@@ -1,58 +1,106 @@
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Avatar, DatePicker, Modal, Select } from "antd";
-import modalStyle from "../../pages/tenantadmin/allocateduser/allocate/style.module.css";
-import { InputText } from "primereact/inputtext";
-import { useEffect, useState } from "react";
-import Router, { useRouter } from "next/router";
-import {
-  faSearch,
-  faXmark,
-  faUser,
-  faCircle,
-} from "@fortawesome/free-solid-svg-icons";
-import {
-  disablePastDate,
-  priorityOptions,
-} from "../../components/headerFilters";
-import { actions as allActions } from "../../stores/admin/patientAllocation";
+import { Modal, Select } from "antd";
 import { connect } from "react-redux";
-import {
-  createIdGen,
-  formatDateForIndex,
-  getResponePopup,
-} from "../../utils/reusable";
-import styles from "../../components/tables/table.module.css";
-import { getStorage } from "../../utils/storages";
-import TableSkeleton from "../../components/skeleton/table";
 import RegularButton from "../../components/button";
+import { actions as allActions } from "../../stores/tenantAdmin/patientAllocations";
+import { useEffect, useState } from "react";
+import { getResponePopup } from "../../utils/reusable";
 
-const MoveBackModal = ({ open, setOpen }) => {
+const MoveBackModal = ({
+  open,
+  setOpen,
+  moveBackLevel,
+  levelOptions,
+  selectedRowsId,
+  moveBack,
+  setSelectedRows,
+  setSelectedRowsId,
+  selectedRole,
+  activeTab
+}) => {
+  const [selectLevel, setSelectLevel] = useState([]);
+  const handleChange = (value) => {
+    setSelectLevel(value);
+  };
+
+  const handleSubmit = async () => {
+    try {
+      const response = await moveBack({
+        patientIdList: selectedRowsId,
+        roleDetailsToMoveBack: selectLevel,
+      });
+
+      if (response?.status === "SUCCESS") {
+        getResponePopup(response);
+        setSelectedRowsId([]);
+        setSelectedRows([]);
+        setSelectLevel([]);
+        setOpen(false);
+      } else {
+        getResponePopup(response);
+      }
+    } catch (error) {
+      console.error("failed");
+    }
+  };
+  useEffect(() => {
+    moveBackLevel({
+      roleName:selectedRole
+    });
+  }, [activeTab]);
   return (
     <div>
       <Modal
         open={open}
         onCancel={() => {
           setOpen(false);
+          setSelectLevel([]);
+          setSelectedRowsId([]);
+          setSelectedRows([]);
         }}
         title="Select Level"
         footer={false}
         width={700}
         className={"custom-modal"}
       >
-        <div style={{height:'500px'}}>
-        <div className="mt-4">
-        <Select  placeholder="Select level" className="w-50 h-50"/>
+        <div style={{ height: "500px" }}>
+          <div className="mt-4">
+            <Select
+              allowClear
+              value={selectLevel}
+              onChange={handleChange}
+              placeholder="Select level"
+              className="w-50 h-50"
+            >
+              {levelOptions?.map((item) => (
+                <Option key={item} value={item}>
+                  {item}
+                </Option>
+              ))}{" "}
+            </Select>
+          </div>
+
+          <div className=" h-100 d-flex align-items-center justify-content-center">
+            <RegularButton
+              disabled={!selectLevel}
+              type="submit"
+              onClick={handleSubmit}
+              name={"Done"}
+            />
+          </div>
         </div>
-      
-      <div className=" h-100 d-flex align-items-center justify-content-center">
-        <RegularButton name={"Done"} />
-      </div>
-      </div>
       </Modal>
-     
     </div>
   );
 };
 
-const connector = connect((state) => ({}), {});
+const connector = connect(
+  (state) => ({
+    levelOptions:
+      state?.tenantAdmin?.patientsAllocation?.moveBackLevel?.data?.response,
+  }),
+  {
+    moveBackLevel: allActions.getMoveBackLevel,
+    moveBack: allActions.postMoveBack,
+  }
+);
 export default connector(MoveBackModal);

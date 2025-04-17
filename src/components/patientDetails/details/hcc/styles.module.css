@@ -506,3 +506,16 @@ cursor: pointer;
  .header{
   width:100%;
  }
+ .approveBtn{
+  color :#008000;
+  background-color: #00800026;
+  border : 1px solid #00800026;
+  border-radius: 5px;
+ }
+ .rejectBtn{
+  color :#A20404;
+  background-color: #A2040426;
+  border : 1px solid #A2040426;
+  border-radius: 5px;
+
+ }

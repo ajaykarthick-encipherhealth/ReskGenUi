@@ -11,6 +11,7 @@ import AppTable from "../../../components/tables";
 import { actions as allActions } from "../../../stores/reviewer/workqueue";
 import { setStorage } from "../../../utils/storages";
 import { statusOptions } from "../../reviewer/patients";
+import { getAccessTabItems } from "../../../utils/reusable";
 
 const commonFilterItems = [
   {
@@ -114,8 +115,8 @@ const Tin = ({
   loading,
   routedData,
 }) => {
-  const tabs = ["Active", "InActive", "Providers"];
-  const activeTab = activeTabName || "Active";
+  const tabs = getAccessTabItems({page:"Tin",tabsMenu:"tabMenuList"})
+  const activeTab = activeTabName || tabs?.[0] || "Active";
   const router = useRouter();
   const [activeFilters, setActiveFilters] = useState(commonFilterItems);
   const [sort, setSort] = useState({
@@ -354,7 +355,7 @@ const Tin = ({
     <div className={`show`}>
       <Header />
       <div className="d-flex" style={{ marginTop: "5%", width: "100%" }}>
-        <Tab icon activeTab={activeTab} handleTabs={handleTabs} tabs={tabs} />
+        <Tab activeTab={activeTab} handleTabs={handleTabs} tabs={tabs} />
         <div className="d-flex  align-items-center justify-content-center gap-4">
           <div>Total Tin : 45</div>
           <div> Active Tin : 45</div>
@@ -363,7 +364,7 @@ const Tin = ({
             width="200px"
             type="submit"
             name="Change to Inactive"
-            onClick={() => {}}
+         
           />
         </div>
       </div>

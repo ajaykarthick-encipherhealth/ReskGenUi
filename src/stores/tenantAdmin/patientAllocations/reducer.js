@@ -9,7 +9,11 @@ import {
   getFilterOptions,
   getAllAllocationList,
   getAllocatedCount,
-  updateAllocationList
+  updateAllocationList,
+  randomSamplingAction,
+  getMoveBackLevel,
+  postMoveBack,
+  getAllRoles
 } from "./actions";
 
 const initialState = {
@@ -64,7 +68,14 @@ const patientsAllocationReducer = combineReducers({
   allocationCount:createReducer(getAllocatedCount),
   updateAllocationData:createReducer(updateAllocationList),
   supervisorListLoader:getReportLoading(getAllAllocationList),
-  supervisorLoader:getReportLoading(getSelectedSupervisorList)
+  supervisorLoader:getReportLoading(getSelectedSupervisorList),
+  randomSampling:createReducer(randomSamplingAction),
+  moveBackLevel:createReducer(getMoveBackLevel),
+  postMoveBack:createReducer(postMoveBack),
+  getRoles:createReducer(getAllRoles),
+
+  //loaders
+  rolesLoader:getReportLoading(getAllRoles),
 
 });
 

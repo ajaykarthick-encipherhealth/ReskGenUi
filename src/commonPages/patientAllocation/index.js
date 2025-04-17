@@ -13,16 +13,18 @@ import styles from "../../components/tables/table.module.css";
 import Header from "../../jsx/layouts/nav/Header";
 import RandomSamplingModal from "./reviewerAllocation/randomSamplingModal";
 import { actions as tableAction } from "../../stores/tableView";
+import CardSkeleton from "../../components/skeleton/card";
 
 const PatientAllocation = ({
   getAllReviewerList,
   organizationList,
   getAllOrganizationList,
-  getAllSupervisorList,
-  getReviewerList,
+  getAllTabRoles,
   routedData,
   getTableData,
   data,
+  allRoles,
+  rolesLoader,
 }) => {
   const commonFilterItems = [
     {
@@ -113,8 +115,11 @@ const PatientAllocation = ({
   const [search, setSearch] = useState({});
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [pageId, setPageId] = useState("3a5feaba-7de6-4557-961b-ab973a688f81");
+  const [samplingModal, setSamplingModal] = useState(false);
+  const [selectedRoleId, setSelectedRoleId] = useState("");
+
   const showModal = () => {
-    setIsModalOpen(true);
+    setSamplingModal(true);
   };
   const handleTabChange = (key) => {
     setActiveTab(key);
@@ -158,18 +163,6 @@ const PatientAllocation = ({
       search: searchText,
       batchCount: batchCount,
       searchList: search,
-    });
-  };
-
-  const getAllSupervisorAllocation = async () => {
-    const res = await getAllSupervisorList({
-      pageNo,
-      pageNumber,
-      selectedOption,
-      sort,
-      selectedDateRanges,
-      searchText,
-      search,
     });
   };
 
@@ -227,6 +220,16 @@ const PatientAllocation = ({
     }
   }, [routedData]);
 
+  useEffect(() => {
+    getAllTabRoles();
+  }, [activeTab]);
+  useEffect(() => {
+    if (allRoles?.allocationRoles?.length > 0) {
+      setSelectedRoleId(allRoles.allocationRoles[0].roleId);
+    }
+  }, [allRoles,activeTab]);
+
+  console.log(selectedRoleId,"selectedRoleId")
   return (
     <div>
       <Header />
@@ -242,72 +245,84 @@ const PatientAllocation = ({
                       activeKey={activeTab}
                       onSelect={handleTabChange}
                     >
-                      <Nav
-                        as="li"
-                        variant="tabs"
-                        className="nav nav-tabs profile-tab"
-                      >
-                        <Nav.Item as="li" className="nav-item profile-tab mt-4">
-                          <Nav.Link className="mt-4" eventKey="1">
-                            Coder 1
-                          </Nav.Link>
-                        </Nav.Item>
-                        <Nav.Item as="li" className="nav-item profile-tab mt-4">
-                          <Nav.Link className="mt-4" eventKey="2">
-                            Coder 2
-                          </Nav.Link>
-                        </Nav.Item>
-                        <Nav.Item as="li" className="nav-item profile-tab mt-4">
-                          <Nav.Link className="mt-4" eventKey="3">
-                            QA
-                          </Nav.Link>
-                        </Nav.Item>
-                        <div
-                          className="d-flex align-items-end justify-content-end "
-                          style={{ width: "85%" }}
+                      {rolesLoader ? (
+                        <CardSkeleton />
+                      ) : (
+                        <Nav
+                          as="li"
+                          variant="tabs"
+                          className="nav nav-tabs profile-tab"
                         >
-                          <Nav.Item as="li" className="nav-item profile-tab ">
-                            <Tooltip
-                              title={
-                                selectedRowsId?.length === 0
-                                  ? "Select patients to Allocate"
-                                  : ""
-                              }
+                          {allRoles?.allocationRoles?.map((role, index) => (
+                            <Nav.Item
+                              as="li"
+                              className="nav-item profile-tab mt-4"
+                              key={role}
                             >
-                              <Button
-                                data-testid="allocate-btn"
-                                name="allocate-btn"
-                                onClick={handleOpenModal}
-                                type="primary"
-                                className={` ${styles.allocate}`}
-                                disabled={selectedRowsId?.length === 0}
+                              <Nav.Link className="mt-4" onClick={() => setSelectedRoleId(role.roleId)} eventKey={index + 1}>
+                                {role?.roleName
+                                  ?.replace(/_/g, " ")
+                                  ?.replace(/\b\w/g, (c) => c.toUpperCase())}
+                              </Nav.Link>
+                            </Nav.Item>
+                          ))}
+                          <div
+                            className="d-flex align-items-end justify-content-end  "
+                            style={{ width: "85%" }}
+                          >
+                            {allRoles?.allocationEnabledForQa  && (
+                              <Nav.Item
+                                as="li"
+                                className="nav-item profile-tab "
                               >
-                                Allocate
-                              </Button>
-                            </Tooltip>
-                          </Nav.Item>
-                          <Nav.Item as="li" className="nav-item profile-tab ">
-                            <Tooltip
-                              title={
-                                selectedRowsId?.length === 0
-                                  ? "Select patients to Random Sampling"
-                                  : ""
-                              }
-                            >
-                              <Button
-                                data-testid="random-sampling"
-                                name="random-sampling"
-                                onClick={showModal}
-                                type="primary"
-                                className={` ${styles.allocate}`}
-                                disabled={selectedRowsId?.length === 0}
+                                <Tooltip
+                                  title={
+                                    selectedRowsId?.length === 0
+                                      ? "Select patients to Allocate"
+                                      : ""
+                                  }
+                                >
+                                  <Button
+                                    data-testid="allocate-btn"
+                                    name="allocate-btn"
+                                    onClick={handleOpenModal}
+                                    type="primary"
+                                    className={` ${styles.allocate}`}
+                                    disabled={selectedRowsId?.length === 0}
+                                  >
+                                    Allocate
+                                  </Button>
+                                </Tooltip>
+                              </Nav.Item>
+                            )}
+                            {activeTab === "3" && (
+                              <Nav.Item
+                                as="li"
+                                className="nav-item profile-tab "
                               >
-                                Random Sampling
-                              </Button>
-                            </Tooltip>
-                          </Nav.Item>
-                        </div>
-                      </Nav>
+                                <Tooltip
+                                  title={
+                                    selectedRowsId?.length === 0
+                                      ? "Select patients to Random Sampling"
+                                      : ""
+                                  }
+                                >
+                                  <Button
+                                    data-testid="random-sampling"
+                                    name="random-sampling"
+                                    onClick={showModal}
+                                    type="primary"
+                                    className={` ${styles.allocate}`}
+                                  >
+                                    Random Sampling
+                                  </Button>
+                                </Tooltip>
+                              </Nav.Item>
+                            )}
+                          </div>
+                        </Nav>
+                      )}
+
                       <div className="d-flex">
                         <div
                           className={` d-flex gap-3 mt-4`}
@@ -389,10 +404,19 @@ const PatientAllocation = ({
         setSelectedUserName={setSelectedUserName}
         getAllReviewerALlocation={getAllReviewerALlocation}
         setBatchCount={setBatchCount}
+        selectedRoleId={selectedRoleId}
       />
       <RandomSamplingModal
+        activeTab={activeTab}
+        selectedRowsId={selectedRowsId}
+        setSelectedRowsId={setSelectedRowsId}
+        setSelectedRows={setSelectedRows}
+        selectedRows={selectedRows}
+        open={samplingModal}
+        setOpen={setSamplingModal}
         isModalOpen={isModalOpen}
         setIsModalOpen={setIsModalOpen}
+        selectedRoleId={selectedRoleId}
       />
     </div>
   );
@@ -409,16 +433,18 @@ const connector = connect(
       state.tenantAdmin?.patientsAllocation?.filterOptions?.data?.response,
     routedData: state.tenantAdmin?.tin?.allocationRoutedData,
     data: state?.tableView?.tableView?.data,
+    allRoles: state?.tenantAdmin?.patientsAllocation?.getRoles?.data?.response,
+    rolesLoader: state?.tenantAdmin?.patientsAllocation?.rolesLoader,
   }),
   {
     getAllOrganizationList: tenantAdminUsersAction?.getAllOrganizationAction,
     getAllReviewerList: allActions.getAllReviewerList,
     getAllCheckedReviewers: allActions.getAllCheckedListForReviewer,
-    getAllSupervisorList: allActions.getAllSupervisorList,
     allocationList: allActions.getAllAllocationList,
     getReviewerList: allActions.getFilterOptions,
     getRoutedData: tinActions.getAllocationRoutedData,
     getTableData: tableAction.tableViewAction,
+    getAllTabRoles: allActions.getAllRoles,
   }
 );
 

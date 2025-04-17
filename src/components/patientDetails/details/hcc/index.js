@@ -63,7 +63,7 @@ const Hcc = ({
   setSearch,
   setFlagContainerActive,
   selectedDate,
-  setSelectedDate
+  setSelectedDate,
 }) => {
   const [activeTabHead, setActiveTabHead] = useState(1);
   const [flagTagActive, setFlagTagActive] = useState(false);
@@ -652,23 +652,14 @@ const Hcc = ({
                         ) : null}
                       </div>
                     </Nav.Item>
-                    <Nav.Item as="li" className="nav-item">
-                      <Popover
-                        open={actions.showActionsPop}
-                        trigger={["click"]}
-                        placement="bottom"
-                        content={hideDiseasePopContent}
-                        onOpenChange={() =>
-                          setActions({
-                            showActionsPop: !actions.showActionsPop,
-                            showDisease: actions?.showDisease,
-                            reEvaluate: actions?.reEvaluate,
-                          })
-                        }
-                      >
-                        <button
-                          className={`${visitStyles.actionBtn} px-3   py-1 rounded-md`}
-                          onClick={() =>
+                    <div className="d-flex gap-3">
+                      <Nav.Item as="li" className="nav-item">
+                        <Popover
+                          open={actions.showActionsPop}
+                          trigger={["click"]}
+                          placement="bottom"
+                          content={hideDiseasePopContent}
+                          onOpenChange={() =>
                             setActions({
                               showActionsPop: !actions.showActionsPop,
                               showDisease: actions?.showDisease,
@@ -676,10 +667,32 @@ const Hcc = ({
                             })
                           }
                         >
-                          Action
+                          <button
+                            className={`${visitStyles.actionBtn} px-3   py-1 rounded-md`}
+                            onClick={() =>
+                              setActions({
+                                showActionsPop: !actions.showActionsPop,
+                                showDisease: actions?.showDisease,
+                                reEvaluate: actions?.reEvaluate,
+                              })
+                            }
+                          >
+                            Action
+                          </button>
+                        </Popover>
+                      </Nav.Item>
+                      <Nav.Item as="li" className="nav-item">
+                        <button
+                          className={` px-3   py-1 rounded-md  ${styles.approveBtn}`}
+                          onClick={() => ghb}
+                        >
+                          Approve
                         </button>
-                      </Popover>
-                    </Nav.Item>
+                      </Nav.Item>
+                      <Nav.Item as="li" className="nav-item">
+                        <button className={` px-3   py-1 rounded-md  ${styles.rejectBtn}`} onClick={() => gvb}>Reject</button>
+                      </Nav.Item>
+                    </div>
                   </div>
                 </Nav>
               </div>

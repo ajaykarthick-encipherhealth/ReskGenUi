@@ -10,10 +10,7 @@ import {
   faUser,
   faCircle,
 } from "@fortawesome/free-solid-svg-icons";
-import {
-  disablePastDate,
-  priorityOptions,
-} from '../../../components/headerFilters'
+
 import { actions as allActions } from '../../../stores/admin/patientAllocation'
 import { connect } from "react-redux";
 import {
@@ -25,6 +22,7 @@ import styles from '../../../components/tables/table.module.css'
 import { getStorage } from '../../../utils/storages'
 import TableSkeleton from "../../../components/skeleton/table";
 import RegularButton from "../../../components/button";
+import { disablePastDate, priorityOptions } from "../../../components/headerFilters/functions";
 
 const AllocateModal = ({
   open,
@@ -43,6 +41,7 @@ const AllocateModal = ({
   setBatchCount,
   id,
   activeTab,
+  selectedRoleId
 }) => {
   const router = useRouter();
   const userId = getStorage("userId")
@@ -96,7 +95,7 @@ const AllocateModal = ({
   const setAllocate = async () => {
     const response = await getAllocateUsers({
       data: {
-        roleId:activeTab,
+        roleId:selectedRoleId,
         userIdList: activeEmail,
         dueDate: formatDateForIndex({ date: allocateDate, index: 1 }),
         allocatedBy:userId,
@@ -150,7 +149,6 @@ const AllocateModal = ({
     setSelectedChart(selectedRowsId);
   }, [selectedRowsId]);
 
-  console.log(activeEmail, "activeEmail");
 
   return (
     <div>
@@ -222,7 +220,6 @@ const AllocateModal = ({
           <div className={modalStyle.scroll}>
             {userDetails?.map((item) => (
               <div className="mt-4 ">
-                {console.log(userDetails, "userDetails")}
                 <div
                   className={`form-control new-item-control my-2 p-0 ${
                     item.id == activeCard

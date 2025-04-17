@@ -1,4 +1,3 @@
-// import { getStorage } from "@/utils/storages";
 import { requestPortal } from "../../../utils/network";
 import { getStorage } from "../../../utils/storages";
 
@@ -293,3 +292,50 @@ export const reviewerCheckedList = async ({
   const res = await requestPortal(`${url}`, options);
   return res;
 };
+
+export async function randomSampling(data) {
+  const options = {
+    method: "POST",
+    body: JSON.stringify(data),
+  };
+  const response = await requestPortal(
+    `management/allocation/random-sampling`,
+    options
+  );
+  return response;
+}
+
+export async function getmoveBackLevel({roleName}) {
+  const options = {
+    method: "GET",
+  };
+  const res = await requestPortal(
+    `dbservice/v1/move-back/get-role-status-details?roleAlias=${roleName}`,
+    options
+  );
+  return res;
+}
+
+export async function moveBack(data) {
+  const options = {
+    method: "POST",
+    body: JSON.stringify(data),
+  };
+  const response = await requestPortal(
+    `dbservice/v1/move-back`,
+    options
+  );
+  return response;
+}
+
+export async function getRoles() {
+  const options = {
+    method: "GET",
+  };
+  const roleId = getStorage("roleId")
+  const res = await requestPortal(
+    `dbservice/allocation/roles?roleId=${roleId}`,
+    options
+  );
+  return res;
+}

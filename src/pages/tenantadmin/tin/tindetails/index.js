@@ -10,17 +10,12 @@ import MoveBack from "../../../../commonPages/moveBack";
 import PatientAllocation from "../../../../commonPages/patientAllocation";
 import QueryApproval from "../../../../commonPages/queryApproval";
 import Patients from "../../../../commonPages/patients";
+import { getAccessTabItems } from "../../../../utils/reusable";
 
 const TinDetails = ({  activeTabName, getProjectActiveTab }) => {
   const router = useRouter();
-  const tabs = [  
-    "Patients",
-    "File Processing",
-    "Patient Allocation",
-    "Moveback",
-    "Query Approval",
-  ];
-  const activeTab = activeTabName?.tinDetailsTab || "Patients";
+  const tabs =  getAccessTabItems({page:"Tin",tabsMenu:"tabMenuList2"})
+  const activeTab = activeTabName?.tinDetailsTab ||  tabs?.[0] || "Patients";
   const handleTabs = (name) => {
     getProjectActiveTab({ tinDetailsTab: name });
   };

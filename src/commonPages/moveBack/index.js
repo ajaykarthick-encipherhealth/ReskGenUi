@@ -12,15 +12,18 @@ import styles from "../../components/tables/table.module.css";
 import MoveBackModal from "./moveBackModal";
 import MoveBackTable from "./moveBackTable";
 import { actions as tableAction } from "../../stores/tableView";
+import CardSkeleton from "../../components/skeleton/card";
 
 const MoveBack = ({
   getAllReviewerList,
   organizationList,
   getAllOrganizationList,
-  getAllSupervisorList,
+  rolesLoader,
   routedData,
   getTableData,
-  data
+  data,
+  getAllTabRoles,
+  allRoles,
 }) => {
   const commonFilterItems = [
     {
@@ -103,7 +106,6 @@ const MoveBack = ({
   const [paginationFirst, setPaginationFirst] = useState(0);
   const [selectAllChecked, setSelectAllChecked] = useState(false);
   const [paramsFilter, setParamsFilter] = useState(null);
-  const [selectedUserName, setSelectedUserName] = useState([]);
   const [search, setSearch] = useState({});
   const [test, setTest] = useState(data?.response?.metaDataDTO);
   const [open, setOpen] = useState(false);
@@ -111,7 +113,8 @@ const MoveBack = ({
     const [pageSize, setPageSize] = useState(15);
     const [activeStatus, setActiveStatus] = useState("PENDING");
     const [roleId, setroleId] = useState(1);
-  
+    const [selectedRole, setSelectedRole] = useState("");
+
   const handleTabChange = (key) => {
     setActiveTab(key);
     setSelectedSupervisor(null);
@@ -155,18 +158,6 @@ const MoveBack = ({
       selectedDateRanges,
       search: searchText,
       searchList: search,
-    });
-  };
-
-  const getAllSupervisorAllocation = async () => {
-    const res = await getAllSupervisorList({
-      pageNo,
-      pageNumber,
-      selectedOption,
-      sort,
-      selectedDateRanges,
-      searchText,
-      search,
     });
   };
 
@@ -238,6 +229,15 @@ const MoveBack = ({
     }
   }, [routedData]);
 
+  useEffect(() => {
+    getAllTabRoles();
+  }, []);
+    useEffect(() => {
+      if (allRoles?.allocationRoles?.length > 0) {
+        setSelectedRole(allRoles.allocationRoles[0].roleName);
+      }
+    }, [allRoles,activeTab]);
+  
   return (
     <div>
       <Header />
@@ -253,53 +253,55 @@ const MoveBack = ({
                       activeKey={activeTab}
                       onSelect={handleTabChange}
                     >
-                      <Nav
-                        as="li"
-                        variant="tabs"
-                        className="nav nav-tabs profile-tab"
-                      >
-                        <Nav.Item as="li" className="nav-item profile-tab">
-                          <Nav.Link className="mt-4" eventKey="1">
-                            {" "}
-                            Coder 1
-                          </Nav.Link>
-                        </Nav.Item>
-                        <Nav.Item as="li" className="nav-item profile-tab">
-                          <Nav.Link className="mt-4" eventKey="2">
-                            Coder 2
-                          </Nav.Link>
-                        </Nav.Item>
-                        <Nav.Item as="li" className="nav-item profile-tab">
-                          <Nav.Link className="mt-4" eventKey="3">
-                            QA
-                          </Nav.Link>
-                        </Nav.Item>
-                        <div
-                          className="d-flex align-items-end justify-content-end"
-                          style={{ width: "85%" }}
+                      {rolesLoader ? (
+                        <CardSkeleton />
+                      ) : (
+                        <Nav
+                          as="li"
+                          variant="tabs"
+                          className="nav nav-tabs profile-tab"
                         >
-                          <Nav.Item as="li" className="nav-item profile-tab ">
-                            <Tooltip
-                              title={
-                                selectedRowsId?.length === 0
-                                  ? "Select patients to move back"
-                                  : ""
-                              }
+                          {allRoles?.allocationRoles?.map((role, index) => (
+                            <Nav.Item
+                              as="li"
+                              className="nav-item profile-tab mt-4"
+                              key={role}
                             >
-                              <Button
-                                data-testid="allocate-btn"
-                                name="allocate-btn"
-                                onClick={handleOpenModal}
-                                type="primary"
-                                className={` ${styles.allocate}`}
-                                // disabled={selectedRowsId?.length === 0}
+                              <Nav.Link onClick={() => setSelectedRole(role.roleName)} className="mt-4" eventKey={index + 1}>
+                                {role?.roleName
+                                  .replace(/_/g, " ")
+                                  .replace(/\b\w/g, (c) => c.toUpperCase())}
+                              </Nav.Link>
+                            </Nav.Item>
+                          ))}
+                          <div
+                            className="d-flex align-items-end justify-content-end"
+                            style={{ width: "85%" }}
+                          >
+                            <Nav.Item as="li" className="nav-item profile-tab ">
+                              <Tooltip
+                                title={
+                                  selectedRowsId?.length === 0
+                                    ? "Select patients to move back"
+                                    : ""
+                                }
                               >
-                                Move Back
-                              </Button>
-                            </Tooltip>
-                          </Nav.Item>
-                        </div>
-                      </Nav>
+                                <Button
+                                  data-testid="allocate-btn"
+                                  name="allocate-btn"
+                                  onClick={handleOpenModal}
+                                  type="primary"
+                                  className={` ${styles.allocate}`}
+                                  // disabled={selectedRowsId?.length === 0}
+                                >
+                                  Move Back
+                                </Button>
+                              </Tooltip>
+                            </Nav.Item>
+                          </div>
+                        </Nav>
+                      )}
+
                       <div className="d-flex">
                         <div
                           className={` d-flex gap-3 mt-4`}
@@ -351,8 +353,6 @@ const MoveBack = ({
                             setPageNo={setPageNo}
                             paginationFirst={paginationFirst}
                             setPaginationFirst={setPaginationFirst}
-                            selectedUserName={selectedUserName}
-                            setSelectedUserName={setSelectedUserName}
                             setSort={setSort}
                             sort={sort}
                             data = {data}
@@ -378,6 +378,7 @@ const MoveBack = ({
         setSelectedRows={setSelectedRows}
         selectedRows={selectedRows}
         activeTab={activeTab}
+        selectedRole={selectedRole}
       />
     </div>
   );
@@ -395,17 +396,18 @@ const connector = connect(
     routedData: state.tenantAdmin?.tin?.allocationRoutedData,
         data: state?.tableView?.tableView?.data,
 
+    allRoles: state?.tenantAdmin?.patientsAllocation?.getRoles?.data?.response,
+    rolesLoader: state?.tenantAdmin?.patientsAllocation?.rolesLoader,
   }),
   {
     getAllOrganizationList: tenantAdminUsersAction?.getAllOrganizationAction,
     getAllReviewerList: allActions.getAllReviewerList,
     getAllCheckedReviewers: allActions.getAllCheckedListForReviewer,
-    getAllSupervisorList: allActions.getAllSupervisorList,
-    allocationList: allActions.getAllAllocationList,
     getReviewerList: allActions.getFilterOptions,
     getRoutedData: tinActions.getAllocationRoutedData,
         getTableData: tableAction.tableViewAction,
     
+    getAllTabRoles: allActions.getAllRoles,
   }
 );
 
