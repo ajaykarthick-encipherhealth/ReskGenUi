@@ -283,7 +283,7 @@ const QueryApproval = ({
                       <div className="d-flex">
                         <div className="mt-4 w-100">
                           <ReusableFilters
-                            showFilter={true}
+                            showFilter={false}
                             setActiveFilters={setActiveFilters}
                             setSearchText={setSearchText}
                             searchText={searchText}
@@ -305,7 +305,6 @@ const QueryApproval = ({
                             onClose={onClose}
                             selectedColumns={test}
                             setSelectedColumns={setTest}
-                            handleInsert={handleInsert}
                             commonFilterItems={commonFilterItems}
                             showCustomizeTable={true}
                             showDrawer={showDrawer}

@@ -386,6 +386,7 @@ const MoveBack = ({
                             sort={sort}
                             data={data}
                             tableLoader={tableLoader}
+                            roleId={roleId}
                           />
                         </Tab.Pane>
                       </Tab.Content>
