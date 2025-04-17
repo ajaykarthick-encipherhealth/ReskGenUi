@@ -11,13 +11,16 @@ export async function getTableView({
   searchText,
   activeStatus,
   roleId,
+  projectId,
 }) {
   const options = {
     method: "GET",
   };
   const uId = getStorage("userId");
   const data = await requestPortalRoleBased(
-    `dbservice/table/view?pageId=${pageId}&pageNo=${pageNo}&pageSize=${pageSize}&status=${activeStatus?activeStatus:""}&roleId=${roleId?roleId:""}`,
+    `dbservice/table/view?pageId=${pageId}&pageNo=${pageNo}&pageSize=${pageSize}&status=${
+      activeStatus ? activeStatus : ""
+    }&roleId=${roleId ? roleId : ""}&projectId=${projectId ? projectId : ""}`,
     options
   );
   return data;

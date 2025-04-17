@@ -99,7 +99,14 @@ const AppTable = ({
   dateFormateAlign,
   getStatusStyles,
   renderCountDetailsPopover,
+  isCheckBox,
 }) => {
+  if (isCheckBox) {
+    column.push({
+      checkBox: true,
+      value: "patientId",
+    });
+  }
   const router = useRouter();
   const columnsArr = Array.from({ length: column?.length || 5 });
   return (
@@ -229,6 +236,26 @@ const AppTable = ({
 };
 
 const TableHeadItem = ({ item, sort, setSort }) => {
+  if (item.checkBox) {
+    return (
+      <th>
+        <input
+          style={{
+            width: "20px",
+            height: "20px",
+            flexShrink: "0",
+            borderRadius: "4px",
+            cursor: "pointer",
+          }}
+          type="checkbox"
+          id="checkall-header"
+          name="checkall-header"
+          className="mx-1"
+        />
+        {item.name}
+      </th>
+    );
+  }
   if (item.sortable) {
     return (
       <th className="text-start text-truncate font2">
@@ -323,7 +350,9 @@ const TableHeadItem = ({ item, sort, setSort }) => {
   }
   return (
     <th className="text-start text-truncate   font2">
-      {typeof item?.headerName === "string" ? item?.headerName?.toUpperCase() : item?.headerName}
+      {typeof item?.headerName === "string"
+        ? item?.headerName?.toUpperCase()
+        : item?.headerName}
     </th>
   );
 };
@@ -550,7 +579,6 @@ const TableRow = ({
               </div>
             </td>
           );
-        
         }
 
         if (columnItem.isBoolean) {
@@ -820,7 +848,9 @@ const TableRow = ({
         }
         if (columnItem.batchStatus) {
           return (
-            <td  className={` d-flex align-items-center justify-content-center ${Style.childBorder}`}>
+            <td
+              className={` d-flex align-items-center justify-content-center ${Style.childBorder}`}
+            >
               {statusBodyTemplate(item)}
             </td>
           );
@@ -993,7 +1023,7 @@ const TableRow = ({
           );
         }
 
-        if (columnItem?.isCheckbox) {
+        if (columnItem?.checkBox) {
           return (
             <td
               className={
@@ -1223,7 +1253,8 @@ const TableRow = ({
                 <div className="d-flex px-4">
                   {item[columnItem.value] ? "True" : "False"}
                 </div>
-              ) : item[columnItem.actualField] || item[columnItem.actualField] === 0 ? (
+              ) : item[columnItem.actualField] ||
+                item[columnItem.actualField] === 0 ? (
                 <Tooltip title={item[columnItem.value]}>
                   {reusableEllipses({
                     str: item[columnItem.actualField].toString(),

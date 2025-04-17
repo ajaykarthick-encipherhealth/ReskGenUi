@@ -6,6 +6,7 @@ import AppTable from '../../../components/tables'
 import { Spin } from "antd";
 import { LoadingOutlined } from "@ant-design/icons";
 import { actions as allPatientSyncAction } from '../../../stores/tenantAdmin/patientSync'
+import { findItemWithTrueKey } from "../../../utils/reusable";
 const ReviewerAllocation = ({
   reviewersData,
   loader,
@@ -160,6 +161,7 @@ const ReviewerAllocation = ({
         totalRecords={data?.response?.pageResponse?.totalElements}
         row={15}
         onPageChange={onPageChange}
+        isCheckBox={findItemWithTrueKey(data?.response?.staticDesign,"checkBox")}
       />
     </div>
   );
