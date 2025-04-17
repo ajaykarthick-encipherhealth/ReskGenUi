@@ -204,6 +204,7 @@ const MoveBack = ({
       pageNo,
       pageSize,
       roleId,
+      selectedRole,
     });
   };
   useEffect(() => {
@@ -232,6 +233,7 @@ const MoveBack = ({
     selectedSupervisor,
     search,
     roleId,
+    selectedRole,
   ]);
   return (
     <div>
