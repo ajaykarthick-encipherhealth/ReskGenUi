@@ -1101,7 +1101,7 @@ const PatientSync = ({
                                           ? socketData?.content
                                           : pdfTableData?.content
                                       }
-                                      column={test.filter(
+                                      column={test?.filter(
                                         (item) => item.isShow
                                       )}
                                       // loader={loading}
