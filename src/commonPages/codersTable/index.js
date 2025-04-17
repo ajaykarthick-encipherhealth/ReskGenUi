@@ -14,7 +14,6 @@ import ReusableFilters from "../../components/reusableFilters";
 import AppTable from "../../components/tables";
 import { actions as allReportActions } from "../../stores/admin/report";
 import { Tab, Nav } from "react-bootstrap";
-import data from "../../pages/reviewer/patients/data.json"
 import Header from "../../jsx/layouts/nav/Header";
 import { getResponePopup } from "../../utils/reusable";
 const role = getStorage("proxyRole");
@@ -118,7 +117,10 @@ const CodersTable = ({
   getTableData,
   tableDynamicColumn,
   pageId,
-  data
+  data,
+  isQueried,
+  isReAssigned,
+  patientAllocated,
 }) => {
   const columns = [
     {
@@ -268,6 +270,9 @@ const CodersTable = ({
       searchText: searchText,
       activeStatus,
       pageId,
+      isReAssigned,
+      isQueried,
+      patientAllocated,
     });
     if (res?.status == "SUCCESS") {
       setTotalElements(res.response?.patientDTOList?.totalElements);

@@ -40,7 +40,8 @@ const AllocateModal = ({
   setBatchCount,
   id,
   getAllAllocation,
-  selectedRoleId
+  selectedRoleId,
+  roleId
 }) => {
   const router = useRouter();
   const userId = getStorage("userId")
@@ -90,11 +91,11 @@ const AllocateModal = ({
       setUserDetails(user);
     }
   };
-
+console.log(roleId,"roleId")
   const setAllocate = async () => {
     const response = await getAllocateUsers({
       data: {
-        roleId:selectedRoleId,
+        roleId:roleId,
         userIdList: activeEmail,
         dueDate: formatDateForIndex({ date: allocateDate, index: 1 }),
         allocatedBy:userId,
