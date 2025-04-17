@@ -32,6 +32,7 @@ import AppTable from "../../components/tables";
 import { actions as allPatientSyncAction } from "../../stores/tenantAdmin/patientSync";
 import SvgFlag from "../../components/patientDetails/details/components/svg/svg";
 import { actions as workflowActions } from "../../stores/reviewer/workqueue";
+import { actions as tableAction } from "../../stores/tableView";
 
 export const batchBullets = [
   {
@@ -217,6 +218,8 @@ const Patient = ({
   getAllFlags,
   getFlagsData,
   route,
+  getTableData,
+  data,
 }) => {
   const columns = [
     {
@@ -739,12 +742,11 @@ const Patient = ({
     setLocalOrgId(orgId);
     setLocalUserId(uId);
     if (paramsFilter === "check") {
-      getAllPatients({
+      getTableData({
+        pageId: "c41d4ea9-6da4-495c-84f4-95b25d6c13b4",
         pageNo,
-        selectedOption,
-        searchText,
-        selectedDateRanges,
-        sort: sort,
+        pageSize: 15,
+        roleId: "",
       });
     }
   }, [
@@ -878,13 +880,17 @@ const Patient = ({
           <div id="task-tbl_wrapper" className="dataTables_wrapper no-footer">
             <div className="mt-4">
               <AppTable
-                data={
-                  statusUpdateWebSocket
-                    ? statusUpdateWebSocket
-                    : allPatientList?.data?.response?.patientDtoList?.content
-                }
+                // data={
+                //   statusUpdateWebSocket
+                //     ? statusUpdateWebSocket
+                //     : allPatientList?.data?.response?.patientDtoList?.content
+                // }
                 getRetregger={getRetregger}
-                column={columns}
+                // column={columns}
+                data={data?.response?.pageResponse?.content}
+                column={data?.response?.metaDataDTO.filter(
+                  (item) => item.active
+                )}
                 onRowClick={gotoPatientDetails}
                 loader={loading}
                 actionBodyTemplate={actionBodyTemplate}
@@ -944,6 +950,9 @@ const enhancer = connect(
     filteredList: state.admin?.patientAllocate?.filtersList,
     routedData: state.tenantAdmin?.patientSync?.routedData,
     getFlagsData: state?.reviewer?.workQueue?.flags?.data,
+    data: state?.tableView?.tableView?.data,
+        tableLoader: state?.tableView?.tableViewLoading,
+    
   }),
   {
     getAllOrganizationList: tenantAdminAction.getAllOrganizationAction,
@@ -957,6 +966,8 @@ const enhancer = connect(
     getRetreggerPatient: tenantAdminAction.getRetreggerPatient,
     getRoutedData: allPatientSyncAction.getRoutedData,
     getAllFlags: workflowActions.flagsAction,
+    getTableData: tableAction.tableViewAction,
+    getAllTabRoles: allActions.getAllRoles,
   }
 );
 export default enhancer(Patient);

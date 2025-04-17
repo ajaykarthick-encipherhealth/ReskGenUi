@@ -43,6 +43,7 @@ const PracticeRoasterTable = ({
   practiceRoasterData,
   loading,
   handleRoasterBtn,
+  data
 }) => {
   const onPageChange = (e) => {
     setPagination(e.first);
@@ -78,8 +79,8 @@ const PracticeRoasterTable = ({
   return (
     <div>
       <AppTable
-        data={practiceRoasterData?.content}
-        column={columns}
+        data={data?.response?.pageResponse?.content}
+        column={data?.response?.metaDataDTO.filter((item) => item.active)}
         loader={loading}
         first={pageNumber === 0 ? 0 : pagination}
         totalRecords={practiceRoasterData?.totalElements}

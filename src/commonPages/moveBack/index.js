@@ -191,6 +191,7 @@ const MoveBack = ({
       pageNo,
       pageSize,
       roleId,
+      selectedRole,
     });
   };
 
@@ -244,6 +245,7 @@ const MoveBack = ({
     selectedSupervisor,
     search,
     roleId,
+    selectedRole,
   ]);
   useEffect(() => {
     if (routedData) {

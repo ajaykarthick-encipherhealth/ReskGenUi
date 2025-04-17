@@ -11,6 +11,7 @@ const TinRoasterTable = ({
   tinRoasterData,
   loading,
   handleRoasterBtn,
+  data
 }) => {
   const onPageChange = (e) => {
     setPagination(e.first);
@@ -46,8 +47,8 @@ const TinRoasterTable = ({
   return (
     <div>
       <AppTable
-        data={tinRoasterData?.content}
-        column={columns}
+        data={data?.response?.pageResponse?.content}
+        column={data?.response?.metaDataDTO.filter((item) => item.active)}
         loader={loading}
         first={pageNumber === 0 ? 0 : pagination}
         totalRecords={tinRoasterData?.totalElements}
