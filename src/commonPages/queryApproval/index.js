@@ -10,7 +10,7 @@ import { actions as tinActions } from "../../stores/tenantAdmin/tin";
 import QueryTable from "./queryTable";
 import Header from "../../jsx/layouts/nav/Header";
 import CardSkeleton from "../../components/skeleton/card";
-import {actions as tableAction} from '../../stores/tableView'
+import { actions as tableAction } from "../../stores/tableView";
 
 const QueryApproval = ({
   organizationList,
@@ -20,7 +20,8 @@ const QueryApproval = ({
   routedData,
   allRoles,
   rolesLoader,
-  tableLoader
+  tableLoader,
+  data,
 }) => {
   const commonFilterItems = [
     {
@@ -99,9 +100,10 @@ const QueryApproval = ({
   const [paramsFilter, setParamsFilter] = useState(null);
   const [search, setSearch] = useState({});
   const [roleId, setRoleId] = useState(null);
-  const [activeStatus , setActiveStatus] = useState("PENDING")
-   const [active, setActive] = useState("Pending");
-
+  const [activeStatus, setActiveStatus] = useState("PENDING");
+  const [active, setActive] = useState("Pending");
+  const [test, setTest] = useState(data?.response?.metaDataDTO);
+  const [open, setOpen] = useState(false);
   const handleTabChange = (key) => {
     setActiveTab(key);
     setSearchText("");
@@ -134,11 +136,14 @@ const QueryApproval = ({
     });
   };
 
-
   useEffect(() => {
     setParamsFilter("check");
-    if (window !== "undefined" && paramsFilter && allRoles?.allocationRoles?.length > 0) {
-      getQueryApproval()
+    if (
+      window !== "undefined" &&
+      paramsFilter &&
+      allRoles?.allocationRoles?.length > 0
+    ) {
+      getQueryApproval();
     }
   }, [
     selectedOption,
@@ -174,6 +179,13 @@ const QueryApproval = ({
       setRoleId(res?.response?.allocationRoles[0]?.roleId);
     }
   };
+  const showDrawer = () => {
+    setOpen(true);
+  };
+  const onClose = () => {
+    setOpen(false);
+  };
+  const handleInsert = () => {};
 
   useEffect(() => {
     const filteredFilters = getFilterOption();
@@ -231,9 +243,13 @@ const QueryApproval = ({
                               className="nav-item profile-tab mt-4"
                               key={role}
                             >
-                              <Nav.Link                                 onClick={() => {
+                              <Nav.Link
+                                onClick={() => {
                                   setRoleId(role.roleId);
-                                }} className="mt-4" eventKey={index + 1}>
+                                }}
+                                className="mt-4"
+                                eventKey={index + 1}
+                              >
                                 {role?.roleName
                                   ?.replace(/_/g, " ")
                                   ?.replace(/\b\w/g, (c) => c.toUpperCase())}
@@ -262,12 +278,27 @@ const QueryApproval = ({
                             opt={opt}
                             setSearch={setSearch}
                             search={search}
+                            //customize table
+
+                            open={open}
+                            onClose={onClose}
+                            selectedColumns={test}
+                            setSelectedColumns={setTest}
+                            handleInsert={handleInsert}
+                            commonFilterItems={commonFilterItems}
+                            showCustomizeTable={true}
+                            showDrawer={showDrawer}
                           />
                         </div>
                       </div>
                       <Tab.Content>
                         <Tab.Pane eventKey={activeTab}>
-                          <QueryTable tableLoader={tableLoader} setActiveStatus={setActiveStatus} active={active} setActive={setActive} />
+                          <QueryTable
+                            tableLoader={tableLoader}
+                            setActiveStatus={setActiveStatus}
+                            active={active}
+                            setActive={setActive}
+                          />
                         </Tab.Pane>
                       </Tab.Content>
                     </Tab.Container>
@@ -294,7 +325,8 @@ const connector = connect(
     routedData: state.tenantAdmin?.tin?.allocationRoutedData,
     allRoles: state?.tenantAdmin?.patientsAllocation?.getRoles?.data?.response,
     rolesLoader: state?.tenantAdmin?.patientsAllocation?.rolesLoader,
-    tableLoader:state?.tableView?.tableViewLoading,
+    tableLoader: state?.tableView?.tableViewLoading,
+    data: state?.tableView?.tableView?.data,
   }),
   {
     getAllOrganizationList: tenantAdminUsersAction?.getAllOrganizationAction,
