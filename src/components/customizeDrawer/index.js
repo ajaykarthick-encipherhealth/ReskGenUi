@@ -16,6 +16,7 @@ const CustomizableDrawer = ({
   setActiveFilters,
   tableDynamicColumn,
   handleSubmit,
+  handleReset
 }) => {
   // const handleSubmit = async () => {
   //   const payload = {
@@ -35,17 +36,7 @@ const CustomizableDrawer = ({
   //     getResponePopup(error?.response);
   //   }
   // };
-  const handleReset = () => {
-    const resetColumns = selectedColumns.map((col) => ({
-      ...col,
-      active: false,
-    }));
-
-    setSelectedColumns(resetColumns);
-    setActiveFilters((prev) =>
-      prev.map((filter) => ({ ...filter, active: false }))
-    );
-  };
+ 
 
   return (
     <Drawer title={title} onClose={onClose} open={open}>

@@ -56,6 +56,7 @@ const Patient = ({
   getTableData,
   data,
   tableDynamicColumn,
+  tableDynamicColumnReset,
 }) => {
   const commonFilterItems = [
     {
@@ -315,6 +316,22 @@ const Patient = ({
       getResponePopup(error?.response);
     }
   };
+  const handleReset = async () => {
+    const payload = {
+      pageId: "ea046971-08de-4ee2-bf47-10c62c0eaa18",
+    };
+
+    try {
+      const response = await tableDynamicColumnReset({ payload });
+      if (response?.status === "SUCCESS") {
+        getAllTracking();
+        onClose();
+        getResponePopup(response);
+      }
+    } catch (error) {
+      getResponePopup(error?.response);
+    }
+  };
   useEffect(() => {
     var orgListArray = [];
     organizationList?.response?.map((res) => {
@@ -479,6 +496,7 @@ const Patient = ({
                   showCustomizeTable={true}
                   showDrawer={showDrawer}
                   handleSubmit={handleSubmit}
+                  handleReset={handleReset}
                 />
               </div>
               <div className="col-2 d-flex align-items-center justify-content-center">
@@ -539,6 +557,7 @@ const enhancer = connect(
     getRoutedData: allPatientSyncAction.getRoutedData,
     getTableData: tableAction.tableViewAction,
     tableDynamicColumn: tableAction.tableDynamicColumn,
+    tableDynamicColumnReset: tableAction.tableDynamicColumnReset,
   }
 );
 export default enhancer(Patient);
