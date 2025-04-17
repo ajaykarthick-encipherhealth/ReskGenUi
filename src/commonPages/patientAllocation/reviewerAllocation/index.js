@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
-import { actions as allActions } from  '../../../stores/tenantAdmin/patientAllocation'
+import { actions as allActions } from  '../../../stores/tenantAdmin/patientAllocations'
 import styles from '../../../components/tables/table.module.css'
 import AppTable from '../../../components/tables'
 import { Spin } from "antd";
 import { LoadingOutlined } from "@ant-design/icons";
 import { actions as allPatientSyncAction } from '../../../stores/tenantAdmin/patientSync'
 import { findItemWithTrueKey } from "../../../utils/reusable";
+import {actions as tableAction } from "../../../stores/tableView"
 const ReviewerAllocation = ({
   reviewersData,
   loader,
@@ -23,7 +24,9 @@ const ReviewerAllocation = ({
   setSort,
   batchCount,
   data,
-  tableLoader
+  tableLoader,
+  getTableData,
+  roleId
 }) => {
   const [selectAllChecked, setSelectAllChecked] = useState(false);
   const [checkedLoader, setCheckedLoader] = useState(false);
@@ -36,10 +39,14 @@ const ReviewerAllocation = ({
     if (!singleCheck) {
       if (checked) {
         setCheckedLoader(true);
-        const response = await getAllCheckedReviewers({
+        const response = await getTableData({
           fromTenant: true,
           allPatientIds: checked,
           batchCount: batchCount,
+          pageId:"6cd166eb-79ac-4c12-ab0f-07be2983ca70",
+          pageNo:0,
+          pageSize:15,
+          roleId:roleId
         });
   
         if (response?.status === "SUCCESS") {
@@ -175,7 +182,7 @@ const connector = connect(
     loader: state.tenantAdmin?.patientsAllocation?.loader,
   }),
   {
-    getAllCheckedReviewers: allActions.getAllCheckedListForReviewer,
+    getTableData: tableAction.tableDynamicChecked,
     getSupervisorName: allPatientSyncAction.getSupervisorName,
     getAllReviewerList: allActions.getAllReviewerList,
   }

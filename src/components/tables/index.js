@@ -136,6 +136,7 @@ const AppTable = ({
                       item={item}
                       sort={sort}
                       setSort={setSort}
+                      handleRowCheckboxChange={handleRowCheckboxChange}
                     />
                   ))}
                 </tr>
@@ -235,11 +236,20 @@ const AppTable = ({
   );
 };
 
-const TableHeadItem = ({ item, sort, setSort }) => {
+const TableHeadItem = ({ item, sort, setSort,handleRowCheckboxChange }) => {
   if (item.checkBox) {
     return (
       <th>
         <input
+          onChange={(e) => {
+            e.stopPropagation();
+            handleRowCheckboxChange({
+              e,
+              row: item,
+              singleCheck: false,
+              checked: e.target.checked,
+            });
+          }}
           style={{
             width: "20px",
             height: "20px",

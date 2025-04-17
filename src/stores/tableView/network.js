@@ -40,3 +40,30 @@ export async function dynamicColumn({ payload }) {
   const data = await requestPortal(`dbservice/table/column`, options);
   return data;
 }
+
+export async function getTableViewChecked({
+  pageId,
+  pageNo,
+  pageSize,
+  selectedOption,
+  sort,
+  selectedDateRanges,
+  searchText,
+  activeStatus,
+  roleId,
+  projectId,
+  selectedRole,
+  allPatientIds,
+}) {
+  const options = {
+    method: "GET",
+  };
+  const uId = getStorage("userId");
+  const data = await requestPortalRoleBased(
+    `dbservice/table/view?pageId=${pageId}&pageNo=${pageNo}&pageSize=${pageSize}&status=${
+      activeStatus ? activeStatus : ""
+    }&roleId=${roleId ? roleId : ""}&projectId=${projectId ? projectId : ""}&aliasName=${selectedRole?selectedRole:''}&allPatientIds=${allPatientIds?allPatientIds:""}`,
+    options
+  );
+  return data;
+}
