@@ -1,6 +1,9 @@
 import React from "react";
 import { Drawer, Checkbox } from "antd";
 import RegularButton from "../button";
+import { connect } from "react-redux";
+import { actions as allActions } from "../../stores/tableView";
+import { getResponePopup } from "../../utils/reusable";
 
 const CustomizableDrawer = ({
   open,
@@ -11,16 +14,22 @@ const CustomizableDrawer = ({
   handleInsert,
   title = "Table Customize",
   setActiveFilters,
+  tableDynamicColumn,
 }) => {
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     const payload = {
-      pageId: "234560oihgvcfasra",
-      orderNumber: selectedColumns
+      pageId: "3a5feaba-7de6-4557-961b-ab973a688f81",
+      headerNames: selectedColumns
         .filter((col) => col.active)
         .map((col) => col.actualField),
     };
 
-    handleInsert(payload);
+    try {
+      const response = await tableDynamicColumn({payload});
+      getResponePopup(response);
+    } catch (error) {
+      getResponePopup(error?.response);
+    }
   };
   const handleReset = () => {
     const resetColumns = selectedColumns.map((col) => ({
@@ -33,7 +42,6 @@ const CustomizableDrawer = ({
       prev.map((filter) => ({ ...filter, active: false }))
     );
   };
-
 
   return (
     <Drawer title={title} onClose={onClose} open={open}>
@@ -80,9 +88,7 @@ const CustomizableDrawer = ({
                   }
                 }}
               >
-                <div
-                  className="d-flex align-items-center gap-3 "
-                >
+                <div className="d-flex align-items-center gap-3 ">
                   {option?.headerName}
                   {/* <div>{option?.orderValue}</div> */}
                 </div>
@@ -101,4 +107,12 @@ const CustomizableDrawer = ({
   );
 };
 
-export default CustomizableDrawer;
+const enhancer = connect(
+  (state) => ({
+  }),
+  {
+    tableDynamicColumn: allActions.tableDynamicColumn,
+  }
+);
+
+export default enhancer(CustomizableDrawer);

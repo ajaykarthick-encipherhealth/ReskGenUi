@@ -22,15 +22,17 @@ export async function getTableView({
   );
   return data;
 }
-export async function dynamicColumn({ obj }) {
+
+export async function dynamicColumn({ payload }) {
   const options = {
     method: "POST",
-    body: JSON.stringify(obj),
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(payload),
   };
-  const data = await requestPortal(
-    `dbservice/table/column
-  `,
-    options
-  );
+  console.log(payload, "test");
+
+  const data = await requestPortal(`dbservice/table/column`, options);
   return data;
 }
