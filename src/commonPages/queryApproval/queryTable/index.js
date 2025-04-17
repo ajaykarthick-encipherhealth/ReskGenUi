@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import AppTable from "../../../components/tables";
 import RegularButton from "../../../components/button";
 import { connect } from "react-redux";
+import { findItemWithTrueKey } from "../../../utils/reusable";
 
 const QueryTable = ({ data ,active , setActive,setActiveStatus,tableLoader}) => {
   const buttons = ["Pending", "Approved", "Rejected"];
@@ -38,6 +39,7 @@ const QueryTable = ({ data ,active , setActive,setActiveStatus,tableLoader}) => 
           totalRecords={data?.response?.pageResponse?.totalElements}
           row={15}
           onPageChange={onPageChange}
+          isCheckBox={findItemWithTrueKey(data?.response?.staticDesign,"checkBox")}
         />
       </div>
     </div>
