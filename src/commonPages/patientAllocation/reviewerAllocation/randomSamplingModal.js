@@ -147,7 +147,6 @@ const RandomSamplingModal = ({
         open={open}
         onCancel={() => {
           setOpen(false);
-          setSelectedRowsId(selectedChart);
           setActiveCard("");
           setActiveEmail("");
           setSearch("");
