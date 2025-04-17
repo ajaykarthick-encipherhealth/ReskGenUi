@@ -7,5 +7,8 @@ export const tableViewAction = createActionThunk(
   "TABLE_VIEW",
   network.getTableView
 );
-
+export const tableDynamicColumn = createActionThunk(
+  "TABLE_DYNAMIC_COLUMN",
+  network.dynamicColumn
+);
 
