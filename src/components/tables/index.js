@@ -99,7 +99,13 @@ const AppTable = ({
   dateFormateAlign,
   getStatusStyles,
   renderCountDetailsPopover,
+  isCheckBox
 }) => {
+  if(isCheckBox){
+    column.push({
+      checkBox:true
+    })
+  }    
   const router = useRouter();
   const columnsArr = Array.from({ length: column?.length || 5 });
   return (
@@ -123,7 +129,7 @@ const AppTable = ({
                 }`}
               >
                 <tr>
-                  {column?.map((item, index) => (
+                  {column?.map((item, index) => (                    
                     <TableHeadItem
                       infoIcon={infoIcon}
                       item={item}
@@ -229,6 +235,16 @@ const AppTable = ({
 };
 
 const TableHeadItem = ({ item, sort, setSort }) => {
+  if (item.checkBox) {
+    return (
+      <th >
+        <input type="checkbox"  id="checkall-header"
+                    name="checkall-header"
+                    className="mx-1" />
+        {item.name}
+      </th>
+    );
+  }
   if (item.sortable) {
     return (
       <th className="text-start text-truncate font2">
@@ -384,7 +400,7 @@ const TableRow = ({
       } ${activeItem?.id === item?.id ? Style.activeRow : ""} text-start`}
       style={{ backgroundColor: rowBackground, height: "35px" }}
     >
-      {column?.map((columnItem, index) => {
+      {column?.map((columnItem, index) => {        
         if (columnItem.name == "Priority") {
           return (
             <td
@@ -993,7 +1009,7 @@ const TableRow = ({
           );
         }
 
-        if (columnItem?.isCheckbox) {
+        if (columnItem?.checkBox) {
           return (
             <td
               className={

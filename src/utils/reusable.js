@@ -712,3 +712,12 @@ export const getAccessTabItems = ({ page, tabsMenu }) => {
   );
   return currentTabs?.[tabsMenu];
 };
+
+export  const  findItemWithTrueKey =(dataArray, fieldName)=> {
+  const item = dataArray?.find(item => item.actualField === fieldName);
+  if(item?.actualField === fieldName){
+   return true;
+  }else{
+    return false;
+  }
+}
