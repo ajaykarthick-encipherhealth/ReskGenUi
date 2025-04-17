@@ -77,6 +77,7 @@ const ReviewerAllocation = ({
       });
     }
   };
+  console.log(data?.response?.pageResponse?.totalElements, "datatest");
   
   const columns = [
     { name: "PATIENT Id", value: "patientId" },
@@ -148,9 +149,7 @@ const ReviewerAllocation = ({
         // data={reviewersData?.content}
         // column={columns}
         data={data?.response?.pageResponse?.content}
-                                column={data?.response?.metaDataDTO.filter(
-                                  (item) => item.active
-                                )}
+        column={data?.response?.metaDataDTO.filter((item) => item.active)}
         loader={loader}
         handleRowCheckboxChange={handleRowCheckboxChange}
         checkBoxLoader={checkedLoader}
@@ -159,7 +158,7 @@ const ReviewerAllocation = ({
         sort={sort}
         tableId={"reviewer-Allocation-Table"}
         first={pageNo === 0 ? 0 : paginationFirst}
-        totalRecords={reviewersData?.totalElements}
+        totalRecords={data?.response?.pageResponse?.totalElements}
         row={15}
         onPageChange={onPageChange}
       />

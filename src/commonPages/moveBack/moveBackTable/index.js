@@ -95,7 +95,7 @@ const MoveBackTable = ({data}) => {
           //   loader={loading}
           pagination={true}
           first={pageNo === 0 ? 0 : paginationFirst}
-          totalRecords={0}
+          totalRecords={data?.response?.pageResponse?.totalElements}
           row={15}
           onPageChange={onPageChange}
         />
