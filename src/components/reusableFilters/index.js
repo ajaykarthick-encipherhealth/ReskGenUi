@@ -63,6 +63,7 @@ const ReusableFilters = ({
   handleInsert,
   showCustomizeTable,
   showDrawer,
+  handleSubmit
 }) => {
   const pickerRefs = useRef({});
   const router = useRouter();
@@ -380,7 +381,7 @@ const ReusableFilters = ({
             <div
               id="addPatient-btn"
               name="addPatient-btn"
-              className="d-flex justify-content-center align-items-center  mt-4"
+              className="d-flex justify-content-center align-items-center   mt-4"
               style={{ width: "auto" }}
             >
               <RegularButton name={"Table Customize"} onClick={showDrawer} />
@@ -393,6 +394,7 @@ const ReusableFilters = ({
                 setSelectedColumns={setSelectedColumns}
                 handleInsert={handleInsert}
                 setActiveFilters={setActiveFilters}
+                handleSubmit={handleSubmit}
               />
             </div>
           </>

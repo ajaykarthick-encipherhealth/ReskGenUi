@@ -13,6 +13,7 @@ import MoveBackModal from "./moveBackModal";
 import MoveBackTable from "./moveBackTable";
 import { actions as tableAction } from "../../stores/tableView";
 import CardSkeleton from "../../components/skeleton/card";
+import { getResponePopup } from "../../utils/reusable";
 
 const MoveBack = ({
   tableLoader,
@@ -24,6 +25,7 @@ const MoveBack = ({
   data,
   getAllTabRoles,
   allRoles,
+  tableDynamicColumn,
 }) => {
   const commonFilterItems = [
     {
@@ -162,15 +164,9 @@ const MoveBack = ({
 
     return filteredItems;
   };
-  const handleInsert = () => {};
   const showDrawer = () => {
     setOpen(true);
   };
-
-  useEffect(() => {
-    const filteredFilters = getFilterOption();
-    setActiveFilters(filteredFilters);
-  }, [activeTab, selectedSupervisor]);
 
   const params = {
     pageNo,
@@ -189,15 +185,6 @@ const MoveBack = ({
       setRoleId(res?.response?.allocationRoles[0]?.roleId);
     }
   };
-  useEffect(() => {
-    if (routedData) {
-      setActiveTab(routedData?.activeTab);
-    } else {
-      setActiveTab("1");
-      setSearchText("");
-      setSelectedOption({});
-    }
-  }, [routedData]);
   const getMoveBack = async () => {
     const response = await getTableData({
       pageId: "937b0477-f0cd-46e7-b8ab-fefb38f91859",
@@ -206,6 +193,27 @@ const MoveBack = ({
       roleId,
     });
   };
+
+  const handleSubmit = async () => {
+    const payload = {
+      pageId: pageId,
+      headerNames: test
+        .filter((col) => col.active)
+        .map((col) => col.actualField),
+    };
+
+    try {
+      const response = await tableDynamicColumn({ payload });
+      if (response?.status === "SUCCESS") {
+        getMoveBack();
+        onClose();
+        getResponePopup(response);
+      }
+    } catch (error) {
+      getResponePopup(error?.response);
+    }
+  };
+
   useEffect(() => {
     getRolesList();
   }, []);
@@ -218,8 +226,12 @@ const MoveBack = ({
 
   useEffect(() => {
     setParamsFilter("check");
-    if (window !== "undefined" && paramsFilter &&  allRoles?.allocationRoles?.length > 0) {
-      getMoveBack()
+    if (
+      window !== "undefined" &&
+      paramsFilter &&
+      allRoles?.allocationRoles?.length > 0
+    ) {
+      getMoveBack();
     }
   }, [
     selectedOption,
@@ -233,6 +245,20 @@ const MoveBack = ({
     search,
     roleId,
   ]);
+  useEffect(() => {
+    if (routedData) {
+      setActiveTab(routedData?.activeTab);
+    } else {
+      setActiveTab("1");
+      setSearchText("");
+      setSelectedOption({});
+    }
+  }, [routedData]);
+  useEffect(() => {
+    const filteredFilters = getFilterOption();
+    setActiveFilters(filteredFilters);
+  }, [activeTab, selectedSupervisor]);
+
   return (
     <div>
       <Header />
@@ -304,10 +330,9 @@ const MoveBack = ({
                         </Nav>
                       )}
 
-                      <div className="d-flex">
+                      <div className="d-flex ">
                         <div
                           className={` d-flex gap-3 mt-4`}
-                          style={{ width: "90%" }}
                         >
                           <ReusableFilters
                             showFilter={false}
@@ -336,10 +361,10 @@ const MoveBack = ({
                             onClose={onClose}
                             selectedColumns={test}
                             setSelectedColumns={setTest}
-                            handleInsert={handleInsert}
                             commonFilterItems={commonFilterItems}
                             showCustomizeTable={true}
                             showDrawer={showDrawer}
+                            handleSubmit={handleSubmit}
                           />
                         </div>
                       </div>
@@ -398,7 +423,7 @@ const connector = connect(
       state.tenantAdmin?.patientsAllocation?.filterOptions?.data?.response,
     routedData: state.tenantAdmin?.tin?.allocationRoutedData,
     data: state?.tableView?.tableView?.data,
-    tableLoader:state?.tableView?.tableViewLoading,
+    tableLoader: state?.tableView?.tableViewLoading,
     allRoles: state?.tenantAdmin?.patientsAllocation?.getRoles?.data?.response,
     rolesLoader: state?.tenantAdmin?.patientsAllocation?.rolesLoader,
   }),
@@ -410,6 +435,7 @@ const connector = connect(
     getRoutedData: tinActions.getAllocationRoutedData,
     getTableData: tableAction.tableViewAction,
     getAllTabRoles: allActions.getAllRoles,
+    tableDynamicColumn: tableAction.tableDynamicColumn,
   }
 );
 

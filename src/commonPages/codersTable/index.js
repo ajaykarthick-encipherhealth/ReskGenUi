@@ -16,6 +16,7 @@ import { actions as allReportActions } from "../../stores/admin/report";
 import { Tab, Nav } from "react-bootstrap";
 import data from "../../pages/reviewer/patients/data.json"
 import Header from "../../jsx/layouts/nav/Header";
+import { getResponePopup } from "../../utils/reusable";
 const role = getStorage("proxyRole");
 export const bullets = [
   {
@@ -115,7 +116,9 @@ const CodersTable = ({
   status,
   tableLoader,
   getTableData,
+  tableDynamicColumn,
   pageId,
+  data
 }) => {
   const columns = [
     {
@@ -300,7 +303,25 @@ const CodersTable = ({
     setActiveStatus(name);
   };
 
-  const handleInsert = () => {};
+ const handleSubmit = async () => {
+    const payload = {
+      pageId: pageId,
+      headerNames: test
+        .filter((col) => col.active)
+        .map((col) => col.actualField),
+    };
+
+    try {
+      const response = await tableDynamicColumn({payload});
+      if (response?.status === "SUCCESS"){
+        getCodersApi()
+        onClose()
+        getResponePopup(response);
+      }
+    } catch (error) {
+      getResponePopup(error?.response);
+    }
+  };
   useEffect(() => {
     getAllBatchList();
 
@@ -378,10 +399,10 @@ const CodersTable = ({
                 onClose={onClose}
                 selectedColumns={test}
                 setSelectedColumns={setTest}
-                handleInsert={handleInsert}
                 commonFilterItems={commonFilterItems}
                 showCustomizeTable={true}
                 showDrawer={showDrawer}
+                handleSubmit={handleSubmit}
               />
             </div>
           </div>
@@ -503,6 +524,7 @@ const enhancer = connect(
     status:
       state?.reviewer?.workQueue?.getStatus?.data?.response?.processStatusCount,
       tableLoader:state?.tableView?.tableViewLoading,
+      data: state?.tableView?.tableView?.data,
   }),
   {
     getpatientsListFilter: workqueueActions.patientsAction,
@@ -513,6 +535,7 @@ const enhancer = connect(
     getActiveTab: allReportActions.activeTab,
     getStatus: allActions.getStatusAction,
     getTableData: tableAction.tableViewAction,
+    tableDynamicColumn: tableAction.tableDynamicColumn,
   }
 );
 export default enhancer(CodersTable);

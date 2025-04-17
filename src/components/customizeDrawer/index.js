@@ -15,25 +15,26 @@ const CustomizableDrawer = ({
   title = "Table Customize",
   setActiveFilters,
   tableDynamicColumn,
+  handleSubmit,
 }) => {
-  const handleSubmit = async () => {
-    const payload = {
-      pageId: "3a5feaba-7de6-4557-961b-ab973a688f81",
-      headerNames: selectedColumns
-        .filter((col) => col.active)
-        .map((col) => col.actualField),
-    };
+  // const handleSubmit = async () => {
+  //   const payload = {
+  //     pageId: "3a5feaba-7de6-4557-961b-ab973a688f81",
+  //     headerNames: selectedColumns
+  //       .filter((col) => col.active)
+  //       .map((col) => col.actualField),
+  //   };
 
-    try {
-      const response = await tableDynamicColumn({payload});
-      if (response?.status === "SUCCESS"){
-        onClose()
-        getResponePopup(response);
-      }
-    } catch (error) {
-      getResponePopup(error?.response);
-    }
-  };
+  //   try {
+  //     const response = await tableDynamicColumn({payload});
+  //     if (response?.status === "SUCCESS"){
+  //       onClose()
+  //       getResponePopup(response);
+  //     }
+  //   } catch (error) {
+  //     getResponePopup(error?.response);
+  //   }
+  // };
   const handleReset = () => {
     const resetColumns = selectedColumns.map((col) => ({
       ...col,
@@ -102,6 +103,7 @@ const CustomizableDrawer = ({
       </div>
       <div className="w-100">
         <div className="mt-4 d-flex align-items-center justify-content-center gap-3">
+          <div></div>
           <RegularButton name="Reset" onClick={handleReset} />
           <RegularButton name="Insert" onClick={handleSubmit} />
         </div>
