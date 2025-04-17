@@ -3,8 +3,7 @@ import AppTable from "../../../components/tables";
 import RegularButton from "../../../components/button";
 import { connect } from "react-redux";
 
-const QueryTable = ({data}) => {
-  const [active, setActive] = useState("Pending");
+const QueryTable = ({ data ,active , setActive,setActiveStatus}) => {
   const buttons = ["Pending", "Approved", "Rejected"];
   const [pageNo, setPageNo] = useState(0);
   const [paginationFirst, setPaginationFirst] = useState(0);
@@ -21,15 +20,18 @@ const QueryTable = ({data}) => {
           <RegularButton
             key={btn}
             name={btn}
-            type={active === btn ? "primary" : "outline"} 
-            onClick={() => setActive(btn)}
+            type={active === btn ? "primary" : "outline"}
+            onClick={() => {
+              setActive(btn);
+              setActiveStatus(btn.toLocaleUpperCase());
+            }}            
           />
         ))}
       </div>
       <div className="mt-3">
         <AppTable
-                 data={data?.response?.pageResponse?.content}
-                 column={data?.response?.metaDataDTO.filter((item) => item.active)}
+          data={data?.response?.pageResponse?.content}
+          column={data?.response?.metaDataDTO.filter((item) => item.active)}
           //   loader={loading}
           pagination={true}
           first={pageNo === 0 ? 0 : paginationFirst}
@@ -42,16 +44,11 @@ const QueryTable = ({data}) => {
   );
 };
 
-
 const connector = connect(
   (state) => ({
-
     data: state?.tableView?.tableView?.data,
-    
   }),
-  {
-   
-  }
+  {}
 );
 
 export default connector(QueryTable);

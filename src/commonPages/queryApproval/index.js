@@ -99,6 +99,7 @@ const QueryApproval = ({
   const [search, setSearch] = useState({});
   const [roleId, setRoleId] = useState(null);
   const [activeStatus , setActiveStatus] = useState("PENDING")
+   const [active, setActive] = useState("Pending");
 
   const handleTabChange = (key) => {
     setActiveTab(key);
@@ -149,6 +150,7 @@ const QueryApproval = ({
     search,
     activeStatus,
     roleId,
+    active,
   ]);
   const getFilterOption = () => {
     let filteredItems;
@@ -264,7 +266,7 @@ const QueryApproval = ({
                       </div>
                       <Tab.Content>
                         <Tab.Pane eventKey={activeTab}>
-                          <QueryTable />
+                          <QueryTable setActiveStatus={setActiveStatus} active={active} setActive={setActive} />
                         </Tab.Pane>
                       </Tab.Content>
                     </Tab.Container>
