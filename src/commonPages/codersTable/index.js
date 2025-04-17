@@ -324,8 +324,6 @@ const CodersTable = ({
   };
   useEffect(() => {
     getAllBatchList();
-
- 
   }, []);
 
   const params = {

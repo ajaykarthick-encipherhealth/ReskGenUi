@@ -86,72 +86,7 @@ const ReviewerAllocation = ({
       });
     }
   };
-  console.log(data?.response?.pageResponse?.totalElements, "datatest");
-  
-  const columns = [
-    { name: "PATIENT Id", value: "patientId" },
-    { name: "PATIENT NAME", value: "patientName" },
-    {
-      name: "COMPUTED DATE",
-      value: "computedDate",
-      isDate: true,
-      sortable: true,
-    },
-    { name: "PRIORITY", value: "priority" },
-    {
-      name: (
-        <div>
-          {reviewersData?.content?.length > 0 ? (
-            <div className="w-full d-flex justify-content-center">
-              {checkedLoader ? (
-                <Spin
-                  indicator={<LoadingOutlined className="text-white font2" />}
-                  className={`mx-4 ${styles.spinnerStyle}`}
-                />
-              ) : (
-                <input
-                  type="checkbox"
-                  onChange={(e) => {
-                    let checked = !selectAllChecked;
-                    setSelectAllChecked(checked);
-                    if (selectedRows?.length < reviewersData?.totalElements) {
-                      checked = true;
-                      setSelectAllChecked(true);
-                    }
-                    handleRowCheckboxChange({
-                      e,
-                      row: null,
-                      singleCheck: false,
-                      checked,
-                    });
-                  }}
-                  style={{
-                    width: "20px",
-                    height: "20px",
-                    flexShrink: "0",
-                    borderRadius: "4px",
-                    cursor: "pointer",
-                  }}
-                  checked={
-                    selectedRows?.length === reviewersData?.totalElements
-                  }
-                  className={`mx-4 ${styles.checkBox} ${
-                    selectedRows?.length === reviewersData?.totalElements
-                      ? styles.customChecked2
-                      : ""
-                  }`}
-                />
-              )}
-            </div>
-          ) : (
-            ""
-          )}
-        </div>
-      ),
-      value: "patientId",
-      isCheckbox: true,
-    },
-  ];
+
   return (
     <div className="mt-2">
       <AppTable

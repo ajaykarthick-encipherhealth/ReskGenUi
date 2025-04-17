@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { DatePicker, Input, Select, Space } from "antd";
+import { Button, DatePicker, Input, Select, Space } from "antd";
 import moment from "moment";
 import ReusableInput from "./reusableInput";
 import MoreFilter from "../../pages/tenantadmin/tracking/filters";
@@ -382,9 +382,25 @@ const ReusableFilters = ({
               id="addPatient-btn"
               name="addPatient-btn"
               className="d-flex justify-content-center align-items-center   mt-4"
-              style={{ width: "auto" }}
+             
             >
-              <RegularButton name={"Table Customize"} onClick={showDrawer} />
+              {/* <RegularButton name={"Table Customize"} onClick={showDrawer} /> */}
+              <Button
+                data-testid="table-custom"
+                name="table-custom"
+                onClick={
+                  showDrawer
+              }
+                style={{
+                  background: "#04306f",
+                  color: "#fff",
+                  width: "100%",
+                  fontSize: "12px",
+                }}
+                className="btn btn-sm w-full text-ellipsis"
+              >
+                Table Customize
+              </Button>
             </div>
             <div>
               <CustomizableDrawer

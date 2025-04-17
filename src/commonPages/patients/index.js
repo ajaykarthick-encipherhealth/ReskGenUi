@@ -893,7 +893,7 @@ const Patient = ({
             <div
               id="addPatient-btn"
               name="addPatient-btn"
-              className="d-flex justify-content-center align-items-center mt-3"
+              className="d-flex justify-content-center align-items-center mt-4 px-1"
               style={{ width: "10%" }}
             >
               <Button
