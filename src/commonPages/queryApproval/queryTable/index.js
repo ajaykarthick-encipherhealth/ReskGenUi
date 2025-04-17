@@ -1,82 +1,9 @@
 import React, { useState } from "react";
 import AppTable from "../../../components/tables";
 import RegularButton from "../../../components/button";
+import { connect } from "react-redux";
 
-const QueryTable = () => {
-  const columns = [
-    {
-      name: "Tin",
-      value: "patientId",
-      isShow: true,
-      filterKey: "Search",
-    },
-    {
-      name: "Progress",
-      value: "batchName",
-      isShow: true,
-      filterKey: "batch",
-    },
-    {
-      name: "Providers",
-      value: "fileName",
-      isShow: true,
-    },
-    {
-      name: "Patients",
-      value: "validDiseaseCount",
-      isShow: true,
-    },
-    {
-      name: "Not Assigned",
-      value: "allocatedOn",
-      isShow: true,
-      filterKey: "allocatedDate",
-    },
-    {
-      name: "Downloading",
-      value: "dueDate",
-
-      isDate: true,
-      isShow: true,
-      filterKey: "dueDate",
-    },
-    {
-      name: "Coder 1",
-      value: "processedDate",
-      isDate: true,
-      isShow: true,
-      filterKey: "completedDate",
-    },
-
-    {
-      name: "Coder 2",
-      isShow: true,
-    },
-    {
-      name: "QA",
-      value: "",
-      isShow: true,
-      filterKey: "Priority",
-    },
-    {
-      name: "Downloader Not Complete",
-      value: "statusProxy",
-      isShow: true,
-      filterKey: "Status",
-    },
-    {
-      name: "Complete",
-      value: "statusProxy",
-      isShow: true,
-      filterKey: "Status",
-    },
-    {
-      name: "priority",
-      value: "",
-      isShow: true,
-      filterKey: "",
-    },
-  ];
+const QueryTable = ({data}) => {
   const [active, setActive] = useState("Pending");
   const buttons = ["Pending", "Approved", "Rejected"];
   const [pageNo, setPageNo] = useState(0);
@@ -101,12 +28,12 @@ const QueryTable = () => {
       </div>
       <div className="mt-3">
         <AppTable
-          data={[]}
-          column={columns}
+                 data={data?.response?.pageResponse?.content}
+                 column={data?.response?.metaDataDTO.filter((item) => item.active)}
           //   loader={loading}
           pagination={true}
           first={pageNo === 0 ? 0 : paginationFirst}
-          totalRecords={0}
+          totalRecords={data?.response?.pageResponse?.totalElements}
           row={15}
           onPageChange={onPageChange}
         />
@@ -115,4 +42,16 @@ const QueryTable = () => {
   );
 };
 
-export default QueryTable;
+
+const connector = connect(
+  (state) => ({
+
+    data: state?.tableView?.tableView?.data,
+    
+  }),
+  {
+   
+  }
+);
+
+export default connector(QueryTable);
