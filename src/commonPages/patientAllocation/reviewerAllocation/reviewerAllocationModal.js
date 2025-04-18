@@ -116,6 +116,7 @@ const AllocateModal = ({
       setSelectedUserName([]);
       setBatchCount("");
       setSelectedUserIds([]);
+      setActiveCard("");
       setIsSecondModalOpen(false);
     } else {
       getResponePopup(response);
@@ -147,7 +148,6 @@ const AllocateModal = ({
   useEffect(() => {
     setSelectedChart(selectedRowsId);
   }, [selectedRowsId]);
-
   return (
     <div>
       <Modal

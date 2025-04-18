@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Tab, Nav } from "react-bootstrap";
 import ReviewerAllocation from "./reviewerAllocation";
-import { Button, Input, Tooltip, Space } from "antd";
+import { Button, Tooltip } from "antd";
 import ReviewerAllocationModal from "./reviewerAllocation/reviewerAllocationModal";
 import { connect } from "react-redux";
 import { actions as allActions } from "../../stores/tenantAdmin/patientAllocations";

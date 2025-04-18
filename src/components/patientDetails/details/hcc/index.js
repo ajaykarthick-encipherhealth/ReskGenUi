@@ -20,6 +20,8 @@ import {
   Tag,
   Divider,
   Modal,
+  Input,
+  Form,
 } from "antd";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -40,6 +42,8 @@ import { getStorage } from "../../../../utils/storages";
 import { SwapOutlined } from "@ant-design/icons";
 import { faEye, faEyeSlash } from "@fortawesome/free-regular-svg-icons";
 import DosSelect from "../components/dosSelect";
+import RegularButton from "../../../button";
+
 const { Option } = Select;
 
 const Hcc = ({
@@ -65,6 +69,8 @@ const Hcc = ({
   selectedDate,
   setSelectedDate,
 }) => {
+  const { TextArea } = Input;
+  const [form] = Form.useForm();
   const [activeTabHead, setActiveTabHead] = useState(1);
   const [flagTagActive, setFlagTagActive] = useState(false);
   const [popoverVisible, setPopoverVisible] = useState(false);
@@ -80,6 +86,26 @@ const Hcc = ({
     showActionsPop: false,
   });
   const [selectedReEvaluateItems, setSelectedReEvaluateItems] = useState([]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const showModal = () => {
+    setIsModalOpen(true);
+  };
+  const handleOk = () => {
+    setIsModalOpen(false);
+  };
+  const handleCancel = () => {
+    setIsModalOpen(false);
+  };
+  const [isOpen, setIsOpen] = useState(false);
+  const showQueryModal = () => {
+    setIsOpen(true);
+  };
+  const handleQueryOk = () => {
+    setIsOpen(false);
+  };
+  const handleQueryCancel = () => {
+    setIsOpen(false);
+  };
 
   useEffect(() => {
     if (patientDosResult?.data?.response) {
@@ -275,65 +301,60 @@ const Hcc = ({
       <div className={styles.displayDiv}>
         {pageNumberOptions
           ? pageNumberOptions?.map((data) => (
-              <div className={styles.hoverDiv} style={{ marginBottom: "5px" }}>
-                <div
-                  className={` ${styles.selectDetailsContainer}`}
-                  style={{
-                    alignItems: "center",
-                    justifyContent: "space-evenly",
-                    margin: "0",
-                  }}
-                >
-                  <div className="col-xl-6 ">
-                    <span className={styles.selectHead}>
-                      {moment(data.dos).format("MM-DD-YYYY")}
-                    </span>
+            <div className={styles.hoverDiv} style={{ marginBottom: "5px" }}>
+              <div
+                className={` ${styles.selectDetailsContainer}`}
+                style={{
+                  alignItems: "center",
+                  justifyContent: "space-evenly",
+                  margin: "0",
+                }}
+              >
+                <div className="col-xl-6 ">
+                  <span className={styles.selectHead}>
+                    {moment(data.dos).format("MM-DD-YYYY")}
+                  </span>
+                </div>
+
+                <div style={{ display: "flex", alignItems: "center" }}>
+                  <div
+                    className={`col-xl-4 p-2 cr-pointer ${styles.hoverPageNum}`}
+                    style={{
+                      textAlign: "center",
+                      margin: "10px",
+                    }}
+                    onClick={() =>
+                      handleChangePageNumber(data.startPageNumber)
+                    }
+                  >
+                    <span>{data?.startPageNumber}</span>
+                  </div>
+                  <div
+                    className="col-xl-1 text-center"
+                    style={{ padding: "10px" }}
+                  >
+                    <SwapOutlined />
                   </div>
 
-                  <div style={{ display: "flex", alignItems: "center" }}>
-                    <div
-                      className={`col-xl-4 p-2 cr-pointer ${styles.hoverPageNum}`}
-                      style={{
-                        textAlign: "center",
-                        margin: "10px",
-                      }}
-                      onClick={() =>
-                        handleChangePageNumber(data.startPageNumber)
-                      }
-                    >
-                      <span>{data?.startPageNumber}</span>
-                    </div>
-                    <div
-                      className="col-xl-1 text-center"
-                      style={{ padding: "10px" }}
-                    >
-                      <SwapOutlined />
-                    </div>
-
-                    <div
-                      className={`col-xl-4 p-2 cr-pointer ${styles.hoverPageNum}`}
-                      style={{
-                        textAlign: "center",
-                        margin: "10px",
-                      }}
-                      onClick={() => handleChangePageNumber(data.endPagNumber)}
-                    >
-                      <span>{data?.endPagNumber}</span>
-                    </div>
+                  <div
+                    className={`col-xl-4 p-2 cr-pointer ${styles.hoverPageNum}`}
+                    style={{
+                      textAlign: "center",
+                      margin: "10px",
+                    }}
+                    onClick={() => handleChangePageNumber(data.endPagNumber)}
+                  >
+                    <span>{data?.endPagNumber}</span>
                   </div>
                 </div>
               </div>
-            ))
+            </div>
+          ))
           : null}
       </div>
     </div>
   );
-  const content = (
-    <div>
-      <p>Content</p>
-      <p>Content</p>
-    </div>
-  );
+
   const hideDiseasePopContent = (
     <>
       <div className="row">
@@ -397,7 +418,7 @@ const Hcc = ({
       </div> */}
     </>
   );
-
+  const onFinish = async (values) => { }
   return (
     <div className={visitStyles.visitdata_tab_body}>
       <div className={`profile-tab ${visitStyles.visitdata_header_card2}`}>
@@ -689,23 +710,25 @@ const Hcc = ({
                       <Nav.Item as="li" className="nav-item">
                         <button
                           className={` px-3   py-1 rounded-md  ${styles.approveBtn}`}
-                          onClick={() => ghb}
                         >
                           Approve
                         </button>
                       </Nav.Item>
                       <Nav.Item as="li" className="nav-item">
-                        <Popover
-                          content={content}
-                          title="Title"
-                          trigger="click"
+                        <button
+                          className={` px-3   py-1 rounded-md  ${styles.rejectBtn}`}
+                          onClick={showModal}
                         >
-                          <button
-                            className={` px-3   py-1 rounded-md  ${styles.rejectBtn}`}
-                          >
-                            Reject
-                          </button>
-                        </Popover>
+                          Reject
+                        </button>
+                      </Nav.Item>
+                      <Nav.Item as="li" className="nav-item">
+                        <button
+                          onClick={showQueryModal}
+                          className={` px-3   py-1 rounded-md  ${styles.queryBtn}`}
+                        >
+                          Query
+                        </button>
                       </Nav.Item>
                     </div>
                   </div>
@@ -789,12 +812,12 @@ const Hcc = ({
               onChange={(val) => {
                 val?.target.checked
                   ? setSelectedReEvaluateItems((prev) => [
-                      ...prev,
-                      "Combination",
-                    ])
+                    ...prev,
+                    "Combination",
+                  ])
                   : setSelectedReEvaluateItems((prev) =>
-                      prev.filter((item) => item !== "Combination")
-                    );
+                    prev.filter((item) => item !== "Combination")
+                  );
               }}
               style={{
                 width: "20px",
@@ -818,12 +841,12 @@ const Hcc = ({
               onChange={(val) => {
                 val?.target.checked
                   ? setSelectedReEvaluateItems((prev) => [
-                      ...prev,
-                      "Lab & Radiology",
-                    ])
+                    ...prev,
+                    "Lab & Radiology",
+                  ])
                   : setSelectedReEvaluateItems((prev) =>
-                      prev.filter((item) => item !== "Lab & Radiology")
-                    );
+                    prev.filter((item) => item !== "Lab & Radiology")
+                  );
               }}
               style={{
                 width: "20px",
@@ -848,6 +871,85 @@ const Hcc = ({
             </span>
           </div>
         </div>
+      </Modal>
+      <Modal
+        footer={null}
+        title="Reason for Queried Rejected"
+        open={isModalOpen}
+        onOk={handleOk}
+        onCancel={handleCancel}
+      >
+        <div className="rejectTextArea">
+          <TextArea width={500} rows={4} maxLength={100} />
+          <div className="mt-2 mx-2 my-2 d-flex justify-content-end align-items-end">
+            <Button
+              style={{ background: "#04306f", color: "white" }}
+              className={`${styles.submitBtn}`}
+            >
+              Submit
+            </Button>
+          </div>
+        </div>
+      </Modal>
+      <Modal
+        title="Raise Query"
+        open={isOpen}
+        onOk={handleQueryOk}
+        onCancel={handleQueryCancel}
+        footer={null}
+      >
+        <Form
+          form={form}
+          name="validateOnly"
+          layout="vertical"
+          autoComplete="off"
+          onFinish={onFinish}
+        >
+          <div className="mt-3 samplingSelect">
+            <Form.Item
+              label="Select Role"
+              name="role"
+              rules={[
+                {
+                  required: true,
+                  message: "Select the Role!",
+                },
+              ]}
+            >
+              <Select
+                options={[
+                  { value: "jack", label: "Jack" },
+                  { value: "lucy", label: "Lucy" },
+                  { value: "Yiminghe", label: "yiminghe" },
+                  { value: "disabled", label: "Disabled", disabled: true },
+                ]}
+                className="w-75"
+                placeholder="Select Role"
+              />
+            </Form.Item>
+          </div>
+          <div className="rejectTextArea">
+            <Form.Item
+              rules={[
+                {
+                  required: true,
+                  message: "Enter Reason",
+                },
+              ]}
+              label="Reason"
+              name="raeson"
+            >
+
+              <TextArea placeholder="Enter Reason" width={500} rows={4} maxLength={100} />
+            </Form.Item>
+          </div>
+
+          <Form.Item>
+            <div className="d-flex align-items-center justify-content-center">
+              <RegularButton type="submit" name="Submit" width={100} />
+            </div>
+          </Form.Item>
+        </Form>
       </Modal>
     </div>
   );

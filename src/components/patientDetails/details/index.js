@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import NavBar from "../../../jsx/layouts/nav/Header";
 import visitStyles from '../../../styles/visitdata.module.css'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { FilterOutlined, UndoOutlined } from "@ant-design/icons";
+import { FilterOutlined, MonitorOutlined, UndoOutlined } from "@ant-design/icons";
 import {
   faFlag,
   faComment,
@@ -70,6 +70,7 @@ import { allFilters } from "../../../pages/reviewer/patients/headerFilters";
 import { actions as allActions } from "../../../stores/tenantAdmin/patientSync";
 import CardSkeleton from "../../skeleton/card";
 import VersionHistory from "./versionHistory";
+import Queried from "./hcc/queried";
 export const navigetPageDetails = async (
   pageTitle,
   setSideNavLabelActiveKey,
@@ -482,6 +483,9 @@ const Details = ({
       setFlagContainerActiveTitle("Version History");
       getAllRevertDetails({ dos: isDosSelected });
     }
+    if (value == "Queried") {
+      setFlagContainerActiveTitle("Queried");
+    }
   };
 
   const flagList = [
@@ -512,6 +516,10 @@ const Details = ({
     {
       name: "Version History",
       icon: <FontAwesomeIcon icon={faClockRotateLeft} />,
+    },
+    {
+      name: "Queried",
+      icon:   <MonitorOutlined />,
     },
   ];
 
@@ -1113,7 +1121,10 @@ const Details = ({
                       selectedDosValue={selectedDosValue}
                       dosYearDefalutSelect={dosYearDefalutSelect}
                     />
-                  ) : flagContainerActive === "Version History"
+                  ) 
+                  : flagContainerActive === "Queried" ?( <Queried
+                  />)
+                  : flagContainerActive === "Version History"
                     ? (
                     <VersionHistory
                       getRevertDetails={getRevertDetails}

@@ -16587,5 +16587,7 @@ input::-webkit-inner-spin-button {
 .samplingPicker .ant-picker{
   border:1px solid #d9d9d9 !important
 }
-
+.rejectTextArea textarea:where(.css-dev-only-do-not-override-240cud).ant-input{
+  min-height: 100px !important;
+}
 
