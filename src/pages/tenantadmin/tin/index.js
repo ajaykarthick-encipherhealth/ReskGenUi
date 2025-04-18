@@ -350,7 +350,6 @@ const Tin = ({
     },
   ];
 
-  console.log(selectedOption, "selectedOption");
   return (
     <div className={`show`}>
       <Header />

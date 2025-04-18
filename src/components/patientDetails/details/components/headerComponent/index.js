@@ -51,6 +51,7 @@ const HeaderComponent = ({
           fromHcc={true}
         />
       </div>
+      
       <div className="col-1 d-grid " style={{ padding: "0px" }}>
         <div>
           <StatusAction />

@@ -418,25 +418,29 @@ const YearAndDosStatus = ({
   };
 
   const updateStatus = async (action) => {
+    const roleId = getStorage("roleId")
+    const patientId = getStorage("patientId")
     setIsLoading(true);
     setConfirmNotesModal(false);
     setConfirmCompleteModal(false);
     setConfirmAuditModal(false);
     var postData = {
-      patientId: localPatientId,
+      patientId: patientId,
       notes: inputValue.notes,
       processedYear: patientDetailsResult?.data?.response?.processedYear,
       dateOfService: patientDetailsResult?.data?.response?.dateOfService,
+      roleId:roleId,
+      processedStatus:"COMPLETED"
     };
     var apiURL = "";
     if (action == "declineFunction") {
-      apiURL = "dbservice/patient/status/decline";
+      apiURL = "dbservice/status/update-status";
     }
     if (action == "holdFunction") {
-      apiURL = "dbservice/patient/status/hold";
+      apiURL = "dbservice/status/update-status";
     }
     if (action == "pendingFunction") {
-      apiURL = "dbservice/patient/status/pending";
+      apiURL = "dbservice/status/update-status";
     }
     if (action == "reAuditFunction") {
       apiURL = "dbservice/patient/status/reaudit";
@@ -451,7 +455,7 @@ const YearAndDosStatus = ({
       apiURL = "dbservice/patient/status/auditDecline";
     }
     if (action == "completedFuntion") {
-      apiURL = "dbservice/patient/status/complete";
+      apiURL = "dbservice/status/update-status";
     }
     if (action == "auditFunction") {
       apiURL = "dbservice/patient/status/audit";
@@ -479,6 +483,7 @@ const YearAndDosStatus = ({
       }
     } catch (e) {}
   };
+  console.log(localPatientId,"localPatientId")
 
   const handleChange = async (e) => {
     const key = e.target.name;
@@ -497,7 +502,7 @@ const YearAndDosStatus = ({
     getPatientIdDetails(patientDetailsResult?.data?.response);
     setPatienIdDetails(patientDetailsResult?.data?.response);
   }, [patientDetailsResult?.data?.response]);
-
+console.log(patientIdDetailsData?.data?.response?.id,"datas")
   return (
     <>
       {patientDetailsResult?.data?.response && (

@@ -12,7 +12,7 @@ import Header from "../../jsx/layouts/nav/Header";
 import CardSkeleton from "../../components/skeleton/card";
 import { actions as tableAction } from "../../stores/tableView";
 import { getResponePopup } from "../../utils/reusable";
-import { setStorage } from "../../utils/storages";
+import { getStorage, setStorage } from "../../utils/storages";
 
 const QueryApproval = ({
   organizationList,
@@ -212,8 +212,6 @@ const QueryApproval = ({
     }
   };
   const gotoPatientDetails = (data) => {
-    console.log("click")
-    console.log(data,"data  ")
     if (data?.computing === 2) {
       const controller = new AbortController();
       const { signal } = controller;
@@ -221,10 +219,9 @@ const QueryApproval = ({
       setStorage("patientId", data?.patientId);
       var role = getStorage("userRole");
       if (role == "tenant_admin") {
-        // setStorage("routeBackTo", "/tenantadmin/tin/tindetails");
         getRoutedData(page);
         navigate.push({
-          pathname: route ? route : "/tenantadmin/patients/details",
+          pathname: route ? route : "/tenantadmin/tin/details"
         });
       } 
     } 
