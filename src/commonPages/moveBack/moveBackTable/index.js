@@ -23,6 +23,7 @@ const MoveBackTable = ({
   setSort,
   data,
   roleId,
+  selectedRole,
 }) => {
   const [selectAllChecked, setSelectAllChecked] = useState(false);
   const [checkedLoader, setCheckedLoader] = useState(false);
@@ -41,6 +42,7 @@ const MoveBackTable = ({
           pageNo: 0,
           pageSize: 15,
           roleId: roleId,
+          selectedRole:selectedRole
         });
 
         if (response?.status === "SUCCESS") {
@@ -48,7 +50,7 @@ const MoveBackTable = ({
             patientId: patient.patientId,
             patientName: patient.patientName,
           }));
-          setSelectedRows(result.map((patient) => patient.patientId));
+          setSelectedRows(result?.map((patient) => patient.patientId));
           setSelectedRowsId(result);
         }
         setCheckedLoader(false);

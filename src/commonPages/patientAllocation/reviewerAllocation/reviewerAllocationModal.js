@@ -51,7 +51,7 @@ const AllocateModal = ({
   const [search, setSearch] = useState("");
   const [userDetails, setUserDetails] = useState([]);
   const [allocateDate, setAllocateDate] = useState("");
-  const [activeEmail, setActiveEmail] = useState("");
+  const [activeEmail, setActiveEmail] = useState([]);
   const [chart, setChart] = useState({
     date: null,
     completed: null,
@@ -143,13 +143,13 @@ const AllocateModal = ({
       setActiveEmail(userDetails.map((user) => user.email));
     }
   };
-
   useEffect(() => {
     getUserList(search);
   }, [search]);
   useEffect(() => {
     setSelectedChart(selectedRowsId);
   }, [selectedRowsId]);
+  console.log(activeEmail,"activeEmail")
   return (
     <div>
       <Modal

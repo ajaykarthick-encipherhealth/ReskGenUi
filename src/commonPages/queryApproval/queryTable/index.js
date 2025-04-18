@@ -3,6 +3,7 @@ import AppTable from "../../../components/tables";
 import RegularButton from "../../../components/button";
 import { connect } from "react-redux";
 import { findItemWithTrueKey } from "../../../utils/reusable";
+import { getStorage } from "../../../utils/storages";
 
 const QueryTable = ({ data ,active , setActive,setActiveStatus,tableLoader}) => {
   const buttons = ["Pending", "Approved", "Rejected"];
@@ -12,6 +13,27 @@ const QueryTable = ({ data ,active , setActive,setActiveStatus,tableLoader}) => 
     setPaginationFirst(e.first);
     setPageNo(e.page);
     setPageSize(e.rows);
+  };
+  
+  const gotoPatientDetails = (data) => {
+    if (data?.computing === 2) {
+      const controller = new AbortController();
+      const { signal } = controller;
+      controller.abort();
+      setStorage("patientId", data?.patientId);
+      var role = getStorage("userRole");
+      if (role == "tenant_admin") {
+        // setStorage("routeBackTo", "/tenantadmin/tin/tindetails");
+        getRoutedData(page);
+        navigate.push({
+          pathname: route ? route : "/tenantadmin/patients/details",
+        });
+      } 
+    } else {
+      notification.warning({
+        message: data?.patientId + " file not processed. Please wait.",
+      });
+    }
   };
 
   return (
@@ -40,6 +62,7 @@ const QueryTable = ({ data ,active , setActive,setActiveStatus,tableLoader}) => 
           row={15}
           onPageChange={onPageChange}
           isCheckBox={findItemWithTrueKey(data?.response?.staticDesign,"checkBox")}
+          onClick={gotoPatientDetails}
         />
       </div>
     </div>
