@@ -28,6 +28,7 @@ const PatientAllocation = ({
   rolesLoader,
   tableLoader,
   tableDynamicColumn,
+  tableDynamicColumnReset,
 }) => {
   const commonFilterItems = [
     {
@@ -183,6 +184,21 @@ const PatientAllocation = ({
       getResponePopup(error?.response);
     }
   };
+    const handleReset = async () => {
+      const payload = {
+        pageId: "6cd166eb-79ac-4c12-ab0f-07be2983ca70",
+      };
+      try {
+        const response = await tableDynamicColumnReset({ payload });
+        if (response?.status === "SUCCESS") {
+          getAllAllocation();
+          onClose();
+          getResponePopup(response);
+        }
+      } catch (error) {
+        getResponePopup(error?.response);
+      }
+    };
   useEffect(() => {
     setParamsFilter("check");
     if (
@@ -263,7 +279,7 @@ const PatientAllocation = ({
     <div>
       <Header />
       <div className="content-body">
-        <div className="container-fluid" style={{paddingTop:"5px"}}>
+        <div className="container-fluid" style={{ paddingTop: "5px" }}>
           <div className="table-responsive active-projects task-table">
             <div className="row">
               <div className="col-xl-12">
@@ -399,6 +415,7 @@ const PatientAllocation = ({
                           showCustomizeTable={true}
                           showDrawer={showDrawer}
                           handleSubmit={handleSubmit}
+                          handleReset={handleReset}
                         />
                       </div>
 
@@ -494,6 +511,8 @@ const connector = connect(
     getTableData: tableAction.tableViewAction,
     getAllTabRoles: allActions.getAllRoles,
     tableDynamicColumn: tableAction.tableDynamicColumn,
+        tableDynamicColumnReset: tableAction.tableDynamicColumnReset,
+    
   }
 );
 

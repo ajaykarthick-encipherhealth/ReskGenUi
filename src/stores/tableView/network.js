@@ -51,7 +51,7 @@ export async function dynamicColumnReset({ payload }) {
     body: JSON.stringify(payload),
   };
 
-  const data = await requestPortal(`dbservice/table/column`, options);
+  const data = await requestPortal(`dbservice/table/column/reset`, options);
   return data;
 }
 export async function getTableViewChecked({

@@ -24,6 +24,7 @@ const QueryApproval = ({
   tableLoader,
   data,
   tableDynamicColumn,
+  tableDynamicColumnReset,
 }) => {
   const commonFilterItems = [
     {
@@ -182,33 +183,47 @@ const QueryApproval = ({
     }
   };
   const showDrawer = () => {
-    setTest(data?.response?.metaDataDTO)
+    setTest(data?.response?.metaDataDTO);
     setOpen(true);
   };
   const onClose = () => {
     setOpen(false);
   };
- 
-   const handleSubmit = async () => {
-     const payload = {
-       pageId: "8c1eebaf-eb20-4758-b968-6ae15e6fc031",
-       headerNames: test
-         .filter((col) => col.active)
-         .map((col) => col.actualField),
-     };
- 
-     try {
-       const response = await tableDynamicColumn({ payload });
-       if (response?.status === "SUCCESS") {
-        getQueryApproval();
-         onClose();
-         getResponePopup(response);
-       }
-     } catch (error) {
-       getResponePopup(error?.response);
-     }
-   };
 
+  const handleSubmit = async () => {
+    const payload = {
+      pageId: "8c1eebaf-eb20-4758-b968-6ae15e6fc031",
+      headerNames: test
+        .filter((col) => col.active)
+        .map((col) => col.actualField),
+    };
+
+    try {
+      const response = await tableDynamicColumn({ payload });
+      if (response?.status === "SUCCESS") {
+        getQueryApproval();
+        onClose();
+        getResponePopup(response);
+      }
+    } catch (error) {
+      getResponePopup(error?.response);
+    }
+  };
+  const handleReset = async () => {
+    const payload = {
+      pageId: "8c1eebaf-eb20-4758-b968-6ae15e6fc031",
+    };
+    try {
+      const response = await tableDynamicColumnReset({ payload });
+      if (response?.status === "SUCCESS") {
+        getQueryApproval();
+        onClose();
+        getResponePopup(response);
+      }
+    } catch (error) {
+      getResponePopup(error?.response);
+    }
+  };
   useEffect(() => {
     const filteredFilters = getFilterOption();
     setActiveFilters(filteredFilters);
@@ -236,7 +251,7 @@ const QueryApproval = ({
   }, [routedData]);
   useEffect(() => {
     getRolesList();
-    setTest(data?.response?.metaDataDTO)
+    setTest(data?.response?.metaDataDTO);
   }, []);
   return (
     <div>
@@ -311,6 +326,7 @@ const QueryApproval = ({
                             showCustomizeTable={true}
                             showDrawer={showDrawer}
                             handleSubmit={handleSubmit}
+                            handleReset={handleReset}
                           />
                         </div>
                       </div>
@@ -361,6 +377,8 @@ const connector = connect(
     getAllTabRoles: allActions.getAllRoles,
     getTableData: tableAction.tableViewAction,
     tableDynamicColumn: tableAction.tableDynamicColumn,
+        tableDynamicColumnReset: tableAction.tableDynamicColumnReset,
+    
   }
 );
 

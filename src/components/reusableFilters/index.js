@@ -63,7 +63,8 @@ const ReusableFilters = ({
   handleInsert,
   showCustomizeTable,
   showDrawer,
-  handleSubmit
+  handleSubmit,
+  handleReset,
 }) => {
   const pickerRefs = useRef({});
   const router = useRouter();
@@ -83,9 +84,7 @@ const ReusableFilters = ({
   const handleClearFilters = () => {
     setSelectAll(false);
     setActiveFilters((prevFilters) =>
-      prevFilters.map((filter) =>
-        ({ ...filter, active: true })
-      )
+      prevFilters.map((filter) => ({ ...filter, active: true }))
     );
     setSelectedDateRanges({});
     setSelectedDates([]);
@@ -351,13 +350,13 @@ const ReusableFilters = ({
           </div>
         )}
       </div>
-      <div className="d-flex " style={{alignContent:"flex-end"}}>
+      <div className="d-flex " style={{ alignContent: "flex-end" }}>
         {showFilter && (
           <div
             id="more-filters"
             name="more-filters"
             className="d-flex justify-content-center align-items-center "
-            >
+          >
             <MoreFilter
               selectAll={selectAll}
               setSelectAll={setSelectAll}
@@ -382,21 +381,18 @@ const ReusableFilters = ({
               id="addPatient-btn"
               name="addPatient-btn"
               className="d-flex justify-content-center align-items-center   mt-4"
-             
             >
               {/* <RegularButton name={"Table Customize"} onClick={showDrawer} /> */}
               <Button
                 data-testid="table-custom"
                 name="table-custom"
-                onClick={
-                  showDrawer
-              }
+                onClick={showDrawer}
                 style={{
                   background: "#04306f",
                   color: "#fff",
                   width: "100%",
                   fontSize: "12px",
-                  marginLeft:"10px"
+                  marginLeft: "10px",
                 }}
                 className="btn btn-sm w-full text-ellipsis"
               >
@@ -412,6 +408,7 @@ const ReusableFilters = ({
                 handleInsert={handleInsert}
                 setActiveFilters={setActiveFilters}
                 handleSubmit={handleSubmit}
+                handleReset={handleReset}
               />
             </div>
           </>

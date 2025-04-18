@@ -26,6 +26,7 @@ const MoveBack = ({
   getAllTabRoles,
   allRoles,
   tableDynamicColumn,
+  tableDynamicColumnReset,
 }) => {
   const commonFilterItems = [
     {
@@ -164,8 +165,8 @@ const MoveBack = ({
 
     return filteredItems;
   };
-  const showDrawer = () =>{
-    setTest(data?.response?.metaDataDTO)
+  const showDrawer = () => {
+    setTest(data?.response?.metaDataDTO);
     setOpen(true);
   };
 
@@ -215,6 +216,21 @@ const MoveBack = ({
       getResponePopup(error?.response);
     }
   };
+   const handleReset = async () => {
+      const payload = {
+        pageId: "937b0477-f0cd-46e7-b8ab-fefb38f91859",
+      };
+      try {
+        const response = await tableDynamicColumnReset({ payload });
+        if (response?.status === "SUCCESS") {
+          getMoveBack();
+          onClose();
+          getResponePopup(response);
+        }
+      } catch (error) {
+        getResponePopup(error?.response);
+      }
+    };
 
   useEffect(() => {
     getRolesList();
@@ -264,7 +280,7 @@ const MoveBack = ({
     <div>
       <Header />
       <div className="content-body">
-        <div className="container-fluid" style={{paddingTop:"5px"}}>
+        <div className="container-fluid" style={{ paddingTop: "5px" }}>
           <div className="table-responsive active-projects task-table">
             <div className="row">
               <div className="col-xl-12">
@@ -367,6 +383,7 @@ const MoveBack = ({
                             showCustomizeTable={true}
                             showDrawer={showDrawer}
                             handleSubmit={handleSubmit}
+                            handleReset={handleReset}
                           />
                         </div>
                       </div>
@@ -439,6 +456,8 @@ const connector = connect(
     getTableData: tableAction.tableViewAction,
     getAllTabRoles: allActions.getAllRoles,
     tableDynamicColumn: tableAction.tableDynamicColumn,
+        tableDynamicColumnReset: tableAction.tableDynamicColumnReset,
+    
   }
 );
 

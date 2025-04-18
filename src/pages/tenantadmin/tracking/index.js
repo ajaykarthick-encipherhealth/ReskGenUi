@@ -223,7 +223,7 @@ const Patient = ({
     setPageNo(e.page);
   };
   const showDrawer = () => {
-    setTest(data?.response?.metaDataDTO)
+    setTest(data?.response?.metaDataDTO);
     setOpen(true);
   };
   const onClose = () => {
@@ -252,7 +252,6 @@ const Patient = ({
     const payload = {
       pageId: "ea046971-08de-4ee2-bf47-10c62c0eaa18",
     };
-
     try {
       const response = await tableDynamicColumnReset({ payload });
       if (response?.status === "SUCCESS") {

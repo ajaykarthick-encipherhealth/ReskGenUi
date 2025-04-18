@@ -331,8 +331,8 @@ const PatientSync = ({
   getTableData,
   data,
   tableDynamicColumn,
+  tableDynamicColumnReset
 }) => {
-  console.log(reportActiveTab);
 
   const columns = [
     {
@@ -790,6 +790,29 @@ const PatientSync = ({
       getResponePopup(error?.response);
     }
   };
+   const handleReset = async () => {
+      const payload = {
+        pageId: pageIds,
+      };
+      try {
+        const response = await tableDynamicColumnReset({ payload });
+        if (response?.status === "SUCCESS") {
+         if (reportActiveTab === "Provider Roaster") {
+           getAllProviderApi();
+         } else if (reportActiveTab === "Practice Roaster") {
+           getAllPracticeApi();
+         } else if (reportActiveTab === "Patient Roaster") {
+           getAllPatientApi();
+         } else if (reportActiveTab === "Tin Roaster") {
+           getTinApi();
+         }
+          onClose();
+          getResponePopup(response);
+        }
+      } catch (error) {
+        getResponePopup(error?.response);
+      }
+    };
   useEffect(() => {
     if (reportActiveTab === "Provider Roaster") {
       getAllProviderApi();
@@ -993,6 +1016,7 @@ const PatientSync = ({
                                 showCustomizeTable={true}
                                 showDrawer={showDrawer}
                                 handleSubmit={handleSubmitInsert}
+                                handleReset={handleReset}
                               />
                             ) : null}
                             {renderButton()}
@@ -1306,6 +1330,8 @@ const connector = connect(
     getTinRoaster: patientSyncAction.tinRoasterAction,
     getTableData: tableAction.tableViewAction,
     tableDynamicColumn: tableAction.tableDynamicColumn,
+        tableDynamicColumnReset: tableAction.tableDynamicColumnReset,
+    
   }
 );
 export default connector(PatientSync);

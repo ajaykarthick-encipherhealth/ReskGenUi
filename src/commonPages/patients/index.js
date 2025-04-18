@@ -13,7 +13,7 @@ import {
   Tooltip,
   notification,
 } from "antd";
-import visitStyles from '../../styles/visitdata.module.css'
+import visitStyles from "../../styles/visitdata.module.css";
 import FileUploading from "../fileprocessing/FileUploading";
 import Addpatients from "../fileprocessing/Addpatiens";
 import { LoadingOutlined, PlusCircleFilled } from "@ant-design/icons";
@@ -221,6 +221,7 @@ const Patient = ({
   getTableData,
   data,
   tableDynamicColumn,
+  tableDynamicColumnReset,
 }) => {
   const columns = [
     {
@@ -340,7 +341,7 @@ const Patient = ({
     setOpen(false);
   };
   const showDrawer = () => {
-    setTest(data?.response?.metaDataDTO)
+    setTest(data?.response?.metaDataDTO);
     setOpen(true);
   };
 
@@ -818,6 +819,21 @@ const Patient = ({
       getResponePopup(error?.response);
     }
   };
+  const handleReset = async () => {
+    const payload = {
+      pageId: "c41d4ea9-6da4-495c-84f4-95b25d6c13b4",
+    };
+    try {
+      const response = await tableDynamicColumnReset({ payload });
+      if (response?.status === "SUCCESS") {
+        getPatients();
+        onClose();
+        getResponePopup(response);
+      }
+    } catch (error) {
+      getResponePopup(error?.response);
+    }
+  };
   useEffect(() => {
     if (webSocketData && webSocketData?.webSocketType == "PATIENT_COMPUTE") {
       const patientData =
@@ -850,13 +866,16 @@ const Patient = ({
   }, [navigate, routedData]);
   useEffect(() => {
     getAllFlags();
-    setTest(data?.response?.metaDataDTO)
+    setTest(data?.response?.metaDataDTO);
   }, []);
   return (
     <div className={`show `}>
       <Header />
       <div className="content-body">
-        <div className="container-fluid table-responsive active-projects task-table" style={{paddingTop:"5px"}}>
+        <div
+          className="container-fluid table-responsive active-projects task-table"
+          style={{ paddingTop: "5px" }}
+        >
           <section className="d-flex">
             <div style={{ width: "90%" }}>
               <ReusableFilters
@@ -890,6 +909,7 @@ const Patient = ({
                 showCustomizeTable={true}
                 showDrawer={showDrawer}
                 handleSubmit={handleSubmitInsert}
+                handleReset={handleReset}
               />
             </div>
             <div
@@ -991,8 +1011,7 @@ const enhancer = connect(
     routedData: state.tenantAdmin?.patientSync?.routedData,
     getFlagsData: state?.reviewer?.workQueue?.flags?.data,
     data: state?.tableView?.tableView?.data,
-        tableLoader: state?.tableView?.tableViewLoading,
-    
+    tableLoader: state?.tableView?.tableViewLoading,
   }),
   {
     getAllOrganizationList: tenantAdminAction.getAllOrganizationAction,
@@ -1008,7 +1027,8 @@ const enhancer = connect(
     getAllFlags: workflowActions.flagsAction,
     getTableData: tableAction.tableViewAction,
     getAllTabRoles: allActions.getAllRoles,
-        tableDynamicColumn: tableAction.tableDynamicColumn,
+    tableDynamicColumn: tableAction.tableDynamicColumn,
+        tableDynamicColumnReset: tableAction.tableDynamicColumnReset,
     
   }
 );
