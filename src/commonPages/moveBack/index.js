@@ -403,6 +403,7 @@ const MoveBack = ({
                             data={data}
                             tableLoader={tableLoader}
                             roleId={roleId}
+                            selectedRole={selectedRole}
                           />
                         </Tab.Pane>
                       </Tab.Content>
@@ -456,7 +457,7 @@ const connector = connect(
     getTableData: tableAction.tableViewAction,
     getAllTabRoles: allActions.getAllRoles,
     tableDynamicColumn: tableAction.tableDynamicColumn,
-        tableDynamicColumnReset: tableAction.tableDynamicColumnReset,
+    tableDynamicColumnReset: tableAction.tableDynamicColumnReset,
     
   }
 );
