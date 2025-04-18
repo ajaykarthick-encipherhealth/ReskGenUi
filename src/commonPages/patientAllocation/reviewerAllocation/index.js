@@ -77,7 +77,6 @@ const ReviewerAllocation = ({
       });
     }
   };
-
   return (
     <div className="mt-2">
       <AppTable

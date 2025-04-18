@@ -134,6 +134,7 @@ const PatientAllocation = ({
     setBatchCount("");
     setPageNo(0);
     setSearch({});
+    setSelectedRowsId([]);
   };
 
   const handleOpenModal = () => {
@@ -313,6 +314,9 @@ const PatientAllocation = ({
                                 onClick={() => {
                                   setSelectedRoleId(role.roleId);
                                   setRoleId(role.roleId);
+                                  setSelectedRows([]);
+                                  setSelectedRowsId([]);
+                                  setSelectedUserName([]);
                                 }}
                                 eventKey={index + 1}
                               >
