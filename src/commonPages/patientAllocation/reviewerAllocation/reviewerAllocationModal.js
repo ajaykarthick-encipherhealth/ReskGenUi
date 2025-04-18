@@ -149,6 +149,7 @@ const AllocateModal = ({
   useEffect(() => {
     setSelectedChart(selectedRowsId);
   }, [selectedRowsId]);
+
   return (
     <div>
       <Modal
@@ -229,16 +230,19 @@ const AllocateModal = ({
                   <div
                     className="d-flex justify-content-between"
                     onClick={() => {
-                      if (activeCard == item.id) {
+                      if (activeCard === item.id) {
                         setActiveCard("");
-                        setActiveEmail(item.email);
+                        setActiveEmail(activeEmail.filter(email => email !== item.email)); 
                       } else {
                         setActiveCard(item.id);
-                        setActiveEmail(item.email);
+                        if (!activeEmail.includes(item.email)) {
+                          setActiveEmail([...activeEmail, item.email]);
+                        }
                         setAllocateDate("");
                         setPriority([]);
                       }
                     }}
+                    
                   >
                     <div className="d-flex">
                       <Avatar

@@ -423,7 +423,7 @@ const RandomSamplingModal = ({
                 },
               ]}
             >
-              <Select
+              {/* <Select
                 options={[
                   { value: "jack", label: "Jack" },
                   { value: "lucy", label: "Lucy" },
@@ -432,7 +432,8 @@ const RandomSamplingModal = ({
                 ]}
                 className="w-75"
                 placeholder="Select Tin"
-              />
+              /> */}
+              <Input   className="w-75" placeholder="Select Tin" />
             </Form.Item>
           </div>
 
