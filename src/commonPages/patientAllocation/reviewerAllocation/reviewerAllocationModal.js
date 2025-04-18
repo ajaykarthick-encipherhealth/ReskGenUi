@@ -4,6 +4,8 @@ import modalStyle from '../../../pages/tenantadmin/allocateduser/allocate/style.
 import { InputText } from "primereact/inputtext";
 import { useEffect, useState } from "react";
 import Router, { useRouter } from "next/router";
+import dayjs from "dayjs";
+
 import {
   faSearch,
   faXmark,
@@ -277,7 +279,7 @@ const AllocateModal = ({
                       }}
                       type="checkbox"
                       checked={selectedUserIds.includes(item.id)}
-                      onChange={() => handleUserSelect(item.id, item.email)}  
+                      onChange={() => handleUserSelect(item.id, item.email)}
                       className="me-2 ms-3 align-self-center"
                     />
                   </div>
@@ -462,6 +464,7 @@ const AllocateModal = ({
               onClick={() => {
                 setIsSecondModalOpen(true);
                 setOpen(false);
+                setAllocateDate(null);
               }}
             >
               Next
@@ -474,7 +477,7 @@ const AllocateModal = ({
         onCancel={() => {
           setSelectedUserIds([]);
           setIsSecondModalOpen(false);
-          setAllocateDate(null)
+          setAllocateDate(null);
         }}
         footer={null}
         width="35%"
@@ -493,6 +496,7 @@ const AllocateModal = ({
                   id="select-dueDate"
                   name="select-dueDate"
                   style={{ width: "150px" }}
+                  value={allocateDate ? dayjs(allocateDate) : null} 
                   onChange={(date, dateS) => {
                     setAllocateDate(dateS || "");
                   }}
