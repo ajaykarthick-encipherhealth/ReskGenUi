@@ -40,7 +40,8 @@ import {
   getFlagCharts,
   revertDetails,
   confirmRevertDetails,
-  getProxyStatus
+  getProxyStatus,
+  getQuery
 } from "./actions";
 
 
@@ -163,6 +164,7 @@ const patientDetailsReducer = combineReducers({
   revertLoading:getPatientsLoading(revertDetails),
   confirmRevertDetails:createReducer(confirmRevertDetails),
   getStatusAction:createReducer(getProxyStatus),
+  getQueriedDetails:createReducer(getQuery)
 });
 
 export default patientDetailsReducer;

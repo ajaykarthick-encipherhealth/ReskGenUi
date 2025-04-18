@@ -12,6 +12,7 @@ import Header from "../../jsx/layouts/nav/Header";
 import CardSkeleton from "../../components/skeleton/card";
 import { actions as tableAction } from "../../stores/tableView";
 import { getResponePopup } from "../../utils/reusable";
+import { setStorage } from "../../utils/storages";
 
 const QueryApproval = ({
   organizationList,
@@ -25,6 +26,7 @@ const QueryApproval = ({
   data,
   tableDynamicColumn,
   tableDynamicColumnReset,
+  getRoutedData,
 }) => {
   const commonFilterItems = [
     {
@@ -209,6 +211,29 @@ const QueryApproval = ({
       getResponePopup(error?.response);
     }
   };
+  const gotoPatientDetails = (data) => {
+    console.log("click")
+    console.log(data,"data  ")
+    if (data?.computing === 2) {
+      const controller = new AbortController();
+      const { signal } = controller;
+      controller.abort();
+      setStorage("patientId", data?.patientId);
+      var role = getStorage("userRole");
+      if (role == "tenant_admin") {
+        // setStorage("routeBackTo", "/tenantadmin/tin/tindetails");
+        getRoutedData(page);
+        navigate.push({
+          pathname: route ? route : "/tenantadmin/patients/details",
+        });
+      } 
+    } 
+    // else {
+    //   notification.warning({
+    //     message: data?.patientId + " file not processed. Please wait.",
+    //   });
+    // }
+  };
   const handleReset = async () => {
     const payload = {
       pageId: "8c1eebaf-eb20-4758-b968-6ae15e6fc031",
@@ -316,6 +341,7 @@ const QueryApproval = ({
                             opt={opt}
                             setSearch={setSearch}
                             search={search}
+                            onRowClick={gotoPatientDetails}
                             //customize table
 
                             open={open}
@@ -377,7 +403,7 @@ const connector = connect(
     getAllTabRoles: allActions.getAllRoles,
     getTableData: tableAction.tableViewAction,
     tableDynamicColumn: tableAction.tableDynamicColumn,
-        tableDynamicColumnReset: tableAction.tableDynamicColumnReset,
+    tableDynamicColumnReset: tableAction.tableDynamicColumnReset,
     
   }
 );

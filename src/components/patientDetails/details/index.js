@@ -147,6 +147,8 @@ const Details = ({
   getRevertDetails,
   revertLoading,
   confirmRevert,
+  getQueryDetails,
+  queriedData,
 }) => {
   const navigate = useRouter();
   const [count, setCount] = useState(0);
@@ -485,6 +487,7 @@ const Details = ({
     }
     if (value == "Queried") {
       setFlagContainerActiveTitle("Queried");
+      getQueryDetails()
     }
   };
 
@@ -677,6 +680,7 @@ const Details = ({
       getActiveLabels();
     }
   }, [isDosSelected, dosYearDefalutSelect]);
+
 
   return (
     <>
@@ -1123,6 +1127,8 @@ const Details = ({
                     />
                   ) 
                   : flagContainerActive === "Queried" ?( <Queried
+                    queriedData={queriedData}
+
                   />)
                   : flagContainerActive === "Version History"
                     ? (
@@ -1195,6 +1201,8 @@ const enhancer = connect(
     getRevertDetails:
       state?.patientDetails?.details?.getRevertDetails?.data?.response,
     revertLoading: state?.patientDetails?.details?.revertLoading,
+    queriedData:
+    state?.patientDetails?.details?.getQueriedDetails?.data,
   }),
   {
     workFgetFlagsowData: workflowActions.flagsAction,
@@ -1229,6 +1237,7 @@ const enhancer = connect(
     patientDetailsLoad: detailsActions.patientDetailsLoad,
     getAllRevertDetails: detailsActions.revertDetails,
     confirmRevert: detailsActions.confirmRevertDetails,
+    getQueryDetails:detailsActions.getQuery,
   }
 );
 export default enhancer(Details);

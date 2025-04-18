@@ -643,6 +643,20 @@ export async function getRevertDetails({dos}) {
   return data;
 }
 
+export async function getQueryDetails() {
+  const patientId = getStorage("patientId")
+  const roleId = getStorage("roleId")
+  const options = {
+    method: "GET"
+  };
+  const data = await requestPortal(
+    `dbservice/v1/reassign/get/queryDetails?roleId=${roleId}&patientId=${patientId}`,
+    options
+  );
+  return data;
+}
+
+
 export const confirmRevert = async ({dos,year,versionHistory}) => {
   const patientId = getStorage("patientId")
   const options = {

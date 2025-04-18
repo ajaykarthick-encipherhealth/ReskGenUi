@@ -209,3 +209,8 @@ export const getProxyStatus = createActionThunk(
   "GET_CONFIRM_REVERT_DETAILS",
   network.getStatus
 );
+export const getQuery = createActionThunk(
+  "GET_QUERY",
+  network.getQueryDetails
+);
+
