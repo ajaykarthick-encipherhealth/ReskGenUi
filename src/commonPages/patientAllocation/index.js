@@ -184,21 +184,21 @@ const PatientAllocation = ({
       getResponePopup(error?.response);
     }
   };
-    const handleReset = async () => {
-      const payload = {
-        pageId: "6cd166eb-79ac-4c12-ab0f-07be2983ca70",
-      };
-      try {
-        const response = await tableDynamicColumnReset({ payload });
-        if (response?.status === "SUCCESS") {
-          getAllAllocation();
-          onClose();
-          getResponePopup(response);
-        }
-      } catch (error) {
-        getResponePopup(error?.response);
-      }
+  const handleReset = async () => {
+    const payload = {
+      pageId: "6cd166eb-79ac-4c12-ab0f-07be2983ca70",
     };
+    try {
+      const response = await tableDynamicColumnReset({ payload });
+      if (response?.status === "SUCCESS") {
+        getAllAllocation();
+        onClose();
+        getResponePopup(response);
+      }
+    } catch (error) {
+      getResponePopup(error?.response);
+    }
+  };
   useEffect(() => {
     setParamsFilter("check");
     if (
@@ -275,6 +275,10 @@ const PatientAllocation = ({
     }
   }, [allRoles, activeTab]);
 
+  const disbaleAllocate = allRoles?.allocationRoles?.map(
+    (item) => item.disableAllocation
+  );
+
   return (
     <div>
       <Header />
@@ -319,10 +323,10 @@ const PatientAllocation = ({
                             </Nav.Item>
                           ))}
                           <div
-                            className="d-flex align-items-end justify-content-end  "
-                            style={{ width: "85%" }}
+                            className="d-flex align-items-end justify-content-end  w-75 "
+                            // style={{ width: "85%" }}
                           >
-                            {allRoles?.allocationEnabledForQa && (
+                            {disbaleAllocate && (
                               <Nav.Item
                                 as="li"
                                 className="nav-item profile-tab "
@@ -511,8 +515,7 @@ const connector = connect(
     getTableData: tableAction.tableViewAction,
     getAllTabRoles: allActions.getAllRoles,
     tableDynamicColumn: tableAction.tableDynamicColumn,
-        tableDynamicColumnReset: tableAction.tableDynamicColumnReset,
-    
+    tableDynamicColumnReset: tableAction.tableDynamicColumnReset,
   }
 );
 

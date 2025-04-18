@@ -147,7 +147,6 @@ const AllocateModal = ({
   useEffect(() => {
     setSelectedChart(selectedRowsId);
   }, [selectedRowsId]);
-  console.log(activeEmail,"activeEmail")
   return (
     <div>
       <Modal

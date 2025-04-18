@@ -261,7 +261,6 @@ const MoveBack = ({
     paginationFirst,
     search,
     roleId,
-    // selectedRole,
   ]);
   useEffect(() => {
     if (routedData) {
@@ -320,8 +319,8 @@ const MoveBack = ({
                             </Nav.Item>
                           ))}
                           <div
-                            className="d-flex align-items-end justify-content-end"
-                            style={{ width: "85%" }}
+                            className="d-flex align-items-end justify-content-end w-75"
+                            // style={{ width: "85%" }}
                           >
                             <Nav.Item as="li" className="nav-item profile-tab ">
                               <Tooltip
