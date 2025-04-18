@@ -166,7 +166,6 @@ const MoveBack = ({
   };
   const showDrawer = () =>{
     setTest(data?.response?.metaDataDTO)
-    console.log(data?.response?.metaDataDTO,test,"datas")
     setOpen(true);
   };
 
