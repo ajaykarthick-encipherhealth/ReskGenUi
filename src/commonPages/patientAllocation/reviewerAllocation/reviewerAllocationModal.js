@@ -141,13 +141,13 @@ const AllocateModal = ({
       setActiveEmail(userDetails.map((user) => user.email));
     }
   };
-
   useEffect(() => {
     getUserList(search);
   }, [search]);
   useEffect(() => {
     setSelectedChart(selectedRowsId);
   }, [selectedRowsId]);
+  console.log(activeEmail,"activeEmail")
   return (
     <div>
       <Modal
