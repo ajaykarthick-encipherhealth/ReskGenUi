@@ -47,11 +47,11 @@ const ProviderRoasterTable = ({
   return (
     <div>
       <AppTable
-               data={data?.response?.pageResponse?.content}
+        data={data?.response?.pageResponse?.content}
         column={data?.response?.metaDataDTO.filter((item) => item.active)}
         loader={tableLoader}
         first={pageNumber === 0 ? 0 : pagination}
-        totalRecords={providerRoasterData?.totalElements}
+        totalRecords={data?.response?.pageResponse?.totalElements}
         row={15}
         onPageChange={onPageChange}
         statusBodyTemplate={renderStatusRoaster}

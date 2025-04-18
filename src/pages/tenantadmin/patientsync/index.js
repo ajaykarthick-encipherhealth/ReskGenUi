@@ -462,21 +462,34 @@ const PatientSync = ({
   const renderButton = () => {
     switch (reportActiveTab) {
       case "FHIR":
-        return <RegularButton name="Upload" onClick={handleFhirUpload} />;
+        return (
+          <RegularButton
+            name="Upload"
+            onClick={handleFhirUpload}
+            padding={"5px 10px"}
+          />
+        );
       case "PDF":
         return (
           <RegularButton
             name="Create Batch"
             onClick={handleUploadButtonClick}
+            padding={"5px 10px"}
           />
         );
       case "Patient Roaster":
       case "Practice Roaster":
       case "Provider Roaster":
       case "Tin Roaster":
-        return <RegularButton name="Add Roaster" onClick={handleRoasterBtn} />;
+        return <RegularButton name="Add Roaster" onClick={handleRoasterBtn} padding={"5px 10px"} />;
       default:
-        return <RegularButton name="Upload" onClick={handleRoasterBtn} />;
+        return (
+          <RegularButton
+            name="Upload"
+            onClick={handleRoasterBtn}
+            padding={"5px 10px"}
+          />
+        );
     }
   };
   const handleRowActionClick = (row) => {
@@ -632,79 +645,12 @@ const PatientSync = ({
         : "none",
     };
   };
-   const getAllProviderApi = async () => {
-    const response = await getTableData({
-      pageId: "42136c12-83df-46fc-8c8a-200d97f154be",
-      pageNo,
-      pageSize: 15,
-      roleId,
-      projectId: "test",
-    });
-  };
-  const getAllPracticeApi = async () => {
-    const response = await getTableData({
-      pageId: "e2785147-39dc-4bd3-828c-c0d5168acba7",
-      pageNo,
-      pageSize: 15,
-      roleId,
-      projectId: "test",
-    });
-  };
-  const getAllPatientApi = async () => {
-    const response = await getTableData({
-      pageId: "c60dec23-bcfa-48ce-966e-dbf1ce3d41b2",
-      pageNo,
-      pageSize: 15,
-      roleId,
-      projectId: "test",
-    });
-  };
-  const getTinApi = async () => {
-    const response = await getTableData({
-      pageId: "1ff437a0-18a8-47de-893d-41dc669e3cbd",
-      pageNo,
-      pageSize: 15,
-      roleId,
-      projectId: "test",
-    });
-  };
-  const handleBatchTrigger = async (data) => {
-    const triggerData = {
-      batchId: data?.id,
-      ftpRequestFrom: "COGENT_AI",
-    };
-    const res = await getTriggerBatch({ obj: triggerData });
-    if (res.status === "SUCCESS") {
-      getResponePopup(res);
-      getAllBatches({ page: pageNo });
-    }
-  };
-
-  const handleSubmitInsert = async () => {
-    const payload = {
-      pageId: "1ff437a0-18a8-47de-893d-41dc669e3cbd",
-      headerNames: test
-        .filter((col) => col.active)
-        .map((col) => col.actualField),
-    };
-
-    try {
-      const response = await tableDynamicColumn({ payload });
-      if (response?.status === "SUCCESS") {
-        getTinApi();
-        onClose();
-        getResponePopup(response);
-      }
-    } catch (error) {
-      getResponePopup(error?.response);
-    }
-  };
 
   const onClose = () => {
     setOpen(false);
   };
   const showDrawer = () => {
-    setTest(data?.response?.metaDataDTO)
+    setTest(data?.response?.metaDataDTO);
     setOpen(true);
   };
 
@@ -759,7 +705,91 @@ const PatientSync = ({
     //   setSocketData(pdfTableData);
     // }
   }, [webSocketData, pdfTableData]);
- 
+
+  const handleBatchTrigger = async (data) => {
+    const triggerData = {
+      batchId: data?.id,
+      ftpRequestFrom: "COGENT_AI",
+    };
+    const res = await getTriggerBatch({ obj: triggerData });
+    if (res.status === "SUCCESS") {
+      getResponePopup(res);
+      getAllBatches({ page: pageNo });
+    }
+  };
+  const getAllProviderApi = async () => {
+    const response = await getTableData({
+      pageId: "42136c12-83df-46fc-8c8a-200d97f154be",
+      pageNo,
+      pageSize: 15,
+      roleId,
+      projectId: "test",
+    });
+  };
+  const getAllPracticeApi = async () => {
+    const response = await getTableData({
+      pageId: "e2785147-39dc-4bd3-828c-c0d5168acba7",
+      pageNo,
+      pageSize: 15,
+      roleId,
+      projectId: "test",
+    });
+  };
+  const getAllPatientApi = async () => {
+    const response = await getTableData({
+      pageId: "c60dec23-bcfa-48ce-966e-dbf1ce3d41b2",
+      pageNo,
+      pageSize: 15,
+      roleId,
+      projectId: "test",
+    });
+  };
+  const getTinApi = async () => {
+    const response = await getTableData({
+      pageId: "1ff437a0-18a8-47de-893d-41dc669e3cbd",
+      pageNo,
+      pageSize: 15,
+      roleId,
+      projectId: "test",
+    });
+  };
+  const pageIds =
+    reportActiveTab === "Provider Roaster"
+      ? "42136c12-83df-46fc-8c8a-200d97f154be"
+      : reportActiveTab === "Practice Roaster"
+      ? "e2785147-39dc-4bd3-828c-c0d5168acba7"
+      : reportActiveTab === "Patient Roaster"
+      ? "c60dec23-bcfa-48ce-966e-dbf1ce3d41b2"
+      : reportActiveTab === "Tin Roaster"
+      ? "1ff437a0-18a8-47de-893d-41dc669e3cbd"
+      : "";
+  const handleSubmitInsert = async () => {
+    const payload = {
+      pageId: pageIds,
+      headerNames: test
+        .filter((col) => col.active)
+        .map((col) => col.actualField),
+    };
+
+    try {
+      const response = await tableDynamicColumn({ payload });
+      if (response?.status === "SUCCESS") {
+        if (reportActiveTab === "Provider Roaster") {
+          getAllProviderApi();
+        } else if (reportActiveTab === "Practice Roaster") {
+          getAllPracticeApi();
+        } else if (reportActiveTab === "Patient Roaster") {
+          getAllPatientApi();
+        } else if (reportActiveTab === "Tin Roaster") {
+          getTinApi();
+        }
+        onClose();
+        getResponePopup(response);
+      }
+    } catch (error) {
+      getResponePopup(error?.response);
+    }
+  };
   useEffect(() => {
     if (reportActiveTab === "Provider Roaster") {
       getAllProviderApi();
@@ -1223,6 +1253,10 @@ const PatientSync = ({
                             reportActiveTab={reportActiveTab}
                             reUpload={drawerProps.reUpload}
                             pageNumber={pageNumber}
+                            getProviderRoaster={getAllProviderApi}
+                            getPatientRoaster={getAllPatientApi}
+                            getTinRoaster={getTinApi}
+                            getPracticeRoaster={getAllPracticeApi}
                           />
                         </div>
                       </div>

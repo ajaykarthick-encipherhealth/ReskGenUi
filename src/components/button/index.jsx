@@ -11,16 +11,17 @@ const RegularButton = ({
   disabled,
   htmlType,
   id,
+  padding
 }) => {
   return (
     <button
-    id={id}
+      id={id}
       className={`btn mx-1 ${
         type === "outline" ? Style.outer : Style.btnColor
       }`}
       name={name}
       onClick={!htmlType && onClick}
-      style={{ width: width }}
+      style={{ width: width, padding: padding }}
       type={
         method == "reset" ? "reset" : method == "button" ? "button" : "submit"
       }
