@@ -260,7 +260,6 @@ const MoveBack = ({
     const filteredFilters = getFilterOption();
     setActiveFilters(filteredFilters);
   }, [activeTab]);
-console.log(test,data?.response?.metaDataDTO,"testings")
   return (
     <div>
       <Header />

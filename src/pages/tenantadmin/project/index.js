@@ -15,7 +15,6 @@ const Project = ({ getProjectActiveTab, activeTabName }) => {
       projectActiveTab: name,
     });
   };
-  console.log(activeTab,"activeTab")
   return (
     <div className={`show`}>
       <Header />

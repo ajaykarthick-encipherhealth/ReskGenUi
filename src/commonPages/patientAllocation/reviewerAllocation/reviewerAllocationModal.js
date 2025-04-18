@@ -91,7 +91,6 @@ const AllocateModal = ({
       setUserDetails(user);
     }
   };
-console.log(roleId,"roleId")
   const setAllocate = async () => {
     const response = await getAllocateUsers({
       data: {
@@ -132,7 +131,6 @@ console.log(roleId,"roleId")
     }
   };
   
-console.log(allocateDate,"allocateDate")
   const handleSelectAll = () => {
     if (selectedUserIds.length === userDetails.length) {
       setSelectedUserIds([]);

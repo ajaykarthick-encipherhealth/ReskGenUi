@@ -18,7 +18,6 @@ const CustomizableDrawer = ({
   handleSubmit,
   handleReset
 }) => {
-console.log(selectedColumns,"selectedColumns")
  
 
   return (
