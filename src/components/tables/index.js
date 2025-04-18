@@ -239,8 +239,9 @@ const AppTable = ({
 const TableHeadItem = ({ item, sort, setSort,handleRowCheckboxChange }) => {
   if (item.checkBox) {
     return (
-      <th>
+      <th >
         <input
+         className={`mx-1`}
           onChange={(e) => {
             e.stopPropagation();
             handleRowCheckboxChange({
@@ -260,7 +261,6 @@ const TableHeadItem = ({ item, sort, setSort,handleRowCheckboxChange }) => {
           type="checkbox"
           id="checkall-header"
           name="checkall-header"
-          className="mx-1"
         />
         {item.name}
       </th>
@@ -1054,7 +1054,7 @@ const TableRow = ({
                           colIndex
                       )
                 }
-                className={`${Style.checkBoxDiv} d-flex justify-content-center align-items-center`}
+                className={`${Style.checkBoxDiv} d-flex justify-content-start align-items-start`}
               >
                 {checkBoxLoader ? (
                   <Spin

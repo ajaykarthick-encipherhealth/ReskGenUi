@@ -70,7 +70,7 @@ const connector = connect(
   (state) => ({
     patientRoasterData:
       state?.tenantAdmin?.patientSync?.patientRoaster?.data?.response,
-    loading: state?.tenantAdmin?.patientSync?.patientLoader,
+      tableLoader:state?.tableView?.tableViewLoading,  
   }),
   {}
 );

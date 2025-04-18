@@ -253,6 +253,7 @@ const CodersTable = ({
   };
 
   const showDrawer = () => {
+    setTest(data?.response?.metaDataDTO)
     setOpen(true);
   };
   const onClose = () => {

@@ -182,6 +182,7 @@ const QueryApproval = ({
     }
   };
   const showDrawer = () => {
+    setTest(data?.response?.metaDataDTO)
     setOpen(true);
   };
   const onClose = () => {

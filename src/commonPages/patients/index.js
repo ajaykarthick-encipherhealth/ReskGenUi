@@ -32,6 +32,7 @@ import AppTable from "../../components/tables";
 import { actions as allPatientSyncAction } from "../../stores/tenantAdmin/patientSync";
 import SvgFlag from "../../components/patientDetails/details/components/svg/svg";
 import { actions as workflowActions } from "../../stores/reviewer/workqueue";
+import { actions as tableAction } from "../../stores/tableView";
 
 export const batchBullets = [
   {
@@ -202,7 +203,7 @@ const Patient = ({
   getAllPatients,
   allPatientList,
   webSocketData,
-  loading,
+  tableLoader,
   getPatientId,
   uploadFiles,
   uploadFilesRadiology,
@@ -217,6 +218,9 @@ const Patient = ({
   getAllFlags,
   getFlagsData,
   route,
+  getTableData,
+  data,
+  tableDynamicColumn,
 }) => {
   const columns = [
     {
@@ -312,6 +316,8 @@ const Patient = ({
   const [selectedDates, setSelectedDates] = useState([]);
   const [pageNumber, setPageNumber] = useState(0);
   const [statusUpdateWebSocket, setStatusUpdateWebSocket] = useState();
+  const [open, setOpen] = useState(false);
+  const [test, setTest] = useState(data?.response?.metaDataDTO);
 
   const addPatientFormId = () => {
     setValidated(false);
@@ -329,6 +335,13 @@ const Patient = ({
 
   const onChangeFile = (e) => {
     setSelectFile(e[0]);
+  };
+  const onClose = () => {
+    setOpen(false);
+  };
+  const showDrawer = () => {
+    setTest(data?.response?.metaDataDTO)
+    setOpen(true);
   };
 
   const handleChange = async (e, name) => {
@@ -729,7 +742,14 @@ const Patient = ({
       setSort(sort);
     }
   }, [routedData]);
-
+  const getPatients = async () => {
+    const response = await getTableData({
+      pageId: "c41d4ea9-6da4-495c-84f4-95b25d6c13b4",
+      pageNo,
+      pageSize: 15,
+      roleId: "",
+    });
+  };
   useEffect(() => {
     setParamsFilter("check");
     let tenId = getStorage("tenantId");
@@ -739,13 +759,7 @@ const Patient = ({
     setLocalOrgId(orgId);
     setLocalUserId(uId);
     if (paramsFilter === "check") {
-      getAllPatients({
-        pageNo,
-        selectedOption,
-        searchText,
-        selectedDateRanges,
-        sort: sort,
-      });
+      getPatients();
     }
   }, [
     pageNo,
@@ -785,6 +799,25 @@ const Patient = ({
     status: statusOptions,
     flag: flagPostList,
   };
+  const handleSubmitInsert = async () => {
+    const payload = {
+      pageId: "c41d4ea9-6da4-495c-84f4-95b25d6c13b4",
+      headerNames: test
+        .filter((col) => col.active)
+        .map((col) => col.actualField),
+    };
+
+    try {
+      const response = await tableDynamicColumn({ payload });
+      if (response?.status === "SUCCESS") {
+        getPatients();
+        onClose();
+        getResponePopup(response);
+      }
+    } catch (error) {
+      getResponePopup(error?.response);
+    }
+  };
   useEffect(() => {
     if (webSocketData && webSocketData?.webSocketType == "PATIENT_COMPUTE") {
       const patientData =
@@ -817,6 +850,7 @@ const Patient = ({
   }, [navigate, routedData]);
   useEffect(() => {
     getAllFlags();
+    setTest(data?.response?.metaDataDTO)
   }, []);
   return (
     <div className={`show `}>
@@ -846,12 +880,22 @@ const Patient = ({
                 form={form}
                 setPageNo={setPageNo}
                 opt={opt}
+                //customize table
+
+                open={open}
+                onClose={onClose}
+                selectedColumns={test}
+                setSelectedColumns={setTest}
+                commonFilterItems={commonFilterItems}
+                showCustomizeTable={true}
+                showDrawer={showDrawer}
+                handleSubmit={handleSubmitInsert}
               />
             </div>
             <div
               id="addPatient-btn"
               name="addPatient-btn"
-              className="d-flex justify-content-center align-items-center mt-3"
+              className="d-flex justify-content-center align-items-center mt-4 px-1"
               style={{ width: "10%" }}
             >
               <Button
@@ -878,24 +922,26 @@ const Patient = ({
           <div id="task-tbl_wrapper" className="dataTables_wrapper no-footer">
             <div className="mt-4">
               <AppTable
-                data={
-                  statusUpdateWebSocket
-                    ? statusUpdateWebSocket
-                    : allPatientList?.data?.response?.patientDtoList?.content
-                }
+                // data={
+                //   statusUpdateWebSocket
+                //     ? statusUpdateWebSocket
+                //     : allPatientList?.data?.response?.patientDtoList?.content
+                // }
                 getRetregger={getRetregger}
-                column={columns}
+                // column={columns}
+                data={data?.response?.pageResponse?.content}
+                column={data?.response?.metaDataDTO.filter(
+                  (item) => item.active
+                )}
                 onRowClick={gotoPatientDetails}
-                loader={loading}
+                loader={tableLoader}
                 actionBodyTemplate={actionBodyTemplate}
                 statusBodyTemplate={processstatusBodyTemplate}
                 pagination={false}
                 sort={sort}
                 setSort={setSort}
                 first={pageNo === 0 ? 0 : paginationFirst}
-                totalRecords={
-                  allPatientList?.data?.response?.patientDtoList?.totalElements
-                }
+                totalRecords={data?.response?.pageResponse?.totalElements}
                 row={15}
                 onPageChange={onPageChange}
                 renderFlagCell={renderFlagCell}
@@ -944,6 +990,9 @@ const enhancer = connect(
     filteredList: state.admin?.patientAllocate?.filtersList,
     routedData: state.tenantAdmin?.patientSync?.routedData,
     getFlagsData: state?.reviewer?.workQueue?.flags?.data,
+    data: state?.tableView?.tableView?.data,
+        tableLoader: state?.tableView?.tableViewLoading,
+    
   }),
   {
     getAllOrganizationList: tenantAdminAction.getAllOrganizationAction,
@@ -957,6 +1006,10 @@ const enhancer = connect(
     getRetreggerPatient: tenantAdminAction.getRetreggerPatient,
     getRoutedData: allPatientSyncAction.getRoutedData,
     getAllFlags: workflowActions.flagsAction,
+    getTableData: tableAction.tableViewAction,
+    getAllTabRoles: allActions.getAllRoles,
+        tableDynamicColumn: tableAction.tableDynamicColumn,
+    
   }
 );
 export default enhancer(Patient);

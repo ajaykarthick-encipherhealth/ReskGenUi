@@ -704,6 +704,7 @@ const PatientSync = ({
     setOpen(false);
   };
   const showDrawer = () => {
+    setTest(data?.response?.metaDataDTO)
     setOpen(true);
   };
 
@@ -1091,7 +1092,7 @@ const PatientSync = ({
                                     />
                                   </Tab.Pane>
                                   <Tab.Pane id="my-posts" eventKey="pdf">
-                                    {/* <PdfTable
+                                    <PdfTable
                                       paginationFirst={paginationFirst}
                                       setSelectedBatch={setSelectedBatch}
                                       onPageChange={onPageChange}
@@ -1110,8 +1111,8 @@ const PatientSync = ({
                                       }
                                       viewDetailedBatch={viewDetailedBatch}
                                       pdfTableData={pdfTableData}
-                                    /> */}
-                                    <AppTable
+                                    />
+                                    {/* <AppTable
                                       data={
                                         socketData?.content?.length > 0
                                           ? socketData?.content
@@ -1132,7 +1133,7 @@ const PatientSync = ({
                                       renderCountDetailsPopover={
                                         renderCountDetailsPopover
                                       }
-                                    />
+                                    /> */}
                                   </Tab.Pane>
                                   <Tab.Pane id="my-posts" eventKey="tinRoaster">
                                     <TinRoasterTable

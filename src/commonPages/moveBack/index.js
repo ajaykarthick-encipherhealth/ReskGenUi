@@ -164,7 +164,9 @@ const MoveBack = ({
 
     return filteredItems;
   };
-  const showDrawer = () => {
+  const showDrawer = () =>{
+    setTest(data?.response?.metaDataDTO)
+    console.log(data?.response?.metaDataDTO,test,"datas")
     setOpen(true);
   };
 
@@ -217,7 +219,6 @@ const MoveBack = ({
 
   useEffect(() => {
     getRolesList();
-    setTest(data?.response?.metaDataDTO)
   }, []);
 
   useEffect(() => {
@@ -245,7 +246,7 @@ const MoveBack = ({
     paginationFirst,
     search,
     roleId,
-    selectedRole,
+    // selectedRole,
   ]);
   useEffect(() => {
     if (routedData) {
@@ -260,7 +261,7 @@ const MoveBack = ({
     const filteredFilters = getFilterOption();
     setActiveFilters(filteredFilters);
   }, [activeTab]);
-
+console.log(test,data?.response?.metaDataDTO,"testings")
   return (
     <div>
       <Header />

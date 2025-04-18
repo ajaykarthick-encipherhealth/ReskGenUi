@@ -204,76 +204,7 @@ const Patient = ({
     },
     sort: { sortDir: "DESC", sortField: "" },
   });
-  const columns = [
-    {
-      name: "Patients",
-      value: "patientId",
-    },
-    {
-      name: "Allocated By | Date",
-      value1: {
-        first: "allocatedByFirstName",
-        last: "allocatedByLastName",
-        img: "allocatedByProfileImage",
-      },
-      value: "allocatedOn",
-      clumpseTwoFields: true,
-      sortable: true,
-    },
-    {
-      name: "Reviewer | Date",
-      value1: {
-        first: "patientAllocatedFirstName",
-        last: "patientAllocatedLastName",
-        img: "patientAllocatedProfileImage",
-      },
-      clumpseTwoFields: true,
-      value: "processedDate",
-      sortable: true,
-    },
-    {
-      name: "Audit Allocated By | Date",
-      value1: {
-        first: "auditAllocatedByFirstName",
-        last: "auditAllocatedByLastName",
-        img: "auditAllocatedByProfileImage",
-      },
-      value: "auditAllocatedDate",
-      clumpseTwoFields: true,
-      sortable: true,
-    },
-    {
-      name: "Supervisor",
-      value: {
-        first: "auditedAssignedFirstName",
-        last: "auditedAssignedLastName",
-        img: "auditedAssignedProfileImage",
-      },
-      isImage: true,
-    },
-    {
-      name: "Audited Date",
-      value: "auditedDate",
-      sortable: true,
-      isDate: true,
-    },
-    {
-      name: "Priority",
-      value: "priority",
-    },
-    {
-      name: " PROCESSED STATUS",
-      value: "processedStatus",
-      status: true,
-      infoIcon: true,
-    },
-    {
-      name: "Audited STATUS",
-      value: "auditedStatus",
-      auditedStatus: true,
-      infoIcon: true,
-    },
-  ];
+
   const navigate = useRouter();
   const [clear, setClear] = useState(false);
   const [orgAllList, setOrgAllList] = useState([]);
@@ -292,6 +223,7 @@ const Patient = ({
     setPageNo(e.page);
   };
   const showDrawer = () => {
+    setTest(data?.response?.metaDataDTO)
     setOpen(true);
   };
   const onClose = () => {

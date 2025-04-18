@@ -164,25 +164,25 @@ const PatientAllocation = ({
       roleId,
     });
   };
-   const handleSubmit = async () => {
-      const payload = {
-        pageId: "6cd166eb-79ac-4c12-ab0f-07be2983ca70",
-        headerNames: test
-          .filter((col) => col.active)
-          .map((col) => col.actualField),
-      };
-  
-      try {
-        const response = await tableDynamicColumn({ payload });
-        if (response?.status === "SUCCESS") {
-          getAllAllocation();
-          onClose();
-          getResponePopup(response);
-        }
-      } catch (error) {
-        getResponePopup(error?.response);
-      }
+  const handleSubmit = async () => {
+    const payload = {
+      pageId: "6cd166eb-79ac-4c12-ab0f-07be2983ca70",
+      headerNames: test
+        .filter((col) => col.active)
+        .map((col) => col.actualField),
     };
+
+    try {
+      const response = await tableDynamicColumn({ payload });
+      if (response?.status === "SUCCESS") {
+        getAllAllocation();
+        onClose();
+        getResponePopup(response);
+      }
+    } catch (error) {
+      getResponePopup(error?.response);
+    }
+  };
   useEffect(() => {
     setParamsFilter("check");
     if (
@@ -226,12 +226,13 @@ const PatientAllocation = ({
       setRoleId(res?.response?.allocationRoles[0]?.roleId);
     }
   };
-    const onClose = () => {
-      setOpen(false);
-    };
-      const showDrawer = () => {
-        setOpen(true);
-      };
+  const onClose = () => {
+    setOpen(false);
+  };
+  const showDrawer = () => {
+    setTest(data?.response?.metaDataDTO);
+    setOpen(true);
+  };
   useEffect(() => {
     const filteredFilters = getFilterOption();
     setActiveFilters(filteredFilters);
@@ -249,7 +250,7 @@ const PatientAllocation = ({
 
   useEffect(() => {
     getRolesList();
-  setTest(data?.response?.metaDataDTO)
+    setTest(data?.response?.metaDataDTO);
   }, []);
 
   useEffect(() => {
@@ -358,48 +359,48 @@ const PatientAllocation = ({
                         </Nav>
                       )}
 
-                        <div
-                          className={` d-flex gap-3 mt-4`}
-                          // style={{ width: "90%" }}
-                        >
-                          <ReusableFilters
-                            showFilter={false}
-                            setActiveFilters={setActiveFilters}
-                            setSearchText={setSearchText}
-                            searchText={searchText}
-                            setSelectedOption={setSelectedOption}
-                            selectedOption={selectedOption}
-                            setSelectedDateRanges={setSelectedDateRanges}
-                            selectedDateRanges={selectedDateRanges}
-                            setPageNumber={setPageNumber}
-                            FilterItems={activeFilters}
-                            selectedDates={selectedDates}
-                            setSelectedDates={setSelectedDates}
-                            activeFilters={activeFilters}
-                            setPageNo={setPageNo}
-                            opt={opt}
-                            batchCount={batchCount}
-                            setBatchCount={setBatchCount}
-                            setFilterBatchCount={setFilterBatchCount}
-                            setSelectAllChecked={setSelectAllChecked}
-                            setSelectedRowsId={setSelectedRowsId}
-                            setSelectedRows={setSelectedRows}
-                            showBatchCount={true}
-                            selectedRowsId={selectedRowsId}
-                            setSearch={setSearch}
-                            search={search}
-                            //customize table
+                      <div
+                        className={` d-flex gap-3 mt-4`}
+                        // style={{ width: "90%" }}
+                      >
+                        <ReusableFilters
+                          showFilter={false}
+                          setActiveFilters={setActiveFilters}
+                          setSearchText={setSearchText}
+                          searchText={searchText}
+                          setSelectedOption={setSelectedOption}
+                          selectedOption={selectedOption}
+                          setSelectedDateRanges={setSelectedDateRanges}
+                          selectedDateRanges={selectedDateRanges}
+                          setPageNumber={setPageNumber}
+                          FilterItems={activeFilters}
+                          selectedDates={selectedDates}
+                          setSelectedDates={setSelectedDates}
+                          activeFilters={activeFilters}
+                          setPageNo={setPageNo}
+                          opt={opt}
+                          batchCount={batchCount}
+                          setBatchCount={setBatchCount}
+                          setFilterBatchCount={setFilterBatchCount}
+                          setSelectAllChecked={setSelectAllChecked}
+                          setSelectedRowsId={setSelectedRowsId}
+                          setSelectedRows={setSelectedRows}
+                          showBatchCount={true}
+                          selectedRowsId={selectedRowsId}
+                          setSearch={setSearch}
+                          search={search}
+                          //customize table
 
-                            open={open}
-                            onClose={onClose}
-                            selectedColumns={test}
-                            setSelectedColumns={setTest}
-                            commonFilterItems={commonFilterItems}
-                            showCustomizeTable={true}
-                            showDrawer={showDrawer}
-                            handleSubmit={handleSubmit}
-                          />
-                        </div>
+                          open={open}
+                          onClose={onClose}
+                          selectedColumns={test}
+                          setSelectedColumns={setTest}
+                          commonFilterItems={commonFilterItems}
+                          showCustomizeTable={true}
+                          showDrawer={showDrawer}
+                          handleSubmit={handleSubmit}
+                        />
+                      </div>
 
                       <Tab.Content>
                         <Tab.Pane eventKey={activeTab}>

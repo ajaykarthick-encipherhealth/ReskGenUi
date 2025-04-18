@@ -41,7 +41,7 @@ const PracticeRoasterTable = ({
   pagination,
   setPagination,
   practiceRoasterData,
-  loading,
+  tableLoader,
   handleRoasterBtn,
   data
 }) => {
@@ -81,7 +81,7 @@ const PracticeRoasterTable = ({
       <AppTable
         data={data?.response?.pageResponse?.content}
         column={data?.response?.metaDataDTO.filter((item) => item.active)}
-        loader={loading}
+        loader={tableLoader}
         first={pageNumber === 0 ? 0 : pagination}
         totalRecords={practiceRoasterData?.totalElements}
         row={15}
@@ -97,7 +97,7 @@ const connector = connect(
   (state) => ({
     practiceRoasterData:
       state?.tenantAdmin?.patientSync?.practiceRoaster?.data?.response,
-    loading: state?.tenantAdmin?.patientSync?.practiceLoader,
+      tableLoader:state?.tableView?.tableViewLoading,  
   }),
   {}
 );

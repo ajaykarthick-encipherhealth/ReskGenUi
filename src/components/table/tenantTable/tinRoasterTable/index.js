@@ -9,7 +9,7 @@ const TinRoasterTable = ({
   pagination,
   setPagination,
   tinRoasterData,
-  loading,
+  tableLoader,
   handleRoasterBtn,
   data
 }) => {
@@ -49,7 +49,7 @@ const TinRoasterTable = ({
       <AppTable
         data={data?.response?.pageResponse?.content}
         column={data?.response?.metaDataDTO.filter((item) => item.active)}
-        loader={loading}
+        loader={tableLoader}
         first={pageNumber === 0 ? 0 : pagination}
         totalRecords={tinRoasterData?.totalElements}
         row={15}
@@ -63,7 +63,7 @@ const TinRoasterTable = ({
 const connector = connect(
   (state) => ({
     tinRoasterData: state?.tenantAdmin?.patientSync?.tinRoaster?.data?.response,
-    loading: state?.tenantAdmin?.patientSync?.tinRoasterLoader,    
+    tableLoader:state?.tableView?.tableViewLoading,   
   }),
   {}
 );

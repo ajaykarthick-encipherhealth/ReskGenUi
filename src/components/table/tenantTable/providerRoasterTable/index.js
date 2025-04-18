@@ -9,7 +9,7 @@ const ProviderRoasterTable = ({
   pagination,
   setPagination,
   providerRoasterData,
-  loading,
+  tableLoader,
   handleRoasterBtn,
   data
 }) => {
@@ -49,7 +49,7 @@ const ProviderRoasterTable = ({
       <AppTable
                data={data?.response?.pageResponse?.content}
         column={data?.response?.metaDataDTO.filter((item) => item.active)}
-        loader={loading}
+        loader={tableLoader}
         first={pageNumber === 0 ? 0 : pagination}
         totalRecords={providerRoasterData?.totalElements}
         row={15}
@@ -64,7 +64,7 @@ const connector = connect(
   (state) => ({
     providerRoasterData:
     state?.tenantAdmin?.patientSync?.providerRoaster?.data?.response,
-    loading: state?.tenantAdmin?.patientSync?.providerLoader,
+    tableLoader:state?.tableView?.tableViewLoading,   
   }),
   {}
 );

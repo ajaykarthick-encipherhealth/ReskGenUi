@@ -18,24 +18,7 @@ const CustomizableDrawer = ({
   handleSubmit,
   handleReset
 }) => {
-  // const handleSubmit = async () => {
-  //   const payload = {
-  //     pageId: "3a5feaba-7de6-4557-961b-ab973a688f81",
-  //     headerNames: selectedColumns
-  //       .filter((col) => col.active)
-  //       .map((col) => col.actualField),
-  //   };
-
-  //   try {
-  //     const response = await tableDynamicColumn({payload});
-  //     if (response?.status === "SUCCESS"){
-  //       onClose()
-  //       getResponePopup(response);
-  //     }
-  //   } catch (error) {
-  //     getResponePopup(error?.response);
-  //   }
-  // };
+console.log(selectedColumns,"selectedColumns")
  
 
   return (
@@ -85,7 +68,6 @@ const CustomizableDrawer = ({
               >
                 <div className="d-flex align-items-center gap-3 ">
                   {option?.headerName}
-                  {/* <div>{option?.orderValue}</div> */}
                 </div>
               </Checkbox>
             </div>
