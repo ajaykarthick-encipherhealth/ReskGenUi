@@ -49,7 +49,7 @@ const AllocateModal = ({
   const [search, setSearch] = useState("");
   const [userDetails, setUserDetails] = useState([]);
   const [allocateDate, setAllocateDate] = useState("");
-  const [activeEmail, setActiveEmail] = useState("");
+  const [activeEmail, setActiveEmail] = useState([]);
   const [chart, setChart] = useState({
     date: null,
     completed: null,
