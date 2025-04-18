@@ -433,7 +433,8 @@ const CodersTable = ({
                       to="#my-posts"
                       eventKey="PENDING"
                     >
-                      PENDING - {status?.PENDING || 0}
+                      PENDING -{" "}
+                      {data?.response?.pageResponse?.totalElements || 0}
                     </Nav.Link>
                   </Nav.Item>
                   <Nav.Item
@@ -449,7 +450,8 @@ const CodersTable = ({
                       to="#my-posts"
                       eventKey="COMPLETED"
                     >
-                      COMPLETED - {status?.COMPLETED || 0}
+                      COMPLETED -{" "}
+                      {data?.response?.pageResponse?.totalElements || 0}
                     </Nav.Link>
                   </Nav.Item>{" "}
                   <Nav.Item
@@ -465,7 +467,7 @@ const CodersTable = ({
                       to="#my-posts"
                       eventKey="HOLD"
                     >
-                      HOLD - {status?.HOLD || 0}
+                      HOLD - {data?.response?.pageResponse?.totalElements || 0}
                     </Nav.Link>
                   </Nav.Item>
                   <Nav.Item
@@ -481,7 +483,8 @@ const CodersTable = ({
                       to="#my-posts"
                       eventKey="DECLINED"
                     >
-                      DECLINED - {status?.DECLINED || 0}
+                      DECLINED -{" "}
+                      {data?.response?.pageResponse?.totalElements || 0}
                     </Nav.Link>
                   </Nav.Item>
                 </Nav>
