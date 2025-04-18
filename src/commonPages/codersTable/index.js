@@ -499,7 +499,9 @@ const CodersTable = ({
                         setSort={setSort}
                         sort={sort}
                         first={pageNo === 0 ? 0 : paginationFirst}
-                        totalRecords={totalElements}
+                        totalRecords={
+                          data?.response?.pageResponse?.totalElements
+                        }
                         row={15}
                         onPageChange={onPageChange}
                       />
