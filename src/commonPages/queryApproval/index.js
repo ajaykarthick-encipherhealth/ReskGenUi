@@ -199,7 +199,7 @@ const QueryApproval = ({
      try {
        const response = await tableDynamicColumn({ payload });
        if (response?.status === "SUCCESS") {
-         getMoveBack();
+        getQueryApproval();
          onClose();
          getResponePopup(response);
        }
