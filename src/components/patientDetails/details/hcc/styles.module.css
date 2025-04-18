@@ -517,5 +517,11 @@ cursor: pointer;
   background-color: #A2040426;
   border : 1px solid #A2040426;
   border-radius: 5px;
+ }
+ .queryBtn{
+  background-color: #4C4C9D;
+  color:#fff;
+  border : 1px solid #4C4C9D;
+  border-radius: 5px;
 
  }

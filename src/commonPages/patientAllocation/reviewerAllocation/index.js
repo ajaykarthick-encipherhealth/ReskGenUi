@@ -1,17 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, {  useState } from "react";
 import { connect } from "react-redux";
 import { actions as allActions } from  '../../../stores/tenantAdmin/patientAllocations'
-import styles from '../../../components/tables/table.module.css'
 import AppTable from '../../../components/tables'
-import { Spin } from "antd";
-import { LoadingOutlined } from "@ant-design/icons";
-import { actions as allPatientSyncAction } from '../../../stores/tenantAdmin/patientSync'
 import { findItemWithTrueKey } from "../../../utils/reusable";
 import {actions as tableAction } from "../../../stores/tableView"
 const ReviewerAllocation = ({
-  reviewersData,
-  loader,
-  getAllCheckedReviewers,
   setSelectedRowsId,
   selectedRows,
   setSelectedRows,
@@ -28,9 +21,7 @@ const ReviewerAllocation = ({
   getTableData,
   roleId
 }) => {
-  const [selectAllChecked, setSelectAllChecked] = useState(false);
   const [checkedLoader, setCheckedLoader] = useState(false);
-
   const onPageChange = (e) => {
     setPaginationFirst(e.first);
     setPageNo(e.page);
@@ -118,7 +109,6 @@ const connector = connect(
   }),
   {
     getTableData: tableAction.tableDynamicChecked,
-    getSupervisorName: allPatientSyncAction.getSupervisorName,
     getAllReviewerList: allActions.getAllReviewerList,
   }
 );
