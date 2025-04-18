@@ -328,7 +328,12 @@ const Hcc = ({
       </div>
     </div>
   );
-
+  const content = (
+    <div>
+      <p>Content</p>
+      <p>Content</p>
+    </div>
+  );
   const hideDiseasePopContent = (
     <>
       <div className="row">
@@ -690,7 +695,17 @@ const Hcc = ({
                         </button>
                       </Nav.Item>
                       <Nav.Item as="li" className="nav-item">
-                        <button className={` px-3   py-1 rounded-md  ${styles.rejectBtn}`} onClick={() => gvb}>Reject</button>
+                        <Popover
+                          content={content}
+                          title="Title"
+                          trigger="click"
+                        >
+                          <button
+                            className={` px-3   py-1 rounded-md  ${styles.rejectBtn}`}
+                          >
+                            Reject
+                          </button>
+                        </Popover>
                       </Nav.Item>
                     </div>
                   </div>
