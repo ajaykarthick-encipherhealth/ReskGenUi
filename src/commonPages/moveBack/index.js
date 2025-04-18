@@ -217,6 +217,7 @@ const MoveBack = ({
 
   useEffect(() => {
     getRolesList();
+    setTest(data?.response?.metaDataDTO)
   }, []);
 
   useEffect(() => {
@@ -242,7 +243,6 @@ const MoveBack = ({
     paramsFilter,
     sort,
     paginationFirst,
-    selectedSupervisor,
     search,
     roleId,
     selectedRole,
@@ -259,7 +259,7 @@ const MoveBack = ({
   useEffect(() => {
     const filteredFilters = getFilterOption();
     setActiveFilters(filteredFilters);
-  }, [activeTab, selectedSupervisor]);
+  }, [activeTab]);
 
   return (
     <div>

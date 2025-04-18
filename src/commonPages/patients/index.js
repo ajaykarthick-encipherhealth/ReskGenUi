@@ -849,6 +849,7 @@ const Patient = ({
   }, [navigate, routedData]);
   useEffect(() => {
     getAllFlags();
+    setTest(data?.response?.metaDataDTO)
   }, []);
   return (
     <div className={`show `}>

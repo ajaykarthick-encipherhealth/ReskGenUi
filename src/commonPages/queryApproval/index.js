@@ -235,6 +235,7 @@ const QueryApproval = ({
   }, [routedData]);
   useEffect(() => {
     getRolesList();
+    setTest(data?.response?.metaDataDTO)
   }, []);
   return (
     <div>

@@ -249,6 +249,7 @@ const PatientAllocation = ({
 
   useEffect(() => {
     getRolesList();
+  setTest(data?.response?.metaDataDTO)
   }, []);
 
   useEffect(() => {
