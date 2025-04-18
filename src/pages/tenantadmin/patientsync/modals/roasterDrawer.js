@@ -161,9 +161,9 @@ const enhancer = connect((state) => ({}), {
   practiceRoasterExcel: patientSyncAction.practiceRoasterExcelAction,
   patientRoasterExcel: patientSyncAction.patientRoasterExcelAction,
   tinRoasterExcel: patientSyncAction.tinRoasterExcelAction,
-  getProviderRoaster: patientSyncAction.providerRoasterAction,
-  getPatientRoaster: patientSyncAction.patientRoasterAction,
-  getPracticeRoaster: patientSyncAction.praticeRoasterAction,
-  getTinRoaster: patientSyncAction.tinRoasterAction,
+  // getProviderRoaster: patientSyncAction.providerRoasterAction,
+  // getPatientRoaster: patientSyncAction.patientRoasterAction,
+  // getPracticeRoaster: patientSyncAction.praticeRoasterAction,
+  // getTinRoaster: patientSyncAction.tinRoasterAction,
 });
 export default enhancer(RoasterDrawer);
