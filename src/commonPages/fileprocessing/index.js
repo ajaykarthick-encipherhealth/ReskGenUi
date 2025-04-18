@@ -338,7 +338,7 @@ const FileProcessing = ({
       <div className={`show `}>
         <Header />
         <div class="content-body">
-          <div className="container-fluid">
+          <div className="container-fluid" style={{paddingTop:"5px"}}>
             <div className="row">
               <div className="col-xl-12">
                 <div className="">

@@ -396,6 +396,7 @@ const ReusableFilters = ({
                   color: "#fff",
                   width: "100%",
                   fontSize: "12px",
+                  marginLeft:"10px"
                 }}
                 className="btn btn-sm w-full text-ellipsis"
               >

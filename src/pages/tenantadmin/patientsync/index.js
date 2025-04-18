@@ -462,21 +462,34 @@ const PatientSync = ({
   const renderButton = () => {
     switch (reportActiveTab) {
       case "FHIR":
-        return <RegularButton name="Upload" onClick={handleFhirUpload} />;
+        return (
+          <RegularButton
+            name="Upload"
+            onClick={handleFhirUpload}
+            padding={"5px 10px"}
+          />
+        );
       case "PDF":
         return (
           <RegularButton
             name="Create Batch"
             onClick={handleUploadButtonClick}
+            padding={"5px 10px"}
           />
         );
       case "Patient Roaster":
       case "Practice Roaster":
       case "Provider Roaster":
       case "Tin Roaster":
-        return <RegularButton name="Add Roaster" onClick={handleRoasterBtn} />;
+        return <RegularButton name="Add Roaster" onClick={handleRoasterBtn} padding={"5px 10px"} />;
       default:
-        return <RegularButton name="Upload" onClick={handleRoasterBtn} />;
+        return (
+          <RegularButton
+            name="Upload"
+            onClick={handleRoasterBtn}
+            padding={"5px 10px"}
+          />
+        );
     }
   };
   const handleRowActionClick = (row) => {

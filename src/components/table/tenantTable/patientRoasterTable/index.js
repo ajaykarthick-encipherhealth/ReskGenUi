@@ -57,7 +57,7 @@ const PatientRoasterTable = ({
         column={data?.response?.metaDataDTO.filter((item) => item.active)}
         loader={tableLoader}
         first={pageNumber === 0 ? 0 : pagination}
-        totalRecords={patientRoasterData?.totalElements}
+        totalRecords={data?.response?.pageResponse?.totalElements}
         row={15}
         onPageChange={onPageChange}
         statusBodyTemplate={renderStatusRoaster}

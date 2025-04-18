@@ -263,7 +263,7 @@ const PatientAllocation = ({
     <div>
       <Header />
       <div className="content-body">
-        <div className="container-fluid">
+        <div className="container-fluid" style={{paddingTop:"5px"}}>
           <div className="table-responsive active-projects task-table">
             <div className="row">
               <div className="col-xl-12">
