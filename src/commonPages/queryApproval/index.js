@@ -135,7 +135,6 @@ const QueryApproval = ({
   };
 
   const gotoPatientDetails = (data) => {
-    console.log(data,"data")
     // if (data?.computing === 2) {
     //   const controller = new AbortController();
     //   const { signal } = controller;

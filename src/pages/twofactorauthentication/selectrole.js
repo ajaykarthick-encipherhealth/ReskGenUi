@@ -50,11 +50,11 @@ const SelectRole = ({ getLogin ,getProxyRoles,proxyRoles}) => {
           const accessList = proxyRoles?.find(
            (item) => item.role?.toLowerCase() === selectedRole?.toLowerCase()
          );
-         console.log(selectedProxyObj,"selectedProxyObj")
          const roleId = selectedProxyObj?.roleId   
           setStorage("proxyRole", formattedProxyRole);
           setStorage("accessMenuList", JSON.stringify(accessList));
           setStorage("roleId", roleId)
+          setStorage("aliasName",selectedProxyObj?.aliasName  )
       }
  
         loginSuccessCallBack();

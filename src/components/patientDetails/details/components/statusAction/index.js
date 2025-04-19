@@ -633,7 +633,6 @@ const StatusAction = ({
     getPatientIdDetails(patientIdDetailsData?.data?.response);
     setPatienIdDetails(patientIdDetailsData?.data?.response);
   }, [patientIdDetailsData?.data?.response]);
-console.log(patientIdDetailsData?.data?.response,"response")
   return (
     <>
       {patientIdDetailsData?.data?.response && (

@@ -120,7 +120,6 @@ const Hcc = ({
     setIsOpen(false);
     form.resetFields();
   };
-  console.log(isModalOpen, "isModalOpen");
 
   useEffect(() => {
     if (patientDosResult?.data?.response) {
@@ -486,8 +485,8 @@ const Hcc = ({
       rejectedReason: null,
     };
     const response = await queryApproval(data);
-    getResponePopup(response);
     if (response?.status === "SUCCESS") {
+      getResponePopup(response);
     }
   };
 
@@ -783,8 +782,8 @@ const Hcc = ({
                           </button>
                         </Popover>
                       </Nav.Item>
-                      {proxyRole === "OWNER" ? (
-                        <>
+                      {proxyRole === "OWNER"  || proxyRole === "TENANT ADMIN" ? (
+                        <span>
                           <Nav.Item as="li" className="nav-item">
                             <Popconfirm
                               placement="bottom"
@@ -808,11 +807,11 @@ const Hcc = ({
                               Reject
                             </button>
                           </Nav.Item>
-                        </>
+                        </span>
                       ) : (
                         ""
                       )}
-                      {proxyRole === "CODER 1" || proxyRole === "CODER 2" ? (
+                      {proxyRole === "CODER 1" || proxyRole === "CODER 2" || proxyRole === "QA" ? (
                         <Nav.Item as="li" className="nav-item">
                           <button
                             onClick={showQueryModal}
@@ -1061,7 +1060,6 @@ const enhancer = connect(
     patientDosResult: state?.patientDetails?.details?.dosResult,
     isDosSelected: state.patientDetails.details?.getSelectedDosDetails,
     roles: state.patientDetails.details?.allRoles,
-    fcv: console.log(state, "state"),
   }),
   {
     getpatientDetailsData: detailsActions.patientDetailsAction,

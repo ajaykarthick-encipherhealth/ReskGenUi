@@ -496,6 +496,7 @@ const PatientAllocation = ({
         setIsModalOpen={setIsModalOpen}
         selectedRoleId={selectedRoleId}
         getAllAllocation={getAllAllocation}
+        roleId={roleId}
       />
     </div>
   );

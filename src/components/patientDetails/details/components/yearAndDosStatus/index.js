@@ -485,7 +485,6 @@ const YearAndDosStatus = ({
       }
     } catch (e) {}
   };
-  console.log(localPatientId,"localPatientId")
 
   const handleChange = async (e) => {
     const key = e.target.name;
@@ -504,7 +503,6 @@ const YearAndDosStatus = ({
     getPatientIdDetails(patientDetailsResult?.data?.response);
     setPatienIdDetails(patientDetailsResult?.data?.response);
   }, [patientDetailsResult?.data?.response]);
-console.log(patientIdDetailsData?.data?.response?.id,"datas")
   return (
     <>
       {patientDetailsResult?.data?.response && (

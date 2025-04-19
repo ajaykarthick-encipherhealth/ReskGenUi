@@ -36,6 +36,7 @@ const RandomSamplingModal = ({
   isModalOpen,
   randomSampling,
   selectedRoleId,
+  roleId,
 }) => {
   const router = useRouter();
   const userId = getStorage("userId");
@@ -43,7 +44,7 @@ const RandomSamplingModal = ({
   const [search, setSearch] = useState("");
   const [userDetails, setUserDetails] = useState([]);
   const [allocateDate, setAllocateDate] = useState("");
-  const [activeEmail, setActiveEmail] = useState("");
+  const [activeEmail, setActiveEmail] = useState([]);
   const [chart, setChart] = useState({
     date: null,
     completed: null,
@@ -66,6 +67,9 @@ const RandomSamplingModal = ({
   const handleCancel = () => {
     setIsModalOpen(false);
     setSelectedUserIds([]);
+    setActiveCard("");
+    setActiveEmail([])
+    setUserDetails([])
     form.resetFields();
   };
 
@@ -90,8 +94,7 @@ const RandomSamplingModal = ({
   };
   const onFinish = async (values) => {
     const response = await randomSampling({
-       
-        roleId: selectedRoleId,
+        roleId: roleId,
         userIdList: activeEmail,
         dueDate: formatDateForIndex({ date: values.duedate, index: 1 }),
         allocatedBy: userId,
@@ -105,11 +108,10 @@ const RandomSamplingModal = ({
       setIsModalOpen(false);
       setAllocateDate(null);
       setActiveCard("");
-      setActiveEmail("");
+      setActiveEmail([]);
       setSearch("");
       setSelectedRowsId([]);
       setSelectedRows([]);
-      setBatchCount("");
       setSelectedUserIds([]);
     } else {
       getResponePopup(response);
@@ -140,7 +142,6 @@ const RandomSamplingModal = ({
     getUserList(search);
   }, [search]);
 
-
   return (
     <div>
       <Modal
@@ -148,7 +149,7 @@ const RandomSamplingModal = ({
         onCancel={() => {
           setOpen(false);
           setActiveCard("");
-          setActiveEmail("");
+          setActiveEmail([]);
           setSearch("");
           setAllocateDate(null);
           setSelectedUserIds([]);
@@ -197,7 +198,10 @@ const RandomSamplingModal = ({
               } `}
               type="checkbox"
               id="selectAll"
-              checked={selectedUserIds.length === userDetails.length}
+              checked={
+                userDetails.length > 0 &&
+                selectedUserIds.length === userDetails.length
+              }
               onChange={handleSelectAll}
             />
           </div>
@@ -219,12 +223,10 @@ const RandomSamplingModal = ({
                   <div
                     className="d-flex justify-content-between"
                     onClick={() => {
-                      if (activeCard == item.id) {
+                      if (activeCard === item.id) {
                         setActiveCard("");
-                        setActiveEmail(item.email);
                       } else {
                         setActiveCard(item.id);
-                        setActiveEmail(item.email);
                         setAllocateDate("");
                       }
                     }}
@@ -271,7 +273,7 @@ const RandomSamplingModal = ({
                       className="me-2 ms-3 align-self-center"
                     />
                   </div>
-                  {activeCard == item.id && (
+                  {activeCard == item.id ? (
                     <>
                       <div className="row px-3">
                         <div className={`col-5 ${modalStyle.activeRow1}`}>
@@ -364,7 +366,7 @@ const RandomSamplingModal = ({
                         </div>
                       </div>
                     </>
-                  )}
+                  ):""}
                 </div>
               </div>
             ))}
@@ -375,7 +377,7 @@ const RandomSamplingModal = ({
               id="addUser-btn"
               name="addUser-btn"
               onClick={() => {
-                Router.push("/admin/user");
+                Router.push("/tenantadmin/user");
               }}
               className={`btn btn-outline-primary btn-sm ms-2 ${modalStyle.modalBtn}`}
             >
@@ -383,7 +385,7 @@ const RandomSamplingModal = ({
             </button>
           </div>
         )}
-        {selectedUserIds.length && userDetails.length > 0 && (
+        {selectedUserIds.length && userDetails.length > 0 ? (
           <div className="d-flex justify-content-center mt-3">
             <RegularButton
               name={"Next"}
@@ -391,12 +393,13 @@ const RandomSamplingModal = ({
               onClick={() => {
                 setIsModalOpen(true);
                 setOpen(false);
+                form.resetFields()
               }}
             >
               Next
             </RegularButton>
           </div>
-        )}
+        ):""}
       </Modal>
       <Modal
         title="Random Sampling"
@@ -423,16 +426,6 @@ const RandomSamplingModal = ({
                 },
               ]}
             >
-              {/* <Select
-                options={[
-                  { value: "jack", label: "Jack" },
-                  { value: "lucy", label: "Lucy" },
-                  { value: "Yiminghe", label: "yiminghe" },
-                  { value: "disabled", label: "Disabled", disabled: true },
-                ]}
-                className="w-75"
-                placeholder="Select Tin"
-              /> */}
               <Input   className="w-75" placeholder="Select Tin" />
             </Form.Item>
           </div>

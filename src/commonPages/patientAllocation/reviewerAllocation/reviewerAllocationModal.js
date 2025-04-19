@@ -233,12 +233,12 @@ const AllocateModal = ({
                     onClick={() => {
                       if (activeCard === item.id) {
                         setActiveCard("");
-                        setActiveEmail(activeEmail.filter(email => email !== item.email)); 
+                        // setActiveEmail(activeEmail.filter(email => email !== item.email)); 
                       } else {
                         setActiveCard(item.id);
-                        if (!activeEmail.includes(item.email)) {
-                          setActiveEmail([...activeEmail, item.email]);
-                        }
+                        // if (!activeEmail.includes(item.email)) {
+                        //   setActiveEmail([...activeEmail, item.email]);
+                        // }
                         setAllocateDate("");
                         setPriority([]);
                       }
@@ -287,7 +287,7 @@ const AllocateModal = ({
                       className="me-2 ms-3 align-self-center"
                     />
                   </div>
-                  {activeCard == item.id && (
+                  {activeCard == item.id ?(
                     <>
                       <div className="row px-3">
                         <div className={`col-5 ${modalStyle.activeRow1}`}>
@@ -441,7 +441,7 @@ const AllocateModal = ({
                         </div>
                       </div>
                     </>
-                  )}
+                  ):""}
                 </div>
               </div>
             ))}
@@ -452,7 +452,7 @@ const AllocateModal = ({
               id="addUser-btn"
               name="addUser-btn"
               onClick={() => {
-                Router.push("/admin/user");
+                Router.push("/tenantadmin/user");
               }}
               className={`btn btn-outline-primary btn-sm ms-2 ${modalStyle.modalBtn}`}
             >
@@ -460,7 +460,7 @@ const AllocateModal = ({
             </button>
           </div>
         )}
-        {selectedUserIds.length && userDetails.length > 0 && (
+        {selectedUserIds.length && userDetails.length > 0 ? (
           <div className="d-flex justify-content-center mt-3">
             <RegularButton
               name={"Next"}
@@ -474,7 +474,7 @@ const AllocateModal = ({
               Next
             </RegularButton>
           </div>
-        )}
+        ):""}
       </Modal>
       <Modal
         open={isSecondModalOpen}
