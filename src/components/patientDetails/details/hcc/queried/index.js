@@ -1,5 +1,6 @@
 import React from 'react';
 import StatusCard from './card';
+import { Empty } from 'antd';
 
 const Index = ({queriedData}) => {
   const data = {
@@ -15,7 +16,7 @@ const Index = ({queriedData}) => {
         performedOn: null,
         rejectedReason: null,
         queriedAlllocated: {
-          firstName: "john",
+          firstName: "John",
           lastName: "smith"
         }
       },
@@ -28,8 +29,8 @@ const Index = ({queriedData}) => {
         performedOn: null,
         rejectedReason: null,
         queriedAlllocated: {
-          firstName: "john",
-          lastName: "smith"
+          firstName: "Clarus",
+          lastName: "dustin"
         }
       },
       {
@@ -41,7 +42,7 @@ const Index = ({queriedData}) => {
         performedOn: null,
         rejectedReason: null,
         queriedAlllocated: {
-          firstName: "john",
+          firstName: "John",
           lastName: "smith"
         }
       },
@@ -54,7 +55,7 @@ const Index = ({queriedData}) => {
         performedOn: null,
         rejectedReason: null,
         queriedAlllocated: {
-          firstName: "john",
+          firstName: "John",
           lastName: "smith"
         }
       }
@@ -63,17 +64,21 @@ const Index = ({queriedData}) => {
 
   return (
     <div style={{ background: "#F5F9FE", height: "100%" , overflowY:"scroll" }} className="container py-5">
-      <div >
-        {data.response.map((item, index) => (
-          <StatusCard
-            key={index}
-            number={item.queriedAlllocated.firstName.charAt(0).toUpperCase()}
-            name={`${item.queriedAlllocated.firstName} ${item.queriedAlllocated.lastName}`}
-            status={item.approvalStatus}
-            reason={item.queryReason}
-            date={(item.queriedOn)}
-          />
-        ))}
+      <div>
+        {data.response.length === 0 ? (
+          <Empty />
+        ) : (
+          data.response.map((item, index) => (
+            <StatusCard
+              key={index}
+              number={item.queriedAlllocated.firstName.charAt(0).toUpperCase()}
+              name={`${item.queriedAlllocated.firstName} ${item.queriedAlllocated.lastName}`}
+              status={item.approvalStatus}
+              reason={item.queryReason}
+              date={item.queriedOn}
+            />
+          ))
+        )}
       </div>
     </div>
   );
