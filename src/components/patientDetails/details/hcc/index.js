@@ -678,7 +678,7 @@ const Hcc = ({
                         ) : null}
                       </div>
                     </Nav.Item>
-                    <div className="d-flex gap-3">
+                    <div className="d-flex gap-3 mt-1">
                       <Nav.Item as="li" className="nav-item">
                         <Popover
                           open={actions.showActionsPop}
