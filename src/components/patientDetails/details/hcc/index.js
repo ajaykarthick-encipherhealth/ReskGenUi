@@ -120,7 +120,6 @@ const Hcc = ({
     setIsOpen(false);
     form.resetFields();
   };
-  console.log(isModalOpen, "isModalOpen");
 
   useEffect(() => {
     if (patientDosResult?.data?.response) {
@@ -1061,7 +1060,6 @@ const enhancer = connect(
     patientDosResult: state?.patientDetails?.details?.dosResult,
     isDosSelected: state.patientDetails.details?.getSelectedDosDetails,
     roles: state.patientDetails.details?.allRoles,
-    fcv: console.log(state, "state"),
   }),
   {
     getpatientDetailsData: detailsActions.patientDetailsAction,

@@ -633,7 +633,6 @@ const StatusAction = ({
     getPatientIdDetails(patientIdDetailsData?.data?.response);
     setPatienIdDetails(patientIdDetailsData?.data?.response);
   }, [patientIdDetailsData?.data?.response]);
-console.log(patientIdDetailsData?.data?.response,"response")
   return (
     <>
       {patientIdDetailsData?.data?.response && (
@@ -730,7 +729,7 @@ console.log(patientIdDetailsData?.data?.response,"response")
               id="auditbtnContainer"
               name="auditbtnContainer"
             >
-              {patienIdDetails?.processedStatus == "COMPLETED" ? (
+              {patienIdDetails?.workflow?.[0].status == "COMPLETED" ? (
                 <Dropdown
                   id="auditbtn"
                   overlay={
@@ -755,7 +754,7 @@ console.log(patientIdDetailsData?.data?.response,"response")
                     </span>
                   </Button>
                 </Dropdown>
-              ) : patienIdDetails?.processedStatus == "DECLINED" ? (
+              ) : patienIdDetails?.workflow?.[0].status == "DECLINED" ? (
                 <div className={`col-xl-12`}>
                   <Dropdown
                     overlay={
@@ -780,7 +779,7 @@ console.log(patientIdDetailsData?.data?.response,"response")
                     </Button>
                   </Dropdown>
                 </div>
-              ) : patienIdDetails?.processedStatus == "HOLD" ? (
+              ) : patienIdDetails?.workflow?.[0].status == "HOLD" ? (
                 <Dropdown
                   overlay={
                     activeTab == 3
@@ -803,8 +802,8 @@ console.log(patientIdDetailsData?.data?.response,"response")
                     </span>
                   </Button>
                 </Dropdown>
-              ) : patienIdDetails?.processedStatus == "PENDING" ||
-                patienIdDetails?.processedStatus == "COMPUTED" ? (
+              ) : patienIdDetails?.workflow?.[0].status == "PENDING" ||
+                patienIdDetails?.workflow?.[0].status == "COMPUTED" ? (
                 <Dropdown
                   overlay={
                     activeTab == 3

@@ -485,7 +485,6 @@ const YearAndDosStatus = ({
       }
     } catch (e) {}
   };
-  console.log(localPatientId,"localPatientId")
 
   const handleChange = async (e) => {
     const key = e.target.name;
@@ -504,7 +503,7 @@ const YearAndDosStatus = ({
     getPatientIdDetails(patientDetailsResult?.data?.response);
     setPatienIdDetails(patientDetailsResult?.data?.response);
   }, [patientDetailsResult?.data?.response]);
-console.log(patientIdDetailsData?.data?.response?.id,"datas")
+
   return (
     <>
       {patientDetailsResult?.data?.response && (
@@ -570,7 +569,7 @@ console.log(patientIdDetailsData?.data?.response?.id,"datas")
             </div>
           ) : userRole == "reviewer" || userRole == "admin" ? (
             <div className={`${visitStyles.yearactionbtnContainer} ant-badge`}>
-              {patienIdDetails?.processedStatus == "COMPLETED" ? (
+              {patienIdDetails?.workflow?.[0].status == "COMPLETED" ? (
                 <Dropdown
                   overlay={
                     activeTab == 3
@@ -595,7 +594,7 @@ console.log(patientIdDetailsData?.data?.response?.id,"datas")
                     </span>
                   </Button>
                 </Dropdown>
-              ) : patienIdDetails?.processedStatus == "DECLINED" ? (
+              ) : patienIdDetails?.workflow?.[0].status == "DECLINED" ? (
                 <Dropdown
                   overlay={
                     activeTab == 3
@@ -620,7 +619,7 @@ console.log(patientIdDetailsData?.data?.response?.id,"datas")
                     </span>
                   </Button>
                 </Dropdown>
-              ) : patienIdDetails?.processedStatus == "HOLD" ? (
+              ) : patienIdDetails?.workflow?.[0].status == "HOLD" ? (
                 <Dropdown
                   overlay={
                     activeTab == 3
@@ -645,9 +644,9 @@ console.log(patientIdDetailsData?.data?.response?.id,"datas")
                     </span>
                   </Button>
                 </Dropdown>
-              ) : patienIdDetails?.processedStatus == "PENDING" ||
-                patienIdDetails?.processedStatus == "COMPUTED" ||
-                patienIdDetails?.processedStatus == null ? (
+              ) : patienIdDetails?.workflow?.[0].status == "PENDING" ||
+                patienIdDetails?.workflow?.[0].status == "COMPUTED" ||
+                patienIdDetails?.workflow?.[0].status == null ? (
                 <Dropdown
                   overlay={
                     activeTab == 3
