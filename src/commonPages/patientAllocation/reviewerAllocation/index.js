@@ -19,7 +19,9 @@ const ReviewerAllocation = ({
   data,
   tableLoader,
   getTableData,
-  roleId
+  roleId,
+  checkedHeader,
+  setCheckedHeader
 }) => {
   const [checkedLoader, setCheckedLoader] = useState(false);
   const onPageChange = (e) => {
@@ -30,6 +32,7 @@ const ReviewerAllocation = ({
     if (!singleCheck) {
       if (checked) {
         setCheckedLoader(true);
+setCheckedHeader(true)
         const response = await getTableData({
           fromTenant: true,
           allPatientIds: checked,
@@ -55,6 +58,8 @@ const ReviewerAllocation = ({
         setSelectedRowsId([]);
         setSelectedUserName([]);
         setCheckedLoader(false);
+        setCheckedHeader(false);
+
       }
     } else {
       setSelectedUserName((prev) => {
@@ -93,7 +98,12 @@ const ReviewerAllocation = ({
         totalRecords={data?.response?.pageResponse?.totalElements}
         row={15}
         onPageChange={onPageChange}
-        isCheckBox={findItemWithTrueKey(data?.response?.staticDesign,"checkBox")}
+        isCheckBox={findItemWithTrueKey(
+          data?.response?.staticDesign,
+          "checkBox"
+        )}
+        checkedHeader={checkedHeader}
+        setCheckedHeader={setCheckedHeader}
       />
     </div>
   );

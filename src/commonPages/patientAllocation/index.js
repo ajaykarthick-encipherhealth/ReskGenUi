@@ -121,6 +121,8 @@ const PatientAllocation = ({
   const [selectedRoleId, setSelectedRoleId] = useState("");
   const [open, setOpen] = useState(false);
   const [test, setTest] = useState(data?.response?.metaDataDTO);
+    const [checkedHeader, setCheckedHeader] = useState(false)
+
 
   const showModal = () => {
     setSamplingModal(true);
@@ -135,10 +137,13 @@ const PatientAllocation = ({
     setPageNo(0);
     setSearch({});
     setSelectedRowsId([]);
+    setCheckedHeader(false);
+
   };
 
   const handleOpenModal = () => {
     setAllocateModal(true);
+ 
   };
 
   useEffect(() => {
@@ -447,6 +452,8 @@ const PatientAllocation = ({
                             data={data}
                             tableLoader={tableLoader}
                             roleId={roleId}
+                            checkedHeader={checkedHeader}
+                            setCheckedHeader={setCheckedHeader}
                           />
                         </Tab.Pane>
                       </Tab.Content>
