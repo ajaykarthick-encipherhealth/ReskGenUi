@@ -43,6 +43,7 @@ import { SwapOutlined } from "@ant-design/icons";
 import { faEye, faEyeSlash } from "@fortawesome/free-regular-svg-icons";
 import DosSelect from "../components/dosSelect";
 import RegularButton from "../../../button";
+import { getResponePopup } from "../../../../utils/reusable";
 
 const { Option } = Select;
 
@@ -68,6 +69,8 @@ const Hcc = ({
   setFlagContainerActive,
   selectedDate,
   setSelectedDate,
+  queryApproval,
+  raiseQuery,
 }) => {
   const { TextArea } = Input;
   const [form] = Form.useForm();
@@ -87,6 +90,12 @@ const Hcc = ({
   });
   const [selectedReEvaluateItems, setSelectedReEvaluateItems] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [queryText, setQueryText] = useState("");
+  const [isOpen, setIsOpen] = useState(false);
+
+  const handleChange = (e) => {
+    setQueryText(e.target.value);
+  };
   const showModal = () => {
     setIsModalOpen(true);
   };
@@ -95,8 +104,9 @@ const Hcc = ({
   };
   const handleCancel = () => {
     setIsModalOpen(false);
+    setQueryText("");
   };
-  const [isOpen, setIsOpen] = useState(false);
+
   const showQueryModal = () => {
     setIsOpen(true);
   };
@@ -105,7 +115,9 @@ const Hcc = ({
   };
   const handleQueryCancel = () => {
     setIsOpen(false);
+    form.resetFields();
   };
+  console.log(isModalOpen, "isModalOpen");
 
   useEffect(() => {
     if (patientDosResult?.data?.response) {
@@ -301,55 +313,55 @@ const Hcc = ({
       <div className={styles.displayDiv}>
         {pageNumberOptions
           ? pageNumberOptions?.map((data) => (
-            <div className={styles.hoverDiv} style={{ marginBottom: "5px" }}>
-              <div
-                className={` ${styles.selectDetailsContainer}`}
-                style={{
-                  alignItems: "center",
-                  justifyContent: "space-evenly",
-                  margin: "0",
-                }}
-              >
-                <div className="col-xl-6 ">
-                  <span className={styles.selectHead}>
-                    {moment(data.dos).format("MM-DD-YYYY")}
-                  </span>
-                </div>
-
-                <div style={{ display: "flex", alignItems: "center" }}>
-                  <div
-                    className={`col-xl-4 p-2 cr-pointer ${styles.hoverPageNum}`}
-                    style={{
-                      textAlign: "center",
-                      margin: "10px",
-                    }}
-                    onClick={() =>
-                      handleChangePageNumber(data.startPageNumber)
-                    }
-                  >
-                    <span>{data?.startPageNumber}</span>
-                  </div>
-                  <div
-                    className="col-xl-1 text-center"
-                    style={{ padding: "10px" }}
-                  >
-                    <SwapOutlined />
+              <div className={styles.hoverDiv} style={{ marginBottom: "5px" }}>
+                <div
+                  className={` ${styles.selectDetailsContainer}`}
+                  style={{
+                    alignItems: "center",
+                    justifyContent: "space-evenly",
+                    margin: "0",
+                  }}
+                >
+                  <div className="col-xl-6 ">
+                    <span className={styles.selectHead}>
+                      {moment(data.dos).format("MM-DD-YYYY")}
+                    </span>
                   </div>
 
-                  <div
-                    className={`col-xl-4 p-2 cr-pointer ${styles.hoverPageNum}`}
-                    style={{
-                      textAlign: "center",
-                      margin: "10px",
-                    }}
-                    onClick={() => handleChangePageNumber(data.endPagNumber)}
-                  >
-                    <span>{data?.endPagNumber}</span>
+                  <div style={{ display: "flex", alignItems: "center" }}>
+                    <div
+                      className={`col-xl-4 p-2 cr-pointer ${styles.hoverPageNum}`}
+                      style={{
+                        textAlign: "center",
+                        margin: "10px",
+                      }}
+                      onClick={() =>
+                        handleChangePageNumber(data.startPageNumber)
+                      }
+                    >
+                      <span>{data?.startPageNumber}</span>
+                    </div>
+                    <div
+                      className="col-xl-1 text-center"
+                      style={{ padding: "10px" }}
+                    >
+                      <SwapOutlined />
+                    </div>
+
+                    <div
+                      className={`col-xl-4 p-2 cr-pointer ${styles.hoverPageNum}`}
+                      style={{
+                        textAlign: "center",
+                        margin: "10px",
+                      }}
+                      onClick={() => handleChangePageNumber(data.endPagNumber)}
+                    >
+                      <span>{data?.endPagNumber}</span>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-          ))
+            ))
           : null}
       </div>
     </div>
@@ -418,7 +430,46 @@ const Hcc = ({
       </div> */}
     </>
   );
-  const onFinish = async (values) => { }
+  const onFinish = async (values) => {
+    console.log(values,"values")
+    const patientId = getStorage("patientId")
+    const data = {
+      patientId: patientId,
+      aliasName: "QA",
+      queryReason: values?.reason,
+      queriedTo: "user_987",
+      queriedToAliasName: "CODER_1",
+    };
+    const response = await queryApproval(data);
+    if (response?.status === "SUCCESS") {
+      getResponePopup(response);
+      setIsOpen(false);
+      form.resetFields();
+    } else {
+      getResponePopup(response);
+    }
+  };
+
+  const handleSubmit = async () => {
+    const patientId = getStorage("patientId")
+    const data = {
+      patientId: patientId,
+      aliasName: "QA",
+      approvalStatus: "APPROVED",
+      queryReason: queryText,
+      queriedTo: "user_987",
+      queriedToAliasName: "CODER_1",
+    };
+    const response = await raiseQuery(data);
+    if (response?.status === "SUCCESS") {
+      setIsModalOpen(false);
+      getResponePopup(response);
+      setQueryText(null);
+      form.resetFields();
+    } else {
+      getResponePopup(response);
+    }
+  };
   return (
     <div className={visitStyles.visitdata_tab_body}>
       <div className={`profile-tab ${visitStyles.visitdata_header_card2}`}>
@@ -812,12 +863,12 @@ const Hcc = ({
               onChange={(val) => {
                 val?.target.checked
                   ? setSelectedReEvaluateItems((prev) => [
-                    ...prev,
-                    "Combination",
-                  ])
+                      ...prev,
+                      "Combination",
+                    ])
                   : setSelectedReEvaluateItems((prev) =>
-                    prev.filter((item) => item !== "Combination")
-                  );
+                      prev.filter((item) => item !== "Combination")
+                    );
               }}
               style={{
                 width: "20px",
@@ -841,12 +892,12 @@ const Hcc = ({
               onChange={(val) => {
                 val?.target.checked
                   ? setSelectedReEvaluateItems((prev) => [
-                    ...prev,
-                    "Lab & Radiology",
-                  ])
+                      ...prev,
+                      "Lab & Radiology",
+                    ])
                   : setSelectedReEvaluateItems((prev) =>
-                    prev.filter((item) => item !== "Lab & Radiology")
-                  );
+                      prev.filter((item) => item !== "Lab & Radiology")
+                    );
               }}
               style={{
                 width: "20px",
@@ -880,9 +931,16 @@ const Hcc = ({
         onCancel={handleCancel}
       >
         <div className="rejectTextArea">
-          <TextArea width={500} rows={4} maxLength={100} />
+          <TextArea
+            value={queryText}
+            onChange={handleChange}
+            style={{ width: 500 }}
+            rows={4}
+            maxLength={100}
+          />
           <div className="mt-2 mx-2 my-2 d-flex justify-content-end align-items-end">
             <Button
+              onClick={handleSubmit}
               style={{ background: "#04306f", color: "white" }}
               className={`${styles.submitBtn}`}
             >
@@ -937,10 +995,14 @@ const Hcc = ({
                 },
               ]}
               label="Reason"
-              name="raeson"
+              name="reason"
             >
-
-              <TextArea placeholder="Enter Reason" width={500} rows={4} maxLength={100} />
+              <TextArea
+                placeholder="Enter Reason"
+                width={500}
+                rows={4}
+                maxLength={100}
+              />
             </Form.Item>
           </div>
 
@@ -970,6 +1032,8 @@ const enhancer = connect(
     getPatientHccFile: detailsActions.patientHccFileAction,
     storeFileDetails: detailsActions.storeFileIdAction,
     patientDetailsLoad: detailsActions.patientDetailsLoad,
+    queryApproval: detailsActions.getQueryApproval,
+    raiseQuery: detailsActions.raiseQueryAction,
   }
 );
 export default enhancer(Hcc);

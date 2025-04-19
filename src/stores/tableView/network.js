@@ -16,6 +16,7 @@ export async function getTableView({
   isReAssigned,
   isQueried,
   patientAllocated,
+  queryStatus,
 }) {
   const options = {
     method: "GET",
@@ -24,7 +25,7 @@ export async function getTableView({
   const data = await requestPortalRoleBased(
     `dbservice/table/view?pageId=${pageId}&pageNo=${pageNo}&pageSize=${pageSize}&status=${
       activeStatus ? activeStatus : ""
-    }&roleId=${roleId ? roleId : ""}&projectId=${projectId ? projectId : ""}&aliasName=${selectedRole?selectedRole:''}&isReAssigned=${isReAssigned?isReAssigned:''}&isQueried=${isQueried?isQueried:""}&patientAllocated=${patientAllocated?patientAllocated:""}`,
+    }&roleId=${roleId ? roleId : ""}&projectId=${projectId ? projectId : ""}&aliasName=${selectedRole?selectedRole:''}&isReAssigned=${isReAssigned?isReAssigned:''}&isQueried=${isQueried?isQueried:""}&patientAllocated=${patientAllocated?patientAllocated:""}&queryStatus=${queryStatus?queryStatus:""}`,
     options
   );
   return data;

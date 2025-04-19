@@ -109,6 +109,7 @@ const QueryApproval = ({
   const [active, setActive] = useState("Pending");
   const [test, setTest] = useState(data?.response?.metaDataDTO);
   const [open, setOpen] = useState(false);
+    const [selectedRole, setSelectedRole] = useState("");
   const handleTabChange = (key) => {
     setActiveTab(key);
     setSearchText("");
@@ -137,7 +138,8 @@ const QueryApproval = ({
       pageNo,
       pageSize,
       roleId,
-      activeStatus,
+      queryStatus :activeStatus,
+      selectedRole,
     });
   };
 
@@ -162,6 +164,7 @@ const QueryApproval = ({
     activeStatus,
     roleId,
     active,
+    selectedRole,
   ]);
   const getFilterOption = () => {
     let filteredItems;
@@ -271,6 +274,12 @@ const QueryApproval = ({
       setSelectedOption({});
     }
   }, [routedData]);
+
+    useEffect(() => {
+      if (allRoles?.allocationRoles?.length > 0) {
+        setSelectedRole(allRoles.allocationRoles[0].aliasName);
+      }
+    }, [allRoles, activeTab]);
   useEffect(() => {
     getRolesList();
     setTest(data?.response?.metaDataDTO);
@@ -306,6 +315,7 @@ const QueryApproval = ({
                               <Nav.Link
                                 onClick={() => {
                                   setRoleId(role.roleId);
+                                  setSelectedRole(role.aliasName);
                                 }}
                                 className="mt-4"
                                 eventKey={index + 1}

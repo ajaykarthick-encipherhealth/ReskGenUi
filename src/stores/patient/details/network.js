@@ -668,3 +668,37 @@ export async function getStatus() {
   const data = await requestPortal(`/dbservice/proxy/status/get`, options);
   return data;
 }
+
+export async function getQueryDetails() {
+  const options = {
+    method: "GET",
+  };
+  const roleId = getStorage("roleId")
+  const patientId = getStorage("patientId")
+  const data = await requestPortal(`dbservice/v1/reassign/get/queryDetails?roleId=${roleId}&patientId=${patientId}`, options);
+  return data;
+}
+
+export async function queryApproval(obj) {
+  const options = {
+    method: "POST",
+    body: JSON.stringify(obj),
+  };
+  const data = await requestPortal(
+    `dbservice/v1/reassign/query/approval`,
+    options
+  );
+  return data;
+}
+
+export async function raiseQuery(obj) {
+  const options = {
+    method: "POST",
+    body: JSON.stringify(obj),
+  };
+  const data = await requestPortal(
+    `dbservice/v1/reassign/raise/query`,
+    options
+  );
+  return data;
+}

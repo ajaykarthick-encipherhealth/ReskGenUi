@@ -41,7 +41,9 @@ import {
   revertDetails,
   confirmRevertDetails,
   getProxyStatus,
-  getQuery
+  getQuery,
+  getQueryApproval,
+  raiseQueryAction
 } from "./actions";
 
 
@@ -164,7 +166,9 @@ const patientDetailsReducer = combineReducers({
   revertLoading:getPatientsLoading(revertDetails),
   confirmRevertDetails:createReducer(confirmRevertDetails),
   getStatusAction:createReducer(getProxyStatus),
-  getQueriedDetails:createReducer(getQuery)
+  getQueriedDetails:createReducer(getQuery),
+  getQueryApproval:createReducer(getQueryApproval),
+  raiseQuery:createReducer(raiseQueryAction)
 });
 
 export default patientDetailsReducer;

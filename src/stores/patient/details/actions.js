@@ -214,3 +214,13 @@ export const getQuery = createActionThunk(
   network.getQueryDetails
 );
 
+export const getQueryApproval = createActionThunk(
+  "GET_QUERY_APPROVAL",
+  network.queryApproval
+);
+
+export const raiseQueryAction = createActionThunk(
+  "RAISE_QUERY",
+  network.raiseQuery
+);
+

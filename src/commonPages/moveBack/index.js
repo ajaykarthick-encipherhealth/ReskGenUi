@@ -185,6 +185,7 @@ const MoveBack = ({
     const res = await getAllTabRoles();
     if (res.status === "SUCCESS") {
       setRoleId(res?.response?.allocationRoles[0]?.roleId);
+      
     }
   };
   const getMoveBack = async () => {
