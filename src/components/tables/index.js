@@ -100,6 +100,7 @@ const AppTable = ({
   getStatusStyles,
   renderCountDetailsPopover,
   isCheckBox,
+  checkedHeader,
 }) => {
   if (isCheckBox) {
     column.push({
@@ -137,6 +138,7 @@ const AppTable = ({
                       sort={sort}
                       setSort={setSort}
                       handleRowCheckboxChange={handleRowCheckboxChange}
+                      checkedHeader={checkedHeader}
                     />
                   ))}
                 </tr>
@@ -236,12 +238,18 @@ const AppTable = ({
   );
 };
 
-const TableHeadItem = ({ item, sort, setSort,handleRowCheckboxChange }) => {
+const TableHeadItem = ({
+  item,
+  sort,
+  setSort,
+  handleRowCheckboxChange,
+  checkedHeader,
+}) => {
   if (item.checkBox) {
     return (
-      <th >
+      <th>
         <input
-         className={`mx-1`}
+          className={`mx-1`}
           onChange={(e) => {
             e.stopPropagation();
             handleRowCheckboxChange({
@@ -261,6 +269,7 @@ const TableHeadItem = ({ item, sort, setSort,handleRowCheckboxChange }) => {
           type="checkbox"
           id="checkall-header"
           name="checkall-header"
+          checked={checkedHeader}
         />
         {item.name}
       </th>
@@ -424,7 +433,7 @@ const TableRow = ({
       style={{ backgroundColor: rowBackground, height: "35px" }}
     >
       {column?.map((columnItem, index) => {
-        if (columnItem.name == "Priority") {
+        if (columnItem?.design?.includes("PRIORITY")) {
           return (
             <td
               style={{ cursor: "not-allowed" }}
@@ -794,7 +803,7 @@ const TableRow = ({
             </td>
           );
         }
-        if (columnItem.status) {
+        if (columnItem?.design?.includes("REVIEWER_STATUS")) {
           return (
             <td
               className={`${
@@ -818,14 +827,15 @@ const TableRow = ({
                 className="d-flex justify-content-center"
               >
                 {processstatusBodyTemplate(
-                  item[`${columnItem.value}`],
+                  item[`${columnItem.actualField}`],
                   columnItem.isIcon
                 )}
               </div>
             </td>
           );
         }
-        if (columnItem.proxcystatus) {
+
+        if (columnItem?.design?.includes("PROXY_STATUS")) {
           return (
             <td
               className={`${
@@ -849,7 +859,7 @@ const TableRow = ({
                 className="d-flex justify-content-center"
               >
                 {proxyStatusBodyTemplate(
-                  item[`${columnItem.value}`],
+                  item[`${columnItem.actualField}`],
                   columnItem.isIcon
                 )}
               </div>

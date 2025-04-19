@@ -103,6 +103,7 @@ const AllocateModal = ({
         patientIdList: selectedRowsId,
         priority: priority,
       },
+
     });
     if (response?.status == "SUCCESS") {
       getResponePopup(response);
@@ -110,7 +111,7 @@ const AllocateModal = ({
       setOpen(false);
       setAllocateDate("");
       setActiveCard("");
-      setActiveEmail("");
+      setActiveEmail([]);
       setSearch("");
       setPriority([]);
       setSelectedRowsId([]);
@@ -158,7 +159,7 @@ const AllocateModal = ({
           setOpen(false);
           setSelectedRowsId(selectedChart);
           setActiveCard("");
-          setActiveEmail("");
+          setActiveEmail([]);
           setSearch("");
           setAllocateDate(null);
           setPriority([]);
