@@ -38,7 +38,7 @@ export async function patientDetails(
     return data;
   } catch (error) {
     setIsSpinnerLoading(false);
-    return error
+    return error;
   }
 }
 
@@ -89,7 +89,9 @@ export async function labDetails(
   const options = {
     method: "GET",
   };
-  var url = `patientId=${patientId}&processedYear=${processedYear||""}&dateOfService=${dos}&stateIndicator=LAB`;
+  var url = `patientId=${patientId}&processedYear=${
+    processedYear || ""
+  }&dateOfService=${dos}&stateIndicator=LAB`;
   try {
     const data = await requestPortal(
       `dbservice/patient/compute/get/diagnostic/data?${url}
@@ -102,7 +104,7 @@ export async function labDetails(
   }
 }
 
-export async function labPDFData({fileId}) {
+export async function labPDFData({ fileId }) {
   const options = {
     method: "GET",
   };
@@ -315,7 +317,9 @@ export async function labdosWiseList(patientId, year) {
     method: "GET",
   };
   const data = await requestPortal(
-    `dbservice/patient/compute/get/alldos/stateindicator?patientId=${patientId}&processedYear=${year||""}&stateIndicator=LAB`,
+    `dbservice/patient/compute/get/alldos/stateindicator?patientId=${patientId}&processedYear=${
+      year || ""
+    }&stateIndicator=LAB`,
     options
   );
   return data;
@@ -396,12 +400,14 @@ export async function getValidHccDetailsApi(year, code) {
   return res;
 }
 
-export async function getTimelineList({patientId,dos}) {
+export async function getTimelineList({ patientId, dos }) {
   const options = {
     method: "GET",
   };
   const res = await requestPortal(
-    `dbservice/actioneventaudit?patientid=${patientId}&dos=${dos?dos:""}&pageno=${0}&pagesize=${100}`,
+    `dbservice/actioneventaudit?patientid=${patientId}&dos=${
+      dos ? dos : ""
+    }&pageno=${0}&pagesize=${100}`,
     options
   );
   return res;
@@ -527,10 +533,7 @@ export async function overallStatusUpdate(obj) {
     method: "POST",
     body: JSON.stringify(obj),
   };
-  const data = await requestPortal(
-    `dbservice/patient/status/overallstatus`,
-    options
-  );
+  const data = await requestPortal(`dbservice/status/overallstatus`, options);
   return data;
 }
 
@@ -539,7 +542,7 @@ export async function overallYearStatus(obj, url) {
     method: "POST",
     body: JSON.stringify(obj),
   };
-  const data = await requestPortal(url, options);
+  const data = await requestPortal(`dbservice/status/update-status`, options);
   return data;
 }
 
@@ -620,10 +623,10 @@ export const manuallyAddComboCode = async (data) => {
   return response;
 };
 
-export async function getFlagCharts({dos}) {
-  const patientId = getStorage("patientId")
+export async function getFlagCharts({ dos }) {
+  const patientId = getStorage("patientId");
   const options = {
-    method: "GET"
+    method: "GET",
   };
   const data = await requestPortal(
     `dbservice/flagdetails/getcount?patientId=${patientId}&yearOfService=${dos}`,
@@ -631,34 +634,22 @@ export async function getFlagCharts({dos}) {
   );
   return data;
 }
-export async function getRevertDetails({dos}) {
-  const patientId = getStorage("patientId")
+export async function getRevertDetails({ dos }) {
+  const patientId = getStorage("patientId");
   const options = {
-    method: "GET"
+    method: "GET",
   };
   const data = await requestPortal(
-    `dbservice/actioneventaudit/revert-history?patientid=${patientId}&dateOfService=${dos?dos:""}`,
+    `dbservice/actioneventaudit/revert-history?patientid=${patientId}&dateOfService=${
+      dos ? dos : ""
+    }`,
     options
   );
   return data;
 }
 
-export async function getQueryDetails() {
-  const patientId = getStorage("patientId")
-  const roleId = getStorage("roleId")
-  const options = {
-    method: "GET"
-  };
-  const data = await requestPortal(
-    `dbservice/v1/reassign/get/queryDetails?roleId=${roleId}&patientId=${patientId}`,
-    options
-  );
-  return data;
-}
-
-
-export const confirmRevert = async ({dos,year,versionHistory}) => {
-  const patientId = getStorage("patientId")
+export const confirmRevert = async ({ dos, year, versionHistory }) => {
+  const patientId = getStorage("patientId");
   const options = {
     method: "PUT",
   };
@@ -670,15 +661,10 @@ export const confirmRevert = async ({dos,year,versionHistory}) => {
   return response;
 };
 
-
 export async function getStatus() {
   const options = {
-    method: "GET"
+    method: "GET",
   };
-  const data = await requestPortal(
-    `/dbservice/proxy/status/get`,
-    options
-  );
+  const data = await requestPortal(`/dbservice/proxy/status/get`, options);
   return data;
 }
-

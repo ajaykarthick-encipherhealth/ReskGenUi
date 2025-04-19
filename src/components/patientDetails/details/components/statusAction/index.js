@@ -561,6 +561,7 @@ const StatusAction = ({
       // orgId: localOrgId,
       patientId: localPatientId,
       notes: inputValue.notes,
+      roleId:getStorage("roleId"),
       processedStatus: statusCheck(action),
       // dos: patientDetailsResult?.data?.response?.processedYear,
     };

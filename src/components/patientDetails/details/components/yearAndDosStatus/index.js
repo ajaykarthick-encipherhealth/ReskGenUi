@@ -36,6 +36,7 @@ const YearAndDosStatus = ({
   const [inputValue, setInputValue] = useState({
     notes: "",
   });
+  const [statusName, setStatusName] = useState('');
 
   const renderAuditMenu = (value) => {
     var value = (
@@ -186,7 +187,7 @@ const YearAndDosStatus = ({
             className="ant-badge"
             key="4"
             onClick={() => {
-              handleActionClick("COMPLETE");
+              handleActionClick("COMPLETED");
               setMenuIsOpen(false);
             }}
           >
@@ -255,7 +256,7 @@ const YearAndDosStatus = ({
             name="complete-menu-item2"
             key="4"
             onClick={() => {
-              handleActionClick("COMPLETE");
+              handleActionClick("COMPLETED");
               setMenuIsOpen(false);
             }}
           >
@@ -345,7 +346,7 @@ const YearAndDosStatus = ({
             name="complete-menu-item3"
             key="4"
             onClick={() => {
-              handleActionClick("COMPLETE");
+              handleActionClick("COMPLETED");
               setMenuIsOpen(false);
             }}
           >
@@ -374,6 +375,7 @@ const YearAndDosStatus = ({
     setActionItems3(menu3);
   };
   const handleActionClick = (value) => {
+    setStatusName(value);
     if (value == "HOLD") {
       setConfirmNotesModal(true);
       setIsValidAction("holdFunction");
@@ -386,7 +388,7 @@ const YearAndDosStatus = ({
       setConfirmNotesModal(true);
       setIsValidAction("pendingFunction");
     }
-    if (value == "COMPLETE") {
+    if (value == "COMPLETED") {
       setConfirmCompleteModal(true);
     }
   };
@@ -429,8 +431,8 @@ const YearAndDosStatus = ({
       notes: inputValue.notes,
       processedYear: patientDetailsResult?.data?.response?.processedYear,
       dateOfService: patientDetailsResult?.data?.response?.dateOfService,
-      roleId:roleId,
-      processedStatus:"COMPLETED"
+      roleId:getStorage("roleId"),
+      processedStatus:statusName
     };
     var apiURL = "";
     if (action == "declineFunction") {
