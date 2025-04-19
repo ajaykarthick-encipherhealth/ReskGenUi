@@ -702,3 +702,15 @@ export async function raiseQuery(obj) {
   );
   return data;
 }
+
+export async function getAllRoles() {
+  const aliasName = getStorage("aliasName");
+  const options = {
+    method: "GET",
+  };
+  const data = await requestPortal(
+    `dbservice/v1/reassign/get-roles?aliasName=${aliasName}`,
+    options
+  );
+  return data;
+}

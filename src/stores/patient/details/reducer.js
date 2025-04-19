@@ -43,7 +43,8 @@ import {
   getProxyStatus,
   getQuery,
   getQueryApproval,
-  raiseQueryAction
+  raiseQueryAction,
+  getAllRolesAction
 } from "./actions";
 
 
@@ -168,7 +169,8 @@ const patientDetailsReducer = combineReducers({
   getStatusAction:createReducer(getProxyStatus),
   getQueriedDetails:createReducer(getQuery),
   getQueryApproval:createReducer(getQueryApproval),
-  raiseQuery:createReducer(raiseQueryAction)
+  raiseQuery:createReducer(raiseQueryAction),
+  allRoles:createReducer(getAllRolesAction)
 });
 
 export default patientDetailsReducer;

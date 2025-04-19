@@ -22,6 +22,7 @@ import {
   Modal,
   Input,
   Form,
+  Popconfirm,
 } from "antd";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -71,6 +72,8 @@ const Hcc = ({
   setSelectedDate,
   queryApproval,
   raiseQuery,
+  getAllRoles,
+  roles,
 }) => {
   const { TextArea } = Input;
   const [form] = Form.useForm();
@@ -430,15 +433,20 @@ const Hcc = ({
       </div> */}
     </>
   );
+  const selectOptions = roles?.data?.response?.map((role) => ({
+    label: role.aliasName,
+    value: role.aliasName,
+  }));
   const onFinish = async (values) => {
-    console.log(values,"values")
-    const patientId = getStorage("patientId")
+    const patientId = getStorage("patientId");
+    const aliasName = getStorage("aliasName");
     const data = {
       patientId: patientId,
-      aliasName: "QA", // tab name
-      queryReason: values?.reason, // only rejected --- reason
+      aliasName: aliasName,
+      queryReason: values?.reason,
+      queriedToAliasName: values?.role,
     };
-    const response = await queryApproval(data);
+    const response = await raiseQuery(data);
     if (response?.status === "SUCCESS") {
       getResponePopup(response);
       setIsOpen(false);
@@ -449,14 +457,15 @@ const Hcc = ({
   };
 
   const handleSubmit = async () => {
-    const patientId = getStorage("patientId")
-    const data ={
-      "patientId": "revert_test_01",
-     "aliasName": "CODER_2", // login
-     "queryReason": "Missing lab values for Hemoglobin A1C",
-     "queriedToAliasName": "CODER_1" //dropdown
-     };
-    const response = await raiseQuery(data);
+    const patientId = getStorage("patientId");
+    const aliasName = getStorage("aliasName");
+    const data = {
+      patientId: patientId,
+      aliasName: aliasName,
+      queryReason: queryText,
+      approvalStatus: "REJECTED",
+    };
+    const response = await queryApproval(data);
     if (response?.status === "SUCCESS") {
       setIsModalOpen(false);
       getResponePopup(response);
@@ -466,6 +475,26 @@ const Hcc = ({
       getResponePopup(response);
     }
   };
+  const handleApprove = async () => {
+    const patientId = getStorage("patientId");
+    const aliasName = getStorage("aliasName");
+    const data = {
+      patientId: patientId,
+      aliasName: aliasName,
+      queryReason: "",
+      approvalStatus: "APPROVED",
+      rejectedReason: null,
+    };
+    const response = await queryApproval(data);
+    getResponePopup(response);
+    if (response?.status === "SUCCESS") {
+    }
+  };
+
+  useEffect(() => {
+    getAllRoles();
+  }, []);
+  const proxyRole = getStorage("proxyRole");
   return (
     <div className={visitStyles.visitdata_tab_body}>
       <div className={`profile-tab ${visitStyles.visitdata_header_card2}`}>
@@ -754,29 +783,47 @@ const Hcc = ({
                           </button>
                         </Popover>
                       </Nav.Item>
-                      <Nav.Item as="li" className="nav-item">
-                        <button
-                          className={` px-3   py-1 rounded-md  ${styles.approveBtn}`}
-                        >
-                          Approve
-                        </button>
-                      </Nav.Item>
-                      <Nav.Item as="li" className="nav-item">
-                        <button
-                          className={` px-3   py-1 rounded-md  ${styles.rejectBtn}`}
-                          onClick={showModal}
-                        >
-                          Reject
-                        </button>
-                      </Nav.Item>
-                      <Nav.Item as="li" className="nav-item">
-                        <button
-                          onClick={showQueryModal}
-                          className={` px-3   py-1 rounded-md  ${styles.queryBtn}`}
-                        >
-                          Query
-                        </button>
-                      </Nav.Item>
+                      {proxyRole === "OWNER" ? (
+                        <>
+                          <Nav.Item as="li" className="nav-item">
+                            <Popconfirm
+                              placement="bottom"
+                              description="Are you sure to Approved ?"
+                              okText="Yes"
+                              cancelText="No"
+                              onConfirm={handleApprove}
+                            >
+                              <button
+                                className={` px-3   py-1 rounded-md  ${styles.approveBtn}`}
+                              >
+                                Approve
+                              </button>
+                            </Popconfirm>
+                          </Nav.Item>
+                          <Nav.Item as="li" className="nav-item">
+                            <button
+                              className={` px-3   py-1 rounded-md  ${styles.rejectBtn}`}
+                              onClick={showModal}
+                            >
+                              Reject
+                            </button>
+                          </Nav.Item>
+                        </>
+                      ) : (
+                        ""
+                      )}
+                      {proxyRole === "CODER 1" || proxyRole === "CODER 2" ? (
+                        <Nav.Item as="li" className="nav-item">
+                          <button
+                            onClick={showQueryModal}
+                            className={` px-3   py-1 rounded-md  ${styles.queryBtn}`}
+                          >
+                            Query
+                          </button>
+                        </Nav.Item>
+                      ) : (
+                        ""
+                      )}
                     </div>
                   </div>
                 </Nav>
@@ -971,12 +1018,7 @@ const Hcc = ({
               ]}
             >
               <Select
-                options={[
-                  { value: "jack", label: "Jack" },
-                  { value: "lucy", label: "Lucy" },
-                  { value: "Yiminghe", label: "yiminghe" },
-                  { value: "disabled", label: "Disabled", disabled: true },
-                ]}
+                options={selectOptions}
                 className="w-75"
                 placeholder="Select Role"
               />
@@ -1018,6 +1060,8 @@ const enhancer = connect(
     patientDetailsResult: state?.patientDetails?.details?.patientResult,
     patientDosResult: state?.patientDetails?.details?.dosResult,
     isDosSelected: state.patientDetails.details?.getSelectedDosDetails,
+    roles: state.patientDetails.details?.allRoles,
+    fcv: console.log(state, "state"),
   }),
   {
     getpatientDetailsData: detailsActions.patientDetailsAction,
@@ -1030,6 +1074,7 @@ const enhancer = connect(
     patientDetailsLoad: detailsActions.patientDetailsLoad,
     queryApproval: detailsActions.getQueryApproval,
     raiseQuery: detailsActions.raiseQueryAction,
+    getAllRoles: detailsActions.getAllRolesAction,
   }
 );
 export default enhancer(Hcc);

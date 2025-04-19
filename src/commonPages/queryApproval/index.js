@@ -13,6 +13,7 @@ import CardSkeleton from "../../components/skeleton/card";
 import { actions as tableAction } from "../../stores/tableView";
 import { getResponePopup } from "../../utils/reusable";
 import { getStorage, setStorage } from "../../utils/storages";
+import { useRouter } from "next/router";
 
 const QueryApproval = ({
   organizationList,
@@ -26,7 +27,7 @@ const QueryApproval = ({
   data,
   tableDynamicColumn,
   tableDynamicColumnReset,
-  getRoutedData,
+  route,
 }) => {
   const commonFilterItems = [
     {
@@ -94,6 +95,7 @@ const QueryApproval = ({
       sortField: "computedDate",
     },
   });
+  const navigate = useRouter()
   const [activeTab, setActiveTab] = useState();
   const [searchText, setSearchText] = useState(null);
   const [selectedOption, setSelectedOption] = useState({});
@@ -132,6 +134,28 @@ const QueryApproval = ({
     priority: priorityOptions,
   };
 
+  const gotoPatientDetails = (data) => {
+    console.log(data,"data")
+    // if (data?.computing === 2) {
+    //   const controller = new AbortController();
+    //   const { signal } = controller;
+    //   controller.abort();
+      setStorage("patientId", data?.patientId);
+      setStorage("aliasName" , selectedRole)
+      var role = getStorage("userRole");
+      if (role == "tenant_admin") {
+        // getRoutedData(page);
+        navigate.push({
+          pathname: route ? route : "/tenantadmin/tin/details",
+        });
+      } 
+    // } 
+    // else {
+    //   notification.warning({
+    //     message: data?.patientId + " file not processed. Please wait.",
+    //   });
+    // }
+  };
   const getQueryApproval = async () => {
     const response = await getTableData({
       pageId: "8c1eebaf-eb20-4758-b968-6ae15e6fc031",
@@ -215,26 +239,7 @@ const QueryApproval = ({
       getResponePopup(error?.response);
     }
   };
-  const gotoPatientDetails = (data) => {
-    if (data?.computing === 2) {
-      const controller = new AbortController();
-      const { signal } = controller;
-      controller.abort();
-      setStorage("patientId", data?.patientId);
-      var role = getStorage("userRole");
-      if (role == "tenant_admin") {
-        getRoutedData(page);
-        navigate.push({
-          pathname: route ? route : "/tenantadmin/tin/details",
-        });
-      }
-    }
-    else {
-      notification.warning({
-        message: data?.patientId + " file not processed. Please wait.",
-      });
-    }
-  };
+
   const handleReset = async () => {
     const payload = {
       pageId: "8c1eebaf-eb20-4758-b968-6ae15e6fc031",
@@ -345,7 +350,6 @@ const QueryApproval = ({
                             opt={opt}
                             setSearch={setSearch}
                             search={search}
-                            onRowClick={gotoPatientDetails}
                             //customize table
 
                             open={open}
@@ -367,6 +371,7 @@ const QueryApproval = ({
                             setActiveStatus={setActiveStatus}
                             active={active}
                             setActive={setActive}
+                            gotoPatientDetails={gotoPatientDetails}
                           />
                         </Tab.Pane>
                       </Tab.Content>

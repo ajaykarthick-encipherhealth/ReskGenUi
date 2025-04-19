@@ -50,6 +50,7 @@ const SelectRole = ({ getLogin ,getProxyRoles,proxyRoles}) => {
           const accessList = proxyRoles?.find(
            (item) => item.role?.toLowerCase() === selectedRole?.toLowerCase()
          );
+         console.log(selectedProxyObj,"selectedProxyObj")
          const roleId = selectedProxyObj?.roleId   
           setStorage("proxyRole", formattedProxyRole);
           setStorage("accessMenuList", JSON.stringify(accessList));
@@ -94,7 +95,6 @@ const SelectRole = ({ getLogin ,getProxyRoles,proxyRoles}) => {
 
     const selectedRoleInfo = rolesMapping[selectedRole];
     if (selectedRoleInfo && !roleError) {
-  console.log(selectedRoleInfo,"selectedRoleInfo")
 
       setStorage("userRole", selectedRoleInfo?.userRole);
       // setStorage("userRole", selectedRole);

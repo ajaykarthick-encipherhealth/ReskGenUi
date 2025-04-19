@@ -223,4 +223,8 @@ export const raiseQueryAction = createActionThunk(
   "RAISE_QUERY",
   network.raiseQuery
 );
+export const getAllRolesAction = createActionThunk(
+  "GET_ALL_ROLES_QUERIED",
+  network.getAllRoles
+);
 
