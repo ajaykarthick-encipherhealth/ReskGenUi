@@ -568,7 +568,7 @@ const YearAndDosStatus = ({
             </div>
           ) : userRole == "reviewer" || userRole == "admin" ? (
             <div className={`${visitStyles.yearactionbtnContainer} ant-badge`}>
-              {patienIdDetails?.processedStatus == "COMPLETED" ? (
+              {patienIdDetails?.workflow?.[0].status == "COMPLETED" ? (
                 <Dropdown
                   overlay={
                     activeTab == 3
@@ -593,7 +593,7 @@ const YearAndDosStatus = ({
                     </span>
                   </Button>
                 </Dropdown>
-              ) : patienIdDetails?.processedStatus == "DECLINED" ? (
+              ) : patienIdDetails?.workflow?.[0].status == "DECLINED" ? (
                 <Dropdown
                   overlay={
                     activeTab == 3
@@ -618,7 +618,7 @@ const YearAndDosStatus = ({
                     </span>
                   </Button>
                 </Dropdown>
-              ) : patienIdDetails?.processedStatus == "HOLD" ? (
+              ) : patienIdDetails?.workflow?.[0].status == "HOLD" ? (
                 <Dropdown
                   overlay={
                     activeTab == 3
@@ -643,9 +643,9 @@ const YearAndDosStatus = ({
                     </span>
                   </Button>
                 </Dropdown>
-              ) : patienIdDetails?.processedStatus == "PENDING" ||
-                patienIdDetails?.processedStatus == "COMPUTED" ||
-                patienIdDetails?.processedStatus == null ? (
+              ) : patienIdDetails?.workflow?.[0].status == "PENDING" ||
+                patienIdDetails?.workflow?.[0].status == "COMPUTED" ||
+                patienIdDetails?.workflow?.[0].status == null ? (
                 <Dropdown
                   overlay={
                     activeTab == 3

@@ -729,7 +729,7 @@ const StatusAction = ({
               id="auditbtnContainer"
               name="auditbtnContainer"
             >
-              {patienIdDetails?.processedStatus == "COMPLETED" ? (
+              {patienIdDetails?.workflow?.[0].status == "COMPLETED" ? (
                 <Dropdown
                   id="auditbtn"
                   overlay={
@@ -754,7 +754,7 @@ const StatusAction = ({
                     </span>
                   </Button>
                 </Dropdown>
-              ) : patienIdDetails?.processedStatus == "DECLINED" ? (
+              ) : patienIdDetails?.workflow?.[0].status == "DECLINED" ? (
                 <div className={`col-xl-12`}>
                   <Dropdown
                     overlay={
@@ -779,7 +779,7 @@ const StatusAction = ({
                     </Button>
                   </Dropdown>
                 </div>
-              ) : patienIdDetails?.processedStatus == "HOLD" ? (
+              ) : patienIdDetails?.workflow?.[0].status == "HOLD" ? (
                 <Dropdown
                   overlay={
                     activeTab == 3
@@ -802,8 +802,8 @@ const StatusAction = ({
                     </span>
                   </Button>
                 </Dropdown>
-              ) : patienIdDetails?.processedStatus == "PENDING" ||
-                patienIdDetails?.processedStatus == "COMPUTED" ? (
+              ) : patienIdDetails?.workflow?.[0].status == "PENDING" ||
+                patienIdDetails?.workflow?.[0].status == "COMPUTED" ? (
                 <Dropdown
                   overlay={
                     activeTab == 3
