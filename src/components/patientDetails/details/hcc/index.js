@@ -435,10 +435,8 @@ const Hcc = ({
     const patientId = getStorage("patientId")
     const data = {
       patientId: patientId,
-      aliasName: "QA",
-      queryReason: values?.reason,
-      queriedTo: "user_987",
-      queriedToAliasName: "CODER_1",
+      aliasName: "QA", // tab name
+      queryReason: values?.reason, // only rejected --- reason
     };
     const response = await queryApproval(data);
     if (response?.status === "SUCCESS") {
@@ -452,14 +450,12 @@ const Hcc = ({
 
   const handleSubmit = async () => {
     const patientId = getStorage("patientId")
-    const data = {
-      patientId: patientId,
-      aliasName: "QA",
-      approvalStatus: "APPROVED",
-      queryReason: queryText,
-      queriedTo: "user_987",
-      queriedToAliasName: "CODER_1",
-    };
+    const data ={
+      "patientId": "revert_test_01",
+     "aliasName": "CODER_2", // login
+     "queryReason": "Missing lab values for Hemoglobin A1C",
+     "queriedToAliasName": "CODER_1" //dropdown
+     };
     const response = await raiseQuery(data);
     if (response?.status === "SUCCESS") {
       setIsModalOpen(false);

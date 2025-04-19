@@ -308,7 +308,6 @@ const MoveBack = ({
                               <Nav.Link
                                 onClick={() => {
                                   setSelectedRole(role.aliasName);
-                                  setRoleId(role.roleId);
                                 }}
                                 className="mt-4"
                                 eventKey={index + 1}

@@ -109,7 +109,7 @@ const QueryApproval = ({
   const [active, setActive] = useState("Pending");
   const [test, setTest] = useState(data?.response?.metaDataDTO);
   const [open, setOpen] = useState(false);
-    const [selectedRole, setSelectedRole] = useState("");
+  const [selectedRole, setSelectedRole] = useState("");
   const handleTabChange = (key) => {
     setActiveTab(key);
     setSearchText("");
@@ -138,7 +138,7 @@ const QueryApproval = ({
       pageNo,
       pageSize,
       roleId,
-      queryStatus :activeStatus,
+      queryStatus: activeStatus,
       selectedRole,
     });
   };
@@ -185,6 +185,7 @@ const QueryApproval = ({
     const res = await getAllTabRoles();
     if (res.status === "SUCCESS") {
       setRoleId(res?.response?.allocationRoles[0]?.roleId);
+      setSelectedRole(res?.response?.allocationRoles[0]?.aliasName);
     }
   };
   const showDrawer = () => {
@@ -224,15 +225,15 @@ const QueryApproval = ({
       if (role == "tenant_admin") {
         getRoutedData(page);
         navigate.push({
-          pathname: route ? route : "/tenantadmin/tin/details"
+          pathname: route ? route : "/tenantadmin/tin/details",
         });
-      } 
-    } 
-    // else {
-    //   notification.warning({
-    //     message: data?.patientId + " file not processed. Please wait.",
-    //   });
-    // }
+      }
+    }
+    else {
+      notification.warning({
+        message: data?.patientId + " file not processed. Please wait.",
+      });
+    }
   };
   const handleReset = async () => {
     const payload = {
@@ -275,14 +276,10 @@ const QueryApproval = ({
     }
   }, [routedData]);
 
-    useEffect(() => {
-      if (allRoles?.allocationRoles?.length > 0) {
-        setSelectedRole(allRoles.allocationRoles[0].aliasName);
-      }
-    }, [allRoles, activeTab]);
+
+
   useEffect(() => {
     getRolesList();
-    setTest(data?.response?.metaDataDTO);
   }, []);
   return (
     <div>
@@ -314,7 +311,7 @@ const QueryApproval = ({
                             >
                               <Nav.Link
                                 onClick={() => {
-                                  setRoleId(role.roleId);
+                                  // setRoleId(role.roleId);
                                   setSelectedRole(role.aliasName);
                                 }}
                                 className="mt-4"
@@ -411,7 +408,6 @@ const connector = connect(
     getTableData: tableAction.tableViewAction,
     tableDynamicColumn: tableAction.tableDynamicColumn,
     tableDynamicColumnReset: tableAction.tableDynamicColumnReset,
-    
   }
 );
 
