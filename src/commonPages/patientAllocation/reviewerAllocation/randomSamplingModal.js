@@ -69,7 +69,6 @@ const RandomSamplingModal = ({
     setSelectedUserIds([]);
     setActiveCard("");
     setActiveEmail([])
-    setUserDetails([])
     form.resetFields();
   };
 
@@ -98,8 +97,8 @@ const RandomSamplingModal = ({
         userIdList: activeEmail,
         dueDate: formatDateForIndex({ date: values.duedate, index: 1 }),
         allocatedBy: userId,
-        percentage: values?.percentage,
-        tin:values?.tin,
+        percentage: Number(values?.percentage),
+        tin: Number(values?.tin),
     });
     if (response?.status == "SUCCESS") {
       getResponePopup(response);
@@ -420,9 +419,10 @@ const RandomSamplingModal = ({
               label="Select Tin"
               name="tin"
               rules={[
+                { required: true, message: "Select the Tin!" },
                 {
-                  required: true,
-                  message: "Select the Tin!",
+                  pattern: /^[0-9]+$/,
+                  message: "Tin must contain only numbers",
                 },
               ]}
             >
@@ -431,10 +431,11 @@ const RandomSamplingModal = ({
           </div>
 
           <Form.Item
-            rules={[
+             rules={[
+              { required: true, message: "Select the Tin!" },
               {
-                required: true,
-                message: "Enter Percentage!",
+                pattern: /^[0-9]+$/,
+                message: "Percentage must contain only numbers",
               },
             ]}
             label="Enter Percentage"
