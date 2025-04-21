@@ -1,9 +1,9 @@
-import React, {  useState } from "react";
+import React, { useState } from "react";
 import { connect } from "react-redux";
-import { actions as allActions } from  '../../../stores/tenantAdmin/patientAllocations'
-import AppTable from '../../../components/tables'
+import { actions as allActions } from "../../../stores/tenantAdmin/patientAllocations";
+import AppTable from "../../../components/tables";
 import { findItemWithTrueKey } from "../../../utils/reusable";
-import {actions as tableAction } from "../../../stores/tableView"
+import { actions as tableAction } from "../../../stores/tableView";
 const ReviewerAllocation = ({
   setSelectedRowsId,
   selectedRows,
@@ -21,7 +21,7 @@ const ReviewerAllocation = ({
   getTableData,
   roleId,
   checkedHeader,
-  setCheckedHeader
+  setCheckedHeader,
 }) => {
   const [checkedLoader, setCheckedLoader] = useState(false);
   const onPageChange = (e) => {
@@ -32,17 +32,17 @@ const ReviewerAllocation = ({
     if (!singleCheck) {
       if (checked) {
         setCheckedLoader(true);
-setCheckedHeader(true)
+        setCheckedHeader(true);
         const response = await getTableData({
           fromTenant: true,
           allPatientIds: checked,
           batchCount: batchCount,
-          pageId:"6cd166eb-79ac-4c12-ab0f-07be2983ca70",
-          pageNo:0,
-          pageSize:15,
-          roleId:roleId
+          pageId: "6cd166eb-79ac-4c12-ab0f-07be2983ca70",
+          pageNo: 0,
+          pageSize: 15,
+          roleId: roleId,
         });
-  
+
         if (response?.status === "SUCCESS") {
           const result = response?.response?.patientIds?.map((patient) => ({
             patientId: patient.patientId,
@@ -59,12 +59,14 @@ setCheckedHeader(true)
         setSelectedUserName([]);
         setCheckedLoader(false);
         setCheckedHeader(false);
-
       }
     } else {
       setSelectedUserName((prev) => {
         let updatedSelection = e.target.checked
-          ? [...prev, { patientId: row.patientId, patientName: row.patientName }]
+          ? [
+              ...prev,
+              { patientId: row.patientId, patientName: row.patientName },
+            ]
           : prev.filter((user) => user.patientId !== row.patientId);
         return updatedSelection;
       });
@@ -102,7 +104,11 @@ setCheckedHeader(true)
           data?.response?.staticDesign,
           "checkBox"
         )}
-        checkedHeader={checkedHeader}
+        checkedHeader={
+          selectedRows?.length ===
+          data?.response?.pageResponse?.totalElements &&
+          data?.response?.pageResponse?.totalElements !== 0
+        }
         setCheckedHeader={setCheckedHeader}
       />
     </div>
