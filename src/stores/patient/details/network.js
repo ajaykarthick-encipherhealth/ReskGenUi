@@ -673,9 +673,12 @@ export async function getQueryDetails() {
   const options = {
     method: "GET",
   };
-  const roleId = getStorage("roleId")
-  const patientId = getStorage("patientId")
-  const data = await requestPortal(`dbservice/v1/reassign/get/queryDetails?roleId=${roleId}&patientId=${patientId}`, options);
+  const roleId = getStorage("roleId");
+  const patientId = getStorage("patientId");
+  const data = await requestPortal(
+    `dbservice/v1/reassign/get/queryDetails?roleId=${roleId}&patientId=${patientId}`,
+    options
+  );
   return data;
 }
 
@@ -704,13 +707,17 @@ export async function raiseQuery(obj) {
 }
 
 export async function getAllRoles() {
-  const aliasName = getStorage("aliasName");
+  const userAccess = JSON.parse(sessionStorage.getItem("accessMenuList"));
+  const proxyRole = userAccess?.proxyRole;
+  console.log(proxyRole);
+
   const options = {
     method: "GET",
   };
   const data = await requestPortal(
-    `dbservice/v1/reassign/get-roles?aliasName=${aliasName}`,
+    `dbservice/v1/reassign/get-roles?proxyRole=${proxyRole}`,
     options
   );
   return data;
 }
+  
