@@ -1,10 +1,10 @@
 import React from "react";
 
 const statusColors = {
- REJECTED: "text-danger",
+  REJECTED: "text-danger",
   QUERIED: "text-warning",
   APPROVED: "text-success",
-  PENDING:"text-muted",
+  PENDING:"text-warning",
 };
 
 function StatusCard({ number, name, status, reason, date }) {
@@ -25,12 +25,12 @@ function StatusCard({ number, name, status, reason, date }) {
       </div>
       <div style={{border:"1px solid #BBE6E3"}} className={` rounded p-3 w-100 `}>
         <div className="fw-semibold mb-2">
-          {name} <span className={statusColors[status]}>{status}</span>
+          {name} <span className={` p-2 ${statusColors[status]}`}>{status}</span>
         </div>
         {reason && (
           <>
             <div  className="text-muted mall mb-1">Reason</div>
-            <div style={{border:"1px solid #BBE6E3" , height:"100px"}} className="w-2 w-100  p-2 rounded  small">{reason}</div>
+            <div style={{border:"1px solid #BBE6E3" , height:"100px",overflow:"scroll"}} className="w-2 w-100  p-2 rounded  small">{reason}</div>
           </>
         )}
         <div className="text-muted small mt-2">{date}</div>

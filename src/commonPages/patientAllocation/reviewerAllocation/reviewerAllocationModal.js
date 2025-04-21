@@ -469,6 +469,7 @@ const AllocateModal = ({
                 setIsSecondModalOpen(true);
                 setOpen(false);
                 setAllocateDate(null);
+                setPriority([])
               }}
             >
               Next

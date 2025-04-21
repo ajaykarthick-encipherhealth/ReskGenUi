@@ -31,8 +31,8 @@ const MoveBackModal = ({
       });
 
       if (response?.status === "SUCCESS") {
-        getMoveBack()
         getResponePopup(response);
+        getMoveBack()
         setSelectedRowsId([]);
         setSelectedRows([]);
         setSelectLevel([]);

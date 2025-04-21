@@ -1,78 +1,25 @@
-import React from 'react';
-import StatusCard from './card';
-import { Empty } from 'antd';
+import React from "react";
+import StatusCard from "./card";
+import { Empty } from "antd";
+import TableSkeleton from "../../../../skeleton/table";
 
-const Index = ({queriedData}) => {
-  const data = {
-    status: "SUCCESS",
-    message: "Success!!",
-    response: [
-      {
-        roleId: "3",
-        approvalStatus: "REJECTED",
-        queryReason: "Clarification on diagnosis",
-        queriedTo: "jonsnow@encipherhealthinternal.onmicrosoft.com",
-        queriedOn: "2025-04-17T13:36:41.054Z",
-        performedOn: null,
-        rejectedReason: null,
-        queriedAlllocated: {
-          firstName: "John",
-          lastName: "smith"
-        }
-      },
-      {
-        roleId: "3",
-        approvalStatus: "APPROVED",
-        queryReason: "Clarification on diagnosis data",
-        queriedTo: "jonsnow@encipherhealthinternal.onmicrosoft.com",
-        queriedOn: "2025-04-17T13:36:41.054Z",
-        performedOn: null,
-        rejectedReason: null,
-        queriedAlllocated: {
-          firstName: "Clarus",
-          lastName: "dustin"
-        }
-      },
-      {
-        roleId: "3",
-        approvalStatus: "PENDING",
-        queryReason: "Clarification on diagnosis data",
-        queriedTo: "jonsnow@encipherhealthinternal.onmicrosoft.com",
-        queriedOn: "2025-04-17T13:36:41.054Z",
-        performedOn: null,
-        rejectedReason: null,
-        queriedAlllocated: {
-          firstName: "John",
-          lastName: "smith"
-        }
-      },
-      {
-        roleId: "3",
-        approvalStatus: "QUERIED",
-        queryReason: "Clarification on diagnosis data",
-        queriedTo: "jonsnow@encipherhealthinternal.onmicrosoft.com",
-        queriedOn: "2025-04-17T13:36:41.054Z",
-        performedOn: null,
-        rejectedReason: null,
-        queriedAlllocated: {
-          firstName: "John",
-          lastName: "smith"
-        }
-      }
-    ]
-  };
-
+const Index = ({ queriedData, queriedLoader }) => {
   return (
-    <div style={{ background: "#F5F9FE", height: "100%" , overflowY:"scroll" }} className="container py-5">
+    <div
+      style={{ background: "#F5F9FE", height: "100%", overflowY: "scroll" }}
+      className="container py-5"
+    >
       <div>
-        {data.response.length === 0 ? (
+        {queriedData?.response?.length === 0 ? (
           <Empty />
+        ) : queriedLoader ? (
+          <TableSkeleton />
         ) : (
-          data.response.map((item, index) => (
+          queriedData?.response?.map((item, index) => (
             <StatusCard
               key={index}
-              number={item.queriedAlllocated.firstName.charAt(0).toUpperCase()}
-              name={`${item.queriedAlllocated.firstName} ${item.queriedAlllocated.lastName}`}
+              number={item.queryByName.charAt(0).toUpperCase()}
+              name={item.queryByName.toUpperCase()}
               status={item.approvalStatus}
               reason={item.queryReason}
               date={item.queriedOn}

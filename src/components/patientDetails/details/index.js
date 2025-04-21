@@ -149,6 +149,7 @@ const Details = ({
   confirmRevert,
   getQueryDetails,
   queriedData,
+  queriedLoader
 }) => {
   const navigate = useRouter();
   const [count, setCount] = useState(0);
@@ -1127,7 +1128,7 @@ const Details = ({
                     />
                   ) 
                   : flagContainerActive === "Queried" ?( <Queried
-                    queriedData={queriedData}
+                    queriedData={queriedData} queriedLoader={queriedLoader}
 
                   />)
                   : flagContainerActive === "Version History"
@@ -1203,6 +1204,7 @@ const enhancer = connect(
     revertLoading: state?.patientDetails?.details?.revertLoading,
     queriedData:
     state?.patientDetails?.details?.getQueriedDetails?.data,
+    queriedLoader:state.patientDetails?.details?.getQueryLoader
   }),
   {
     workFgetFlagsowData: workflowActions.flagsAction,

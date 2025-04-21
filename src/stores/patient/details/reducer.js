@@ -170,7 +170,8 @@ const patientDetailsReducer = combineReducers({
   getQueriedDetails:createReducer(getQuery),
   getQueryApproval:createReducer(getQueryApproval),
   raiseQuery:createReducer(raiseQueryAction),
-  allRoles:createReducer(getAllRolesAction)
+  allRoles:createReducer(getAllRolesAction),
+  getQueryLoader:createReducer(getQuery),
 });
 
 export default patientDetailsReducer;
