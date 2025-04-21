@@ -332,9 +332,8 @@ export async function getRoles() {
   const options = {
     method: "GET",
   };
-  const roleId = getStorage("roleId")
   const res = await requestPortal(
-    `dbservice/allocation/roles?roleId=${roleId}`,
+    `dbservice/allocation/roles`,
     options
   );
   return res;
