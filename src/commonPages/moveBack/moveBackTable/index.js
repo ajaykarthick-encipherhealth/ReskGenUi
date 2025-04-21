@@ -96,6 +96,11 @@ const MoveBackTable = ({
             data?.response?.staticDesign,
             "checkBox"
           )}
+          checkedHeader={
+            selectedRows?.length ===
+            data?.response?.pageResponse?.totalElements &&
+            data?.response?.pageResponse?.totalElements !== 0
+          }
         />
       </div>
     </div>
