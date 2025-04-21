@@ -121,8 +121,11 @@ const PatientAllocation = ({
   const [selectedRoleId, setSelectedRoleId] = useState("");
   const [open, setOpen] = useState(false);
   const [test, setTest] = useState(data?.response?.metaDataDTO);
-    const [checkedHeader, setCheckedHeader] = useState(false)
+  const [checkedHeader, setCheckedHeader] = useState(false)
 
+  const disbaleAllocate = allRoles?.allocationRoles?.map(
+    (item) => item.disableAllocation
+  );
 
   const showModal = () => {
     setSamplingModal(true);
@@ -275,15 +278,8 @@ const PatientAllocation = ({
     setTest(data?.response?.metaDataDTO);
   }, []);
 
-  useEffect(() => {
-    if (allRoles?.allocationRoles?.length > 0) {
-      setSelectedRoleId(allRoles.allocationRoles[0].roleId);
-    }
-  }, [allRoles, activeTab]);
+ 
 
-  const disbaleAllocate = allRoles?.allocationRoles?.map(
-    (item) => item.disableAllocation
-  );
 
   return (
     <div>
@@ -360,7 +356,7 @@ const PatientAllocation = ({
                                 </Tooltip>
                               </Nav.Item>
                             )}
-                            {activeTab === "3" && (
+                          {allRoles?.allocationRoles?.find(role => role.roleId === selectedRoleId)?.roleName === "QA" && (
                               <Nav.Item
                                 as="li"
                                 className="nav-item profile-tab "
