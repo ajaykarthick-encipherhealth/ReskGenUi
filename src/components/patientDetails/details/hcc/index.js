@@ -783,7 +783,7 @@ const Hcc = ({
                         </Popover>
                       </Nav.Item>
                       {proxyRole === "OWNER"  || proxyRole === "TENANT ADMIN" ? (
-                        <span>
+                        <div className="d-flex gap-3">
                           <Nav.Item as="li" className="nav-item">
                             <Popconfirm
                               placement="bottom"
@@ -807,7 +807,7 @@ const Hcc = ({
                               Reject
                             </button>
                           </Nav.Item>
-                        </span>
+                        </div>
                       ) : (
                         ""
                       )}
