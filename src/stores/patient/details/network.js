@@ -709,15 +709,13 @@ export async function raiseQuery(obj) {
 export async function getAllRoles() {
   const userAccess = JSON.parse(sessionStorage.getItem("accessMenuList"));
   const proxyRole = userAccess?.proxyRole;
-  console.log(proxyRole);
 
   const options = {
     method: "GET",
   };
   const data = await requestPortal(
-    `dbservice/v1/reassign/get-roles?proxyRole=${proxyRole}`,
+    `dbservice/v1/reassign/get-roles?aliasName=${proxyRole}`,
     options
   );
   return data;
 }
-  
