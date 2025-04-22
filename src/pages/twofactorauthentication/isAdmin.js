@@ -9,6 +9,7 @@ import { Form, Select } from "antd";
 
 const IsAdmin = ({ loginResponse, setClickAuth, isClickAuth }) => {
   const [form] = Form.useForm();
+  const { Option } = Select;
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [clientList, setClientList] = useState([
