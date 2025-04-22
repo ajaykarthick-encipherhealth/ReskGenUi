@@ -22,6 +22,7 @@ import { getStorage } from "../../../utils/storages";
 import TableSkeleton from "../../../components/skeleton/table";
 import RegularButton from "../../../components/button";
 import { actions as allAction } from "../../../stores/tenantAdmin/patientAllocations";
+import { priorityOptions } from "../../../components/headerFilters/functions";
 
 const RandomSamplingModal = ({
   open,
@@ -69,7 +70,7 @@ const RandomSamplingModal = ({
     setIsModalOpen(false);
     setSelectedUserIds([]);
     setActiveCard("");
-    setActiveEmail([])
+    setActiveEmail([]);
     form.resetFields();
   };
 
@@ -93,17 +94,18 @@ const RandomSamplingModal = ({
     }
   };
   const onFinish = async (values) => {
-    setIsAllocate(true)
+    setIsAllocate(true);
     const response = await randomSampling({
-        roleId: roleId,
-        userIdList: activeEmail,
-        dueDate: formatDateForIndex({ date: values.duedate, index: 1 }),
-        allocatedBy: userId,
-        percentage: Number(values?.percentage),
-        tin: Number(values?.tin),
+      roleId: roleId,
+      userIdList: activeEmail,
+      dueDate: formatDateForIndex({ date: values.duedate, index: 1 }),
+      allocatedBy: userId,
+      hccFoundFilesPercentage: Number(values?.hccpercentage),
+      noHccFoundFilesPercentage:Number(values?.nohccpercentage),
+      tin: values?.tin,
     });
     if (response?.status == "SUCCESS") {
-      setIsAllocate(false)
+      setIsAllocate(false);
       getResponePopup(response);
       getAllAllocation();
       setOpen(false);
@@ -116,7 +118,7 @@ const RandomSamplingModal = ({
       setSelectedRows([]);
       setSelectedUserIds([]);
     } else {
-      setIsAllocate(false)
+      setIsAllocate(false);
       getResponePopup(response);
     }
   };
@@ -369,7 +371,9 @@ const RandomSamplingModal = ({
                         </div>
                       </div>
                     </>
-                  ):""}
+                  ) : (
+                    ""
+                  )}
                 </div>
               </div>
             ))}
@@ -391,18 +395,20 @@ const RandomSamplingModal = ({
         {selectedUserIds.length && userDetails.length > 0 ? (
           <div className="d-flex justify-content-center mt-3">
             <RegularButton
-               name={"Next"}
+              name={"Next"}
               type="submit"
               onClick={() => {
                 setIsModalOpen(true);
                 setOpen(false);
-                form.resetFields()
+                form.resetFields();
               }}
             >
               Next
             </RegularButton>
           </div>
-        ):""}
+        ) : (
+          ""
+        )}
       </Modal>
       <Modal
         title="Random Sampling"
@@ -424,29 +430,56 @@ const RandomSamplingModal = ({
               name="tin"
               rules={[
                 { required: true, message: "Select the Tin!" },
-                {
-                  pattern: /^[0-9]+$/,
-                  message: "Tin must contain only numbers",
-                },
               ]}
             >
-              <Input   className="w-75" placeholder="Select Tin" />
+              <Input className="w-75" placeholder=" Tin" />
             </Form.Item>
           </div>
 
           <Form.Item
-             rules={[
+            rules={[
               { required: true, message: "Select the Tin!" },
               {
                 pattern: /^[0-9]+$/,
                 message: "Percentage must contain only numbers",
               },
             ]}
-            label="Enter Percentage"
-            name="percentage"
+            label="Enter Percentage of File Related to HCC Condition"
+            name="hccpercentage"
           >
-            <Input className="w-75" placeholder="Enter Percentage" />
+            <Input className="w-75" placeholder=" Percentage" />
           </Form.Item>
+          <Form.Item
+            rules={[
+              { required: true, message: "Select the Tin!" },
+              {
+                pattern: /^[0-9]+$/,
+                message: "Percentage must contain only numbers",
+              },
+            ]}
+            label="Enter Percentage of File Related to No HCC Condition"
+            name="nohccpercentage"
+          >
+            <Input className="w-75" placeholder=" Percentage" />
+          </Form.Item>
+          <div className="samplingSelect">
+          <Form.Item
+            rules={[
+              {
+                required: true,
+                message: "Select the Priority ",
+              },
+            ]}
+            label="Priority"
+            name="priority"
+          >
+            <Select
+              className="w-75"
+              options={priorityOptions}
+              placeholder="Select Priority"
+            />
+          </Form.Item>
+          </div>
           <div className="samplingPicker">
             <Form.Item
               rules={[
@@ -464,7 +497,12 @@ const RandomSamplingModal = ({
 
           <Form.Item>
             <div className="d-flex align-items-center justify-content-center">
-              <RegularButton   loading={isAllocate} type="submit" name="Save" width={150} />
+              <RegularButton
+                loading={isAllocate}
+                type="submit"
+                name="Save"
+                width={150}
+              />
             </div>
           </Form.Item>
         </Form>
