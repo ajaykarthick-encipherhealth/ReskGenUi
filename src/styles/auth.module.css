@@ -346,3 +346,8 @@ img.auth_ehrLogo3 {
   margin :0 auto;
   width:500px
 }
+
+.line {
+  height: 1px;
+  background-color: #ccc;
+}
