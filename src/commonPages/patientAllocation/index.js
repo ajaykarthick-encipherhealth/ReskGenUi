@@ -124,10 +124,11 @@ const PatientAllocation = ({
   const [checkedHeader, setCheckedHeader] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isResetting, setIsResetting] = useState(false);
+const [isAllocate,setIsAllocate]=useState(false)
+
   const disbaleAllocate = allRoles?.allocationRoles?.map(
     (item) => item.disableAllocation
   );
-
 
   const showModal = () => {
     setSamplingModal(true);
@@ -365,7 +366,7 @@ const PatientAllocation = ({
                                   </Button>
                                 </Tooltip>
                               </Nav.Item>
-                            )}
+                             )} 
                           {allRoles?.allocationRoles?.find(role => role.roleId === selectedRoleId)?.roleName === "QA" && (
                               <Nav.Item
                                 as="li"
@@ -389,7 +390,7 @@ const PatientAllocation = ({
                                   </Button>
                                 </Tooltip>
                               </Nav.Item>
-                            )}
+                             )} 
                           </div>
                         </Nav>
                       )}
@@ -491,6 +492,8 @@ const PatientAllocation = ({
         selectedRoleId={selectedRoleId}
         getAllAllocation={getAllAllocation}
         roleId={roleId}
+        isAllocate={isAllocate}
+        setIsAllocate={setIsAllocate}
       />
       <RandomSamplingModal
         activeTab={activeTab}
@@ -505,6 +508,8 @@ const PatientAllocation = ({
         selectedRoleId={selectedRoleId}
         getAllAllocation={getAllAllocation}
         roleId={roleId}
+        isAllocate={isAllocate}
+        setIsAllocate={setIsAllocate}
       />
     </div>
   );

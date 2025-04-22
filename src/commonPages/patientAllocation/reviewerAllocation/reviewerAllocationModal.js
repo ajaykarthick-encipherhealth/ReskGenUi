@@ -42,8 +42,9 @@ const AllocateModal = ({
   setBatchCount,
   id,
   getAllAllocation,
-  selectedRoleId,
-  roleId
+  setIsAllocate,
+  roleId,
+  isAllocate,
 }) => {
   const router = useRouter();
   const userId = getStorage("userId")
@@ -94,6 +95,7 @@ const AllocateModal = ({
     }
   };
   const setAllocate = async () => {
+    setIsAllocate(true)
     const response = await getAllocateUsers({
       data: {
         roleId:roleId,
@@ -106,6 +108,7 @@ const AllocateModal = ({
 
     });
     if (response?.status == "SUCCESS") {
+      setIsAllocate(false)
       getResponePopup(response);
       getAllAllocation();
       setOpen(false);
@@ -123,6 +126,7 @@ const AllocateModal = ({
       setIsSecondModalOpen(false);
     } else {
       getResponePopup(response);
+      setIsAllocate(false)
     }
   };
   const handleUserSelect = (id, email) => {
@@ -150,7 +154,6 @@ const AllocateModal = ({
   useEffect(() => {
     setSelectedChart(selectedRowsId);
   }, [selectedRowsId]);
-
   return (
     <div>
       <Modal
@@ -233,12 +236,8 @@ const AllocateModal = ({
                     onClick={() => {
                       if (activeCard === item.id) {
                         setActiveCard("");
-                        // setActiveEmail(activeEmail.filter(email => email !== item.email)); 
                       } else {
                         setActiveCard(item.id);
-                        // if (!activeEmail.includes(item.email)) {
-                        //   setActiveEmail([...activeEmail, item.email]);
-                        // }
                         setAllocateDate("");
                         setPriority([]);
                       }
@@ -562,22 +561,18 @@ const AllocateModal = ({
               </ul>
             </div>
           </div>
-
           <div className="d-flex justify-content-center">
-            <button
-              id="allocate-btn"
-              name="allocate-btn"
-              className={`btn btn-primary px-5 p-1 ${modalStyle.modalBtn}`}
-              disabled={
+             <RegularButton
+               disabled={
                 !selectedChart?.length ||
                 !allocateDate ||
                 !priority ||
-                selectedChart?.length + chart?.hold + chart?.pending > 100
+                selectedChart?.length + chart?.hold + chart?.pending > 100 
               }
-              onClick={setAllocate}
-            >
-              Allocate
-            </button>
+                name="Allocate"
+                onClick={setAllocate}
+                loading={isAllocate}
+              />
           </div>
         </>
       </Modal>

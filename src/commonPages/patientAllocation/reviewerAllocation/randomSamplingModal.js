@@ -35,8 +35,9 @@ const RandomSamplingModal = ({
   setIsModalOpen,
   isModalOpen,
   randomSampling,
-  selectedRoleId,
+  isAllocate,
   roleId,
+  setIsAllocate,
 }) => {
   const router = useRouter();
   const userId = getStorage("userId");
@@ -92,6 +93,7 @@ const RandomSamplingModal = ({
     }
   };
   const onFinish = async (values) => {
+    setIsAllocate(true)
     const response = await randomSampling({
         roleId: roleId,
         userIdList: activeEmail,
@@ -101,6 +103,7 @@ const RandomSamplingModal = ({
         tin: Number(values?.tin),
     });
     if (response?.status == "SUCCESS") {
+      setIsAllocate(false)
       getResponePopup(response);
       getAllAllocation();
       setOpen(false);
@@ -113,6 +116,7 @@ const RandomSamplingModal = ({
       setSelectedRows([]);
       setSelectedUserIds([]);
     } else {
+      setIsAllocate(false)
       getResponePopup(response);
     }
   };
@@ -387,7 +391,7 @@ const RandomSamplingModal = ({
         {selectedUserIds.length && userDetails.length > 0 ? (
           <div className="d-flex justify-content-center mt-3">
             <RegularButton
-              name={"Next"}
+               name={"Next"}
               type="submit"
               onClick={() => {
                 setIsModalOpen(true);
@@ -460,7 +464,7 @@ const RandomSamplingModal = ({
 
           <Form.Item>
             <div className="d-flex align-items-center justify-content-center">
-              <RegularButton type="submit" name="Save" width={100} />
+              <RegularButton   loading={isAllocate} type="submit" name="Save" width={150} />
             </div>
           </Form.Item>
         </Form>

@@ -16,7 +16,9 @@ const MoveBackModal = ({
   setSelectedRowsId,
   selectedRole,
   activeTab,
-  getMoveBack
+  getMoveBack,
+  setIsMoveBackLoader,
+  moveBackLoader
 }) => {
   const [selectLevel, setSelectLevel] = useState([]);
   const handleChange = (value) => {
@@ -24,6 +26,7 @@ const MoveBackModal = ({
   };
 
   const handleSubmit = async () => {
+    setIsMoveBackLoader(true)
     try {
       const response = await moveBack({
         patientIdList: selectedRowsId,
@@ -31,6 +34,7 @@ const MoveBackModal = ({
       });
 
       if (response?.status === "SUCCESS") {
+        setIsMoveBackLoader(false)
         getResponePopup(response);
         getMoveBack()
         setSelectedRowsId([]);
@@ -39,6 +43,7 @@ const MoveBackModal = ({
         setOpen(false);
       } else {
         getResponePopup(response);
+        setIsMoveBackLoader(false)
       }
     } catch (error) {
       console.error("failed");
@@ -87,6 +92,7 @@ const MoveBackModal = ({
               type="submit"
               onClick={handleSubmit}
               name={"Done"}
+              loading={moveBackLoader}
             />
           </div>
         </div>

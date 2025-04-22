@@ -115,8 +115,9 @@ const MoveBack = ({
   const [pageSize, setPageSize] = useState(15);
   const [roleId, setRoleId] = useState(null);
   const [selectedRole, setSelectedRole] = useState("");
-    const [isSubmitting, setIsSubmitting] = useState(false);
-    const [isResetting, setIsResetting] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isResetting, setIsResetting] = useState(false);
+  const [moveBackLoader,setIsMoveBackLoader] = useState(false)
 
   const handleTabChange = (key) => {
     setActiveTab(key);
@@ -439,6 +440,8 @@ const MoveBack = ({
         activeTab={activeTab}
         selectedRole={selectedRole}
         getMoveBack={getMoveBack}
+        moveBackLoader={moveBackLoader}
+        setIsMoveBackLoader={setIsMoveBackLoader}
       />
     </div>
   );
