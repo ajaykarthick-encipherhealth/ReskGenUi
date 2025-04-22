@@ -95,7 +95,7 @@ const QueryApproval = ({
       sortField: "computedDate",
     },
   });
-  const navigate = useRouter()
+  const navigate = useRouter();
   const [activeTab, setActiveTab] = useState();
   const [searchText, setSearchText] = useState(null);
   const [selectedOption, setSelectedOption] = useState({});
@@ -112,8 +112,9 @@ const QueryApproval = ({
   const [test, setTest] = useState(data?.response?.metaDataDTO);
   const [open, setOpen] = useState(false);
   const [selectedRole, setSelectedRole] = useState("");
-    const [isSubmitting, setIsSubmitting] = useState(false);
-    const [isResetting, setIsResetting] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isResetting, setIsResetting] = useState(false);
+
   const handleTabChange = (key) => {
     setActiveTab(key);
     setSearchText("");
@@ -123,11 +124,7 @@ const QueryApproval = ({
     setSearch({});
   };
 
-  useEffect(() => {
-    if (!organizationList?.response) {
-      getAllOrganizationList();
-    }
-  }, []);
+ 
   const opt = {
     organization: organizationList?.response?.map((item) => ({
       value: item?.id,
@@ -141,16 +138,15 @@ const QueryApproval = ({
     //   const controller = new AbortController();
     //   const { signal } = controller;
     //   controller.abort();
-      setStorage("patientId", data?.patientId);
-      setStorage("aliasName" , selectedRole)
-      var role = getStorage("userRole");
-      if (role == "tenant_admin") {
-        // getRoutedData(page);
-        navigate.push({
-          pathname: route ? route : "/tenantadmin/tin/details",
-        });
-      } 
-    // } 
+    setStorage("patientId", data?.patientId);
+    setStorage("aliasName", selectedRole);
+    var role = getStorage("userRole");
+    if (role == "tenant_admin") {
+      navigate.push({
+        pathname: route ? route : "/tenantadmin/tin/details",
+      });
+    }
+    // }
     // else {
     //   notification.warning({
     //     message: data?.patientId + " file not processed. Please wait.",
@@ -191,21 +187,7 @@ const QueryApproval = ({
     active,
     selectedRole,
   ]);
-  const getFilterOption = () => {
-    let filteredItems;
 
-    switch (activeTab) {
-      case "1":
-        filteredItems = commonFilterItems.filter(
-          (filter) => filter.title !== "reviewer" && filter.title !== "status"
-        );
-        break;
-      default:
-        filteredItems = commonFilterItems;
-    }
-
-    return filteredItems;
-  };
   const getRolesList = async () => {
     const res = await getAllTabRoles();
     if (res.status === "SUCCESS") {
@@ -222,7 +204,7 @@ const QueryApproval = ({
   };
 
   const handleSubmit = async () => {
-  setIsSubmitting(true);
+    setIsSubmitting(true);
 
     const payload = {
       pageId: "8c1eebaf-eb20-4758-b968-6ae15e6fc031",
@@ -238,15 +220,14 @@ const QueryApproval = ({
         onClose();
         getResponePopup(response);
       }
-    setIsSubmitting(false);
-
+      setIsSubmitting(false);
     } catch (error) {
       getResponePopup(error?.response);
     }
   };
 
   const handleReset = async () => {
-  setIsResetting(true);
+    setIsResetting(true);
 
     const payload = {
       pageId: "8c1eebaf-eb20-4758-b968-6ae15e6fc031",
@@ -258,28 +239,13 @@ const QueryApproval = ({
         onClose();
         getResponePopup(response);
       }
-    setIsResetting(false);
-
+      setIsResetting(false);
     } catch (error) {
       getResponePopup(error?.response);
     }
   };
-  useEffect(() => {
-    const filteredFilters = getFilterOption();
-    setActiveFilters(filteredFilters);
-  }, [activeTab]);
 
-  const params = {
-    pageNo,
-    paginationFirst,
-    sort,
-    activeFilters,
-    searchText,
-    selectedOption,
-    activeTab,
-    search,
-    activeStatus,
-  };
+
   useEffect(() => {
     if (routedData) {
       setActiveTab(routedData?.activeTab);
@@ -290,11 +256,15 @@ const QueryApproval = ({
     }
   }, [routedData]);
 
-
-
   useEffect(() => {
     getRolesList();
   }, []);
+  useEffect(() => {
+    if (!organizationList?.response) {
+      getAllOrganizationList();
+    }
+  }, []);
+
   return (
     <div>
       <Header />
@@ -313,31 +283,49 @@ const QueryApproval = ({
                       {rolesLoader ? (
                         <CardSkeleton />
                       ) : (
-                        <Nav
-                          variant="tabs"
-                          className="nav nav-tabs profile-tab"
-                        >
-                          {allRoles?.allocationRoles?.map((role, index) => (
-                            <Nav.Item
-                              as="li"
-                              className="nav-item profile-tab mt-4"
-                              key={role}
-                            >
-                              <Nav.Link
-                                onClick={() => {
-                                  // setRoleId(role.roleId);
-                                  setSelectedRole(role.aliasName);
-                                }}
-                                className="mt-4"
-                                eventKey={index + 1}
+                        <div className="d-flex justify-content-between align-items-end w-100 border-bottom custom-tab-header">
+                          <Nav
+                            variant="tabs"
+                            className="nav nav-tabs profile-tab"
+                          >
+                            {allRoles?.allocationRoles?.map((role, index) => (
+                              <Nav.Item
+                                as="li"
+                                className="nav-item profile-tab mt-4"
+                                key={role}
                               >
-                                {role?.roleName
-                                  ?.replace(/_/g, " ")
-                                  ?.replace(/\b\w/g, (c) => c.toUpperCase())}
-                              </Nav.Link>
-                            </Nav.Item>
-                          ))}
-                        </Nav>
+                                <Nav.Link
+                                  onClick={() => {
+                                    setSelectedRole(role.aliasName);
+                                  }}
+                                  className="mt-4"
+                                  eventKey={index + 1}
+                                >
+                                  {role?.roleName
+                                    ?.replace(/_/g, " ")
+                                    ?.replace(/\b\w/g, (c) => c.toUpperCase())}
+                                </Nav.Link>
+                              </Nav.Item>
+                            ))}
+                          </Nav>
+
+                          <div className="d-flex align-items-center gap-2 me-3 mb-2">
+                            <div
+                              id="table-btn"
+                              name="table-btn"
+                              className="d-flex justify-content-center align-items-center   mt-4"
+                            >
+                              <Button
+                                data-testid="table-custom"
+                                name="table-custom"
+                                onClick={showDrawer}
+                                className="btn btn-sm w-full text-ellipsis tableButton"
+                              >
+                                Table Customization
+                              </Button>
+                            </div>
+                          </div>
+                        </div>
                       )}
 
                       <div className="d-flex">
@@ -366,7 +354,7 @@ const QueryApproval = ({
                             selectedColumns={test}
                             setSelectedColumns={setTest}
                             commonFilterItems={commonFilterItems}
-                            showCustomizeTable={true}
+                            showCustomizeTable={false}
                             showDrawer={showDrawer}
                             handleSubmit={handleSubmit}
                             handleReset={handleReset}

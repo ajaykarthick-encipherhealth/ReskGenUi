@@ -384,7 +384,6 @@ const ReusableFilters = ({
               name="addPatient-btn"
               className="d-flex justify-content-center align-items-center   mt-4"
             >
-              {/* <RegularButton name={"Table Customize"} onClick={showDrawer} /> */}
               <Button
                 data-testid="table-custom"
                 name="table-custom"
@@ -398,10 +397,13 @@ const ReusableFilters = ({
                 }}
                 className="btn btn-sm w-full text-ellipsis"
               >
-                Table Customize
+                Table Customization
               </Button>
             </div>
-            <div>
+           
+          </>
+        )}
+         <div>
               <CustomizableDrawer
                 open={open}
                 onClose={onClose}
@@ -415,8 +417,6 @@ const ReusableFilters = ({
                 isResetting={isResetting}
               />
             </div>
-          </>
-        )}
       </div>
     </div>
   );

@@ -104,7 +104,6 @@ const MoveBack = ({
   const [selectedOption, setSelectedOption] = useState({});
   const [selectedDateRanges, setSelectedDateRanges] = useState({});
   const [selectedDates, setSelectedDates] = useState([]);
-  const [pageNumber, setPageNumber] = useState(0);
   const [pageNo, setPageNo] = useState(0);
   const [paginationFirst, setPaginationFirst] = useState(0);
   const [selectAllChecked, setSelectAllChecked] = useState(false);
@@ -136,15 +135,7 @@ const MoveBack = ({
   const onClose = () => {
     setOpen(false);
   };
-  useEffect(() => {
-    setSelectedRowsId(selectedRows);
-  }, [selectedRows, setSelectedRowsId]);
 
-  useEffect(() => {
-    if (!organizationList?.response) {
-      getAllOrganizationList();
-    }
-  }, []);
   const opt = {
     organization: organizationList?.response?.map((item) => ({
       value: item?.id,
@@ -153,42 +144,16 @@ const MoveBack = ({
     priority: priorityOptions,
   };
 
-  const getFilterOption = () => {
-    let filteredItems;
-
-    switch (activeTab) {
-      case "1":
-        filteredItems = commonFilterItems.filter(
-          (filter) => filter.title !== "reviewer" && filter.title !== "status"
-        );
-        break;
-      default:
-        filteredItems = commonFilterItems;
-    }
-
-    return filteredItems;
-  };
   const showDrawer = () => {
     setTest(data?.response?.metaDataDTO);
     setOpen(true);
   };
 
-  const params = {
-    pageNo,
-    paginationFirst,
-    sort,
-    activeFilters,
-    searchText,
-    selectedOption,
-    activeTab,
-    search,
-  };
 
   const getRolesList = async () => {
     const res = await getAllTabRoles();
     if (res.status === "SUCCESS") {
       setRoleId(res?.response?.allocationRoles[0]?.roleId);
-      
     }
   };
   const getMoveBack = async () => {
@@ -202,7 +167,7 @@ const MoveBack = ({
   };
 
   const handleSubmit = async () => {
-  setIsSubmitting(true);
+    setIsSubmitting(true);
 
     const payload = {
       pageId: "937b0477-f0cd-46e7-b8ab-fefb38f91859",
@@ -218,31 +183,29 @@ const MoveBack = ({
         onClose();
         getResponePopup(response);
       }
-    setIsSubmitting(false);
-
+      setIsSubmitting(false);
     } catch (error) {
       getResponePopup(error?.response);
     }
   };
-   const handleReset = async () => {
-  setIsResetting(true);
+  const handleReset = async () => {
+    setIsResetting(true);
 
-      const payload = {
-        pageId: "937b0477-f0cd-46e7-b8ab-fefb38f91859",
-      };
-      try {
-        const response = await tableDynamicColumnReset({ payload });
-        if (response?.status === "SUCCESS") {
-          getMoveBack();
-          onClose();
-          getResponePopup(response);
-        }
-    setIsResetting(false);
-
-      } catch (error) {
-        getResponePopup(error?.response);
-      }
+    const payload = {
+      pageId: "937b0477-f0cd-46e7-b8ab-fefb38f91859",
     };
+    try {
+      const response = await tableDynamicColumnReset({ payload });
+      if (response?.status === "SUCCESS") {
+        getMoveBack();
+        onClose();
+        getResponePopup(response);
+      }
+      setIsResetting(false);
+    } catch (error) {
+      getResponePopup(error?.response);
+    }
+  };
 
   useEffect(() => {
     getRolesList();
@@ -284,9 +247,15 @@ const MoveBack = ({
     }
   }, [routedData]);
   useEffect(() => {
-    const filteredFilters = getFilterOption();
-    setActiveFilters(filteredFilters);
-  }, [activeTab]);
+    setSelectedRowsId(selectedRows);
+  }, [selectedRows, setSelectedRowsId]);
+
+  useEffect(() => {
+    if (!organizationList?.response) {
+      getAllOrganizationList();
+    }
+  }, []);
+
   return (
     <div>
       <Header />
@@ -305,63 +274,78 @@ const MoveBack = ({
                       {rolesLoader ? (
                         <CardSkeleton />
                       ) : (
-                        <Nav
-                          as="li"
-                          variant="tabs"
-                          className="nav nav-tabs profile-tab"
-                        >
-                          {allRoles?.allocationRoles?.map((role, index) => (
-                            <Nav.Item
-                              as="li"
-                              className="nav-item profile-tab mt-4"
-                              key={role}
-                            >
-                              <Nav.Link
-                                onClick={() => {
-                                  setSelectedRole(role.aliasName);
-                                }}
-                                className="mt-4"
-                                eventKey={index + 1}
-                              >
-                                {role?.roleName
-                                  .replace(/_/g, " ")
-                                  .replace(/\b\w/g, (c) => c.toUpperCase())}
-                              </Nav.Link>
-                            </Nav.Item>
-                          ))}
-                          <div
-                            className="d-flex align-items-end justify-content-end w-75"
-                            // style={{ width: "85%" }}
+                        <div className="d-flex justify-content-between align-items-end w-100 border-bottom custom-tab-header">
+                          <Nav
+                            as="li"
+                            variant="tabs"
+                            className="nav nav-tabs profile-tab"
                           >
-                            <Nav.Item as="li" className="nav-item profile-tab ">
-                              <Tooltip
-                                title={
-                                  selectedRowsId?.length === 0
-                                    ? "Select patients to move back"
-                                    : ""
-                                }
+                            {allRoles?.allocationRoles?.map((role, index) => (
+                              <Nav.Item
+                                as="li"
+                                className="nav-item profile-tab mt-4"
+                                key={role}
                               >
-                                <Button
-                                  data-testid="allocate-btn"
-                                  name="allocate-btn"
-                                  onClick={handleOpenModal}
-                                  type="primary"
-                                  className={` ${styles.allocate}`}
-                                  disabled={selectedRowsId?.length === 0}
+                                <Nav.Link
+                                  onClick={() => {
+                                    setSelectedRole(role.aliasName);
+                                  }}
+                                  className="mt-4"
+                                  eventKey={index + 1}
                                 >
-                                  Move Back
-                                </Button>
-                              </Tooltip>
-                            </Nav.Item>
-                          </div>
-                        </Nav>
-                      )}
+                                  {role?.roleName
+                                    .replace(/_/g, " ")
+                                    .replace(/\b\w/g, (c) => c.toUpperCase())}
+                                </Nav.Link>
+                              </Nav.Item>
+                            ))}
+                          </Nav>
 
+                          <div className="d-flex ms-auto gap-2 mb-2 me-2">
+                            <Nav.Item as="li" className="nav-item profile-tab">
+                              <div
+                                id="random-btn"
+                                name="random-btn"
+                                className="d-flex justify-content-center align-items-center   mt-4"
+                              >
+                                <Tooltip
+                                  title={
+                                    selectedRowsId?.length === 0
+                                      ? "Select patients to move back"
+                                      : ""
+                                  }
+                                >
+                                  <Button
+                                    data-testid="allocate-btn"
+                                    name="allocate-btn"
+                                    onClick={handleOpenModal}
+                                    className="tableButton"
+                                    disabled={selectedRowsId?.length === 0}
+                                  >
+                                    Move Back
+                                  </Button>
+                                </Tooltip>
+                              </div>
+                            </Nav.Item>
+                            <div
+                              id="table-btn"
+                              name="table-btn"
+                              className="d-flex justify-content-center align-items-center   mt-4"
+                            >
+                              <Button
+                                data-testid="table-custom"
+                                name="table-custom"
+                                onClick={showDrawer}
+                                className="btn btn-sm w-full text-ellipsis tableButton"
+                              >
+                                Table Customization
+                              </Button>
+                            </div>
+                          </div>
+                        </div>
+                      )}
                       <div className="d-flex ">
-                        <div
-                          className={` d-flex gap-3 mt-4`}
-                          // style={{ width: "90%" }}
-                        >
+                        <div className={` d-flex gap-3 mt-4`}>
                           <ReusableFilters
                             showFilter={false}
                             setActiveFilters={setActiveFilters}
@@ -371,7 +355,6 @@ const MoveBack = ({
                             selectedOption={selectedOption}
                             setSelectedDateRanges={setSelectedDateRanges}
                             selectedDateRanges={selectedDateRanges}
-                            setPageNumber={setPageNumber}
                             FilterItems={activeFilters}
                             selectedDates={selectedDates}
                             setSelectedDates={setSelectedDates}
@@ -390,7 +373,7 @@ const MoveBack = ({
                             selectedColumns={test}
                             setSelectedColumns={setTest}
                             commonFilterItems={commonFilterItems}
-                            showCustomizeTable={true}
+                            showCustomizeTable={false}
                             showDrawer={showDrawer}
                             handleSubmit={handleSubmit}
                             handleReset={handleReset}
@@ -472,7 +455,6 @@ const connector = connect(
     getAllTabRoles: allActions.getAllRoles,
     tableDynamicColumn: tableAction.tableDynamicColumn,
     tableDynamicColumnReset: tableAction.tableDynamicColumnReset,
-    
   }
 );
 

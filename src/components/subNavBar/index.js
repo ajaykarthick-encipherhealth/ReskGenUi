@@ -69,15 +69,15 @@ const SubNavBar = ({ handleBack }) => {
     <section className={`${styles.tabMainContainer} d-flex align-items-center`}>
       <div
         onClick={handleBack}
-        className="cursor-pointer mx-3"
+        className={`${styles.arrowBtn} cursor-pointer mx-3 ` }
         data-testid={createIdGen(`${role} tin backicon`)}
         id={createIdGen(`${role} tin backicon`)}
       >
       <FontAwesomeIcon icon={faArrowLeft} />
       </div>
+      <div className={styles.tabContainer}>
       <section
-        style={{ gap: "50px" }}
-        className="d-flex mx-3 pb-2 d-flex align-items-center flex-wrap"
+        className="d-flex mx-3 pb-2 gap-3 d-flex align-items-center flex-wrap"
       >
         {showItems?.map((header, index) => (
           <section className={`cr-pointer mx-2 px-2  ${styles.headerContent}`}>
@@ -112,7 +112,9 @@ const SubNavBar = ({ handleBack }) => {
           </section>
         ))}
       </section>
+      </div>
     </section>
+    
   );
 };
 

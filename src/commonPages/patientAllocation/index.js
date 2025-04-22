@@ -9,7 +9,6 @@ import ReusableFilters from "../../components/reusableFilters";
 import { priorityOptions } from "../../components/headerFilters/functions";
 import { actions as tenantAdminUsersAction } from "../../stores/tenantAdmin/users";
 import { actions as tinActions } from "../../stores/tenantAdmin/tin";
-import styles from "../../components/tables/table.module.css";
 import Header from "../../jsx/layouts/nav/Header";
 import RandomSamplingModal from "./reviewerAllocation/randomSamplingModal";
 import { actions as tableAction } from "../../stores/tableView";
@@ -105,7 +104,6 @@ const PatientAllocation = ({
   const [selectedOption, setSelectedOption] = useState({});
   const [selectedDateRanges, setSelectedDateRanges] = useState({});
   const [selectedDates, setSelectedDates] = useState([]);
-  const [pageNumber, setPageNumber] = useState(0);
   const [batchCount, setBatchCount] = useState("");
   const [pageNo, setPageNo] = useState(0);
   const [pageSize, setPageSize] = useState(15);
@@ -121,10 +119,10 @@ const PatientAllocation = ({
   const [selectedRoleId, setSelectedRoleId] = useState("");
   const [open, setOpen] = useState(false);
   const [test, setTest] = useState(data?.response?.metaDataDTO);
-  const [checkedHeader, setCheckedHeader] = useState(false)
+  const [checkedHeader, setCheckedHeader] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isResetting, setIsResetting] = useState(false);
-const [isAllocate,setIsAllocate]=useState(false)
+  const [isAllocate, setIsAllocate] = useState(false);
 
   const disbaleAllocate = allRoles?.allocationRoles?.map(
     (item) => item.disableAllocation
@@ -144,23 +142,19 @@ const [isAllocate,setIsAllocate]=useState(false)
     setSearch({});
     setSelectedRowsId([]);
     setCheckedHeader(false);
-
   };
 
   const handleOpenModal = () => {
     setAllocateModal(true);
- 
+  };
+  const onClose = () => {
+    setOpen(false);
+  };
+  const showDrawer = () => {
+    setTest(data?.response?.metaDataDTO);
+    setOpen(true);
   };
 
-  useEffect(() => {
-    setSelectedRowsId(selectedRows);
-  }, [selectedRows, setSelectedRowsId]);
-
-  useEffect(() => {
-    if (!organizationList?.response) {
-      getAllOrganizationList();
-    }
-  }, []);
   const opt = {
     organization: organizationList?.response?.map((item) => ({
       value: item?.id,
@@ -178,7 +172,7 @@ const [isAllocate,setIsAllocate]=useState(false)
     });
   };
   const handleSubmit = async () => {
-  setIsSubmitting(true);
+    setIsSubmitting(true);
 
     const payload = {
       pageId: "6cd166eb-79ac-4c12-ab0f-07be2983ca70",
@@ -194,14 +188,13 @@ const [isAllocate,setIsAllocate]=useState(false)
         onClose();
         getResponePopup(response);
       }
-    setIsSubmitting(false);
-
+      setIsSubmitting(false);
     } catch (error) {
       getResponePopup(error?.response);
     }
   };
   const handleReset = async () => {
-  setIsResetting(true);
+    setIsResetting(true);
 
     const payload = {
       pageId: "6cd166eb-79ac-4c12-ab0f-07be2983ca70",
@@ -213,12 +206,38 @@ const [isAllocate,setIsAllocate]=useState(false)
         onClose();
         getResponePopup(response);
       }
-    setIsResetting(false);
-
+      setIsResetting(false);
     } catch (error) {
       getResponePopup(error?.response);
     }
   };
+
+  const getRolesList = async () => {
+    const res = await getAllTabRoles();
+    if (res.status === "SUCCESS") {
+      setRoleId(res?.response?.allocationRoles[0]?.roleId);
+    }
+  };
+
+  useEffect(() => {
+    if (routedData) {
+      setActiveTab(routedData?.activeTab);
+    } else {
+      setActiveTab("1");
+      setSearchText("");
+      setSelectedOption({});
+    }
+  }, [routedData]);
+
+  useEffect(() => {
+    setSelectedRowsId(selectedRows);
+  }, [selectedRows, setSelectedRowsId]);
+
+  useEffect(() => {
+    if (!organizationList?.response) {
+      getAllOrganizationList();
+    }
+  }, []);
   useEffect(() => {
     setParamsFilter("check");
     if (
@@ -240,57 +259,11 @@ const [isAllocate,setIsAllocate]=useState(false)
     batchCount,
     roleId,
   ]);
-  const getFilterOption = () => {
-    let filteredItems;
-
-    switch (activeTab) {
-      case "1":
-        filteredItems = commonFilterItems.filter(
-          (filter) => filter.title !== "reviewer" && filter.title !== "status"
-        );
-        break;
-      default:
-        filteredItems = commonFilterItems;
-    }
-
-    return filteredItems;
-  };
-
-  const getRolesList = async () => {
-    const res = await getAllTabRoles();
-    if (res.status === "SUCCESS") {
-      setRoleId(res?.response?.allocationRoles[0]?.roleId);
-    }
-  };
-  const onClose = () => {
-    setOpen(false);
-  };
-  const showDrawer = () => {
-    setTest(data?.response?.metaDataDTO);
-    setOpen(true);
-  };
-  useEffect(() => {
-    const filteredFilters = getFilterOption();
-    setActiveFilters(filteredFilters);
-  }, [activeTab]);
-
-  useEffect(() => {
-    if (routedData) {
-      setActiveTab(routedData?.activeTab);
-    } else {
-      setActiveTab("1");
-      setSearchText("");
-      setSelectedOption({});
-    }
-  }, [routedData]);
 
   useEffect(() => {
     getRolesList();
     setTest(data?.response?.metaDataDTO);
   }, []);
-
- 
-
 
   return (
     <div>
@@ -310,43 +283,44 @@ const [isAllocate,setIsAllocate]=useState(false)
                       {rolesLoader ? (
                         <CardSkeleton />
                       ) : (
-                        <Nav
-                          as="li"
-                          variant="tabs"
-                          className="nav nav-tabs profile-tab"
-                        >
-                          {allRoles?.allocationRoles?.map((role, index) => (
-                            <Nav.Item
-                              as="li"
-                              className="nav-item profile-tab mt-4"
-                              key={role}
-                            >
-                              <Nav.Link
-                                className="mt-4"
-                                onClick={() => {
-                                  setSelectedRoleId(role.roleId);
-                                  setRoleId(role.roleId);
-                                  setSelectedRows([]);
-                                  setSelectedRowsId([]);
-                                  setSelectedUserName([]);
-                                }}
-                                eventKey={index + 1}
-                              >
-                                {role?.roleName
-                                  ?.replace(/_/g, " ")
-                                  ?.replace(/\b\w/g, (c) => c.toUpperCase())}
-                              </Nav.Link>
-                            </Nav.Item>
-                          ))}
-                          <div
-                            className="d-flex align-items-end justify-content-end  w-75 "
-                            // style={{ width: "85%" }}
+                        <div className="d-flex justify-content-between align-items-end w-100   custom-tab-header">
+                          <Nav
+                            as="li"
+                            variant="tabs"
+                            className="nav nav-tabs profile-tab"
                           >
-                            {disbaleAllocate && (
+                            {allRoles?.allocationRoles?.map((role, index) => (
                               <Nav.Item
                                 as="li"
-                                className="nav-item profile-tab "
+                                className="nav-item profile-tab mt-4"
+                                key={role}
                               >
+                                <Nav.Link
+                                  className="mt-4"
+                                  onClick={() => {
+                                    setSelectedRoleId(role.roleId);
+                                    setRoleId(role.roleId);
+                                    setSelectedRows([]);
+                                    setSelectedRowsId([]);
+                                    setSelectedUserName([]);
+                                  }}
+                                  eventKey={index + 1}
+                                >
+                                  {role?.roleName
+                                    ?.replace(/_/g, " ")
+                                    ?.replace(/\b\w/g, (c) => c.toUpperCase())}
+                                </Nav.Link>
+                              </Nav.Item>
+                            ))}
+                          </Nav>
+
+                          <div className="d-flex gap-2 ms-auto  mb-2">
+                            <div
+                              id="allocate-btn"
+                              name="allocate-btn"
+                              className="d-flex justify-content-center align-items-center   mt-4"
+                            >
+                              {disbaleAllocate && (
                                 <Tooltip
                                   title={
                                     selectedRowsId?.length === 0
@@ -358,19 +332,36 @@ const [isAllocate,setIsAllocate]=useState(false)
                                     data-testid="allocate-btn"
                                     name="allocate-btn"
                                     onClick={handleOpenModal}
-                                    type="primary"
-                                    className={` ${styles.allocate}`}
+                                    className="tableButton"
                                     disabled={selectedRowsId?.length === 0}
                                   >
                                     Allocate
                                   </Button>
                                 </Tooltip>
-                              </Nav.Item>
-                             )} 
-                          {allRoles?.allocationRoles?.find(role => role.roleId === selectedRoleId)?.roleName === "QA" && (
-                              <Nav.Item
-                                as="li"
-                                className="nav-item profile-tab "
+                              )}
+                            </div>
+                            <div
+                              id="table-btn"
+                              name="table-btn"
+                              className="d-flex justify-content-center align-items-center   mt-4"
+                            >
+                              <Button
+                                data-testid="table-custom"
+                                name="table-custom"
+                                onClick={showDrawer}
+                                className="btn btn-sm w-full text-ellipsis tableButton"
+                              >
+                                Table Customization
+                              </Button>
+                            </div>
+
+                            {allRoles?.allocationRoles?.find(
+                              (role) => role.roleId === selectedRoleId
+                            )?.roleName === "QA" && (
+                              <div
+                                id="random-btn"
+                                name="random-btn"
+                                className="d-flex justify-content-center align-items-center   mt-4"
                               >
                                 <Tooltip
                                   title={
@@ -383,22 +374,18 @@ const [isAllocate,setIsAllocate]=useState(false)
                                     data-testid="random-sampling"
                                     name="random-sampling"
                                     onClick={showModal}
-                                    type="primary"
-                                    className={` ${styles.allocate}`}
+                                    className="tableButton"
                                   >
                                     Random Sampling
                                   </Button>
                                 </Tooltip>
-                              </Nav.Item>
-                             )} 
+                              </div>
+                            )}
                           </div>
-                        </Nav>
+                        </div>
                       )}
 
-                      <div
-                        className={` d-flex gap-3 mt-4`}
-                        // style={{ width: "90%" }}
-                      >
+                      <div className={` d-flex gap-3 mt-4`}>
                         <ReusableFilters
                           showFilter={false}
                           setActiveFilters={setActiveFilters}
@@ -408,7 +395,6 @@ const [isAllocate,setIsAllocate]=useState(false)
                           selectedOption={selectedOption}
                           setSelectedDateRanges={setSelectedDateRanges}
                           selectedDateRanges={selectedDateRanges}
-                          setPageNumber={setPageNumber}
                           FilterItems={activeFilters}
                           selectedDates={selectedDates}
                           setSelectedDates={setSelectedDates}
@@ -432,7 +418,7 @@ const [isAllocate,setIsAllocate]=useState(false)
                           selectedColumns={test}
                           setSelectedColumns={setTest}
                           commonFilterItems={commonFilterItems}
-                          showCustomizeTable={true}
+                          showCustomizeTable={false}
                           showDrawer={showDrawer}
                           handleSubmit={handleSubmit}
                           handleReset={handleReset}

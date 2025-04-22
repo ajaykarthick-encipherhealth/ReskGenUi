@@ -12,31 +12,33 @@ import QueryApproval from "../../../../commonPages/queryApproval";
 import Patients from "../../../../commonPages/patients";
 import { getAccessTabItems } from "../../../../utils/reusable";
 
-const TinDetails = ({  activeTabName, getProjectActiveTab }) => {
+const TinDetails = ({ activeTabName, getProjectActiveTab }) => {
   const router = useRouter();
-  const tabs =  getAccessTabItems({page:"Tin",tabsMenu:"tabMenuList2"})
-  const activeTab = activeTabName?.tinDetailsTab ||  tabs?.[0] || "Patients";
+  const tabs = getAccessTabItems({ page: "Tin", tabsMenu: "tabMenuList2" });
+  const activeTab = activeTabName?.tinDetailsTab || tabs?.[0] || "Patients";
   const handleTabs = (name) => {
     getProjectActiveTab({ tinDetailsTab: name });
   };
   const handleBack = () => {
     getProjectActiveTab(activeTabName);
-    router.push("/tenantadmin/tin")
+    router.push("/tenantadmin/tin");
   };
   return (
     <div className={`show `}>
       <Header />
-      <div style={{ marginTop: "3%" }}>
+      <div>
         <SubNavBar handleBack={handleBack} />
-        <div className="mt-3">
+        <div className="mt-5">
           <Tab
-            width={"50%"}
+            width={"58%"}
             icon
             activeTab={activeTab}
             handleTabs={handleTabs}
             tabs={tabs}
           />
-          {activeTab === "Patients" && <Patients route={`/tenantadmin/tin/details`} />}
+          {activeTab === "Patients" && (
+            <Patients route={`/tenantadmin/tin/details`} />
+          )}
           {activeTab === "File Processing" && (
             <div>
               <Fileprocessing />
@@ -44,7 +46,7 @@ const TinDetails = ({  activeTabName, getProjectActiveTab }) => {
           )}
           {activeTab === "Patient Allocation" && <PatientAllocation />}
           {activeTab === "Moveback" && <MoveBack />}
-          {activeTab === "Query Approval" && <QueryApproval/>}
+          {activeTab === "Query Approval" && <QueryApproval />}
         </div>
       </div>
     </div>

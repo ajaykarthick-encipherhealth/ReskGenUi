@@ -16590,4 +16590,15 @@ input::-webkit-inner-spin-button {
 .rejectTextArea textarea:where(.css-dev-only-do-not-override-240cud).ant-input{
   min-height: 100px !important;
 }
+.custom-tab-header {
+  border-bottom: 1px solid #dee2e6; 
+}
+.tableButton{
+  background-color: #04306f;
+  color:#fff;
+  width: 100%;
+  font-size:12px;
+}
+
+
 
