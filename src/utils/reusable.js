@@ -1,4 +1,4 @@
-import { Button, notification, Popover, Skeleton, Tooltip } from "antd";
+import { Badge, Button, notification, Popover, Skeleton, Tooltip } from "antd";
 import moment from "moment";
 import dayjs from "dayjs";
 import Pending from "../../src/images/trackingImages/pending.webp";
@@ -18,6 +18,7 @@ import momentTimezone from "moment-timezone";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSpinner } from "@fortawesome/free-solid-svg-icons";
 import { getStorage } from "./storages";
+import SvgFlag from "../components/patientDetails/details/components/svg/svg";
 
 export const getResponePopup = (res) => {
   switch (res?.data?.status ? res?.data?.status : res?.status) {
@@ -384,6 +385,113 @@ export const processstatusBodyTemplate = (rowData) => {
       );
   }
 };
+export const processStatusBodyTemplate = (rowData) => {
+  const declinedDataFromDeclined = extractLatestData(rowData?.declinedNotes);
+
+  switch (rowData) {
+    case "COMPLETED":
+      return (
+        <Popover placement="bottom" title="Status: COMPLETED">
+          <div
+            className="patient-status"
+            style={{ textAlign: "center", color: "#05bf35" }}
+          >
+            COMPLETED
+          </div>
+        </Popover>
+      );
+
+    case "PENDING":
+      return (
+        <Popover placement="bottom" title="Status: PENDING">
+          <div
+            className="patient-status"
+            style={{ textAlign: "center", color: "#027bd3" }}
+          >
+            PENDING{" "}
+          </div>
+        </Popover>
+      );
+
+    case "DECLINED":
+      return (
+        <Popover
+          placement="bottom"
+          title="Status: DECLINED"
+          content={`Reason: ${
+            declinedDataFromDeclined ? declinedDataFromDeclined : "---"
+          }`}
+        >
+          <div
+            className="patient-status"
+            style={{ textAlign: "center", color: "#ff4b4a" }}
+          >
+            DECLINED{" "}
+          </div>
+        </Popover>
+      );
+    case "NOTCOMPUTED":
+      return (
+        <Popover placement="bottom" title="Status: NOT COMPUTED">
+          <div
+            className="patient-status"
+            style={{ textAlign: "center", color: "#c96c61" }}
+          >
+            NOT COMPUTED{" "}
+          </div>
+        </Popover>
+      );
+    case "COMPUTED":
+      return (
+        <Popover placement="bottom" title="Status: PENDING">
+          <div
+            className="patient-status"
+            style={{ textAlign: "center", color: "#055673" }}
+          >
+            COMPUTED{" "}
+          </div>
+        </Popover>
+      );
+    case "PROCESSING":
+      return (
+        <Popover placement="bottom" title="Status: PROCESSING">
+          <div className="patient-status" style={{ textAlign: "center" }}>
+            <FontAwesomeIcon
+              style={{ height: "30px", width: "30px", color: "orange" }}
+              icon={faSpinner}
+            />
+          </div>
+        </Popover>
+      );
+    case "HOLD":
+      return (
+        <Popover placement="bottom" title="Status: HOLD">
+          <div className="patient-status" style={{ textAlign: "center" }}>
+            COMPUTED{" "}
+          </div>
+        </Popover>
+      );
+    case "ABORTED_BY_CRON":
+      return (
+        <Popover placement="bottom" title="Status: ABORTED BY CRON">
+          <div
+            className="patient-status"
+            style={{ textAlign: "center", color: "#453c8b" }}
+          >
+            ABORTED BY CRON{" "}
+          </div>
+        </Popover>
+      );
+    case null:
+      return (
+        <Popover placement="bottom" title="Status: PENDING">
+          <div className="patient-status" style={{ textAlign: "center" }}>
+            PENDING
+          </div>
+        </Popover>
+      );
+  }
+};
 
 
 export const proxyStatusBodyTemplate = (rowData) => {
@@ -643,6 +751,96 @@ export const auditStatusTemplate = (rowData) => {
       );
   }
 };
+export const dynamicAuditStatusTemplate = (rowData) => {
+  const declinedDataFromAudit = extractLatestData(rowData?.auditDeclinedNotes);
+  const declinedDataFromDeclined = extractLatestData(rowData?.declinedNotes);
+  const declinedData = declinedDataFromAudit || declinedDataFromDeclined;
+  switch (rowData) {
+    case "AUDIT_PENDING":
+      return (
+        <Popover placement="bottom" title="Status: AUDIT PENDING">
+          <span
+            className="patient-status"
+            style={{ textAlign: "center", color: "#bf437f" }}
+          >
+            AUDIT PENDING
+          </span>
+        </Popover>
+      );
+
+    case "AUDITHOLD":
+      return (
+        <Popover placement="bottom" title="Status: AUDIT HOLD">
+          <span className="patient-status" style={{ textAlign: "center", color:'#ce9900' }}>
+            AUDIT HOLD{" "}
+          </span>
+        </Popover>
+      );
+    case "REAUDIT":
+      return (
+        <Popover placement="bottom" title="Status: REAUDIT">
+          <span
+            className="patient-status"
+            style={{ textAlign: "center", color: "#ce9900" }}
+          >
+            REAUDIT{" "}
+          </span>
+        </Popover>
+      );
+    case "AUDITED":
+      return (
+        <Popover placement="bottom" title="Status: AUDITED">
+          <span
+            className="patient-status"
+            style={{ textAlign: "center", color: "#377880" }}
+          >
+            AUDITED
+          </span>
+        </Popover>
+      );
+    case "AUDIT_DECLINED":
+      return (
+        <Popover
+          placement="bottom"
+          title="Status: AUDIT DECLINED"
+          content={`Reason: ${declinedData ? declinedData : "---"}`}
+        >
+          <span
+            className="patient-status"
+            style={{ textAlign: "center", color: "#377880" }}
+          >
+            AUDIT DECLINED
+          </span>
+        </Popover>
+      );
+    case "AUDITED":
+      return (
+        <span
+          className="patient-status"
+          style={{ textAlign: "center", color: "#4aa0aa" }}
+        >
+          AUDITED{" "}
+        </span>
+      );
+    case "NOT_AUDIT":
+      return (
+        <Popover placement="bottom" title=" Status: NOT AUDIT">
+          <span
+            className="patient-status"
+            style={{ textAlign: "center", color: "#ea8f2a" }}
+          >
+            NOT AUDIT{" "}
+          </span>
+        </Popover>
+      );
+    case null:
+      return (
+        <span className="patient-status" style={{ textAlign: "center" }}>
+          ---
+        </span>
+      );
+  }
+};
 
 
 export const createIdGen = (key) => {
@@ -721,3 +919,64 @@ export  const  findItemWithTrueKey =(dataArray, fieldName)=> {
     return false;
   }
 }
+ export const renderFlagCells = (data) => {
+    if (!data?.flagList || data.flagList.length === 0) {
+      return (
+        <Tooltip title="No flag found">
+          <span>
+            <SvgFlag fillColor={"transparent"} />
+          </span>
+        </Tooltip>
+      );
+    }
+
+    const sortedFlags = [...data.flagList].sort((a, b) => {
+      if (a.priority === null) return 1;
+      if (b.priority === null) return -1;
+      return a.priority - b.priority;
+    });
+
+    const priorityFlag = sortedFlags[0];
+
+    return (
+      <Popover
+        content={
+          <div
+            className="ant-badge"
+            style={{ height: "auto", overflow: "scroll" }}
+          >
+            <strong>Flag details</strong>
+            {data.flagList.map((flag, flagIndex) => (
+              <div key={flagIndex}>
+                <span className="p-1 ant-badge">
+                  <SvgFlag fillColor={flag?.flagColour} />
+                </span>
+                {flag?.flagName.replaceAll("_", " ")}
+              </div>
+            ))}
+          </div>
+        }
+        placement="right"
+      >
+        <Badge
+          className="ant-badge"
+          count={data.flagList.length}
+          offset={[5, 5]}
+          size="small"
+          style={{
+            right: "2px",
+            marginTop: "2px",
+            background: "#04306f",
+            cursor: "default",
+          }}
+        >
+          <span className="ant-badge">
+            <SvgFlag
+              className="ant-badge"
+              fillColor={priorityFlag?.flagColour || "transparent"}
+            />
+          </span>
+        </Badge>
+      </Popover>
+    );
+  };

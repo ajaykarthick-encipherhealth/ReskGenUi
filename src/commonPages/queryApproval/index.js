@@ -112,6 +112,8 @@ const QueryApproval = ({
   const [test, setTest] = useState(data?.response?.metaDataDTO);
   const [open, setOpen] = useState(false);
   const [selectedRole, setSelectedRole] = useState("");
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [isResetting, setIsResetting] = useState(false);
   const handleTabChange = (key) => {
     setActiveTab(key);
     setSearchText("");
@@ -220,6 +222,8 @@ const QueryApproval = ({
   };
 
   const handleSubmit = async () => {
+  setIsSubmitting(true);
+
     const payload = {
       pageId: "8c1eebaf-eb20-4758-b968-6ae15e6fc031",
       headerNames: test
@@ -234,12 +238,16 @@ const QueryApproval = ({
         onClose();
         getResponePopup(response);
       }
+    setIsSubmitting(false);
+
     } catch (error) {
       getResponePopup(error?.response);
     }
   };
 
   const handleReset = async () => {
+  setIsResetting(true);
+
     const payload = {
       pageId: "8c1eebaf-eb20-4758-b968-6ae15e6fc031",
     };
@@ -250,6 +258,8 @@ const QueryApproval = ({
         onClose();
         getResponePopup(response);
       }
+    setIsResetting(false);
+
     } catch (error) {
       getResponePopup(error?.response);
     }
@@ -360,6 +370,8 @@ const QueryApproval = ({
                             showDrawer={showDrawer}
                             handleSubmit={handleSubmit}
                             handleReset={handleReset}
+                            isSubmitting={isSubmitting}
+                            isResetting={isResetting}
                           />
                         </div>
                       </div>

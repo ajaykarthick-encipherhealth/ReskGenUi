@@ -65,6 +65,8 @@ const ReusableFilters = ({
   showDrawer,
   handleSubmit,
   handleReset,
+  isSubmitting,
+  isResetting,
 }) => {
   const pickerRefs = useRef({});
   const router = useRouter();
@@ -409,6 +411,8 @@ const ReusableFilters = ({
                 setActiveFilters={setActiveFilters}
                 handleSubmit={handleSubmit}
                 handleReset={handleReset}
+                isSubmitting={isSubmitting}
+                isResetting={isResetting}
               />
             </div>
           </>

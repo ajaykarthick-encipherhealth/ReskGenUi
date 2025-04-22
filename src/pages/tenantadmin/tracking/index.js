@@ -57,6 +57,7 @@ const Patient = ({
   data,
   tableDynamicColumn,
   tableDynamicColumnReset,
+  tableLoader,
 }) => {
   const commonFilterItems = [
     {
@@ -217,7 +218,10 @@ const Patient = ({
   const [pageNumber, setPageNumber] = useState(0);
   const [open, setOpen] = useState(false);
   const [test, setTest] = useState(data?.response?.metaDataDTO);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isResetting, setIsResetting] = useState(false);
 
+  console.log(isSubmitting, "isSubmitting");
   const onPageChange = (e) => {
     setPaginationFirst(e.first);
     setPageNo(e.page);
@@ -230,6 +234,7 @@ const Patient = ({
     setOpen(false);
   };
   const handleSubmit = async () => {
+    setIsSubmitting(true);
     const payload = {
       pageId: "ea046971-08de-4ee2-bf47-10c62c0eaa18",
       headerNames: test
@@ -244,14 +249,18 @@ const Patient = ({
         onClose();
         getResponePopup(response);
       }
+      setIsSubmitting(false);
     } catch (error) {
       getResponePopup(error?.response);
     }
   };
+
   const handleReset = async () => {
+    setIsResetting(true);
     const payload = {
       pageId: "ea046971-08de-4ee2-bf47-10c62c0eaa18",
     };
+
     try {
       const response = await tableDynamicColumnReset({ payload });
       if (response?.status === "SUCCESS") {
@@ -259,10 +268,12 @@ const Patient = ({
         onClose();
         getResponePopup(response);
       }
+      setIsResetting(false);
     } catch (error) {
       getResponePopup(error?.response);
     }
   };
+
   useEffect(() => {
     var orgListArray = [];
     organizationList?.response?.map((res) => {
@@ -339,11 +350,14 @@ const Patient = ({
     }
   }, [routedData]);
   const getAllTracking = async () => {
+    const userId = getStorage("userId");
     const response = await getTableData({
       pageId: "ea046971-08de-4ee2-bf47-10c62c0eaa18",
       pageNo,
       pageSize: 15,
       roleId: "",
+      isAdmin: true,
+      patientAllocated: userId,
     });
   };
   useEffect(() => {
@@ -428,6 +442,8 @@ const Patient = ({
                   showDrawer={showDrawer}
                   handleSubmit={handleSubmit}
                   handleReset={handleReset}
+                  isSubmitting={isSubmitting}
+                  isResetting={isResetting}
                 />
               </div>
               <div className="col-2 d-flex align-items-center justify-content-center">
@@ -444,7 +460,7 @@ const Patient = ({
                   column={data?.response?.metaDataDTO.filter(
                     (item) => item.active
                   )}
-                  loader={loader}
+                  loader={tableLoader}
                   onRowClick={gotoPatientDetails}
                   pagination={false}
                   setSort={setSort}

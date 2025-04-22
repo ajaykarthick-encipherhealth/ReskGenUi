@@ -11,7 +11,8 @@ const RegularButton = ({
   disabled,
   htmlType,
   id,
-  padding
+  padding,
+  
 }) => {
   return (
     <button

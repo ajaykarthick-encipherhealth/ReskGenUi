@@ -429,7 +429,8 @@ const PatientSync = ({
   const [roleId, setRoleId] = useState(null);
   const [open, setOpen] = useState(false);
   const [activeFilters, setActiveFilters] = useState([]);
-
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isResetting, setIsResetting] = useState(false);
   const [drawerProps, setDrawerProps] = useState({
     isDrawerOpen: false,
     reUpload: null,
@@ -764,6 +765,8 @@ const PatientSync = ({
       ? "1ff437a0-18a8-47de-893d-41dc669e3cbd"
       : "";
   const handleSubmitInsert = async () => {
+  setIsSubmitting(true);
+
     const payload = {
       pageId: pageIds,
       headerNames: test
@@ -786,11 +789,15 @@ const PatientSync = ({
         onClose();
         getResponePopup(response);
       }
+    setIsSubmitting(false);
+
     } catch (error) {
       getResponePopup(error?.response);
     }
   };
    const handleReset = async () => {
+  setIsResetting(true);
+
       const payload = {
         pageId: pageIds,
       };
@@ -809,6 +816,8 @@ const PatientSync = ({
           onClose();
           getResponePopup(response);
         }
+    setIsResetting(false);
+
       } catch (error) {
         getResponePopup(error?.response);
       }
@@ -1017,6 +1026,8 @@ const PatientSync = ({
                                 showDrawer={showDrawer}
                                 handleSubmit={handleSubmitInsert}
                                 handleReset={handleReset}
+                                isSubmitting={isSubmitting}
+                                isResetting={isResetting}
                               />
                             ) : null}
                             {renderButton()}

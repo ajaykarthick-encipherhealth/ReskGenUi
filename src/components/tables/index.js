@@ -28,6 +28,9 @@ import {
   createIdGen,
   proxyStatusBodyTemplate,
   getRoasterStatus,
+  renderFlagCells,
+  processStatusBodyTemplate,
+  dynamicAuditStatusTemplate,
 } from "../../utils/reusable";
 import { faCircleCheck } from "@fortawesome/free-regular-svg-icons";
 
@@ -445,7 +448,7 @@ const TableRow = ({
                   : Style.childBorder
               }`}
             >
-              <span className="text-secondary">
+              <span className="text-secondary" >
                 {" "}
                 {item?.priority
                   ? priorityStatus(item?.priority)
@@ -826,7 +829,7 @@ const TableRow = ({
                 }
                 className="d-flex justify-content-center"
               >
-                {processstatusBodyTemplate(
+                {processStatusBodyTemplate(
                   item[`${columnItem.actualField}`],
                   columnItem.isIcon
                 )}
@@ -983,6 +986,37 @@ const TableRow = ({
             </td>
           );
         }
+            if (columnItem?.design?.includes("AUDIT_STATUS")) {
+              return (
+                <td
+                  className={`${
+                    index == 0
+                      ? Style.firstTdBorder
+                      : column.length - 1 == index
+                      ? Style.lastBorder
+                      : Style.childBorder
+                  } `}
+                >
+                  <div
+                    id={
+                      tableId
+                        ? createIdGen("auditstatus " + tableId + colIndex)
+                        : createIdGen(
+                            "auditstatus " +
+                              router.pathname.replaceAll("/", " ") +
+                              colIndex
+                          )
+                    }
+                    className="d-flex  justify-content-center"
+                  >
+                    {dynamicAuditStatusTemplate(
+                      item[`${columnItem.actualField}`],
+                      columnItem.isIcon
+                    )}
+                  </div>
+                </td>
+              );
+            }
         if (columnItem.progressBar) {
           return (
             <td
@@ -1115,10 +1149,19 @@ const TableRow = ({
             </td>
           );
         }
-        if (columnItem?.isFlag) {
+        if (columnItem?.design?.includes("FLAG")) {
           return (
-            <td className={`ant-badge-count ${Style.firstTdBorder}`}>
-              {renderFlagCell(item)}
+            <td 
+            // className={`ant-badge-count ${Style.firstTdBorder}`}
+            className={
+                index == 0
+                  ? Style.firstTdBorder
+                  : column.length - 1 == index
+                  ? Style.lastBorder
+                  : Style.childBorder
+              }
+            >
+              {renderFlagCells(item)}
             </td>
           );
         }

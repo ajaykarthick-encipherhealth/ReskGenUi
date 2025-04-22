@@ -122,6 +122,8 @@ const CodersTable = ({
   isReAssigned,
   patientAllocated,
   tableDynamicColumnReset,
+  tableStatus,
+  getTableStatus,
 }) => {
   const columns = [
     {
@@ -228,7 +230,8 @@ const CodersTable = ({
   const [test, setTest] = useState(data?.response?.metaDataDTO);
   const [open, setOpen] = useState(false);
   const [activeStatus, setActiveStatus] = useState("PENDING");
-
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isResetting, setIsResetting] = useState(false);
   const gotoPatientDetails = (data) => {
     patientDetails(data);
     setStorage("patientId", data.patientId);
@@ -260,12 +263,11 @@ const CodersTable = ({
   const onClose = () => {
     setOpen(false);
   };
-
   const getCodersApi = async () => {
     const res = await getTableData({
       pageNo,
       pageNumber,
-      pageSize,
+      pageSize: 15,
       selectedOption,
       sort: sort,
       selectedDateRanges,
@@ -280,6 +282,12 @@ const CodersTable = ({
       setTotalElements(res.response?.patientDTOList?.totalElements);
     }
   };
+  useEffect(() => {
+    getTableStatus({
+      pageNo,
+      pageId,
+    });
+  }, [activeStatus, pageNo, pageId]);
   useEffect(() => {
     setParamsFilter("check");
     if (window !== "undefined" && paramsFilter) {
@@ -311,6 +319,8 @@ const CodersTable = ({
   };
 
   const handleSubmit = async () => {
+    setIsSubmitting(true);
+
     const payload = {
       pageId: pageId,
       headerNames: test
@@ -325,11 +335,14 @@ const CodersTable = ({
         onClose();
         getResponePopup(response);
       }
+      setIsSubmitting(false);
     } catch (error) {
       getResponePopup(error?.response);
     }
   };
   const handleReset = async () => {
+    setIsResetting(true);
+
     const payload = {
       pageId: pageId,
     };
@@ -340,6 +353,7 @@ const CodersTable = ({
         onClose();
         getResponePopup(response);
       }
+      setIsResetting(false);
     } catch (error) {
       getResponePopup(error?.response);
     }
@@ -387,7 +401,6 @@ const CodersTable = ({
       setActiveStatus(activeStatus);
     }
   }, [routedData]);
-
   return (
     <div className={`show `}>
       <Header />
@@ -424,6 +437,8 @@ const CodersTable = ({
                 showDrawer={showDrawer}
                 handleSubmit={handleSubmit}
                 handleReset={handleReset}
+                isSubmitting={isSubmitting}
+                isResetting={isResetting}
               />
             </div>
           </div>
@@ -450,8 +465,7 @@ const CodersTable = ({
                       to="#my-posts"
                       eventKey="PENDING"
                     >
-                      PENDING -{" "}
-                      {data?.response?.pageResponse?.totalElements || 0}
+                      PENDING - {tableStatus?.PENDING || 0}{" "}
                     </Nav.Link>
                   </Nav.Item>
                   <Nav.Item
@@ -467,8 +481,7 @@ const CodersTable = ({
                       to="#my-posts"
                       eventKey="COMPLETED"
                     >
-                      COMPLETED -{" "}
-                      {data?.response?.pageResponse?.totalElements || 0}
+                      COMPLETED - {tableStatus?.COMPLETED || 0}{" "}
                     </Nav.Link>
                   </Nav.Item>{" "}
                   <Nav.Item
@@ -484,7 +497,7 @@ const CodersTable = ({
                       to="#my-posts"
                       eventKey="HOLD"
                     >
-                      HOLD - {data?.response?.pageResponse?.totalElements || 0}
+                      HOLD - {tableStatus?.HOLD || 0}
                     </Nav.Link>
                   </Nav.Item>
                   <Nav.Item
@@ -500,8 +513,7 @@ const CodersTable = ({
                       to="#my-posts"
                       eventKey="DECLINED"
                     >
-                      DECLINED -{" "}
-                      {data?.response?.pageResponse?.totalElements || 0}
+                      DECLINED - {tableStatus?.DECLINED || 0}
                     </Nav.Link>
                   </Nav.Item>
                 </Nav>
@@ -549,8 +561,10 @@ const enhancer = connect(
     statusActiveTab: state.admin?.report?.activeTab,
     status:
       state?.reviewer?.workQueue?.getStatus?.data?.response?.processStatusCount,
-      tableLoader:state?.tableView?.tableViewLoading,
-      data: state?.tableView?.tableView?.data,
+    tableLoader: state?.tableView?.tableViewLoading,
+    data: state?.tableView?.tableView?.data,
+    tableStatus:
+      state?.tableView?.TableStatusView?.data?.response?.processStatusCount,
   }),
   {
     getpatientsListFilter: workqueueActions.patientsAction,
@@ -560,10 +574,10 @@ const enhancer = connect(
     getFilteApi: allActions.getReviewerPatients,
     getActiveTab: allReportActions.activeTab,
     getStatus: allActions.getStatusAction,
+    getTableStatus: tableAction.getTableStatusAction,
     getTableData: tableAction.tableViewAction,
     tableDynamicColumn: tableAction.tableDynamicColumn,
-        tableDynamicColumnReset: tableAction.tableDynamicColumnReset,
-    
+    tableDynamicColumnReset: tableAction.tableDynamicColumnReset,
   }
 );
 export default enhancer(CodersTable);

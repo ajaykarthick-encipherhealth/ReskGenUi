@@ -18,4 +18,8 @@ export const tableDynamicColumnReset = createActionThunk(
   "TABLE_DYNAMIC_COLUMN_RESET",
   network.dynamicColumnReset
 );
+export const getTableStatusAction = createActionThunk(
+  "GET_TABLE_STATUS_ACTION",
+  network.getTableView
+);
 

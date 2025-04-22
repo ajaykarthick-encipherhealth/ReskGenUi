@@ -115,6 +115,8 @@ const MoveBack = ({
   const [pageSize, setPageSize] = useState(15);
   const [roleId, setRoleId] = useState(null);
   const [selectedRole, setSelectedRole] = useState("");
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [isResetting, setIsResetting] = useState(false);
 
   const handleTabChange = (key) => {
     setActiveTab(key);
@@ -199,6 +201,8 @@ const MoveBack = ({
   };
 
   const handleSubmit = async () => {
+  setIsSubmitting(true);
+
     const payload = {
       pageId: "937b0477-f0cd-46e7-b8ab-fefb38f91859",
       headerNames: test
@@ -213,11 +217,15 @@ const MoveBack = ({
         onClose();
         getResponePopup(response);
       }
+    setIsSubmitting(false);
+
     } catch (error) {
       getResponePopup(error?.response);
     }
   };
    const handleReset = async () => {
+  setIsResetting(true);
+
       const payload = {
         pageId: "937b0477-f0cd-46e7-b8ab-fefb38f91859",
       };
@@ -228,6 +236,8 @@ const MoveBack = ({
           onClose();
           getResponePopup(response);
         }
+    setIsResetting(false);
+
       } catch (error) {
         getResponePopup(error?.response);
       }
@@ -383,6 +393,8 @@ const MoveBack = ({
                             showDrawer={showDrawer}
                             handleSubmit={handleSubmit}
                             handleReset={handleReset}
+                            isSubmitting={isSubmitting}
+                            isResetting={isResetting}
                           />
                         </div>
                       </div>

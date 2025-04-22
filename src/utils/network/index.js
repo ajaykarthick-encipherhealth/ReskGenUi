@@ -100,7 +100,7 @@ export async function authRequestPortal(url, options) {
 
 export async function requestPortalRoleBased(url, options) {
   const token = getStorage(tokenKey);
-  const userRoleId = getStorage("userRoleId");
+  const userRoleId = getStorage("roleId");
   const actualUrl = `${portalUrl}${url}`;
   const actualOptions = {
     ...options,
@@ -108,7 +108,7 @@ export async function requestPortalRoleBased(url, options) {
       Authorization: `${"Bearer" + " " + token}`,
       "Content-Type": "application/json",
       // "X-Role-Id":userRoleId
-      "X-Role-Id": 1,
+      "X-Role-Id": userRoleId,
     },
   };
   return fetch(actualUrl, actualOptions).then(checkStatus);

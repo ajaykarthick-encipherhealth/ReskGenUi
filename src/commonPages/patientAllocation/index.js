@@ -122,10 +122,12 @@ const PatientAllocation = ({
   const [open, setOpen] = useState(false);
   const [test, setTest] = useState(data?.response?.metaDataDTO);
   const [checkedHeader, setCheckedHeader] = useState(false)
-
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isResetting, setIsResetting] = useState(false);
   const disbaleAllocate = allRoles?.allocationRoles?.map(
     (item) => item.disableAllocation
   );
+
 
   const showModal = () => {
     setSamplingModal(true);
@@ -175,6 +177,8 @@ const PatientAllocation = ({
     });
   };
   const handleSubmit = async () => {
+  setIsSubmitting(true);
+
     const payload = {
       pageId: "6cd166eb-79ac-4c12-ab0f-07be2983ca70",
       headerNames: test
@@ -189,11 +193,15 @@ const PatientAllocation = ({
         onClose();
         getResponePopup(response);
       }
+    setIsSubmitting(false);
+
     } catch (error) {
       getResponePopup(error?.response);
     }
   };
   const handleReset = async () => {
+  setIsResetting(true);
+
     const payload = {
       pageId: "6cd166eb-79ac-4c12-ab0f-07be2983ca70",
     };
@@ -204,6 +212,8 @@ const PatientAllocation = ({
         onClose();
         getResponePopup(response);
       }
+    setIsResetting(false);
+
     } catch (error) {
       getResponePopup(error?.response);
     }
@@ -425,6 +435,8 @@ const PatientAllocation = ({
                           showDrawer={showDrawer}
                           handleSubmit={handleSubmit}
                           handleReset={handleReset}
+                          isSubmitting={isSubmitting}
+                          isResetting={isResetting}
                         />
                       </div>
 

@@ -266,7 +266,7 @@ export const priorityStatus = (value) => {
   switch (value) {
     case "URGENT":
       return (
-        <div data-testid="status-span">
+        <div data-testid="status-span" style={{ width: "100px" }}>
           <i>
             <FontAwesomeIcon
               icon={faTriangleExclamation}
@@ -280,7 +280,7 @@ export const priorityStatus = (value) => {
       );
     case "HIGH":
       return (
-        <div data-testid="status-span">
+        <div data-testid="status-span" style={{ width: "100px" }}>
           <i className={TableStyle.highFlag}>
             <FontAwesomeIcon icon={faTriangleExclamation} />
           </i>
@@ -291,16 +291,21 @@ export const priorityStatus = (value) => {
       );
     case "NORMAL":
       return (
-        <div data-testid="status-span">
+        <div data-testid="status-span" style={{ width: "100px" }}>
           <i className={TableStyle.normalFlag}>
             <FontAwesomeIcon icon={faTriangleExclamation} />
           </i>
-          <span className="mx-1" style={{ fontSize: "13px", color: "#4466ff " }}>Normal</span>
+          <span
+            className="mx-1"
+            style={{ fontSize: "13px", color: "#4466ff " }}
+          >
+            Normal
+          </span>
         </div>
       );
     case "LOW":
       return (
-        <div data-testid="status-span">
+        <div data-testid="status-span" style={{width:"100px"}}>
           <i className={TableStyle.lowFlag}>
             <FontAwesomeIcon icon={faTriangleExclamation} />
           </i>

@@ -1,6 +1,10 @@
 import { combineReducers } from "redux";
 import { handleActions } from "redux-actions";
-import { tableViewAction,tableDynamicChecked } from "./actions";
+import {
+  tableViewAction,
+  tableDynamicChecked,
+  getTableStatusAction,
+} from "./actions";
 
 const initialState = {
   loading: true,
@@ -43,6 +47,7 @@ const tableReducer = combineReducers({
   tableViewLoading: getReportLoading(tableViewAction),
   tableView: createReducer(tableViewAction),
   tableColumnChecked:createReducer(tableDynamicChecked),
+  TableStatusView: createReducer(getTableStatusAction),
 });
 
 export default tableReducer;
