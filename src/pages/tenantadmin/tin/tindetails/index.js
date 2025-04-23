@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Header from "../../../../jsx/layouts/nav/Header";
 import SubNavBar from "../../../../components/subNavBar";
 import Tab from "../../../../mainStream/components/tags";
@@ -14,28 +14,41 @@ import { getAccessTabItems } from "../../../../utils/reusable";
 
 const TinDetails = ({ activeTabName, getProjectActiveTab }) => {
   const router = useRouter();
+
   const tabs = getAccessTabItems({ page: "Tin", tabsMenu: "tabMenuList2" });
-  const activeTab = activeTabName?.tinDetailsTab || tabs?.[0] || "Patients";
+  const { tab } = router.query;
+  const activeTab = tab || activeTabName?.tinDetailsTab || "Patients";
+  
   const handleTabs = (name) => {
     getProjectActiveTab({ tinDetailsTab: name });
+    router.replace({
+      pathname: router.pathname,
+      query: { ...router.query, tab: name },
+    });
   };
+
   const handleBack = () => {
     getProjectActiveTab(activeTabName);
     router.push("/tenantadmin/tin");
   };
+  useEffect(() => {
+    if (tab) {
+      getProjectActiveTab({ tinDetailsTab: tab });
+    }
+  }, [tab]);
+
   return (
     <div className={`show `}>
       <Header />
       <div>
-        <SubNavBar hideBackArrow ={true} handleBack={handleBack} />
+        <SubNavBar hideBackArrow={true} handleBack={handleBack} />
         <div className="mt-5">
           <Tab
-            width={"58%"}
+            width={"50%"}
             icon
             activeTab={activeTab}
             handleTabs={handleTabs}
             tabs={tabs}
-           
           />
           {activeTab === "Patients" && (
             <Patients route={`/tenantadmin/tin/details`} />

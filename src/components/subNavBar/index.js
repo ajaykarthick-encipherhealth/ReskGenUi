@@ -78,7 +78,7 @@ const SubNavBar = ({ handleBack,hideBackArrow }) => {
      
       <div className={styles.tabContainer}>
       <section
-        className="d-flex mx-3 pb-2 gap-3 d-flex align-items-center flex-wrap"
+        className="d-flex mx-3 gap-2 pb-2  d-flex align-items-center flex-wrap"
       >
         {showItems?.map((header, index) => (
           <section className={`cr-pointer mx-2 px-2  ${styles.headerContent}`}>
@@ -90,7 +90,7 @@ const SubNavBar = ({ handleBack,hideBackArrow }) => {
               data-testid={createIdGen(`${role} tin copyicon`)}
               id={createIdGen(`${role} tin copyicon`)}
             >
-              {index != 1 && header?.key}
+             <div className={styles.count}>{index != 1 && header?.key}</div> 
               {index == 0 && header?.key !== "" && (
                 <FontAwesomeIcon
                   icon={faCopy}

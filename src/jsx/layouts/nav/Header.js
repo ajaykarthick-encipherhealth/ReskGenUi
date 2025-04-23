@@ -606,7 +606,7 @@ const Header = ({
                   <Select
                     placeholder="Client"
                     style={{
-                      width: 200,
+                      width: 150,
                     }}
                     // onChange={handleProject}
                     // value={selectedOption}
@@ -617,7 +617,7 @@ const Header = ({
                   <Select
                     placeholder="Sample Project"
                     style={{
-                      width: 200,
+                      width: 150,
                     }}
                     // onChange={handleProject}
                     // value={selectedOption}
@@ -629,7 +629,7 @@ const Header = ({
                     <Select
                       placeholder="Tin"
                       style={{
-                        width: 200,
+                        width: 150,
                       }}
                       // onChange={handleProject}
                       // value={selectedOption}

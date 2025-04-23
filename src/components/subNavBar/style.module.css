@@ -34,4 +34,14 @@
     padding-top: 60px;
   }
   
+  @media (min-width: 1024px) and (max-width: 1400px) {
+    .headerTitle {
+      font-size: 12px !important;
+      font-weight: 600;
+    }
+    .count{
+      font-size: 12px !important;
+    }
+  }
+  
  

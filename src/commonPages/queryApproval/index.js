@@ -264,7 +264,6 @@ const QueryApproval = ({
       getAllOrganizationList();
     }
   }, []);
-
   return (
     <div>
       <Header />
@@ -371,6 +370,7 @@ const QueryApproval = ({
                             active={active}
                             setActive={setActive}
                             gotoPatientDetails={gotoPatientDetails}
+                            
                           />
                         </Tab.Pane>
                       </Tab.Content>

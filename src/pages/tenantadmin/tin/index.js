@@ -118,8 +118,9 @@ const Tin = ({
   routedData,
 }) => {
   const tabs = getAccessTabItems({ page: "Tin", tabsMenu: "tabMenuList" });
-  const activeTab = activeTabName || tabs?.[0] || "Active";
   const router = useRouter();
+  const { tab } = router.query;
+  const activeTab = tab || activeTabName?.tinDetailsTab || "Active";
   const [activeFilters, setActiveFilters] = useState(commonFilterItems);
   const [sort, setSort] = useState({
     allocatedOn: {
@@ -155,6 +156,10 @@ const Tin = ({
     getProjectActiveTab({
       tinTabName: name,
     });
+    router.replace({
+      pathname: router.pathname,
+      query: { ...router.query, tab: name },
+    });
     setSelectedOption({});
   };
 
@@ -187,8 +192,6 @@ const Tin = ({
   const opt = {
     Priority: statusOptions,
   };
-
-  const handleInsert = () => {};
 
   const params = {
     pageNo,
@@ -445,7 +448,6 @@ const Tin = ({
             options={columns}
             selectedColumns={test}
             setSelectedColumns={setTest}
-            handleInsert={handleInsert}
             setActiveFilters={setActiveFilters}
           />
         </div>

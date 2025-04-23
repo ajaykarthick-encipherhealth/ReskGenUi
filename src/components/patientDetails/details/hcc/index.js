@@ -96,9 +96,14 @@ const Hcc = ({
   const [queryText, setQueryText] = useState("");
   const [isOpen, setIsOpen] = useState(false);
   const [isClient, setIsClient] = useState(false);
+  const [isApproved, setIsApproved] = useState(false);
+  const [selectedName, setSelectedName] = useState(null);
 
   const handleChange = (e) => {
     setQueryText(e.target.value);
+  };
+  const handleRoleChange = (value) => {
+    setSelectedName(value); 
   };
   const showModal = () => {
     setIsModalOpen(true);
@@ -441,10 +446,9 @@ const Hcc = ({
   }));
   const onFinish = async (values) => {
     const patientId = getStorage("patientId");
-    const aliasName = getStorage("aliasName");
     const data = {
       patientId: patientId,
-      aliasName: aliasName,
+      aliasName: selectedName,
       queryReason: values?.reason,
       queriedToAliasName: values?.role,
     };
@@ -469,6 +473,7 @@ const Hcc = ({
     };
     const response = await queryApproval(data);
     if (response?.status === "SUCCESS") {
+      setIsApproved(true); // Disable
       setIsModalOpen(false);
       getResponePopup(response);
       setQueryText(null);
@@ -791,16 +796,17 @@ const Hcc = ({
                             <Nav.Item as="li" className="nav-item">
                               <Popconfirm
                                 placement="bottom"
-                                description="Are you sure to Approve?"
+                                description="Are you sure you want to approve?"
                                 okText="Yes"
                                 cancelText="No"
                                 onConfirm={handleApprove}
                               >
-                                <button
+                                <Button
+                                  disabled={isApproved}
                                   className={`px-3 py-1 rounded-md ${styles.approveBtn}`}
                                 >
                                   Approve
-                                </button>
+                                </Button>
                               </Popconfirm>
                             </Nav.Item>
                             <Nav.Item as="li" className="nav-item">
@@ -1022,6 +1028,7 @@ const Hcc = ({
                 options={selectOptions}
                 className="w-75"
                 placeholder="Select Role"
+                onChange={handleRoleChange} 
               />
             </Form.Item>
           </div>
@@ -1038,7 +1045,6 @@ const Hcc = ({
             >
               <TextArea
                 placeholder="Enter Reason"
-                width={500}
                 rows={4}
                 maxLength={100}
               />
