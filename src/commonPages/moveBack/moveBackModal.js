@@ -2,19 +2,18 @@ import { Modal, Select } from "antd";
 import { connect } from "react-redux";
 import RegularButton from "../../components/button";
 import { actions as allActions } from "../../stores/tenantAdmin/patientAllocations";
-import { useEffect, useState } from "react";
+import {  useState } from "react";
 import { getResponePopup } from "../../utils/reusable";
 
 const MoveBackModal = ({
   open,
   setOpen,
-  moveBackLevel,
   levelOptions,
   selectedRowsId,
   moveBack,
   setSelectedRows,
   setSelectedRowsId,
-  selectedRole,
+  roleId,
   activeTab,
   getMoveBack,
   setIsMoveBackLoader,
@@ -49,13 +48,9 @@ const MoveBackModal = ({
       console.error("failed");
     }
   };
-  useEffect(() => {
-    moveBackLevel({
-      roleName:selectedRole
-    });
-  }, [activeTab]);
+
   return (
-    <div>
+    <div> 
       <Modal
         open={open}
         onCancel={() => {
@@ -107,7 +102,6 @@ const connector = connect(
       state?.tenantAdmin?.patientsAllocation?.moveBackLevel?.data?.response,
   }),
   {
-    moveBackLevel: allActions.getMoveBackLevel,
     moveBack: allActions.postMoveBack,
   }
 );

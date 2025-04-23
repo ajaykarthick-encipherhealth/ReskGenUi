@@ -2305,4 +2305,9 @@
 .isSHowHccBlurHcc {
   filter: blur(1px);
 }
+@media (min-width: 1024px) and (max-width: 1400px) {
+  .font {
+    font-size: 12px !important;
+  }
+}
 

@@ -27,6 +27,7 @@ const MoveBack = ({
   allRoles,
   tableDynamicColumn,
   tableDynamicColumnReset,
+  moveBackLevel,
 }) => {
   const commonFilterItems = [
     {
@@ -116,7 +117,7 @@ const MoveBack = ({
   const [selectedRole, setSelectedRole] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isResetting, setIsResetting] = useState(false);
-  const [moveBackLoader,setIsMoveBackLoader] = useState(false)
+  const [moveBackLoader, setIsMoveBackLoader] = useState(false);
 
   const handleTabChange = (key) => {
     setActiveTab(key);
@@ -149,7 +150,6 @@ const MoveBack = ({
     setOpen(true);
   };
 
-
   const getRolesList = async () => {
     const res = await getAllTabRoles();
     if (res.status === "SUCCESS") {
@@ -165,7 +165,6 @@ const MoveBack = ({
       selectedRole,
     });
   };
-
   const handleSubmit = async () => {
     setIsSubmitting(true);
 
@@ -212,12 +211,6 @@ const MoveBack = ({
   }, []);
 
   useEffect(() => {
-    if (allRoles?.allocationRoles?.length > 0) {
-      setSelectedRole(allRoles.allocationRoles[0].aliasName);
-    }
-  }, [allRoles, activeTab]);
-
-  useEffect(() => {
     setParamsFilter("check");
     if (
       window !== "undefined" &&
@@ -255,6 +248,17 @@ const MoveBack = ({
       getAllOrganizationList();
     }
   }, []);
+  useEffect(() => {
+    if (
+      window !== "undefined" &&
+      paramsFilter &&
+      allRoles?.allocationRoles?.length > 0
+    ) {
+      moveBackLevel({
+        roleId: roleId,
+      });
+    }
+  }, [roleId]); 
 
   return (
     <div>
@@ -288,7 +292,7 @@ const MoveBack = ({
                               >
                                 <Nav.Link
                                   onClick={() => {
-                                    setSelectedRole(role.aliasName);
+                                    setRoleId(role.roleId);
                                   }}
                                   className="mt-4"
                                   eventKey={index + 1}
@@ -455,6 +459,7 @@ const connector = connect(
     getAllTabRoles: allActions.getAllRoles,
     tableDynamicColumn: tableAction.tableDynamicColumn,
     tableDynamicColumnReset: tableAction.tableDynamicColumnReset,
+    moveBackLevel: allActions.getMoveBackLevel,
   }
 );
 

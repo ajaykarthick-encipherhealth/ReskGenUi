@@ -12,6 +12,8 @@ import { actions as allActions } from "../../../stores/reviewer/workqueue";
 import { setStorage } from "../../../utils/storages";
 import { statusOptions } from "../../reviewer/patients";
 import { getAccessTabItems } from "../../../utils/reusable";
+import styles from "../../../styles/visitdata.module.css";
+import { Button } from "antd";
 
 const commonFilterItems = [
   {
@@ -115,7 +117,7 @@ const Tin = ({
   loading,
   routedData,
 }) => {
-  const tabs = getAccessTabItems({page:"Tin",tabsMenu:"tabMenuList"})
+  const tabs = getAccessTabItems({ page: "Tin", tabsMenu: "tabMenuList" });
   const activeTab = activeTabName || tabs?.[0] || "Active";
   const router = useRouter();
   const [activeFilters, setActiveFilters] = useState(commonFilterItems);
@@ -353,29 +355,40 @@ const Tin = ({
   return (
     <div className={`show`}>
       <Header />
-     <div
-  className="d-flex justify-content-end position-relative"
-  style={{ marginTop: "5%", width: "100%" }}
->
-  <div style={{ position: "absolute", left: "50%", transform: "translateX(-50%)" }}>
-    <Tab
-      activeTab={activeTab}
-      handleTabs={handleTabs}
-      tabs={tabs}
-      margin={"0"}
-      width={"100%"}
-      padding={"50px"}
-    />
-  </div>
+      <div
+        className="d-flex justify-content-end position-relative"
+        style={{ marginTop: "5%", width: "100%" }}
+      >
+        <div
+          style={{
+            position: "absolute",
+            left: "50%",
+            transform: "translateX(-50%)",
+          }}
+        >
+          <Tab
+            activeTab={activeTab}
+            handleTabs={handleTabs}
+            tabs={tabs}
+            margin={"0"}
+            width={"100%"}
+            padding={"50px"}
+          />
+        </div>
 
-  <div className="d-flex align-items-center justify-content-end gap-4">
-    <div>Total Tin : 45</div>
-    <div>Active Tin : 45</div>
-    <div>InActive Tin : 45</div>
-    <RegularButton width="200px" type="submit" name="Change to Inactive" />
-  </div>
-</div>
-
+        <div className="d-flex align-items-center justify-content-end gap-4">
+          <div className={styles.font}>Total Tin : 45</div>
+          <div className={styles.font}>Active Tin : 45</div>
+          <div className={styles.font}>InActive Tin : 45</div>
+          <Button
+            data-testid="activeBtn"
+            name="activeBtn"
+            className="btn btn-sm   tableButton"
+          >
+            Change to Inactive
+          </Button>
+        </div>
+      </div>
 
       <div className=" mt-3  container-fluid table-responsive active-projects task-table">
         <div className="d-flex">
@@ -394,12 +407,18 @@ const Tin = ({
             />
           </div>
           <div
-            id="addPatient-btn"
-            name="addPatient-btn"
-            className="d-flex justify-content-center align-items-center mt-3"
-            style={{ width: "10%" }}
+            id="table-btn"
+            name="table-btn"
+            className="d-flex justify-content-center align-items-center   mt-4"
           >
-            <RegularButton name={"Table Customize"} onClick={showDrawer} />
+            <Button
+              data-testid="table-custom"
+              name="table-custom"
+              // onClick={showDrawer}
+              className="btn btn-sm w-full text-ellipsis tableButton"
+            >
+              Table Customization
+            </Button>
           </div>
         </div>
         <div className="profile-tab  mt-3">

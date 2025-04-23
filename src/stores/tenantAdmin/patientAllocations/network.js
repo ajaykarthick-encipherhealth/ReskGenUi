@@ -305,12 +305,12 @@ export async function randomSampling(data) {
   return response;
 }
 
-export async function getmoveBackLevel({roleName}) {
+export async function getmoveBackLevel({roleId}) {
   const options = {
     method: "GET",
   };
   const res = await requestPortal(
-    `dbservice/v1/move-back/get-role-status-details?roleAlias=${roleName}`,
+    `dbservice/v1/move-back/get-role-status-details?roleId=${roleId}`,
     options
   );
   return res;
