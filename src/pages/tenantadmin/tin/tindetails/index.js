@@ -35,6 +35,7 @@ const TinDetails = ({ activeTabName, getProjectActiveTab }) => {
             activeTab={activeTab}
             handleTabs={handleTabs}
             tabs={tabs}
+           
           />
           {activeTab === "Patients" && (
             <Patients route={`/tenantadmin/tin/details`} />

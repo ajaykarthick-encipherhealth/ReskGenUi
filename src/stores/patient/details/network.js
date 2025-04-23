@@ -136,8 +136,10 @@ export async function dosWiseList(patientId, year) {
   const options = {
     method: "GET",
   };
+    const userRoleId = getStorage("roleId");
+  
   const data = await requestPortal(
-    `dbservice/patient/compute/get/alldos?patientId=${patientId}&processedYear=${year}`,
+    `dbservice/status/patient/get/alldos?patientId=${patientId}&processedYear=${year}&roleId=${userRoleId}`,
     options
   );
   return data;

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import styles from "../../reports/report.module.css";
 
-const Tab = ({ activeTab, handleTabs, tabs, width }) => {
+const Tab = ({ activeTab, handleTabs, tabs, width, margin, padding }) => {
   const [isClient, setIsClient] = useState(false);
 
   useEffect(() => {
@@ -11,11 +11,15 @@ const Tab = ({ activeTab, handleTabs, tabs, width }) => {
   if (!isClient || !tabs || tabs.length === 0) return null;
 
   return (
-    <div style={{ width: width || "30%" }} className={styles.buttonContainer}>
+    <div
+      style={{ width: width || "30%", margin: margin || "auto" }}
+      className={styles.buttonContainer}
+    >
       <div
         id={`reportTab-${activeTab}`}
         name={`reportTab-${activeTab}`}
         className={styles.group}
+        style={{ padding: padding || "0px" }}
       >
         {tabs?.map((tab) => (
           <button

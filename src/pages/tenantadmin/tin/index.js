@@ -353,20 +353,30 @@ const Tin = ({
   return (
     <div className={`show`}>
       <Header />
-      <div className="d-flex" style={{ marginTop: "5%", width: "100%" }}>
-        <Tab activeTab={activeTab} handleTabs={handleTabs} tabs={tabs} />
-        <div className="d-flex  align-items-center justify-content-center gap-4">
-          <div>Total Tin : 45</div>
-          <div> Active Tin : 45</div>
-          <div> InActive Tin : 45</div>
-          <RegularButton
-            width="200px"
-            type="submit"
-            name="Change to Inactive"
-         
-          />
-        </div>
-      </div>
+     <div
+  className="d-flex justify-content-end position-relative"
+  style={{ marginTop: "5%", width: "100%" }}
+>
+  <div style={{ position: "absolute", left: "50%", transform: "translateX(-50%)" }}>
+    <Tab
+      activeTab={activeTab}
+      handleTabs={handleTabs}
+      tabs={tabs}
+      margin={"0"}
+      width={"100%"}
+      padding={"50px"}
+    />
+  </div>
+
+  <div className="d-flex align-items-center justify-content-end gap-4">
+    <div>Total Tin : 45</div>
+    <div>Active Tin : 45</div>
+    <div>InActive Tin : 45</div>
+    <RegularButton width="200px" type="submit" name="Change to Inactive" />
+  </div>
+</div>
+
+
       <div className=" mt-3  container-fluid table-responsive active-projects task-table">
         <div className="d-flex">
           <div style={{ width: "90%" }}>

@@ -95,6 +95,7 @@ const Hcc = ({
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [queryText, setQueryText] = useState("");
   const [isOpen, setIsOpen] = useState(false);
+  const [isClient, setIsClient] = useState(false);
 
   const handleChange = (e) => {
     setQueryText(e.target.value);
@@ -120,7 +121,9 @@ const Hcc = ({
     setIsOpen(false);
     form.resetFields();
   };
-
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
   useEffect(() => {
     if (patientDosResult?.data?.response) {
       // setSelectDosValue("");
@@ -762,19 +765,17 @@ const Hcc = ({
                           content={hideDiseasePopContent}
                           onOpenChange={() =>
                             setActions({
+                              ...actions,
                               showActionsPop: !actions.showActionsPop,
-                              showDisease: actions?.showDisease,
-                              reEvaluate: actions?.reEvaluate,
                             })
                           }
                         >
                           <button
-                            className={`${visitStyles.actionBtn} px-3   py-1 rounded-md`}
+                            className={`${visitStyles.actionBtn} px-3 py-1 rounded-md`}
                             onClick={() =>
                               setActions({
+                                ...actions,
                                 showActionsPop: !actions.showActionsPop,
-                                showDisease: actions?.showDisease,
-                                reEvaluate: actions?.reEvaluate,
                               })
                             }
                           >
@@ -782,47 +783,48 @@ const Hcc = ({
                           </button>
                         </Popover>
                       </Nav.Item>
-                      {proxyRole === "OWNER"  || proxyRole === "TENANT ADMIN" ? (
-                        <div className="d-flex gap-3">
-                          <Nav.Item as="li" className="nav-item">
-                            <Popconfirm
-                              placement="bottom"
-                              description="Are you sure to Approved ?"
-                              okText="Yes"
-                              cancelText="No"
-                              onConfirm={handleApprove}
-                            >
-                              <button
-                                className={` px-3   py-1 rounded-md  ${styles.approveBtn}`}
+
+                      {isClient &&
+                        (proxyRole === "OWNER" ||
+                          proxyRole === "TENANT ADMIN") && (
+                          <>
+                            <Nav.Item as="li" className="nav-item">
+                              <Popconfirm
+                                placement="bottom"
+                                description="Are you sure to Approve?"
+                                okText="Yes"
+                                cancelText="No"
+                                onConfirm={handleApprove}
                               >
-                                Approve
+                                <button
+                                  className={`px-3 py-1 rounded-md ${styles.approveBtn}`}
+                                >
+                                  Approve
+                                </button>
+                              </Popconfirm>
+                            </Nav.Item>
+                            <Nav.Item as="li" className="nav-item">
+                              <button
+                                className={`px-3 py-1 rounded-md ${styles.rejectBtn}`}
+                                onClick={showModal}
+                              >
+                                Reject
                               </button>
-                            </Popconfirm>
-                          </Nav.Item>
-                          <Nav.Item as="li" className="nav-item">
+                            </Nav.Item>
+                          </>
+                        )}
+
+                      <Nav.Item as="li" className="nav-item">
+                        {isClient &&
+                          ["CODER 1", "CODER 2", "QA"].includes(proxyRole) && (
                             <button
-                              className={` px-3   py-1 rounded-md  ${styles.rejectBtn}`}
-                              onClick={showModal}
+                              onClick={showQueryModal}
+                              className={`px-3 py-1 rounded-md ${styles.queryBtn}`}
                             >
-                              Reject
+                              Query
                             </button>
-                          </Nav.Item>
-                        </div>
-                      ) : (
-                        ""
-                      )}
-                      {proxyRole === "CODER 1" || proxyRole === "CODER 2" || proxyRole === "QA" ? (
-                        <Nav.Item as="li" className="nav-item">
-                          <button
-                            onClick={showQueryModal}
-                            className={` px-3   py-1 rounded-md  ${styles.queryBtn}`}
-                          >
-                            Query
-                          </button>
-                        </Nav.Item>
-                      ) : (
-                        ""
-                      )}
+                          )}
+                      </Nav.Item>
                     </div>
                   </div>
                 </Nav>

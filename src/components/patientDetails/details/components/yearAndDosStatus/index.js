@@ -125,7 +125,7 @@ const YearAndDosStatus = ({
   const getPatientIdDetails = async (result) => {
     const menu = (
       <Menu className="ant-badge" id="menu-container" name="menu-container">
-        {result?.processedStatus != "HOLD" ? (
+        {result?.workflow?.[0].status != "HOLD" ? (
           <Menu.Item
             id="hold-menu-item"
             name="hold-menu-item"
@@ -141,8 +141,8 @@ const YearAndDosStatus = ({
             </div>
           </Menu.Item>
         ) : null}
-        {result?.processedStatus != "PENDING" &&
-        result?.processedStatus != "COMPUTED" ? (
+        {result?.workflow?.[0].status != "PENDING" &&
+        result?.workflow?.[0].status != "COMPUTED" ? (
           <Menu.Item
             id="pending-menu-item"
             name="pending-menu-item"
@@ -158,7 +158,7 @@ const YearAndDosStatus = ({
             </div>
           </Menu.Item>
         ) : null}
-        {result?.processedStatus != "DECLINED" ? (
+        {result?.workflow?.[0].status != "DECLINED" ? (
           <Menu.Item
             id="decline-menu-item"
             name="decline-menu-item"
@@ -180,7 +180,7 @@ const YearAndDosStatus = ({
           </Menu.Item>
         ) : null}
 
-        {result?.processedStatus != "COMPLETED" ? (
+        {result?.workflow?.[0].status != "COMPLETED" ? (
           <Menu.Item
             id="complete-menu-item"
             name="complete-menu-item"

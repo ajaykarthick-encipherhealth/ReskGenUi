@@ -22,11 +22,11 @@ const DosSelect = ({
       (it) => it?.dos == item?.dateOfService
     ),
     flags: item?.flagsWithColor,
+    status: item?.workflow?.status,
   }));
   const selectedRow = dosData?.find(
     (row) => row?.dateOfService === selectedDate
   );
-
   const getDos = (item) => (
     <div className="d-flex ant-badge gap-1 align-items-center ">
       <div
@@ -82,14 +82,15 @@ const DosSelect = ({
             ? moment(item?.dateOfService).format("MM-DD-YYYY")
             : "---"}
         </span>
-        <span>{getStatusIcon(item?.processedStatus)}</span>
+        <span>
+          {getStatusIcon(item?.processedStatus)}
+        </span>
       </div>
     </div>
   );
 
   const renderSelectedRow = (row) => {
     if (!row) return null;
-
     return (
       <span className="d-flex w-100 justify-content-between">
         <span>{getDos(row)}</span> |
@@ -155,7 +156,7 @@ const DosSelect = ({
           {/* Data rows */}
           {dosData?.length <= 0 && (
             <div className="text-center">
-              <Empty/>
+              <Empty />
             </div>
           )}
           {dosData?.map((item) => (
