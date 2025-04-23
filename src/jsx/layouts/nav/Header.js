@@ -109,6 +109,7 @@ const Header = ({
   const [selectedFile, setSelectedFile] = useState(null);
   const [loading, setLoading] = useState(false);
   const [animate, setAnimate] = useState(false);
+  const proxyRole = getStorage("proxyRole")
   const showDrawer = () => {
     setOpened(true);
     setPopoverVisible(false);
@@ -213,7 +214,7 @@ const Header = ({
     }
   };
   const getMenuListByRole = (role) => {
-    const accessMenuList = JSON.parse(getStorage("accessMenuList"))
+    const accessMenuList = JSON.parse(getStorage("accessMenuList"));
     switch (role?.replace(/_/g, " ")?.toLowerCase()) {
       case "admin":
         return AdminMenuList;
@@ -230,7 +231,7 @@ const Header = ({
       case "physician":
         // return PhysicianMenuList;
         return PhysicanMenu;
-       case "qa":
+      case "qa":
         return QAMenuList;
       default:
         return [];
@@ -623,6 +624,19 @@ const Header = ({
                     // options={options}
                   />
                 </div>
+                {proxyRole === "QA" && (
+                  <div className="mt-3">
+                    <Select
+                      placeholder="Tin"
+                      style={{
+                        width: 200,
+                      }}
+                      // onChange={handleProject}
+                      // value={selectedOption}
+                      // options={options}
+                    />
+                  </div>
+                )}
               </div>
             </div>
             {stateActive != "/reviewer/home" ? (

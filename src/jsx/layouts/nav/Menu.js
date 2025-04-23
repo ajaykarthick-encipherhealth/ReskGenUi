@@ -4,6 +4,7 @@ import {
   faUser,
   faBarsStaggered,
   faHospitalAlt,
+  faTimeline,
 } from "@fortawesome/free-solid-svg-icons";
 import {
   DashboardOutlined,
@@ -23,6 +24,10 @@ import {
   EnvironmentFilled,
   ContactsOutlined,
   ContactsFilled,
+  ProjectFilled,
+  ProjectOutlined,
+  ContainerOutlined,
+  ContainerFilled,
 } from "@ant-design/icons";
 import { faUser as faUserReg } from "@fortawesome/free-regular-svg-icons";
 import { IMAGES, SVGICON } from "../../constant/theme";
@@ -120,7 +125,7 @@ export const PhysicanMenuList2 = [
   },
   {
     title: "Queried",
-    iconStyle:  <Image src={IMAGES.queried} />,
+    iconStyle: <Image src={IMAGES.queried} />,
     activeIcon: <Image src={IMAGES.queried} />,
     to: "/reviewer/queried",
     childRoute: "/reviewer/queried/details",
@@ -132,7 +137,7 @@ export const PhysicanMenuList2 = [
     to: "/reviewer/reassign",
     childRoute: "/reviewer/reassign/details",
   },
- 
+
   {
     title: "Report",
     iconStyle: <FileOutlined />,
@@ -326,8 +331,8 @@ export const ProviderMenuList = (data) => {
     if (res?.title == "Tin" && res?.active) {
       menus.push({
         title: "Tin",
-        iconStyle: <Image src={IMAGES.tin} />,
-        activeIcon: <Image src={IMAGES.tin} />,
+        iconStyle:<ContainerOutlined />,
+        activeIcon: <ContainerFilled />,
         to: "/tenantadmin/tin",
         childRoute2: "/tenantadmin/tin/tindetails",
         childRoute: "/tenantadmin/tin/tindetails/details",
@@ -337,8 +342,8 @@ export const ProviderMenuList = (data) => {
     if (res?.title == "Project" && res?.active) {
       menus.push({
         title: "Project",
-        iconStyle: <Image src={IMAGES.project} />,
-        activeIcon: <Image src={IMAGES.project} />,
+        iconStyle: <ProjectOutlined />,
+        activeIcon: <ProjectFilled />,
         to: "/tenantadmin/project",
         childRoute: "/tenantadmin/project/patients/details",
         childRoute2: "/tenantadmin/patientsync/batchfilesview",
@@ -392,16 +397,16 @@ export const ProviderMenuList2 = [
   },
   {
     title: "Tin",
-    iconStyle:<Image src={IMAGES.tin} />,
+    iconStyle: <Image src={IMAGES.tin} />,
     activeIcon: <Image src={IMAGES.tin} />,
     to: "/tenantadmin/tin",
     childRoute2: "/tenantadmin/tin/tindetails",
-    childRoute:"/tenantadmin/tin/details",
+    childRoute: "/tenantadmin/tin/details",
   },
   {
     title: "Project",
     iconStyle: <Image src={IMAGES.project} />,
-    activeIcon:<Image src={IMAGES.project} />,
+    activeIcon: <Image src={IMAGES.project} />,
     to: "/tenantadmin/project",
     childRoute: "/tenantadmin/project/details",
     childRoute2: "/tenantadmin/patientsync/batchfilesview",
@@ -430,21 +435,20 @@ export const ProviderMenuList2 = [
   //   childRoute2: "/tenantadmin/patientsync/batchfilesview",
   //   childRoute3: "/tenantadmin/patientsync/pdftable",
 
-    
   // },
-    // {
-    //   title: "File Processing",
-    //   iconStyle: <FilePptOutlined />,
-    //   activeIcon: <FilePptFilled />,
-    //   to: "/tenantadmin/fileprocessing",
-    // },
-    // {
-    //   title: "Patient Allocation",
-    //   iconStyle: <ContactsOutlined />,
-    //   activeIcon: <ContactsFilled />,
-    //   to: "/tenantadmin/allocatedusers",
-    //   childRoute: "/tenantadmin/allocatedusers/supervisorlist",
-    // },
+  // {
+  //   title: "File Processing",
+  //   iconStyle: <FilePptOutlined />,
+  //   activeIcon: <FilePptFilled />,
+  //   to: "/tenantadmin/fileprocessing",
+  // },
+  // {
+  //   title: "Patient Allocation",
+  //   iconStyle: <ContactsOutlined />,
+  //   activeIcon: <ContactsFilled />,
+  //   to: "/tenantadmin/allocatedusers",
+  //   childRoute: "/tenantadmin/allocatedusers/supervisorlist",
+  // },
   {
     title: "Report",
     iconStyle: <FileTextOutlined />,
@@ -491,7 +495,6 @@ export const PhysicianMenuList = [
   },
 ];
 
-
 export const QAMenuList = [
   {
     title: "My Work Queue",
@@ -514,7 +517,4 @@ export const QAMenuList = [
     to: "/qa/reassign",
     childRoute: "/qa/reassign/details",
   },
- 
 ];
-
-

@@ -16,6 +16,7 @@ import { actions as allReportActions } from "../../stores/admin/report";
 import { Tab, Nav } from "react-bootstrap";
 import Header from "../../jsx/layouts/nav/Header";
 import { getResponePopup } from "../../utils/reusable";
+import SubNavBar from "../../components/subNavBar";
 const role = getStorage("proxyRole");
 export const bullets = [
   {
@@ -215,7 +216,7 @@ const CodersTable = ({
       sortField: "processedDate",
     },
   });
-
+  const proxyRole = getStorage("proxyRole");
   const [searchText, setSearchText] = useState(null);
   const [selectedOption, setSelectedOption] = useState({});
   const [selectedDateRanges, setSelectedDateRanges] = useState({});
@@ -404,6 +405,14 @@ const CodersTable = ({
   return (
     <div className={`show `}>
       <Header />
+      {proxyRole === "QA" ? (
+        <div>
+          <SubNavBar hideBackArrow={false} />
+        </div>
+      ) : (
+        ""
+      )}
+
       <div className="content-body">
         <div className="container-fluid table-responsive active-projects task-table">
           <div className="d-flex p-3">

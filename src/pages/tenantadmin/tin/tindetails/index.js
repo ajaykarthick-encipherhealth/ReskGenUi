@@ -27,7 +27,7 @@ const TinDetails = ({ activeTabName, getProjectActiveTab }) => {
     <div className={`show `}>
       <Header />
       <div>
-        <SubNavBar handleBack={handleBack} />
+        <SubNavBar hideBackArrow ={true} handleBack={handleBack} />
         <div className="mt-5">
           <Tab
             width={"58%"}

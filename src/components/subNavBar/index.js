@@ -12,7 +12,7 @@ import { connect } from "react-redux";
 import { getStorage } from "../../utils/storages";
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 
-const SubNavBar = ({ handleBack }) => {
+const SubNavBar = ({ handleBack,hideBackArrow }) => {
   const role = getStorage("userRole");
   const headerData = [];
   const showItems = [
@@ -67,14 +67,15 @@ const SubNavBar = ({ handleBack }) => {
 
   return (
     <section className={`${styles.tabMainContainer} d-flex align-items-center`}>
-      <div
+      {hideBackArrow &&  <div
         onClick={handleBack}
         className={`${styles.arrowBtn} cursor-pointer mx-3 ` }
         data-testid={createIdGen(`${role} tin backicon`)}
         id={createIdGen(`${role} tin backicon`)}
       >
       <FontAwesomeIcon icon={faArrowLeft} />
-      </div>
+      </div>}
+     
       <div className={styles.tabContainer}>
       <section
         className="d-flex mx-3 pb-2 gap-3 d-flex align-items-center flex-wrap"
