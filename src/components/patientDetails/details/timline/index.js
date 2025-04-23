@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import visitStyles from "../../../../styles/visitdata.module.css";
-import { Popover, Tooltip } from "antd";
+import { Empty, Popover, Tooltip } from "antd";
 import styles from "./styles.module.css";
 import { CloseCircleFilled } from "@ant-design/icons";
 import { getProviderNameTagList } from "../components/function/ProviderHyperlinks";
@@ -1016,7 +1016,7 @@ const Timeline = ({
               )
             ) : (
               <div className="no-data-container">
-                <h6 className="text-center">NO DATA</h6>
+                <h6 className="text-center"><Empty/></h6>
               </div>
             )}
           </ul>

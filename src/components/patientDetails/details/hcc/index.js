@@ -97,14 +97,12 @@ const Hcc = ({
   const [isOpen, setIsOpen] = useState(false);
   const [isClient, setIsClient] = useState(false);
   const [isApproved, setIsApproved] = useState(false);
-  const [selectedName, setSelectedName] = useState(null);
-
+  const [isQueried, setIsQueried] = useState(false);
+  const [isReject, setIsReject] = useState(false);
   const handleChange = (e) => {
     setQueryText(e.target.value);
   };
-  const handleRoleChange = (value) => {
-    setSelectedName(value); 
-  };
+
   const showModal = () => {
     setIsModalOpen(true);
   };
@@ -446,14 +444,16 @@ const Hcc = ({
   }));
   const onFinish = async (values) => {
     const patientId = getStorage("patientId");
+    const aliasName = getStorage("aliasName");
     const data = {
       patientId: patientId,
-      aliasName: selectedName,
+      aliasName: aliasName,
       queryReason: values?.reason,
       queriedToAliasName: values?.role,
     };
     const response = await raiseQuery(data);
     if (response?.status === "SUCCESS") {
+      setIsQueried(true);
       getResponePopup(response);
       setIsOpen(false);
       form.resetFields();
@@ -473,7 +473,7 @@ const Hcc = ({
     };
     const response = await queryApproval(data);
     if (response?.status === "SUCCESS") {
-      setIsApproved(true); // Disable
+      setIsReject(true);
       setIsModalOpen(false);
       getResponePopup(response);
       setQueryText(null);
@@ -494,6 +494,9 @@ const Hcc = ({
     };
     const response = await queryApproval(data);
     if (response?.status === "SUCCESS") {
+      setIsApproved(true);
+      getResponePopup(response);
+    } else {
       getResponePopup(response);
     }
   };
@@ -810,12 +813,13 @@ const Hcc = ({
                               </Popconfirm>
                             </Nav.Item>
                             <Nav.Item as="li" className="nav-item">
-                              <button
+                              <Button
+                                disabled={isReject}
                                 className={`px-3 py-1 rounded-md ${styles.rejectBtn}`}
                                 onClick={showModal}
                               >
                                 Reject
-                              </button>
+                              </Button>
                             </Nav.Item>
                           </>
                         )}
@@ -823,12 +827,13 @@ const Hcc = ({
                       <Nav.Item as="li" className="nav-item">
                         {isClient &&
                           ["CODER 1", "CODER 2", "QA"].includes(proxyRole) && (
-                            <button
+                            <Button
+                              disabled={isQueried}
                               onClick={showQueryModal}
                               className={`px-3 py-1 rounded-md ${styles.queryBtn}`}
                             >
                               Query
-                            </button>
+                            </Button>
                           )}
                       </Nav.Item>
                     </div>
@@ -1028,7 +1033,6 @@ const Hcc = ({
                 options={selectOptions}
                 className="w-75"
                 placeholder="Select Role"
-                onChange={handleRoleChange} 
               />
             </Form.Item>
           </div>
@@ -1043,11 +1047,7 @@ const Hcc = ({
               label="Reason"
               name="reason"
             >
-              <TextArea
-                placeholder="Enter Reason"
-                rows={4}
-                maxLength={100}
-              />
+              <TextArea placeholder="Enter Reason" rows={4} maxLength={100} />
             </Form.Item>
           </div>
 

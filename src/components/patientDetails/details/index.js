@@ -682,7 +682,6 @@ const Details = ({
     }
   }, [isDosSelected, dosYearDefalutSelect]);
 
-
   return (
     <>
       <div className={`show `} style={{ height: "100vh", background: "#fff" }}>

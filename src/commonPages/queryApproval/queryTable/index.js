@@ -45,8 +45,7 @@ const QueryTable = ({
           totalRecords={data?.response?.pageResponse?.totalElements}
           row={15}
           onPageChange={onPageChange}
-          // isCheckBox={findItemWithTrueKey(data?.response?.staticDesign,"checkBox")}
-          onRowClick={gotoPatientDetails}
+          onRowClick={active === "Approved" ? "" :gotoPatientDetails}
         />
       </div>
     </div>
