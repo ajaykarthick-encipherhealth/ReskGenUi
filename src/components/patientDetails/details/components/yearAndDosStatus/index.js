@@ -125,7 +125,7 @@ const YearAndDosStatus = ({
   const getPatientIdDetails = async (result) => {
     const menu = (
       <Menu className="ant-badge" id="menu-container" name="menu-container">
-        {result?.workflow?.[0].status != "HOLD" ? (
+        {result?.workflow?.[0]?.status != "HOLD" ? (
           <Menu.Item
             id="hold-menu-item"
             name="hold-menu-item"
@@ -141,8 +141,8 @@ const YearAndDosStatus = ({
             </div>
           </Menu.Item>
         ) : null}
-        {result?.workflow?.[0].status != "PENDING" &&
-        result?.workflow?.[0].status != "COMPUTED" ? (
+        {result?.workflow?.[0]?.status != "PENDING" &&
+        result?.workflow?.[0]?.status != "COMPUTED" ? (
           <Menu.Item
             id="pending-menu-item"
             name="pending-menu-item"
@@ -158,14 +158,14 @@ const YearAndDosStatus = ({
             </div>
           </Menu.Item>
         ) : null}
-        {result?.workflow?.[0].status != "DECLINED" ? (
+        {result?.workflow?.[0]?.status != "DECLINED" ? (
           <Menu.Item
             id="decline-menu-item"
             name="decline-menu-item"
             className="ant-badge"
             key="3"
             onClick={() => {
-              handleActionClick("DECLINE");
+              handleActionClick("DECLINED");
               setMenuIsOpen(false);
             }}
           >
@@ -180,7 +180,7 @@ const YearAndDosStatus = ({
           </Menu.Item>
         ) : null}
 
-        {result?.workflow?.[0].status != "COMPLETED" ? (
+        {result?.workflow?.[0]?.status != "COMPLETED" ? (
           <Menu.Item
             id="complete-menu-item"
             name="complete-menu-item"
@@ -202,7 +202,7 @@ const YearAndDosStatus = ({
     );
     const menu2 = (
       <Menu id="menu-container2" name="menu-container2">
-        {result?.processedStatus != "HOLD" ? (
+        {result?.workflow?.[0]?.status != "HOLD" ? (
           <Menu.Item
             id="hold-menu-item2"
             name="hold-menu-item2"
@@ -217,7 +217,7 @@ const YearAndDosStatus = ({
             </div>
           </Menu.Item>
         ) : null}
-        {result?.processedStatus != "PENDING" ? (
+        {result?.workflow?.[0]?.status != "PENDING" ? (
           <Menu.Item
             id="pending-menu-item2"
             name="pending-menu-item2"
@@ -232,25 +232,25 @@ const YearAndDosStatus = ({
             </div>
           </Menu.Item>
         ) : null}
-        {result?.processedStatus != "DECLINE" ? (
+        {result?.workflow?.[0]?.status != "DECLINED" ? (
           <Menu.Item
             id="decline-menu-item2"
             name="decline-menu-item2"
             key="3"
             onClick={() => {
-              handleActionClick("DECLINE");
+              handleActionClick("DECLINED");
               setMenuIsOpen(false);
             }}
           >
             <div className="patient-status">
               <span className={`badge failed-text`} style={{ color: "red" }}>
-                DECLINED
+                DECLINE
               </span>
             </div>
           </Menu.Item>
         ) : null}
 
-        {result?.processedStatus != "COMPLETE" ? (
+        {result?.workflow?.[0]?.status != "COMPLETE" ? (
           <Menu.Item
           id="complete-menu-item2"
             name="complete-menu-item2"
@@ -284,7 +284,7 @@ const YearAndDosStatus = ({
     );
     const menu3 = (
       <Menu id="menu-container3" name="menu-container3">
-        {result?.processedStatus != "HOLD" ? (
+        {result?.workflow?.[0]?.status != "HOLD" ? (
           <Menu.Item
           id="hold-menu-item3"
             name="hold-menu-item3"
@@ -299,7 +299,7 @@ const YearAndDosStatus = ({
             </div>
           </Menu.Item>
         ) : null}
-        {result?.processedStatus != "PENDING" ? (
+        {result?.workflow?.[0]?.status != "PENDING" ? (
           <Menu.Item
           id="pending-menu-item3"
             name="pending-menu-item3"
@@ -314,13 +314,13 @@ const YearAndDosStatus = ({
             </div>
           </Menu.Item>
         ) : null}
-        {result?.processedStatus != "DECLINE" ? (
+        {result?.workflow?.[0]?.status != "DECLINED" ? (
           <Menu.Item
           id="decline-menu-item3"
             name="decline-menu-item3"
             key="3"
             onClick={() => {
-              handleActionClick("DECLINE");
+              handleActionClick("DECLINED");
               setMenuIsOpen(false);
             }}
             disabled={flagFirstData?.flag !== undefined ? false : true}
@@ -340,7 +340,7 @@ const YearAndDosStatus = ({
           </Menu.Item>
         ) : null}
 
-        {result?.processedStatus != "COMPLETE" ? (
+        {result?.workflow?.[0]?.status != "COMPLETE" ? (
           <Menu.Item
           id="complete-menu-item3"
             name="complete-menu-item3"
@@ -380,7 +380,7 @@ const YearAndDosStatus = ({
       setConfirmNotesModal(true);
       setIsValidAction("holdFunction");
     }
-    if (value == "DECLINE") {
+    if (value == "DECLINED") {
       setConfirmNotesModal(true);
       setIsValidAction("declineFunction");
     }
@@ -503,6 +503,7 @@ const YearAndDosStatus = ({
     getPatientIdDetails(patientDetailsResult?.data?.response);
     setPatienIdDetails(patientDetailsResult?.data?.response);
   }, [patientDetailsResult?.data?.response]);
+
   return (
     <>
       {patientDetailsResult?.data?.response && (
@@ -568,7 +569,7 @@ const YearAndDosStatus = ({
             </div>
           ) : userRole == "reviewer" || userRole == "admin" ? (
             <div className={`${visitStyles.yearactionbtnContainer} ant-badge`}>
-              {patienIdDetails?.workflow?.[0].status == "COMPLETED" ? (
+              {patienIdDetails?.workflow?.[0]?.status == "COMPLETED" ? (
                 <Dropdown
                   overlay={
                     activeTab == 3
@@ -593,7 +594,7 @@ const YearAndDosStatus = ({
                     </span>
                   </Button>
                 </Dropdown>
-              ) : patienIdDetails?.workflow?.[0].status == "DECLINED" ? (
+              ) : patienIdDetails?.workflow?.[0]?.status == "DECLINED" ? (
                 <Dropdown
                   overlay={
                     activeTab == 3
@@ -612,13 +613,13 @@ const YearAndDosStatus = ({
                       isDosStatus && `${visitStyles.statusBtn}`
                     } declinedBtnHcc ant-badge`}
                   >
-                    <span>DECLINED</span>
+                    <span>DECLINE</span>
                     <span style={{ marginLeft: "10px" }}>
                       <DownOutlined />
                     </span>
                   </Button>
                 </Dropdown>
-              ) : patienIdDetails?.workflow?.[0].status == "HOLD" ? (
+              ) : patienIdDetails?.workflow?.[0]?.status == "HOLD" ? (
                 <Dropdown
                   overlay={
                     activeTab == 3
@@ -643,9 +644,9 @@ const YearAndDosStatus = ({
                     </span>
                   </Button>
                 </Dropdown>
-              ) : patienIdDetails?.workflow?.[0].status == "PENDING" ||
-                patienIdDetails?.workflow?.[0].status == "COMPUTED" ||
-                patienIdDetails?.workflow?.[0].status == null ? (
+              ) : patienIdDetails?.workflow?.[0]?.status == "PENDING" ||
+                patienIdDetails?.workflow?.[0]?.status == "COMPUTED" ||
+                patienIdDetails?.workflow?.[0]?.status == null ? (
                 <Dropdown
                   overlay={
                     activeTab == 3
@@ -658,6 +659,7 @@ const YearAndDosStatus = ({
                   visible={menuIsOpen}
                   className={`ant-badge pendingBtn${visitStyles.pendingBtn}`}
                 >
+                  
                   <Button
                     type="primary"
                     className={`ant-badge ${visitStyles.pendingBtn} ${

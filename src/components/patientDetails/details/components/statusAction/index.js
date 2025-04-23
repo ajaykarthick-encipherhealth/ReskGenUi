@@ -45,7 +45,6 @@ const StatusAction = ({
   const [inputValue, setInputValue] = useState({
     notes: "",
   });
-
   const renderAuditMenu = (value) => {
     var value = (
       <Menu id="auditbtn">
@@ -161,7 +160,7 @@ const StatusAction = ({
     setSelectedRowsId(data);
     const menu = (
       <Menu id="auditbtn">
-        {result?.processedStatus != "HOLD" ? (
+        {result?.workflow?.[0]?.status != "HOLD" ? (
           <Menu.Item
             key="1"
             onClick={() => {
@@ -176,8 +175,8 @@ const StatusAction = ({
             </div>
           </Menu.Item>
         ) : null}
-        {result?.processedStatus != "PENDING" &&
-        result?.processedStatus != "COMPUTED" ? (
+        {result?.workflow?.[0]?.status != "PENDING" &&
+        result?.workflow?.[0]?.status != "COMPUTED" ? (
           <Menu.Item
             key="2"
             onClick={() => {
@@ -192,7 +191,7 @@ const StatusAction = ({
             </div>
           </Menu.Item>
         ) : null}
-        {result?.processedStatus != "DECLINED" ? (
+        {result?.workflow?.[0]?.status != "DECLINED" ? (
           <Menu.Item
             key="3"
             // disabled={flagFirstData?.flag !== undefined ? false : true}
@@ -220,7 +219,7 @@ const StatusAction = ({
           </Menu.Item>
         ) : null}
 
-        {result?.processedStatus != "COMPLETED" ? (
+        {result?.workflow?.[0]?.status != "COMPLETED" ? (
           <Menu.Item
             key="4"
             onClick={() => {
@@ -270,7 +269,7 @@ const StatusAction = ({
 
     const menu2 = (
       <Menu>
-        {result?.processedStatus != "HOLD" ? (
+        {result?.workflow?.[0]?.status != "HOLD" ? (
           <Menu.Item
             key="1"
             onClick={() => {
@@ -283,7 +282,7 @@ const StatusAction = ({
             </div>
           </Menu.Item>
         ) : null}
-        {result?.processedStatus != "PENDING" ? (
+        {result?.workflow?.[0]?.status != "PENDING" ? (
           <Menu.Item
             key="2"
             onClick={() => {
@@ -296,7 +295,7 @@ const StatusAction = ({
             </div>
           </Menu.Item>
         ) : null}
-        {result?.processedStatus != "DECLINE" ? (
+        {result?.workflow?.[0]?.status != "DECLINE" ? (
           <Menu.Item
             key="3"
             onClick={() => {
@@ -320,7 +319,7 @@ const StatusAction = ({
           </Menu.Item>
         ) : null}
 
-        {result?.processedStatus != "COMPLETE" ? (
+        {result?.workflow?.[0]?.status != "COMPLETE" ? (
           <Menu.Item
             key="4"
             onClick={() => {
@@ -350,7 +349,7 @@ const StatusAction = ({
     );
     const menu3 = (
       <Menu>
-        {result?.processedStatus != "HOLD" ? (
+        {result?.workflow?.[0]?.status != "HOLD" ? (
           <Menu.Item
             key="1"
             onClick={() => {
@@ -363,7 +362,7 @@ const StatusAction = ({
             </div>
           </Menu.Item>
         ) : null}
-        {result?.processedStatus != "PENDING" ? (
+        {result?.workflow?.[0]?.status != "PENDING" ? (
           <Menu.Item
             key="2"
             onClick={() => {
@@ -376,7 +375,7 @@ const StatusAction = ({
             </div>
           </Menu.Item>
         ) : null}
-        {result?.processedStatus != "DECLINE" ? (
+        {result?.workflow?.[0]?.status != "DECLINE" ? (
           <Menu.Item
             key="3"
             onClick={() => {
@@ -400,7 +399,7 @@ const StatusAction = ({
           </Menu.Item>
         ) : null}
 
-        {result?.processedStatus != "COMPLETE" ? (
+        {result?.workflow?.[0]?.status != "COMPLETE" ? (
           <Menu.Item
             key="4"
             onClick={() => {
@@ -729,7 +728,7 @@ const StatusAction = ({
               id="auditbtnContainer"
               name="auditbtnContainer"
             >
-              {patienIdDetails?.workflow?.[0].status == "COMPLETED" ? (
+              {patienIdDetails?.workflow?.[0]?.status == "COMPLETED" ? (
                 <Dropdown
                   id="auditbtn"
                   overlay={
@@ -754,7 +753,7 @@ const StatusAction = ({
                     </span>
                   </Button>
                 </Dropdown>
-              ) : patienIdDetails?.workflow?.[0].status == "DECLINED" ? (
+              ) : patienIdDetails?.workflow?.[0]?.status == "DECLINED" ? (
                 <div className={`col-xl-12`}>
                   <Dropdown
                     overlay={
@@ -779,7 +778,7 @@ const StatusAction = ({
                     </Button>
                   </Dropdown>
                 </div>
-              ) : patienIdDetails?.workflow?.[0].status == "HOLD" ? (
+              ) : patienIdDetails?.workflow?.[0]?.status == "HOLD" ? (
                 <Dropdown
                   overlay={
                     activeTab == 3
@@ -802,8 +801,8 @@ const StatusAction = ({
                     </span>
                   </Button>
                 </Dropdown>
-              ) : patienIdDetails?.workflow?.[0].status == "PENDING" ||
-                patienIdDetails?.workflow?.[0].status == "COMPUTED" ? (
+              ) : patienIdDetails?.workflow?.[0]?.status == "PENDING" ||
+                patienIdDetails?.workflow?.[0]?.status == "COMPUTED" ? (
                 <Dropdown
                   overlay={
                     activeTab == 3

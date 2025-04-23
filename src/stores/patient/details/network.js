@@ -23,7 +23,8 @@ export async function patientDetails(
   const options = {
     method: "GET",
   };
-  var url = `patientId=${patientId}&role=${roles?.toUpperCase()}&processedYear=${processedYear}`;
+     const userRoleId = getStorage("roleId");
+  var url = `patientId=${patientId}&role=${roles?.toUpperCase()}&processedYear=${processedYear}&roleId=${userRoleId}`;
   if (dos) {
     url = `patientId=${patientId}&role=${
       roles ? roles?.toUpperCase() : ""
@@ -31,7 +32,7 @@ export async function patientDetails(
   }
   try {
     const data = await requestPortal(
-      `dbservice/patient/compute/get?${url}
+      `dbservice/status/patient/compute/get?${url}&roleId=${userRoleId}
     `,
       options
     );
@@ -47,8 +48,9 @@ export async function patientIdDetails(patientId) {
   const options = {
     method: "GET",
   };
+   const userRoleId = getStorage("roleId");
   const data = await requestPortal(
-    `dbservice/patient/get?patientId=${patientId}`,
+    `dbservice/status/patient/get?patientId=${patientId}&roleId=${userRoleId}`,
     options
   );
   return data;

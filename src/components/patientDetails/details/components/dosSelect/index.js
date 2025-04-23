@@ -82,9 +82,7 @@ const DosSelect = ({
             ? moment(item?.dateOfService).format("MM-DD-YYYY")
             : "---"}
         </span>
-        <span>
-          {getStatusIcon(item?.processedStatus)}
-        </span>
+        <span>{getStatusIcon(item?.workflow?.[0]?.status)}</span>
       </div>
     </div>
   );
