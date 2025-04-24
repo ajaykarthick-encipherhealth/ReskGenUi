@@ -12,6 +12,7 @@ const RegularButton = ({
   htmlType,
   id,
   padding,
+  height
   
 }) => {
   return (
@@ -22,7 +23,7 @@ const RegularButton = ({
       }`}
       name={name}
       onClick={!htmlType && onClick}
-      style={{ width: width, padding: padding }}
+      style={{ width: width, padding: padding, height: height }}
       type={
         method == "reset" ? "reset" : method == "button" ? "button" : "submit"
       }

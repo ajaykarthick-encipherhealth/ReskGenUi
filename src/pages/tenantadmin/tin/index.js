@@ -11,9 +11,11 @@ import AppTable from "../../../components/tables";
 import { actions as allActions } from "../../../stores/reviewer/workqueue";
 import { setStorage } from "../../../utils/storages";
 import { statusOptions } from "../../reviewer/patients";
-import { getAccessTabItems } from "../../../utils/reusable";
+import { getAccessTabItems, getResponePopup } from "../../../utils/reusable";
+import { actions as tableAction } from "../../../stores/tableView";
 import styles from "../../../styles/visitdata.module.css";
 import { Button } from "antd";
+
 
 const commonFilterItems = [
   {
@@ -115,9 +117,14 @@ const Tin = ({
   activeTabName,
   getFilteApi,
   loading,
+  tableDynamicColumn,
+  tableDynamicColumnReset,
+  tableLoader,
   routedData,
+  getTableData,
+  data,
 }) => {
-  const tabs = getAccessTabItems({page:"Tin",tabsMenu:"tabMenuList"})
+  const tabs = getAccessTabItems({ page: "Tin", tabsMenu: "tabMenuList" });
   const activeTab = activeTabName || tabs?.[0] || "Active";
   const router = useRouter();
   const [activeFilters, setActiveFilters] = useState(commonFilterItems);
@@ -140,8 +147,10 @@ const Tin = ({
   const [pageNo, setPageNo] = useState(0);
   const [paginationFirst, setPaginationFirst] = useState(0);
   const [paramsFilter, setParamsFilter] = useState(null);
-  const [test, setTest] = useState(columns);
   const [open, setOpen] = useState(false);
+  const [test, setTest] = useState(data?.response?.metaDataDTO);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isResetting, setIsResetting] = useState(false);
 
   const gotoPatientDetails = (data) => {
     setStorage("patientId", data.patientId);
@@ -151,38 +160,93 @@ const Tin = ({
     });
     router.push("/tenantadmin/tin/tindetails?tab=Patients");
   };
+  // const handleTabs = (name) => {
+  //   getProjectActiveTab({
+  //     tinTabName: name,
+  //   });
+  //   setSelectedOption({});
+  // };
   const handleTabs = (name) => {
-    getProjectActiveTab({
-      tinTabName: name,
-    });
     setSelectedOption({});
+    getProjectActiveTab({ tinTabName: name }); 
+    setPageNo(0); 
+    getAllTins(name); 
   };
   const onPageChange = (e) => {
     setPaginationFirst(e.first);
     setPageNo(e.page);
     setPageSize(e.rows);
   };
-
   const showDrawer = () => {
+    setTest(data?.response?.metaDataDTO);
     setOpen(true);
   };
   const onClose = () => {
     setOpen(false);
   };
-
-  const getReviewerApi = async () => {
-    const res = await getFilteApi({
-      pageNo,
-      selectedOption,
-      sort: sort,
-    });
-  };
-  useEffect(() => {
-    setParamsFilter("check");
-    if (window !== "undefined" && paramsFilter) {
-      getReviewerApi();
+  const getPageIdByTab = (tab) => {
+    switch (tab) {
+      case "Active":
+        return "2d7cb7f7-6dad-41fb-970b-d805fb3f195f";
+      case "InActive":
+        return "6579b31a-aa46-42bf-abbb-c1e17e987a3a";
+      case "Provider":
+        return "c60dec23-bcfa-48ce-966e-dbf1ce3d41b2";
+      default:
+        return "";
     }
-  }, [selectedOption, pageNo, paramsFilter, sort]);
+  };
+
+  const pageIds =
+    activeTab === "Active"
+      ? "2d7cb7f7-6dad-41fb-970b-d805fb3f195f"
+      : activeTab === "InActive"
+      ? "6579b31a-aa46-42bf-abbb-c1e17e987a3a"
+      : activeTab === "Provider"
+      ? "c60dec23-bcfa-48ce-966e-dbf1ce3d41b2"
+      : "";
+  const handleSubmit = async () => {
+    setIsSubmitting(true);
+    const payload = {
+      pageId: pageIds,
+      headerNames: test
+        .filter((col) => col.active)
+        .map((col) => col.actualField),
+    };
+
+    try {
+      const response = await tableDynamicColumn({ payload });
+      if (response?.status === "SUCCESS") {
+        getAllTins();
+        onClose();
+        getResponePopup(response);
+      }
+      setIsSubmitting(false);
+    } catch (error) {
+      getResponePopup(error?.response);
+    }
+  };
+
+  const handleReset = async () => {
+    setIsResetting(true);
+    const payload = {
+      pageId: pageIds,
+    };
+
+    try {
+      const response = await tableDynamicColumnReset({ payload });
+      if (response?.status === "SUCCESS") {
+        getAllTins();
+        onClose();
+        getResponePopup(response);
+      }
+      setIsResetting(false);
+    } catch (error) {
+      getResponePopup(error?.response);
+    }
+  };
+
+
   const opt = {
     Priority: statusOptions,
   };
@@ -205,149 +269,26 @@ const Tin = ({
       setSort(sort);
     }
   }, [routedData]);
-  const mockData = [
-    {
-      batchName: "1001",
-      diagnosisCode: "I110",
-      description: "TESing fasdfsadfaserevvasde",
-      reason:
-        "Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
-      patientId: "EH-1001",
-      fileName: "John Jacobs",
-      createdData: "2024-03-11T12:16:30.091Z",
-      firstName: "john jacobs",
-      lastName: "Grey",
-      profileImageUrl:
-        "https://cogentaifiles.blob.core.windows.net/profileimages/0dc96dc1-8fc6-4dab-8986-bfa8b9da4729.jpeg",
-      priority: "pending",
-    },
-    {
-      batchName: "1001",
-      diagnosisCode: "I110",
-      description: "TESing fasdfsadfaserevvasde",
-      reason:
-        "Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
-      patientId: "EH-1001",
-      fileName: "John Jacobs",
-      createdData: "2024-03-11T12:16:30.091Z",
-      firstName: "john jacobs",
-      lastName: "Grey",
-      profileImageUrl:
-        "https://cogentaifiles.blob.core.windows.net/profileimages/0dc96dc1-8fc6-4dab-8986-bfa8b9da4729.jpeg",
-      priority: "pending",
-    },
-    {
-      batchName: "1001",
-      diagnosisCode: "I110",
-      description: "TESing fasdfsadfaserevvasde",
-      reason:
-        "Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
-      patientId: "EH-1001",
-      fileName: "John Jacobs",
-      createdData: "2024-03-11T12:16:30.091Z",
-      firstName: "john jacobs",
-      lastName: "Grey",
-      profileImageUrl:
-        "https://cogentaifiles.blob.core.windows.net/profileimages/0dc96dc1-8fc6-4dab-8986-bfa8b9da4729.jpeg",
-      priority: "pending",
-    },
-    {
-      batchName: "1001",
-      diagnosisCode: "I110",
-      description: "TESing fasdfsadfaserevvasde",
-      reason:
-        "Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
-      patientId: "EH-1001",
-      fileName: "John Jacobs",
-      createdData: "2024-03-11T12:16:30.091Z",
-      firstName: "john jacobs",
-      lastName: "Grey",
-      profileImageUrl:
-        "https://cogentaifiles.blob.core.windows.net/profileimages/0dc96dc1-8fc6-4dab-8986-bfa8b9da4729.jpeg",
-      priority: "pending",
-    },
-    {
-      batchName: "1001",
-      diagnosisCode: "I110",
-      description: "TESing fasdfsadfaserevvasde",
-      reason:
-        "Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
-      patientId: "EH-1001",
-      fileName: "John Jacobs",
-      createdData: "2024-03-11T12:16:30.091Z",
-      firstName: "john jacobs",
-      lastName: "Grey",
-      profileImageUrl:
-        "https://cogentaifiles.blob.core.windows.net/profileimages/0dc96dc1-8fc6-4dab-8986-bfa8b9da4729.jpeg",
-      priority: "pending",
-    },
-    {
-      batchName: "1001",
-      diagnosisCode: "I110",
-      description: "TESing fasdfsadfaserevvasde",
-      reason:
-        "Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
-      patientId: "EH-1001",
-      fileName: "John Jacobs",
-      createdData: "2024-03-11T12:16:30.091Z",
-      firstName: "john jacobs",
-      lastName: "Grey",
-      profileImageUrl:
-        "https://cogentaifiles.blob.core.windows.net/profileimages/0dc96dc1-8fc6-4dab-8986-bfa8b9da4729.jpeg",
-      priority: "pending",
-    },
-    {
-      batchName: "1001",
-      diagnosisCode: "I110",
-      description: "TESing fasdfsadfaserevvasde",
-      reason:
-        "Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
-      patientId: "EH-1001",
-      fileName: "John Jacobs",
-      createdData: "2024-03-11T12:16:30.091Z",
-      firstName: "john jacobs",
-      lastName: "Grey",
-      profileImageUrl:
-        "https://cogentaifiles.blob.core.windows.net/profileimages/0dc96dc1-8fc6-4dab-8986-bfa8b9da4729.jpeg",
-      priority: "decline",
-    },
-    {
-      batchName: "1001",
-      diagnosisCode: "I110",
-      description: "TESing fasdfsadfaserevvasde",
-      reason:
-        "Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
-      patientId: "EH-1001",
-      fileName: "John Jacobs",
-      createdData: "2024-03-11T12:16:30.091Z",
-      firstName: "John Jacobs",
-      priority: "approved",
-    },
-    {
-      batchName: "1001",
-      diagnosisCode: "I110",
-      description: "TESing fasdfsadfaserevvasde",
-      reason:
-        "Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
-      patientId: "EH-1001",
-      fileName: "John Jacobs",
-      createdData: "2024-03-11T12:16:30.091Z",
-      firstName: "John Jacobs",
-      priority: "pending",
-    },
-    {
-      batchName: "1001",
-      diagnosisCode: "I110",
-      description: "TESing fasdfsadfaserevvasde",
-      reason:
-        "Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
-      patientId: "EH-1001",
-      fileName: "John Jacobs",
-      createdData: "2024-03-11T12:16:30.091Z",
-      firstName: "John Jacobs",
-      priority: "pending",
-    },
-  ];
+const getAllTins = async (tabOverride) => {
+  const currentTab = tabOverride || activeTab;
+  const pageId = getPageIdByTab(currentTab);
+
+  await getTableData({
+    pageId,
+    pageNo,
+    pageSize: 15,
+    roleId: "",
+  });
+};
+
+
+  useEffect(() => {
+    setParamsFilter("check");
+    if (paramsFilter === "check") {
+      getAllTins();
+    }
+  }, [pageNo, paramsFilter]);
+  console.log(activeTab, "activeTab");
 
   return (
     <div className={`show`}>
@@ -374,6 +315,7 @@ const Tin = ({
         </div>
 
         <div className="d-flex align-items-center justify-content-end gap-4">
+
           <div className={styles.font}>Total Tin : 45</div>
           <div className={styles.font}>Active Tin : 45</div>
           <div className={styles.font}>InActive Tin : 45</div>
@@ -389,7 +331,7 @@ const Tin = ({
 
       <div className=" mt-3  container-fluid table-responsive active-projects task-table">
         <div className="d-flex">
-          <div style={{ width: "90%" }}>
+          <div style={{ width: "100%" }}>
             <ReusableFilters
               showFilter={true}
               setActiveFilters={setActiveFilters}
@@ -401,8 +343,20 @@ const Tin = ({
               opt={opt}
               columns={columns}
               commonFilterItems={commonFilterItems}
+              //customize table
+              open={open}
+              onClose={onClose}
+              selectedColumns={test}
+              setSelectedColumns={setTest}
+              showCustomizeTable={true}
+              showDrawer={showDrawer}
+              handleSubmit={handleSubmit}
+              handleReset={handleReset}
+              isSubmitting={isSubmitting}
+              isResetting={isResetting}
             />
           </div>
+
           <div
             id="table-btn"
             name="table-btn"
@@ -417,22 +371,61 @@ const Tin = ({
               Table Customization
             </Button>
           </div>
+
         </div>
         <div className="profile-tab  mt-3">
           <div className="mt-3">
-            <AppTable
-              data={mockData}
-              column={test.filter((item) => item.isShow)}
-              loader={loading}
-              onRowClick={gotoPatientDetails}
-              pagination={false}
-              setSort={setSort}
-              sort={sort}
-              first={pageNo === 0 ? 0 : paginationFirst}
-              totalRecords={0}
-              row={15}
-              onPageChange={onPageChange}
-            />
+            {activeTab === "Active" && (
+              <AppTable
+                data={data?.response?.pageResponse?.content}
+                column={data?.response?.metaDataDTO.filter(
+                  (item) => item.active
+                )}
+                loader={tableLoader}
+                onRowClick={gotoPatientDetails}
+                pagination={false}
+                setSort={setSort}
+                sort={sort}
+                first={pageNo === 0 ? 0 : paginationFirst}
+                totalRecords={0}
+                row={15}
+                onPageChange={onPageChange}
+              />
+            )}
+            {activeTab === "InActive" && (
+              <AppTable
+                data={data?.response?.pageResponse?.content}
+                column={data?.response?.metaDataDTO.filter(
+                  (item) => item.active
+                )}
+                loader={tableLoader}
+                onRowClick={gotoPatientDetails}
+                pagination={false}
+                setSort={setSort}
+                sort={sort}
+                first={pageNo === 0 ? 0 : paginationFirst}
+                totalRecords={0}
+                row={15}
+                onPageChange={onPageChange}
+              />
+            )}
+            {activeTab === "Providers" && (
+              <AppTable
+                data={data?.response?.pageResponse?.content}
+                column={data?.response?.metaDataDTO.filter(
+                  (item) => item.active
+                )}
+                loader={tableLoader}
+                onRowClick={gotoPatientDetails}
+                pagination={false}
+                setSort={setSort}
+                sort={sort}
+                first={pageNo === 0 ? 0 : paginationFirst}
+                totalRecords={0}
+                row={15}
+                onPageChange={onPageChange}
+              />
+            )}
           </div>
         </div>
         <div>
@@ -454,10 +447,15 @@ const enhancer = connect(
   (state) => ({
     activeTabName: state.tenantAdmin.tin?.activeTabRoutedData?.tinTabName,
     routedData: state.tenantAdmin?.tin?.activeTabRoutedData?.tinFilter,
+    data: state?.tableView?.tableView?.data,
+    tableLoader: state?.tableView?.tableViewLoading,
   }),
   {
     getProjectActiveTab: tinActions.getProjectActiveTab,
     getFilteApi: allActions.getReviewerPatients,
+    getTableData: tableAction.tableViewAction,
+    tableDynamicColumn: tableAction.tableDynamicColumn,
+    tableDynamicColumnReset: tableAction.tableDynamicColumnReset,
   }
 );
 

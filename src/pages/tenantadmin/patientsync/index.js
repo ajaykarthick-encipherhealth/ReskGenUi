@@ -468,6 +468,8 @@ const PatientSync = ({
             name="Upload"
             onClick={handleFhirUpload}
             padding={"5px 10px"}
+            height={"35px"}
+            width={"120px"}
           />
         );
       case "PDF":
@@ -476,19 +478,31 @@ const PatientSync = ({
             name="Create Batch"
             onClick={handleUploadButtonClick}
             padding={"5px 10px"}
+            height={"35px"}
+            width={"120px"}
           />
         );
       case "Patient Roaster":
       case "Practice Roaster":
       case "Provider Roaster":
       case "Tin Roaster":
-        return <RegularButton name="Add Roaster" onClick={handleRoasterBtn} padding={"5px 10px"} />;
+        return (
+          <RegularButton
+            name="Add Roaster"
+            onClick={handleRoasterBtn}
+            padding={"5px 10px"}
+            height={"35px"}
+            width={"120px"}
+          />
+        );
       default:
         return (
           <RegularButton
             name="Upload"
             onClick={handleRoasterBtn}
             padding={"5px 10px"}
+            height={"35px"}
+            width={"120px"}
           />
         );
     }
@@ -871,10 +885,13 @@ const PatientSync = ({
                     <div className="card-body p-0">
                       <div className="table-responsive active-projects task-table">
                         <div
-                          className="d-flex justify-content-between"
+                          className="d-flex"
                           style={{ width: "100%", margin: "auto" }}
                         >
-                          <div className="d-flex flex-wrap col-10 ">
+                          <div
+                            className="d-flex flex-wrap col-10 "
+                            style={{ width: "85%" }}
+                          >
                             <div className="default-filter-size col-2 col-xl-2 col-md-4 mx-1">
                               <label>Search by Name or ID</label>
                               <div
@@ -1011,29 +1028,45 @@ const PatientSync = ({
                                 </div>
                               ))}
                           </div>
-                          <div className="w-100 d-flex justify-content-end align-items-end">
-                            {reportActiveTab === "Tin Roaster" ||
-                            reportActiveTab === "Patient Roaster" ||
-                            reportActiveTab === "Practice Roaster" ||
-                            reportActiveTab === "Provider Roaster" ? (
-                              <ReusableFilters
-                                setActiveFilters={setActiveFilters}
-                                open={open}
-                                onClose={onClose}
-                                selectedColumns={test}
-                                setSelectedColumns={setTest}
-                                showCustomizeTable={true}
-                                showDrawer={showDrawer}
-                                handleSubmit={handleSubmitInsert}
-                                handleReset={handleReset}
-                                isSubmitting={isSubmitting}
-                                isResetting={isResetting}
-                              />
-                            ) : null}
-                            {renderButton()}
-                          </div>
+                          <div
+                            className="d-flex justify-content-center align-items-center"
+                            style={{ width: "10%" }}
+                          >
+             
+                            <div className=" mt-4">{renderButton()}</div>
+                            <div
+                              id="table-btn"
+                              name="table-btn"
+                              className="d-flex justify-content-center align-items-center  mt-4"
+                            >
+                              <Button
+                                data-testid="table-custom"
+                                name="table-custom"
+                                onClick={showDrawer}
+                                className="btn btn-sm w-full text-ellipsis tableButton"
+                              >
+                                Table Customization
+                              </Button>
+                            </div>
+                          </div>{" "}
                         </div>
-
+                        {reportActiveTab === "Tin Roaster" ||
+                        reportActiveTab === "Patient Roaster" ||
+                        reportActiveTab === "Practice Roaster" ||
+                        reportActiveTab === "Provider Roaster" ? (
+                          <ReusableFilters
+                            setActiveFilters={setActiveFilters}
+                            open={open}
+                            onClose={onClose}
+                            selectedColumns={test}
+                            setSelectedColumns={setTest}
+                            showDrawer={showDrawer}
+                            handleSubmit={handleSubmitInsert}
+                            handleReset={handleReset}
+                            isSubmitting={isSubmitting}
+                            isResetting={isResetting}
+                          />
+                        ) : null}
                         <div
                           id="task-tbl_wrapper"
                           className="dataTables_wrapper no-footer"

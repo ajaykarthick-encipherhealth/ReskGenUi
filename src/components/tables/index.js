@@ -504,8 +504,11 @@ const TableRow = ({
             </td>
           );
         }
-
+    console.log(columnItem?.actualField, "columnItem");
+    console.log(item["coder-1AllocatedByName"], "item");
+    console.log(item,"test")
         if (columnItem.isImage) {
+      
           return (
             <td
               style={{
@@ -520,6 +523,7 @@ const TableRow = ({
                   : Style.childBorder
               } `}
             >
+
               {item.accountStatus === false ? (
                 <span
                   style={{

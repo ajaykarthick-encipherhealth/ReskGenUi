@@ -13,6 +13,8 @@ import { getResponePopup } from "../../../utils/reusable";
 import ReusableFilters from "../../../components/reusableFilters";
 import { PlusCircleFilled } from "@ant-design/icons";
 import AppTable from "../../../components/tables";
+import { actions as tableAction } from "../../../stores/tableView";
+
 const options3 = [
   { value: "true", label: "Enabled" },
   { value: "false", label: "Disabled" },
@@ -44,6 +46,11 @@ const UserList = ({
   getEnableUser,
   getTenantAdminSelectUserList,
   selectUserList,
+  getTableData,
+  data,
+  tableDynamicColumn,
+  tableDynamicColumnReset,
+  tableLoader,
 }) => {
   const commonFilterItems = [
     {
@@ -182,7 +189,10 @@ const UserList = ({
   const [open, setOpen] = useState(false);
   const [openManager, setOpenManager] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-
+  const [openTable, setOpenTable] = useState(false);
+  const [test, setTest] = useState(data?.response?.metaDataDTO);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isResetting, setIsResetting] = useState(false);
   const handleChange = (e) => {
     let value = e.target.value;
     const val = getDisplayValue(value);
@@ -221,12 +231,11 @@ const UserList = ({
     userFormData.passwordIv = encryptedData.iv;
     const response = await getAddUser(userFormData, setFormData);
     if (response?.status == "SUCCESS") {
-      getAllUsersList({
-        pageNo: 0,
-        searchText,
-        selectedDateRanges,
-        selectedOption,
-        sort: sort,
+      getTableData({
+        pageId: "8e4f1d2a-7b3c-45e6-9f1d-2a7b3c45e6f1",
+        pageNo,
+        pageSize: 15,
+        roleId: "",
       });
       setFormData({
         firstName: "",
@@ -265,7 +274,7 @@ const UserList = ({
       },
     }));
   };
- 
+
   const handleSwitchToggle = async (item, checked) => {
     if (isLoading) return;
     setIsLoading(true);
@@ -280,7 +289,12 @@ const UserList = ({
         user: item,
       });
       if (res?.status === "SUCCESS") {
-        getAllUsersList({ pageCount: 0 });
+         getTableData({
+           pageId: "8e4f1d2a-7b3c-45e6-9f1d-2a7b3c45e6f1",
+           pageNo,
+           pageSize: 15,
+           roleId: "",
+         });
       }
     } catch (error) {
       console.error("Error toggling switch:", error);
@@ -409,7 +423,53 @@ const UserList = ({
       </div>
     );
   };
+  const showDrawer = () => {
+    setTest(data?.response?.metaDataDTO);
+    setOpenTable(true);
+  };
+  const onClose = () => {
+    setOpenTable(false);
+  };
+  const handleSubmitInsert = async () => {
+    setIsSubmitting(true);
+    const payload = {
+      pageId: "8e4f1d2a-7b3c-45e6-9f1d-2a7b3c45e6f1",
+      headerNames: test
+        .filter((col) => col.active)
+        .map((col) => col.actualField),
+    };
 
+    try {
+      const response = await tableDynamicColumn({ payload });
+      if (response?.status === "SUCCESS") {
+        getAllTracking();
+        onClose();
+        getResponePopup(response);
+      }
+      setIsSubmitting(false);
+    } catch (error) {
+      getResponePopup(error?.response);
+    }
+  };
+
+  const handleReset = async () => {
+    setIsResetting(true);
+    const payload = {
+      pageId: "8e4f1d2a-7b3c-45e6-9f1d-2a7b3c45e6f1",
+    };
+
+    try {
+      const response = await tableDynamicColumnReset({ payload });
+      if (response?.status === "SUCCESS") {
+        getAllTracking();
+        onClose();
+        getResponePopup(response);
+      }
+      setIsResetting(false);
+    } catch (error) {
+      getResponePopup(error?.response);
+    }
+  };
   const handleSave = async () => {
     if (selectedRoles?.length > 0) {
       setRoleChangeLoader(true);
@@ -422,7 +482,12 @@ const UserList = ({
         field: "addRole",
       });
       if (res?.status === "SUCCESS") {
-        getAllUsersList({ pageCount: 0 });
+         getTableData({
+           pageId: "8e4f1d2a-7b3c-45e6-9f1d-2a7b3c45e6f1",
+           pageNo,
+           pageSize: 15,
+           roleId: "",
+         });
         setPopoverVisible(null);
         setPageNo(0);
         setRoleChangeLoader(false);
@@ -454,12 +519,11 @@ const UserList = ({
     setLocalUserId(uId);
     setLocalOrgId(orgId);
     setUseAdd(false);
-    getAllUsersList({
+    getTableData({
+      pageId: "8e4f1d2a-7b3c-45e6-9f1d-2a7b3c45e6f1",
       pageNo,
-      searchText,
-      selectedDateRanges,
-      selectedOption,
-      sort: sort,
+      pageSize: 15,
+      roleId: "",
     });
   }, [pageNo, searchText, sort, selectedDateRanges, selectedOption]);
 
@@ -484,6 +548,7 @@ const UserList = ({
     role: RoleList,
     status: options3,
   };
+  console.log(data, "data");
   return (
     <div className={`show `}>
       <Header />
@@ -513,12 +578,25 @@ const UserList = ({
                   addUser={false}
                   btnTitle={"Add User"}
                   form={form}
+                  //customize table
+                  open={openTable}
+                  onClose={onClose}
+                  selectedColumns={test}
+                  setSelectedColumns={setTest}
+                  commonFilterItems={commonFilterItems}
+                  showCustomizeTable={true}
+                  showDrawer={showDrawer}
+                  handleSubmit={handleSubmitInsert}
+                  handleReset={handleReset}
+                  isSubmitting={isSubmitting}
+                  isResetting={isResetting}
                 />
               </div>
+
               <div
                 id="user-btn"
                 name="user-btn"
-                className="d-flex justify-content-center align-items-center mt-3"
+                className="d-flex justify-content-center align-items-center mt-4 mx-2"
                 style={{ width: "10%" }}
               >
                 <Button
@@ -541,21 +619,24 @@ const UserList = ({
                   <PlusCircleFilled /> Add User
                 </Button>
               </div>
+             
             </div>
             <div id="task-tbl_wrapper" className="dataTables_wrapper no-footer">
               <>
                 <AppTable
-                  data={usersListData?.data?.response?.content}
-                  column={columns}
-                  loader={loading}
+                  data={data?.response?.pageResponse?.content}
+                  column={data?.response?.metaDataDTO.filter(
+                    (item) => item.active
+                  )}
+                  loader={tableLoader}
                   switchStates={switchStates}
                   onSwitchToggle={handleSwitchToggle}
-                  totalLength={usersListData?.data?.response?.totalElements}
+                  // totalLength={usersListData?.data?.response?.totalElements}
                   pageNumber={pageNo}
-                  pagination={false}
+                  // pagination={false}
                   disableUser={true}
                   rowBackground={true}
-                  totalPages={usersListData?.data?.response?.totalPages}
+                  // totalPages={usersListData?.data?.response?.totalPages}
                   setRowData={setRowData}
                   setPopoverVisible={setPopoverVisible}
                   setSelectedRoles={setSelectedRoles}
@@ -569,7 +650,7 @@ const UserList = ({
                   name="user-paginator"
                   first={pageNo === 0 ? 0 : paginationFirst}
                   rows={15}
-                  totalRecords={totalElements}
+                  totalRecords={data?.response?.pageResponse?.totalElements}
                   onPageChange={onPageChange}
                 />
               </>
@@ -1028,6 +1109,8 @@ const enhancer = connect(
     usersListData: state?.tenantAdmin?.users?.allUsers,
     loading: state?.tenantAdmin?.users?.allUsersLoading,
     selectUserList: state?.admin.dashboard?.managersList,
+    data: state?.tableView?.tableView?.data,
+    tableLoader: state?.tableView?.tableViewLoading,
   }),
   {
     getAllOrganizationList: tenantAdminAction.getAllOrganizationAction,
@@ -1036,6 +1119,9 @@ const enhancer = connect(
     addPatients: tenantAdminAction.addPatient,
     getEnableUser: tenantAdminAction.getEnableUser,
     getTenantAdminSelectUserList: adminAction.getSelectUserList,
+    getTableData: tableAction.tableViewAction,
+    tableDynamicColumn: tableAction.tableDynamicColumn,
+    tableDynamicColumnReset: tableAction.tableDynamicColumnReset,
   }
 );
 export default enhancer(UserList);
