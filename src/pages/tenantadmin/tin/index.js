@@ -357,21 +357,6 @@ const getAllTins = async (tabOverride) => {
             />
           </div>
 
-          <div
-            id="table-btn"
-            name="table-btn"
-            className="d-flex justify-content-center align-items-center   mt-4"
-          >
-            <Button
-              data-testid="table-custom"
-              name="table-custom"
-              // onClick={showDrawer}
-              className="btn btn-sm w-full text-ellipsis tableButton"
-            >
-              Table Customization
-            </Button>
-          </div>
-
         </div>
         <div className="profile-tab  mt-3">
           <div className="mt-3">
