@@ -278,6 +278,7 @@ const getAllTins = async (tabOverride) => {
     pageNo,
     pageSize: 15,
     roleId: "",
+    projectId : "test",
   });
 };
 
@@ -288,7 +289,7 @@ const getAllTins = async (tabOverride) => {
       getAllTins();
     }
   }, [pageNo, paramsFilter]);
-  console.log(activeTab, "activeTab");
+
 
   return (
     <div className={`show`}>
@@ -315,7 +316,6 @@ const getAllTins = async (tabOverride) => {
         </div>
 
         <div className="d-flex align-items-center justify-content-end gap-4">
-
           <div className={styles.font}>Total Tin : 45</div>
           <div className={styles.font}>Active Tin : 45</div>
           <div className={styles.font}>InActive Tin : 45</div>
@@ -356,7 +356,6 @@ const getAllTins = async (tabOverride) => {
               isResetting={isResetting}
             />
           </div>
-
         </div>
         <div className="profile-tab  mt-3">
           <div className="mt-3">
@@ -372,7 +371,7 @@ const getAllTins = async (tabOverride) => {
                 setSort={setSort}
                 sort={sort}
                 first={pageNo === 0 ? 0 : paginationFirst}
-                totalRecords={0}
+                totalRecords={data?.response?.pageResponse?.totalElements}
                 row={15}
                 onPageChange={onPageChange}
               />
@@ -389,7 +388,7 @@ const getAllTins = async (tabOverride) => {
                 setSort={setSort}
                 sort={sort}
                 first={pageNo === 0 ? 0 : paginationFirst}
-                totalRecords={0}
+                totalRecords={data?.response?.pageResponse?.totalElements}
                 row={15}
                 onPageChange={onPageChange}
               />
@@ -406,7 +405,7 @@ const getAllTins = async (tabOverride) => {
                 setSort={setSort}
                 sort={sort}
                 first={pageNo === 0 ? 0 : paginationFirst}
-                totalRecords={0}
+                totalRecords={data?.response?.pageResponse?.totalElements}
                 row={15}
                 onPageChange={onPageChange}
               />
