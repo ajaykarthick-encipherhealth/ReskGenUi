@@ -20,6 +20,9 @@ import { serverControl } from "../utils/config";
 import { authRequestPortal, requestPortal } from "../utils/network";
 import Swal from "sweetalert2";
 import InternetError from "../utils/internetError";
+import { MsalProvider } from "@azure/msal-react";
+import { msalInstance } from "../../lib/msalInstance";
+import { clearInactivityTimer, resetInactivityTimer, startInactivityTimer } from "../utils/inactiveTracker";
 
 config.autoAddCss = false;
 
@@ -52,91 +55,89 @@ function MyApp({ Component, pageProps }) {
     return ["TABLE", "TR", "TD", "TH"].includes(element.tagName);
   };
 
-const applyHoverEffect = (target, isEntering, pathname) => {
-  if (
-    target.id === "badge" ||
-    target.classList.contains("ant-badge") ||
-    target.classList.contains("timeline-panel") ||
-    target.classList.contains("ant-badge-count") ||
-    target.classList.contains("ant-steps-item-container") ||
-    target.classList.contains("fileprocessingstepper") ||
-    target.classList.contains("fileprocessing") ||
-    target.classList.contains("ant-progress-inner") ||
-    target.closest(".ant-select-dropdown") || 
-    target.closest(".ant-select-selector") ||
-    target.closest(".ant-spin")
-  ) {
-    return;
-  }
-
-  if (
-    target.classList.contains("ant-steps-item") &&
-    target.classList.contains("ant-steps-item-process") &&
-    target.classList.contains("ant-steps-item-active") &&
-    target.classList.contains("ant-progress-circle-path")
-  ) {
-    return;
-  }
-
-  if (
-    (target.tagName === "A" ||
-      target.tagName === "BUTTON" ||
-      target.classList.contains("cursor-pointer") ||
-      window.getComputedStyle(target).cursor === "pointer") &&
-    !isTableElement(target)
-  ) {
-    if (isEntering) {
-      target.style.transition = "all 0.5s ease-in-out";
-      if (pathname.endsWith("/fileprocessing")) {
-        target.style.removeProperty("transform");
-        return;
-      }
-
-      if (target.id === "auditbtn") {
-        target.style.transform = "scale(1)";
-      } else if (target.id === "dosSelect") {
-        target.style.transform = "scale(1.01)";
-      } else {
-        target.style.transform = pathname.endsWith("/report")
-          ? "scale(1.01)"
-          : pathname.endsWith("/details")
-          ? "scale(1.05)"
-          : "scale(1.02)";
-      }
-      target.classList.add("hover-effect");
-    } else {
-      target.classList.add("hover-effect-remove");
-      target.style.transform = "scale(1)";
-      setTimeout(() => {
-        target.classList.remove("hover-effect", "hover-effect-remove");
-      }, 300);
-    }
-  }
-};
-
-
-  useEffect(() => {
-  const handleClick = (event) => {
-    if (router.pathname.endsWith("/report")) {
+  const applyHoverEffect = (target, isEntering, pathname) => {
+    if (
+      target.id === "badge" ||
+      target.classList.contains("ant-badge") ||
+      target.classList.contains("timeline-panel") ||
+      target.classList.contains("ant-badge-count") ||
+      target.classList.contains("ant-steps-item-container") ||
+      target.classList.contains("fileprocessingstepper") ||
+      target.classList.contains("fileprocessing") ||
+      target.classList.contains("ant-progress-inner") ||
+      target.closest(".ant-select-dropdown") ||
+      target.closest(".ant-select-selector") ||
+      target.closest(".ant-spin")
+    ) {
       return;
     }
 
-    let target = event.target;
-    while (target && target !== document.body) {
-      if (
-        (target.tagName === "A" ||
-          target.tagName === "BUTTON" ||
-          target.classList.contains("cursor-pointer") ||
-          window.getComputedStyle(target).cursor === "pointer") &&
-        !isTableElement(target)
-      ) {
-        // target.classList.add("smooth-transition");
-        break;
+    if (
+      target.classList.contains("ant-steps-item") &&
+      target.classList.contains("ant-steps-item-process") &&
+      target.classList.contains("ant-steps-item-active") &&
+      target.classList.contains("ant-progress-circle-path")
+    ) {
+      return;
+    }
+
+    if (
+      (target.tagName === "A" ||
+        target.tagName === "BUTTON" ||
+        target.classList.contains("cursor-pointer") ||
+        window.getComputedStyle(target).cursor === "pointer") &&
+      !isTableElement(target)
+    ) {
+      if (isEntering) {
+        target.style.transition = "all 0.5s ease-in-out";
+        if (pathname.endsWith("/fileprocessing")) {
+          target.style.removeProperty("transform");
+          return;
+        }
+
+        if (target.id === "auditbtn") {
+          target.style.transform = "scale(1)";
+        } else if (target.id === "dosSelect") {
+          target.style.transform = "scale(1.01)";
+        } else {
+          target.style.transform = pathname.endsWith("/report")
+            ? "scale(1.01)"
+            : pathname.endsWith("/details")
+            ? "scale(1.05)"
+            : "scale(1.02)";
+        }
+        target.classList.add("hover-effect");
+      } else {
+        target.classList.add("hover-effect-remove");
+        target.style.transform = "scale(1)";
+        setTimeout(() => {
+          target.classList.remove("hover-effect", "hover-effect-remove");
+        }, 300);
       }
-      target = target.parentElement;
     }
   };
 
+  useEffect(() => {
+    const handleClick = (event) => {
+      if (router.pathname.endsWith("/report")) {
+        return;
+      }
+
+      let target = event.target;
+      while (target && target !== document.body) {
+        if (
+          (target.tagName === "A" ||
+            target.tagName === "BUTTON" ||
+            target.classList.contains("cursor-pointer") ||
+            window.getComputedStyle(target).cursor === "pointer") &&
+          !isTableElement(target)
+        ) {
+          // target.classList.add("smooth-transition");
+          break;
+        }
+        target = target.parentElement;
+      }
+    };
 
     const handleMouseEnter = (event) => {
       if (event.target instanceof Element) {
@@ -226,31 +227,31 @@ const applyHoverEffect = (target, isEntering, pathname) => {
     // }
   }, []);
 
-  useEffect(() => {
-    const currentPath = window.location.pathname;
-    fetch(currentPath)
-      .then((response) => {
-        if (!response.ok) {
-          setShowTerminal(false);
-        } else {
-          if (
-            currentPath === "/" ||
-            currentPath?.includes("/login") ||
-            currentPath?.includes("/ehrlogin") ||
-            currentPath?.includes("/twofactorauthentication/") ||
-            currentPath?.includes("search")
-            // currentPath?.includes("/reviewer/patients/details")
-          ) {
-            setShowTerminal(false);
-          } else {
-            setShowTerminal(true);
-          }
-        }
-      })
-      .catch((error) => {
-        console.error("Error fetching data:", error);
-      });
-  }, [router]);
+  // useEffect(() => {
+  //   const currentPath = window.location.pathname;
+  //   fetch(currentPath)
+  //     .then((response) => {
+  //       if (!response.ok) {
+  //         setShowTerminal(false);
+  //       } else {
+  //         if (
+  //           currentPath === "/" ||
+  //           currentPath?.includes("/login") ||
+  //           currentPath?.includes("/ehrlogin") ||
+  //           currentPath?.includes("/twofactorauthentication/") ||
+  //           currentPath?.includes("search")
+  //           // currentPath?.includes("/reviewer/patients/details")
+  //         ) {
+  //           setShowTerminal(false);
+  //         } else {
+  //           setShowTerminal(true);
+  //         }
+  //       }
+  //     })
+  //     .catch((error) => {
+  //       console.error("Error fetching data:", error);
+  //     });
+  // }, [router]);
 
   useEffect(() => {
     let intervalId;
@@ -307,6 +308,80 @@ const applyHoverEffect = (target, isEntering, pathname) => {
       document.removeEventListener("visibilitychange", handleVisibilityChange);
     };
   }, [showTerminal]);
+
+  // sso changes
+
+  // Inactivity logout logic
+  useEffect(() => {
+    const account = msalInstance.getAllAccounts()[0];
+    if (!account) return;
+
+    const handleLogout = () => {
+      console.log("Logging out due to inactivity");
+      ssoLogout();
+    };
+
+    const handleActivity = () => {
+      resetInactivityTimer(handleLogout);
+    };
+
+    const activityEvents = ["mousemove", "keydown", "scroll", "click"];
+    activityEvents.forEach((event) =>
+      window.addEventListener(event, handleActivity)
+    );
+    startInactivityTimer(handleLogout);
+
+    return () => {
+      activityEvents.forEach((event) =>
+        window.removeEventListener(event, handleActivity)
+      );
+      clearInactivityTimer();
+    };
+  }, [router.pathname]);
+
+  useEffect(() => {
+    const account = msalInstance.getAllAccounts()[0];
+
+    if (!account) return;
+
+    let previousToken = null;
+
+    const refreshToken = async () => {
+      try {
+        const tokenResponse = await msalInstance.acquireTokenSilent({
+          account,
+          scopes: ["User.Read", "offline_access"],
+          forceRefresh: true,
+        });
+        const newToken = tokenResponse.accessToken;
+
+        if (previousToken && previousToken !== newToken) {
+          console.log("✅ Access token has been refreshed.");
+        }
+        setStorage("token", tokenResponse.idToken);
+        previousToken = newToken;
+
+        const tokenParts = newToken.split(".");
+        const payload = JSON.parse(atob(tokenParts[1]));
+        console.log(
+          "🔒 Token expires at:",
+          new Date(payload.exp * 1000).toISOString(),
+          payload
+        );
+      } catch (error) {
+        console.error("❌ Silent token refresh failed. Logging out...");
+        ssoLogout();
+      }
+    };
+
+    refreshToken(); // initial run
+    const interval = setInterval(refreshToken, 16 * 30 * 1000);
+
+    return () => clearInterval(interval);
+  }, [router.pathname]);
+
+  // sso changes
+
   const hideFooterPaths = [
     "/admin/patients/details",
     "/reviewer/patients/details",
@@ -318,7 +393,7 @@ const applyHoverEffect = (target, isEntering, pathname) => {
     "/reviewer/report/reportdetails",
     "/supervisor/report/reportdetails",
     "/tenantadmin/report/reportdetails",
-    "/tenantadmin/tracking/details"
+    "/tenantadmin/tracking/details",
   ];
   const showFooter = !hideFooterPaths.includes(router.pathname);
   useEffect(() => {
@@ -368,17 +443,19 @@ const applyHoverEffect = (target, isEntering, pathname) => {
     //     {showFooter && showTerminal && <Footer />}
     //   </Provider>
     // </PrimeReactProvider>
-    <PrimeReactProvider>
-      <Provider store={store}>
-        {showTerminal && <AICHAT openMsg={true} />}
-        <span>
-          <Component {...pageProps} />
-        </span>
-        <InternetError />
-        {loginCheck == true && <ConnectWebSocket />}
-        {showFooter && showTerminal && <Footer />}
-      </Provider>
-    </PrimeReactProvider>
+    <MsalProvider instance={msalInstance}>
+      <PrimeReactProvider>
+        <Provider store={store}>
+          {showTerminal && <AICHAT openMsg={true} />}
+          <span>
+            <Component {...pageProps} />
+          </span>
+          <InternetError />
+          {loginCheck == true && <ConnectWebSocket />}
+          {showFooter && showTerminal && <Footer />}
+        </Provider>
+      </PrimeReactProvider>
+    </MsalProvider>
   );
 }
 

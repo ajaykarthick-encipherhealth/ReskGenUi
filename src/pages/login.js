@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { connect } from "react-redux";
 import styles from "../styles/auth.module.css";
@@ -12,6 +12,8 @@ import IsAdmin from "./twofactorauthentication/isAdmin";
 import MS_Logo from "../images/logo/logos_microsoft-icon.png";
 import GoogleLogo from "../images/logo/devicon_google.png";
 import Image from "next/image";
+import { useMsal } from "@azure/msal-react";
+import { setStorage } from "../utils/storages";
 
 const Login = ({ getMFAValidation, loginResponse }) => {
   const router = useRouter();
@@ -63,6 +65,38 @@ const Login = ({ getMFAValidation, loginResponse }) => {
       return;
     }
   };
+  
+  const { instance, accounts, inProgress } = useMsal();
+  const handleClick = () => {
+    if (inProgress !== "none") return;
+
+    // Always redirect to login when accounts are empty
+    if (accounts.length === 0) {
+      console.log("No session found. Forcing Outlook SSO login...");
+
+      // Use prompt=login to force MS login page even if SSO cookie is present
+      instance
+        .loginRedirect({
+          prompt: "login", // ✅ Forces user to re-enter credentials
+        })
+        .catch((error) => {
+          console.error("Login error:", error);
+        });
+
+      return;
+    }
+  };
+
+    useEffect(() => {
+      // Already logged in
+      if (accounts.length > 0) {
+        setStorage("token", accounts[0].idToken);
+        console.log("✅ User authenticated. Redirecting to dashboard...");
+        router.push("/projects");
+      }
+    }, [instance, accounts, inProgress, router]);
+
+  console.log(accounts, "testings");
 
   return (
     <div className="page-wraper">
@@ -160,7 +194,8 @@ const Login = ({ getMFAValidation, loginResponse }) => {
                         id="click-ms-login"
                         className="cr-pointer"
                         onClick={() => {
-                          setClickAuth("MS");
+                          // setClickAuth("MS");
+                          handleClick();
                         }}
                       >
                         <Image

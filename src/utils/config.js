@@ -10,3 +10,5 @@ export const salt = process.env.NEXT_PUBLIC_SALT;
 export const companyDeatils = process.env.NEXT_PUBLIC_COMPANY_LOGO || "cogentai";
 export const isLocalEdit = true;
 export const portalMockoon = process.env.NEXT_PUBLIC_PORTAL_BASE_URL_MOCKKON;
+export const protalClientId = process.env.NEXT_PUBLIC_PORTAL_CLIENTID;
+export const portalRedirectUrl = process.env.NEXT_PUBLIC_PORTAL_REDIRECT_URI;
