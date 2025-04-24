@@ -163,6 +163,9 @@ const MoveBack = ({
       pageSize,
       roleId,
       selectedRole,
+      selectedDateRanges,
+      selectedOption,
+      searchText,
     });
   };
   const handleSubmit = async () => {
@@ -258,7 +261,15 @@ const MoveBack = ({
         roleId: roleId,
       });
     }
-  }, [roleId]); 
+  }, [roleId]);
+
+  useEffect(() => {
+    setActiveFilters(
+      data?.response?.metaDataDTO.filter(
+        (item) => item.active && item?.filter?.style
+      )
+    );
+  }, [data?.response?.metaDataDTO]);
 
   return (
     <div>
@@ -351,7 +362,7 @@ const MoveBack = ({
                       <div className="d-flex ">
                         <div className={` d-flex gap-3 mt-4`}>
                           <ReusableFilters
-                            showFilter={false}
+                            showFilter={true}
                             setActiveFilters={setActiveFilters}
                             setSearchText={setSearchText}
                             searchText={searchText}

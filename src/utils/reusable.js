@@ -980,3 +980,61 @@ export  const  findItemWithTrueKey =(dataArray, fieldName)=> {
       </Popover>
     );
   };
+
+  export const generateOptionsObject = (items) => {
+    if (items?.length > 0) {
+      const options = [
+        ...items?.map((item) => ({
+          label: item?.name,
+          value: item?.id,
+        })),
+      ].filter(Boolean);
+      return options;
+    } else {
+      return [];
+    }
+  };
+  
+  export const generateOptions = (items) => {
+    if (items?.length > 0) {
+      const options = [
+        ...items?.map((item) => ({
+          label: item,
+          value: item,
+        })),
+      ].filter(Boolean);
+      return options;
+    } else {
+      return [];
+    }
+  };
+  
+  export const convertToCustomParams = (obj) => {
+    const keys = Object.keys(obj);
+    if (keys.length === 0) return "";
+    const restParams = keys
+      .filter((key) => obj[key] !== undefined && obj[key] !== null)
+      .map((key) => `&${key}=${obj[key]}`)
+      .join("");
+    return restParams;
+  };
+  
+  export const convertToCustomParamsDatePicker = (obj) => {
+    let params = '';
+  
+    Object.entries(obj).forEach(([key, value]) => {
+      if (typeof value === 'object' && value !== null) {
+        const { startDate, endDate } = value;
+  
+        if (startDate) {
+          params += `&${key}Start=${startDate}`;
+        }
+  
+        if (endDate) {
+          params += `&${key}End=${endDate}`;
+        }
+      }
+    });
+  
+    return params;
+  };

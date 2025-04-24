@@ -8,6 +8,8 @@ import {
   createIdGen,
   disabledDate,
   formatDateForIndex,
+  generateOptions,
+  generateOptionsObject,
 } from "../../utils/reusable";
 import ReusableMultiInput from "./reusableInput/multiple";
 import { useRouter } from "next/router";
@@ -142,11 +144,14 @@ const ReusableFilters = ({
     <div className="d-flex gap-5">
       <div className="row" style={{ width: showFilter ? "98%" : "auto" }}>
         {FilterItems?.filter((item) => item?.active).map((item) => {
-          switch (item?.type) {
-            case "search":
+          switch (item?.filter?.style) {
+            case "SEARCH":
               return (
-                <div key={item?.title} className="default-filter-size mb-2">
-                  <label className="responsiveLabel">{item?.header}</label>
+                <div
+                  key={item?.headerName}
+                  className="default-filter-size mb-2"
+                >
+                  <label className="responsiveLabel">{item?.headerName}</label>
                   <ReusableInput
                     id={
                       id
@@ -167,18 +172,27 @@ const ReusableFilters = ({
                           )
                     }
                     placeholder={"Search"}
-                    value={searchText}
+                    value={setSearchText[item?.actualField] || ""}
                     isSearch={true}
-                    setSearchText={setSearchText}
+                    setSearchText={(val) => {
+                      setSearchText((prev) => ({
+                        ...prev,
+                        [item?.actualField]: val,
+                      }));
+                      setPageNo(1); // optional if resetting page
+                    }}
                     autoComplete="off"
                     setPageNumber={setPageNo}
                   />
                 </div>
               );
-            case "select":
+            case "DROP_DOWN":
               return (
-                <div key={item?.title} className="default-filter-size mb-2">
-                  <label className="responsiveLabel">{item?.placeholder}</label>
+                <div
+                  key={item?.headerName}
+                  className="default-filter-size mb-2"
+                >
+                  <label className="responsiveLabel">{item?.headerName}</label>
                   <div>
                     <div
                       id={
@@ -186,7 +200,7 @@ const ReusableFilters = ({
                           ? createIdGen("parentSelect " + id)
                           : createIdGen(
                               "parentSelect" +
-                                item?.title +
+                                item?.headerName +
                                 router.pathname.replaceAll("/", " ")
                             )
                       }
@@ -198,7 +212,7 @@ const ReusableFilters = ({
                             ? createIdGen("select " + id)
                             : createIdGen(
                                 "select " +
-                                  item?.title +
+                                  item?.headerName +
                                   router.pathname.replaceAll("/", " ")
                               )
                         }
@@ -209,13 +223,17 @@ const ReusableFilters = ({
                         }
                         showSearch={item?.showSearch || false}
                         className="custom-react-select-audit w-100"
-                        options={opt[item?.title] || []}
-                        placeholder={`Select ${item?.placeholder}`}
-                        value={selectedOption?.[item?.title] || null}
+                        options={
+                          item?.filter?.object
+                            ? generateOptionsObject(item?.filter?.object)
+                            : generateOptions(item?.filter?.options) || []
+                        }
+                        placeholder={`Select ${item?.headerName}`}
+                        value={selectedOption?.[item?.actualField] || null}
                         onChange={(value) => {
                           setSelectedOption((prevOptions) => ({
                             ...prevOptions,
-                            [item?.title]: value,
+                            [item?.actualField]: value,
                           }));
                           setPageNo && setPageNo(0);
                         }}
@@ -225,24 +243,27 @@ const ReusableFilters = ({
                   </div>
                 </div>
               );
-            case "rangePicker":
+            case "DATE":
               return (
-                <div key={item?.title} className="default-filter-size mb-2">
-                  <label className="responsiveLabel">{item?.placeholder}</label>
+                <div
+                  key={item?.headerName}
+                  className="default-filter-size mb-2"
+                >
+                  <label className="responsiveLabel">{item?.headerName}</label>
                   <div
                     id={
                       id
                         ? createIdGen("parentPicker " + id)
                         : createIdGen(
                             "parentPicker" +
-                              item?.title +
+                              item?.headerName +
                               router.pathname.replaceAll("/", " ")
                           )
                     }
                   >
                     <RangePicker
                       ref={(node) => {
-                        if (node) pickerRefs.current[item?.title] = node;
+                        if (node) pickerRefs.current[item?.headerName] = node;
                       }}
                       className="custom-range-picker"
                       data-testid={
@@ -250,32 +271,32 @@ const ReusableFilters = ({
                           ? createIdGen("picker " + id)
                           : createIdGen(
                               "picker" +
-                                item?.title +
+                                item?.headerName +
                                 router.pathname.replaceAll("/", " ")
                             )
                       }
                       format="MM-DD-YYYY"
-                      value={selectedDates?.[item?.title]}
+                      value={selectedDates?.[item?.actualField]}
                       onCalendarChange={(val) => {
                         setSelectedDates((prev) => ({
                           ...prev,
-                          [item?.title]: val,
+                          [item?.actualField]: val,
                         }));
                       }}
                       onChange={(date, dateString) => {
                         if (!date || date.length === 0) {
-                          handleFocusPicker(item?.title);
+                          handleFocusPicker(item?.actualField);
                         }
-                        handleRangePicker(date, dateString, item?.title);
+                        handleRangePicker(date, dateString, item?.actualField);
                       }}
                       allowClear={true}
                       disabledDate={(currentDate) =>
                         disabledDate(
                           currentDate,
-                          selectedDates?.[item?.title],
-                          item?.title === "dueDate" ||
-                            item?.title == "auditedDueDate" ||
-                            item?.title == "auditDueDate"
+                          selectedDates?.[item?.actualField],
+                          item?.actualField === "dueDate" ||
+                            item?.actualField == "auditedDueDate" ||
+                            item?.actualField == "auditDueDate"
                         )
                       }
                     />
@@ -353,7 +374,7 @@ const ReusableFilters = ({
         )}
       </div>
       <div className="d-flex " style={{ alignContent: "flex-end" }}>
-        {showFilter && (
+        {showFilter && columns?.length != 0  && (
           <div
             id="more-filters"
             name="more-filters"
@@ -400,23 +421,22 @@ const ReusableFilters = ({
                 Table Customization
               </Button>
             </div>
-           
           </>
         )}
-         <div>
-              <CustomizableDrawer
-                open={open}
-                onClose={onClose}
-                selectedColumns={selectedColumns}
-                setSelectedColumns={setSelectedColumns}
-                handleInsert={handleInsert}
-                setActiveFilters={setActiveFilters}
-                handleSubmit={handleSubmit}
-                handleReset={handleReset}
-                isSubmitting={isSubmitting}
-                isResetting={isResetting}
-              />
-            </div>
+        <div>
+          <CustomizableDrawer
+            open={open}
+            onClose={onClose}
+            selectedColumns={selectedColumns}
+            setSelectedColumns={setSelectedColumns}
+            handleInsert={handleInsert}
+            setActiveFilters={setActiveFilters}
+            handleSubmit={handleSubmit}
+            handleReset={handleReset}
+            isSubmitting={isSubmitting}
+            isResetting={isResetting}
+          />
+        </div>
       </div>
     </div>
   );

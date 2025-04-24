@@ -124,7 +124,6 @@ const QueryApproval = ({
     setSearch({});
   };
 
- 
   const opt = {
     organization: organizationList?.response?.map((item) => ({
       value: item?.id,
@@ -161,6 +160,9 @@ const QueryApproval = ({
       roleId,
       queryStatus: activeStatus,
       selectedRole,
+      selectedDateRanges,
+      selectedOption,
+      searchText,
     });
   };
 
@@ -245,7 +247,6 @@ const QueryApproval = ({
     }
   };
 
-
   useEffect(() => {
     if (routedData) {
       setActiveTab(routedData?.activeTab);
@@ -264,6 +265,14 @@ const QueryApproval = ({
       getAllOrganizationList();
     }
   }, []);
+
+  useEffect(() => {
+    setActiveFilters(
+      data?.response?.metaDataDTO.filter(
+        (item) => item.active && item?.filter?.style
+      )
+    );
+  }, [data?.response?.metaDataDTO]);
   return (
     <div>
       <Header />
@@ -330,7 +339,7 @@ const QueryApproval = ({
                       <div className="d-flex">
                         <div className="mt-4 w-100">
                           <ReusableFilters
-                            showFilter={false}
+                            showFilter={true}
                             setActiveFilters={setActiveFilters}
                             setSearchText={setSearchText}
                             searchText={searchText}
@@ -370,7 +379,6 @@ const QueryApproval = ({
                             active={active}
                             setActive={setActive}
                             gotoPatientDetails={gotoPatientDetails}
-                            
                           />
                         </Tab.Pane>
                       </Tab.Content>
