@@ -19,6 +19,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSpinner } from "@fortawesome/free-solid-svg-icons";
 import { getStorage } from "./storages";
 import SvgFlag from "../components/patientDetails/details/components/svg/svg";
+import { ssoLogout } from "../../lib/authService";
 
 export const getResponePopup = (res) => {
   switch (res?.data?.status ? res?.data?.status : res?.status) {
@@ -979,4 +980,24 @@ export  const  findItemWithTrueKey =(dataArray, fieldName)=> {
         </Badge>
       </Popover>
     );
+  };
+  export const logoutFunction = async ({ router, azureLogout }) => {
+    Swal.fire({
+      title: "Warning!",
+      text: "Do you want Logout!",
+      icon: "warning",
+      confirmButtonText: "Logout",
+      showCancelButton: true,
+      confirmButtonColor: "var(--logoutBtn)",
+      closeOnConfirm: false,
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        // removeStorage();
+        // azureLogout && azureLogout.logoutRedirect({
+        //   postLogoutRedirectUri: window.location.origin, // Redirect to home/login page after logout
+        // })
+        ssoLogout();
+        router.push("/projects");
+      }
+    });
   };

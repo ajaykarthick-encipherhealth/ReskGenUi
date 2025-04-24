@@ -10,24 +10,15 @@ import { actions as allActions } from "../stores/authFlows";
 import { getLogoImage } from "./twofactorauthentication/reusableFun";
 import { priorityOptions } from "../components/headerFilters/functions";
 
-const SelectProject = ({ getLogin, getProxyRoles, proxyRoles }) => {
+const SelectClient = ({ getLogin, getProxyRoles, proxyRoles }) => {
   const router = useRouter();
   const [selectedRole, setSelectedRole] = useState(null);
   const [roleError, setRoleError] = useState(false);
   const [confirmModal, setConfirmModal] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [password, setPassword] = useState("");
 
-  const rolesList = JSON.parse(getStorage("roles"));
-  const optionsList = rolesList?.map((role) => {
-    const proxyObj = proxyRoles?.find((item) => item.role === role);
-    return {
-      value: role,
-      label:
-        proxyObj?.proxyRole?.split("_").join(" ") || role?.split("_").join(" "),
-    };
-  });
-  const items = [...(rolesList?.length > 0 ? optionsList : [])];
+
+
 
   const onSubmitRole = async (e) => {
     e.preventDefault();
@@ -60,7 +51,7 @@ const SelectProject = ({ getLogin, getProxyRoles, proxyRoles }) => {
             <div className="login-client ">
               <form onSubmit={onSubmitRole}>
                 <div className="mt-4">
-                  <label className="mb-1 text-dark">Select Client</label>
+                  <label className="mb-1 text-dark">Select Project</label>
                   <div
                     id="role"
                     name="role"
@@ -70,19 +61,19 @@ const SelectProject = ({ getLogin, getProxyRoles, proxyRoles }) => {
                     }}
                   >
                     <Select
-                      id="select-role"
-                      name="select-role"
+                      id="select-project"
+                      name="select-project"
                       style={{ width: "100%", height: "2.75rem" }}
-                      placeholder="Select Client"
+                      placeholder="Select Project"
                       onChange={(value) => {
                         setSelectedRole(value?.toLowerCase());
                         setRoleError(false);
                       }}
-                        options={priorityOptions}
+                      options={priorityOptions}
                     />
                     {roleError && (
                       <span className="text-danger fs-12">
-                        Please Select Client
+                        Please Select Project
                       </span>
                     )}
                   </div>
@@ -126,4 +117,4 @@ const connector = connect(
     getProxyRoles: allActions.proxyRoles,
   }
 );
-export default connector(SelectProject);
+export default connector(SelectClient);
