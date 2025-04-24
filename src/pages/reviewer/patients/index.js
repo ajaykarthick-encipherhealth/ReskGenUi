@@ -6,9 +6,12 @@ const Patients =  () => {
   const userId = getStorage("userId")
   return (
     <div>
-   <CodersTable patientAllocated={userId} pageId={"e76aaa6c-319e-44d3-b7ae-aadb17dfb664"}/>
+      <CodersTable
+        patientAllocated={userId}
+        pageId={"da4958c3-7795-4bcc-8ab0-24d93cd52c25"}
+      />
     </div>
-  )
+  );
 }
 
 export default Patients;

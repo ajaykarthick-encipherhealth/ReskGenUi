@@ -190,8 +190,8 @@ const Tin = ({
         return "2d7cb7f7-6dad-41fb-970b-d805fb3f195f";
       case "InActive":
         return "6579b31a-aa46-42bf-abbb-c1e17e987a3a";
-      case "Provider":
-        return "c60dec23-bcfa-48ce-966e-dbf1ce3d41b2";
+      case "Providers":
+        return "32e9eea6-095c-4bd3-abee-17835ea53cdc";
       default:
         return "";
     }
@@ -202,8 +202,8 @@ const Tin = ({
       ? "2d7cb7f7-6dad-41fb-970b-d805fb3f195f"
       : activeTab === "InActive"
       ? "6579b31a-aa46-42bf-abbb-c1e17e987a3a"
-      : activeTab === "Provider"
-      ? "c60dec23-bcfa-48ce-966e-dbf1ce3d41b2"
+      : activeTab === "Providers"
+      ? "32e9eea6-095c-4bd3-abee-17835ea53cdc"
       : "";
   const handleSubmit = async () => {
     setIsSubmitting(true);
