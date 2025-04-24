@@ -14,6 +14,7 @@ import GoogleLogo from "../images/logo/devicon_google.png";
 import Image from "next/image";
 import { useMsal } from "@azure/msal-react";
 import { setStorage } from "../utils/storages";
+import PageLoading from "../components/page-loading"
 
 const Login = ({ getMFAValidation, loginResponse }) => {
   const router = useRouter();
@@ -23,6 +24,7 @@ const Login = ({ getMFAValidation, loginResponse }) => {
   const [password, setPassword] = useState("");
   const [emailErro, setEmailError] = useState("");
   const [isClickAuth, setClickAuth] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   const validateEmail = (enteredEmail) => {
     const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i;
@@ -65,7 +67,7 @@ const Login = ({ getMFAValidation, loginResponse }) => {
       return;
     }
   };
-  
+
   const { instance, accounts, inProgress } = useMsal();
   const handleClick = () => {
     if (inProgress !== "none") return;
@@ -87,16 +89,33 @@ const Login = ({ getMFAValidation, loginResponse }) => {
     }
   };
 
-    useEffect(() => {
-      // Already logged in
-      if (accounts.length > 0) {
-        setStorage("token", accounts[0].idToken);
-        console.log("✅ User authenticated. Redirecting to dashboard...");
-        router.push("/projects");
-      }
-    }, [instance, accounts, inProgress, router]);
+  useEffect(() => {
+    // Already logged in
+    if (accounts.length > 0) {
+      setIsLoading(false);
+      setStorage("token", accounts[0].idToken);
+      console.log("✅ User authenticated. Redirecting to dashboard...");
+      router.push("/projects");
+    } else {
+      // Delay redirect slightly to give MSAL time to populate accounts
+      const timeout = setTimeout(() => {
+        if (!accounts || accounts.length === 0) {
+          setIsLoading(false);
+          router.push("/login");
+        }
+      }, 2000); // 500ms wait before redirecting
 
-  console.log(accounts, "testings");
+      return () => clearTimeout(timeout); // Cleanup
+    }
+  }, [instance, accounts, inProgress]);
+  
+  if (isLoading) {
+    return (
+      <div>
+        <PageLoading />
+      </div>
+    );
+  }
 
   return (
     <div className="page-wraper">
