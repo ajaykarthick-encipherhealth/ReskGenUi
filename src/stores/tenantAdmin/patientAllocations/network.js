@@ -322,7 +322,7 @@ export async function moveBack(data) {
     body: JSON.stringify(data),
   };
   const response = await requestPortal(
-    `dbservice/v1/move-back`,
+    `management/v1/move-back`,
     options
   );
   return response;
