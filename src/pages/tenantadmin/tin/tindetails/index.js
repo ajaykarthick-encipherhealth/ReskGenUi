@@ -17,7 +17,7 @@ const TinDetails = ({ activeTabName, getProjectActiveTab }) => {
 
   const tabs = getAccessTabItems({ page: "Tin", tabsMenu: "tabMenuList2" });
   const { tab } = router.query;
-  const activeTab = tab || activeTabName?.tinDetailsTab || "Patients";
+  const activeTab = tab || activeTabName?.tinDetailsTab;
   
   const handleTabs = (name) => {
     getProjectActiveTab({ tinDetailsTab: name });

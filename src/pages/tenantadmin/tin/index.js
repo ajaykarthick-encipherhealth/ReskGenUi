@@ -117,10 +117,9 @@ const Tin = ({
   loading,
   routedData,
 }) => {
-  const tabs = getAccessTabItems({ page: "Tin", tabsMenu: "tabMenuList" });
+  const tabs = getAccessTabItems({page:"Tin",tabsMenu:"tabMenuList"})
+  const activeTab = activeTabName || tabs?.[0] || "Active";
   const router = useRouter();
-  const { tab } = router.query;
-  const activeTab = tab || activeTabName?.tinDetailsTab || "Active";
   const [activeFilters, setActiveFilters] = useState(commonFilterItems);
   const [sort, setSort] = useState({
     allocatedOn: {
@@ -150,19 +149,14 @@ const Tin = ({
     getProjectActiveTab({
       tinFilter: params,
     });
-    router.push("/tenantadmin/tin/tindetails");
+    router.push("/tenantadmin/tin/tindetails?tab=Patients");
   };
   const handleTabs = (name) => {
     getProjectActiveTab({
       tinTabName: name,
     });
-    router.replace({
-      pathname: router.pathname,
-      query: { ...router.query, tab: name },
-    });
     setSelectedOption({});
   };
-
   const onPageChange = (e) => {
     setPaginationFirst(e.first);
     setPageNo(e.page);
