@@ -9,6 +9,8 @@ import { connect } from "react-redux";
 import { actions as allActions } from "../stores/authFlows";
 import { getLogoImage } from "./twofactorauthentication/reusableFun";
 import { priorityOptions } from "../components/headerFilters/functions";
+import { useMsal } from "@azure/msal-react";
+import PageLoading from "../components/page-loading";
 
 const SelectProject = ({ getLogin, getProxyRoles, proxyRoles }) => {
   const router = useRouter();
@@ -17,6 +19,8 @@ const SelectProject = ({ getLogin, getProxyRoles, proxyRoles }) => {
   const [confirmModal, setConfirmModal] = useState(false);
   const [loading, setLoading] = useState(false);
   const [password, setPassword] = useState("");
+  const { accounts } = useMsal();
+  const [isLoading, setIsLoading] = useState(true); // Add loading state
 
   const rolesList = JSON.parse(getStorage("roles"));
   const optionsList = rolesList?.map((role) => {
@@ -28,10 +32,11 @@ const SelectProject = ({ getLogin, getProxyRoles, proxyRoles }) => {
     };
   });
   const items = [...(rolesList?.length > 0 ? optionsList : [])];
-
   const onSubmitRole = async (e) => {
     e.preventDefault();
+    router.push("/client");
   };
+  
 
   const handleLogout = () => {
     setConfirmModal(false);
@@ -41,6 +46,29 @@ const SelectProject = ({ getLogin, getProxyRoles, proxyRoles }) => {
   useEffect(() => {
     getProxyRoles();
   }, []);
+
+  useEffect(() => {
+    if (accounts && accounts.length > 0) {
+      setIsLoading(false); // User is authenticated
+    } else {
+      // Delay redirect slightly to give MSAL time to populate accounts
+      const timeout = setTimeout(() => {
+        if (!accounts || accounts.length === 0) {
+          router.push("/");
+        }
+      }, 1000); // 500ms wait before redirecting
+
+      return () => clearTimeout(timeout); // Cleanup
+    }
+  }, [accounts, router]);
+
+  if (isLoading) {
+    return (
+      <div>
+        <PageLoading />
+      </div>
+    );
+  }
   return (
     <div className="page-wraper">
       <div className="login-account">

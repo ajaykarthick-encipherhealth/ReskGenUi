@@ -21,6 +21,7 @@ const SelectClient = ({ getLogin, getProxyRoles, proxyRoles }) => {
 
 
   const onSubmitRole = async (e) => {
+    router.push("/twofactorauthentication/selectrole");
     e.preventDefault();
   };
 

@@ -23,6 +23,7 @@ import InternetError from "../utils/internetError";
 import { MsalProvider } from "@azure/msal-react";
 import { msalInstance } from "../../lib/msalInstance";
 import { clearInactivityTimer, resetInactivityTimer, startInactivityTimer } from "../utils/inactiveTracker";
+import { ssoLogout } from "../../lib/authService";
 
 config.autoAddCss = false;
 
@@ -253,61 +254,64 @@ function MyApp({ Component, pageProps }) {
   //     });
   // }, [router]);
 
-  useEffect(() => {
-    let intervalId;
-    let pauseTime = 0;
 
-    const checkLoginTime = () => {
-      const loginTimeStr = getStorage("loginTime");
-      const loginTime = parseInt(loginTimeStr);
+  // comment this refresh token --- Dev  login 
 
-      if (!isNaN(loginTime)) {
-        const timeElapsed = Date.now() - loginTime;
-        if (timeElapsed > 30 * 60 * 1000) {
-          refreshToken();
-        }
-      }
-    };
-    if (showTerminal) {
-      checkLoginTime();
-    }
+  // useEffect(() => {
+  //   let intervalId;
+  //   let pauseTime = 0;
 
-    intervalId = setInterval(() => {
-      if (showTerminal && document.visibilityState === "visible") {
-        checkLoginTime();
-      } else {
-        clearInterval(intervalId);
-        pauseTime = Date.now();
-      }
-    }, 30 * 60 * 1000);
+  //   const checkLoginTime = () => {
+  //     const loginTimeStr = getStorage("loginTime");
+  //     const loginTime = parseInt(loginTimeStr);
 
-    const handleVisibilityChange = () => {
-      if (document.visibilityState === "visible") {
-        if (showTerminal) {
-          const remainingTime = 30 * 60 * 1000 - (Date.now() - pauseTime);
-          if (remainingTime > 0) {
-            setTimeout(() => {
-              checkLoginTime();
-              intervalId = setInterval(checkLoginTime, 30 * 60 * 1000);
-            }, remainingTime);
-          } else {
-            checkLoginTime();
-            intervalId = setInterval(checkLoginTime, 30 * 60 * 1000);
-          }
-        }
-      } else {
-        clearInterval(intervalId);
-        pauseTime = Date.now();
-      }
-    };
+  //     if (!isNaN(loginTime)) {
+  //       const timeElapsed = Date.now() - loginTime;
+  //       if (timeElapsed > 30 * 60 * 1000) {
+  //         refreshToken();
+  //       }
+  //     }
+  //   };
+  //   if (showTerminal) {
+  //     checkLoginTime();
+  //   }
 
-    document.addEventListener("visibilitychange", handleVisibilityChange);
+  //   intervalId = setInterval(() => {
+  //     if (showTerminal && document.visibilityState === "visible") {
+  //       checkLoginTime();
+  //     } else {
+  //       clearInterval(intervalId);
+  //       pauseTime = Date.now();
+  //     }
+  //   }, 30 * 60 * 1000);
 
-    return () => {
-      clearInterval(intervalId);
-      document.removeEventListener("visibilitychange", handleVisibilityChange);
-    };
-  }, [showTerminal]);
+  //   const handleVisibilityChange = () => {
+  //     if (document.visibilityState === "visible") {
+  //       if (showTerminal) {
+  //         const remainingTime = 30 * 60 * 1000 - (Date.now() - pauseTime);
+  //         if (remainingTime > 0) {
+  //           setTimeout(() => {
+  //             checkLoginTime();
+  //             intervalId = setInterval(checkLoginTime, 30 * 60 * 1000);
+  //           }, remainingTime);
+  //         } else {
+  //           checkLoginTime();
+  //           intervalId = setInterval(checkLoginTime, 30 * 60 * 1000);
+  //         }
+  //       }
+  //     } else {
+  //       clearInterval(intervalId);
+  //       pauseTime = Date.now();
+  //     }
+  //   };
+
+  //   document.addEventListener("visibilitychange", handleVisibilityChange);
+
+  //   return () => {
+  //     clearInterval(intervalId);
+  //     document.removeEventListener("visibilitychange", handleVisibilityChange);
+  //   };
+  // }, [showTerminal]);
 
   // sso changes
 
@@ -380,7 +384,7 @@ function MyApp({ Component, pageProps }) {
     return () => clearInterval(interval);
   }, [router.pathname]);
 
-  // sso changes
+
 
   const hideFooterPaths = [
     "/admin/patients/details",
@@ -434,15 +438,6 @@ function MyApp({ Component, pageProps }) {
   }, []);
 
   return (
-    // <PrimeReactProvider>
-    //   <Provider store={store}>
-    //     {showTerminal && <AICHAT openMsg={true} />}
-    //     <Component {...pageProps} />
-    //     <InternetError/>
-    //     {loginCheck == true && <ConnectWebSocket />}
-    //     {showFooter && showTerminal && <Footer />}
-    //   </Provider>
-    // </PrimeReactProvider>
     <MsalProvider instance={msalInstance}>
       <PrimeReactProvider>
         <Provider store={store}>

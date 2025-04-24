@@ -103,44 +103,46 @@ const SelectRole = ({ getLogin ,getProxyRoles,proxyRoles}) => {
     }
   };
 
-  useEffect(() => {
-    const mfa = JSON.parse(getStorage("mfa"));
-    const skipEntry = JSON.parse(getStorage("skipEntry"));
-    const username = getStorage("userId");
-    const sessionPassword = JSON.parse(getStorage("password"));
-    const code = getStorage("code");
-    setPassword(sessionPassword);
-    removeStorage("password");
-    if (password) {
-      // let rolesArray = JSON.parse(getStorage("roles"));
-      // let getUserId = getStorage("userId");
-      // if (getUserId == "johnson@encipherhealth.onmicrosoft.com") {
-      //   rolesArray = ["TENANT ADMIN"];
-      // }
+  // useEffect(() => {
+  //   const mfa = JSON.parse(getStorage("mfa"));
+  //   const skipEntry = JSON.parse(getStorage("skipEntry"));
+  //   const username = getStorage("userId");
+  //   const sessionPassword = JSON.parse(getStorage("password"));
+  //   const code = getStorage("code");
+  //   setPassword(sessionPassword);
+  //   removeStorage("password");
+  //   if (password) {
+  //     // let rolesArray = JSON.parse(getStorage("roles"));
+  //     // let getUserId = getStorage("userId");
+  //     // if (getUserId == "johnson@encipherhealth.onmicrosoft.com") {
+  //     //   rolesArray = ["TENANT ADMIN"];
+  //     // }
 
-      getLogin({
-        email: username,
-        router: router,
-        code: code,
-        password: password,
-        mfa: mfa,
-        skip: skipEntry,
-      });
-    }
-    if (!username) {
-      router.push("/login");
-    }
-  }, []);
+  //     getLogin({
+  //       email: username,
+  //       router: router,
+  //       code: code,
+  //       password: password,
+  //       mfa: mfa,
+  //       skip: skipEntry,
+  //     });
+  //   }
+  //   if (!username) {
+  //     router.push("/login");
+  //   }
+  // }, []);
 
-  useEffect(() => {
-    router.beforePopState(({ url }) => {
-      router.push("/login");
-      return false;
-    });
-    return () => {
-      router.beforePopState(() => true);
-    };
-  }, [router]);
+  // useEffect(() => {
+  //   router.beforePopState(({ url }) => {
+  //     router.push("/login");
+  //     return false;
+  //   });
+  //   return () => {
+  //     router.beforePopState(() => true);
+  //   };
+  // }, [router]);
+
+  
   useEffect(()=>{
     getProxyRoles()
   },[])
