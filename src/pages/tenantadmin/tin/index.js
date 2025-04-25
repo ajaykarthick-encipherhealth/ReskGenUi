@@ -220,6 +220,8 @@ const gotoPatientDetails = (rowData) => {
       : activeTab === "Providers"
       ? "32e9eea6-095c-4bd3-abee-17835ea53cdc"
       : "";
+      console.log(pageIds, activeTab, "pageIds");
+      
   const handleSubmit = async () => {
     setIsSubmitting(true);
     const payload = {
@@ -286,16 +288,17 @@ const gotoPatientDetails = (rowData) => {
   }, [routedData]);
 const getAllTins = async (tabOverride) => {
   const currentTab = tabOverride || activeTab;
-  const pageId =  getPageId(activeTab);
+  const pageId = getPageId(currentTab); 
 
   await getTableData({
     pageId,
     pageNo,
     pageSize: 15,
     roleId: "",
-    projectId : "test",
+    projectId: "test",
   });
 };
+
 
 
   useEffect(() => {
