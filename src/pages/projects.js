@@ -32,6 +32,7 @@ const SelectProject = ({
   const onSubmitClient = async (e) => {
     e.preventDefault();
     router.push("/client");
+    setStorage("client", selectClient);
   };
 
   const handleLogout = () => {
@@ -40,22 +41,29 @@ const SelectProject = ({
   };
   useEffect(() => {
     getAllClientId();
-     setStorage("userId", clientIdData?.userName);
   }, []);
   useEffect(() => {
     getAllClientDetails();
   }, []);
+  useEffect(() => {
+    if (clientIdData?.userName) {
+      setStorage("userId", clientIdData.userName);
+      setStorage("orgId", clientIdData.orgId);
 
+    }
+  }, []);
+  console.log(selectClient, "selectClient");
+  console.log(clientIdData?.userName);
   useEffect(() => {
     if (accounts && accounts.length > 0) {
-      setIsLoading(false); 
+      setIsLoading(false);
     } else {
       const timeout = setTimeout(() => {
         if (!accounts || accounts.length === 0) {
           router.push("/");
         }
-      }, 1000); 
-      return () => clearTimeout(timeout); 
+      }, 1000);
+      return () => clearTimeout(timeout);
     }
   }, [accounts, router]);
 
@@ -66,7 +74,7 @@ const SelectProject = ({
       </div>
     );
   }
-console.log(clientIdData, "clientIdData");
+  console.log(clientIdData, "clientIdData");
   return (
     <div className="page-wraper">
       <div className="login-account">

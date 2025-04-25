@@ -19,6 +19,7 @@ const SelectClient = ({ projectDetails,getAllProjects }) => {
   const onSubmit = async (e) => {
     router.push("/twofactorauthentication/selectrole");
     e.preventDefault();
+       setStorage("project", selectClient);
   };
 
   const handleLogout = () => {

@@ -16,7 +16,11 @@ import { portalMockoon, portalUrl, tokenKey } from "../config";
 // }
 export async function requestPortal(url, options) {
   const token = getStorage(tokenKey);
+  const clientId = getStorage("client");
+  const projectId = getStorage("project");
+  const orgId = getStorage("orgId");
   const userRoleId = getStorage("roleId");
+
   const actualUrl = `${portalUrl}${url}`;
   const actualOptions = {
     ...options,
@@ -24,9 +28,9 @@ export async function requestPortal(url, options) {
       Authorization: `${"Bearer" + " " + token}`,
       "Content-Type": "application/json",
       "X-Role-Id": userRoleId,
-      "X-Client": "543AA",
-      "X-Org": "680b5cf84719af031b1bc89c",
-      "X-Project": "56d568c4-d474-4e01-b292-83b4fbc7a65b",
+      "X-Client": clientId,
+      "X-Org": orgId,
+      "X-Project": projectId,
       "X-Org-based": "true",
     },
   };
