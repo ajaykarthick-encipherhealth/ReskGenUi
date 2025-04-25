@@ -1,123 +1,134 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styles from "./style.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCopy } from "@fortawesome/free-regular-svg-icons";
-import { Progress } from "antd";
-import {
-  createIdGen,
-  handleCopyTextInput,
-  priorityStatusRender,
-} from "../../utils/reusable";
-import { connect } from "react-redux";
+import { faCopy, faArrowLeft } from "@fortawesome/free-solid-svg-icons";
+import { createIdGen, getAccessTabItems, handleCopyTextInput, tableSkeleton } from "../../utils/reusable";
 import { getStorage } from "../../utils/storages";
-import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
+import { getTableView } from "../../stores/tableView/network";
+import { Skeleton } from "antd";
+import { getPageId } from "../../pages/tenantadmin/tin";
+import { connect } from "react-redux";
 
-const SubNavBar = ({ handleBack,hideBackArrow }) => {
+const SubNavBar = ({
+  handleBack,
+  hideBackArrow,
+  activeTabName,
+}) => {
   const role = getStorage("userRole");
-  const headerData = [];
-  const showItems = [
-    {
-      title: "tin",
-      key: headerData?.tinName || "--",
-    },
-    { title: "progress", key: headerData?.progressPercentage || 0 },
-    { title: "providers", key: headerData?.providerCount || 0 },
-    { title: "patients", key: headerData?.patientCount || 0 },
-    {
-      title: "not Assigned",
-      key: headerData?.processedStatusCount?.NOT_ASSIGNED || 0,
-    },
-    {
-      title: "downloading",
-      key:
-        headerData?.processedStatusCount?.DOWNLOADER_ASSIGNED ||
-        0 + headerData?.processedStatusCount?.DOWNLOADER_COMPLETED ||
-        0,
-    },
-    {
-      title: "coder1",
-      key:
-        headerData?.processedStatusCount?.CODER_1_ASSIGNED ||
-        0 + headerData?.processedStatusCount?.CODER_1_COMPLETED ||
-        0,
-    },
-    {
-      title: "coder2",
-      key:
-        headerData?.processedStatusCount?.CODER_2_ASSIGNED ||
-        0 + headerData?.processedStatusCount?.CODER_2_COMPLETED ||
-        0,
-    },
-    { title: "QA", key: headerData?.processedStatusCount?.QA_ASSIGNED || 0 },
-    {
-      title: "Downloader Not Complete",
-      key: headerData?.processedStatusCount?.NOT_COMPLETED || 0,
-    },
-    {
-      title: "complete",
-      key: headerData?.processedStatusCount?.COMPLETED || 0,
-    },
-    { title: "priority", key: priorityStatusRender(headerData?.priority) },
-  ];
+  const [metaData, setMetaData] = useState([]);
+  const [tableData, setTableData] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const tabs = getAccessTabItems({ page: "Tin", tabsMenu: "tabMenuList" });
+  const activeTab = activeTabName || tabs?.[0] || "Active";
+  const getAllTins = async () => {
+    setLoading(true);
+    const pageId = getPageId(activeTab);
+    const userId = getStorage("userId");
+    const tin = getStorage("tinNumber");
 
-  // const showItems =
-  //   routedData?.tabName?.Status === "Active"
-  //     ? tinInfo.slice(0, 12)
-  //     : tinInfo?.filter((item) => item?.title !== "priority");
+    const result = await getTableView({
+      pageId,
+      pageNo: 0,
+      projectId: "test",
+      tin,
+      patientAllocated: userId,
+      isAdmin: true,
+    });
+
+    const response = result?.response || {};
+    setMetaData(response.metaDataDTO || []);
+    setTableData(response.pageResponse?.content || []);
+    setLoading(false);
+  };
+
+  useEffect(() => {
+    getAllTins();
+  }, []);
+
+  const activeFields = metaData?.filter((field) => field.active);
 
   return (
     <section className={`${styles.tabMainContainer} d-flex align-items-center`}>
-      {hideBackArrow &&  <div
-        onClick={handleBack}
-        className={`${styles.arrowBtn} cursor-pointer mx-3 ` }
-        data-testid={createIdGen(`${role} tin backicon`)}
-        id={createIdGen(`${role} tin backicon`)}
-      >
-      <FontAwesomeIcon icon={faArrowLeft} />
-      </div>}
-     
+      {hideBackArrow && (
+        <div
+          onClick={handleBack}
+          className={`${styles.arrowBtn} cursor-pointer mx-3`}
+          data-testid={createIdGen(`${role} tin backicon`)}
+          id={createIdGen(`${role} tin backicon`)}
+        >
+          <FontAwesomeIcon icon={faArrowLeft} />
+        </div>
+      )}
+
       <div className={styles.tabContainer}>
-      <section
-        className="d-flex mx-3 gap-2 pb-2  d-flex align-items-center flex-wrap"
-      >
-        {showItems?.map((header, index) => (
-          <section className={`cr-pointer mx-2 px-2  ${styles.headerContent}`}>
-            <div className={`d-flex ${styles.headerTitle} pb-1`}>
-              {header?.title?.charAt(0).toUpperCase() + header?.title?.slice(1)}
-            </div>
-            <div
-              className={`d-flex align-items-center justify-content-center `}
-              data-testid={createIdGen(`${role} tin copyicon`)}
-              id={createIdGen(`${role} tin copyicon`)}
+        {loading ? (
+          <div className="mx-3 w-100">
+            {Array.from({ length: 1 }).map((_, rowIndex) => (
+              <div
+                key={rowIndex}
+                className="d-flex gap-4 flex-wrap pb-2 border-bottom py-2"
+              >
+                {Array.from({ length: 1 }).map((_, rowIndex) => (
+                  <div key={rowIndex} style={{ width: 150 }}>
+                    {tableSkeleton({ rows: 1, columns: 1 })}
+                  </div>
+                ))}
+              </div>
+            ))}
+          </div>
+        ) : tableData.length === 0 ? (
+          <div className="mx-3">No records found.</div>
+        ) : (
+          tableData.map((row, rowIndex) => (
+            <section
+              key={rowIndex}
+              className="d-flex mx-3 gap-4 pb-2 flex-wrap border-bottom py-2"
             >
-             <div className={styles.count}>{index != 1 && header?.key}</div> 
-              {index == 0 && header?.key !== "" && (
-                <FontAwesomeIcon
-                  icon={faCopy}
-                  className="cr-pointer d-flex align-items-center justify-content-center mx-2"
-                  onClick={() => {
-                    handleCopyTextInput(header?.key);
-                  }}
-                />
-              )}
-              {index == 1 && (
+              {activeFields.map((field, colIndex) => (
                 <div
-                  style={{ width: "100px" }}
-                  data-testid={createIdGen(`${role} tin percenticon`)}
-                  id={createIdGen(`${role} tin percenticon`)}
+                  key={`${rowIndex}-${colIndex}`}
+                  className={`cr-pointer px-2 ${styles.headerContent}`}
                 >
-                  <Progress percent={header?.key} strokeColor="#263E50" />
+                  <div className={`pb-1 fw-bold ${styles.headerTitle}`}>
+                    {field.headerName.toUpperCase()}
+                  </div>
+                  <div
+                    className="d-flex align-items-center justify-content-between"
+                    data-testid={createIdGen(`${role} tin copyicon`)}
+                    id={createIdGen(`${role} tin copyicon`)}
+                  >
+                    <span className={styles.count}>
+                      {row[field.actualField] || "--"}
+                    </span>
+                    {field.headerName === "Tin Id" &&
+                      row[field.actualField] && (
+                        <FontAwesomeIcon
+                          icon={faCopy}
+                          className="cr-pointer mx-2"
+                          onClick={() =>
+                            handleCopyTextInput(row[field.actualField])
+                          }
+                        />
+                      )}
+                  </div>
                 </div>
-              )}
-            </div>
-          </section>
-        ))}
-      </section>
+              ))}
+            </section>
+          ))
+        )}
       </div>
     </section>
-    
   );
 };
 
-const connector = connect((state) => ({}));
-export default connector(SubNavBar);
+
+const enhancer = connect(
+  (state) => ({
+    activeTabName: state.tenantAdmin.tin?.activeTabRoutedData?.tinTabName,
+  }),
+  {
+
+  }
+);
+
+export default enhancer(SubNavBar);

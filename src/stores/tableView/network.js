@@ -19,6 +19,7 @@ export async function getTableView({
   patientAllocated,
   queryStatus,
   isAdmin,
+  tin,
 }) {
   const options = {
     method: "GET",
@@ -39,15 +40,15 @@ export async function getTableView({
   const uId = getStorage("userId");
   const baseUrl = `dbservice/table/view?pageId=${pageId}&page=${pageNo}&size=${
     pageSize ? pageSize : 15
-  }&processedStatus=${
-    activeStatus || ""
-  }&roleId=${roleId || ""}&projectId=${projectId || ""}&aliasName=${
-    selectedRole || ""
-  }&isReAssigned=${isReAssigned || ""}&isQueried=${
-    isQueried || ""
-  }&patientAllocated=${patientAllocated || ""}&queryStatus=${
-    queryStatus || ""
-  }&isAdmin=${isAdmin || ""}`;
+  }&processedStatus=${activeStatus || ""}&roleId=${roleId || ""}&projectId=${
+    projectId || ""
+  }&aliasName=${selectedRole || ""}&isReAssigned=${
+    isReAssigned || ""
+  }&isQueried=${isQueried || ""}&patientAllocated=${
+    patientAllocated || ""
+  }&queryStatus=${queryStatus || ""}&isAdmin=${isAdmin || ""}&tin=${
+    tin ? tin : ""
+  }`;
 
   const finalUrl = `${baseUrl}${searchTextParams || ""}${selectParams || ""}${
     dateRagngesParams || ""
