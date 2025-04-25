@@ -275,7 +275,7 @@ const PatientAllocation = ({
       )
     );
   }, [data?.response?.metaDataDTO]);
-
+console.log(selectedRoleId, "selectedRoleId");
   return (
     <div>
       <Header />
@@ -460,6 +460,7 @@ const PatientAllocation = ({
                             roleId={roleId}
                             checkedHeader={checkedHeader}
                             setCheckedHeader={setCheckedHeader}
+                         
                           />
                         </Tab.Pane>
                       </Tab.Content>

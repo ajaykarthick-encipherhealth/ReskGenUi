@@ -75,13 +75,13 @@ export async function checkedReviewersList({
   );
   return res;
 }
-export async function usersList({ search }) {
+export async function usersList({ roleId }) {
   const orgId = getStorage("orgId");
   const options = {
     method: "GET",
   };
   const res = await requestPortal(
-    `dbservice/user/getL1UsersByOrgIdAndTenantId?orgid=${orgId}&searchString=${search}`,
+    `dbservice/user/get/role?roleId=${roleId}`,
     options
   );
   return res;

@@ -74,9 +74,9 @@ const RandomSamplingModal = ({
     form.resetFields();
   };
 
-  const getUserList = async (search) => {
+  const getUserList = async ({roleId}) => {
     const response = await getL1UsersList({
-      search: search || "",
+      roleId: roleId || "",
     });
     if (response?.status === "SUCCESS") {
       let result = response?.response;
@@ -144,8 +144,8 @@ const RandomSamplingModal = ({
   };
 
   useEffect(() => {
-    getUserList(search);
-  }, [search]);
+    getUserList({ roleId: roleId });
+  }, [roleId]);
 
   return (
     <div>
@@ -251,6 +251,7 @@ const RandomSamplingModal = ({
                           />
                         )}
                       </Avatar>
+          
                       <div className="p-3">
                         <p className={`${modalStyle.listName} mb-1`}>
                           {item.firstName + " " + item.lastName}
@@ -428,9 +429,7 @@ const RandomSamplingModal = ({
             <Form.Item
               label="Select Tin"
               name="tin"
-              rules={[
-                { required: true, message: "Select the Tin!" },
-              ]}
+              rules={[{ required: true, message: "Select the Tin!" }]}
             >
               <Input className="w-75" placeholder=" Tin" />
             </Form.Item>
@@ -463,22 +462,22 @@ const RandomSamplingModal = ({
             <Input className="w-75" placeholder=" Percentage" />
           </Form.Item>
           <div className="samplingSelect">
-          <Form.Item
-            rules={[
-              {
-                required: true,
-                message: "Select the Priority ",
-              },
-            ]}
-            label="Priority"
-            name="priority"
-          >
-            <Select
-              className="w-75"
-              options={priorityOptions}
-              placeholder="Select Priority"
-            />
-          </Form.Item>
+            <Form.Item
+              rules={[
+                {
+                  required: true,
+                  message: "Select the Priority ",
+                },
+              ]}
+              label="Priority"
+              name="priority"
+            >
+              <Select
+                className="w-75"
+                options={priorityOptions}
+                placeholder="Select Priority"
+              />
+            </Form.Item>
           </div>
           <div className="samplingPicker">
             <Form.Item

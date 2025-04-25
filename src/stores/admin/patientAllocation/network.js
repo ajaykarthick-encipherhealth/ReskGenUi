@@ -192,17 +192,29 @@ export const supervisorCheckedList = async ({
   return res;
 };
 
-export const usersList = async ({ search }) => {
-  const orgId = getStorage("orgId");
-  const url = `dbservice/user/getL1UsersByOrgIdAndTenantId?orgid=${orgId}&searchString=${search}`;
+// export const usersList = async ({ search }) => {
+//   const orgId = getStorage("orgId");
+//   const url = `dbservice/user/getL1UsersByOrgIdAndTenantId?orgid=${orgId}&searchString=${search}`;
 
+//   const options = {
+//     method: "GET",
+//   };
+
+//   const res = await requestPortal(`${url}`, options);
+//   return res;
+// };
+export async function usersList({ roleId }) {
+  const orgId = getStorage("orgId");
   const options = {
     method: "GET",
   };
 
-  const res = await requestPortal(`${url}`, options);
+  const res = await requestPortal(
+    `dbservice/user/get/role?roleId=${roleId}`,
+    options
+  );
   return res;
-};
+}
 export const allocateUsers = async ({ data }) => {
   const url = `management/allocation/manual`;
   const options = {

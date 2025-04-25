@@ -75,9 +75,9 @@ const AllocateModal = ({
     setPriority(value);
   };
 
-  const getUserList = async (search) => {
+  const getUserList = async ({ roleId }) => {
     const response = await getL1UsersList({
-      search: search || "",
+      roleId: roleId || "",
     });
     if (response?.status === "SUCCESS") {
       let result = response?.response;
@@ -149,8 +149,8 @@ const AllocateModal = ({
     }
   };
   useEffect(() => {
-    getUserList(search);
-  }, [search]);
+    getUserList({ roleId: roleId });
+  }, [roleId]);
   useEffect(() => {
     setSelectedChart(selectedRowsId);
   }, [selectedRowsId]);
@@ -217,7 +217,7 @@ const AllocateModal = ({
             />
           </div>
         </div>
-
+        {console.log(userDetails, "userDetails")}
         {usersLoader ? (
           <TableSkeleton />
         ) : userDetails.length > 0 ? (
@@ -242,7 +242,6 @@ const AllocateModal = ({
                         setPriority([]);
                       }
                     }}
-                    
                   >
                     <div className="d-flex">
                       <Avatar
@@ -286,7 +285,7 @@ const AllocateModal = ({
                       className="me-2 ms-3 align-self-center"
                     />
                   </div>
-                  {activeCard == item.id ?(
+                  {activeCard == item.id ? (
                     <>
                       <div className="row px-3">
                         <div className={`col-5 ${modalStyle.activeRow1}`}>
@@ -440,7 +439,9 @@ const AllocateModal = ({
                         </div>
                       </div>
                     </>
-                  ):""}
+                  ) : (
+                    ""
+                  )}
                 </div>
               </div>
             ))}
@@ -468,13 +469,15 @@ const AllocateModal = ({
                 setIsSecondModalOpen(true);
                 setOpen(false);
                 setAllocateDate(null);
-                setPriority([])
+                setPriority([]);
               }}
             >
               Next
             </RegularButton>
           </div>
-        ):""}
+        ) : (
+          ""
+        )}
       </Modal>
       <Modal
         open={isSecondModalOpen}
@@ -500,7 +503,7 @@ const AllocateModal = ({
                   id="select-dueDate"
                   name="select-dueDate"
                   style={{ width: "150px" }}
-                  value={allocateDate ? dayjs(allocateDate) : null} 
+                  value={allocateDate ? dayjs(allocateDate) : null}
                   onChange={(date, dateS) => {
                     setAllocateDate(dateS || "");
                   }}
@@ -562,17 +565,17 @@ const AllocateModal = ({
             </div>
           </div>
           <div className="d-flex justify-content-center">
-             <RegularButton
-               disabled={
+            <RegularButton
+              disabled={
                 !selectedChart?.length ||
                 !allocateDate ||
                 !priority ||
-                selectedChart?.length + chart?.hold + chart?.pending > 100 
+                selectedChart?.length + chart?.hold + chart?.pending > 100
               }
-                name="Allocate"
-                onClick={setAllocate}
-                loading={isAllocate}
-              />
+              name="Allocate"
+              onClick={setAllocate}
+              loading={isAllocate}
+            />
           </div>
         </>
       </Modal>
