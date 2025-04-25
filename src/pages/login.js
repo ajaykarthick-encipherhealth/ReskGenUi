@@ -199,7 +199,7 @@ const Login = ({ getMFAValidation, loginResponse }) => {
                       name="LOGIN"
                       width="100%"
                       loading={loginResponse}
-                      disabled
+                      // disabled
                     />
                   </div>
 
