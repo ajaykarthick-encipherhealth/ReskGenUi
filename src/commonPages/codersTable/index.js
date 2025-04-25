@@ -201,7 +201,9 @@ const CodersTable = ({
     },
   ];
   const router = useRouter();
-  const [activeFilters, setActiveFilters] = useState(commonFilterItems);
+  const [activeFilters, setActiveFilters] = useState(data?.response?.metaDataDTO.filter(
+    (item) => item.active
+  ));
   const [sort, setSort] = useState({
     allocatedOn: {
       sortDir: "DESC",
@@ -402,6 +404,14 @@ const CodersTable = ({
       setActiveStatus(activeStatus);
     }
   }, [routedData]);
+
+  useEffect(() => {
+    setActiveFilters(data?.response?.metaDataDTO.filter(
+      (item) => item.active && item?.filter?.style
+    ));
+  }, [data?.response?.metaDataDTO]);
+
+  
   return (
     <div className={`show `}>
       <Header />

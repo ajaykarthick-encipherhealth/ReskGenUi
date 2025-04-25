@@ -358,6 +358,9 @@ const Patient = ({
       roleId: "",
       isAdmin: true,
       patientAllocated: userId,
+      selectedDateRanges,
+      selectedOption,
+      searchText,
     });
   };
   useEffect(() => {
@@ -406,6 +409,13 @@ const Patient = ({
     })),
     priority: priorityOptions,
   };
+  useEffect(() => {
+    setActiveFilters(
+      data?.response?.metaDataDTO.filter(
+        (item) => item.active && item?.filter?.style
+      )
+    );
+  }, [data?.response?.metaDataDTO]);
   return (
     <div className={`show `}>
       <Header />

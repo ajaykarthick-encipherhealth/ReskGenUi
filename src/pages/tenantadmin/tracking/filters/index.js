@@ -33,7 +33,7 @@ const MoreFilter = ({
   const handleRowCheckboxChange = (filter, e) => {
     setActiveFilters((prev) =>
       prev.map((x) =>
-        x.title === filter.title ? { ...x, active: !x.active } : x
+        x.headerName === filter.headerName ? { ...x, active: !x.active } : x
       )
     );
   };
@@ -68,7 +68,7 @@ const MoreFilter = ({
             className={`${styles.customChecked}`}
             checked={filter.active}
           />
-          <span style={{ margin: "0 5px" }}>{filter.placeholder}</span>
+          <span style={{ margin: "0 5px" }}>{filter.headerName}</span>
         </div>
       ))}
 

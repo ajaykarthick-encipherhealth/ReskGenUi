@@ -169,6 +169,9 @@ const PatientAllocation = ({
       pageNo,
       pageSize,
       roleId,
+      selectedDateRanges,
+      selectedOption,
+      searchText,
     });
   };
   const handleSubmit = async () => {
@@ -264,6 +267,14 @@ const PatientAllocation = ({
     getRolesList();
     setTest(data?.response?.metaDataDTO);
   }, []);
+
+  useEffect(() => {
+    setActiveFilters(
+      data?.response?.metaDataDTO.filter(
+        (item) => item.active && item?.filter?.style
+      )
+    );
+  }, [data?.response?.metaDataDTO]);
 
   return (
     <div>
@@ -387,7 +398,7 @@ const PatientAllocation = ({
 
                       <div className={` d-flex gap-3 mt-4`}>
                         <ReusableFilters
-                          showFilter={false}
+                          showFilter={true}
                           setActiveFilters={setActiveFilters}
                           setSearchText={setSearchText}
                           searchText={searchText}

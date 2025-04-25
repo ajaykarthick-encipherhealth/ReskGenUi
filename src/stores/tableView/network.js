@@ -1,4 +1,5 @@
 import { requestPortal, requestPortalRoleBased } from "../../utils/network";
+import { convertToCustomParams, convertToCustomParamsDatePicker } from "../../utils/reusable";
 import { getStorage } from "../../utils/storages";
 
 export async function getTableView({
@@ -22,19 +23,37 @@ export async function getTableView({
   const options = {
     method: "GET",
   };
+  let searchTextParams = null;
+  let selectParams = null;
+  let dateRagngesParams = null;
+  if (searchText) {
+    searchTextParams = convertToCustomParams(searchText);
+  }
+  if (selectedOption) {
+    selectParams = convertToCustomParams(selectedOption);
+  }
+  if (selectedDateRanges) {
+    dateRagngesParams = convertToCustomParamsDatePicker(selectedDateRanges);
+  } 
+
   const uId = getStorage("userId");
-  const data = await requestPortalRoleBased(
-    `dbservice/table/view?pageId=${pageId}&page=${pageNo}&size=${pageSize ? pageSize : 15 }&processedStatus=${
-      activeStatus ? activeStatus : ""
-    }&roleId=${roleId ? roleId : ""}&projectId=${
-      projectId ? projectId : ""
-    }&aliasName=${selectedRole ? selectedRole : ""}&isReAssigned=${
-      isReAssigned ? isReAssigned : ""
-    }&isQueried=${isQueried ? isQueried : ""}&patientAllocated=${
-      patientAllocated ? patientAllocated : ""
-    }&queryStatus=${queryStatus ? queryStatus : ""}&isAdmin=${isAdmin ? isAdmin : ""}`,
-    options
-  );
+  const baseUrl = `dbservice/table/view?pageId=${pageId}&page=${pageNo}&size=${
+    pageSize ? pageSize : 15
+  }&processedStatus=${
+    activeStatus || ""
+  }&roleId=${roleId || ""}&projectId=${projectId || ""}&aliasName=${
+    selectedRole || ""
+  }&isReAssigned=${isReAssigned || ""}&isQueried=${
+    isQueried || ""
+  }&patientAllocated=${patientAllocated || ""}&queryStatus=${
+    queryStatus || ""
+  }&isAdmin=${isAdmin || ""}`;
+
+  const finalUrl = `${baseUrl}${searchTextParams || ""}${selectParams || ""}${
+    dateRagngesParams || ""
+  }`;
+
+  const data = await requestPortalRoleBased(finalUrl, options);
   return data;
 }
 
