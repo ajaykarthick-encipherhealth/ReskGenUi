@@ -1,4 +1,4 @@
-import { requestPortal, requestPortalRoleBased } from "../../utils/network";
+import { requestPortal, requestPortal } from "../../utils/network";
 import { convertToCustomParams, convertToCustomParamsDatePicker } from "../../utils/reusable";
 import { getStorage } from "../../utils/storages";
 
@@ -54,7 +54,45 @@ export async function getTableView({
     dateRagngesParams || ""
   }`;
 
-  const data = await requestPortalRoleBased(finalUrl, options);
+  const data = await requestPortal(finalUrl, options);
+  return data;
+}
+export async function getStatusTableView({
+  selectedOption,
+  selectedDateRanges,
+  searchText,
+  isReAssigned,
+  isQueried,
+  patientAllocated,
+}) {
+  const options = {
+    method: "GET",
+  };
+  let searchTextParams = null;
+  let selectParams = null;
+  let dateRagngesParams = null;
+  if (searchText) {
+    searchTextParams = convertToCustomParams(searchText);
+  }
+  if (selectedOption) {
+    selectParams = convertToCustomParams(selectedOption);
+  }
+  if (selectedDateRanges) {
+    dateRagngesParams = convertToCustomParamsDatePicker(selectedDateRanges);
+  }
+
+  const uId = getStorage("userId");
+  const baseUrl = `dbservice/get-count?&isReAssigned=${
+    isReAssigned || ""
+  }&isQueried=${isQueried || ""}&patientAllocated=${
+    patientAllocated || ""
+  }`;
+
+  const finalUrl = `${baseUrl}${searchTextParams || ""}${selectParams || ""}${
+    dateRagngesParams || ""
+  }`;
+
+  const data = await requestPortal(finalUrl, options);
   return data;
 }
 
@@ -100,7 +138,7 @@ export async function getTableViewChecked({
     method: "GET",
   };
   const uId = getStorage("userId");
-  const data = await requestPortalRoleBased(
+  const data = await requestPortal(
     `dbservice/table/view?pageId=${pageId}&page=${pageNo}&size=${pageSize}&status=${
       activeStatus ? activeStatus : ""
     }&roleId=${roleId ? roleId : ""}&projectId=${projectId ? projectId : ""}&aliasName=${selectedRole?selectedRole:''}&allPatientIds=${allPatientIds?allPatientIds:""}`,

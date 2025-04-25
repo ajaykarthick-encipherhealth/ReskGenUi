@@ -20,6 +20,6 @@ export const tableDynamicColumnReset = createActionThunk(
 );
 export const getTableStatusAction = createActionThunk(
   "GET_TABLE_STATUS_ACTION",
-  network.getTableView
+  network.getStatusTableView
 );
 
