@@ -27,14 +27,14 @@ const SelectClient = ({ projectDetails,getAllProjects }) => {
   };
 
   const projectOptions = projectDetails?.map((client) => ({
-    label: client.clientName,
-    value: client.clientId,
+    label: client.projectName,
+    value: client.id,
   }));
 
   useEffect(() => {
     getAllProjects();
   }, []);
-
+console.log(projectDetails,"projectDetails")
   return (
     <div className="page-wraper">
       <div className="login-account">

@@ -8,6 +8,7 @@ import { getStorage, removeStorage, setStorage } from "../../utils/storages";
 import { connect } from "react-redux";
 import { actions as allActions } from "../../stores/authFlows";
 import { getLogoImage } from "./reusableFun";
+import { priorityOptions } from "../../components/headerFilters/functions";
 
 const SelectRole = ({ getLogin ,getProxyRoles,proxyRoles}) => {
   const router = useRouter();
@@ -188,7 +189,8 @@ const SelectRole = ({ getLogin ,getProxyRoles,proxyRoles}) => {
                         setSelectedRole(value?.toLowerCase());
                         setRoleError(false);
                       }}
-                      options={items}
+                      // options={items}
+                      options={priorityOptions}
                     />
                     {roleError && (
                       <span className="text-danger fs-12">
