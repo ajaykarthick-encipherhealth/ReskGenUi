@@ -355,3 +355,16 @@ export async function getClientDetails() {
   );
   return data;
 }
+
+export async function getProjectDetails() {
+  const options = {
+    method: "GET",
+  };
+  const data = await requestPortalRoleBased(
+    `/secure/dbservice/project/get/dropdown`,
+    options
+  );
+  return data;
+}
+
+

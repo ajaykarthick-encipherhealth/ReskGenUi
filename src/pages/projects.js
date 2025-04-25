@@ -11,9 +11,14 @@ import { getLogoImage } from "./twofactorauthentication/reusableFun";
 import { useMsal } from "@azure/msal-react";
 import PageLoading from "../components/page-loading";
 
-const SelectProject = ({ getAllClientId,clientIdData,getAllClientDetails,clientDetails }) => {
+const SelectProject = ({
+  getAllClientId,
+  clientIdData,
+  getAllClientDetails,
+  clientDetails,
+}) => {
   const router = useRouter();
-  const clientId = setStorage("clientId",clientIdData)
+  const clientId = setStorage("clientId", clientIdData);
   const [selectClient, setSelectClient] = useState(null);
   const [clientError, setClientError] = useState(false);
   const [confirmModal, setConfirmModal] = useState(false);
@@ -22,9 +27,9 @@ const SelectProject = ({ getAllClientId,clientIdData,getAllClientDetails,clientD
   const [isLoading, setIsLoading] = useState(true);
 
   const clientOptions = clientDetails?.map((client) => ({
-    label: client.clientName,  
-    value: client.clientId,  
-  }))
+    label: client.clientName,
+    value: client.clientId,
+  }));
   const onSubmitClient = async (e) => {
     e.preventDefault();
     router.push("/client");
@@ -36,21 +41,22 @@ const SelectProject = ({ getAllClientId,clientIdData,getAllClientDetails,clientD
   };
   useEffect(() => {
     getAllClientId();
-    getAllClientDetails()
+  }, []);
+
+  useEffect(() => {
+    getAllClientDetails();
   }, []);
 
   useEffect(() => {
     if (accounts && accounts.length > 0) {
-      setIsLoading(false); // User is authenticated
+      setIsLoading(false); 
     } else {
-      // Delay redirect slightly to give MSAL time to populate accounts
       const timeout = setTimeout(() => {
         if (!accounts || accounts.length === 0) {
           router.push("/");
         }
-      }, 1000); // 500ms wait before redirecting
-
-      return () => clearTimeout(timeout); // Cleanup
+      }, 1000); 
+      return () => clearTimeout(timeout); 
     }
   }, [accounts, router]);
 
@@ -61,7 +67,6 @@ const SelectProject = ({ getAllClientId,clientIdData,getAllClientDetails,clientD
       </div>
     );
   }
-
 
   return (
     <div className="page-wraper">
@@ -157,11 +162,12 @@ const SelectProject = ({ getAllClientId,clientIdData,getAllClientDetails,clientD
 const connector = connect(
   (state) => ({
     clientIdData: state.authReducer?.getClientId?.data?.response,
-    clientDetails:state.authReducer?.getClientDetails?.data?.response,
+    clientDetails: state.authReducer?.getClientDetails?.data?.response,
+    xc:console.log(state,"state")
   }),
   {
     getAllClientId: allActions.clientId,
-    getAllClientDetails:allActions.clientDetails,
+    getAllClientDetails: allActions.clientDetails,
   }
 );
 export default connector(SelectProject);

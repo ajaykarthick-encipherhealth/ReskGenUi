@@ -80,6 +80,10 @@ export const clientDetails=createActionThunk(
   "GET_CLIENT_DETAILS",
   network.getClientDetails
 )
+export const projectDetails=createActionThunk(
+  "GET_PROJECT_DETAILS",
+  network.getProjectDetails
+)
 
 
 

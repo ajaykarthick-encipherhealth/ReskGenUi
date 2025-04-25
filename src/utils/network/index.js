@@ -44,7 +44,7 @@ export async function requestPortalFiles(url, options) {
 export async function requestPortalImgUpload(url, options) {
   const actualUrl = `${url}`;
   const actualOptions = {
-    ...options
+    ...options,
   };
   return fetch(actualUrl, actualOptions).then((res) => res);
 }
@@ -88,7 +88,7 @@ export async function requestAUthflow(url, options) {
 }
 
 export async function authRequestPortal(url, options) {
-    const actualUrl = `${portalUrl}${url}`;
+  const actualUrl = `${portalUrl}${url}`;
   const actualOptions = {
     ...options,
     headers: {
@@ -101,16 +101,18 @@ export async function authRequestPortal(url, options) {
 export async function requestPortalRoleBased(url, options) {
   const token = getStorage(tokenKey);
   const userRoleId = getStorage("roleId");
-  const clientId = getStorage("clientId")
+  const clientId = getStorage("clientId");
   const actualUrl = `${portalUrl}${url}`;
   const actualOptions = {
     ...options,
     headers: {
       Authorization: `${"Bearer" + " " + token}`,
       "Content-Type": "application/json",
-      // "X-Role-Id":userRoleId
       "X-Role-Id": userRoleId,
-      "X-Client-Id": clientId
+      "X-Client": "test",
+      "X-Org": test,
+      "X-Project": test,
+      "X-Org-based": true,
     },
   };
   return fetch(actualUrl, actualOptions).then(checkStatus);

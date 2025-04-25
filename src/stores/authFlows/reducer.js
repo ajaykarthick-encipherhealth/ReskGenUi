@@ -17,6 +17,7 @@ import {
   proxyRoles,
   clientId,
   clientDetails,
+  projectDetails
 } from "./actions";
 
 const initialState = {
@@ -83,6 +84,7 @@ const authReducer = combineReducers({
   getAllProxyRoles: createReducer(proxyRoles),
   getClientId: createReducer(clientId),
   getClientDetails: createReducer(clientDetails),
+  getProjectDetails:createReducer(projectDetails),
 
   // loaders
   mfaLoader: getUsersDetailsLoading(getMFAValidation),
