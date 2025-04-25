@@ -807,7 +807,7 @@ const TableRow = ({
               >
                 <Switch
                   className="user-switch"
-                  // checked={switchStates[item.userName]}
+                  checked={switchStates[item.userName]}
                   onChange={(checked) => onSwitchToggle(item, checked)}
                 />
               </div>
