@@ -8,43 +8,35 @@ import { getStorage, removeStorage, setStorage } from "../utils/storages";
 import { connect } from "react-redux";
 import { actions as allActions } from "../stores/authFlows";
 import { getLogoImage } from "./twofactorauthentication/reusableFun";
-import { priorityOptions } from "../components/headerFilters/functions";
 import { useMsal } from "@azure/msal-react";
 import PageLoading from "../components/page-loading";
 
-const SelectProject = ({ getLogin, getProxyRoles, proxyRoles }) => {
+const SelectProject = ({ getAllClientId,clientIdData,getAllClientDetails,clientDetails }) => {
   const router = useRouter();
-  const [selectedRole, setSelectedRole] = useState(null);
-  const [roleError, setRoleError] = useState(false);
+  const clientId = setStorage("clientId",clientIdData)
+  const [selectClient, setSelectClient] = useState(null);
+  const [clientError, setClientError] = useState(false);
   const [confirmModal, setConfirmModal] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [password, setPassword] = useState("");
   const { accounts } = useMsal();
-  const [isLoading, setIsLoading] = useState(true); // Add loading state
+  const [isLoading, setIsLoading] = useState(true);
 
-  const rolesList = JSON.parse(getStorage("roles"));
-  const optionsList = rolesList?.map((role) => {
-    const proxyObj = proxyRoles?.find((item) => item.role === role);
-    return {
-      value: role,
-      label:
-        proxyObj?.proxyRole?.split("_").join(" ") || role?.split("_").join(" "),
-    };
-  });
-  const items = [...(rolesList?.length > 0 ? optionsList : [])];
-  const onSubmitRole = async (e) => {
+  const clientOptions = clientDetails?.map((client) => ({
+    label: client.clientName,  
+    value: client.clientId,  
+  }))
+  const onSubmitClient = async (e) => {
     e.preventDefault();
     router.push("/client");
   };
-  
 
   const handleLogout = () => {
     setConfirmModal(false);
     loginSuccessCallBack();
   };
-
   useEffect(() => {
-    getProxyRoles();
+    getAllClientId();
+    getAllClientDetails()
   }, []);
 
   useEffect(() => {
@@ -69,6 +61,8 @@ const SelectProject = ({ getLogin, getProxyRoles, proxyRoles }) => {
       </div>
     );
   }
+
+
   return (
     <div className="page-wraper">
       <div className="login-account">
@@ -84,11 +78,18 @@ const SelectProject = ({ getLogin, getProxyRoles, proxyRoles }) => {
               </div>
             </div>
           </div>
-          <div className="col-lg-6 col-md-7 col-sm-12 mx-auto align-self-center ">
-            <div className="login-client ">
-              <form onSubmit={onSubmitRole}>
-                <div className="mt-4">
-                  <label className="mb-1 text-dark">Select Client</label>
+          <div className="col-lg-6 col-md-7 col-sm-12 mx-auto align-self-center">
+            <div className="login-form">
+              <div className=" d-flex align-items-center justify-content-center">
+                <h2 className="title fontWeight2 ">Login to Your Account</h2>
+              </div>
+              <h6 className="login-title">
+                <span>Login</span>
+              </h6>
+
+              <form onSubmit={onSubmitClient}>
+                <div className="mb-4">
+                  <label className="mb-1 text-dark">Select Cleint</label>
                   <div
                     id="role"
                     name="role"
@@ -103,14 +104,14 @@ const SelectProject = ({ getLogin, getProxyRoles, proxyRoles }) => {
                       style={{ width: "100%", height: "2.75rem" }}
                       placeholder="Select Client"
                       onChange={(value) => {
-                        setSelectedRole(value?.toLowerCase());
-                        setRoleError(false);
+                        setSelectClient(value?.toLowerCase());
+                        setClientError(false);
                       }}
-                        options={priorityOptions}
+                      options={clientOptions}
                     />
-                    {roleError && (
+                    {clientError && (
                       <span className="text-danger fs-12">
-                        Please Select Client
+                        Please Select Cleint
                       </span>
                     )}
                   </div>
@@ -120,6 +121,15 @@ const SelectProject = ({ getLogin, getProxyRoles, proxyRoles }) => {
                   id="next-btn"
                   name="next-btn"
                 >
+                  {/* <RegularButton
+                  onClick={() => {
+                    setSelectClient(null);
+                    setClientError(false);
+                  }}
+                  type="outline"
+                  name="BACK"
+                  width="240px"
+                /> */}
                   <RegularButton
                     type="submit"
                     name="NEXT"
@@ -146,12 +156,12 @@ const SelectProject = ({ getLogin, getProxyRoles, proxyRoles }) => {
 
 const connector = connect(
   (state) => ({
-    loginData: state.authReducer?.loginData?.data?.response,
-    proxyRoles: state.authReducer?.getAllProxyRoles?.data?.response,
+    clientIdData: state.authReducer?.getClientId?.data?.response,
+    clientDetails:state.authReducer?.getClientDetails?.data?.response,
   }),
   {
-    getLogin: allActions.getLogin,
-    getProxyRoles: allActions.proxyRoles,
+    getAllClientId: allActions.clientId,
+    getAllClientDetails:allActions.clientDetails,
   }
 );
 export default connector(SelectProject);

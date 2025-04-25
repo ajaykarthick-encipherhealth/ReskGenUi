@@ -14,7 +14,7 @@ import GoogleLogo from "../images/logo/devicon_google.png";
 import Image from "next/image";
 import { useMsal } from "@azure/msal-react";
 import { setStorage } from "../utils/storages";
-import PageLoading from "../components/page-loading"
+import PageLoading from "../components/page-loading";
 
 const Login = ({ getMFAValidation, loginResponse }) => {
   const router = useRouter();
@@ -108,7 +108,7 @@ const Login = ({ getMFAValidation, loginResponse }) => {
       return () => clearTimeout(timeout); // Cleanup
     }
   }, [instance, accounts, inProgress]);
-  
+
   if (isLoading) {
     return (
       <div>
@@ -199,6 +199,7 @@ const Login = ({ getMFAValidation, loginResponse }) => {
                       name="LOGIN"
                       width="100%"
                       loading={loginResponse}
+                      disabled
                     />
                   </div>
 

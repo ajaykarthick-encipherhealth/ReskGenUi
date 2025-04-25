@@ -72,5 +72,17 @@ export const proxyRoles=createActionThunk(
   "GET_PROXY_ROLES",
   network.getProxyRole
 )
+export const clientId=createActionThunk(
+  "GET_CLIENT_ID",
+  network.getClientId
+)
+export const clientDetails=createActionThunk(
+  "GET_CLIENT_DETAILS",
+  network.getClientDetails
+)
+
+
+
+
 
 

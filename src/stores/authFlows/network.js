@@ -1,5 +1,5 @@
 import { notification } from "antd";
-import { authRequestPortal, requestPortal, requestPortalMockoon } from "../../utils/network";
+import { authRequestPortal, requestPortal, requestPortalMockoon, requestPortalRoleBased } from "../../utils/network";
 import { getStorage, setStorage } from "../../utils/storages";
 import { getResponePopup } from "../../utils/reusable";
 
@@ -328,6 +328,29 @@ export async function getProxyRole() {
   };
   const data = await requestPortal(
     `dbservice/roleproxy/get`,
+    options
+  );
+  return data;
+}
+
+
+export async function getClientId() {
+  const options = {
+    method: "GET",
+  };
+  const data = await requestPortal(
+    `secure/dbservice/user/orgid`,
+    options
+  );
+  return data;
+}
+
+export async function getClientDetails() {
+  const options = {
+    method: "GET",
+  };
+  const data = await requestPortalRoleBased(
+    `/secure/dbservice/client/get/dropdown`,
     options
   );
   return data;
