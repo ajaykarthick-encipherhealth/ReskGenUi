@@ -10,61 +10,45 @@ import { actions as allActions } from "../../stores/authFlows";
 import { getLogoImage } from "./reusableFun";
 import { priorityOptions } from "../../components/headerFilters/functions";
 
-const SelectRole = ({ getLogin ,getProxyRoles,proxyRoles}) => {
+const SelectRole = ({
+  getAllRoles,
+  getProxyRoles,
+  proxyRoles,
+  allRolesData,
+}) => {
   const router = useRouter();
   const [selectedRole, setSelectedRole] = useState(null);
   const [roleError, setRoleError] = useState(false);
   const [confirmModal, setConfirmModal] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [password, setPassword] = useState("");
 
-  
-  const rolesList = JSON.parse(getStorage("roles"));
-  const optionsList = rolesList?.map((role) => {
-    const proxyObj = proxyRoles?.find((item) => item.role === role);
-    return {
-      value: role,
-      label: proxyObj?.proxyRole?.split("_").join(" ") || role?.split("_").join(" "), 
-    };
-  });
-  const items = [...(rolesList?.length > 0 ? optionsList : [])];
- 
+  const roleOptions = allRolesData?.userRoles?.map((client) => ({
+    label: client.proxyRole,
+    value: client.proxyRole,
+  }));
   const onSubmitRole = async (e) => {
     e.preventDefault();
+
     if (!selectedRole) {
       setRoleError(true);
+      return;
+    }
+    const selectedRoleObj = allRolesData?.userRoles?.find(
+      (role) => role.proxyRole === selectedRole
+    );
+    if (selectedRoleObj) {
+      // console.log(selectedRoleObj, selectedRole, "selectedRoleObj");
+      // const { roleId, accessList, aliasName, proxyRole } = selectedRoleObj;
+      console.log(selectedRoleObj?.accessList,"list")
+      setStorage("proxyRole", selectedRoleObj?.proxyRole);
+      setStorage("accessMenuList", JSON.stringify(selectedRoleObj?.accessList));
+      setStorage("roleId", selectedRoleObj?.roleId);
+      setStorage("aliasName", selectedRoleObj?.aliasName);
+      loginSuccessCallBack();
     } else {
-      if (selectedRole.toLowerCase() === "admin") {
-        notification.warning({
-          message: "Unprivileged access!",
-          duration: 1,
-        });
-      } else {
-        const selectedProxyObj = proxyRoles?.find(
-          (item) => item.role?.toLowerCase() === selectedRole?.toLowerCase()
-        );
-        if (selectedProxyObj?.proxyRole) {
-          const formattedProxyRole = selectedProxyObj.proxyRole.replace(
-            /_/g,
-            " "
-          );
-          const accessList = proxyRoles?.find(
-           (item) => item.role?.toLowerCase() === selectedRole?.toLowerCase()
-         );
-         const roleId = selectedProxyObj?.roleId   
-          setStorage("proxyRole", formattedProxyRole);
-          setStorage("accessMenuList", JSON.stringify(accessList));
-          setStorage("roleId", roleId)
-          setStorage("aliasName",selectedProxyObj?.aliasName  )
-      }
- 
-        loginSuccessCallBack();
-      }
+      console.error("Selected role not found in userRoles array");
     }
   };
-
-
-
 
   const handleLogout = () => {
     setConfirmModal(false);
@@ -80,10 +64,13 @@ const SelectRole = ({ getLogin ,getProxyRoles,proxyRoles}) => {
     const rolesMapping = {
       admin: { userRole: "admin", route: "/admin/dashboard" },
       reviewer: { userRole: "reviewer", route: "/reviewer/dashboard" },
+      CODER_1: { userRole: "CODER_1", route: "/reviewer/dashboard" },
+      CODER_2: { userRole: "CODER_2", route: "/reviewer/dashboard" },
+      QA: { userRole: "QA", route: "/reviewer/dashboard" },
       supervisor: { userRole: "supervisor", route: "/supervisor/dashboard" },
       provider: { userRole: "provider", route: "/provider/fhirTable" },
-      tenant_admin: {
-        userRole: "tenant_admin",
+      TENANT_ADMIN: {
+        userRole: "TENANT_ADMIN",
         route: "/tenantadmin/dashboard",
       },
       physician: { userRole: "physician", route: "/physicians/dashboard" },
@@ -91,62 +78,23 @@ const SelectRole = ({ getLogin ,getProxyRoles,proxyRoles}) => {
         userRole: "record_analyst",
         route: "/analyst/patients",
       },
-      // physician: { userRole: "physician", route: "/physician/dashboard" },
     };
 
     const selectedRoleInfo = rolesMapping[selectedRole];
     if (selectedRoleInfo && !roleError) {
-
       setStorage("userRole", selectedRoleInfo?.userRole);
-      // setStorage("userRole", selectedRole);
       setLoading(true);
       router?.push(selectedRoleInfo?.route);
     }
   };
+  console.log(selectedRole, "selectedRole");
+  useEffect(() => {
+    getAllRoles();
+  }, []);
 
-  // useEffect(() => {
-  //   const mfa = JSON.parse(getStorage("mfa"));
-  //   const skipEntry = JSON.parse(getStorage("skipEntry"));
-  //   const username = getStorage("userId");
-  //   const sessionPassword = JSON.parse(getStorage("password"));
-  //   const code = getStorage("code");
-  //   setPassword(sessionPassword);
-  //   removeStorage("password");
-  //   if (password) {
-  //     // let rolesArray = JSON.parse(getStorage("roles"));
-  //     // let getUserId = getStorage("userId");
-  //     // if (getUserId == "johnson@encipherhealth.onmicrosoft.com") {
-  //     //   rolesArray = ["TENANT ADMIN"];
-  //     // }
-
-  //     getLogin({
-  //       email: username,
-  //       router: router,
-  //       code: code,
-  //       password: password,
-  //       mfa: mfa,
-  //       skip: skipEntry,
-  //     });
-  //   }
-  //   if (!username) {
-  //     router.push("/login");
-  //   }
-  // }, []);
-
-  // useEffect(() => {
-  //   router.beforePopState(({ url }) => {
-  //     router.push("/login");
-  //     return false;
-  //   });
-  //   return () => {
-  //     router.beforePopState(() => true);
-  //   };
-  // }, [router]);
-
-  
-  useEffect(()=>{
-    getProxyRoles()
-  },[])
+  useEffect(() => {
+    getProxyRoles();
+  }, []);
   return (
     <div className="page-wraper">
       <div className="login-account">
@@ -174,7 +122,9 @@ const SelectRole = ({ getLogin ,getProxyRoles,proxyRoles}) => {
               <form onSubmit={onSubmitRole}>
                 <div className="mb-4">
                   <label className="mb-1 text-dark">Select Role</label>
-                  <div id="role" name="role"
+                  <div
+                    id="role"
+                    name="role"
                     style={{
                       height: "100px",
                       marginTop: "5px",
@@ -186,11 +136,11 @@ const SelectRole = ({ getLogin ,getProxyRoles,proxyRoles}) => {
                       style={{ width: "100%", height: "2.75rem" }}
                       placeholder="Select Role"
                       onChange={(value) => {
-                        setSelectedRole(value?.toLowerCase());
+                        setSelectedRole(value);
                         setRoleError(false);
                       }}
-                      // options={items}
-                      options={priorityOptions}
+                      value={selectedRole}
+                      options={roleOptions}
                     />
                     {roleError && (
                       <span className="text-danger fs-12">
@@ -199,7 +149,11 @@ const SelectRole = ({ getLogin ,getProxyRoles,proxyRoles}) => {
                     )}
                   </div>
                 </div>
-                <div className="d-flex justify-content-between " id="next-btn" name="next-btn">
+                <div
+                  className="d-flex justify-content-between "
+                  id="next-btn"
+                  name="next-btn"
+                >
                   <RegularButton
                     onClick={() => {
                       setSelectedRole(null);
@@ -237,11 +191,13 @@ const SelectRole = ({ getLogin ,getProxyRoles,proxyRoles}) => {
 const connector = connect(
   (state) => ({
     loginData: state.authReducer?.loginData?.data?.response,
-    proxyRoles:state.authReducer?.getAllProxyRoles?.data?.response,
+    proxyRoles: state.authReducer?.getAllProxyRoles?.data?.response,
+    allRolesData: state.authReducer?.getAllRoles?.data?.response,
   }),
   {
     getLogin: allActions.getLogin,
-    getProxyRoles:allActions.proxyRoles,
+    getProxyRoles: allActions.proxyRoles,
+    getAllRoles: allActions.allRoles,
   }
 );
 export default connector(SelectRole);

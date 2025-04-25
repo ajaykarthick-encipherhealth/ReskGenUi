@@ -366,5 +366,13 @@ export async function getProjectDetails() {
   );
   return data;
 }
-
-
+export async function getAllRoles() {
+  const options = {
+    method: "GET",
+  };
+  const data = await requestPortal(
+    `dbservice/user/get/dropdown`,
+    options
+  );
+  return data;
+}
