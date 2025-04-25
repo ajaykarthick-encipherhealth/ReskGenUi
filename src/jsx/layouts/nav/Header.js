@@ -76,7 +76,8 @@ const Header = ({
   getAllProjects,
   getAllClientDetails,
   clientDetails,
-  projectDetails
+  projectDetails,
+  getAllRoles,
 }) => {
   const router = useRouter();
   const fileInputRef = useRef(null);
@@ -112,8 +113,9 @@ const Header = ({
   });
   const [selectedFile, setSelectedFile] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [animate, setAnimate] = useState(false);
-  const proxyRole = getStorage("proxyRole")
+  const [selectedClient, setSelectedClient] = useState(null);
+  const [selectedProject, setSelectedProject] = useState(null);
+  const proxyRole = getStorage("proxyRole");
   const showDrawer = () => {
     setOpened(true);
     setPopoverVisible(false);
@@ -204,14 +206,14 @@ const Header = ({
     );
 
   const onClick = ({ key }) => {
-    setStorage("userRole", key.replace(/ /g, "_"));
+    setStorage("userRole", key);
     if (key === "Admin") {
       router.push("/admin/dashboard");
-    } else if (key === "Reviewer") {
+    } else if (key === "CODER_1" || key === "CODER_2" || key === "QA") {
       router.push("/reviewer/dashboard");
     } else if (key === "Supervisor") {
       router.push("/supervisor/dashboard");
-    } else if (key === "Tenant Admin") {
+    } else if (key === "TENANT_ADMIN") {
       router.push("/tenantadmin/dashboard");
     } else if (key === "Ehr") {
       router.push("/ehr/patients");
@@ -224,11 +226,10 @@ const Header = ({
         return AdminMenuList;
       case "CODER_1":
         return PhysicanMenuList(accessMenuList);
-        case "CODER_2":
-          return PhysicanMenuList(accessMenuList);
-          case "QA":
-            return PhysicanMenuList(accessMenuList);
-          
+      case "CODER_2":
+        return PhysicanMenuList(accessMenuList);
+      case "QA":
+        return PhysicanMenuList(accessMenuList);
       case "supervisor":
         return L2AuditorMenuList;
       case "TENANT_ADMIN":
@@ -312,7 +313,6 @@ const Header = ({
     var countUnread =
       notificationResponse?.data?.response?.totalUnreadCount + count?.length;
     setNotificationCount(countUnread ? countUnread : 0);
-
 
     notificationSoundRef.current = new Audio("/messageSound.mp3");
 
@@ -591,13 +591,43 @@ const Header = ({
     label: client.clientName,
     value: client.clientId,
   }));
+
+  const handleClientChange = (value) => {
+    setSelectedClient(value);
+  };
+
+  const handleProjectChange = (value) => {
+    setSelectedProject(value);
+  };
+
   useEffect(() => {
+    if (clientDetails) {
+      setSelectedClient(clientOptions || clientOptions[0]);
+    }
+    if (projectDetails) {
+      setSelectedProject(projectOptions || projectOptions[0]);
+    }
+  }, [clientDetails, projectDetails]);
+  console.log(selectedClient, "selectedClient");
+  useEffect(() => {
+    if (selectedClient !== null) {
+      setStorage("clientId", selectedClient);
+    }
+  }, [selectedClient]);
+
+  useEffect(() => {
+    if (selectedProject !== null) {
+      setStorage("projectId", selectedProject);
+    }
+  }, [selectedProject]);
+
+  useEffect(() => {
+    getAllProjects();
     getAllClientDetails();
   }, []);
-    useEffect(() => {
-      getAllProjects();
-    }, []);
-
+  useEffect(() => {
+    getAllRoles();
+  }, []);
   return (
     <div className={`header ${headerFix ? "is-fixed" : ""}`}>
       <div className="header-content">
@@ -628,36 +658,30 @@ const Header = ({
                 <div className="mt-3">
                   <Select
                     placeholder="Client"
-                    style={{
-                      width: 150,
-                    }}
-                    // onChange={handleProject}
-                    // value={selectedOption}
+                    style={{ width: 150 }}
+                    value={selectedClient}
+                    onChange={handleClientChange}
                     options={clientOptions}
                   />
                 </div>
                 <div className="mt-3">
                   <Select
                     placeholder="Sample Project"
-                    style={{
-                      width: 150,
-                    }}
-                    // onChange={handleProject}
-                    // value={selectedOption}
+                    style={{ width: 150 }}
+                    value={selectedProject}
+                    onChange={handleProjectChange}
                     options={projectOptions}
                   />
                 </div>
                 {proxyRole === "QA" && (
                   <div className="mt-3">
-                    <Select
-                      placeholder="Tin"
-                      style={{
-                        width: 150,
-                      }}
-                      // onChange={handleProject}
-                      // value={selectedOption}
-                      // options={options}
-                    />
+                    {/* <Select
+                      placeholder="Sample Project"
+                      style={{ width: 150 }}
+                      value={selectedProject}
+                      onChange={handleProjectChange}
+                      options={projectOptions}
+                    /> */}
                   </div>
                 )}
               </div>
@@ -1082,6 +1106,7 @@ const enhancer = connect(
     deleteImage: state?.authReducer?.deleteProfileImg?.data,
     projectDetails: state.authReducer?.getProjectDetails?.data?.response,
     clientDetails: state.authReducer?.getClientDetails?.data?.response,
+    allRolesData: state.authReducer?.getAllRoles?.data?.response,
   }),
   {
     getNotificationList: dashbaordActions.notificationAction,
@@ -1103,6 +1128,7 @@ const enhancer = connect(
     getRoutedData: tenantAction.getRoutedData,
     getAllProjects: authActions.projectDetails,
     getAllClientDetails: authActions.clientDetails,
+    getAllRoles: authActions.allRoles,
   }
 );
 export default enhancer(Header);

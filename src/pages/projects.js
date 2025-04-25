@@ -18,7 +18,6 @@ const SelectProject = ({
   clientDetails,
 }) => {
   const router = useRouter();
-  const clientIds = setStorage("clientId", clientIdData);
   const [selectClient, setSelectClient] = useState(null);
   const [clientError, setClientError] = useState(false);
   const [confirmModal, setConfirmModal] = useState(false);

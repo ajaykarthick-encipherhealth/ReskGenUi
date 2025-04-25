@@ -87,7 +87,7 @@ const SelectRole = ({
       router?.push(selectedRoleInfo?.route);
     }
   };
-  console.log(selectedRole, "selectedRole");
+
   useEffect(() => {
     getAllRoles();
   }, []);
