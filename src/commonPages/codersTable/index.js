@@ -201,9 +201,9 @@ const CodersTable = ({
     },
   ];
   const router = useRouter();
-  const [activeFilters, setActiveFilters] = useState(data?.response?.metaDataDTO.filter(
-    (item) => item.active
-  ));
+  const [activeFilters, setActiveFilters] = useState(
+    data?.response?.metaDataDTO.filter((item) => item.active)
+  );
   const [sort, setSort] = useState({
     allocatedOn: {
       sortDir: "DESC",
@@ -287,10 +287,11 @@ const CodersTable = ({
   };
   useEffect(() => {
     getTableStatus({
-      pageNo,
-      pageId,
+      isReAssigned,
+      isQueried,
+      patientAllocated,
     });
-  }, [activeStatus, pageNo, pageId]);
+  }, []);
   useEffect(() => {
     setParamsFilter("check");
     if (window !== "undefined" && paramsFilter) {
@@ -406,12 +407,13 @@ const CodersTable = ({
   }, [routedData]);
 
   useEffect(() => {
-    setActiveFilters(data?.response?.metaDataDTO.filter(
-      (item) => item.active && item?.filter?.style
-    ));
+    setActiveFilters(
+      data?.response?.metaDataDTO.filter(
+        (item) => item.active && item?.filter?.style
+      )
+    );
   }, [data?.response?.metaDataDTO]);
 
-  
   return (
     <div className={`show `}>
       <Header />
@@ -462,105 +464,192 @@ const CodersTable = ({
             </div>
           </div>
           <div className="profile-tab  mt-3">
-            <div className="custom-tab-1">
-              <Tab.Container
-                defaultActiveKey={
-                  routedData?.activeStatus
-                    ? routedData?.activeStatus
-                    : "PENDING"
-                }
-              >
-                <Nav as="ul" className="nav nav-tabs">
-                  <Nav.Item
-                    as="li"
-                    className="nav-item"
-                    onClick={() => {
-                      handleTabs("PENDING");
-                    }}
-                  >
-                    <Nav.Link
-                      id="pending"
-                      name="pending"
-                      to="#my-posts"
-                      eventKey="PENDING"
+            {pageId === "a9d5c555-7954-4382-a2ef-3f66b292cf8f" ? (
+              <div className="custom-tab-1">
+                <Tab.Container
+                  defaultActiveKey={
+                    routedData?.activeStatus
+                      ? routedData?.activeStatus
+                      : "PENDING"
+                  }
+                >
+                  <Nav as="ul" className="nav nav-tabs">
+                    <Nav.Item
+                      as="li"
+                      className="nav-item"
+                      onClick={() => {
+                        handleTabs("PENDING");
+                      }}
                     >
-                      PENDING - {tableStatus?.PENDING || 0}{" "}
-                    </Nav.Link>
-                  </Nav.Item>
-                  <Nav.Item
-                    as="li"
-                    className="nav-item"
-                    onClick={() => {
-                      handleTabs("COMPLETED");
-                    }}
-                  >
-                    <Nav.Link
-                      id="completed"
-                      name="completed"
-                      to="#my-posts"
-                      eventKey="COMPLETED"
+                      <Nav.Link
+                        id="pending"
+                        name="pending"
+                        to="#my-posts"
+                        eventKey="PENDING"
+                      >
+                        PENDING - {tableStatus?.pendingCount || 0}{" "}
+                      </Nav.Link>
+                    </Nav.Item>
+                    <Nav.Item
+                      as="li"
+                      className="nav-item"
+                      onClick={() => {
+                        handleTabs("COMPLETED");
+                      }}
                     >
-                      COMPLETED - {tableStatus?.COMPLETED || 0}{" "}
-                    </Nav.Link>
-                  </Nav.Item>{" "}
-                  <Nav.Item
-                    as="li"
-                    className="nav-item"
-                    onClick={() => {
-                      handleTabs("HOLD");
-                    }}
-                  >
-                    <Nav.Link
-                      id="hold"
-                      name="hold"
-                      to="#my-posts"
-                      eventKey="HOLD"
+                      <Nav.Link
+                        id="completed"
+                        name="completed"
+                        to="#my-posts"
+                        eventKey="COMPLETED"
+                      >
+                        APPROVED - {tableStatus?.approvedCount || 0}{" "}
+                      </Nav.Link>
+                    </Nav.Item>{" "}
+                  
+                    <Nav.Item
+                      as="li"
+                      className="nav-item"
+                      onClick={() => {
+                        handleTabs("DECLINED");
+                      }}
                     >
-                      HOLD - {tableStatus?.HOLD || 0}
-                    </Nav.Link>
-                  </Nav.Item>
-                  <Nav.Item
-                    as="li"
-                    className="nav-item"
-                    onClick={() => {
-                      handleTabs("DECLINED");
-                    }}
-                  >
-                    <Nav.Link
-                      id="declined"
-                      name="declined"
-                      to="#my-posts"
-                      eventKey="DECLINED"
+                      <Nav.Link
+                        id="declined"
+                        name="declined"
+                        to="#my-posts"
+                        eventKey="DECLINED"
+                      >
+                        REJECTED - {tableStatus?.rejectedCount || 0}
+                      </Nav.Link>
+                    </Nav.Item>
+                  </Nav>
+                  <Tab.Content>
+                    <Tab.Pane eventKey={activeStatus}>
+                      <div className="mt-3">
+                        <AppTable
+                          data={data?.response?.pageResponse?.content}
+                          column={data?.response?.metaDataDTO.filter(
+                            (item) => item.active
+                          )}
+                          loader={tableLoader}
+                          onRowClick={gotoPatientDetails}
+                          pagination={false}
+                          setSort={setSort}
+                          sort={sort}
+                          first={pageNo === 0 ? 0 : paginationFirst}
+                          totalRecords={
+                            data?.response?.pageResponse?.totalElements
+                          }
+                          row={15}
+                          onPageChange={onPageChange}
+                        />
+                      </div>
+                    </Tab.Pane>
+                  </Tab.Content>
+                </Tab.Container>
+              </div>
+            ) : (
+              <div className="custom-tab-1">
+                <Tab.Container
+                  defaultActiveKey={
+                    routedData?.activeStatus
+                      ? routedData?.activeStatus
+                      : "PENDING"
+                  }
+                >
+                  <Nav as="ul" className="nav nav-tabs">
+                    <Nav.Item
+                      as="li"
+                      className="nav-item"
+                      onClick={() => {
+                        handleTabs("PENDING");
+                      }}
                     >
-                      DECLINED - {tableStatus?.DECLINED || 0}
-                    </Nav.Link>
-                  </Nav.Item>
-                </Nav>
-                <Tab.Content>
-                  <Tab.Pane eventKey={activeStatus}>
-                    <div className="mt-3">
-                      <AppTable
-                        data={data?.response?.pageResponse?.content}
-                        column={data?.response?.metaDataDTO.filter(
-                          (item) => item.active
-                        )}
-                        loader={tableLoader}
-                        onRowClick={gotoPatientDetails}
-                        pagination={false}
-                        setSort={setSort}
-                        sort={sort}
-                        first={pageNo === 0 ? 0 : paginationFirst}
-                        totalRecords={
-                          data?.response?.pageResponse?.totalElements
-                        }
-                        row={15}
-                        onPageChange={onPageChange}
-                      />
-                    </div>
-                  </Tab.Pane>
-                </Tab.Content>
-              </Tab.Container>
-            </div>
+                      <Nav.Link
+                        id="pending"
+                        name="pending"
+                        to="#my-posts"
+                        eventKey="PENDING"
+                      >
+                        PENDING - {tableStatus?.pendingCount || 0}{" "}
+                      </Nav.Link>
+                    </Nav.Item>
+                    <Nav.Item
+                      as="li"
+                      className="nav-item"
+                      onClick={() => {
+                        handleTabs("COMPLETED");
+                      }}
+                    >
+                      <Nav.Link
+                        id="completed"
+                        name="completed"
+                        to="#my-posts"
+                        eventKey="COMPLETED"
+                      >
+                        COMPLETED - {tableStatus?.approvedCount || 0}{" "}
+                      </Nav.Link>
+                    </Nav.Item>{" "}
+                    <Nav.Item
+                      as="li"
+                      className="nav-item"
+                      onClick={() => {
+                        handleTabs("HOLD");
+                      }}
+                    >
+                      <Nav.Link
+                        id="hold"
+                        name="hold"
+                        to="#my-posts"
+                        eventKey="HOLD"
+                      >
+                        HOLD - {tableStatus?.holdCount || 0}
+                      </Nav.Link>
+                    </Nav.Item>
+                    <Nav.Item
+                      as="li"
+                      className="nav-item"
+                      onClick={() => {
+                        handleTabs("DECLINED");
+                      }}
+                    >
+                      <Nav.Link
+                        id="declined"
+                        name="declined"
+                        to="#my-posts"
+                        eventKey="DECLINED"
+                      >
+                        DECLINED - {tableStatus?.rejectedCount || 0}
+                      </Nav.Link>
+                    </Nav.Item>
+                  </Nav>
+                  <Tab.Content>
+                    <Tab.Pane eventKey={activeStatus}>
+                      <div className="mt-3">
+                        <AppTable
+                          data={data?.response?.pageResponse?.content}
+                          column={data?.response?.metaDataDTO.filter(
+                            (item) => item.active
+                          )}
+                          loader={tableLoader}
+                          onRowClick={gotoPatientDetails}
+                          pagination={false}
+                          setSort={setSort}
+                          sort={sort}
+                          first={pageNo === 0 ? 0 : paginationFirst}
+                          totalRecords={
+                            data?.response?.pageResponse?.totalElements
+                          }
+                          row={15}
+                          onPageChange={onPageChange}
+                        />
+                      </div>
+                    </Tab.Pane>
+                  </Tab.Content>
+                </Tab.Container>
+              </div>
+            )}
           </div>
         </div>
       </div>
@@ -582,8 +671,7 @@ const enhancer = connect(
       state?.reviewer?.workQueue?.getStatus?.data?.response?.processStatusCount,
     tableLoader: state?.tableView?.tableViewLoading,
     data: state?.tableView?.tableView?.data,
-    tableStatus:
-      state?.tableView?.TableStatusView?.data?.response?.processStatusCount,
+    tableStatus: state?.tableView?.TableStatusView?.data?.response,
   }),
   {
     getpatientsListFilter: workqueueActions.patientsAction,

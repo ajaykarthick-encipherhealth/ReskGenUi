@@ -48,6 +48,7 @@ const tableReducer = combineReducers({
   tableView: createReducer(tableViewAction),
   tableColumnChecked:createReducer(tableDynamicChecked),
   TableStatusView: createReducer(getTableStatusAction),
+
 });
 
 export default tableReducer;

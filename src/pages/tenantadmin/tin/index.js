@@ -111,7 +111,18 @@ const columns = [
     filterKey: "",
   },
 ];
-
+export const getPageId = (activeTab) => {
+  switch (activeTab) {
+    case "Active":
+      return "2d7cb7f7-6dad-41fb-970b-d805fb3f195f";
+    case "InActive":
+      return "6579b31a-aa46-42bf-abbb-c1e17e987a3a";
+    case "Providers":
+      return "32e9eea6-095c-4bd3-abee-17835ea53cdc";
+    default:
+      return "";
+  }
+};
 const Tin = ({
   getProjectActiveTab,
   activeTabName,
@@ -152,14 +163,18 @@ const Tin = ({
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isResetting, setIsResetting] = useState(false);
 
-  const gotoPatientDetails = (data) => {
-    setStorage("patientId", data.patientId);
-    setStorage("routeBackTo", "/tenantadmin/tin");
-    getProjectActiveTab({
-      tinFilter: params,
-    });
-    router.push("/tenantadmin/tin/tindetails?tab=Patients");
-  };
+const gotoPatientDetails = (rowData) => {
+  setStorage("patientId", rowData.patientId);
+  setStorage("tinNumber", rowData.tinNumber); 
+  setStorage("routeBackTo", "/tenantadmin/tin");
+
+  getProjectActiveTab({
+    tinFilter: params,
+  });
+
+  router.push("/tenantadmin/tin/tindetails?tab=Patients");
+};
+
   // const handleTabs = (name) => {
   //   getProjectActiveTab({
   //     tinTabName: name,
@@ -184,18 +199,18 @@ const Tin = ({
   const onClose = () => {
     setOpen(false);
   };
-  const getPageIdByTab = (tab) => {
-    switch (tab) {
-      case "Active":
-        return "2d7cb7f7-6dad-41fb-970b-d805fb3f195f";
-      case "InActive":
-        return "6579b31a-aa46-42bf-abbb-c1e17e987a3a";
-      case "Providers":
-        return "32e9eea6-095c-4bd3-abee-17835ea53cdc";
-      default:
-        return "";
-    }
-  };
+  // const getPageIdByTab = (tab) => {
+  //   switch (tab) {
+  //     case "Active":
+  //       return "2d7cb7f7-6dad-41fb-970b-d805fb3f195f";
+  //     case "InActive":
+  //       return "6579b31a-aa46-42bf-abbb-c1e17e987a3a";
+  //     case "Providers":
+  //       return "32e9eea6-095c-4bd3-abee-17835ea53cdc";
+  //     default:
+  //       return "";
+  //   }
+  // };
 
   const pageIds =
     activeTab === "Active"
@@ -271,7 +286,7 @@ const Tin = ({
   }, [routedData]);
 const getAllTins = async (tabOverride) => {
   const currentTab = tabOverride || activeTab;
-  const pageId = getPageIdByTab(currentTab);
+  const pageId =  getPageId(activeTab);
 
   await getTableData({
     pageId,
