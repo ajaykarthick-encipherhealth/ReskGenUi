@@ -25,9 +25,9 @@ export async function requestPortal(url, options) {
       Authorization: `${"Bearer" + " " + token}`,
       "Content-Type": "application/json",
       "X-Role-Id": userRoleId,
-      "X-Client": "test",
-      "X-Org": "test",
-      "X-Project": "test",
+      "X-Client": "a76cf2c9-91e7-40f3-8e18-d4fad61a8cf9",
+      "X-Org": "680b5cf84719af031b1bc89c",
+      "X-Project": "56d568c4-d474-4e01-b292-83b4fbc7a65b",
       "X-Org-based": "true",
     },
   };

@@ -319,8 +319,8 @@ const Patient = ({
   const [statusUpdateWebSocket, setStatusUpdateWebSocket] = useState();
   const [open, setOpen] = useState(false);
   const [test, setTest] = useState(data?.response?.metaDataDTO);
-    const [isSubmitting, setIsSubmitting] = useState(false);
-    const [isResetting, setIsResetting] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isResetting, setIsResetting] = useState(false);
 
   const addPatientFormId = () => {
     setValidated(false);
@@ -746,11 +746,16 @@ const Patient = ({
     }
   }, [routedData]);
   const getPatients = async () => {
+    const tin = getStorage("tinNumber");
+    const userId = getStorage("userId");
     const response = await getTableData({
       pageId: "c41d4ea9-6da4-495c-84f4-95b25d6c13b4",
       pageNo,
       pageSize: 15,
       roleId: "",
+      tin,
+      patientAllocated: userId,
+      isAdmin: true,
     });
   };
   useEffect(() => {
@@ -803,7 +808,7 @@ const Patient = ({
     flag: flagPostList,
   };
   const handleSubmitInsert = async () => {
-     setIsSubmitting(true);
+    setIsSubmitting(true);
     const payload = {
       pageId: "c41d4ea9-6da4-495c-84f4-95b25d6c13b4",
       headerNames: test
@@ -818,13 +823,13 @@ const Patient = ({
         onClose();
         getResponePopup(response);
       }
-       setIsSubmitting(false);
+      setIsSubmitting(false);
     } catch (error) {
       getResponePopup(error?.response);
     }
   };
   const handleReset = async () => {
-  setIsResetting(true);
+    setIsResetting(true);
 
     const payload = {
       pageId: "c41d4ea9-6da4-495c-84f4-95b25d6c13b4",
@@ -836,8 +841,7 @@ const Patient = ({
         onClose();
         getResponePopup(response);
       }
-    setIsResetting(false);
-
+      setIsResetting(false);
     } catch (error) {
       getResponePopup(error?.response);
     }
@@ -1038,8 +1042,7 @@ const enhancer = connect(
     getTableData: tableAction.tableViewAction,
     getAllTabRoles: allActions.getAllRoles,
     tableDynamicColumn: tableAction.tableDynamicColumn,
-        tableDynamicColumnReset: tableAction.tableDynamicColumnReset,
-    
+    tableDynamicColumnReset: tableAction.tableDynamicColumnReset,
   }
 );
 export default enhancer(Patient);

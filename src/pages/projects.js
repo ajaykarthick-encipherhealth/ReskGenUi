@@ -18,7 +18,7 @@ const SelectProject = ({
   clientDetails,
 }) => {
   const router = useRouter();
-  const clientId = setStorage("clientId", clientIdData);
+  const clientIds = setStorage("clientId", clientIdData);
   const [selectClient, setSelectClient] = useState(null);
   const [clientError, setClientError] = useState(false);
   const [confirmModal, setConfirmModal] = useState(false);
@@ -41,8 +41,8 @@ const SelectProject = ({
   };
   useEffect(() => {
     getAllClientId();
+     setStorage("userId", clientIdData?.userName);
   }, []);
-
   useEffect(() => {
     getAllClientDetails();
   }, []);
@@ -67,7 +67,7 @@ const SelectProject = ({
       </div>
     );
   }
-
+console.log(clientIdData, "clientIdData");
   return (
     <div className="page-wraper">
       <div className="login-account">
