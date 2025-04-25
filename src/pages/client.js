@@ -34,7 +34,7 @@ const SelectClient = ({ projectDetails,getAllProjects }) => {
   useEffect(() => {
     getAllProjects();
   }, []);
-console.log(projectDetails,"projectDetails")
+
   return (
     <div className="page-wraper">
       <div className="login-account">
@@ -74,7 +74,7 @@ console.log(projectDetails,"projectDetails")
                       id="select-role"
                       name="select-role"
                       style={{ width: "100%", height: "2.75rem" }}
-                      placeholder="Select Role"
+                      placeholder="Select Projects"
                       onChange={(value) => {
                         setSelectClient(value?.toLowerCase());
                         setClientError(false);
@@ -120,7 +120,6 @@ console.log(projectDetails,"projectDetails")
 const connector = connect(
   (state) => ({
     projectDetails: state.authReducer?.getProjectDetails?.data?.response,
-    cv:console.log(state,"state")
   }),
   {
     getAllProjects: allActions.projectDetails,

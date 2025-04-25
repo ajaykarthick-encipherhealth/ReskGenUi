@@ -163,7 +163,6 @@ const connector = connect(
   (state) => ({
     clientIdData: state.authReducer?.getClientId?.data?.response,
     clientDetails: state.authReducer?.getClientDetails?.data?.response,
-    xc:console.log(state,"state")
   }),
   {
     getAllClientId: allActions.clientId,

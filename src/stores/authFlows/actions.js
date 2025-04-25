@@ -84,6 +84,12 @@ export const projectDetails=createActionThunk(
   "GET_PROJECT_DETAILS",
   network.getProjectDetails
 )
+export const allRoles=createActionThunk(
+  "GET_ALL_ROLES",
+  network.getAllRoles
+)
+
+
 
 
 

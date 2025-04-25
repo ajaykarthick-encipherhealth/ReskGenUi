@@ -73,6 +73,10 @@ const Header = ({
   getUrl,
   updateImage,
   getRoutedData,
+  getAllProjects,
+  getAllClientDetails,
+  clientDetails,
+  projectDetails
 }) => {
   const router = useRouter();
   const fileInputRef = useRef(null);
@@ -215,14 +219,19 @@ const Header = ({
   };
   const getMenuListByRole = (role) => {
     const accessMenuList = JSON.parse(getStorage("accessMenuList"));
-    switch (role?.replace(/_/g, " ")?.toLowerCase()) {
+    switch (role) {
       case "admin":
         return AdminMenuList;
-      case "reviewer":
+      case "CODER_1":
         return PhysicanMenuList(accessMenuList);
+        case "CODER_2":
+          return PhysicanMenuList(accessMenuList);
+          case "QA":
+            return PhysicanMenuList(accessMenuList);
+          
       case "supervisor":
         return L2AuditorMenuList;
-      case "tenant admin":
+      case "TENANT_ADMIN":
         return ProviderMenuList(accessMenuList);
       case "ehr":
         return EHRMenuList;
@@ -304,7 +313,6 @@ const Header = ({
       notificationResponse?.data?.response?.totalUnreadCount + count?.length;
     setNotificationCount(countUnread ? countUnread : 0);
 
-    // console.log(open,"open")
 
     notificationSoundRef.current = new Audio("/messageSound.mp3");
 
@@ -574,6 +582,21 @@ const Header = ({
       console.error("error deleting profile", error);
     }
   };
+  const projectOptions = projectDetails?.map((client) => ({
+    label: client.projectName,
+    value: client.id,
+  }));
+
+  const clientOptions = clientDetails?.map((client) => ({
+    label: client.clientName,
+    value: client.clientId,
+  }));
+  useEffect(() => {
+    getAllClientDetails();
+  }, []);
+    useEffect(() => {
+      getAllProjects();
+    }, []);
 
   return (
     <div className={`header ${headerFix ? "is-fixed" : ""}`}>
@@ -610,7 +633,7 @@ const Header = ({
                     }}
                     // onChange={handleProject}
                     // value={selectedOption}
-                    // options={options}
+                    options={clientOptions}
                   />
                 </div>
                 <div className="mt-3">
@@ -621,7 +644,7 @@ const Header = ({
                     }}
                     // onChange={handleProject}
                     // value={selectedOption}
-                    // options={options}
+                    options={projectOptions}
                   />
                 </div>
                 {proxyRole === "QA" && (
@@ -1057,6 +1080,8 @@ const enhancer = connect(
     accuracy: state?.authReducer?.getAccuracy?.getAccuracy?.data?.response,
     profileUploadedTime: state?.authReducer?.getUpdateImageLoading,
     deleteImage: state?.authReducer?.deleteProfileImg?.data,
+    projectDetails: state.authReducer?.getProjectDetails?.data?.response,
+    clientDetails: state.authReducer?.getClientDetails?.data?.response,
   }),
   {
     getNotificationList: dashbaordActions.notificationAction,
@@ -1076,6 +1101,8 @@ const enhancer = connect(
     updateImage: uploadImagesAction.updateImage,
     getCurrentUser: userActions.getCurrentUserInfo,
     getRoutedData: tenantAction.getRoutedData,
+    getAllProjects: authActions.projectDetails,
+    getAllClientDetails: authActions.clientDetails,
   }
 );
 export default enhancer(Header);
