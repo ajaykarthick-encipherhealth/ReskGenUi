@@ -1,4 +1,4 @@
-import { requestPortal, requestPortal } from "../../utils/network";
+import { requestPortal } from "../../utils/network";
 import { convertToCustomParams, convertToCustomParamsDatePicker } from "../../utils/reusable";
 import { getStorage } from "../../utils/storages";
 
