@@ -906,7 +906,7 @@ export const priorityStatusRender = (status) => {
 
 export const getAccessTabItems = ({ page, tabsMenu }) => {
   const accessMenuList = JSON.parse(getStorage("accessMenuList"));
-  const currentTabs = accessMenuList?.accessList?.find(
+  const currentTabs = accessMenuList?.find(
     (item) => item?.title === page
   );
   return currentTabs?.[tabsMenu];
