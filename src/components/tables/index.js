@@ -31,6 +31,7 @@ import {
   renderFlagCells,
   processStatusBodyTemplate,
   dynamicAuditStatusTemplate,
+  findItemWithTrueOrFalse,
 } from "../../utils/reusable";
 import { faCircleCheck } from "@fortawesome/free-regular-svg-icons";
 
@@ -504,9 +505,9 @@ const TableRow = ({
             </td>
           );
         }
-    console.log(columnItem?.actualField, "columnItem");
-    console.log(item["coder-1AllocatedByName"], "item");
-    console.log(item,"test")
+    // console.log(columnItem?.actualField, "columnItem");
+    // console.log(item["coder-1AllocatedByName"], "item");
+    // console.log(item,"test")
         if (columnItem.isImage) {
       
           return (
@@ -773,8 +774,11 @@ const TableRow = ({
               </span>
             </td>
           );
-        }
-        if (columnItem.isSwitchStatus) {
+        }      
+        
+        console.log(item,"itememail");
+        
+        if (findItemWithTrueOrFalse(columnItem.design,"TOGGLE")) {
           return (
             <td
               className={
@@ -803,7 +807,7 @@ const TableRow = ({
               >
                 <Switch
                   className="user-switch"
-                  checked={switchStates[item.email]}
+                  checked={switchStates[item.userName]}
                   onChange={(checked) => onSwitchToggle(item, checked)}
                 />
               </div>

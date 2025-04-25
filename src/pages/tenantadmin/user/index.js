@@ -173,7 +173,7 @@ const UserList = ({
     patientId: "",
     patientName: "",
   });
-  const [activeFilters, setActiveFilters] = useState(commonFilterItems);
+  const [activeFilters, setActiveFilters] = useState([]);
   const [searchText, setSearchText] = useState(null);
   const [selectedOption, setSelectedOption] = useState({});
   const [selectedDateRanges, setSelectedDateRanges] = useState({});
@@ -280,7 +280,7 @@ const UserList = ({
     setIsLoading(true);
     setSwitchStates((prevStates) => ({
       ...prevStates,
-      [item.email]: checked,
+      [item.userName]: checked,
     }));
 
     try {
@@ -524,6 +524,9 @@ const UserList = ({
       pageNo,
       pageSize: 15,
       roleId: "",
+      searchText,
+      selectedDateRanges,
+      selectedOption
     });
   }, [pageNo, searchText, sort, selectedDateRanges, selectedOption]);
 
@@ -548,7 +551,15 @@ const UserList = ({
     role: RoleList,
     status: options3,
   };
-  console.log(data, "data");
+
+  useEffect(() => {
+    setActiveFilters(
+      data?.response?.metaDataDTO.filter(
+        (item) => item.active && item?.filter?.style
+      )
+    );
+  }, [data?.response?.metaDataDTO]);
+
   return (
     <div className={`show `}>
       <Header />

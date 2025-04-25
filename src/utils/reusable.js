@@ -1,4 +1,12 @@
-import { Badge, Button, message, notification, Popover, Skeleton, Tooltip } from "antd";
+import {
+  Badge,
+  Button,
+  message,
+  notification,
+  Popover,
+  Skeleton,
+  Tooltip,
+} from "antd";
 import moment from "moment";
 import dayjs from "dayjs";
 import Pending from "../../src/images/trackingImages/pending.webp";
@@ -13,7 +21,10 @@ import AuditHold from "../../src/images/trackingImages/audithold.webp";
 import ReAudit from "../../src/images/trackingImages/reaudited.webp";
 import AuditPending from "../../src/images/trackingImages/auditpending.webp";
 import AuditeDeclineTrack from "../../src/images/trackingImages/auditdeclined.webp";
-import { renderUserPrfoileAvatar, renderUserPrfoileAvatarDisabled } from "../components/headerFilters/functions";
+import {
+  renderUserPrfoileAvatar,
+  renderUserPrfoileAvatarDisabled,
+} from "../components/headerFilters/functions";
 import momentTimezone from "moment-timezone";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSpinner } from "@fortawesome/free-solid-svg-icons";
@@ -275,13 +286,12 @@ export const tableSkeleton = ({ rows = 1, columns = 1 }) => (
     {Array.from({ length: rows }).map((_, rowIndex) => (
       <div key={rowIndex} id="badge">
         {Array.from({ length: columns }).map((_, colIndex) => (
-          <Skeleton.Input key={colIndex}   active />
+          <Skeleton.Input key={colIndex} active />
         ))}
       </div>
     ))}
   </div>
 );
-
 
 export function extractLatestData(notes) {
   let declinedData;
@@ -352,11 +362,14 @@ export const processstatusBodyTemplate = (rowData) => {
           </div>
         </Popover>
       );
-      case "PROCESSING":
+    case "PROCESSING":
       return (
         <Popover placement="bottom" title="Status: PROCESSING">
           <div className="patient-status" style={{ textAlign: "center" }}>
-          <FontAwesomeIcon style={{ height: "30px", width: "30px" , color:"orange"}} icon={faSpinner} />
+            <FontAwesomeIcon
+              style={{ height: "30px", width: "30px", color: "orange" }}
+              icon={faSpinner}
+            />
           </div>
         </Popover>
       );
@@ -494,55 +507,51 @@ export const processStatusBodyTemplate = (rowData) => {
   }
 };
 
-
 export const proxyStatusBodyTemplate = (rowData) => {
   const declinedDataFromDeclined = extractLatestData(rowData?.declinedNotes);
-  const proxyRole = getStorage("proxyRole")
+  const proxyRole = getStorage("proxyRole");
 
   switch (rowData) {
     case "CODER_1_COMPLETED":
       return (
-        <Popover placement="bottom" title= {`${proxyRole} - COMPLETED`}>
+        <Popover placement="bottom" title={`${proxyRole} - COMPLETED`}>
           <div className="patient-status" style={{ textAlign: "center" }}>
             <Image src={Completed} style={{ height: "30px", width: "30px" }} />
           </div>
         </Popover>
       );
-        case "CODER_1_PENDING":
-          return (
-            <Popover placement="bottom" title= {`${proxyRole} - PENDING`}>
-              <div className="patient-status" style={{ textAlign: "center" }}>
-                <Image src={Pending} style={{ height: "30px", width: "30px" }} />
-              </div>
-            </Popover>
-          );
+    case "CODER_1_PENDING":
+      return (
+        <Popover placement="bottom" title={`${proxyRole} - PENDING`}>
+          <div className="patient-status" style={{ textAlign: "center" }}>
+            <Image src={Pending} style={{ height: "30px", width: "30px" }} />
+          </div>
+        </Popover>
+      );
     case "CODER_1_DECLINED":
       return (
-        <Popover
-          placement="bottom"
-          title="Status: CODER 1 DECLINED"
-        >
-          <div className="patient-status" title= {`${proxyRole} - DECLINED`}>
+        <Popover placement="bottom" title="Status: CODER 1 DECLINED">
+          <div className="patient-status" title={`${proxyRole} - DECLINED`}>
             <Image src={Declined} style={{ height: "30px", width: "30px" }} />
           </div>
         </Popover>
       );
-      case "CODER_1_HOLD":
+    case "CODER_1_HOLD":
       return (
-        <Popover placement="bottom" title= {`${proxyRole} - HOLD`}>
+        <Popover placement="bottom" title={`${proxyRole} - HOLD`}>
           <div className="patient-status" style={{ textAlign: "center" }}>
             <Image src={Hold} style={{ height: "30px", width: "30px" }} />
           </div>
         </Popover>
       );
-      case "COMPUTED":
-        return (
-          <Popover placement="bottom" title= {`${proxyRole} - PENDING`}>
-            <div className="patient-status" style={{ textAlign: "center" }}>
+    case "COMPUTED":
+      return (
+        <Popover placement="bottom" title={`${proxyRole} - PENDING`}>
+          <div className="patient-status" style={{ textAlign: "center" }}>
             <Image src={Pending} style={{ height: "30px", width: "30px" }} />
-            </div>
-          </Popover>
-        );
+          </div>
+        </Popover>
+      );
     case null:
       return (
         <Popover placement="bottom" title="Status: PENDING">
@@ -582,8 +591,7 @@ export const formatDateForIndex = ({ date, index }) => {
   const adjustedTime = time.clone().add(offset, "minutes");
 
   return adjustedTime.toISOString();
-};  
-
+};
 
 export const renderUserProfile = (data, columnItem) => {
   const compareObj = columnItem?.fromObject
@@ -593,7 +601,8 @@ export const renderUserProfile = (data, columnItem) => {
   if (
     compareObj[columnItem?.value?.first] ||
     compareObj[columnItem?.value?.last] ||
-    compareObj[columnItem?.value?.img] || compareObj[columnItem?.value1?.first] ||
+    compareObj[columnItem?.value?.img] ||
+    compareObj[columnItem?.value1?.first] ||
     compareObj[columnItem?.value1?.last] ||
     compareObj[columnItem?.value1?.img]
   ) {
@@ -604,15 +613,20 @@ export const renderUserProfile = (data, columnItem) => {
       >
         <span style={{ marginRight: "10px" }}>
           {renderUserPrfoileAvatar(
-            compareObj[columnItem?.value?.first] || compareObj[columnItem?.value1?.first] ,
-            compareObj[columnItem?.value?.last] || compareObj[columnItem?.value1?.last] ,
-            compareObj[columnItem?.value?.img] || compareObj[columnItem?.value1?.img] ,
+            compareObj[columnItem?.value?.first] ||
+              compareObj[columnItem?.value1?.first],
+            compareObj[columnItem?.value?.last] ||
+              compareObj[columnItem?.value1?.last],
+            compareObj[columnItem?.value?.img] ||
+              compareObj[columnItem?.value1?.img],
             "header"
           )}
         </span>
         <span>
-          {compareObj[columnItem?.value?.first]|| compareObj[columnItem?.value1?.first]}{" "}
-          {compareObj[columnItem?.value?.last] || compareObj[columnItem?.value1?.last]}
+          {compareObj[columnItem?.value?.first] ||
+            compareObj[columnItem?.value1?.first]}{" "}
+          {compareObj[columnItem?.value?.last] ||
+            compareObj[columnItem?.value1?.last]}
         </span>
       </div>
     );
@@ -661,9 +675,7 @@ export const renderUserProfileDisable = (data, columnItem) => {
   return <div style={{ textAlign: "center" }}>---</div>;
 };
 export const auditStatusTemplate = (rowData) => {
-  const declinedDataFromAudit = extractLatestData(
-    rowData?.auditDeclinedNotes
-  );
+  const declinedDataFromAudit = extractLatestData(rowData?.auditDeclinedNotes);
   const declinedDataFromDeclined = extractLatestData(rowData?.declinedNotes);
   const declinedData = declinedDataFromAudit || declinedDataFromDeclined;
   switch (rowData) {
@@ -683,10 +695,7 @@ export const auditStatusTemplate = (rowData) => {
       return (
         <Popover placement="bottom" title="Status: AUDIT HOLD">
           <span className="patient-status" style={{ textAlign: "center" }}>
-            <Image
-              src={AuditHold}
-              style={{ height: "30px", width: "30px" }}
-            />
+            <Image src={AuditHold} style={{ height: "30px", width: "30px" }} />
           </span>
         </Popover>
       );
@@ -727,20 +736,14 @@ export const auditStatusTemplate = (rowData) => {
     case "AUDITED":
       return (
         <span className="patient-status" style={{ textAlign: "center" }}>
-          <Image
-            src={AuditedTrack}
-            style={{ height: "30px", width: "30px" }}
-          />
+          <Image src={AuditedTrack} style={{ height: "30px", width: "30px" }} />
         </span>
       );
     case "NOT_AUDIT":
       return (
         <Popover placement="bottom" title=" Status: NOT AUDIT">
           <span className="patient-status" style={{ textAlign: "center" }}>
-            <Image
-              src={NotAudited}
-              style={{ height: "30px", width: "30px" }}
-            />
+            <Image src={NotAudited} style={{ height: "30px", width: "30px" }} />
           </span>
         </Popover>
       );
@@ -772,7 +775,10 @@ export const dynamicAuditStatusTemplate = (rowData) => {
     case "AUDITHOLD":
       return (
         <Popover placement="bottom" title="Status: AUDIT HOLD">
-          <span className="patient-status" style={{ textAlign: "center", color:'#ce9900' }}>
+          <span
+            className="patient-status"
+            style={{ textAlign: "center", color: "#ce9900" }}
+          >
             AUDIT HOLD{" "}
           </span>
         </Popover>
@@ -843,14 +849,12 @@ export const dynamicAuditStatusTemplate = (rowData) => {
   }
 };
 
-
 export const createIdGen = (key) => {
   if (key) {
     return key.trim().toLowerCase().replaceAll(" ", "-");
   } else {
     return key;
   }
-
 };
 
 export const getRoasterStatus = (status) => {
@@ -906,156 +910,158 @@ export const priorityStatusRender = (status) => {
 
 export const getAccessTabItems = ({ page, tabsMenu }) => {
   const accessMenuList = JSON.parse(getStorage("accessMenuList"));
-  const currentTabs = accessMenuList?.find(
-    (item) => item?.title === page
-  );
+  const currentTabs = accessMenuList?.find((item) => item?.title === page);
   return currentTabs?.[tabsMenu];
 };
 
-export  const  findItemWithTrueKey =(dataArray, fieldName)=> {
-  const item = dataArray?.find(item => item.actualField === fieldName);
-  if(item?.actualField === fieldName){
-   return true;
-  }else{
+export const findItemWithTrueKey = (dataArray, fieldName) => {
+  const item = dataArray?.find((item) => item.actualField === fieldName);
+  if (item?.actualField === fieldName) {
+    return true;
+  } else {
     return false;
   }
-}
- export const renderFlagCells = (data) => {
-    if (!data?.flagList || data.flagList.length === 0) {
-      return (
-        <Tooltip title="No flag found">
-          <span>
-            <SvgFlag fillColor={"transparent"} />
-          </span>
-        </Tooltip>
-      );
-    }
+};
 
-    const sortedFlags = [...data.flagList].sort((a, b) => {
-      if (a.priority === null) return 1;
-      if (b.priority === null) return -1;
-      return a.priority - b.priority;
-    });
-
-    const priorityFlag = sortedFlags[0];
-
+export const findItemWithTrueOrFalse = (design, key) => {
+  return design?.includes(key);
+};
+export const renderFlagCells = (data) => {
+  if (!data?.flagList || data.flagList.length === 0) {
     return (
-      <Popover
-        content={
-          <div
-            className="ant-badge"
-            style={{ height: "auto", overflow: "scroll" }}
-          >
-            <strong>Flag details</strong>
-            {data.flagList.map((flag, flagIndex) => (
-              <div key={flagIndex}>
-                <span className="p-1 ant-badge">
-                  <SvgFlag fillColor={flag?.flagColour} />
-                </span>
-                {flag?.flagName.replaceAll("_", " ")}
-              </div>
-            ))}
-          </div>
-        }
-        placement="right"
-      >
-        <Badge
-          className="ant-badge"
-          count={data.flagList.length}
-          offset={[5, 5]}
-          size="small"
-          style={{
-            right: "2px",
-            marginTop: "2px",
-            background: "#04306f",
-            cursor: "default",
-          }}
-        >
-          <span className="ant-badge">
-            <SvgFlag
-              className="ant-badge"
-              fillColor={priorityFlag?.flagColour || "transparent"}
-            />
-          </span>
-        </Badge>
-      </Popover>
+      <Tooltip title="No flag found">
+        <span>
+          <SvgFlag fillColor={"transparent"} />
+        </span>
+      </Tooltip>
     );
-  };
-  export const logoutFunction = async ({ router, azureLogout }) => {
-    Swal.fire({
-      title: "Warning!",
-      text: "Do you want Logout!",
-      icon: "warning",
-      confirmButtonText: "Logout",
-      showCancelButton: true,
-      confirmButtonColor: "var(--logoutBtn)",
-      closeOnConfirm: false,
-    }).then(async (result) => {
-      if (result.isConfirmed) {
-        // removeStorage();
-        // azureLogout && azureLogout.logoutRedirect({
-        //   postLogoutRedirectUri: window.location.origin, // Redirect to home/login page after logout
-        // })
-        ssoLogout();
-        router.push("/projects");
-      }
-    });
-  };
+  }
 
-  export const generateOptionsObject = (items) => {
-    if (items?.length > 0) {
-      const options = [
-        ...items?.map((item) => ({
-          label: item?.name,
-          value: item?.id,
-        })),
-      ].filter(Boolean);
-      return options;
-    } else {
-      return [];
-    }
-  };
-  
-  export const generateOptions = (items) => {
-    if (items?.length > 0) {
-      const options = [
-        ...items?.map((item) => ({
-          label: item,
-          value: item,
-        })),
-      ].filter(Boolean);
-      return options;
-    } else {
-      return [];
-    }
-  };
-  
-  export const convertToCustomParams = (obj) => {
-    const keys = Object.keys(obj);
-    if (keys.length === 0) return "";
-    const restParams = keys
-      .filter((key) => obj[key] !== undefined && obj[key] !== null)
-      .map((key) => `&${key}=${obj[key]}`)
-      .join("");
-    return restParams;
-  };
-  
-  export const convertToCustomParamsDatePicker = (obj) => {
-    let params = '';
-  
-    Object.entries(obj).forEach(([key, value]) => {
-      if (typeof value === 'object' && value !== null) {
-        const { startDate, endDate } = value;
-  
-        if (startDate) {
-          params += `&${key}Start=${startDate}`;
-        }
-  
-        if (endDate) {
-          params += `&${key}End=${endDate}`;
-        }
+  const sortedFlags = [...data.flagList].sort((a, b) => {
+    if (a.priority === null) return 1;
+    if (b.priority === null) return -1;
+    return a.priority - b.priority;
+  });
+
+  const priorityFlag = sortedFlags[0];
+
+  return (
+    <Popover
+      content={
+        <div
+          className="ant-badge"
+          style={{ height: "auto", overflow: "scroll" }}
+        >
+          <strong>Flag details</strong>
+          {data.flagList.map((flag, flagIndex) => (
+            <div key={flagIndex}>
+              <span className="p-1 ant-badge">
+                <SvgFlag fillColor={flag?.flagColour} />
+              </span>
+              {flag?.flagName.replaceAll("_", " ")}
+            </div>
+          ))}
+        </div>
       }
-    });
-  
-    return params;
-  };
+      placement="right"
+    >
+      <Badge
+        className="ant-badge"
+        count={data.flagList.length}
+        offset={[5, 5]}
+        size="small"
+        style={{
+          right: "2px",
+          marginTop: "2px",
+          background: "#04306f",
+          cursor: "default",
+        }}
+      >
+        <span className="ant-badge">
+          <SvgFlag
+            className="ant-badge"
+            fillColor={priorityFlag?.flagColour || "transparent"}
+          />
+        </span>
+      </Badge>
+    </Popover>
+  );
+};
+export const logoutFunction = async ({ router, azureLogout }) => {
+  Swal.fire({
+    title: "Warning!",
+    text: "Do you want Logout!",
+    icon: "warning",
+    confirmButtonText: "Logout",
+    showCancelButton: true,
+    confirmButtonColor: "var(--logoutBtn)",
+    closeOnConfirm: false,
+  }).then(async (result) => {
+    if (result.isConfirmed) {
+      // removeStorage();
+      // azureLogout && azureLogout.logoutRedirect({
+      //   postLogoutRedirectUri: window.location.origin, // Redirect to home/login page after logout
+      // })
+      ssoLogout();
+      router.push("/projects");
+    }
+  });
+};
+
+export const generateOptionsObject = (items) => {
+  if (items?.length > 0) {
+    const options = [
+      ...items?.map((item) => ({
+        label: item?.name,
+        value: item?.id,
+      })),
+    ].filter(Boolean);
+    return options;
+  } else {
+    return [];
+  }
+};
+
+export const generateOptions = (items) => {
+  if (items?.length > 0) {
+    const options = [
+      ...items?.map((item) => ({
+        label: item,
+        value: item,
+      })),
+    ].filter(Boolean);
+    return options;
+  } else {
+    return [];
+  }
+};
+
+export const convertToCustomParams = (obj) => {
+  const keys = Object.keys(obj);
+  if (keys.length === 0) return "";
+  const restParams = keys
+    .filter((key) => obj[key] !== undefined && obj[key] !== null)
+    .map((key) => `&${key}=${obj[key]}`)
+    .join("");
+  return restParams;
+};
+
+export const convertToCustomParamsDatePicker = (obj) => {
+  let params = "";
+
+  Object.entries(obj).forEach(([key, value]) => {
+    if (typeof value === "object" && value !== null) {
+      const { startDate, endDate } = value;
+
+      if (startDate) {
+        params += `&${key}Start=${startDate}`;
+      }
+
+      if (endDate) {
+        params += `&${key}End=${endDate}`;
+      }
+    }
+  });
+
+  return params;
+};
