@@ -349,7 +349,7 @@ export async function getClientDetails() {
   const options = {
     method: "GET",
   };
-  const data = await requestPortalRoleBased(
+  const data = await requestPortal(
     `/secure/dbservice/client/get/dropdown`,
     options
   );
@@ -360,7 +360,7 @@ export async function getProjectDetails() {
   const options = {
     method: "GET",
   };
-  const data = await requestPortalRoleBased(
+  const data = await requestPortal(
     `/secure/dbservice/project/get/dropdown`,
     options
   );
