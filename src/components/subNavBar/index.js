@@ -19,15 +19,17 @@ const SubNavBar = ({
   const [tableData, setTableData] = useState([]);
   const [loading, setLoading] = useState(false);
   const tabs = getAccessTabItems({ page: "Tin", tabsMenu: "tabMenuList" });
-  const activeTab = activeTabName || tabs?.[0] || "Active";
-    const pageIds =
-    activeTab === "Active"
-      ? "2d7cb7f7-6dad-41fb-970b-d805fb3f195f"
-      : activeTab === "InActive"
-      ? "6579b31a-aa46-42bf-abbb-c1e17e987a3a"
-      : activeTab === "Providers"
-      ? "32e9eea6-095c-4bd3-abee-17835ea53cdc"
-      : "";
+  // const activeTab = activeTabName || tabs?.[0] || "Active";
+  // console.log(activeTab, "activeTab");
+    
+    // const pageIds =
+    // activeTab === "Active"
+    //   ? "2d7cb7f7-6dad-41fb-970b-d805fb3f195f"
+    //   : activeTab === "InActive"
+    //   ? "6579b31a-aa46-42bf-abbb-c1e17e987a3a"
+    //   : activeTab === "Providers"
+    //   ? "32e9eea6-095c-4bd3-abee-17835ea53cdc"
+    //   : "";
   // const getAllTins = async () => {
   //   setLoading(true);
   //   const pageId = getPageId(activeTab);
@@ -49,11 +51,13 @@ const SubNavBar = ({
   //   setLoading(false);
   // };
   const getAllTins = async (tabOverride) => {
+const activeTab = getStorage("activeTabTin");
     const currentTab = tabOverride || activeTab;
     const pageId = getPageId(currentTab);
-    console.log(pageId, "pageId");
+    console.log(pageId,"testpage");
    const userId = getStorage("userId");
    const tin = getStorage("tinNumber");
+   
      setLoading(true);
      const result = 
     await getTableView({

@@ -167,7 +167,9 @@ const gotoPatientDetails = (rowData) => {
   setStorage("patientId", rowData.patientId);
   setStorage("tinNumber", rowData.tinNumber); 
   setStorage("routeBackTo", "/tenantadmin/tin");
+  setStorage("activeTabTin", activeTab);
 
+console.log(rowData, "rowData");
   getProjectActiveTab({
     tinFilter: params,
   });
@@ -298,6 +300,9 @@ const getAllTins = async (tabOverride) => {
     projectId: "test",
   });
 };
+  const handleSwitchToggle = async (item, checked) => {
+ 
+  };
 
 
 
@@ -426,6 +431,7 @@ const getAllTins = async (tabOverride) => {
                 totalRecords={data?.response?.pageResponse?.totalElements}
                 row={15}
                 onPageChange={onPageChange}
+                onSwitchToggle={handleSwitchToggle}
               />
             )}
           </div>

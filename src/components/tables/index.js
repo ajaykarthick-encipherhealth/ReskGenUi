@@ -778,7 +778,12 @@ const TableRow = ({
         
         console.log(item,"itememail");
         
-        if (findItemWithTrueOrFalse(columnItem.design,"TOGGLE")) {
+        if (
+          findItemWithTrueOrFalse(columnItem.design, "TOGGLE") &&
+          item?.userName &&
+          switchStates
+        ) {
+          console.log(item.userName, "item.userName");
           return (
             <td
               className={
@@ -807,7 +812,7 @@ const TableRow = ({
               >
                 <Switch
                   className="user-switch"
-                  checked={switchStates[item.userName]}
+                  checked={switchStates[item?.userName]}
                   onChange={(checked) => onSwitchToggle(item, checked)}
                 />
               </div>
