@@ -339,7 +339,7 @@ export async function getClientId() {
     method: "GET",
   };
   const data = await requestPortal(
-    `dbservice/user/get/user-dropdown`,
+    `dbservice/user/orgid`,
     options
   );
   return data;
