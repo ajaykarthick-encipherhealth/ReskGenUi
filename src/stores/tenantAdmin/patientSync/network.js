@@ -92,7 +92,10 @@ export async function providerRoasterExcel({ obj }) {
     method: "POST",
     body: obj,
   };
-  const data = await requestPortalFiles(`dbservice/excel/convert/provider`, options);
+  const data = await requestPortalFiles(
+    `dbservice/excel/convert/provider`,
+    options
+  );
   return data;
 }
 export async function practiceRoasterExcel({ obj }) {
@@ -100,7 +103,10 @@ export async function practiceRoasterExcel({ obj }) {
     method: "POST",
     body: obj,
   };
-  const data = await requestPortalFiles(`dbservice/excel/convert/practice`, options);
+  const data = await requestPortalFiles(
+    `dbservice/excel/convert/practice`,
+    options
+  );
   return data;
 }
 export async function patientRoasterExcel({ obj }) {
@@ -108,7 +114,10 @@ export async function patientRoasterExcel({ obj }) {
     method: "POST",
     body: obj,
   };
-  const data = await requestPortalFiles(`dbservice/excel/convert/patient`, options);
+  const data = await requestPortalFiles(
+    `dbservice/excel/convert/patient`,
+    options
+  );
   return data;
 }
 export async function tinRoasterExcel({ obj }) {
@@ -120,57 +129,51 @@ export async function tinRoasterExcel({ obj }) {
   return data;
 }
 
-export async function providerRoaster({
- projectId ="test",
- pageNo
-}) {
+export async function providerRoaster({ pageNo }) {
   const options = {
     method: "GET",
   };
+  const projectId = getStorage("project");
+
   const data = await requestPortal(
-    `dbservice/roaster/provider?projectId=${projectId}&pageno=${pageNo}&pagesize=15`,options
+    `dbservice/roaster/provider?projectId=${projectId}&pageno=${pageNo}&pagesize=15`,
+    options
   );
   return data;
 }
 
-export async function practiceRoaster({
-  projectId ="test",
-  pageNo
- }) {
-   const options = {
-     method: "GET",
-   };
-   const data = await requestPortal(
-     `dbservice/roaster/practice?projectId=${projectId}&pageno=${pageNo}&pagesize=15`,
-     options
-   );
-   return data;
- }
+export async function practiceRoaster({ pageNo }) {
+  const options = {
+    method: "GET",
+  };
+  const projectId = getStorage("project");
+  const data = await requestPortal(
+    `dbservice/roaster/practice?projectId=${projectId}&pageno=${pageNo}&pagesize=15`,
+    options
+  );
+  return data;
+}
 
- export async function patientRoaster({
-  projectId ="test",
-  pageNo
- }) {
-   const options = {
-     method: "GET",
-   };
-   const data = await requestPortal(
-     `dbservice/roaster/patient?projectId=${projectId}&pageno=${pageNo}&pagesize=15`,
-     options
-   );
-   return data;
- }
+export async function patientRoaster({ pageNo }) {
+  const options = {
+    method: "GET",
+  };
+  const projectId = getStorage("project");
+  const data = await requestPortal(
+    `dbservice/roaster/patient?projectId=${projectId}&pageno=${pageNo}&pagesize=15`,
+    options
+  );
+  return data;
+}
 
- export async function tinRoaster({
-  projectId ="test",
-  pageNo
- }) {
-   const options = {
-     method: "GET",
-   };
-   const data = await requestPortal(
-     `dbservice/roaster/tin?projectId=${projectId}&pageno=${pageNo}&pagesize=15`,
-     options
-   );
-   return data;
- }
+export async function tinRoaster({ pageNo }) {
+  const options = {
+    method: "GET",
+  };
+  const projectId = getStorage("project");
+  const data = await requestPortal(
+    `dbservice/roaster/tin?projectId=${projectId}&pageno=${pageNo}&pagesize=15`,
+    options
+  );
+  return data;
+}

@@ -22,17 +22,16 @@ const SubNavBar = ({ handleBack, hideBackArrow, pageLoad }) => {
     const pageId = getPageId(currentTab);
    const userId = getStorage("userId");
    const tin = getStorage("tinNumber");
-   
+       const projectId = getStorage("project");
      setLoading(true);
-     const result = 
-    await getTableView({
-      pageId,
-      pageNo: 0,
-      projectId: "test",
-      tin,
-      patientAllocated: userId,
-      isAdmin: true,
-    });
+     const result = await getTableView({
+       pageId,
+       pageNo: 0,
+       projectId: projectId,
+       tin,
+       patientAllocated: userId,
+       isAdmin: true,
+     });
     const response = result?.response || {};
     setMetaData(response.metaDataDTO || []);
     setTableData(response.pageResponse?.content || []);
@@ -77,7 +76,7 @@ const SubNavBar = ({ handleBack, hideBackArrow, pageLoad }) => {
         ) : tableData.length === 0 ? (
           <div className="mx-3">No records found.</div>
         ) : (
-          [tableData].map((row, rowIndex) => (
+          [tableData[0]].map((row, rowIndex) => (
             <section
               key={rowIndex}
               className="d-flex mx-3 gap-4 pb-2 flex-wrap border-bottom py-2"

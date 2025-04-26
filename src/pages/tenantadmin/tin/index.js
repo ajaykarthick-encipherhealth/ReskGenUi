@@ -9,7 +9,7 @@ import { useRouter } from "next/router";
 import ReusableFilters from "../../../components/reusableFilters";
 import AppTable from "../../../components/tables";
 import { actions as allActions } from "../../../stores/reviewer/workqueue";
-import { setStorage } from "../../../utils/storages";
+import { getStorage, setStorage } from "../../../utils/storages";
 import { statusOptions } from "../../reviewer/patients";
 import { getAccessTabItems, getResponePopup } from "../../../utils/reusable";
 import { actions as tableAction } from "../../../stores/tableView";
@@ -154,7 +154,7 @@ const Tin = ({
       sortField: "processedDate",
     },
   });
-
+  const [switchStates, setSwitchStates] = useState({});
   const [selectedOption, setSelectedOption] = useState({});
   const [pageNo, setPageNo] = useState(0);
   const [paginationFirst, setPaginationFirst] = useState(0);
@@ -223,7 +223,6 @@ console.log(rowData, "rowData");
       : activeTab === "Providers"
       ? "32e9eea6-095c-4bd3-abee-17835ea53cdc"
       : "";
-      console.log(pageIds, activeTab, "pageIds");
       
   const handleSubmit = async () => {
     setIsSubmitting(true);
@@ -292,13 +291,14 @@ console.log(rowData, "rowData");
 const getAllTins = async (tabOverride) => {
   const currentTab = tabOverride || activeTab;
   const pageId = getPageId(currentTab); 
+  const projectId = getStorage("project");
 
   await getTableData({
     pageId,
     pageNo,
     pageSize: 15,
     roleId: "",
-    projectId: "test",
+    projectId: projectId,
   });
 };
   const handleSwitchToggle = async (item, checked) => {
@@ -344,15 +344,14 @@ console.log(pageLoad,"pageLoad")
           <div className={styles.font}>Active Tin : 45</div>
           <div className={styles.font}>InActive Tin : 45</div>
           <div className="p-3">
-             <Button
-            data-testid="activeBtn"
-            name="activeBtn"
-            className="btn btn-sm  tableButton"
-          >
-            Change to Inactive
-          </Button>
+            <Button
+              data-testid="activeBtn"
+              name="activeBtn"
+              className="btn btn-sm  tableButton"
+            >
+              Change to Inactive
+            </Button>
           </div>
-         
         </div>
       </div>
 
@@ -436,6 +435,7 @@ console.log(pageLoad,"pageLoad")
                 row={15}
                 onPageChange={onPageChange}
                 onSwitchToggle={handleSwitchToggle}
+                switchStates={switchStates}
               />
             )}
           </div>

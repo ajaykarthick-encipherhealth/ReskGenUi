@@ -232,7 +232,7 @@ const UserList = ({
     userFormData.passwordIv = encryptedData.iv;
     const response = await getAddUser(userFormData, setFormData);
     if (response?.status == "SUCCESS") {
-        getAllUsers();
+      getAllUsers();
       setFormData({
         firstName: "",
         lastName: "",
@@ -272,25 +272,25 @@ const UserList = ({
   };
 
   const handleSwitchToggle = async (item, checked) => {
-    if (isLoading) return;
-    setIsLoading(true);
-    setSwitchStates((prevStates) => ({
-      ...prevStates,
-      [item.userName]: checked,
-    }));
+    // if (isLoading) return;
+    // setIsLoading(true);
+    // setSwitchStates((prevStates) => ({
+    //   ...prevStates,
+    //   [item.userName]: checked,
+    // }));
 
-    try {
-      const res = await getEnableUser({
-        checked: checked ? "yes" : "no",
-        user: item,
-      });
-      if (res?.status === "SUCCESS") {
-           getAllUsers();
-      }
-    } catch (error) {
-      console.error("Error toggling switch:", error);
-    }
-    setIsLoading(false);
+    // try {
+    //   const res = await getEnableUser({
+    //     checked: checked ? "yes" : "no",
+    //     user: item,
+    //   });
+    //   if (res?.status === "SUCCESS") {
+    //     getAllUsers();
+    //   }
+    // } catch (error) {
+    //   console.error("Error toggling switch:", error);
+    // }
+    // setIsLoading(false);
   };
 
   useEffect(() => {
@@ -433,7 +433,7 @@ const UserList = ({
     try {
       const response = await tableDynamicColumn({ payload });
       if (response?.status === "SUCCESS") {
-  getAllUsers();
+        getAllUsers();
         onClose();
         getResponePopup(response);
       }
@@ -452,7 +452,7 @@ const UserList = ({
     try {
       const response = await tableDynamicColumnReset({ payload });
       if (response?.status === "SUCCESS") {
-  getAllUsers();
+        getAllUsers();
         onClose();
         getResponePopup(response);
       }
@@ -473,7 +473,7 @@ const UserList = ({
         field: "addRole",
       });
       if (res?.status === "SUCCESS") {
-         getAllUsers();
+        getAllUsers();
         setPopoverVisible(null);
         setPageNo(0);
         setRoleChangeLoader(false);
@@ -506,7 +506,7 @@ const UserList = ({
       selectedDateRanges,
       selectedOption,
     });
-  }
+  };
   useEffect(() => {
     var tenId = getStorage("tenantId");
     var uId = getStorage("userId");
@@ -517,7 +517,7 @@ const UserList = ({
     setLocalOrgId(orgId);
     setUseAdd(false);
     getAllUsers();
-  }, [pageNo, searchText, sort, selectedDateRanges, selectedOption,pageLoad]);
+  }, [pageNo, searchText, sort, selectedDateRanges, selectedOption, pageLoad]);
 
   useEffect(() => {
     setTimeout(() => {
@@ -619,7 +619,6 @@ const UserList = ({
                   <PlusCircleFilled /> Add User
                 </Button>
               </div>
-             
             </div>
             <div id="task-tbl_wrapper" className="dataTables_wrapper no-footer">
               <>

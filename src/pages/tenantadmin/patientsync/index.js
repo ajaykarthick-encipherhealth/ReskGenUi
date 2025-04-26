@@ -37,6 +37,7 @@ import TinRoasterTable from "../../../components/table/tenantTable/tinRoasterTab
 import AppTable from "../../../components/tables";
 import { actions as tableAction } from "../../../stores/tableView";
 import ReusableFilters from "../../../components/reusableFilters";
+import { getStorage } from "../../../utils/storages";
 
 const { RangePicker } = DatePicker;
 
@@ -332,7 +333,7 @@ const PatientSync = ({
   data,
   tableDynamicColumn,
   tableDynamicColumnReset,
-  pageLoad
+  pageLoad,
 }) => {
   const columns = [
     {
@@ -733,39 +734,43 @@ const PatientSync = ({
     }
   };
   const getAllProviderApi = async () => {
+    const projectId = getStorage("project");
     const response = await getTableData({
       pageId: "42136c12-83df-46fc-8c8a-200d97f154be",
       pageNo,
       pageSize: 15,
       roleId,
-      projectId: "test",
+      projectId: projectId,
     });
   };
   const getAllPracticeApi = async () => {
+    const projectId = getStorage("project");
     const response = await getTableData({
       pageId: "e2785147-39dc-4bd3-828c-c0d5168acba7",
       pageNo,
       pageSize: 15,
       roleId,
-      projectId: "test",
+      projectId: projectId,
     });
   };
   const getAllPatientApi = async () => {
+    const projectId = getStorage("project");
     const response = await getTableData({
       pageId: "c60dec23-bcfa-48ce-966e-dbf1ce3d41b2",
       pageNo,
       pageSize: 15,
       roleId,
-      projectId: "test",
+      projectId: projectId,
     });
   };
   const getTinApi = async () => {
+    const projectId = getStorage("project");
     const response = await getTableData({
       pageId: "1ff437a0-18a8-47de-893d-41dc669e3cbd",
       pageNo,
       pageSize: 15,
       roleId,
-      projectId: "test",
+      projectId: projectId,
     });
   };
   const pageIds =
@@ -844,7 +849,7 @@ const PatientSync = ({
     } else if (reportActiveTab === "Tin Roaster") {
       getTinApi();
     }
-  }, [reportActiveTab, pageNumber, pagination , pageLoad]);
+  }, [reportActiveTab, pageNumber, pagination, pageLoad]);
   return (
     <>
       <Header />
