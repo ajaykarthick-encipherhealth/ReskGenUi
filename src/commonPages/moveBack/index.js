@@ -361,6 +361,9 @@ const MoveBack = ({
                           </div>
                         </div>
                       )}
+                         {tableLoader ? (
+                        <CardSkeleton />
+                      ) : (
                       <div className="d-flex ">
                         <div className={` d-flex gap-3 mt-4`}>
                           <ReusableFilters
@@ -399,6 +402,7 @@ const MoveBack = ({
                           />
                         </div>
                       </div>
+                      )}
                       <Tab.Content>
                         <Tab.Pane eventKey={activeTab}>
                           <MoveBackTable

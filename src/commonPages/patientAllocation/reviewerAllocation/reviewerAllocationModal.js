@@ -215,6 +215,7 @@ const AllocateModal = ({
               checked={selectedUserIds.length === userDetails.length}
               onChange={handleSelectAll}
             />
+            
           </div>
         </div>
         {usersLoader ? (
@@ -287,7 +288,7 @@ const AllocateModal = ({
                   {activeCard == item.id ? (
                     <>
                       <div className="row px-3">
-                        <div className={`col-5 ${modalStyle.activeRow1}`}>
+                        <div className={`col-5 mt-5 ${modalStyle.activeRow1}`}>
                           <span>
                             Charts Selected:{" "}
                             {selectedChart?.length > 0
@@ -388,7 +389,7 @@ const AllocateModal = ({
                               chart?.pending >
                               100 && "Maximum upto 100 charts to pending"}
                           </span>
-                          <div className="mb-3">Selected Charts</div>
+                          <div className="mt-5">Selected Charts</div>
                           <ul className={`${modalStyle.selectChart}`}>
                             {selectedUserName?.map((item, index) => (
                               <li
@@ -490,13 +491,13 @@ const AllocateModal = ({
       >
         <>
           <div className="row mt-5 px-3">
-            <div className={`col-5 ${modalStyle.activeRow1}`}>
+            <div className={`col-6 ${modalStyle.activeRow1}`}>
               <span>
                 Charts Selected:
                 {selectedChart?.length > 0 ? selectedChart.length : 0}
               </span>
 
-              <div className="d-flex gap-3 py-2 align-items-center">
+              <div className="d-flex gap-3 py-2 align-items-center ">
                 <span className={`${modalStyle.title} py-3`}>Due Date</span>
                 <DatePicker
                   id="select-dueDate"
@@ -525,7 +526,7 @@ const AllocateModal = ({
                 </div>
               </div>
             </div>
-            <div className={`col-7 ${modalStyle.activeRow1}`}>
+            <div className={`col-6 ${modalStyle.activeRow1}`}>
               <span className={`${modalStyle.title} text-danger`}>
                 {selectedUserName?.length + chart?.hold + chart?.pending >
                   100 && "Maximum upto 100 charts to pending"}

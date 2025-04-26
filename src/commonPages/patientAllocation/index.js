@@ -28,7 +28,7 @@ const PatientAllocation = ({
   tableLoader,
   tableDynamicColumn,
   tableDynamicColumnReset,
-  pageLoad
+  pageLoad,
 }) => {
   const commonFilterItems = [
     {
@@ -262,7 +262,7 @@ const PatientAllocation = ({
     search,
     batchCount,
     roleId,
-    pageLoad
+    pageLoad,
   ]);
 
   useEffect(() => {
@@ -277,7 +277,6 @@ const PatientAllocation = ({
       )
     );
   }, [data?.response?.metaDataDTO]);
-console.log(selectedRoleId, "selectedRoleId");
   return (
     <div>
       <Header />
@@ -293,8 +292,8 @@ console.log(selectedRoleId, "selectedRoleId");
                       activeKey={activeTab}
                       onSelect={handleTabChange}
                     >
-                      {rolesLoader ? (
-                        <CardSkeleton />
+                      { rolesLoader ? (
+                        <CardSkeleton height={50}/>
                       ) : (
                         <div className="d-flex justify-content-between align-items-end w-100   custom-tab-header">
                           <Nav
@@ -397,48 +396,51 @@ console.log(selectedRoleId, "selectedRoleId");
                           </div>
                         </div>
                       )}
+                      {tableLoader ? (
+                        <CardSkeleton />
+                      ) : (
+                        <div className={` d-flex gap-3 mt-4`}>
+                          <ReusableFilters
+                            showFilter={true}
+                            setActiveFilters={setActiveFilters}
+                            setSearchText={setSearchText}
+                            searchText={searchText}
+                            setSelectedOption={setSelectedOption}
+                            selectedOption={selectedOption}
+                            setSelectedDateRanges={setSelectedDateRanges}
+                            selectedDateRanges={selectedDateRanges}
+                            FilterItems={activeFilters}
+                            selectedDates={selectedDates}
+                            setSelectedDates={setSelectedDates}
+                            activeFilters={activeFilters}
+                            setPageNo={setPageNo}
+                            opt={opt}
+                            batchCount={batchCount}
+                            setBatchCount={setBatchCount}
+                            setFilterBatchCount={setFilterBatchCount}
+                            setSelectAllChecked={setSelectAllChecked}
+                            setSelectedRowsId={setSelectedRowsId}
+                            setSelectedRows={setSelectedRows}
+                            showBatchCount={true}
+                            selectedRowsId={selectedRowsId}
+                            setSearch={setSearch}
+                            search={search}
+                            //customize table
 
-                      <div className={` d-flex gap-3 mt-4`}>
-                        <ReusableFilters
-                          showFilter={true}
-                          setActiveFilters={setActiveFilters}
-                          setSearchText={setSearchText}
-                          searchText={searchText}
-                          setSelectedOption={setSelectedOption}
-                          selectedOption={selectedOption}
-                          setSelectedDateRanges={setSelectedDateRanges}
-                          selectedDateRanges={selectedDateRanges}
-                          FilterItems={activeFilters}
-                          selectedDates={selectedDates}
-                          setSelectedDates={setSelectedDates}
-                          activeFilters={activeFilters}
-                          setPageNo={setPageNo}
-                          opt={opt}
-                          batchCount={batchCount}
-                          setBatchCount={setBatchCount}
-                          setFilterBatchCount={setFilterBatchCount}
-                          setSelectAllChecked={setSelectAllChecked}
-                          setSelectedRowsId={setSelectedRowsId}
-                          setSelectedRows={setSelectedRows}
-                          showBatchCount={true}
-                          selectedRowsId={selectedRowsId}
-                          setSearch={setSearch}
-                          search={search}
-                          //customize table
-
-                          open={open}
-                          onClose={onClose}
-                          selectedColumns={test}
-                          setSelectedColumns={setTest}
-                          commonFilterItems={commonFilterItems}
-                          showCustomizeTable={false}
-                          showDrawer={showDrawer}
-                          handleSubmit={handleSubmit}
-                          handleReset={handleReset}
-                          isSubmitting={isSubmitting}
-                          isResetting={isResetting}
-                        />
-                      </div>
+                            open={open}
+                            onClose={onClose}
+                            selectedColumns={test}
+                            setSelectedColumns={setTest}
+                            commonFilterItems={commonFilterItems}
+                            showCustomizeTable={false}
+                            showDrawer={showDrawer}
+                            handleSubmit={handleSubmit}
+                            handleReset={handleReset}
+                            isSubmitting={isSubmitting}
+                            isResetting={isResetting}
+                          />
+                        </div>
+                      )}
 
                       <Tab.Content>
                         <Tab.Pane eventKey={activeTab}>
@@ -462,7 +464,6 @@ console.log(selectedRoleId, "selectedRoleId");
                             roleId={roleId}
                             checkedHeader={checkedHeader}
                             setCheckedHeader={setCheckedHeader}
-                         
                           />
                         </Tab.Pane>
                       </Tab.Content>

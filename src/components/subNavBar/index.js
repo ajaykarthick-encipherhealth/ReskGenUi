@@ -8,6 +8,8 @@ import { getTableView } from "../../stores/tableView/network";
 import { Skeleton, Tooltip } from "antd";
 import { getPageId, pageIds } from "../../pages/tenantadmin/tin";
 import { connect } from "react-redux";
+import TableSkeleton from "../skeleton/table";
+import CardSkeleton from "../skeleton/card";
 
 const SubNavBar = ({ handleBack, hideBackArrow, pageLoad }) => {
   const role = getStorage("userRole");
@@ -57,21 +59,10 @@ const SubNavBar = ({ handleBack, hideBackArrow, pageLoad }) => {
         </div>
       )}
 
-      <div className={styles.tabContainer}>
+      <div className={`w-100 ${styles.tabContainer}`}>
         {loading ? (
-          <div className="mx-3 w-100">
-            {Array.from({ length: 1 }).map((_, rowIndex) => (
-              <div
-                key={rowIndex}
-                className="d-flex gap-4 flex-wrap pb-2 border-bottom py-2"
-              >
-                {Array.from({ length: 1 }).map((_, rowIndex) => (
-                  <div key={rowIndex} style={{ width: 150 }}>
-                    {tableSkeleton({ rows: 1, columns: 1 })}
-                  </div>
-                ))}
-              </div>
-            ))}
+          <div className="w-100">
+            <CardSkeleton/>
           </div>
         ) : tableData.length === 0 ? (
           <div className="mx-3">No records found.</div>

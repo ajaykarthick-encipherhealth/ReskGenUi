@@ -654,7 +654,9 @@ const Hcc = ({
                           selectedDate={selectedDate}
                           setSelectedDate={setSelectedDate}
                         />
-                        {getStorage("userRole") != "admin" &&
+                        {
+                        getStorage("userRole") != "admin" 
+                        &&
                           selectDosValue && (
                             <YearAndDosStatus
                               setIsLoading={setIsLoading}
@@ -794,7 +796,7 @@ const Hcc = ({
 
                       {isClient &&
                         (proxyRole === "OWNER" ||
-                          proxyRole === "TENANT ADMIN") && (
+                          proxyRole === "TENANT_ADMIN") && (
                           <>
                             <Nav.Item as="li" className="nav-item">
                               <Popconfirm
@@ -826,7 +828,7 @@ const Hcc = ({
 
                       <Nav.Item as="li" className="nav-item">
                         {isClient &&
-                          ["CODER 1", "CODER 2", "QA"].includes(proxyRole) && (
+                          ["CODER_1", "CODER_2", "QA"].includes(proxyRole) && (
                             <Button
                               disabled={isQueried}
                               onClick={showQueryModal}
@@ -1031,7 +1033,7 @@ const Hcc = ({
             >
               <Select
                 options={selectOptions}
-                className="w-75"
+                className="w-100"
                 placeholder="Select Role"
               />
             </Form.Item>
