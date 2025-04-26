@@ -40,21 +40,21 @@ const SelectProject = ({
     loginSuccessCallBack();
   };
   useEffect(() => {
-    getAllClientId();
-  }, []);
-  useEffect(() => {
-    getAllClientDetails();
-  }, []);
-  useEffect(() => {
     if (clientIdData?.userName) {
       setStorage("userId", clientIdData.userName);
     }
   }, [clientIdData?.userName]);
+
   useEffect(() => {
     if (clientIdData) {
       setStorage("orgId", clientIdData?.orgId);
+       getAllClientDetails();
     }
   }, [clientIdData]);
+
+  useEffect(() => {
+    getAllClientId();
+  }, []);
 
   useEffect(() => {
     if (accounts && accounts.length > 0) {

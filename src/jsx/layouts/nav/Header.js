@@ -592,34 +592,23 @@ const Header = ({
     value: client.clientId,
   }));
 
+  useEffect(() => {
+    const defaultClient = getStorage("client");
+    const defaultProject = getStorage("project");
+
+    if (defaultClient) setSelectedClient(defaultClient);
+    if (defaultProject) setSelectedProject(defaultProject);
+  }, []);
+
   const handleClientChange = (value) => {
     setSelectedClient(value);
+    setStorage("client", value);
   };
 
   const handleProjectChange = (value) => {
     setSelectedProject(value);
+    setStorage("project", value);
   };
-
-  useEffect(() => {
-    if (clientDetails) {
-      setSelectedClient(clientOptions || clientOptions[0]);
-    }
-    if (projectDetails) {
-      setSelectedProject(projectOptions || projectOptions[0]);
-    }
-  }, [clientDetails, projectDetails]);
-  console.log(selectedClient, "selectedClient");
-  useEffect(() => {
-    if (selectedClient !== null) {
-      setStorage("clientId", selectedClient);
-    }
-  }, [selectedClient]);
-
-  useEffect(() => {
-    if (selectedProject !== null) {
-      setStorage("projectId", selectedProject);
-    }
-  }, [selectedProject]);
 
   useEffect(() => {
     getAllProjects();
