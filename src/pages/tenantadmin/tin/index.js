@@ -423,7 +423,7 @@ const getAllTins = async (tabOverride) => {
                   (item) => item.active
                 )}
                 loader={tableLoader}
-                onRowClick={gotoPatientDetails}
+                // onRowClick={gotoPatientDetails}
                 pagination={false}
                 setSort={setSort}
                 sort={sort}

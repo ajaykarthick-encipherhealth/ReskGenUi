@@ -231,12 +231,7 @@ const UserList = ({
     userFormData.passwordIv = encryptedData.iv;
     const response = await getAddUser(userFormData, setFormData);
     if (response?.status == "SUCCESS") {
-      getTableData({
-        pageId: "8e4f1d2a-7b3c-45e6-9f1d-2a7b3c45e6f1",
-        pageNo,
-        pageSize: 15,
-        roleId: "",
-      });
+        getAllUsers();
       setFormData({
         firstName: "",
         lastName: "",
@@ -289,12 +284,7 @@ const UserList = ({
         user: item,
       });
       if (res?.status === "SUCCESS") {
-         getTableData({
-           pageId: "8e4f1d2a-7b3c-45e6-9f1d-2a7b3c45e6f1",
-           pageNo,
-           pageSize: 15,
-           roleId: "",
-         });
+           getAllUsers();
       }
     } catch (error) {
       console.error("Error toggling switch:", error);
@@ -442,7 +432,7 @@ const UserList = ({
     try {
       const response = await tableDynamicColumn({ payload });
       if (response?.status === "SUCCESS") {
-        getAllTracking();
+  getAllUsers();
         onClose();
         getResponePopup(response);
       }
@@ -461,7 +451,7 @@ const UserList = ({
     try {
       const response = await tableDynamicColumnReset({ payload });
       if (response?.status === "SUCCESS") {
-        getAllTracking();
+  getAllUsers();
         onClose();
         getResponePopup(response);
       }
@@ -482,12 +472,7 @@ const UserList = ({
         field: "addRole",
       });
       if (res?.status === "SUCCESS") {
-         getTableData({
-           pageId: "8e4f1d2a-7b3c-45e6-9f1d-2a7b3c45e6f1",
-           pageNo,
-           pageSize: 15,
-           roleId: "",
-         });
+         getAllUsers();
         setPopoverVisible(null);
         setPageNo(0);
         setRoleChangeLoader(false);
@@ -510,6 +495,17 @@ const UserList = ({
   useEffect(() => {
     getTenantAdminSelectUserList({ role: "SUPERVISOR" });
   }, []);
+  const getAllUsers = async () => {
+    const response = getTableData({
+      pageId: "8e4f1d2a-7b3c-45e6-9f1d-2a7b3c45e6f1",
+      pageNo,
+      pageSize: 15,
+      roleId: "",
+      searchText,
+      selectedDateRanges,
+      selectedOption,
+    });
+  }
   useEffect(() => {
     var tenId = getStorage("tenantId");
     var uId = getStorage("userId");
@@ -519,15 +515,7 @@ const UserList = ({
     setLocalUserId(uId);
     setLocalOrgId(orgId);
     setUseAdd(false);
-    getTableData({
-      pageId: "8e4f1d2a-7b3c-45e6-9f1d-2a7b3c45e6f1",
-      pageNo,
-      pageSize: 15,
-      roleId: "",
-      searchText,
-      selectedDateRanges,
-      selectedOption
-    });
+    getAllUsers();
   }, [pageNo, searchText, sort, selectedDateRanges, selectedOption]);
 
   useEffect(() => {
