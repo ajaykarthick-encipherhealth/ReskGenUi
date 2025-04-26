@@ -316,7 +316,19 @@ const FHIRData = [
     initialedDate: "2024-03-11T12:16:30.091Z",
   },
 ];
+ const commonFilterItems = [
+   {
+     id: 1,
+     title: "Search",
+     type: "search",
+     value: null,
+     placeholder: "Search",
+     active: true,
+     header: "Search by UserName",
+   },
 
+
+ ];
 const PatientSync = ({
   getAllBatches,
   pdfTableData,
@@ -410,7 +422,7 @@ const PatientSync = ({
   const [selectedDates, setSelectedDates] = useState([]);
   const [selectedOptions, setSelectedOptions] = useState([]);
   const [search, setSearch] = useState();
-  const [selectedDateRanges, setSelecteddateRanges] = useState([]);
+  const [selectedDateRanges, setSelectedDateRanges] = useState({});
   const [isOpenFhirDrawer, setIsOpenFhirDrawer] = useState(false);
   const [fileList, setFileList] = useState([]);
   const [openUpload, setOpenUpload] = useState({ status: false, data: null });
@@ -436,6 +448,10 @@ const PatientSync = ({
     isDrawerOpen: false,
     reUpload: null,
   });
+    const [searchText, setSearchText] = useState(null);
+  const [selectedOption, setSelectedOption] = useState({});
+  const [clear, setClear] = useState(false);
+
 
   const handleUploadButtonClick = (e) => {
     setIsDrawerOpen(!isDrawerOpen);
@@ -553,7 +569,7 @@ const PatientSync = ({
     setSearch();
     setSearchVal(null);
     setSelectedDates(null);
-    setSelecteddateRanges([]);
+    setSelectedDateRanges([]);
   };
   const debouncedSearch = useCallback(
     debounce((text, setSearchVal, field) => {
@@ -581,7 +597,7 @@ const PatientSync = ({
       ...prevOptions,
       [tabName]: date,
     }));
-    setSelecteddateRanges((prevOptions) => ({
+    setSelectedDateRanges((prevOptions) => ({
       ...prevOptions,
       [tabName]: { from: formattedDates[0], to: formattedDates[1] },
     }));
@@ -741,6 +757,9 @@ const PatientSync = ({
       pageSize: 15,
       roleId,
       projectId: projectId,
+      searchText,
+      selectedDateRanges,
+      selectedOption,
     });
   };
   const getAllPracticeApi = async () => {
@@ -751,6 +770,9 @@ const PatientSync = ({
       pageSize: 15,
       roleId,
       projectId: projectId,
+      searchText,
+      selectedDateRanges,
+
     });
   };
   const getAllPatientApi = async () => {
@@ -761,6 +783,9 @@ const PatientSync = ({
       pageSize: 15,
       roleId,
       projectId: projectId,
+      searchText,
+      selectedDateRanges,
+
     });
   };
   const getTinApi = async () => {
@@ -771,6 +796,9 @@ const PatientSync = ({
       pageSize: 15,
       roleId,
       projectId: projectId,
+      searchText,
+      selectedDateRanges,
+
     });
   };
   const pageIds =
@@ -849,7 +877,21 @@ const PatientSync = ({
     } else if (reportActiveTab === "Tin Roaster") {
       getTinApi();
     }
-  }, [reportActiveTab, pageNumber, pagination, pageLoad]);
+  }, [
+    reportActiveTab,
+    pageNumber,
+    pagination,
+    pageLoad,
+    searchText,
+    selectedDateRanges,
+  ]);
+    useEffect(() => {
+      setActiveFilters(
+        data?.response?.metaDataDTO.filter(
+          (item) => item.active && item?.filter?.style
+        )
+      );
+    }, [data?.response?.metaDataDTO]);
   return (
     <>
       <Header />
@@ -869,7 +911,7 @@ const PatientSync = ({
           paramsFilter={paramsFilter}
           setParamsFilter={setParamsFilter}
           setSelectedDates={setSelectedDates}
-          setSelecteddateRanges={setSelecteddateRanges}
+          setSelectedDateRanges={setSelectedDateRanges}
           setListSearch={setSearch}
           setSelectedOptions={setSelectedOptions}
           setListPageNo={setPageNo}
@@ -1057,7 +1099,24 @@ const PatientSync = ({
                         reportActiveTab === "Practice Roaster" ||
                         reportActiveTab === "Provider Roaster" ? (
                           <ReusableFilters
+                            // showFilter={true}
                             setActiveFilters={setActiveFilters}
+                            setSearchText={setSearchText}
+                            searchText={searchText}
+                            setSelectedOption={setSelectedOption}
+                            selectedOption={selectedOption}
+                            setSelectedDateRanges={setSelectedDateRanges}
+                            selectedDateRanges={selectedDateRanges}
+                            setPageNumber={setPageNumber}
+                            FilterItems={activeFilters}
+                            selectedDates={selectedDates}
+                            setSelectedDates={setSelectedDates}
+                            activeFilters={activeFilters}
+                            setClear={setClear}
+                            clear={clear}
+                            setPageNo={setPageNo}
+                            // opt={opt}
+                            commonFilterItems={commonFilterItems}
                             open={open}
                             onClose={onClose}
                             selectedColumns={test}

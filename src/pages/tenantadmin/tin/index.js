@@ -15,16 +15,20 @@ import { getAccessTabItems, getResponePopup } from "../../../utils/reusable";
 import { actions as tableAction } from "../../../stores/tableView";
 import styles from "../../../styles/visitdata.module.css";
 import { Button } from "antd";
-
+import {
+  generateOptionsForNewStore,
+  priorityOptions,
+} from "../../../components/headerFilters/functions";
 
 const commonFilterItems = [
   {
     id: "01",
     title: "Tin",
-    type: "select",
+    type: "search",
     value: null,
-    placeholder: "Tin",
-    options: null,
+    placeholder: "Search",
+    pickerType: "search",
+    header: "Tin Name / ID",
     active: true,
   },
   {
@@ -39,16 +43,24 @@ const commonFilterItems = [
 ];
 const columns = [
   {
-    name: "Tin",
-    value: "patientId",
-    isShow: true,
-    filterKey: "Search",
+    id: 1,
+    title: "Search",
+    type: "search",
+    value: null,
+    placeholder: "Search",
+    pickerType: "search",
+    header: "Tin",
+    active: true,
   },
   {
-    name: "Progress",
-    value: "batchName",
-    isShow: true,
-    filterKey: "batch",
+    id: 2,
+    title: "Search",
+    type: "search",
+    value: null,
+    placeholder: "Search",
+    pickerType: "search",
+    header: "Batch Name",
+    active: true,
   },
   {
     name: "Providers",
@@ -134,12 +146,12 @@ const Tin = ({
   routedData,
   getTableData,
   data,
-  pageLoad
+  pageLoad,
 }) => {
   const tabs = getAccessTabItems({ page: "Tin", tabsMenu: "tabMenuList" });
   const activeTab = activeTabName || tabs?.[0] || "Active";
   const router = useRouter();
-  const [activeFilters, setActiveFilters] = useState(commonFilterItems);
+  const [activeFilters, setActiveFilters] = useState([]);
   const [sort, setSort] = useState({
     allocatedOn: {
       sortDir: "DESC",
@@ -154,6 +166,7 @@ const Tin = ({
       sortField: "processedDate",
     },
   });
+ 
   const [switchStates, setSwitchStates] = useState({});
   const [selectedOption, setSelectedOption] = useState({});
   const [pageNo, setPageNo] = useState(0);
@@ -163,20 +176,25 @@ const Tin = ({
   const [test, setTest] = useState(data?.response?.metaDataDTO);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isResetting, setIsResetting] = useState(false);
+  const [searchText, setSearchText] = useState(null);
+  const [selectedDateRanges, setSelectedDateRanges] = useState({});
+  const [selectedDates, setSelectedDates] = useState([]);
+  const [pageNumber, setPageNumber] = useState(0);
+  const [clear, setClear] = useState(false);
 
-const gotoPatientDetails = (rowData) => {
-  setStorage("patientId", rowData.patientId);
-  setStorage("tinNumber", rowData.tinNumber); 
-  setStorage("routeBackTo", "/tenantadmin/tin");
-  setStorage("activeTabTin", activeTab);
+  const gotoPatientDetails = (rowData) => {
+    setStorage("patientId", rowData.patientId);
+    setStorage("tinNumber", rowData.tinNumber);
+    setStorage("routeBackTo", "/tenantadmin/tin");
+    setStorage("activeTabTin", activeTab);
 
-console.log(rowData, "rowData");
-  getProjectActiveTab({
-    tinFilter: params,
-  });
+    console.log(rowData, "rowData");
+    getProjectActiveTab({
+      tinFilter: params,
+    });
 
-  router.push("/tenantadmin/tin/tindetails?tab=Patients");
-};
+    router.push("/tenantadmin/tin/tindetails?tab=Patients");
+  };
 
   // const handleTabs = (name) => {
   //   getProjectActiveTab({
@@ -186,9 +204,9 @@ console.log(rowData, "rowData");
   // };
   const handleTabs = (name) => {
     setSelectedOption({});
-    getProjectActiveTab({ tinTabName: name }); 
-    setPageNo(0); 
-    getAllTins(name); 
+    getProjectActiveTab({ tinTabName: name });
+    setPageNo(0);
+    getAllTins(name);
   };
   const onPageChange = (e) => {
     setPaginationFirst(e.first);
@@ -223,7 +241,7 @@ console.log(rowData, "rowData");
       : activeTab === "Providers"
       ? "32e9eea6-095c-4bd3-abee-17835ea53cdc"
       : "";
-      
+
   const handleSubmit = async () => {
     setIsSubmitting(true);
     const payload = {
@@ -265,11 +283,33 @@ console.log(rowData, "rowData");
     }
   };
 
-
   const opt = {
-    Priority: statusOptions,
+    priority: priorityOptions,
   };
-
+  useEffect(() => {
+    if (routedData) {
+      const {
+        pageNo,
+        selectedDates,
+        selectedDateRanges,
+        selectedOption,
+        searchText,
+        activeFilters,
+        pageNumber,
+        paginationFirst,
+        sort,
+      } = routedData;
+      setPageNo(pageNo ? pageNo : 0);
+      setSearchText(searchText);
+      setSelectedDateRanges(selectedDateRanges);
+      setSelectedOption(selectedOption);
+      setSelectedDates(selectedDates);
+      setActiveFilters(activeFilters);
+      setPageNumber(pageNumber);
+      setPaginationFirst(paginationFirst);
+      setSort(sort);
+    }
+  }, [routedData]);
   const params = {
     pageNo,
     paginationFirst,
@@ -288,17 +328,17 @@ console.log(rowData, "rowData");
       setSort(sort);
     }
   }, [routedData]);
-const getAllTins = async (tabOverride) => {
-  const currentTab = tabOverride || activeTab;
-  const pageId = getPageId(currentTab); 
-  const projectId = getStorage("project");
+  const getAllTins = async (tabOverride) => {
+    const currentTab = tabOverride || activeTab;
+    const pageId = getPageId(currentTab);
+    const projectId = getStorage("project");
 
   await getTableData({
     pageId,
     pageNo,
     pageSize: 15,
     roleId: "",
-    projectId: projectId,
+    projectId: "test",
   });
 };
   const handleSwitchToggle = async (item, checked) => {
@@ -312,8 +352,15 @@ const getAllTins = async (tabOverride) => {
     if (paramsFilter === "check") {
       getAllTins();
     }
-  }, [pageNo, paramsFilter,pageLoad]);
-console.log(pageLoad,"pageLoad")
+  }, [pageNo, paramsFilter, pageLoad, selectedDateRanges, selectedOption]);
+
+  useEffect(() => {
+    setActiveFilters(
+      data?.response?.metaDataDTO.filter(
+        (item) => item.active && item?.filter?.style
+      )
+    );
+  }, [data?.response?.metaDataDTO]);
 
   return (
     <div className={`show`}>
@@ -351,6 +398,7 @@ console.log(pageLoad,"pageLoad")
             >
               Change to Inactive
             </Button>
+           
           </div>
         </div>
       </div>
@@ -361,14 +409,20 @@ console.log(pageLoad,"pageLoad")
             <ReusableFilters
               showFilter={true}
               setActiveFilters={setActiveFilters}
+              setSearchText={setSearchText}
+              searchText={searchText}
               setSelectedOption={setSelectedOption}
               selectedOption={selectedOption}
+              setSelectedDateRanges={setSelectedDateRanges}
+              selectedDateRanges={selectedDateRanges}
               FilterItems={activeFilters}
+              selectedDates={selectedDates}
+              setSelectedDates={setSelectedDates}
               activeFilters={activeFilters}
+              setClear={setClear}
+              clear={clear}
               setPageNo={setPageNo}
               opt={opt}
-              columns={columns}
-              commonFilterItems={commonFilterItems}
               //customize table
               open={open}
               onClose={onClose}
@@ -376,6 +430,7 @@ console.log(pageLoad,"pageLoad")
               setSelectedColumns={setTest}
               showCustomizeTable={true}
               showDrawer={showDrawer}
+              commonFilterItems={commonFilterItems}
               handleSubmit={handleSubmit}
               handleReset={handleReset}
               isSubmitting={isSubmitting}
@@ -436,6 +491,7 @@ console.log(pageLoad,"pageLoad")
                 onPageChange={onPageChange}
                 onSwitchToggle={handleSwitchToggle}
                 switchStates={switchStates}
+             
               />
             )}
           </div>
