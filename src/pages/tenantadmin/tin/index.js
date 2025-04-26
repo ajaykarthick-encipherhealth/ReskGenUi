@@ -343,13 +343,16 @@ console.log(pageLoad,"pageLoad")
           <div className={styles.font}>Total Tin : 45</div>
           <div className={styles.font}>Active Tin : 45</div>
           <div className={styles.font}>InActive Tin : 45</div>
-          <Button
+          <div className="p-3">
+             <Button
             data-testid="activeBtn"
             name="activeBtn"
-            className="btn btn-sm   tableButton"
+            className="btn btn-sm  tableButton"
           >
             Change to Inactive
           </Button>
+          </div>
+         
         </div>
       </div>
 
