@@ -88,6 +88,12 @@ export const allRoles=createActionThunk(
   "GET_ALL_ROLES",
   network.getAllRoles
 )
+export const tinsDropdown=createActionThunk(
+  "GET_ALL_TIN_DROPDOWNS",
+  network.getAllTinDropdown
+)
+
+
 
 
 

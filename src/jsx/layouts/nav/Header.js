@@ -48,7 +48,7 @@ import { actions as tenantAction } from "../../../stores/tenantAdmin/patientSync
 import Profile from "./profile";
 import { getResponePopup } from "../../../utils/reusable";
 import { getHeaderLoge } from "../../../pages/twofactorauthentication/reusableFun";
-import {actions as tinActions } from '../../../stores/tenantAdmin/tin'
+import { actions as tinActions } from "../../../stores/tenantAdmin/tin";
 
 const Header = ({
   notificationResponse,
@@ -80,8 +80,10 @@ const Header = ({
   projectDetails,
   getAllRoles,
   allRolesData,
-  pageLoad ,
+  pageLoad,
   getPageRendering,
+  getAllTin,
+  tinDetails,
 }) => {
   const router = useRouter();
   const fileInputRef = useRef(null);
@@ -119,6 +121,7 @@ const Header = ({
   const [loading, setLoading] = useState(false);
   const [selectedClient, setSelectedClient] = useState(null);
   const [selectedProject, setSelectedProject] = useState(null);
+  const [selectedTin, setSelectedTin] = useState(null);
   const proxyRole = getStorage("proxyRole");
   const showDrawer = () => {
     setOpened(true);
@@ -591,6 +594,11 @@ const Header = ({
     value: client.id,
   }));
 
+  const TinOptions = tinDetails?.map((client) => ({
+    label: client.tinName,
+    value: client.id,
+  }));
+
   const clientOptions = clientDetails?.map((client) => ({
     label: client.clientName,
     value: client.clientId,
@@ -606,22 +614,32 @@ const Header = ({
 
   const handleClientChange = (value) => {
     setSelectedClient(value);
+    setSelectedProject(null);
     setStorage("client", value);
-    getPageRendering(value)
+    getPageRendering(value);
+  };
+
+  const handleTinChange = (value) => {
+    setSelectedTin(value);
+    getPageRendering(value);
   };
 
   const handleProjectChange = (value) => {
     setSelectedProject(value);
     setStorage("project", value);
-    getPageRendering(value)
+    getPageRendering(value);
   };
 
   useEffect(() => {
     getAllProjects();
-  }, [selectedProject,pageLoad]);
+  }, [selectedProject, pageLoad]);
   useEffect(() => {
     getAllClientDetails();
-  }, [selectedClient,pageLoad]);
+  }, [selectedClient, pageLoad]);
+
+  useEffect(() => {
+    getAllTin();
+  }, [selectedTin, pageLoad]);
   useEffect(() => {
     getAllRoles();
   }, []);
@@ -672,13 +690,13 @@ const Header = ({
                 </div>
                 {proxyRole === "QA" && (
                   <div className="mt-3">
-                    {/* <Select
-                      placeholder="Sample Project"
+                    <Select
+                      placeholder="Select Tin "
                       style={{ width: 150 }}
-                      value={selectedProject}
-                      onChange={handleProjectChange}
-                      options={projectOptions}
-                    /> */}
+                      value={selectedTin}
+                      onChange={handleTinChange}
+                      options={TinOptions}
+                    />
                   </div>
                 )}
               </div>
@@ -1105,6 +1123,7 @@ const enhancer = connect(
     clientDetails: state.authReducer?.getClientDetails?.data?.response,
     allRolesData: state.authReducer?.getAllRoles?.data?.response,
     pageLoad: state?.tenantAdmin?.tin?.getPageRendering,
+    tinDetails: state.authReducer?.getTinDropdown?.data?.response,
   }),
   {
     getNotificationList: dashbaordActions.notificationAction,
@@ -1127,8 +1146,8 @@ const enhancer = connect(
     getAllProjects: authActions.projectDetails,
     getAllClientDetails: authActions.clientDetails,
     getAllRoles: authActions.allRoles,
-    getPageRendering:tinActions. pageRendering,
-
+    getPageRendering: tinActions.pageRendering,
+    getAllTin: authActions.tinsDropdown,
   }
 );
 export default enhancer(Header);

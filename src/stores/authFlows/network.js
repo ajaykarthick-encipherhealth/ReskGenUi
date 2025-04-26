@@ -377,4 +377,14 @@ export async function getAllRoles() {
   return data;
 }
 
+export async function getAllTinDropdown() {
+  const options = {
+    method: "GET",
+  };
+  const data = await requestPortal(
+    `dbservice/tin/get/tin-dropdown`,
+    options
+  );
+  return data;
+}
 

@@ -18,7 +18,8 @@ import {
   clientId,
   clientDetails,
   projectDetails,
-  allRoles
+  allRoles,
+  tinsDropdown
 } from "./actions";
 
 const initialState = {
@@ -87,6 +88,7 @@ const authReducer = combineReducers({
   getClientDetails: createReducer(clientDetails),
   getProjectDetails:createReducer(projectDetails),
   getAllRoles:createReducer(allRoles),
+  getTinDropdown:createReducer(tinsDropdown),
 
   // loaders
   mfaLoader: getUsersDetailsLoading(getMFAValidation),
