@@ -339,7 +339,7 @@ export async function getClientId() {
     method: "GET",
   };
   const data = await requestPortal(
-    `dbservice/user/orgid`,
+    `dbservice/user/get/user-dropdown`,
     options
   );
   return data;
@@ -350,7 +350,7 @@ export async function getClientDetails() {
     method: "GET",
   };
   const data = await requestPortal(
-    `dbservice/client/get/dropdown`,
+    `dbservice/client/get/client-dropdown`,
     options
   );
   return data;
@@ -361,7 +361,7 @@ export async function getProjectDetails() {
     method: "GET",
   };
   const data = await requestPortal(
-    `dbservice/project/get/dropdown`,
+    `dbservice/project/get/project-dropdown`,
     options
   );
   return data;
@@ -371,8 +371,10 @@ export async function getAllRoles() {
     method: "GET",
   };
   const data = await requestPortal(
-    `dbservice/user/get/dropdown`,
+    `dbservice/user/get/user-dropdown`,
     options
   );
   return data;
 }
+
+
