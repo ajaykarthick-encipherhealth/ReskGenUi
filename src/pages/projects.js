@@ -48,12 +48,14 @@ const SelectProject = ({
   useEffect(() => {
     if (clientIdData?.userName) {
       setStorage("userId", clientIdData.userName);
-      setStorage("orgId", clientIdData.orgId);
-
     }
-  }, []);
-  console.log(selectClient, "selectClient");
-  console.log(clientIdData?.userName);
+  }, [clientIdData?.userName]);
+  useEffect(() => {
+    if (clientIdData) {
+      setStorage("orgId", clientIdData?.orgId);
+    }
+  }, [clientIdData]);
+
   useEffect(() => {
     if (accounts && accounts.length > 0) {
       setIsLoading(false);
@@ -74,7 +76,6 @@ const SelectProject = ({
       </div>
     );
   }
-  console.log(clientIdData, "clientIdData");
   return (
     <div className="page-wraper">
       <div className="login-account">
