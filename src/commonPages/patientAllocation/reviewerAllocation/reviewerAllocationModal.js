@@ -217,7 +217,6 @@ const AllocateModal = ({
             />
           </div>
         </div>
-        {console.log(userDetails, "userDetails")}
         {usersLoader ? (
           <TableSkeleton />
         ) : userDetails.length > 0 ? (

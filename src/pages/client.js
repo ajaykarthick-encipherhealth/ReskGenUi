@@ -9,7 +9,7 @@ import { connect } from "react-redux";
 import { actions as allActions } from "../stores/authFlows";
 import { getLogoImage } from "./twofactorauthentication/reusableFun";
 
-const SelectClient = ({ projectDetails,getAllProjects }) => {
+const SelectClient = ({ projectDetails, getAllProjects }) => {
   const router = useRouter();
   const [selectClient, setSelectClient] = useState(null);
   const [clientError, setClientError] = useState(false);
@@ -19,7 +19,7 @@ const SelectClient = ({ projectDetails,getAllProjects }) => {
   const onSubmit = async (e) => {
     router.push("/twofactorauthentication/selectrole");
     e.preventDefault();
-       setStorage("project", selectClient);
+    setStorage("project", selectClient);
   };
 
   const handleLogout = () => {

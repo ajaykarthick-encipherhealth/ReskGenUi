@@ -58,7 +58,6 @@ export const MenuList = [
 ];
 
 export const PhysicanMenuList = (data) => {
-  console.log(data,"data")
   let menus = [];
   data?.map((res) => {
     if (res?.title == "Dashboard" && res?.active) {
@@ -311,10 +310,8 @@ export const L2AuditorMenuList = () => {
 
 export const ProviderMenuList = (data) => {
   let menus = [];
-  console.log(data,"data")
   data?.map((res) => {
     if (res?.title == "Dashboard" && res?.active) {
-      console.log(res?.title,"title")
       menus.push({
         title: "Dashboard",
         iconStyle: <DashboardOutlined />,
