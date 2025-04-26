@@ -505,6 +505,7 @@ const Hcc = ({
     getAllRoles();
   }, []);
   const proxyRole = getStorage("proxyRole");
+  console.log(selectDosValue,"selectDosValue")
   return (
     <div className={visitStyles.visitdata_tab_body}>
       <div className={`profile-tab ${visitStyles.visitdata_header_card2}`}>

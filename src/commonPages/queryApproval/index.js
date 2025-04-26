@@ -134,24 +134,14 @@ const QueryApproval = ({
   };
 
   const gotoPatientDetails = (data) => {
-    // if (data?.computing === 2) {
-    //   const controller = new AbortController();
-    //   const { signal } = controller;
-    //   controller.abort();
     setStorage("patientId", data?.patientId);
     setStorage("aliasName", selectedRole);
     var role = getStorage("userRole");
-    if (role == "tenant_admin") {
+    if (role == "TENANT_ADMIN") {
       navigate.push({
         pathname: route ? route : "/tenantadmin/tin/details",
       });
     }
-    // }
-    // else {
-    //   notification.warning({
-    //     message: data?.patientId + " file not processed. Please wait.",
-    //   });
-    // }
   };
   const getQueryApproval = async () => {
     const response = await getTableData({

@@ -24,11 +24,9 @@ export async function patientDetails(
     method: "GET",
   };
      const userRoleId = getStorage("roleId");
-  var url = `patientId=${patientId}&role=${roles?.toUpperCase()}&processedYear=${processedYear}&roleId=${userRoleId}`;
+  var url = `patientId=${patientId}&processedYear=${processedYear}&roleId=${userRoleId}`;
   if (dos) {
-    url = `patientId=${patientId}&role=${
-      roles ? roles?.toUpperCase() : ""
-    }&dateOfService=${dos}`;
+    url = `patientId=${patientId}&dateOfService=${dos}`;
   }
   try {
     const data = await requestPortal(

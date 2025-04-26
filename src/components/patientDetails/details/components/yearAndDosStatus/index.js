@@ -567,7 +567,7 @@ const YearAndDosStatus = ({
                 </Button>
               </Dropdown>
             </div>
-          ) : userRole == "reviewer" || userRole == "admin" ? (
+          ) : userRole == "CODER_1" || userRole == "CODER_2" || userRole == "QA" ? (
             <div className={`${visitStyles.yearactionbtnContainer} ant-badge`}>
               {patienIdDetails?.workflow?.[0]?.status == "COMPLETED" ? (
                 <Dropdown
