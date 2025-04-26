@@ -64,7 +64,7 @@ const SelectProject = ({
         if (!accounts || accounts.length === 0) {
           router.push("/");
         }
-      }, 1000);
+      }, 3000);
       return () => clearTimeout(timeout);
     }
   }, [accounts, router]);

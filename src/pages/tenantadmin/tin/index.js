@@ -134,6 +134,7 @@ const Tin = ({
   routedData,
   getTableData,
   data,
+  pageLoad
 }) => {
   const tabs = getAccessTabItems({ page: "Tin", tabsMenu: "tabMenuList" });
   const activeTab = activeTabName || tabs?.[0] || "Active";
@@ -311,8 +312,8 @@ const getAllTins = async (tabOverride) => {
     if (paramsFilter === "check") {
       getAllTins();
     }
-  }, [pageNo, paramsFilter]);
-
+  }, [pageNo, paramsFilter,pageLoad]);
+console.log(pageLoad,"pageLoad")
 
   return (
     <div className={`show`}>
@@ -457,6 +458,7 @@ const enhancer = connect(
     routedData: state.tenantAdmin?.tin?.activeTabRoutedData?.tinFilter,
     data: state?.tableView?.tableView?.data,
     tableLoader: state?.tableView?.tableViewLoading,
+    pageLoad: state?.tenantAdmin?.tin?.getPageRendering,
   }),
   {
     getProjectActiveTab: tinActions.getProjectActiveTab,

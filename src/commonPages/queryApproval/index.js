@@ -28,6 +28,7 @@ const QueryApproval = ({
   tableDynamicColumn,
   tableDynamicColumnReset,
   route,
+  pageLoad
 }) => {
   const commonFilterItems = [
     {
@@ -188,6 +189,7 @@ const QueryApproval = ({
     roleId,
     active,
     selectedRole,
+    pageLoad,
   ]);
 
   const getRolesList = async () => {
@@ -408,6 +410,7 @@ const connector = connect(
     rolesLoader: state?.tenantAdmin?.patientsAllocation?.rolesLoader,
     tableLoader: state?.tableView?.tableViewLoading,
     data: state?.tableView?.tableView?.data,
+    pageLoad: state?.tenantAdmin?.tin?.getPageRendering,
   }),
   {
     getAllOrganizationList: tenantAdminUsersAction?.getAllOrganizationAction,

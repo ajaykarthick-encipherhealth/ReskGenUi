@@ -28,6 +28,7 @@ const PatientAllocation = ({
   tableLoader,
   tableDynamicColumn,
   tableDynamicColumnReset,
+  pageLoad
 }) => {
   const commonFilterItems = [
     {
@@ -261,6 +262,7 @@ const PatientAllocation = ({
     search,
     batchCount,
     roleId,
+    pageLoad
   ]);
 
   useEffect(() => {
@@ -527,6 +529,7 @@ const connector = connect(
     allRoles: state?.tenantAdmin?.patientsAllocation?.getRoles?.data?.response,
     rolesLoader: state?.tenantAdmin?.patientsAllocation?.rolesLoader,
     tableLoader: state?.tableView?.tableViewLoading,
+    pageLoad: state?.tenantAdmin?.tin?.getPageRendering,
   }),
   {
     getAllOrganizationList: tenantAdminUsersAction?.getAllOrganizationAction,

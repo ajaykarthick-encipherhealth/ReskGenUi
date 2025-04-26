@@ -113,7 +113,7 @@ const CodersTable = ({
   getAllBatchList,
   batchList,
   getActiveTab,
-  status,
+  pageLoad,
   tableLoader,
   getTableData,
   tableDynamicColumn,
@@ -307,6 +307,7 @@ const CodersTable = ({
     sort,
     pageNumber,
     activeStatus,
+    pageLoad
   ]);
 
   const opt = {
@@ -672,6 +673,7 @@ const enhancer = connect(
     tableLoader: state?.tableView?.tableViewLoading,
     data: state?.tableView?.tableView?.data,
     tableStatus: state?.tableView?.TableStatusView?.data?.response,
+    pageLoad: state?.tenantAdmin?.tin?.getPageRendering,
   }),
   {
     getpatientsListFilter: workqueueActions.patientsAction,

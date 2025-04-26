@@ -28,6 +28,7 @@ const MoveBack = ({
   tableDynamicColumn,
   tableDynamicColumnReset,
   moveBackLevel,
+  pageLoad,
 }) => {
   const commonFilterItems = [
     {
@@ -232,6 +233,7 @@ const MoveBack = ({
     paginationFirst,
     search,
     roleId,
+    pageLoad
   ]);
   useEffect(() => {
     if (routedData) {
@@ -459,6 +461,7 @@ const connector = connect(
     tableLoader: state?.tableView?.tableViewLoading,
     allRoles: state?.tenantAdmin?.patientsAllocation?.getRoles?.data?.response,
     rolesLoader: state?.tenantAdmin?.patientsAllocation?.rolesLoader,
+    pageLoad: state?.tenantAdmin?.tin?.getPageRendering,
   }),
   {
     getAllOrganizationList: tenantAdminUsersAction?.getAllOrganizationAction,

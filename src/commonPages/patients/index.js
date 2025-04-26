@@ -222,6 +222,7 @@ const Patient = ({
   data,
   tableDynamicColumn,
   tableDynamicColumnReset,
+  pageLoad,
 }) => {
   const columns = [
     {
@@ -776,6 +777,7 @@ const Patient = ({
     selectedDateRanges,
     sort,
     paramsFilter,
+    pageLoad
   ]);
   useEffect(() => {
     getAllBatchList();
@@ -1026,6 +1028,7 @@ const enhancer = connect(
     getFlagsData: state?.reviewer?.workQueue?.flags?.data,
     data: state?.tableView?.tableView?.data,
     tableLoader: state?.tableView?.tableViewLoading,
+    pageLoad: state?.tenantAdmin?.tin?.getPageRendering,
   }),
   {
     getAllOrganizationList: tenantAdminAction.getAllOrganizationAction,

@@ -1,6 +1,6 @@
 import { combineReducers } from "redux";
 import { handleActions } from "redux-actions";
-import { getAllocationRoutedData ,getProjectActiveTab} from "./actions";
+import { getAllocationRoutedData ,getProjectActiveTab,pageRendering} from "./actions";
 
 const initialState = {
   loading: true,
@@ -53,6 +53,12 @@ const getProjectActiveTabDetails = handleActions(
   },
   ""
 );
+const getPageRendering = handleActions(
+  {
+    [pageRendering.toString()]: (state, { payload }) => payload,
+  },
+  false
+);
 
 
 
@@ -60,6 +66,7 @@ const getProjectActiveTabDetails = handleActions(
 const tinPatientReducer = combineReducers({
   allocationRoutedData:getAllocationDetails,
   activeTabRoutedData:getProjectActiveTabDetails,
+  getPageRendering: getPageRendering,
 
 });
 

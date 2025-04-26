@@ -58,6 +58,7 @@ const Patient = ({
   tableDynamicColumn,
   tableDynamicColumnReset,
   tableLoader,
+  pageLoad
 }) => {
   const commonFilterItems = [
     {
@@ -366,14 +367,6 @@ const Patient = ({
   useEffect(() => {
     setParamsFilter("check");
     if (paramsFilter === "check") {
-      // getAllTrackingList({
-      //   pageNo,
-      //   pageNumber,
-      //   selectedOption,
-      //   sort: sort,
-      //   selectedDateRanges,
-      //   searchText: searchText,
-      // });
       getAllTracking();
     }
   }, [
@@ -383,6 +376,7 @@ const Patient = ({
     selectedDateRanges,
     selectedOption,
     paramsFilter,
+    pageLoad
   ]);
 
   useEffect(() => {
@@ -502,6 +496,7 @@ const enhancer = connect(
     routedData: state.tenantAdmin?.patientSync?.routedData,
     data: state?.tableView?.tableView?.data,
     tableLoader: state?.tableView?.tableViewLoading,
+    pageLoad: state?.tenantAdmin?.tin?.getPageRendering,
   }),
   {
     getAllOrganizationList: tenantUserAdminAction.getAllOrganizationAction,

@@ -9,11 +9,7 @@ import { Skeleton, Tooltip } from "antd";
 import { getPageId, pageIds } from "../../pages/tenantadmin/tin";
 import { connect } from "react-redux";
 
-const SubNavBar = ({
-  handleBack,
-  hideBackArrow,
-  activeTabName,
-}) => {
+const SubNavBar = ({ handleBack, hideBackArrow, pageLoad }) => {
   const role = getStorage("userRole");
   const [metaData, setMetaData] = useState([]);
   const [tableData, setTableData] = useState([]);
@@ -21,7 +17,7 @@ const SubNavBar = ({
   const tabs = getAccessTabItems({ page: "Tin", tabsMenu: "tabMenuList" });
 
   const getAllTins = async (tabOverride) => {
-const activeTab = getStorage("activeTabTin");
+    const activeTab = getStorage("activeTabTin");
     const currentTab = tabOverride || activeTab;
     const pageId = getPageId(currentTab);
    const userId = getStorage("userId");
@@ -37,15 +33,15 @@ const activeTab = getStorage("activeTabTin");
       patientAllocated: userId,
       isAdmin: true,
     });
-  const response = result?.response || {};
-  setMetaData(response.metaDataDTO || []);
-  setTableData(response.pageResponse?.content || []);
-  setLoading(false);
+    const response = result?.response || {};
+    setMetaData(response.metaDataDTO || []);
+    setTableData(response.pageResponse?.content || []);
+    setLoading(false);
   };
 
   useEffect(() => {
     getAllTins();
-  }, []);
+  }, [pageLoad]);
 
   const activeFields = metaData?.filter((field) => field.active);
 
@@ -129,14 +125,12 @@ const activeTab = getStorage("activeTabTin");
   );
 };
 
-
 const enhancer = connect(
   (state) => ({
     activeTabName: state.tenantAdmin.tin?.activeTabRoutedData?.tinTabName,
+    pageLoad: state?.tenantAdmin?.tin?.getPageRendering,
   }),
-  {
-
-  }
+  {}
 );
 
 export default enhancer(SubNavBar);

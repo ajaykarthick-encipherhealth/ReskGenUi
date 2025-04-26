@@ -51,6 +51,7 @@ const UserList = ({
   tableDynamicColumn,
   tableDynamicColumnReset,
   tableLoader,
+  pageLoad,
 }) => {
   const commonFilterItems = [
     {
@@ -516,7 +517,7 @@ const UserList = ({
     setLocalOrgId(orgId);
     setUseAdd(false);
     getAllUsers();
-  }, [pageNo, searchText, sort, selectedDateRanges, selectedOption]);
+  }, [pageNo, searchText, sort, selectedDateRanges, selectedOption,pageLoad]);
 
   useEffect(() => {
     setTimeout(() => {
@@ -1110,6 +1111,7 @@ const enhancer = connect(
     selectUserList: state?.admin.dashboard?.managersList,
     data: state?.tableView?.tableView?.data,
     tableLoader: state?.tableView?.tableViewLoading,
+    pageLoad: state?.tenantAdmin?.tin?.getPageRendering,
   }),
   {
     getAllOrganizationList: tenantAdminAction.getAllOrganizationAction,

@@ -331,9 +331,9 @@ const PatientSync = ({
   getTableData,
   data,
   tableDynamicColumn,
-  tableDynamicColumnReset
+  tableDynamicColumnReset,
+  pageLoad
 }) => {
-
   const columns = [
     {
       name: "BATCH ID",
@@ -779,7 +779,7 @@ const PatientSync = ({
       ? "1ff437a0-18a8-47de-893d-41dc669e3cbd"
       : "";
   const handleSubmitInsert = async () => {
-  setIsSubmitting(true);
+    setIsSubmitting(true);
 
     const payload = {
       pageId: pageIds,
@@ -803,39 +803,37 @@ const PatientSync = ({
         onClose();
         getResponePopup(response);
       }
-    setIsSubmitting(false);
-
+      setIsSubmitting(false);
     } catch (error) {
       getResponePopup(error?.response);
     }
   };
-   const handleReset = async () => {
-  setIsResetting(true);
+  const handleReset = async () => {
+    setIsResetting(true);
 
-      const payload = {
-        pageId: pageIds,
-      };
-      try {
-        const response = await tableDynamicColumnReset({ payload });
-        if (response?.status === "SUCCESS") {
-         if (reportActiveTab === "Provider Roaster") {
-           getAllProviderApi();
-         } else if (reportActiveTab === "Practice Roaster") {
-           getAllPracticeApi();
-         } else if (reportActiveTab === "Patient Roaster") {
-           getAllPatientApi();
-         } else if (reportActiveTab === "Tin Roaster") {
-           getTinApi();
-         }
-          onClose();
-          getResponePopup(response);
-        }
-    setIsResetting(false);
-
-      } catch (error) {
-        getResponePopup(error?.response);
-      }
+    const payload = {
+      pageId: pageIds,
     };
+    try {
+      const response = await tableDynamicColumnReset({ payload });
+      if (response?.status === "SUCCESS") {
+        if (reportActiveTab === "Provider Roaster") {
+          getAllProviderApi();
+        } else if (reportActiveTab === "Practice Roaster") {
+          getAllPracticeApi();
+        } else if (reportActiveTab === "Patient Roaster") {
+          getAllPatientApi();
+        } else if (reportActiveTab === "Tin Roaster") {
+          getTinApi();
+        }
+        onClose();
+        getResponePopup(response);
+      }
+      setIsResetting(false);
+    } catch (error) {
+      getResponePopup(error?.response);
+    }
+  };
   useEffect(() => {
     if (reportActiveTab === "Provider Roaster") {
       getAllProviderApi();
@@ -846,7 +844,7 @@ const PatientSync = ({
     } else if (reportActiveTab === "Tin Roaster") {
       getTinApi();
     }
-  }, [reportActiveTab, pageNumber, pagination]);
+  }, [reportActiveTab, pageNumber, pagination , pageLoad]);
   return (
     <>
       <Header />
@@ -1032,7 +1030,6 @@ const PatientSync = ({
                             className="d-flex justify-content-center align-items-center"
                             style={{ width: "10%" }}
                           >
-             
                             <div className=" mt-4">{renderButton()}</div>
                             <div
                               id="table-btn"
@@ -1362,6 +1359,7 @@ const connector = connect(
     webSocketData: state?.tenantAdmin?.webSocket?.webSocketDetails?.data,
     tableLoader: state?.tableView?.tableViewLoading,
     data: state?.tableView?.tableView?.data,
+    pageLoad: state?.tenantAdmin?.tin?.getPageRendering,
   }),
   {
     getAllBatches: allActions.getAllBatches,
@@ -1374,8 +1372,7 @@ const connector = connect(
     getTinRoaster: patientSyncAction.tinRoasterAction,
     getTableData: tableAction.tableViewAction,
     tableDynamicColumn: tableAction.tableDynamicColumn,
-        tableDynamicColumnReset: tableAction.tableDynamicColumnReset,
-    
+    tableDynamicColumnReset: tableAction.tableDynamicColumnReset,
   }
 );
 export default connector(PatientSync);

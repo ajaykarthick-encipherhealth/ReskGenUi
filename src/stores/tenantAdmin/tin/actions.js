@@ -4,3 +4,4 @@ import * as network from "./network";
 
 export const getAllocationRoutedData = createAction("GET_ALLOCATION_ROUTED_DATA");
 export const getProjectActiveTab = createAction("GET_TIN_ACTIVETAB");
+export const pageRendering = createAction("PAGE_RENDERING");

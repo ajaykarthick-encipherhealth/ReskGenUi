@@ -48,6 +48,7 @@ import { actions as tenantAction } from "../../../stores/tenantAdmin/patientSync
 import Profile from "./profile";
 import { getResponePopup } from "../../../utils/reusable";
 import { getHeaderLoge } from "../../../pages/twofactorauthentication/reusableFun";
+import {actions as tinActions } from '../../../stores/tenantAdmin/tin'
 
 const Header = ({
   notificationResponse,
@@ -78,6 +79,9 @@ const Header = ({
   clientDetails,
   projectDetails,
   getAllRoles,
+  allRolesData,
+  pageLoad ,
+  getPageRendering,
 }) => {
   const router = useRouter();
   const fileInputRef = useRef(null);
@@ -603,17 +607,21 @@ const Header = ({
   const handleClientChange = (value) => {
     setSelectedClient(value);
     setStorage("client", value);
+    getPageRendering(value)
   };
 
   const handleProjectChange = (value) => {
     setSelectedProject(value);
     setStorage("project", value);
+    getPageRendering(value)
   };
 
   useEffect(() => {
     getAllProjects();
+  }, [selectedProject,pageLoad]);
+  useEffect(() => {
     getAllClientDetails();
-  }, []);
+  }, [selectedClient,pageLoad]);
   useEffect(() => {
     getAllRoles();
   }, []);
@@ -1096,6 +1104,7 @@ const enhancer = connect(
     projectDetails: state.authReducer?.getProjectDetails?.data?.response,
     clientDetails: state.authReducer?.getClientDetails?.data?.response,
     allRolesData: state.authReducer?.getAllRoles?.data?.response,
+    pageLoad: state?.tenantAdmin?.tin?.getPageRendering,
   }),
   {
     getNotificationList: dashbaordActions.notificationAction,
@@ -1118,6 +1127,8 @@ const enhancer = connect(
     getAllProjects: authActions.projectDetails,
     getAllClientDetails: authActions.clientDetails,
     getAllRoles: authActions.allRoles,
+    getPageRendering:tinActions. pageRendering,
+
   }
 );
 export default enhancer(Header);

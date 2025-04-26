@@ -90,22 +90,19 @@ const Login = ({ getMFAValidation, loginResponse }) => {
   };
 
   useEffect(() => {
-    // Already logged in
     if (accounts.length > 0) {
       setIsLoading(false);
       setStorage("token", accounts[0].idToken);
-      console.log("✅ User authenticated. Redirecting to dashboard...");
       router.push("/projects");
     } else {
-      // Delay redirect slightly to give MSAL time to populate accounts
       const timeout = setTimeout(() => {
         if (!accounts || accounts.length === 0) {
           setIsLoading(false);
           router.push("/login");
         }
-      }, 2000); // 500ms wait before redirecting
+      }, 3000); 
 
-      return () => clearTimeout(timeout); // Cleanup
+      return () => clearTimeout(timeout); 
     }
   }, [instance, accounts, inProgress]);
 
