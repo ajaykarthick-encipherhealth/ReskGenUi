@@ -10,6 +10,7 @@ import { actions as allActions } from "../stores/authFlows";
 import { getLogoImage } from "./twofactorauthentication/reusableFun";
 import { useMsal } from "@azure/msal-react";
 import PageLoading from "../components/page-loading";
+import { getResponePopup } from "../utils/reusable";
 
 const SelectProject = ({
   getAllClientId,
@@ -21,9 +22,9 @@ const SelectProject = ({
   const [selectClient, setSelectClient] = useState(null);
   const [clientError, setClientError] = useState(false);
   const [confirmModal, setConfirmModal] = useState(false);
-  const [loading, setLoading] = useState(false);
   const { accounts } = useMsal();
   const [isLoading, setIsLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
 
   const clientOptions = clientDetails?.map((client) => ({
     label: client.clientName,
@@ -31,8 +32,14 @@ const SelectProject = ({
   }));
   const onSubmitClient = async (e) => {
     e.preventDefault();
-    router.push("/client");
+    if (!selectClient) {
+      setClientError(true);
+      return;
+    }
+    setClientError(false);
     setStorage("client", selectClient);
+    setLoading(true);
+    router.push("/client");
   };
 
   const handleLogout = () => {
@@ -44,11 +51,21 @@ const SelectProject = ({
       setStorage("userId", clientIdData.userName);
     }
   }, [clientIdData?.userName]);
+  const clientGetApi = async () => {
+    try {
+      const response = await getAllClientDetails();
+      if (response?.status !== "SUCCESS") {
+        getResponePopup(response);
+      }
+    } catch (error) {
+      getResponePopup(error);
+    }
+  };
 
   useEffect(() => {
     if (clientIdData) {
       setStorage("orgId", clientIdData?.orgId);
-       getAllClientDetails();
+      clientGetApi();
     }
   }, [clientIdData]);
 
@@ -124,7 +141,7 @@ const SelectProject = ({
                     />
                     {clientError && (
                       <span className="text-danger fs-12">
-                        Please Select Cleint
+                        Please Select Client
                       </span>
                     )}
                   </div>
@@ -134,21 +151,11 @@ const SelectProject = ({
                   id="next-btn"
                   name="next-btn"
                 >
-                  {/* <RegularButton
-                  onClick={() => {
-                    setSelectClient(null);
-                    setClientError(false);
-                  }}
-                  type="outline"
-                  name="BACK"
-                  width="240px"
-                /> */}
                   <RegularButton
                     type="submit"
                     name="NEXT"
                     width="400px"
                     loading={loading}
-                    disabled={loading}
                   />
                 </div>
               </form>

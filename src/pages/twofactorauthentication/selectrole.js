@@ -9,6 +9,7 @@ import { connect } from "react-redux";
 import { actions as allActions } from "../../stores/authFlows";
 import { getLogoImage } from "./reusableFun";
 import { priorityOptions } from "../../components/headerFilters/functions";
+import { getResponePopup } from "../../utils/reusable";
 
 const SelectRole = ({
   getAllRoles,
@@ -23,9 +24,10 @@ const SelectRole = ({
   const [loading, setLoading] = useState(false);
 
   const roleOptions = allRolesData?.userRoles?.map((client) => ({
-    label: client.proxyRole,
+    label: client.proxyRole.replaceAll('_', ' '),
     value: client.proxyRole,
   }));
+  
   const onSubmitRole = async (e) => {
     e.preventDefault();
 
@@ -37,9 +39,6 @@ const SelectRole = ({
       (role) => role.proxyRole === selectedRole
     );
     if (selectedRoleObj) {
-      // console.log(selectedRoleObj, selectedRole, "selectedRoleObj");
-      // const { roleId, accessList, aliasName, proxyRole } = selectedRoleObj;
-      console.log(selectedRoleObj?.accessList,"list")
       setStorage("proxyRole", selectedRoleObj?.proxyRole);
       setStorage("accessMenuList", JSON.stringify(selectedRoleObj?.accessList));
       setStorage("roleId", selectedRoleObj?.roleId);
@@ -87,14 +86,22 @@ const SelectRole = ({
       router?.push(selectedRoleInfo?.route);
     }
   };
+   const getRolesApi = async () => {
+      try {
+        const response = await getAllRoles();
+        if (response?.status !== "SUCCESS") {
+          getResponePopup(response);
+        }
+      } catch (error) {
+        getResponePopup(error);
+      }
+    };
 
   useEffect(() => {
-    getAllRoles();
+    getRolesApi();
   }, []);
 
-  useEffect(() => {
-    getProxyRoles();
-  }, []);
+
   return (
     <div className="page-wraper">
       <div className="login-account">
@@ -158,7 +165,7 @@ const SelectRole = ({
                     onClick={() => {
                       setSelectedRole(null);
                       setRoleError(false);
-                      router?.push(`/login`);
+                      router?.push(`/client`);
                     }}
                     type="outline"
                     name="BACK"

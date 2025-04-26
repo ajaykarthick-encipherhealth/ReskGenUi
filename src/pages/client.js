@@ -8,6 +8,7 @@ import { getStorage, removeStorage, setStorage } from "../utils/storages";
 import { connect } from "react-redux";
 import { actions as allActions } from "../stores/authFlows";
 import { getLogoImage } from "./twofactorauthentication/reusableFun";
+import { getResponePopup } from "../utils/reusable";
 
 const SelectClient = ({ projectDetails, getAllProjects }) => {
   const router = useRouter();
@@ -17,23 +18,39 @@ const SelectClient = ({ projectDetails, getAllProjects }) => {
   const [loading, setLoading] = useState(false);
 
   const onSubmit = async (e) => {
-    router.push("/twofactorauthentication/selectrole");
     e.preventDefault();
+    if (!selectClient) {
+      setClientError(true);
+      return;
+    }
     setStorage("project", selectClient);
+    setLoading(true);
+    router.push("/twofactorauthentication/selectrole");
   };
 
   const handleLogout = () => {
     setConfirmModal(false);
-    loginSuccessCallBack();
   };
 
   const projectOptions = projectDetails?.map((client) => ({
     label: client.projectName,
     value: client.id,
   }));
-
+  const projectGetApi = async () => {
+    try {
+      const response = await getAllProjects();
+      if (response?.status !== "SUCCESS") {
+        getResponePopup(response);
+      }
+      else{
+        getResponePopup(response)
+      }
+    } catch (error) {
+      getResponePopup(error);
+    }
+  };
   useEffect(() => {
-    getAllProjects();
+    projectGetApi();
   }, []);
 
   return (
@@ -62,7 +79,7 @@ const SelectClient = ({ projectDetails, getAllProjects }) => {
 
               <form onSubmit={onSubmit}>
                 <div className="mb-4">
-                  <label className="mb-1 text-dark">Select Projects</label>
+                  <label className="mb-1 text-dark">Select Project</label>
                   <div
                     id="role"
                     name="role"
@@ -75,7 +92,7 @@ const SelectClient = ({ projectDetails, getAllProjects }) => {
                       id="select-role"
                       name="select-role"
                       style={{ width: "100%", height: "2.75rem" }}
-                      placeholder="Select Projects"
+                      placeholder="Select Project"
                       onChange={(value) => {
                         setSelectClient(value?.toLowerCase());
                         setClientError(false);
@@ -84,7 +101,7 @@ const SelectClient = ({ projectDetails, getAllProjects }) => {
                     />
                     {clientError && (
                       <span className="text-danger fs-12">
-                        Please Select Projects
+                        Please Select Project
                       </span>
                     )}
                   </div>
@@ -99,7 +116,6 @@ const SelectClient = ({ projectDetails, getAllProjects }) => {
                     name="NEXT"
                     width="440px"
                     loading={loading}
-                    disabled={loading}
                   />
                 </div>
               </form>
