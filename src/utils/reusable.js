@@ -594,17 +594,12 @@ export const formatDateForIndex = ({ date, index }) => {
 };
 
 export const renderUserProfile = (data, columnItem) => {
-  const compareObj = columnItem?.fromObject
-    ? data[columnItem?.fromObject] || data
-    : data;
+  const compareObj = data[columnItem?.actualField];
 
   if (
-    compareObj[columnItem?.value?.first] ||
-    compareObj[columnItem?.value?.last] ||
-    compareObj[columnItem?.value?.img] ||
-    compareObj[columnItem?.value1?.first] ||
-    compareObj[columnItem?.value1?.last] ||
-    compareObj[columnItem?.value1?.img]
+    compareObj?.firstName ||
+    compareObj?.lastName ||
+    compareObj?.profileImage
   ) {
     return (
       <div
@@ -613,26 +608,21 @@ export const renderUserProfile = (data, columnItem) => {
       >
         <span style={{ marginRight: "10px" }}>
           {renderUserPrfoileAvatar(
-            compareObj[columnItem?.value?.first] ||
-              compareObj[columnItem?.value1?.first],
-            compareObj[columnItem?.value?.last] ||
-              compareObj[columnItem?.value1?.last],
-            compareObj[columnItem?.value?.img] ||
-              compareObj[columnItem?.value1?.img],
+            compareObj?.firstName || compareObj?.firstName,
+            compareObj?.lastName || compareObj?.lastName,
+            compareObj?.profileImage || compareObj?.profileImage,
             "header"
           )}
         </span>
         <span>
-          {compareObj[columnItem?.value?.first] ||
-            compareObj[columnItem?.value1?.first]}{" "}
-          {compareObj[columnItem?.value?.last] ||
-            compareObj[columnItem?.value1?.last]}
+          {compareObj?.firstName || compareObj?.firstName}{" "}
+          {compareObj?.lastName || compareObj?.lastName}
         </span>
       </div>
     );
   }
   return <div style={{ textAlign: "center" }}>---</div>;
-};
+}; 	
 
 export const renderUserProfileDisable = (data, columnItem) => {
   const compareObj = columnItem?.fromObject

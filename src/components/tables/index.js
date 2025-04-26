@@ -508,51 +508,57 @@ const TableRow = ({
     // console.log(columnItem?.actualField, "columnItem");
     // console.log(item["coder-1AllocatedByName"], "item");
     // console.log(item,"test")
-        if (columnItem.isImage) {
-      
-          return (
-            <td
-              style={{
-                backgroundColor:
-                  item.accountStatus === false ? "#0000001a" : "",
-              }}
-              className={`font2 ${
-                index == 0
-                  ? Style.firstTdBorder
-                  : column.length - 1 == index
-                  ? Style.lastBorder
-                  : Style.childBorder
-              } `}
-            >
+    if (findItemWithTrueOrFalse(columnItem.design, "PROFILE")) {
+      return (
+        <td
+          style={{
+            backgroundColor:
+              item.accountStatus === false ? "#0000001a" : "",
+          }}
+          className={`font2 ${
+            index == 0
+              ? Style.firstTdBorder
+              : column.length - 1 == index
+              ? Style.lastBorder
+              : Style.childBorder
+          } `}
+        >
+          <span
+            style={{
+              color: item.accountStatus === false ? "gray" : "",
+            }}
+          >
+            {renderUserProfile(item, columnItem)}
+          </span>
 
-              {item.accountStatus === false ? (
-                <span
-                  style={{
-                    color: item.accountStatus === false ? "gray" : "",
-                  }}
-                >
-                  {item[columnItem?.fromObject] === "SYSTEM" ? (
-                    <div>{item[columnItem?.fromObject]}</div>
-                  ) : (
-                    renderUserProfileDisable(item, columnItem)
-                  )}
-                </span>
+          {/* {item.accountStatus === false ? (
+            <span
+              style={{
+                color: item.accountStatus === false ? "gray" : "",
+              }}
+            >
+              {item[columnItem?.actualField] === "SYSTEM" ? (
+                <div>{item[columnItem?.actualField]}</div>
               ) : (
-                <span
-                  style={{
-                    color: item.accountStatus === false ? "gray" : "",
-                  }}
-                >
-                  {item[columnItem?.fromObject] === "SYSTEM" ? (
-                    <div>{item[columnItem?.fromObject]}</div>
-                  ) : (
-                    renderUserProfile(item, columnItem)
-                  )}
-                </span>
+                renderUserProfileDisable(item, columnItem)
               )}
-            </td>
-          );
-        }
+            </span>
+          ) : (
+            <span
+              style={{
+                color: item.accountStatus === false ? "gray" : "",
+              }}
+            >
+              {item[columnItem?.actualField] === "SYSTEM" ? (
+                <div>{item[columnItem?.actualField]}</div>
+              ) : (
+                renderUserProfile(item, columnItem)
+              )}
+            </span>
+          )} */}
+        </td>
+      );
+    }
 
         if (columnItem.isComma) {
           return (
