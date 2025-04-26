@@ -28,7 +28,7 @@ const QueryApproval = ({
   tableDynamicColumn,
   tableDynamicColumnReset,
   route,
-  pageLoad
+  pageLoad,
 }) => {
   const commonFilterItems = [
     {
@@ -327,42 +327,45 @@ const QueryApproval = ({
                           </div>
                         </div>
                       )}
+                      {tableLoader ? (
+                        <CardSkeleton height={50} />
+                      ) : (
+                        <div className="d-flex">
+                          <div className="mt-4 w-100">
+                            <ReusableFilters
+                              showFilter={true}
+                              setActiveFilters={setActiveFilters}
+                              setSearchText={setSearchText}
+                              searchText={searchText}
+                              setSelectedOption={setSelectedOption}
+                              selectedOption={selectedOption}
+                              setSelectedDateRanges={setSelectedDateRanges}
+                              selectedDateRanges={selectedDateRanges}
+                              FilterItems={activeFilters}
+                              selectedDates={selectedDates}
+                              setSelectedDates={setSelectedDates}
+                              activeFilters={activeFilters}
+                              setPageNo={setPageNo}
+                              opt={opt}
+                              setSearch={setSearch}
+                              search={search}
+                              //customize table
 
-                      <div className="d-flex">
-                        <div className="mt-4 w-100">
-                          <ReusableFilters
-                            showFilter={true}
-                            setActiveFilters={setActiveFilters}
-                            setSearchText={setSearchText}
-                            searchText={searchText}
-                            setSelectedOption={setSelectedOption}
-                            selectedOption={selectedOption}
-                            setSelectedDateRanges={setSelectedDateRanges}
-                            selectedDateRanges={selectedDateRanges}
-                            FilterItems={activeFilters}
-                            selectedDates={selectedDates}
-                            setSelectedDates={setSelectedDates}
-                            activeFilters={activeFilters}
-                            setPageNo={setPageNo}
-                            opt={opt}
-                            setSearch={setSearch}
-                            search={search}
-                            //customize table
-
-                            open={open}
-                            onClose={onClose}
-                            selectedColumns={test}
-                            setSelectedColumns={setTest}
-                            commonFilterItems={commonFilterItems}
-                            showCustomizeTable={false}
-                            showDrawer={showDrawer}
-                            handleSubmit={handleSubmit}
-                            handleReset={handleReset}
-                            isSubmitting={isSubmitting}
-                            isResetting={isResetting}
-                          />
+                              open={open}
+                              onClose={onClose}
+                              selectedColumns={test}
+                              setSelectedColumns={setTest}
+                              commonFilterItems={commonFilterItems}
+                              showCustomizeTable={false}
+                              showDrawer={showDrawer}
+                              handleSubmit={handleSubmit}
+                              handleReset={handleReset}
+                              isSubmitting={isSubmitting}
+                              isResetting={isResetting}
+                            />
+                          </div>
                         </div>
-                      </div>
+                      )}
                       <Tab.Content>
                         <Tab.Pane eventKey={activeTab}>
                           <QueryTable

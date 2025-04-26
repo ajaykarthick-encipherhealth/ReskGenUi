@@ -17,6 +17,7 @@ import { Tab, Nav } from "react-bootstrap";
 import Header from "../../jsx/layouts/nav/Header";
 import { getResponePopup } from "../../utils/reusable";
 import SubNavBar from "../../components/subNavBar";
+import CardSkeleton from "../../components/skeleton/card";
 const role = getStorage("proxyRole");
 export const bullets = [
   {
@@ -307,7 +308,7 @@ const CodersTable = ({
     sort,
     pageNumber,
     activeStatus,
-    pageLoad
+    pageLoad,
   ]);
 
   const opt = {
@@ -428,42 +429,46 @@ const CodersTable = ({
 
       <div className="content-body">
         <div className="container-fluid table-responsive active-projects task-table">
-          <div className="d-flex p-3">
-            <div style={{ width: "100%" }}>
-              <ReusableFilters
-                showFilter={true}
-                setActiveFilters={setActiveFilters}
-                setSearchText={setSearchText}
-                searchText={searchText}
-                setSelectedOption={setSelectedOption}
-                selectedOption={selectedOption}
-                setSelectedDateRanges={setSelectedDateRanges}
-                selectedDateRanges={selectedDateRanges}
-                setPageNumber={setPageNumber}
-                FilterItems={activeFilters}
-                selectedDates={selectedDates}
-                setSelectedDates={setSelectedDates}
-                activeFilters={activeFilters}
-                setClear={setClear}
-                clear={clear}
-                setPageNo={setPageNo}
-                opt={opt}
-                columns={columns}
-                //customize table
-                open={open}
-                onClose={onClose}
-                selectedColumns={test}
-                setSelectedColumns={setTest}
-                commonFilterItems={commonFilterItems}
-                showCustomizeTable={true}
-                showDrawer={showDrawer}
-                handleSubmit={handleSubmit}
-                handleReset={handleReset}
-                isSubmitting={isSubmitting}
-                isResetting={isResetting}
-              />
+          {tableLoader ? (
+            <CardSkeleton />
+          ) : (
+            <div className="d-flex p-3">
+              <div style={{ width: "100%" }}>
+                <ReusableFilters
+                  showFilter={true}
+                  setActiveFilters={setActiveFilters}
+                  setSearchText={setSearchText}
+                  searchText={searchText}
+                  setSelectedOption={setSelectedOption}
+                  selectedOption={selectedOption}
+                  setSelectedDateRanges={setSelectedDateRanges}
+                  selectedDateRanges={selectedDateRanges}
+                  setPageNumber={setPageNumber}
+                  FilterItems={activeFilters}
+                  selectedDates={selectedDates}
+                  setSelectedDates={setSelectedDates}
+                  activeFilters={activeFilters}
+                  setClear={setClear}
+                  clear={clear}
+                  setPageNo={setPageNo}
+                  opt={opt}
+                  columns={columns}
+                  //customize table
+                  open={open}
+                  onClose={onClose}
+                  selectedColumns={test}
+                  setSelectedColumns={setTest}
+                  commonFilterItems={commonFilterItems}
+                  showCustomizeTable={true}
+                  showDrawer={showDrawer}
+                  handleSubmit={handleSubmit}
+                  handleReset={handleReset}
+                  isSubmitting={isSubmitting}
+                  isResetting={isResetting}
+                />
+              </div>
             </div>
-          </div>
+          )}
           <div className="profile-tab  mt-3">
             {pageId === "a9d5c555-7954-4382-a2ef-3f66b292cf8f" ? (
               <div className="custom-tab-1">
@@ -507,7 +512,6 @@ const CodersTable = ({
                         APPROVED - {tableStatus?.approvedCount || 0}{" "}
                       </Nav.Link>
                     </Nav.Item>{" "}
-                  
                     <Nav.Item
                       as="li"
                       className="nav-item"

@@ -362,7 +362,7 @@ const MoveBack = ({
                         </div>
                       )}
                          {tableLoader ? (
-                        <CardSkeleton />
+                        <CardSkeleton height={50} />
                       ) : (
                       <div className="d-flex ">
                         <div className={` d-flex gap-3 mt-4`}>
