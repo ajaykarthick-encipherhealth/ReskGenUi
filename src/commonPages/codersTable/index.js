@@ -414,7 +414,7 @@ const CodersTable = ({
         (item) => item.active && item?.filter?.style
       )
     );
-  }, [data?.response?.metaDataDTO]);
+  }, [data?.response?.metaDataDTO]);  
 
   return (
     <div className={`show `}>
@@ -507,7 +507,7 @@ const CodersTable = ({
                         id="completed"
                         name="completed"
                         to="#my-posts"
-                        eventKey="COMPLETED"
+                        eventKey="APPROVED"
                       >
                         APPROVED - {tableStatus?.approvedCount || 0}{" "}
                       </Nav.Link>
@@ -523,7 +523,7 @@ const CodersTable = ({
                         id="declined"
                         name="declined"
                         to="#my-posts"
-                        eventKey="DECLINED"
+                        eventKey="REJECTED"
                       >
                         REJECTED - {tableStatus?.rejectedCount || 0}
                       </Nav.Link>
