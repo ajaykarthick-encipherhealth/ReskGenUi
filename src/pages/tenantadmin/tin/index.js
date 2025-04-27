@@ -496,7 +496,7 @@ const Tin = ({
             )}
           </div>
         </div>
-        <div>
+        {/* <div>
           <CustomizableDrawer
             open={open}
             onClose={onClose}
@@ -505,7 +505,7 @@ const Tin = ({
             setSelectedColumns={setTest}
             setActiveFilters={setActiveFilters}
           />
-        </div>
+        </div> */}
       </div>
     </div>
   );
