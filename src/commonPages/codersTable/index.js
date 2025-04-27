@@ -500,7 +500,7 @@ const CodersTable = ({
                       as="li"
                       className="nav-item"
                       onClick={() => {
-                        handleTabs("COMPLETED");
+                        handleTabs("APPROVED");
                       }}
                     >
                       <Nav.Link
@@ -516,7 +516,7 @@ const CodersTable = ({
                       as="li"
                       className="nav-item"
                       onClick={() => {
-                        handleTabs("DECLINED");
+                        handleTabs("REJECTED");
                       }}
                     >
                       <Nav.Link
