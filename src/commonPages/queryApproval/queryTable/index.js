@@ -45,7 +45,7 @@ const QueryTable = ({
           totalRecords={data?.response?.pageResponse?.totalElements}
           row={15}
           onPageChange={onPageChange}
-          onRowClick={active === "Approved" ? "" :gotoPatientDetails}
+          onRowClick={(active === "Approved" || active === "Rejected") ? "" :gotoPatientDetails}
         />
       </div>
     </div>

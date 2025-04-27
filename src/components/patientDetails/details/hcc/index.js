@@ -74,7 +74,8 @@ const Hcc = ({
   raiseQuery,
   getAllRoles,
   roles,
-}) => {
+  activeTabName
+}) => {  
   const { TextArea } = Input;
   const [form] = Form.useForm();
   const [activeTabHead, setActiveTabHead] = useState(1);
@@ -795,7 +796,7 @@ const Hcc = ({
                         </Popover>
                       </Nav.Item>
 
-                      {isClient &&
+                      {activeTabName?.tinDetailsTab == "Query Approval" &&
                         (proxyRole === "OWNER" ||
                           proxyRole === "TENANT_ADMIN") && (
                           <>
@@ -808,7 +809,7 @@ const Hcc = ({
                                 onConfirm={handleApprove}
                               >
                                 <Button
-                                  disabled={isApproved}
+                                  disabled={isApproved || isReject ? true : false}
                                   className={`px-3 py-1 rounded-md ${styles.approveBtn}`}
                                 >
                                   Approve
@@ -817,7 +818,7 @@ const Hcc = ({
                             </Nav.Item>
                             <Nav.Item as="li" className="nav-item">
                               <Button
-                                disabled={isReject}
+                                disabled={isApproved || isReject ? true : false}
                                 className={`px-3 py-1 rounded-md ${styles.rejectBtn}`}
                                 onClick={showModal}
                               >
@@ -1071,6 +1072,7 @@ const enhancer = connect(
     patientDosResult: state?.patientDetails?.details?.dosResult,
     isDosSelected: state.patientDetails.details?.getSelectedDosDetails,
     roles: state.patientDetails.details?.allRoles,
+    activeTabName: state.tenantAdmin.tin?.activeTabRoutedData,
   }),
   {
     getpatientDetailsData: detailsActions.patientDetailsAction,
