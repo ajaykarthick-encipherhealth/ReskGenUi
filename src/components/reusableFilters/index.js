@@ -224,8 +224,8 @@ const ReusableFilters = ({
                         showSearch={item?.showSearch || false}
                         className="custom-react-select-audit w-100"
                         options={
-                          item?.filter?.object
-                            ? generateOptionsObject(item?.filter?.object)
+                          item?.filter?.nameOptions
+                            ? generateOptionsObject(item?.filter?.nameOptions)
                             : generateOptions(item?.filter?.options) || []
                         }
                         placeholder={`Select ${item?.headerName}`}

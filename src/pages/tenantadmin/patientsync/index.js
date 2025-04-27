@@ -316,19 +316,17 @@ const FHIRData = [
     initialedDate: "2024-03-11T12:16:30.091Z",
   },
 ];
- const commonFilterItems = [
-   {
-     id: 1,
-     title: "Search",
-     type: "search",
-     value: null,
-     placeholder: "Search",
-     active: true,
-     header: "Search by UserName",
-   },
-
-
- ];
+const commonFilterItems = [
+  {
+    id: 1,
+    title: "Search",
+    type: "search",
+    value: null,
+    placeholder: "Search",
+    active: true,
+    header: "Search by UserName",
+  },
+];
 const PatientSync = ({
   getAllBatches,
   pdfTableData,
@@ -448,10 +446,9 @@ const PatientSync = ({
     isDrawerOpen: false,
     reUpload: null,
   });
-    const [searchText, setSearchText] = useState(null);
+  const [searchText, setSearchText] = useState(null);
   const [selectedOption, setSelectedOption] = useState({});
   const [clear, setClear] = useState(false);
-
 
   const handleUploadButtonClick = (e) => {
     setIsDrawerOpen(!isDrawerOpen);
@@ -772,7 +769,6 @@ const PatientSync = ({
       projectId: projectId,
       searchText,
       selectedDateRanges,
-
     });
   };
   const getAllPatientApi = async () => {
@@ -785,7 +781,6 @@ const PatientSync = ({
       projectId: projectId,
       searchText,
       selectedDateRanges,
-
     });
   };
   const getTinApi = async () => {
@@ -798,7 +793,6 @@ const PatientSync = ({
       projectId: projectId,
       searchText,
       selectedDateRanges,
-
     });
   };
   const pageIds =
@@ -885,13 +879,14 @@ const PatientSync = ({
     searchText,
     selectedDateRanges,
   ]);
-    useEffect(() => {
-      setActiveFilters(
-        data?.response?.metaDataDTO.filter(
-          (item) => item.active && item?.filter?.style
-        )
-      );
-    }, [data?.response?.metaDataDTO]);
+  useEffect(() => {
+    setActiveFilters(
+      data?.response?.metaDataDTO.filter(
+        (item) => item.active && item?.filter?.style
+      )
+    );
+  }, [data?.response?.metaDataDTO]);
+
   return (
     <>
       <Header />
@@ -929,7 +924,7 @@ const PatientSync = ({
                   <div className="">
                     <div className="card-body p-0">
                       <div className="table-responsive active-projects task-table">
-                        <div
+                        {/* <div
                           className="d-flex"
                           style={{ width: "100%", margin: "auto" }}
                         >
@@ -1093,13 +1088,13 @@ const PatientSync = ({
                               </Button>
                             </div>
                           </div>{" "}
-                        </div>
+                        </div> */}
                         {reportActiveTab === "Tin Roaster" ||
                         reportActiveTab === "Patient Roaster" ||
                         reportActiveTab === "Practice Roaster" ||
                         reportActiveTab === "Provider Roaster" ? (
                           <ReusableFilters
-                            // showFilter={true}
+                            showFilter={true}
                             setActiveFilters={setActiveFilters}
                             setSearchText={setSearchText}
                             searchText={searchText}
