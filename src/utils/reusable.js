@@ -1040,15 +1040,19 @@ export const convertToCustomParamsDatePicker = (obj) => {
   let params = "";
 
   Object.entries(obj).forEach(([key, value]) => {
+    let keyValue = key;    
     if (typeof value === "object" && value !== null) {
       const { startDate, endDate } = value;
-
+      if(keyValue == "computedDate"){
+        const userRole = getStorage("userRole");
+        keyValue = userRole.replace("_", "").toLowerCase()+"CompletedDate";        
+      }
       if (startDate) {
-        params += `&${key}Start=${startDate}`;
+        params += `&${keyValue}Start=${startDate}`;
       }
 
       if (endDate) {
-        params += `&${key}End=${endDate}`;
+        params += `&${keyValue}End=${endDate}`;
       }
     }
   });

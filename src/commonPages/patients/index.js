@@ -757,6 +757,9 @@ const Patient = ({
       tin,
       patientAllocated: userId,
       isAdmin: true,
+      selectedOption,
+      selectedDateRanges,
+      searchText,
     });
   };
   useEffect(() => {
@@ -882,6 +885,15 @@ const Patient = ({
     getAllFlags();
     setTest(data?.response?.metaDataDTO);
   }, []);
+
+   useEffect(() => {
+      setActiveFilters(
+        data?.response?.metaDataDTO.filter(
+          (item) => item.active && item?.filter?.style
+        )
+      );
+    }, [data?.response?.metaDataDTO]);
+
   return (
     <div className={`show `}>
       <Header />

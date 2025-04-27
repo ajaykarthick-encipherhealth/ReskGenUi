@@ -139,7 +139,7 @@ const ReusableFilters = ({
       setSelectedRows([]);
     }
     getAllReviewerALlocation();
-  };
+  };  
   return (
     <div className="d-flex gap-5">
       <div className="row" style={{ width: showFilter ? "98%" : "auto" }}>
@@ -172,7 +172,7 @@ const ReusableFilters = ({
                           )
                     }
                     placeholder={"Search"}
-                    value={setSearchText[item?.actualField] || ""}
+                    value={searchText ? searchText[item?.actualField] : ""}
                     isSearch={true}
                     setSearchText={(val) => {
                       setSearchText((prev) => ({
