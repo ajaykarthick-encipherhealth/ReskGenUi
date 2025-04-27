@@ -36,11 +36,12 @@ export async function getTableView({
   if (selectedDateRanges) {
     dateRagngesParams = convertToCustomParamsDatePicker(selectedDateRanges);
   } 
+const statusKey = isQueried ? "approvalStatus" : "processedStatus";
 
   const uId = getStorage("userId");
   const baseUrl = `dbservice/table/view?pageId=${pageId}&page=${pageNo}&size=${
     pageSize ? pageSize : 15
-  }&processedStatus=${activeStatus || ""}&roleId=${roleId || ""}&projectId=${
+  }&${statusKey}=${activeStatus || ""}&roleId=${roleId || ""}&projectId=${
     projectId || ""
   }&aliasName=${selectedRole || ""}&isReAssigned=${
     isReAssigned || ""
