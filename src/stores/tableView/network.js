@@ -44,8 +44,8 @@ const statusKey = isQueried ? "approvalStatus" : "processedStatus";
   }&${statusKey}=${activeStatus || ""}&roleId=${roleId || ""}&projectId=${
     projectId || ""
   }&aliasName=${selectedRole || ""}&isReAssigned=${
-    isReAssigned || ""
-  }&isQueried=${isQueried || ""}&patientAllocated=${
+    isReAssigned || false
+  }&isQueried=${isQueried || false}&patientAllocated=${
     patientAllocated || ""
   }&queryStatus=${queryStatus || ""}&isAdmin=${isAdmin || ""}&tin=${
     tin ? tin : ""
@@ -81,11 +81,10 @@ export async function getStatusTableView({
   if (selectedDateRanges) {
     dateRagngesParams = convertToCustomParamsDatePicker(selectedDateRanges);
   }
-
   const uId = getStorage("userId");
   const baseUrl = `dbservice/get-count?&isReAssigned=${
-    isReAssigned || ""
-  }&isQueried=${isQueried || ""}&patientAllocated=${
+    isReAssigned || false
+  }&isQueried=${isQueried || false}&patientAllocated=${
     patientAllocated || ""
   }`;
 
