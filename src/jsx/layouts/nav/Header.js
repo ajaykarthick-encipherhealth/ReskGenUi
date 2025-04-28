@@ -621,6 +621,7 @@ const Header = ({
 
   const handleTinChange = (value) => {
     setSelectedTin(value);
+    setStorage("tinId", value);
     getPageRendering(value);
   };
 

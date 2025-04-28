@@ -12,14 +12,14 @@ export async function getTableView({
   searchText,
   activeStatus,
   roleId,
-  projectId,
+  // projectId,
   selectedRole,
   isReAssigned,
   isQueried,
   patientAllocated,
   queryStatus,
   isAdmin,
-  tin,
+  tin = "",
 }) {
   const options = {
     method: "GET",
@@ -41,9 +41,7 @@ const statusKey = isQueried ? "approvalStatus" : "processedStatus";
   const uId = getStorage("userId");
   const baseUrl = `dbservice/table/view?pageId=${pageId}&page=${pageNo}&size=${
     pageSize ? pageSize : 15
-  }&${statusKey}=${activeStatus || ""}&roleId=${roleId || ""}&projectId=${
-    projectId || ""
-  }&aliasName=${selectedRole || ""}&isReAssigned=${
+  }&${statusKey}=${activeStatus || ""}&roleId=${roleId || ""}&aliasName=${selectedRole || ""}&isReAssigned=${
     isReAssigned || false
   }&isQueried=${isQueried || false}&patientAllocated=${
     patientAllocated || ""

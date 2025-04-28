@@ -2,42 +2,42 @@ import React, { useEffect, useState } from "react";
 import styles from "./style.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCopy, faArrowLeft } from "@fortawesome/free-solid-svg-icons";
-import { createIdGen, getAccessTabItems, handleCopyTextInput, reusableEllipses, tableSkeleton } from "../../utils/reusable";
+import {
+  createIdGen,
+  getAccessTabItems,
+  handleCopyTextInput,
+  reusableEllipses,
+} from "../../utils/reusable";
 import { getStorage } from "../../utils/storages";
 import { getTableView } from "../../stores/tableView/network";
-import { Skeleton, Tooltip } from "antd";
-import { getPageId, pageIds } from "../../pages/tenantadmin/tin";
+import { Tooltip } from "antd";
+import { getPageId } from "../../pages/tenantadmin/tin";
 import { connect } from "react-redux";
-import TableSkeleton from "../skeleton/table";
 import CardSkeleton from "../skeleton/card";
 
-const SubNavBar = ({ handleBack, hideBackArrow, pageLoad }) => {
+const SubNavBar = ({ handleBack, hideBackArrow, pageLoad ,tableLoader}) => {
   const role = getStorage("userRole");
   const [metaData, setMetaData] = useState([]);
   const [tableData, setTableData] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const tabs = getAccessTabItems({ page: "Tin", tabsMenu: "tabMenuList" });
 
   const getAllTins = async (tabOverride) => {
     const activeTab = getStorage("activeTabTin");
     const currentTab = tabOverride || activeTab;
     const pageId = getPageId(currentTab);
-   const userId = getStorage("userId");
-   const tin = getStorage("tinNumber");
-       const projectId = getStorage("project");
-     setLoading(true);
-     const result = await getTableView({
-       pageId,
-       pageNo: 0,
-       projectId: projectId,
-       tin,
-       patientAllocated: userId,
-       isAdmin: true,
-     });
+    const userId = getStorage("userId");
+    const tin = getStorage("tinNumber");
+    const projectId = getStorage("project");
+    const result = await getTableView({
+      pageId,
+      pageNo: 0,
+      projectId: projectId,
+      tin,
+      patientAllocated: userId,
+      isAdmin: true,
+    });
     const response = result?.response || {};
     setMetaData(response.metaDataDTO || []);
     setTableData(response.pageResponse?.content || []);
-    setLoading(false);
   };
 
   useEffect(() => {
@@ -45,9 +45,8 @@ const SubNavBar = ({ handleBack, hideBackArrow, pageLoad }) => {
   }, [pageLoad]);
 
   const activeFields = metaData?.filter((field) => field.active);
-
   return (
-    <section className={`${styles.tabMainContainer} d-flex align-items-center`}>
+    <div className={`${styles.tabMainContainer} d-flex align-items-center`}>
       {hideBackArrow && (
         <div
           onClick={handleBack}
@@ -60,9 +59,9 @@ const SubNavBar = ({ handleBack, hideBackArrow, pageLoad }) => {
       )}
 
       <div className={`w-100 ${styles.tabContainer}`}>
-        {loading ? (
+        {tableLoader ? (
           <div className="w-100">
-            <CardSkeleton/>
+            <CardSkeleton />
           </div>
         ) : tableData.length === 0 ? (
           <div className="mx-3">No records found.</div>
@@ -111,7 +110,7 @@ const SubNavBar = ({ handleBack, hideBackArrow, pageLoad }) => {
           ))
         )}
       </div>
-    </section>
+    </div>
   );
 };
 
@@ -119,6 +118,7 @@ const enhancer = connect(
   (state) => ({
     activeTabName: state.tenantAdmin.tin?.activeTabRoutedData?.tinTabName,
     pageLoad: state?.tenantAdmin?.tin?.getPageRendering,
+    tableLoader: state?.tableView?.tableViewLoading,
   }),
   {}
 );

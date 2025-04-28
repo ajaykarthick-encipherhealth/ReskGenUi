@@ -220,6 +220,7 @@ const CodersTable = ({
     },
   });
   const proxyRole = getStorage("proxyRole");
+  const tin = getStorage("tinId")
   const [searchText, setSearchText] = useState(null);
   const [selectedOption, setSelectedOption] = useState({});
   const [selectedDateRanges, setSelectedDateRanges] = useState({});
@@ -281,6 +282,7 @@ const CodersTable = ({
       isReAssigned,
       isQueried,
       patientAllocated,
+      tin ,
     });
     if (res?.status == "SUCCESS") {
       setTotalElements(res.response?.patientDTOList?.totalElements);
