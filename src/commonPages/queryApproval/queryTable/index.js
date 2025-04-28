@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import AppTable from "../../../components/tables";
 import RegularButton from "../../../components/button";
 import { connect } from "react-redux";
+import { Modal } from "antd";
 
 const QueryTable = ({
   data,
@@ -19,6 +20,20 @@ const QueryTable = ({
     setPageNo(e.page);
     setPageSize(e.rows);
   };
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const showModal = () => {
+    setIsModalOpen(true);
+  };
+  const handleOk = () => {
+    setIsModalOpen(false);
+  };
+  const handleCancel = () => {
+    setIsModalOpen(false);
+  };
+  const handleClick = ()=>{
+    setIsModalOpen(false);
+
+  }
 
   return (
     <div className="mt-3">
@@ -45,8 +60,16 @@ const QueryTable = ({
           totalRecords={data?.response?.pageResponse?.totalElements}
           row={15}
           onPageChange={onPageChange}
-          onRowClick={(active === "Approved" || active === "Rejected") ? "" :gotoPatientDetails}
+          onRowClick={(active === "Approved" || active === "Rejected") ? showModal :gotoPatientDetails}
         />
+      </div>
+      <div>
+      <Modal  open={isModalOpen} footer={null} onOk={handleOk} onCancel={handleCancel}>
+       <div className=" d-flex align-items-center justify-content-center mt-2">You are Unable to Open this file</div>
+       <div className="d-flex align-items-center justify-content-center mt-4">
+        <RegularButton onClick={handleClick} name={"Ok"}/>
+       </div>
+      </Modal>
       </div>
     </div>
   );

@@ -61,10 +61,10 @@ const MoveBackModal = ({
         }}
         title="Select Level"
         footer={false}
-        width={700}
+        width={500}
         className={"custom-modal"}
       >
-        <div style={{ height: "500px" }}>
+        <div style={{ height: "200px" }}>
           <div className="mt-4">
             <Select
               allowClear
