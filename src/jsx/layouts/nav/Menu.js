@@ -335,7 +335,7 @@ export const ProviderMenuList = (data) => {
         activeIcon: <ContainerFilled />,
         to: "/tenantadmin/tin",
         childRoute2: "/tenantadmin/tin/tindetails",
-        childRoute: "/tenantadmin/tin/tindetails/details",
+        childRoute: "/tenantadmin/tin/details",
         childRoute3: "/tenantadmin/patients/details",
       });
     }

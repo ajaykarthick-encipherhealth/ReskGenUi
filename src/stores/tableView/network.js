@@ -21,12 +21,11 @@ export async function getTableView({
   isAdmin,
   tin = "",
 }) {
-  const options = {
-    method: "GET",
-  };
+  const options = { method: "GET" };
   let searchTextParams = null;
   let selectParams = null;
   let dateRagngesParams = null;
+
   if (searchText) {
     searchTextParams = convertToCustomParams(searchText);
   }
@@ -35,19 +34,33 @@ export async function getTableView({
   }
   if (selectedDateRanges) {
     dateRagngesParams = convertToCustomParamsDatePicker(selectedDateRanges);
-  } 
-const statusKey = isQueried ? "approvalStatus" : "processedStatus";
+  }
 
+  const statusKey = isQueried ? "approvalStatus" : "processedStatus";
   const uId = getStorage("userId");
-  const baseUrl = `dbservice/table/view?pageId=${pageId}&page=${pageNo}&size=${
-    pageSize ? pageSize : 15
-  }&${statusKey}=${activeStatus || ""}&roleId=${roleId || ""}&aliasName=${selectedRole || ""}&isReAssigned=${
-    isReAssigned || false
-  }&isQueried=${isQueried || false}&patientAllocated=${
-    patientAllocated || ""
-  }&queryStatus=${queryStatus || ""}&isAdmin=${isAdmin || ""}&tin=${
-    tin ? tin : ""
-  }`;
+
+   const role = getStorage("proxyRole");
+
+  let baseUrl = `dbservice/table/view?pageId=${pageId}&page=${pageNo}&size=${
+    pageSize || 15
+  }&${statusKey}=${activeStatus || ""}&roleId=${roleId || ""}&aliasName=${selectedRole || ""}&queryStatus=${queryStatus || ""}&isAdmin=${isAdmin || ""}&tin=${tin || ""}`;
+
+  const allowedPageIds = [
+    "e76aaa6c-319e-44d3-b7ae-aadb17dfb664",
+    "a9d5c555-7954-4382-a2ef-3f66b292cf8f",
+    "da4958c3-7795-4bcc-8ab0-24d93cd52c25",
+  ];
+
+
+  if (allowedPageIds.includes(pageId)) {
+    baseUrl += `&isReAssigned=${isReAssigned || false}&isQueried=${
+      isQueried || false
+    }`;
+  }
+   if (role !== "TENANT_ADMIN") {
+     baseUrl += `&patientAllocated=${patientAllocated || ""}`;
+   }
+
 
   const finalUrl = `${baseUrl}${searchTextParams || ""}${selectParams || ""}${
     dateRagngesParams || ""
@@ -56,6 +69,7 @@ const statusKey = isQueried ? "approvalStatus" : "processedStatus";
   const data = await requestPortal(finalUrl, options);
   return data;
 }
+
 export async function getStatusTableView({
   selectedOption,
   selectedDateRanges,
@@ -139,7 +153,7 @@ export async function getTableViewChecked({
   const data = await requestPortal(
     `dbservice/table/view?pageId=${pageId}&page=${pageNo}&size=${pageSize}&status=${
       activeStatus ? activeStatus : ""
-    }&roleId=${roleId ? roleId : ""}&projectId=${projectId ? projectId : ""}&aliasName=${selectedRole?selectedRole:''}&allPatientIds=${allPatientIds?allPatientIds:""}`,
+    }&roleId=${roleId ? roleId : ""}&aliasName=${selectedRole?selectedRole:''}&allPatientIds=${allPatientIds?allPatientIds:""}`,
     options
   );
   return data;

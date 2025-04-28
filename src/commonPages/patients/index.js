@@ -455,22 +455,14 @@ const Patient = ({
       controller.abort();
       setStorage("patientId", data?.patientId);
       var role = getStorage("userRole");
-      if (role == "tenant_admin") {
+
         // setStorage("routeBackTo", "/tenantadmin/tin/tindetails");
         getRoutedData(page);
         navigate.push({
           pathname: route ? route : "/tenantadmin/patients/details",
         });
-      } else {
-        const encodedValue = btoa(JSON.stringify(page))
-          .replace(/\+/g, "-")
-          .replace(/\//g, "_")
-          .replace(/=+$/, ""); // Remove padding '='
-        setStorage("AdminPatientsEncodedValue", encodedValue);
-        navigate.push({
-          pathname: "/admin/patients/details",
-        });
-      }
+
+    
     } else {
       notification.warning({
         message: data?.patientId + " file not processed. Please wait.",
