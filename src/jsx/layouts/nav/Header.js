@@ -200,24 +200,27 @@ const Header = ({
       .replace(/\b\w/g, (char) => char.toUpperCase())
   );
 
-  const items = formattedRoles
+  const items = allRolesData?.userRoles
     ?.map((data) => ({
-      key: data,
-      label: data,
-    }))
-    .filter(
-      (info) =>
-        info.key.toLowerCase() !==
-          userRole?.replace(/_/g, " ")?.toLowerCase() &&
-        info.label.toLowerCase() !== userRole?.replace(/_/g, " ")?.toLowerCase()
+      label:data.proxyRole,
+      key: data.proxyRole,
+    })
     );
 
-  const onClick = ({ key }) => {
+  const onClick = ({ key }) => {   
+    setStorage("proxyRole", key);         
     setStorage("userRole", key);
     if (key === "Admin") {
       router.push("/admin/dashboard");
     } else if (key === "CODER_1" || key === "CODER_2" || key === "QA") {
-      router.push("/reviewer/dashboard");
+      if(router?.pathname !="/reviewer/dashboard" ){
+        router.push("/reviewer/dashboard");
+      }else{
+      router.push('/reviewer/dashboard').then(() => {
+        window.location.reload();
+      });
+      }
+     
     } else if (key === "Supervisor") {
       router.push("/supervisor/dashboard");
     } else if (key === "TENANT_ADMIN") {
@@ -965,6 +968,7 @@ const Header = ({
                               <Dropdown
                                 menu={{
                                   items,
+                                  defaultSelectedKeys: currentRole,
                                   onClick,
                                 }}
                                 trigger={["click"]}
