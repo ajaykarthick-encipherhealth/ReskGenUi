@@ -1,8 +1,8 @@
-import { Modal, Select } from "antd";
+import { Modal, Select, Switch } from "antd";
 import { connect } from "react-redux";
 import RegularButton from "../../components/button";
 import { actions as allActions } from "../../stores/tenantAdmin/patientAllocations";
-import {  useState } from "react";
+import { useState } from "react";
 import { getResponePopup } from "../../utils/reusable";
 
 const MoveBackModal = ({
@@ -17,32 +17,39 @@ const MoveBackModal = ({
   activeTab,
   getMoveBack,
   setIsMoveBackLoader,
-  moveBackLoader
+  moveBackLoader,
 }) => {
   const [selectLevel, setSelectLevel] = useState([]);
+  const [isSwitchOn, setIsSwitchOn] = useState(false);
   const handleChange = (value) => {
     setSelectLevel(value);
   };
+  const onChange = (checked) => {
+    setIsSwitchOn(checked);
+  };
 
   const handleSubmit = async () => {
-    setIsMoveBackLoader(true)
+    setIsMoveBackLoader(true);
     try {
       const response = await moveBack({
         patientIdList: selectedRowsId,
         roleDetailsToMoveBack: selectLevel,
+        isRevertSelected: isSwitchOn,
       });
 
       if (response?.status === "SUCCESS") {
-        setIsMoveBackLoader(false)
+        setIsMoveBackLoader(false);
         getResponePopup(response);
-        getMoveBack()
+        getMoveBack();
         setSelectedRowsId([]);
         setSelectedRows([]);
         setSelectLevel([]);
         setOpen(false);
+        setIsSwitchOn(false);
       } else {
         getResponePopup(response);
-        setIsMoveBackLoader(false)
+        setIsMoveBackLoader(false);
+        setIsSwitchOn(false);
       }
     } catch (error) {
       console.error("failed");
@@ -50,7 +57,7 @@ const MoveBackModal = ({
   };
 
   return (
-    <div> 
+    <div>
       <Modal
         open={open}
         onCancel={() => {
@@ -58,6 +65,7 @@ const MoveBackModal = ({
           setSelectLevel([]);
           setSelectedRowsId([]);
           setSelectedRows([]);
+          setIsSwitchOn(false);
         }}
         title="Select Level"
         footer={false}
@@ -65,7 +73,7 @@ const MoveBackModal = ({
         className={"custom-modal"}
       >
         <div style={{ height: "200px" }}>
-          <div className="mt-4">
+          <div className="mt-4 d-flex gap-5 ">
             <Select
               allowClear
               value={selectLevel}
@@ -79,6 +87,10 @@ const MoveBackModal = ({
                 </Option>
               ))}{" "}
             </Select>
+            <div className="mt-1">
+              {" "}
+              <Switch checked={isSwitchOn} onChange={onChange} />
+            </div>
           </div>
 
           <div className=" h-100 d-flex align-items-center justify-content-center">

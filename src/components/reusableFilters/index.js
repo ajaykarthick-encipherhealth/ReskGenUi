@@ -139,9 +139,11 @@ const ReusableFilters = ({
       setSelectedRows([]);
     }
     getAllReviewerALlocation();
-  };  
+  }; 
+  
+  console.log(activeFilters,"activeFilters")
   return (
-    <div className="d-flex gap-5">
+    <div className="d-flex gap-5 w-100">
       <div className="row" style={{ width: showFilter ? "98%" : "auto" }}>
         {FilterItems?.filter((item) => item?.active).map((item) => {
           switch (item?.filter?.style) {
@@ -374,7 +376,7 @@ const ReusableFilters = ({
         )}
       </div>
       <div className="d-flex " style={{ alignContent: "flex-end" }}>
-        {showFilter && columns?.length != 0  && (
+        {showFilter && columns?.length != 0  && activeFilters?.length ? (
           <div
             id="more-filters"
             name="more-filters"
@@ -397,7 +399,7 @@ const ReusableFilters = ({
               columns={columns}
             />
           </div>
-        )}
+        ):""}
         {showCustomizeTable && (
           <>
             <div

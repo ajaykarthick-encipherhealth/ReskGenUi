@@ -365,7 +365,7 @@ const MoveBack = ({
                         <CardSkeleton height={50} />
                       ) : (
                       <div className="d-flex ">
-                        <div className={` d-flex gap-3 mt-4`}>
+                        <div style={{width:"100%"}} className={` d-flex gap-3 mt-4 `}>
                           <ReusableFilters
                             showFilter={true}
                             setActiveFilters={setActiveFilters}
