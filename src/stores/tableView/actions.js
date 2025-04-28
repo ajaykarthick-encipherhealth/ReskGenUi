@@ -22,4 +22,11 @@ export const getTableStatusAction = createActionThunk(
   "GET_TABLE_STATUS_ACTION",
   network.getStatusTableView
 );
-
+export const getTinCountAction = createActionThunk(
+  "GET_TIN_STATUS_ACTION",
+  network.getTinCount
+);
+export const setTinStatus = createActionThunk(
+  "TIN_STATUS_ACTION",
+  network.changeTinStatus
+);

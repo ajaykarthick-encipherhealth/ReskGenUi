@@ -1136,6 +1136,9 @@ const TableRow = ({
                         singleCheck: true,
                       });
                     }}
+                    onClick={(e) => {
+                      e.stopPropagation(); 
+                    }}
                     checked={selectedRows?.some(
                       (row) => row === item[columnItem.value]
                     )}

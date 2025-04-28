@@ -11,10 +11,14 @@ import AppTable from "../../../components/tables";
 import { actions as allActions } from "../../../stores/reviewer/workqueue";
 import { getStorage, setStorage } from "../../../utils/storages";
 import { statusOptions } from "../../reviewer/patients";
-import { getAccessTabItems, getResponePopup } from "../../../utils/reusable";
+import {
+  findItemWithTrueKey,
+  getAccessTabItems,
+  getResponePopup,
+} from "../../../utils/reusable";
 import { actions as tableAction } from "../../../stores/tableView";
 import styles from "../../../styles/visitdata.module.css";
-import { Button } from "antd";
+import { Button, Popconfirm } from "antd";
 import {
   generateOptionsForNewStore,
   priorityOptions,
@@ -138,8 +142,6 @@ export const getPageId = (activeTab) => {
 const Tin = ({
   getProjectActiveTab,
   activeTabName,
-  getFilteApi,
-  loading,
   tableDynamicColumn,
   tableDynamicColumnReset,
   tableLoader,
@@ -147,6 +149,9 @@ const Tin = ({
   getTableData,
   data,
   pageLoad,
+  getTinCountData,
+  tinCount,
+  setTinStatus,
 }) => {
   const tabs = getAccessTabItems({ page: "Tin", tabsMenu: "tabMenuList" });
   const activeTab = activeTabName || tabs?.[0] || "Active";
@@ -166,7 +171,7 @@ const Tin = ({
       sortField: "processedDate",
     },
   });
- 
+
   const [switchStates, setSwitchStates] = useState({});
   const [selectedOption, setSelectedOption] = useState({});
   const [pageNo, setPageNo] = useState(0);
@@ -181,6 +186,11 @@ const Tin = ({
   const [selectedDates, setSelectedDates] = useState([]);
   const [pageNumber, setPageNumber] = useState(0);
   const [clear, setClear] = useState(false);
+  const [selectedRowsId, setSelectedRowsId] = useState([]);
+  const [selectedUserName, setSelectedUserName] = useState([]);
+  const [selectedRows, setSelectedRows] = useState([]);
+  const [checkedLoader, setCheckedLoader] = useState(false);
+  const [checkedHeader, setCheckedHeader] = useState(false);
 
   const gotoPatientDetails = (rowData) => {
     setStorage("patientId", rowData.patientId);
@@ -188,7 +198,6 @@ const Tin = ({
     setStorage("routeBackTo", "/tenantadmin/tin");
     setStorage("activeTabTin", activeTab);
 
-    console.log(rowData, "rowData");
     getProjectActiveTab({
       tinFilter: params,
     });
@@ -196,12 +205,6 @@ const Tin = ({
     router.push("/tenantadmin/tin/tindetails?tab=Patients");
   };
 
-  // const handleTabs = (name) => {
-  //   getProjectActiveTab({
-  //     tinTabName: name,
-  //   });
-  //   setSelectedOption({});
-  // };
   const handleTabs = (name) => {
     setSelectedOption({});
     getProjectActiveTab({ tinTabName: name });
@@ -220,18 +223,6 @@ const Tin = ({
   const onClose = () => {
     setOpen(false);
   };
-  // const getPageIdByTab = (tab) => {
-  //   switch (tab) {
-  //     case "Active":
-  //       return "2d7cb7f7-6dad-41fb-970b-d805fb3f195f";
-  //     case "InActive":
-  //       return "6579b31a-aa46-42bf-abbb-c1e17e987a3a";
-  //     case "Providers":
-  //       return "32e9eea6-095c-4bd3-abee-17835ea53cdc";
-  //     default:
-  //       return "";
-  //   }
-  // };
 
   const pageIds =
     activeTab === "Active"
@@ -241,7 +232,60 @@ const Tin = ({
       : activeTab === "Providers"
       ? "32e9eea6-095c-4bd3-abee-17835ea53cdc"
       : "";
+  const handleRowCheckboxChange = async ({ e, row, singleCheck, checked }) => {
+    if (!singleCheck) {
+      if (checked) {
+        setCheckedLoader(true);
+        setCheckedHeader(true);
+        const response = await getTableData({
+          fromTenant: true,
+          allPatientIds: checked,
 
+          pageId: pageIds,
+          pageNo: 0,
+          pageSize: 15,
+        });
+
+        if (response?.status === "SUCCESS") {
+          const result = response?.response?.patientIds?.map((patient) => ({
+            patientId: patient.id,
+          }));
+          setSelectedRows(result.map((patient) => patient.id));
+          setSelectedRowsId(result);
+          setSelectedUserName(result);
+        }
+        setCheckedLoader(false);
+      } else {
+        setSelectedRows([]);
+        setSelectedRowsId([]);
+        setSelectedUserName([]);
+        setCheckedLoader(false);
+        setCheckedHeader(false);
+      }
+    } else {
+      setSelectedUserName((prev) => {
+        let updatedSelection = e.target.checked
+          ? [...prev, { ids: row.id }]
+          : prev.filter((user) => user.id !== row.id);
+        return updatedSelection;
+      });
+      setSelectedRows((prev) => {
+        let updatedSelection = e.target.checked
+          ? [...prev, row.id]
+          : prev.filter((id) => id !== row.id);
+
+        setSelectedRowsId(
+          updatedSelection.map((id) => ({
+            patientId: id,
+            patientName: row.patientName,
+          }))
+        );
+        return updatedSelection;
+      });
+    }
+  };
+
+  console.log(tinCount, "tinCount");
   const handleSubmit = async () => {
     setIsSubmitting(true);
     const payload = {
@@ -282,7 +326,23 @@ const Tin = ({
       getResponePopup(error?.response);
     }
   };
+  const handleTinStatus = async () => {
+    const payload = {
+      ids: selectedRows,
+      isActive: false,
+    };
 
+    try {
+      const response = await setTinStatus({ payload });
+      if (response?.status === "SUCCESS") {
+        getAllTins();
+        onClose();
+        getResponePopup(response);
+      }
+    } catch (error) {
+      getResponePopup(error?.response);
+    }
+  };
   const opt = {
     priority: priorityOptions,
   };
@@ -333,24 +393,21 @@ const Tin = ({
     const pageId = getPageId(currentTab);
     const projectId = getStorage("project");
 
-  await getTableData({
-    pageId,
-    pageNo,
-    pageSize: 15,
-    roleId: "",
-    projectId: "test",
-  });
-};
-  const handleSwitchToggle = async (item, checked) => {
- 
+    await getTableData({
+      pageId,
+      pageNo,
+      pageSize: 15,
+      roleId: "",
+      projectId: "test",
+    });
   };
-
-
+  const handleSwitchToggle = async (item, checked) => {};
 
   useEffect(() => {
     setParamsFilter("check");
     if (paramsFilter === "check") {
       getAllTins();
+      getTinCountData();
     }
   }, [pageNo, paramsFilter, pageLoad, selectedDateRanges, selectedOption]);
 
@@ -385,22 +442,39 @@ const Tin = ({
             padding={"50px"}
           />
         </div>
+        {activeTab !== "Providers" && (
+          <div className="d-flex align-items-center justify-content-end gap-4">
+            <div className={styles.font}>
+              Total Tin : {tinCount?.totalTin ? tinCount?.totalTin : 0}
+            </div>
+            <div className={styles.font}>
+              Active Tin : {tinCount?.activeTin ? tinCount?.activeTin : 0}
+            </div>
+            <div className={styles.font}>
+              InActive Tin : {tinCount?.inactiveTin ? tinCount?.inactiveTin : 0}
+            </div>
 
-        <div className="d-flex align-items-center justify-content-end gap-4">
-          <div className={styles.font}>Total Tin : 45</div>
-          <div className={styles.font}>Active Tin : 45</div>
-          <div className={styles.font}>InActive Tin : 45</div>
-          <div className="p-3">
-            <Button
-              data-testid="activeBtn"
-              name="activeBtn"
-              className="btn btn-sm  tableButton"
-            >
-              Change to Inactive
-            </Button>
-           
+            <div className="p-3">
+              <Popconfirm
+                title={`Are you sure you want to mark this as ${
+                  activeTab === "InActive" ? "Active" : "InActive"
+                }?`}
+                onConfirm={handleTinStatus}
+                okText="Yes"
+                cancelText="No"
+              >
+                <Button
+                  data-testid="activeBtn"
+                  name="activeBtn"
+                  className="tableButton"
+                  disabled={selectedRowsId?.length === 0}
+                >
+                  Change to {activeTab === "InActive" ? "Active" : "InActive"}
+                </Button>
+              </Popconfirm>
+            </div>
           </div>
-        </div>
+        )}
       </div>
 
       <div className=" mt-3  container-fluid table-responsive active-projects task-table">
@@ -447,7 +521,7 @@ const Tin = ({
                   (item) => item.active
                 )}
                 loader={tableLoader}
-                onRowClick={gotoPatientDetails}
+                // onRowClick={gotoPatientDetails}
                 pagination={false}
                 setSort={setSort}
                 sort={sort}
@@ -455,26 +529,24 @@ const Tin = ({
                 totalRecords={data?.response?.pageResponse?.totalElements}
                 row={15}
                 onPageChange={onPageChange}
+                isCheckBox={findItemWithTrueKey(
+                  data?.response?.staticDesign,
+                  "checkBox"
+                )}
+                checkedHeader={
+                  selectedRows?.length ===
+                    data?.response?.pageResponse?.totalElements &&
+                  data?.response?.pageResponse?.totalElements !== 0
+                }
+                selectedRowsId={selectedRowsId}
+                setSelectedRowsId={setSelectedRowsId}
+                setSelectedRows={setSelectedRows}
+                selectedUserName={selectedUserName}
+                handleRowCheckboxChange={handleRowCheckboxChange}
+                onRowClick={gotoPatientDetails}
               />
             )}
             {activeTab === "InActive" && (
-              <AppTable
-                data={data?.response?.pageResponse?.content}
-                column={data?.response?.metaDataDTO.filter(
-                  (item) => item.active
-                )}
-                loader={tableLoader}
-                onRowClick={gotoPatientDetails}
-                pagination={false}
-                setSort={setSort}
-                sort={sort}
-                first={pageNo === 0 ? 0 : paginationFirst}
-                totalRecords={data?.response?.pageResponse?.totalElements}
-                row={15}
-                onPageChange={onPageChange}
-              />
-            )}
-            {activeTab === "Providers" && (
               <AppTable
                 data={data?.response?.pageResponse?.content}
                 column={data?.response?.metaDataDTO.filter(
@@ -489,9 +561,52 @@ const Tin = ({
                 totalRecords={data?.response?.pageResponse?.totalElements}
                 row={15}
                 onPageChange={onPageChange}
+                isCheckBox={findItemWithTrueKey(
+                  data?.response?.staticDesign,
+                  "checkBox"
+                )}
+                checkedHeader={
+                  selectedRows?.length ===
+                    data?.response?.pageResponse?.totalElements &&
+                  data?.response?.pageResponse?.totalElements !== 0
+                }
+                selectedRowsId={selectedRowsId}
+                setSelectedRowsId={setSelectedRowsId}
+                setSelectedRows={setSelectedRows}
+                selectedUserName={selectedUserName}
+                handleRowCheckboxChange={handleRowCheckboxChange}
+                setCheckedHeader={setCheckedHeader}
+              />
+            )}
+            {activeTab === "Providers" && (
+              <AppTable
+                data={data?.response?.pageResponse?.content}
+                column={data?.response?.metaDataDTO.filter(
+                  (item) => item.active
+                )}
+                loader={tableLoader}
+                pagination={false}
+                setSort={setSort}
+                sort={sort}
+                first={pageNo === 0 ? 0 : paginationFirst}
+                totalRecords={data?.response?.pageResponse?.totalElements}
+                row={15}
+                onPageChange={onPageChange}
                 onSwitchToggle={handleSwitchToggle}
                 switchStates={switchStates}
-             
+                isCheckBox={findItemWithTrueKey(
+                  data?.response?.staticDesign,
+                  "checkBox"
+                )}
+                checkedHeader={
+                  selectedRows?.length ===
+                    data?.response?.pageResponse?.totalElements &&
+                  data?.response?.pageResponse?.totalElements !== 0
+                }
+                selectedRowsId={selectedRowsId}
+                setSelectedRowsId={setSelectedRowsId}
+                setSelectedRows={setSelectedRows}
+                selectedUserName={selectedUserName}
               />
             )}
           </div>
@@ -518,6 +633,7 @@ const enhancer = connect(
     data: state?.tableView?.tableView?.data,
     tableLoader: state?.tableView?.tableViewLoading,
     pageLoad: state?.tenantAdmin?.tin?.getPageRendering,
+    tinCount: state?.tableView?.TinCountView?.data?.response,
   }),
   {
     getProjectActiveTab: tinActions.getProjectActiveTab,
@@ -525,6 +641,8 @@ const enhancer = connect(
     getTableData: tableAction.tableViewAction,
     tableDynamicColumn: tableAction.tableDynamicColumn,
     tableDynamicColumnReset: tableAction.tableDynamicColumnReset,
+    getTinCountData: tableAction.getTinCountAction,
+    setTinStatus: tableAction.setTinStatus,
   }
 );
 

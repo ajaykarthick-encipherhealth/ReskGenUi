@@ -132,6 +132,21 @@ export async function dynamicColumnReset({ payload }) {
   const data = await requestPortal(`dbservice/table/column/reset`, options);
   return data;
 }
+export async function changeTinStatus({ payload }) {
+  const options = {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(payload),
+  };
+
+  const data = await requestPortal(
+    `dbservice/tin/change-active-status`,
+    options
+  );
+  return data;
+}
 export async function getTableViewChecked({
   pageId,
   pageNo,
@@ -156,5 +171,15 @@ export async function getTableViewChecked({
     }&roleId=${roleId ? roleId : ""}&aliasName=${selectedRole?selectedRole:''}&allPatientIds=${allPatientIds?allPatientIds:""}`,
     options
   );
+  return data;
+}
+
+export async function getTinCount({
+}) {
+  const options = {
+    method: "GET",
+  };
+  const uId = getStorage("userId");
+  const data = await requestPortal(`dbservice/tin/get-tin-counts`, options);
   return data;
 }

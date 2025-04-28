@@ -4,6 +4,7 @@ import {
   tableViewAction,
   tableDynamicChecked,
   getTableStatusAction,
+  getTinCountAction,
 } from "./actions";
 
 const initialState = {
@@ -46,9 +47,9 @@ const getReportLoading = (type) =>
 const tableReducer = combineReducers({
   tableViewLoading: getReportLoading(tableViewAction),
   tableView: createReducer(tableViewAction),
-  tableColumnChecked:createReducer(tableDynamicChecked),
+  tableColumnChecked: createReducer(tableDynamicChecked),
   TableStatusView: createReducer(getTableStatusAction),
-
+  TinCountView: createReducer(getTinCountAction),
 });
 
 export default tableReducer;
