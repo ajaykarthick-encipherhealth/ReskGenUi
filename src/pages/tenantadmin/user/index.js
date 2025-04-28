@@ -369,7 +369,7 @@ const UserList = ({
             style={{ width: "300px" }}
             mode={"multiple"}
             onChange={(e) => handleRows(e, data?.role)}
-            options={items || []} // Ensure it doesn't break if items is undefined
+            options={items || []} 
             placeholder={"Select Role"}
             defaultValue={isMultiple ? data.role : data?.role}
             onDropdownVisibleChange={(visible) => setOpen(visible)}

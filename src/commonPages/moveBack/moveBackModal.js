@@ -13,17 +13,24 @@ const MoveBackModal = ({
   moveBack,
   setSelectedRows,
   setSelectedRowsId,
-  roleId,
-  activeTab,
   getMoveBack,
   setIsMoveBackLoader,
   moveBackLoader,
 }) => {
   const [selectLevel, setSelectLevel] = useState([]);
   const [isSwitchOn, setIsSwitchOn] = useState(false);
+  const [revertDescription, setRevertDescription] = useState(null);
+
+  const options = levelOptions?.map((org, index) => ({
+    value: org.status,
+    label: org.status.split("_").join(" "),
+  }));
   const handleChange = (value) => {
     setSelectLevel(value);
+    const selectedOption = levelOptions?.find((opt) => opt.status === value);
+    setRevertDescription(selectedOption?.revertDescription || "");
   };
+
   const onChange = (checked) => {
     setIsSwitchOn(checked);
   };
@@ -46,10 +53,12 @@ const MoveBackModal = ({
         setSelectLevel([]);
         setOpen(false);
         setIsSwitchOn(false);
+        setRevertDescription(null);
       } else {
         getResponePopup(response);
         setIsMoveBackLoader(false);
         setIsSwitchOn(false);
+        setRevertDescription(null);
       }
     } catch (error) {
       console.error("failed");
@@ -66,31 +75,34 @@ const MoveBackModal = ({
           setSelectedRowsId([]);
           setSelectedRows([]);
           setIsSwitchOn(false);
+          setRevertDescription(null);
         }}
         title="Select Level"
         footer={false}
         width={500}
         className={"custom-modal"}
       >
-        <div style={{ height: "200px" }}>
-          <div className="mt-4 d-flex gap-5 ">
+        <div style={{ height: "250px" }}>
+          <div className="mt-4 d-flex justify-content-between ">
             <Select
               allowClear
               value={selectLevel}
               onChange={handleChange}
               placeholder="Select level"
               className="w-50 h-50"
-            >
-              {levelOptions?.map((item) => (
-                <Option key={item} value={item}>
-                  {item}
-                </Option>
-              ))}{" "}
-            </Select>
-            <div className="mt-1">
-              {" "}
-              <Switch checked={isSwitchOn} onChange={onChange} />
+              options={options}
+            ></Select>
+          </div>
+          <div className="mt-4 ">
+              <div className="d-flex gap-2 fontWeight2">
+                Revert
+                <Switch checked={isSwitchOn} onChange={onChange} />
+              </div>
             </div>
+          <div>
+            {revertDescription && (
+              <div className="font1 text-muted mt-2">{revertDescription}</div>
+            )}
           </div>
 
           <div className=" h-100 d-flex align-items-center justify-content-center">
