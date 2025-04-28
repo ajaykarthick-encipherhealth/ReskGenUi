@@ -6,9 +6,8 @@ import data from "../../../../pages/reviewer/patients/data.json";
 import { Button, DatePicker, Drawer, Form, Input } from "antd";
 import { connect } from "react-redux";
 import { actions as settingActions } from "../../../../stores/tenantAdmin/settings";
-import { formatDateForIndex } from "../../../../utils/reusable";
 
-const Projects = ({ createProject }) => {
+const Clients = ({ createClient }) => {
   const [form] = Form.useForm();
   const commonFilterItems = [
     {
@@ -120,21 +119,12 @@ const Projects = ({ createProject }) => {
   };
 
   const handleSubmit = async (values) => {
-    const projectInitiatedDate = formatDateForIndex({
-      date: values.projectInitiatedDate,
-      index: 0,
-    });
-    const projectEndDate = formatDateForIndex({
-      date: values.projectEndDate,
-      index: 1,
-    });
     const data = {
-      projectName: values?.projectName,
-      projectInitiatedDate,
-      projectEndDate,
+      clientName: values?.clientName,
+      clientId: values?.clientId,
     };
     try {
-      const res = await createProject(data);
+      const res = await createClient(data);
       if (res?.status === "SUCCESS") {
         form.resetFields();
         getResponePopup(res);
@@ -143,7 +133,7 @@ const Projects = ({ createProject }) => {
         setOpen(true);
       }
     } catch (error) {
-      console.error("Project creation error:", error);
+      console.error("client creation error:", error);
       setOpen(false);
     }
   };
@@ -171,17 +161,17 @@ const Projects = ({ createProject }) => {
         </div>
 
         <div
-          id="Project-btn"
-          name="Project-btn"
+          id="client-btn"
+          name="client-btn"
           className="d-flex justify-content-center align-items-center mt-3"
           style={{ width: "10%" }}
         >
           <Button
-            data-testid="Project-user"
+            data-testid="client-user"
             className="btn btn-sm w-full text-ellipsis tableButton"
             onClick={showDrawer}
           >
-            Create Project
+            Create Client
           </Button>
         </div>
       </div>
@@ -197,7 +187,7 @@ const Projects = ({ createProject }) => {
         />
       </div>
       <div>
-        <Drawer title="Create New Project" onClose={onClose} open={open}>
+        <Drawer title="Create New Client" onClose={onClose} open={open}>
           <div className="mt-3 mx-4">
             <Form
               form={form}
@@ -208,46 +198,28 @@ const Projects = ({ createProject }) => {
               style={{ maxWidth: 300 }}
             >
               <Form.Item
-                label="Project Name"
-                name="projectName"
+                label="Client ID"
+                name="clientId"
                 rules={[
                   {
                     required: true,
-                    message: "Please enter Project Name",
+                    message: "Please enter Client ID",
                   },
                 ]}
               >
-                <Input placeholder="Project Name" />
+                <Input placeholder="Client ID" />
               </Form.Item>
               <Form.Item
-                name="projectInitiatedDate"
+                label="Client Name"
+                name="clientName"
                 rules={[
                   {
                     required: true,
-                    message: "Please enter Start Date",
+                    message: "Please enter Client Name",
                   },
                 ]}
-                label="Start Date"
               >
-                <DatePicker
-                  style={{ border: "1px solid #d9d9d9" }}
-                  placeholder="Start Date"
-                />
-              </Form.Item>
-              <Form.Item
-                name="projectEndDate"
-                rules={[
-                  {
-                    required: true,
-                    message: "Please enter End Date",
-                  },
-                ]}
-                label="End Date"
-              >
-                <DatePicker
-                  style={{ border: "1px solid #d9d9d9" }}
-                  placeholder="End Date"
-                />
+                <Input placeholder="Client Name" />
               </Form.Item>
               <Form.Item>
                 <div className="d-flex align-items-center justify-content-center">
@@ -271,12 +243,8 @@ const Projects = ({ createProject }) => {
   );
 };
 
-const enhancer = connect(
-  (state) => ({
-   
-  }),
-  {
-    createProject: settingActions.createProjectAction,
-  }
-);
-export default enhancer(Projects);
+const enhancer = connect((state) => ({}), {
+  createClient: settingActions.createClientAction,
+
+});
+export default enhancer(Clients);

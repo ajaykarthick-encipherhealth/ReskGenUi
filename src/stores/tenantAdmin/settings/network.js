@@ -424,6 +424,17 @@ export async function getProjectDetails() {
   const data = await requestPortal(`dbservice/project/get`, options);
   return data;
 }
+export async function createClient(data) {
+  const options = {
+    method: "POST",
+    body: JSON.stringify(data)  
+  };
+  const res = await requestPortal(
+    `dbservice/client/create`,
+    options
+  );
+  return res;
+}
 
 
 

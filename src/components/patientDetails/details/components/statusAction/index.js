@@ -637,7 +637,7 @@ const StatusAction = ({
       {patientIdDetailsData?.data?.response && (
         <>
           {(userRole && userRole?.toLowerCase() == "admin") ||
-          (userRole && userRole?.toLowerCase() === "tenant_admin") ? (
+          (userRole && userRole === "TENANT_ADMIN") ? (
             <div
               id="allocate-action"
               name="allocate-action"

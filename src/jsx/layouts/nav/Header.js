@@ -819,7 +819,7 @@ const Header = ({
                             </Button>
                           </Popover>
                         )} */}
-                        {userRole === "Reviewer" && (
+                        {userRole === "CODER_1" || userRole === "CODER_2" && (
                           <Tooltip
                             title={` Quality : ${
                               accuracy ? Math.round(accuracy) : 100
@@ -843,7 +843,7 @@ const Header = ({
                             </div>
                           </Tooltip>
                         )}
-                        {userRole === "tenant_admin" && (
+                        {userRole === "TENANT_ADMIN" && (
                           <div
                             id="settingsIcon"
                             name="settingsIcon"

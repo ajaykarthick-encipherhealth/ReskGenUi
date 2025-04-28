@@ -160,5 +160,9 @@ export const getProjectAction = createActionThunk(
   "GET_PROJECT",
   network.getProjectDetails
 );
+export const createClientAction = createActionThunk(
+  "CREATE_CLIENT",
+  network.createClient
+);
 
 

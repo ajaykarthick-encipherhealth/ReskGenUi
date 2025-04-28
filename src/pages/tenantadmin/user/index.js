@@ -40,7 +40,7 @@ const UserList = ({
   organizationList,
   getAllUsersList,
   usersListData,
-  loading,
+  hideHeader= true,
   getAddUser,
   addPatients,
   getEnableUser,
@@ -551,7 +551,10 @@ const UserList = ({
 
   return (
     <div className={`show `}>
+      {hideHeader && (
       <Header />
+
+      )}
       <div className="content-body">
         <div className="container-fluid">
           <div className="table-responsive active-projects task-table">

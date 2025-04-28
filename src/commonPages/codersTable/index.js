@@ -126,6 +126,7 @@ const CodersTable = ({
   tableDynamicColumnReset,
   tableStatus,
   getTableStatus,
+  route
 }) => {
   const columns = [
     {
@@ -246,7 +247,10 @@ const CodersTable = ({
       setStorage("patientId", data.patientId);
       setStorage("routeBackTo", "/reviewer/patients");
       getRoutedData(params);
-      router.push("/reviewer/patients/details");
+      router.push({
+        pathname: route ? route : "/reviewer/patients/details",
+      });
+
     } else {
       notification.warning({
         message: data.patientId + " file not processed Please wait",

@@ -984,7 +984,7 @@ const Details = ({
                           {flagList?.map((data, index) => {
                             if (
                               data.name === "Version History" &&
-                              userRole !== "reviewer"
+                              userRole !== "CODER_1" || userRole !== "CODER_2" 
                             ) {
                               return null;
                             }
@@ -1095,7 +1095,7 @@ const Details = ({
                     />
                   ) : flagContainerActive == "Filter" ? (
                     <>
-                      {userRole == "admin" || userRole == "tenant_admin" ? (
+                      {userRole == "admin" || userRole == "TENANT_ADMIN" ? (
                         <AdminWorkList
                           localUserId={localUserId}
                           setWorkListPatientId={setWorkListPatientId}

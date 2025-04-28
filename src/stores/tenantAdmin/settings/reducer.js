@@ -11,7 +11,7 @@ import {
   fhirOrgSubmiAction,
   getFlags,
   healthMetricAddAction,
-  manualAddAction,
+  createClientAction,
   fhirServicesAction,
   updateSettingsAction,createProjectAction ,getProjectAction} from "./actions";
 
@@ -66,17 +66,10 @@ const tenantAminSettingsReducer = combineReducers({
   fhirServicesList: createReducer(fhirServicesAction),
   createProject:createReducer(createProjectAction),
   getProject:createReducer(getProjectAction),
-  getProjectLoader:getReportLoading(getProjectAction)
-  // manualAdd: createReducer(manualAddAction),
-  // healthMetricAdd: createReducer(healthMetricAddAction),
+  getProjectLoader:getReportLoading(getProjectAction),
+  createClient:createReducer(createClientAction)
 });
-// configurationSettings: createReducer(configurationSettingsAction),
-// getFlagsList: createReducer(getFlags),
-// configurationUpdateSettings: createReducer(configurationUpdateSettings),
-// codingGuidelines: createReducer(codingGuidelinesAction),
-// updateSetting: createReducer(updateSettingsAction),
-// manualAdd: createReducer(manualAddAction),
-// healthMetricAdd: createReducer(healthMetricAddAction),
+
 
 
 export default tenantAminSettingsReducer;

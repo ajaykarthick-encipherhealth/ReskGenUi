@@ -34,6 +34,8 @@ import leftArrow from "../../../images/svg/leftArrow.svg";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import Projects from "./projects";
+import Clients from "./clients";
+import Users from "./users";
 
 const { Sider } = Layout;
 
@@ -183,6 +185,32 @@ const menuList =(activePage)=> [
     ),
     label: `Projects`,
   },
+  {
+    key: `Clients`,
+    icon: (
+      <span className="">
+        <FontAwesomeIcon icon={faFile}
+        style={{
+          color: activePage==="Clients"?"#fff":"#04306f",
+          fontSize:"20px"
+        }} />
+      </span>
+    ),
+    label: `Clients`,
+  },
+  {
+    key: `Add Users`,
+    icon: (
+      <span className="">
+        <FontAwesomeIcon icon={faFile}
+        style={{
+          color: activePage==="Add Users"?"#fff":"#04306f",
+          fontSize:"20px"
+        }} />
+      </span>
+    ),
+    label: `Add Users`,
+  },
 ];
 
 const Settings = () => {
@@ -243,7 +271,7 @@ const Settings = () => {
                 />
               </div>
 
-              <div style={{ height: "100vh", width: "100%"}}>
+              <div style={{ height: "100vh", width:  "100%"}}>
                 {activePage == "Chat_Audit_Config" && <ChatAuditConfig />}
                 {activePage == "Flag_Config" && <FlagConfig />}
                 {activePage == "File_Processing_Config" && (
@@ -273,6 +301,8 @@ const Settings = () => {
                 {activePage == "Direct_Confirm_Codes" && <DirectConfirmCodes />}
                 {activePage == "EMR-FHIR" && <EmrFhir />}
                 {activePage == "Projects" && <Projects />}
+                {activePage == "Clients" && <Clients />}
+                {activePage == "Add Users" && <Users />}
               </div>
             </div>
           </div>

@@ -11,6 +11,7 @@ const Patients =  () => {
         pageId={"da4958c3-7795-4bcc-8ab0-24d93cd52c25"}
         isReAssigned={false}
         isQueried={false}
+        route="/reviewer/patients/details"
       />
     </div>
   );
