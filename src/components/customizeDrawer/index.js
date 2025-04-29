@@ -31,9 +31,6 @@ const CustomizableDrawer = ({
     setSelectedColumns((prev) =>
       prev.map((col) => ({ ...col, active: false }))
     );
-    setActiveFilters?.((prev) =>
-      prev.map((filter) => ({ ...filter, active: false }))
-    );
   };
   return (
     <div>
@@ -86,13 +83,13 @@ const CustomizableDrawer = ({
                   checked={option?.active}
                   onChange={() => {
                     if (option?.active) {
-                      setActiveFilters?.((prev) =>
-                        prev?.map((val) =>
-                          val?.title === option?.filterKey
-                            ? { ...val, active: false }
-                            : val
-                        )
-                      );
+                      // setActiveFilters?.((prev) =>
+                      //   prev?.map((val) =>
+                      //     val?.actualField === option?.actualField
+                      //       ? { ...val, active: false }
+                      //       : val
+                      //   )
+                      // );
                       setSelectedColumns((prev) =>
                         prev.map((val) =>
                           val?.actualField === option.actualField
@@ -108,6 +105,13 @@ const CustomizableDrawer = ({
                             : val
                         )
                       );
+                      // setActiveFilters?.((prev) =>
+                      //   prev?.map((val) =>
+                      //     val?.actualField === option?.actualField
+                      //       ? { ...val, active: true }
+                      //       : val
+                      //   )
+                      // );
                     }
                   }}
                 >
