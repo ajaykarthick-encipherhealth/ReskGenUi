@@ -20,7 +20,9 @@ export async function getTableView({
   queryStatus,
   isAdmin,
   tin = "",
-}) {  
+  allTinIds,
+}) {
+
   const options = { method: "GET" };
   let searchTextParams = null;
   let selectParams = null;
@@ -39,13 +41,16 @@ export async function getTableView({
   const statusKey = isQueried ? "approvalStatus" : "processedStatus";
   const uId = getStorage("userId");
 
-   const role = getStorage("proxyRole");
+  const role = getStorage("proxyRole");
 
   let baseUrl = `dbservice/table/view?pageId=${pageId}&page=${pageNo}&size=${
     pageSize || 15
+
   }&${statusKey}=${activeStatus || ""}&roleId=${roleId || ""}&aliasName=${selectedRole || ""}&queryStatus=${queryStatus || ""}&isAdmin=${isAdmin || ""}&tin=${tin || ""}&sortdirection=${
       sort?.sortDir ? sort?.sortDir : ""
-    }&sortfield=${sort?.sortField ? sort?.sortField : ""}`;
+    }&
+allTinIds=${allTinIds || false}&sortfield=${sort?.sortField ? sort?.sortField : ""}`;
+
 
   const allowedPageIds = [
     "e76aaa6c-319e-44d3-b7ae-aadb17dfb664",
@@ -53,16 +58,14 @@ export async function getTableView({
     "da4958c3-7795-4bcc-8ab0-24d93cd52c25",
   ];
 
-
   if (allowedPageIds.includes(pageId)) {
     baseUrl += `&isReAssigned=${isReAssigned || false}&isQueried=${
       isQueried || false
     }`;
   }
-   if (role !== "TENANT_ADMIN") {
-     baseUrl += `&patientAllocated=${patientAllocated || ""}`;
-   }
-
+  if (role !== "TENANT_ADMIN") {
+    baseUrl += `&patientAllocated=${patientAllocated || ""}`;
+  }
 
   const finalUrl = `${baseUrl}${searchTextParams || ""}${selectParams || ""}${
     dateRagngesParams || ""
@@ -175,6 +178,36 @@ export async function getTableViewChecked({
   );
   return data;
 }
+
+export async function getTinViewChecked({
+  pageId,
+  pageNo,
+  pageSize,
+  selectedOption,
+  sort,
+  selectedDateRanges,
+  searchText,
+  activeStatus,
+  roleId,
+  projectId,
+  selectedRole,
+  allTinIds,
+}) {
+  const options = {
+    method: "GET",
+  };
+  const uId = getStorage("userId");
+  const data = await requestPortal(
+    `dbservice/table/view?pageId=${pageId}&page=${pageNo}&size=${pageSize}&status=${
+      activeStatus ? activeStatus : ""
+    }&roleId=${roleId ? roleId : ""}&aliasName=${
+      selectedRole ? selectedRole : ""
+    }&allTinIds=${allTinIds ? allTinIds : ""}`,
+    options
+  );
+  return data;
+}
+
 
 export async function getTinCount({
 }) {

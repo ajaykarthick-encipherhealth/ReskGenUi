@@ -507,6 +507,7 @@ const TableRow = ({
             </td>
           );
         }
+
         if (findItemWithTrueOrFalse(columnItem.design, "PROFILE")) {
           return (
             <td
@@ -529,6 +530,7 @@ const TableRow = ({
               >
                 {renderUserProfile(item, columnItem)}
               </span>
+
 
               {/* {item.accountStatus === false ? (
             <span
@@ -589,19 +591,7 @@ const TableRow = ({
             </td>
           );
         }
-        //   if (columnItem.isTwoRows){
-        //  {   console.log(item[columnItem.value1],"item")}
-        //       <td className={Style.childBorder}>
-        //         <span >
-        //           {item[columnItem.value] ? item[columnItem.value] : "---"}{" "}
-        //         </span>
 
-        //         <br />
-        //         <span >
-        //           {item[columnItem.value1] ? item[columnItem.value1] : "---"}
-        //         </span>
-        //       </td>;
-        //   }
         if (columnItem.countInfo) {
           return (
             <td className={Style.childBorder}>

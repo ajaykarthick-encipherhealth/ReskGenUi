@@ -5,6 +5,7 @@ import {
   tableDynamicChecked,
   getTableStatusAction,
   getTinCountAction,
+  tinDynamicChecked,
 } from "./actions";
 
 const initialState = {
@@ -50,6 +51,7 @@ const tableReducer = combineReducers({
   tableColumnChecked: createReducer(tableDynamicChecked),
   TableStatusView: createReducer(getTableStatusAction),
   TinCountView: createReducer(getTinCountAction),
+  tinColumnChecked: createReducer(tinDynamicChecked),
 });
 
 export default tableReducer;

@@ -152,6 +152,8 @@ const Tin = ({
   getTinCountData,
   tinCount,
   setTinStatus,
+  getTableDataChecked,
+
 }) => {
   const tabs = getAccessTabItems({ page: "Tin", tabsMenu: "tabMenuList" });
   const activeTab = activeTabName || tabs?.[0] || "Active";
@@ -238,20 +240,27 @@ const Tin = ({
       if (checked) {
         setCheckedLoader(true);
         setCheckedHeader(true);
-        const response = await getTableData({
-          fromTenant: true,
-          allPatientIds: checked,
 
+        const response = await getTableDataChecked({
+          allTinIds: checked,
           pageId: pageIds,
           pageNo: 0,
           pageSize: 15,
         });
 
         if (response?.status === "SUCCESS") {
-          const result = response?.response?.patientIds?.map((patient) => ({
-            patientId: patient.id,
-          }));
-          setSelectedRows(result.map((patient) => patient.id));
+          const result = response.response.tinNumbers?.map((patient) => {
+            return {
+              patientId: patient,
+            };
+          });
+
+          // setSelectedRows(result.map((patient) => patient));
+          setSelectedRows(
+            result.map((patient) => {
+              return patient.patientId;
+            })
+          );
           setSelectedRowsId(result);
           setSelectedUserName(result);
         }
@@ -286,7 +295,7 @@ const Tin = ({
     }
   };
 
-  console.log(tinCount, "tinCount");
+
   const handleSubmit = async () => {
     setIsSubmitting(true);
     const payload = {
@@ -327,11 +336,13 @@ const Tin = ({
       getResponePopup(error?.response);
     }
   };
+
   const handleTinStatus = async () => {
     const payload = {
       ids: selectedRows,
-      isActive: false,
+      isActive: activeTab === "InActive" ? true : false,
     };
+
 
     try {
       const response = await setTinStatus({ payload });
@@ -400,6 +411,7 @@ const Tin = ({
       pageSize: 15,
       roleId: "",
       projectId: "test",
+      allTinIds: false,
       sort
     });
   };
@@ -645,6 +657,7 @@ const enhancer = connect(
     tableDynamicColumnReset: tableAction.tableDynamicColumnReset,
     getTinCountData: tableAction.getTinCountAction,
     setTinStatus: tableAction.setTinStatus,
+    getTableDataChecked: tableAction.tinDynamicChecked,
   }
 );
 

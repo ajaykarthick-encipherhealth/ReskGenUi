@@ -449,7 +449,7 @@ const PatientSync = ({
   const [searchText, setSearchText] = useState(null);
   const [selectedOption, setSelectedOption] = useState({});
   const [clear, setClear] = useState(false);
-    const [sort, setSort] = useState(null);
+  const [sort, setSort] = useState(null);
 
   const handleUploadButtonClick = (e) => {
     setIsDrawerOpen(!isDrawerOpen);
@@ -759,7 +759,7 @@ const PatientSync = ({
       searchText,
       selectedDateRanges,
       selectedOption,
-      sort
+      sort,
     });
   };
   const getAllPracticeApi = async () => {
@@ -772,7 +772,7 @@ const PatientSync = ({
       projectId: projectId,
       searchText,
       selectedDateRanges,
-      sort
+      sort,
     });
   };
   const getAllPatientApi = async () => {
@@ -785,7 +785,7 @@ const PatientSync = ({
       projectId: projectId,
       searchText,
       selectedDateRanges,
-      sort
+      sort,
     });
   };
   const getTinApi = async () => {
@@ -798,7 +798,7 @@ const PatientSync = ({
       projectId: projectId,
       searchText,
       selectedDateRanges,
-      sort
+      sort,
     });
   };
   const pageIds =
@@ -884,7 +884,7 @@ const PatientSync = ({
     pageLoad,
     searchText,
     selectedDateRanges,
-    sort
+    sort,
   ]);
   useEffect(() => {
     setActiveFilters(
@@ -931,150 +931,193 @@ const PatientSync = ({
                   <div className="">
                     <div className="card-body p-0">
                       <div className="table-responsive active-projects task-table">
-                        {/* <div
+                        <div
                           className="d-flex"
                           style={{ width: "100%", margin: "auto" }}
                         >
-                          <div
-                            className="d-flex flex-wrap col-10 "
-                            style={{ width: "85%" }}
-                          >
-                            <div className="default-filter-size col-2 col-xl-2 col-md-4 mx-1">
-                              <label>Search by Name or ID</label>
-                              <div
-                                id="searc-name"
-                                name="search-name"
-                                style={{ height: "45px" }}
-                              >
-                                <Input
-                                  type="text"
-                                  name="initialSearch"
-                                  data-testid="initialSearch"
-                                  onChange={(e) => getNameSearch(e)}
-                                  value={search?.searchVal || ""}
-                                  className={
-                                    "w-100 new-search-control border-none"
-                                  }
-                                  placeholder="Search"
-                                  maxLength={25}
-                                  onKeyDown={(e) => {
-                                    // Prevent input of backslash ("\")
-                                    if (e.key === "\\") {
-                                      e.preventDefault();
+                          {reportActiveTab === "FHIR" ||
+                          reportActiveTab === "PDF" ? (
+                            <div
+                              className="d-flex flex-wrap col-10 "
+                              style={{ width: "85%" }}
+                            >
+                              <div className="default-filter-size col-2 col-xl-2 col-md-4 mx-1">
+                                <label>Search by Name or ID</label>
+                                <div
+                                  id="searc-name"
+                                  name="search-name"
+                                  style={{ height: "45px" }}
+                                >
+                                  <Input
+                                    type="text"
+                                    name="initialSearch"
+                                    data-testid="initialSearch"
+                                    onChange={(e) => getNameSearch(e)}
+                                    value={search?.searchVal || ""}
+                                    className={
+                                      "w-100 new-search-control border-none"
                                     }
-                                  }}
-                                  prefix={
-                                    <FontAwesomeIcon
-                                      className="searchPrefix"
-                                      icon={faSearch}
-                                    />
-                                  }
-                                  allowClear={true}
-                                  autoComplete="off"
-                                />
-                              </div>
-                            </div>
-                            <div className="default-filter-size col-2 col-xl-2 col-md-3 mx-1">
-                              <label>Date</label>
-                              <div
-                                id="picker-date"
-                                name="picker-date"
-                                class="form-group has-search"
-                              >
-                                <RangePicker
-                                  ref={pickerRef}
-                                  data-testid="select-date"
-                                  name="select-date"
-                                  format="MM-DD-YYYY"
-                                  value={
-                                    selectedDates
-                                      ? selectedDates[reportActiveTab]
-                                      : undefined
-                                  }
-                                  onChange={(dates, dateStrings) => {
-                                    if (!dates || dates.length === 0) {
-                                      setTimeout(
-                                        () => pickerRef.current?.focus(),
-                                        100
-                                      );
+                                    placeholder="Search"
+                                    maxLength={25}
+                                    onKeyDown={(e) => {
+                                      // Prevent input of backslash ("\")
+                                      if (e.key === "\\") {
+                                        e.preventDefault();
+                                      }
+                                    }}
+                                    prefix={
+                                      <FontAwesomeIcon
+                                        className="searchPrefix"
+                                        icon={faSearch}
+                                      />
                                     }
-                                    handleRangePicker(
-                                      dates,
-                                      dateStrings,
-                                      reportActiveTab
-                                    );
-                                  }}
-                                  onCalendarChange={(val) => {
-                                    setSelectedDates((prev) => ({
-                                      ...prev,
-                                      [reportActiveTab]: val,
-                                    }));
-                                  }}
-                                  disabledDate={(currentDate) => {
-                                    const selectedRange = selectedDates
-                                      ? selectedDates[reportActiveTab]
-                                      : [];
-                                    return disabledDate(
-                                      currentDate,
-                                      selectedRange
-                                    );
-                                  }}
-                                />
-                              </div>
-                            </div>
-                            <div className="default-filter-size col-2 col-xl-2 col-md-3 mx-1">
-                              <label>Status</label>
-                              <div
-                                id="status-select"
-                                name="status-select"
-                                className={`custom-react-select`}
-                              >
-                                <Select
-                                  data-testid="select-status"
-                                  name="select-status"
-                                  placeholder={"Select"}
-                                  options={
-                                    reportActiveTab === "FHIR"
-                                      ? statusOptions
-                                      : statusOptions2
-                                  }
-                                  onChange={(selectedOption) => {
-                                    dosOnChange(
-                                      selectedOption,
-                                      reportActiveTab
-                                    );
-                                  }}
-                                  value={selectedOptions[reportActiveTab]}
-                                  allowClear
-                                />
-                              </div>
-                            </div>
-                            {!reportActiveTab ||
-                              (reportActiveTab === "FHIR" && (
-                                <div className=" default-filter-size col-xl-2 col-md-4 mx-1">
-                                  <label>Initiated By</label>
-                                  <div
-                                    ID="initiated"
-                                    name="initiated"
-                                    className={`custom-react-select`}
-                                  >
-                                    <Select
-                                      data-testid="initiated-by"
-                                      name="initiated-by"
-                                      placeholder={"Select"}
-                                      options={statusOptions}
-                                      onChange={(selectedOption) => {
-                                        dosOnChange(
-                                          selectedOption,
-                                          reportActiveTab
-                                        );
-                                      }}
-                                      allowClear
-                                    />
-                                  </div>
+                                    allowClear={true}
+                                    autoComplete="off"
+                                  />
                                 </div>
-                              ))}
-                          </div>
+                              </div>
+                              <div className="default-filter-size col-2 col-xl-2 col-md-3 mx-1">
+                                <label>Date</label>
+                                <div
+                                  id="picker-date"
+                                  name="picker-date"
+                                  class="form-group has-search"
+                                >
+                                  <RangePicker
+                                    ref={pickerRef}
+                                    data-testid="select-date"
+                                    name="select-date"
+                                    format="MM-DD-YYYY"
+                                    value={
+                                      selectedDates
+                                        ? selectedDates[reportActiveTab]
+                                        : undefined
+                                    }
+                                    onChange={(dates, dateStrings) => {
+                                      if (!dates || dates.length === 0) {
+                                        setTimeout(
+                                          () => pickerRef.current?.focus(),
+                                          100
+                                        );
+                                      }
+                                      handleRangePicker(
+                                        dates,
+                                        dateStrings,
+                                        reportActiveTab
+                                      );
+                                    }}
+                                    onCalendarChange={(val) => {
+                                      setSelectedDates((prev) => ({
+                                        ...prev,
+                                        [reportActiveTab]: val,
+                                      }));
+                                    }}
+                                    disabledDate={(currentDate) => {
+                                      const selectedRange = selectedDates
+                                        ? selectedDates[reportActiveTab]
+                                        : [];
+                                      return disabledDate(
+                                        currentDate,
+                                        selectedRange
+                                      );
+                                    }}
+                                  />
+                                </div>
+                              </div>
+                              <div className="default-filter-size col-2 col-xl-2 col-md-3 mx-1">
+                                <label>Status</label>
+                                <div
+                                  id="status-select"
+                                  name="status-select"
+                                  className={`custom-react-select`}
+                                >
+                                  <Select
+                                    data-testid="select-status"
+                                    name="select-status"
+                                    placeholder={"Select"}
+                                    options={
+                                      reportActiveTab === "FHIR"
+                                        ? statusOptions
+                                        : statusOptions2
+                                    }
+                                    onChange={(selectedOption) => {
+                                      dosOnChange(
+                                        selectedOption,
+                                        reportActiveTab
+                                      );
+                                    }}
+                                    value={selectedOptions[reportActiveTab]}
+                                    allowClear
+                                  />
+                                </div>
+                              </div>
+                              {!reportActiveTab ||
+                                (reportActiveTab === "FHIR" && (
+                                  <div className=" default-filter-size col-xl-2 col-md-4 mx-1">
+                                    <label>Initiated By</label>
+                                    <div
+                                      ID="initiated"
+                                      name="initiated"
+                                      className={`custom-react-select`}
+                                    >
+                                      <Select
+                                        data-testid="initiated-by"
+                                        name="initiated-by"
+                                        placeholder={"Select"}
+                                        options={statusOptions}
+                                        onChange={(selectedOption) => {
+                                          dosOnChange(
+                                            selectedOption,
+                                            reportActiveTab
+                                          );
+                                        }}
+                                        allowClear
+                                      />
+                                    </div>
+                                  </div>
+                                ))}
+                            </div>
+                          ) : (
+                            <div
+                              className="d-flex flex-wrap col-10 "
+                              style={{ width: "85%" }}
+                            >
+                              {reportActiveTab === "Tin Roaster" ||
+                              reportActiveTab === "Patient Roaster" ||
+                              reportActiveTab === "Practice Roaster" ||
+                              reportActiveTab === "Provider Roaster" ? (
+                                <ReusableFilters
+                                  showFilter={true}
+                                  setActiveFilters={setActiveFilters}
+                                  setSearchText={setSearchText}
+                                  searchText={searchText}
+                                  setSelectedOption={setSelectedOption}
+                                  selectedOption={selectedOption}
+                                  setSelectedDateRanges={setSelectedDateRanges}
+                                  selectedDateRanges={selectedDateRanges}
+                                  setPageNumber={setPageNumber}
+                                  FilterItems={activeFilters}
+                                  selectedDates={selectedDates}
+                                  setSelectedDates={setSelectedDates}
+                                  activeFilters={activeFilters}
+                                  setClear={setClear}
+                                  clear={clear}
+                                  setPageNo={setPageNo}
+                                  // opt={opt}
+                                  commonFilterItems={commonFilterItems}
+                                  open={open}
+                                  onClose={onClose}
+                                  selectedColumns={test}
+                                  setSelectedColumns={setTest}
+                                  showDrawer={showDrawer}
+                                  handleSubmit={handleSubmitInsert}
+                                  handleReset={handleReset}
+                                  isSubmitting={isSubmitting}
+                                  isResetting={isResetting}
+                                />
+                              ) : null}
+                            </div>
+                          )}
                           <div
                             className="d-flex justify-content-center align-items-center"
                             style={{ width: "10%" }}
@@ -1095,41 +1138,8 @@ const PatientSync = ({
                               </Button>
                             </div>
                           </div>{" "}
-                        </div> */}
-                        {reportActiveTab === "Tin Roaster" ||
-                        reportActiveTab === "Patient Roaster" ||
-                        reportActiveTab === "Practice Roaster" ||
-                        reportActiveTab === "Provider Roaster" ? (
-                          <ReusableFilters
-                            showFilter={true}
-                            setActiveFilters={setActiveFilters}
-                            setSearchText={setSearchText}
-                            searchText={searchText}
-                            setSelectedOption={setSelectedOption}
-                            selectedOption={selectedOption}
-                            setSelectedDateRanges={setSelectedDateRanges}
-                            selectedDateRanges={selectedDateRanges}
-                            setPageNumber={setPageNumber}
-                            FilterItems={activeFilters}
-                            selectedDates={selectedDates}
-                            setSelectedDates={setSelectedDates}
-                            activeFilters={activeFilters}
-                            setClear={setClear}
-                            clear={clear}
-                            setPageNo={setPageNo}
-                            // opt={opt}
-                            commonFilterItems={commonFilterItems}
-                            open={open}
-                            onClose={onClose}
-                            selectedColumns={test}
-                            setSelectedColumns={setTest}
-                            showDrawer={showDrawer}
-                            handleSubmit={handleSubmitInsert}
-                            handleReset={handleReset}
-                            isSubmitting={isSubmitting}
-                            isResetting={isResetting}
-                          />
-                        ) : null}
+                        </div>
+
                         <div
                           id="task-tbl_wrapper"
                           className="dataTables_wrapper no-footer"
