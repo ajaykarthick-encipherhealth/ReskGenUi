@@ -362,6 +362,7 @@ const Patient = ({
       selectedDateRanges,
       selectedOption,
       searchText,
+      sort
     });
   };
   useEffect(() => {

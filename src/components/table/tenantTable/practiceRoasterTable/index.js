@@ -43,7 +43,9 @@ const PracticeRoasterTable = ({
   practiceRoasterData,
   tableLoader,
   handleRoasterBtn,
-  data
+  data,
+  setSort,
+  sort,
 }) => {
   const onPageChange = (e) => {
     setPagination(e.first);
@@ -88,6 +90,8 @@ const PracticeRoasterTable = ({
         onPageChange={onPageChange}
         statusBodyTemplate={renderStatusRoaster}
         handleRoasterBtn={handleRoasterBtn}
+        setSort={setSort}
+        sort={sort}
       />
     </div>
   );

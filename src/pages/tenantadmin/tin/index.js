@@ -206,6 +206,7 @@ const Tin = ({
   };
 
   const handleTabs = (name) => {
+    setSort("");
     setSelectedOption({});
     getProjectActiveTab({ tinTabName: name });
     setPageNo(0);
@@ -399,6 +400,7 @@ const Tin = ({
       pageSize: 15,
       roleId: "",
       projectId: "test",
+      sort
     });
   };
   const handleSwitchToggle = async (item, checked) => {};
@@ -409,7 +411,7 @@ const Tin = ({
       getAllTins();
       getTinCountData();
     }
-  }, [pageNo, paramsFilter, pageLoad, selectedDateRanges, selectedOption]);
+  }, [pageNo, paramsFilter, pageLoad, selectedDateRanges, selectedOption,sort]);
 
   useEffect(() => {
     setActiveFilters(

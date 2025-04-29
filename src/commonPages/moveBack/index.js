@@ -167,6 +167,7 @@ const MoveBack = ({
       selectedDateRanges,
       selectedOption,
       searchText,
+      sort
     });
   };
   const handleSubmit = async () => {

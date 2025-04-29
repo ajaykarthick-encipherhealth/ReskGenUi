@@ -1059,3 +1059,7 @@ export const convertToCustomParamsDatePicker = (obj) => {
 
   return params;
 };
+
+export const checkWithIncludesKey=(list,key) =>{
+  return list.includes(key);
+}

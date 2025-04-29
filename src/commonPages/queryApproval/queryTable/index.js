@@ -11,6 +11,8 @@ const QueryTable = ({
   setActiveStatus,
   tableLoader,
   gotoPatientDetails,
+  setSort,
+  sort
 }) => {
   const buttons = ["Pending", "Approved", "Rejected"];
   const [pageNo, setPageNo] = useState(0);
@@ -44,6 +46,7 @@ const QueryTable = ({
             name={btn}
             type={active === btn ? "primary" : "outline"}
             onClick={() => {
+              setSort(""),
               setActive(btn);
               setActiveStatus(btn.toLocaleUpperCase());
             }}
@@ -61,6 +64,8 @@ const QueryTable = ({
           row={15}
           onPageChange={onPageChange}
           onRowClick={(active === "Approved" || active === "Rejected") ? showModal :gotoPatientDetails}
+          setSort={setSort}
+          sort={sort}
         />
       </div>
       <div>

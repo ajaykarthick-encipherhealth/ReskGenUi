@@ -20,7 +20,7 @@ export async function getTableView({
   queryStatus,
   isAdmin,
   tin = "",
-}) {
+}) {  
   const options = { method: "GET" };
   let searchTextParams = null;
   let selectParams = null;
@@ -43,7 +43,9 @@ export async function getTableView({
 
   let baseUrl = `dbservice/table/view?pageId=${pageId}&page=${pageNo}&size=${
     pageSize || 15
-  }&${statusKey}=${activeStatus || ""}&roleId=${roleId || ""}&aliasName=${selectedRole || ""}&queryStatus=${queryStatus || ""}&isAdmin=${isAdmin || ""}&tin=${tin || ""}`;
+  }&${statusKey}=${activeStatus || ""}&roleId=${roleId || ""}&aliasName=${selectedRole || ""}&queryStatus=${queryStatus || ""}&isAdmin=${isAdmin || ""}&tin=${tin || ""}&sortdirection=${
+      sort?.sortDir ? sort?.sortDir : ""
+    }&sortfield=${sort?.sortField ? sort?.sortField : ""}`;
 
   const allowedPageIds = [
     "e76aaa6c-319e-44d3-b7ae-aadb17dfb664",

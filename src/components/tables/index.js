@@ -32,6 +32,7 @@ import {
   processStatusBodyTemplate,
   dynamicAuditStatusTemplate,
   findItemWithTrueOrFalse,
+  checkWithIncludesKey,
 } from "../../utils/reusable";
 import { faCircleCheck } from "@fortawesome/free-regular-svg-icons";
 
@@ -279,21 +280,22 @@ const TableHeadItem = ({
       </th>
     );
   }
-  if (item.sortable) {
+
+  if (checkWithIncludesKey(item?.design, "SORTABLE")) {
     return (
       <th className="text-start text-truncate font2">
         {item?.headerName?.toUpperCase()}{" "}
-        {sort?.[item.value]?.sortDir === "ASC" ? (
+        {sort?.sortField === item.actualField && sort?.sortDir == "ASC" ? (
           <ArrowUpOutlined
             onClick={() => {
               if (setSort) {
                 setSort((prev) => ({
                   ...prev,
-                  [item.value]: {
-                    sortField: item?.value,
+                  [item.actualField]: {
+                    sortField: item?.actualField,
                     sortDir: "DESC",
                   },
-                  sortField: item?.value,
+                  sortField: item?.actualField,
                   sortDir: "DESC",
                 }));
               }
@@ -305,11 +307,11 @@ const TableHeadItem = ({
               if (setSort) {
                 setSort((prev) => ({
                   ...prev,
-                  [item.value]: {
-                    sortField: item?.value,
+                  [item.actualField]: {
+                    sortField: item?.actualField,
                     sortDir: "ASC",
                   },
-                  sortField: item?.value,
+                  sortField: item?.actualField,
                   sortDir: "ASC",
                 }));
               }
@@ -449,7 +451,7 @@ const TableRow = ({
                   : Style.childBorder
               }`}
             >
-              <span className="text-secondary" >
+              <span className="text-secondary">
                 {" "}
                 {item?.priority
                   ? priorityStatus(item?.priority)
@@ -505,33 +507,30 @@ const TableRow = ({
             </td>
           );
         }
-    // console.log(columnItem?.actualField, "columnItem");
-    // console.log(item["coder-1AllocatedByName"], "item");
-    // console.log(item,"test")
-    if (findItemWithTrueOrFalse(columnItem.design, "PROFILE")) {
-      return (
-        <td
-          style={{
-            backgroundColor:
-              item.accountStatus === false ? "#0000001a" : "",
-          }}
-          className={`font2 ${
-            index == 0
-              ? Style.firstTdBorder
-              : column.length - 1 == index
-              ? Style.lastBorder
-              : Style.childBorder
-          } `}
-        >
-          <span
-            style={{
-              color: item.accountStatus === false ? "gray" : "",
-            }}
-          >
-            {renderUserProfile(item, columnItem)}
-          </span>
+        if (findItemWithTrueOrFalse(columnItem.design, "PROFILE")) {
+          return (
+            <td
+              style={{
+                backgroundColor:
+                  item.accountStatus === false ? "#0000001a" : "",
+              }}
+              className={`font2 ${
+                index == 0
+                  ? Style.firstTdBorder
+                  : column.length - 1 == index
+                  ? Style.lastBorder
+                  : Style.childBorder
+              } `}
+            >
+              <span
+                style={{
+                  color: item.accountStatus === false ? "gray" : "",
+                }}
+              >
+                {renderUserProfile(item, columnItem)}
+              </span>
 
-          {/* {item.accountStatus === false ? (
+              {/* {item.accountStatus === false ? (
             <span
               style={{
                 color: item.accountStatus === false ? "gray" : "",
@@ -556,9 +555,9 @@ const TableRow = ({
               )}
             </span>
           )} */}
-        </td>
-      );
-    }
+            </td>
+          );
+        }
 
         if (columnItem.isComma) {
           return (
@@ -780,14 +779,9 @@ const TableRow = ({
               </span>
             </td>
           );
-        }      
-        
-        console.log(item,"itememail");
-        
-        if (
-          findItemWithTrueOrFalse(columnItem.design, "TOGGLE") 
-          
-        ) {
+        }
+
+        if (findItemWithTrueOrFalse(columnItem.design, "TOGGLE")) {
           return (
             <td
               className={
@@ -1004,37 +998,37 @@ const TableRow = ({
             </td>
           );
         }
-            if (columnItem?.design?.includes("AUDIT_STATUS")) {
-              return (
-                <td
-                  className={`${
-                    index == 0
-                      ? Style.firstTdBorder
-                      : column.length - 1 == index
-                      ? Style.lastBorder
-                      : Style.childBorder
-                  } `}
-                >
-                  <div
-                    id={
-                      tableId
-                        ? createIdGen("auditstatus " + tableId + colIndex)
-                        : createIdGen(
-                            "auditstatus " +
-                              router.pathname.replaceAll("/", " ") +
-                              colIndex
-                          )
-                    }
-                    className="d-flex  justify-content-center"
-                  >
-                    {dynamicAuditStatusTemplate(
-                      item[`${columnItem.actualField}`],
-                      columnItem.isIcon
-                    )}
-                  </div>
-                </td>
-              );
-            }
+        if (columnItem?.design?.includes("AUDIT_STATUS")) {
+          return (
+            <td
+              className={`${
+                index == 0
+                  ? Style.firstTdBorder
+                  : column.length - 1 == index
+                  ? Style.lastBorder
+                  : Style.childBorder
+              } `}
+            >
+              <div
+                id={
+                  tableId
+                    ? createIdGen("auditstatus " + tableId + colIndex)
+                    : createIdGen(
+                        "auditstatus " +
+                          router.pathname.replaceAll("/", " ") +
+                          colIndex
+                      )
+                }
+                className="d-flex  justify-content-center"
+              >
+                {dynamicAuditStatusTemplate(
+                  item[`${columnItem.actualField}`],
+                  columnItem.isIcon
+                )}
+              </div>
+            </td>
+          );
+        }
         if (columnItem.progressBar) {
           return (
             <td
@@ -1137,7 +1131,7 @@ const TableRow = ({
                       });
                     }}
                     onClick={(e) => {
-                      e.stopPropagation(); 
+                      e.stopPropagation();
                     }}
                     checked={selectedRows?.some(
                       (row) => row === item[columnItem.value]
@@ -1172,9 +1166,9 @@ const TableRow = ({
         }
         if (columnItem?.design?.includes("FLAG")) {
           return (
-            <td 
-            // className={`ant-badge-count ${Style.firstTdBorder}`}
-            className={
+            <td
+              // className={`ant-badge-count ${Style.firstTdBorder}`}
+              className={
                 index == 0
                   ? Style.firstTdBorder
                   : column.length - 1 == index

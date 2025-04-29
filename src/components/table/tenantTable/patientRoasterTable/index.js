@@ -15,7 +15,9 @@ const PatientRoasterTable = ({
   loading,
   handleRoasterBtn,
   tableLoader,
-  data
+  data,
+  setSort,
+  sort,
 }) => {
   const onPageChange = (e) => {
     setPagination(e.first);
@@ -62,6 +64,8 @@ const PatientRoasterTable = ({
         onPageChange={onPageChange}
         statusBodyTemplate={renderStatusRoaster}
         handleRoasterBtn={handleRoasterBtn}
+        setSort={setSort}
+        sort={sort}
       />
     </div>
   );

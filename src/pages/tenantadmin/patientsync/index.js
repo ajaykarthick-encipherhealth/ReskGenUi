@@ -449,6 +449,7 @@ const PatientSync = ({
   const [searchText, setSearchText] = useState(null);
   const [selectedOption, setSelectedOption] = useState({});
   const [clear, setClear] = useState(false);
+    const [sort, setSort] = useState(null);
 
   const handleUploadButtonClick = (e) => {
     setIsDrawerOpen(!isDrawerOpen);
@@ -562,6 +563,7 @@ const PatientSync = ({
   };
 
   const handleTabs = (name) => {
+    setSort("");
     getActiveTab(name);
     setSearch();
     setSearchVal(null);
@@ -757,6 +759,7 @@ const PatientSync = ({
       searchText,
       selectedDateRanges,
       selectedOption,
+      sort
     });
   };
   const getAllPracticeApi = async () => {
@@ -769,6 +772,7 @@ const PatientSync = ({
       projectId: projectId,
       searchText,
       selectedDateRanges,
+      sort
     });
   };
   const getAllPatientApi = async () => {
@@ -781,6 +785,7 @@ const PatientSync = ({
       projectId: projectId,
       searchText,
       selectedDateRanges,
+      sort
     });
   };
   const getTinApi = async () => {
@@ -793,6 +798,7 @@ const PatientSync = ({
       projectId: projectId,
       searchText,
       selectedDateRanges,
+      sort
     });
   };
   const pageIds =
@@ -878,6 +884,7 @@ const PatientSync = ({
     pageLoad,
     searchText,
     selectedDateRanges,
+    sort
   ]);
   useEffect(() => {
     setActiveFilters(
@@ -1297,6 +1304,8 @@ const PatientSync = ({
                                       pagination={pagination}
                                       handleRoasterBtn={handleRoasterBtn}
                                       data={data}
+                                      setSort={setSort}
+                                      sort={sort}
                                     />
                                   </Tab.Pane>
 
@@ -1311,6 +1320,8 @@ const PatientSync = ({
                                       pagination={pagination}
                                       handleRoasterBtn={handleRoasterBtn}
                                       data={data}
+                                      setSort={setSort}
+                                      sort={sort}
                                     />
                                   </Tab.Pane>
 
@@ -1325,6 +1336,8 @@ const PatientSync = ({
                                       pagination={pagination}
                                       handleRoasterBtn={handleRoasterBtn}
                                       data={data}
+                                      setSort={setSort}
+                                      sort={sort}
                                     />
                                   </Tab.Pane>
 
@@ -1339,6 +1352,8 @@ const PatientSync = ({
                                       pagination={pagination}
                                       handleRoasterBtn={handleRoasterBtn}
                                       data={data}
+                                      setSort={setSort}
+                                      sort={sort}
                                     />
                                   </Tab.Pane>
                                 </Tab.Content>

@@ -16,14 +16,14 @@ const MoveBackModal = ({
   getMoveBack,
   setIsMoveBackLoader,
   moveBackLoader,
-}) => {
+}) => {  
   const [selectLevel, setSelectLevel] = useState([]);
   const [isSwitchOn, setIsSwitchOn] = useState(false);
   const [revertDescription, setRevertDescription] = useState(null);
 
   const options = levelOptions?.map((org, index) => ({
-    value: org.status,
-    label: org.status.split("_").join(" "),
+    value: org,
+    label: org.split("_").join(" "),
   }));
   const handleChange = (value) => {
     setSelectLevel(value);

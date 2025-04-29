@@ -154,6 +154,7 @@ const QueryApproval = ({
       selectedDateRanges,
       selectedOption,
       searchText,
+      sort
     });
   };
 
@@ -374,6 +375,8 @@ const QueryApproval = ({
                             active={active}
                             setActive={setActive}
                             gotoPatientDetails={gotoPatientDetails}
+                            setSort={setSort}
+                            sort={sort}
                           />
                         </Tab.Pane>
                       </Tab.Content>

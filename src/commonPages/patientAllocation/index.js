@@ -173,6 +173,7 @@ const PatientAllocation = ({
       selectedDateRanges,
       selectedOption,
       searchText,
+      sort
     });
   };
   const handleSubmit = async () => {
