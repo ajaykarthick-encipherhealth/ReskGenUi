@@ -23,7 +23,7 @@ const MoveBackModal = ({
 
   const options = levelOptions?.map((org, index) => ({
     value: org,
-    label: org.split("_").join(" "),
+    label: org?.split("_")?.join(" "),
   }));
   const handleChange = (value) => {
     setSelectLevel(value);
