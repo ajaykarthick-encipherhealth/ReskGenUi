@@ -46,10 +46,10 @@ export async function getTableView({
   let baseUrl = `dbservice/table/view?pageId=${pageId}&page=${pageNo}&size=${
     pageSize || 15
 
-  }&${statusKey}=${activeStatus || ""}&roleId=${roleId || ""}&aliasName=${selectedRole || ""}&queryStatus=${queryStatus || ""}&isAdmin=${isAdmin || ""}&tin=${tin || ""}&sortdirection=${
+  }&${statusKey}=${activeStatus || ""}&roleId=${roleId || ""}&aliasName=${selectedRole || ""}&queryStatus=${queryStatus || ""}&isAdmin=${isAdmin || ""}&tin=${tin || ""}&sortDirection=${
       sort?.sortDir ? sort?.sortDir : ""
     }&
-allTinIds=${allTinIds || false}&sortfield=${sort?.sortField ? sort?.sortField : ""}`;
+allTinIds=${allTinIds || false}&sortField=${sort?.sortField ? sort?.sortField : ""}`;
 
 
   const allowedPageIds = [
