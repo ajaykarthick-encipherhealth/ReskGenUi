@@ -14,6 +14,7 @@ import MoveBackTable from "./moveBackTable";
 import { actions as tableAction } from "../../stores/tableView";
 import CardSkeleton from "../../components/skeleton/card";
 import { getResponePopup } from "../../utils/reusable";
+import { getStorage } from "../../utils/storages";
 
 const MoveBack = ({
   tableLoader,
@@ -158,6 +159,7 @@ const MoveBack = ({
     }
   };
   const getMoveBack = async () => {
+      const tin = getStorage("tinNumber");
     const response = await getTableData({
       pageId: "937b0477-f0cd-46e7-b8ab-fefb38f91859",
       pageNo,
@@ -167,7 +169,8 @@ const MoveBack = ({
       selectedDateRanges,
       selectedOption,
       searchText,
-      sort
+      sort,
+      tin
     });
   };
   const handleSubmit = async () => {

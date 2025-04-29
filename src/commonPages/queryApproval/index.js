@@ -144,6 +144,7 @@ const QueryApproval = ({
     }
   };
   const getQueryApproval = async () => {
+       const tin = getStorage("tinNumber");
     const response = await getTableData({
       pageId: "8c1eebaf-eb20-4758-b968-6ae15e6fc031",
       pageNo,
@@ -154,7 +155,8 @@ const QueryApproval = ({
       selectedDateRanges,
       selectedOption,
       searchText,
-      sort
+      sort,
+      tin
     });
   };
 

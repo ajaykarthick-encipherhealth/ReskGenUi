@@ -14,6 +14,7 @@ import RandomSamplingModal from "./reviewerAllocation/randomSamplingModal";
 import { actions as tableAction } from "../../stores/tableView";
 import CardSkeleton from "../../components/skeleton/card";
 import { getResponePopup } from "../../utils/reusable";
+import { getStorage } from "../../utils/storages";
 
 const PatientAllocation = ({
   getAllReviewerList,
@@ -165,6 +166,7 @@ const PatientAllocation = ({
   };
 
   const getAllAllocation = async () => {
+     const tin = getStorage("tinNumber");
     const response = await getTableData({
       pageId: "6cd166eb-79ac-4c12-ab0f-07be2983ca70",
       pageNo,
@@ -173,7 +175,8 @@ const PatientAllocation = ({
       selectedDateRanges,
       selectedOption,
       searchText,
-      sort
+      sort,
+      tin
     });
   };
   const handleSubmit = async () => {
