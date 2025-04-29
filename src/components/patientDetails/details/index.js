@@ -982,13 +982,12 @@ const Details = ({
                       >
                         <ul className="" id="flagList" name="flagList">
                           {flagList?.map((data, index) => {
-                            if (
-                              data.name === "Version History" &&
-                              userRole !== "CODER_1" || userRole !== "CODER_2" 
-                            ) {
-                              return null;
-                            }
-
+                            // if (
+                            //   data.name === "Version History" &&
+                            //   userRole !== "CODER_1" || userRole !== "CODER_2" 
+                            // ) {
+                            //   return null;
+                            // }
                             const isFlagDisabled =
                               data.name === "Flag" && !isDosSelected;
                             const isDosDisabled =
