@@ -213,6 +213,8 @@ const Tin = ({
     getProjectActiveTab({ tinTabName: name });
     setPageNo(0);
     getAllTins(name);
+    setSelectedRowsId([])
+    setSelectedRows([])
   };
   const onPageChange = (e) => {
     setPaginationFirst(e.first);
