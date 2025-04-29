@@ -22,9 +22,10 @@ const MoveBackModal = ({
   const [revertDescription, setRevertDescription] = useState(null);
 
   const options = levelOptions?.map((org, index) => ({
-    value: org,
-    label: org?.split("_")?.join(" "),
+    value: org?.status,
+    label: org?.status?.split("_")?.join(" "),
   }));
+  console.log(levelOptions,"levelOptions")
   const handleChange = (value) => {
     setSelectLevel(value);
     const selectedOption = levelOptions?.find((opt) => opt.status === value);
