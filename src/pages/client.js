@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Select, notification, Modal } from "antd";
+import { Select, notification, Modal, Spin } from "antd";
 import { useRouter } from "next/router";
 import LoginBack from "../images/logo/login-back.jpg";
 import styles from "../styles/auth.module.css";
@@ -16,6 +16,7 @@ const SelectClient = ({ projectDetails, getAllProjects }) => {
   const [clientError, setClientError] = useState(false);
   const [confirmModal, setConfirmModal] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [loadingProject, setLoadingProject] = useState(true); 
 
   const onSubmit = async (e) => {
     e.preventDefault();
@@ -37,16 +38,18 @@ const SelectClient = ({ projectDetails, getAllProjects }) => {
     value: client.id,
   }));
   const projectGetApi = async () => {
+        setLoadingProject(true);
     try {
       const response = await getAllProjects();
       if (response?.status !== "SUCCESS") {
         getResponePopup(response);
-      }
-      else{
-        getResponePopup(response)
+      } else {
+        getResponePopup(response);
       }
     } catch (error) {
       getResponePopup(error);
+    } finally {
+      setLoadingProject(false); 
     }
   };
   useEffect(() => {
@@ -93,11 +96,19 @@ const SelectClient = ({ projectDetails, getAllProjects }) => {
                       name="select-role"
                       style={{ width: "100%", height: "2.75rem" }}
                       placeholder="Select Project"
+                      loading={loadingProject}
                       onChange={(value) => {
                         setSelectClient(value?.toLowerCase());
                         setClientError(false);
                       }}
                       options={projectOptions}
+                      notFoundContent={
+                        loadingProject ? (
+                          <div className="d-flex justify-content-center align-items-center">
+                            <Spin size="small" />
+                          </div>
+                        ) : null
+                      } 
                     />
                     {clientError && (
                       <span className="text-danger fs-12">

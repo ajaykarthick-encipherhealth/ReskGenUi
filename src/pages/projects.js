@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Select, notification, Modal } from "antd";
+import { Select, notification, Modal, Spin } from "antd";
 import { useRouter } from "next/router";
 import LoginBack from "../images/logo/login-back.jpg";
 import styles from "../styles/auth.module.css";
@@ -25,6 +25,7 @@ const SelectProject = ({
   const { accounts } = useMsal();
   const [isLoading, setIsLoading] = useState(true);
   const [loading, setLoading] = useState(false);
+  const [loadingClients, setLoadingClients] = useState(true); 
 
   const clientOptions = clientDetails?.map((client) => ({
     label: client.clientName,
@@ -52,6 +53,7 @@ const SelectProject = ({
     }
   }, [clientIdData?.userName]);
   const clientGetApi = async () => {
+    setLoadingClients(true);
     try {
       const response = await getAllClientDetails();
       if (response?.status !== "SUCCESS") {
@@ -59,6 +61,8 @@ const SelectProject = ({
       }
     } catch (error) {
       getResponePopup(error);
+    } finally {
+      setLoadingClients(false); 
     }
   };
 
@@ -118,7 +122,7 @@ const SelectProject = ({
               </h6>
 
               <form onSubmit={onSubmitClient}>
-                <div className="mb-4">
+                {/* <div className="mb-4">
                   <label className="mb-1 text-dark">Select Cleint</label>
                   <div
                     id="role"
@@ -145,7 +149,44 @@ const SelectProject = ({
                       </span>
                     )}
                   </div>
+                </div> */}
+                <div className="mb-4">
+                  <label className="mb-1 text-dark">Select Client</label>
+                  <div
+                    id="role"
+                    name="role"
+                    style={{
+                      height: "100px",
+                      marginTop: "5px",
+                    }}
+                  >
+                    <Select
+                      id="select-role"
+                      name="select-role"
+                      style={{ width: "100%", height: "2.75rem" }}
+                      placeholder="Select Client"
+                      loading={loadingClients} 
+                      onChange={(value) => {
+                        setSelectClient(value?.toLowerCase());
+                        setClientError(false);
+                      }}
+                      options={clientOptions}
+                      notFoundContent={
+                        loadingClients ? (
+                          <div className="d-flex justify-content-center align-items-center">
+                            <Spin size="small" />
+                          </div>
+                        ) : null
+                      } 
+                    />
+                    {clientError && (
+                      <span className="text-danger fs-12">
+                        Please Select Client
+                      </span>
+                    )}
+                  </div>
                 </div>
+
                 <div
                   className="d-flex justify-content-between "
                   id="next-btn"
