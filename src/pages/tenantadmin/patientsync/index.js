@@ -693,9 +693,9 @@ const PatientSync = ({
   }, []);
   useEffect(() => {
     setFilteredCoder(null);
-    if (reportActiveTab) {
-      getActiveTab(reportActiveTab);
-    }
+    // if (reportActiveTab) {
+      getActiveTab("FHIR");
+    // }
   }, []);
 
   useEffect(() => {
@@ -1150,9 +1150,7 @@ const PatientSync = ({
                           >
                             <div className="custom-tab-1">
                               <Tab.Container
-                                defaultActiveKey={
-                                  reportActiveTab === "PDF" ? "pdf" : "fhir"
-                                }
+                                defaultActiveKey="fhir"
                               >
                                 <Nav as="ul" className="nav nav-tabs">
                                   <Nav.Item
