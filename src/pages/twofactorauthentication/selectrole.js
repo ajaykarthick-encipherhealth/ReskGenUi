@@ -40,6 +40,7 @@ const SelectRole = ({
     );
     if (selectedRoleObj) {
       setStorage("proxyRole", selectedRoleObj?.proxyRole);
+      setStorage("userAllRoles", JSON.stringify(allRolesData?.userRoles));
       setStorage("accessMenuList", JSON.stringify(selectedRoleObj?.accessList));
       setStorage("roleId", selectedRoleObj?.roleId);
       setStorage("aliasName", selectedRoleObj?.aliasName);

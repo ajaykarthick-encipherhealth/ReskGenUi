@@ -200,27 +200,29 @@ const Header = ({
       .replace(/\b\w/g, (char) => char.toUpperCase())
   );
 
-  const items = allRolesData?.userRoles
-    ?.map((data) => ({
-      label:data.proxyRole,
-      key: data.proxyRole,
-    })
-    );
+  const items = allRolesData?.userRoles?.map((data) => ({
+    label: data.proxyRole,
+    key: data.proxyRole,
+  }));
 
-  const onClick = ({ key }) => {   
-    setStorage("proxyRole", key);         
+  const onClick = ({ key }) => {
+    const allRoles = JSON.parse(getStorage("userAllRoles"));
+    const selectedRoleObj = allRoles?.find((res) => res.proxyRole === key);
     setStorage("userRole", key);
+    setStorage("proxyRole", selectedRoleObj?.proxyRole);
+    setStorage("roleId", selectedRoleObj?.roleId);
+    setStorage("aliasName", selectedRoleObj?.aliasName);
     if (key === "Admin") {
       router.push("/admin/dashboard");
     } else if (key === "CODER_1" || key === "CODER_2" || key === "QA") {
-      if(router?.pathname !="/reviewer/dashboard" ){
+      // router.push("/reviewer/dashboard");
+      if (router?.pathname != "/reviewer/dashboard") {
         router.push("/reviewer/dashboard");
-      }else{
-      router.push('/reviewer/dashboard').then(() => {
-        window.location.reload();
-      });
+      } else {
+        router.push("/reviewer/dashboard").then(() => {
+          window.location.reload();
+        });
       }
-     
     } else if (key === "Supervisor") {
       router.push("/supervisor/dashboard");
     } else if (key === "TENANT_ADMIN") {
@@ -231,19 +233,21 @@ const Header = ({
   };
   const getMenuListByRole = (role) => {
     const accessMenuList = JSON.parse(getStorage("accessMenuList"));
+    const allRoles = JSON.parse(getStorage("userAllRoles"));
+    const selectedRoleObj = allRoles?.find((res) => res.proxyRole === role);
     switch (role) {
       case "admin":
         return AdminMenuList;
       case "CODER_1":
-        return PhysicanMenuList(accessMenuList);
+        return PhysicanMenuList(selectedRoleObj?.accessList);
       case "CODER_2":
-        return PhysicanMenuList(accessMenuList);
+        return PhysicanMenuList(selectedRoleObj?.accessList);
       case "QA":
-        return PhysicanMenuList(accessMenuList);
+        return PhysicanMenuList(selectedRoleObj?.accessList);
       case "supervisor":
         return L2AuditorMenuList;
       case "TENANT_ADMIN":
-        return ProviderMenuList(accessMenuList);
+        return ProviderMenuList(selectedRoleObj?.accessList);
       case "ehr":
         return EHRMenuList;
       case "record analyst":
@@ -819,30 +823,31 @@ const Header = ({
                             </Button>
                           </Popover>
                         )} */}
-                        {userRole === "CODER_1" || userRole === "CODER_2" && (
-                          <Tooltip
-                            title={` Quality : ${
-                              accuracy ? Math.round(accuracy) : 100
-                            }%`}
-                          >
-                            <div className="header-progress">
-                              <div style={{ width: 40, height: 40 }}>
-                                <CircularProgressbar
-                                  value={
-                                    accuracy
-                                      ? Math.round(accuracy)
-                                      : Math.round(100)
-                                  }
-                                  text={`${
-                                    accuracy
-                                      ? Math.round(accuracy)
-                                      : Math.round(100)
-                                  }%`}
-                                />
+                        {userRole === "CODER_1" ||
+                          (userRole === "CODER_2" && (
+                            <Tooltip
+                              title={` Quality : ${
+                                accuracy ? Math.round(accuracy) : 100
+                              }%`}
+                            >
+                              <div className="header-progress">
+                                <div style={{ width: 40, height: 40 }}>
+                                  <CircularProgressbar
+                                    value={
+                                      accuracy
+                                        ? Math.round(accuracy)
+                                        : Math.round(100)
+                                    }
+                                    text={`${
+                                      accuracy
+                                        ? Math.round(accuracy)
+                                        : Math.round(100)
+                                    }%`}
+                                  />
+                                </div>
                               </div>
-                            </div>
-                          </Tooltip>
-                        )}
+                            </Tooltip>
+                          ))}
                         {userRole === "TENANT_ADMIN" && (
                           <div
                             id="settingsIcon"
@@ -968,7 +973,7 @@ const Header = ({
                               <Dropdown
                                 menu={{
                                   items,
-                                  defaultSelectedKeys: currentRole,
+                                  defaultSelectedKeys: userRole,
                                   onClick,
                                 }}
                                 trigger={["click"]}
