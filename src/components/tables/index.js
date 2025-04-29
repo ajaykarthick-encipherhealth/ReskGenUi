@@ -106,10 +106,19 @@ const AppTable = ({
   renderCountDetailsPopover,
   isCheckBox,
   checkedHeader,
+  isUpload,
+  idKey,
 }) => {
   if (isCheckBox) {
     column.push({
       checkBox: true,
+      value: idKey ? idKey : "patientId",
+    });
+  }
+
+  if (isUpload) {
+    column.push({
+      statusButton: true,
       value: "patientId",
     });
   }
@@ -144,6 +153,7 @@ const AppTable = ({
                       setSort={setSort}
                       handleRowCheckboxChange={handleRowCheckboxChange}
                       checkedHeader={checkedHeader}
+                      isUpload={isUpload}
                     />
                   ))}
                 </tr>
@@ -207,6 +217,7 @@ const AppTable = ({
                       dateFormateAlign={dateFormateAlign}
                       getStatusStyles={getStatusStyles}
                       renderCountDetailsPopover={renderCountDetailsPopover}
+                      isUpload={isUpload}
                     />
                   ))
                 ) : (
@@ -249,6 +260,7 @@ const TableHeadItem = ({
   setSort,
   handleRowCheckboxChange,
   checkedHeader,
+  isUpload,
 }) => {
   if (item.checkBox) {
     return (
@@ -279,6 +291,9 @@ const TableHeadItem = ({
         {item.name}
       </th>
     );
+  }
+  if (item.statusButton) {
+    return <th>Action</th>;
   }
 
   if (checkWithIncludesKey(item?.design, "SORTABLE")) {
@@ -418,6 +433,7 @@ const TableRow = ({
   dateFormateAlign,
   getStatusStyles,
   renderCountDetailsPopover,
+  isUpload,
 }) => {
   const router = useRouter();
   return (
@@ -530,7 +546,6 @@ const TableRow = ({
               >
                 {renderUserProfile(item, columnItem)}
               </span>
-
 
               {/* {item.accountStatus === false ? (
             <span
@@ -1123,9 +1138,11 @@ const TableRow = ({
                     onClick={(e) => {
                       e.stopPropagation();
                     }}
+                 
                     checked={selectedRows?.some(
                       (row) => row === item[columnItem.value]
                     )}
+                    
                     id={
                       tableId
                         ? createIdGen("checkBox " + tableId + colIndex)
@@ -1154,6 +1171,7 @@ const TableRow = ({
             </td>
           );
         }
+
         if (columnItem?.design?.includes("FLAG")) {
           return (
             <td

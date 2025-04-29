@@ -263,6 +263,7 @@ const Tin = ({
           );
           setSelectedRowsId(result);
           setSelectedUserName(result);
+          
         }
         setCheckedLoader(false);
       } else {
@@ -558,6 +559,10 @@ const Tin = ({
                 selectedUserName={selectedUserName}
                 handleRowCheckboxChange={handleRowCheckboxChange}
                 onRowClick={gotoPatientDetails}
+                selectedRows={selectedRows}
+                idKey={"id"}
+                checkBoxLoader={checkedLoader}
+                setCheckedHeader={setCheckedHeader}
               />
             )}
             {activeTab === "InActive" && (
@@ -590,6 +595,9 @@ const Tin = ({
                 selectedUserName={selectedUserName}
                 handleRowCheckboxChange={handleRowCheckboxChange}
                 setCheckedHeader={setCheckedHeader}
+                selectedRows={selectedRows}
+                idKey={"id"}
+                checkBoxLoader={checkedLoader}
               />
             )}
             {activeTab === "Providers" && (
@@ -625,16 +633,6 @@ const Tin = ({
             )}
           </div>
         </div>
-        {/* <div>
-          <CustomizableDrawer
-            open={open}
-            onClose={onClose}
-            options={columns}
-            selectedColumns={test}
-            setSelectedColumns={setTest}
-            setActiveFilters={setActiveFilters}
-          />
-        </div> */}
       </div>
     </div>
   );

@@ -24,7 +24,7 @@ import {
 import { actions as tenantAdminAction } from "../../stores/tenantAdmin/patients";
 import { connect } from "react-redux";
 import { getStorage, setStorage } from "../../utils/storages";
-import { getResponePopup } from "../../utils/reusable";
+import { findItemWithTrueKey, getResponePopup } from "../../utils/reusable";
 import { actions as allocationAction } from "../../stores/admin/patientAllocation";
 import { actions as allActions } from "../../stores/admin/workqueue";
 import ReusableFilters from "../../components/reusableFilters";
@@ -986,6 +986,10 @@ const Patient = ({
                 row={15}
                 onPageChange={onPageChange}
                 renderFlagCell={renderFlagCell}
+                isUpload={findItemWithTrueKey(
+                  data?.response?.staticDesign,
+                  "upload"
+                )}
               />
               <div></div>
             </div>
