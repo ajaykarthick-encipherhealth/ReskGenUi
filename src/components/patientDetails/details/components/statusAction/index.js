@@ -14,13 +14,15 @@ import { getResponePopup } from "../../../../../utils/reusable";
 import { overallStatusUpdate } from "../../../../../stores/patient/details/network";
 import QueryModal from "./queryModal";
 import styles from "../../hcc/styles.module.css";
-
+import { useRouter } from "next/router";
 const StatusAction = ({
   patientDetailsResult,
   patientIdDetailsData,
   getPatientIdData,
 }) => {
-
+const router = useRouter();
+const isOnReviewerPatients = router.pathname === "/reviewer/patients/details";
+const shouldDisable = isOnReviewerPatients ;
   const [localOrgId, setLocalOrgId] = useState("");
   const [localUserId, setLocalUserId] = useState("");
   const [localPatientId, setLocalPatientId] = useState("");
@@ -296,6 +298,7 @@ console.log(isClient, "isClient");
             </Menu.Item>
           </>
         )}
+          {result?.workflow?.[0]?.status != "QUERIED" ? (
           <Menu.Item key="7">
             {["CODER_1", "CODER_2", "QA"].includes(proxyRole) && (
               <Button
@@ -309,7 +312,7 @@ console.log(isClient, "isClient");
                 Query
               </Button>
              )}
-          </Menu.Item>
+          </Menu.Item>) : null }
 
       </Menu>
     );
@@ -901,16 +904,11 @@ console.log(isClient, "isClient");
                   visible={menuIsOpen}
                   className={`queryBtnHcc ${visitStyles.queryBtnHcc}`}
                   disabled={
+                    shouldDisable &&
                     patienIdDetails?.workflow?.[0]?.status === "QUERIED"
-                  } 
+                  }
                 >
-                  <Button
-                    disabled={
-                      patienIdDetails?.workflow?.[0]?.status === "QUERIED"
-                    } // 👈 Also disable button
-                  >
-                    Queried
-                  </Button>
+                  <Button disabled={shouldDisable}>Queried</Button>
                 </Dropdown>
               ) : patienIdDetails?.workflow?.[0]?.status == "PENDING" ||
                 patienIdDetails?.workflow?.[0]?.status == "COMPUTED" ? (
