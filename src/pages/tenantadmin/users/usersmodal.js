@@ -136,7 +136,6 @@ const UsersModal = ({
   useEffect(() => {
     getAllRoles();
   }, []);
-
   return (
     <div>
       <Modal
@@ -321,7 +320,7 @@ const UsersModal = ({
           <TableSkeleton />
         ) : allRoles?.content?.length > 0 ? (
           <div className={modalStyle.scroll}>
-            {allRoles?.userRoles?.map((item) => (
+            {allRoles?.content?.map((item) => (
               <div className="mt-4 ">
                 <div
                   className={`form-control new-item-control my-2 p-0 ${
@@ -333,7 +332,7 @@ const UsersModal = ({
                   <div className="d-flex justify-content-between">
                     <div className="p-3 mt-3">
                       <p className={`${modalStyle.listName} mb-1`}>
-                        {item?.role?.split("_")?.join(" ")}
+                        {item?.roleName?.split("_")?.join(" ")}
                       </p>
                     </div>
                     <input
