@@ -25,7 +25,7 @@ const SelectProject = ({
   const { accounts } = useMsal();
   const [isLoading, setIsLoading] = useState(true);
   const [loading, setLoading] = useState(false);
-  const [loadingClients, setLoadingClients] = useState(true); 
+  const [loadingClients, setLoadingClients] = useState(true);
 
   const clientOptions = clientDetails?.map((client) => ({
     label: client.clientName,
@@ -62,7 +62,7 @@ const SelectProject = ({
     } catch (error) {
       getResponePopup(error);
     } finally {
-      setLoadingClients(false); 
+      setLoadingClients(false);
     }
   };
 
@@ -77,25 +77,35 @@ const SelectProject = ({
     getAllClientId();
   }, []);
 
+  // useEffect(() => {
+  //   if (accounts && accounts.length > 0) {
+  //     setIsLoading(false);
+  //   } else {
+  //     const timeout = setTimeout(() => {
+  //       if (!accounts || accounts.length === 0) {
+  //         router.push("/");
+  //       }
+  //     }, 3000);
+  //     return () => clearTimeout(timeout);
+  //   }
+  // }, [accounts, router]);
   useEffect(() => {
     if (accounts && accounts.length > 0) {
-      setIsLoading(false);
+      setTimeout(() => {
+        setIsLoading(false);
+      }, 1000);
     } else {
       const timeout = setTimeout(() => {
         if (!accounts || accounts.length === 0) {
           router.push("/");
         }
-      }, 3000);
+      }, 4000);
       return () => clearTimeout(timeout);
     }
   }, [accounts, router]);
 
   if (isLoading) {
-    return (
-      <div>
-        <PageLoading />
-      </div>
-    );
+    return <div>{/* <PageLoading /> */}</div>;
   }
   return (
     <div className="page-wraper">
@@ -165,7 +175,7 @@ const SelectProject = ({
                       name="select-role"
                       style={{ width: "100%", height: "2.75rem" }}
                       placeholder="Select Client"
-                      loading={loadingClients} 
+                      loading={loadingClients}
                       onChange={(value) => {
                         setSelectClient(value?.toLowerCase());
                         setClientError(false);
@@ -177,7 +187,7 @@ const SelectProject = ({
                             <Spin size="small" />
                           </div>
                         ) : null
-                      } 
+                      }
                     />
                     {clientError && (
                       <span className="text-danger fs-12">

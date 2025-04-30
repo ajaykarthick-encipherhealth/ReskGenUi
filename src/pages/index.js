@@ -20,5 +20,5 @@ export default function Home() {
     }
   }, [instance, accounts, inProgress, router]);
 
-  return <PageLoading />;
+  return <></>;
 }

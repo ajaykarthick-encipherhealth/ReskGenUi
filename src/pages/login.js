@@ -100,7 +100,7 @@ const Login = ({ getMFAValidation, loginResponse }) => {
           setIsLoading(false);
           router.push("/login");
         }
-      }, 3000); 
+      }, 5000); 
 
       return () => clearTimeout(timeout); 
     }
@@ -109,7 +109,7 @@ const Login = ({ getMFAValidation, loginResponse }) => {
   if (isLoading) {
     return (
       <div>
-        <PageLoading />
+        {/* <PageLoading /> */}
       </div>
     );
   }
