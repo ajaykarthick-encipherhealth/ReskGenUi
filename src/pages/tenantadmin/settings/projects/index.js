@@ -1,102 +1,44 @@
-import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import ReusableFilters from "../../../../components/reusableFilters";
 import AppTable from "../../../../components/tables";
-import data from "../../../../pages/reviewer/patients/data.json";
 import { Button, DatePicker, Drawer, Form, Input } from "antd";
 import { connect } from "react-redux";
 import { actions as settingActions } from "../../../../stores/tenantAdmin/settings";
-import { formatDateForIndex } from "../../../../utils/reusable";
+import { formatDateForIndex, getResponePopup } from "../../../../utils/reusable";
+import { actions as tableAction } from "../../../../stores/tableView";
 
-const Projects = ({ createProject }) => {
+const Projects = ({
+  createProject,
+  getTableData,
+  data,
+  tableLoader,
+  tableDynamicColumn,
+  tableDynamicColumnReset,
+  pageLoad,
+}) => {
   const [form] = Form.useForm();
   const commonFilterItems = [
     {
       id: "01",
-      title: "Search",
+      title: "Tin",
       type: "search",
       value: null,
       placeholder: "Search",
-      header: "Patient Name / ID",
+      pickerType: "search",
+      header: "Tin Name / ID",
+      active: true,
+    },
+    {
+      id: "02",
+      title: "Priority",
+      type: "select",
+      value: null,
+      placeholder: "Priority",
+      options: null,
       active: true,
     },
   ];
-  const columns = [
-    {
-      headerName: "Patient Id",
-      actualField: "patientId",
-      isShow: true,
-      filterKey: "Search",
-    },
-    {
-      headerName: "Batch Name",
-      value: "batchName",
-      isShow: true,
-      filterKey: "batch",
-    },
-    {
-      headerName: "File Name",
-      value: "fileName",
-      isShow: true,
-    },
-    {
-      headerName: "HCC Count",
-      value: "validDiseaseCount",
-      isShow: true,
-    },
-    {
-      headerName: "Allocated Date",
-      value: "allocatedOn",
-      sortable: true,
-      isDate: true,
-      isShow: true,
-      filterKey: "allocatedDate",
-    },
-    {
-      headerName: "Due Date",
-      value: "dueDate",
-      sortable: true,
-      isDate: true,
-      isShow: true,
-      filterKey: "dueDate",
-    },
-    {
-      headerName: "Completed Date",
-      value: "processedDate",
-      sortable: true,
-      isDate: true,
-      isShow: true,
-      filterKey: "completedDate",
-    },
-
-    {
-      headerName: "Allocated By",
-      sortable: true,
-      isImage: true,
-      value: {
-        first: "allocatedByFirstName",
-        last: "allocatedBylastName",
-        img: "allocatedByProfileImage",
-      },
-      isShow: true,
-    },
-    {
-      headerName: "Priority",
-      value: "priority",
-      isShow: true,
-      filterKey: "Priority",
-    },
-    {
-      headerName: "Status",
-      value: "statusProxy",
-      proxcystatus: true,
-      infoIcon: true,
-      isShow: true,
-      filterKey: "Status",
-    },
-  ];
-  const router = useRouter();
-  const [activeFilters, setActiveFilters] = useState(commonFilterItems);
+  const [activeFilters, setActiveFilters] = useState([]);
   const [paramsFilter, setParamsFilter] = useState(null);
   const [searchText, setSearchText] = useState(null);
   const [selectedOption, setSelectedOption] = useState({});
@@ -105,18 +47,30 @@ const Projects = ({ createProject }) => {
   const [pageNo, setPageNo] = useState(0);
   const [paginationFirst, setPaginationFirst] = useState(0);
   const [open, setOpen] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isResetting, setIsResetting] = useState(false);
+  const [test, setTest] = useState(data?.response?.metaDataDTO);
+  const [pageSize, setPageSize] = useState(15);
+  const [drawerOpen, setDrawerOpen] = useState(false);
 
-  const showDrawer = () => {
-    setOpen(true);
+  const showProjectDrawer = () => {
+    setDrawerOpen(true);
   };
-  const onClose = () => {
-    setOpen(false);
+  const onDrawerClose = () => {
+    setDrawerOpen(false);
     form.resetFields();
   };
 
   const onPageChange = (e) => {
     setPaginationFirst(e.first);
     setPageNo(e.page);
+  };
+  const showDrawer = () => {
+    setTest(data?.response?.metaDataDTO);
+    setOpen(true);
+  };
+  const onClose = () => {
+    setOpen(false);
   };
 
   const handleSubmit = async (values) => {
@@ -137,6 +91,8 @@ const Projects = ({ createProject }) => {
       const res = await createProject(data);
       if (res?.status === "SUCCESS") {
         form.resetFields();
+        getProjects();
+        onDrawerClose();
         getResponePopup(res);
         setOpen(false);
       } else {
@@ -147,6 +103,75 @@ const Projects = ({ createProject }) => {
       setOpen(false);
     }
   };
+  const handleReset = async () => {
+    setIsResetting(true);
+
+    const payload = {
+      pageId: "937b0477-f0cd-46e7-b8ab-fefb38f91859",
+    };
+    try {
+      const response = await tableDynamicColumnReset({ payload });
+      if (response?.status === "SUCCESS") {
+        getProjects();
+        onClose();
+        getResponePopup(response);
+      }
+      setIsResetting(false);
+    } catch (error) {
+      getResponePopup(error?.response);
+    }
+  };
+  const getProjects = async () => {
+    const response = await getTableData({
+      pageId: "7e57d004-2b97-0e7a-b45f-5387367791cd",
+      pageNo,
+      pageSize,
+      selectedDateRanges,
+      selectedOption,
+      searchText,
+    });
+  };
+  const handleTableSubmit = async () => {
+    setIsSubmitting(true);
+
+    const payload = {
+      pageId: "7e57d004-2b97-0e7a-b45f-5387367791cd",
+      headerNames: test
+        .filter((col) => col.active)
+        .map((col) => col.actualField),
+    };
+
+    try {
+      const response = await tableDynamicColumn({ payload });
+      if (response?.status === "SUCCESS") {
+        getProjects();
+        onClose();
+        getResponePopup(response);
+      }
+      setIsSubmitting(false);
+    } catch (error) {
+      getResponePopup(error?.response);
+    }
+  };
+  useEffect(() => {
+    setParamsFilter("check");
+    getProjects();
+  }, [
+    selectedOption,
+    selectedDateRanges,
+    searchText,
+    pageNo,
+    paramsFilter,
+    paginationFirst,
+    pageLoad,
+  ]);
+    useEffect(() => {
+      setActiveFilters(
+        data?.response?.metaDataDTO.filter(
+          (item) => item.active && item?.filter?.style
+        )
+      );
+    }, [data?.response?.metaDataDTO]);
 
   return (
     <div>
@@ -166,7 +191,18 @@ const Projects = ({ createProject }) => {
             setSelectedDates={setSelectedDates}
             activeFilters={activeFilters}
             setPageNo={setPageNo}
-            columns={columns}
+            //customize table
+            open={open}
+            onClose={onClose}
+            selectedColumns={test}
+            setSelectedColumns={setTest}
+            commonFilterItems={commonFilterItems}
+            showCustomizeTable={true}
+            showDrawer={showDrawer}
+            handleSubmit={handleTableSubmit}
+            handleReset={handleReset}
+            isSubmitting={isSubmitting}
+            isResetting={isResetting}
           />
         </div>
 
@@ -178,8 +214,8 @@ const Projects = ({ createProject }) => {
         >
           <Button
             data-testid="Project-user"
-            className="btn btn-sm w-full text-ellipsis tableButton"
-            onClick={showDrawer}
+            className="btn btn-sm w-full text-ellipsis tableButton mt-2"
+            onClick={showProjectDrawer}
           >
             Create Project
           </Button>
@@ -187,17 +223,21 @@ const Projects = ({ createProject }) => {
       </div>
       <div className="mx-3 mt-5">
         <AppTable
-          data={data}
-          column={columns.filter((item) => item.isShow)}
-          loader={""}
+          data={data?.response?.pageResponse?.content}
+          column={data?.response?.metaDataDTO.filter((item) => item.active)}
+          loader={tableLoader}
           first={pageNo === 0 ? 0 : paginationFirst}
-          totalRecords={34}
+          totalRecords={data?.response?.pageResponse?.totalElements}
           row={15}
           onPageChange={onPageChange}
         />
       </div>
       <div>
-        <Drawer title="Create New Project" onClose={onClose} open={open}>
+        <Drawer
+          title="Create New Project"
+          onClose={onDrawerClose}
+          open={drawerOpen}
+        >
           <div className="mt-3 mx-4">
             <Form
               form={form}
@@ -273,10 +313,16 @@ const Projects = ({ createProject }) => {
 
 const enhancer = connect(
   (state) => ({
-   
+    data: state?.tableView?.tableView?.data,
+    tableLoader: state?.tableView?.tableViewLoading,
+    pageLoad: state?.tenantAdmin?.tin?.getPageRendering,
+    allRoles: state?.tenantAdmin?.patientsAllocation?.getRoles?.data?.response,
   }),
   {
     createProject: settingActions.createProjectAction,
+    tableDynamicColumn: tableAction.tableDynamicColumn,
+    tableDynamicColumnReset: tableAction.tableDynamicColumnReset,
+    getTableData: tableAction.tableViewAction,
   }
 );
 export default enhancer(Projects);

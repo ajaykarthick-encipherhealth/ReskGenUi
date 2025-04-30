@@ -25,9 +25,7 @@ const Users = ({
   tableDynamicColumnReset,
 }) => {
   const router = useRouter();
-  const [activeFilters, setActiveFilters] = useState(
-    data?.response?.metaDataDTO.filter((item) => item.active)
-  );
+  const [activeFilters, setActiveFilters] = useState([]);
   const [sort, setSort] = useState({
     allocatedOn: {
       sortDir: "DESC",
@@ -74,7 +72,7 @@ const Users = ({
   const onClose = () => {
     setOpen(false);
   };
-  const getCodersApi = async () => {
+  const getUsersAPi = async () => {
     const res = await getTableData({
       pageNo,
       pageNumber,
@@ -83,17 +81,14 @@ const Users = ({
       sort: sort,
       selectedDateRanges,
       searchText: searchText,
-      pageId,
-      isReAssigned,
-      isQueried,
-      patientAllocated,
+      pageId:"8e4f1d2a-7b3c-45e6-9f1d-2a7b3c45e6f1",
     });
   };
 
   useEffect(() => {
     setParamsFilter("check");
     if (window !== "undefined" && paramsFilter) {
-      getCodersApi();
+      getUsersAPi();
     }
   }, [
     selectedOption,
@@ -111,7 +106,7 @@ const Users = ({
     setIsSubmitting(true);
 
     const payload = {
-      pageId: pageId,
+      pageId: "8e4f1d2a-7b3c-45e6-9f1d-2a7b3c45e6f1",
       headerNames: test
         .filter((col) => col.active)
         .map((col) => col.actualField),
@@ -120,7 +115,7 @@ const Users = ({
     try {
       const response = await tableDynamicColumn({ payload });
       if (response?.status === "SUCCESS") {
-        getCodersApi();
+        getUsersAPi();
         onClose();
         getResponePopup(response);
       }
@@ -133,12 +128,12 @@ const Users = ({
     setIsResetting(true);
 
     const payload = {
-      pageId: pageId,
+      pageId: "8e4f1d2a-7b3c-45e6-9f1d-2a7b3c45e6f1",
     };
     try {
       const response = await tableDynamicColumnReset({ payload });
       if (response?.status === "SUCCESS") {
-        getCodersApi();
+        getUsersAPi();
         onClose();
         getResponePopup(response);
       }
@@ -224,7 +219,7 @@ const Users = ({
             />
           </div>
           <div>
-            <Usersmodal open={usersModal} setOpen={setUsersModal} />
+            <Usersmodal getUsersAPi={getUsersAPi} open={usersModal} setOpen={setUsersModal} />
           </div>
         </div>
       </div>

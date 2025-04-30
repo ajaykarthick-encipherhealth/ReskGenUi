@@ -22,6 +22,7 @@ const UsersModal = ({
   allRoles,
   getAllUsersList,
   assignedUsers,
+  getUsersAPi
 }) => {
   const [activeCard, setActiveCard] = useState("");
   const [search, setSearch] = useState("");
@@ -40,7 +41,6 @@ const UsersModal = ({
   const getUserList = async () => {
     const response = await getAllUsersList();
     if (response?.status === "SUCCESS") {
-      console.log(response, "response");
       let result = response?.response?.content;
       const user = result?.map((item) => {
         return {
@@ -78,6 +78,7 @@ const UsersModal = ({
     if (response?.status == "SUCCESS") {
       setIsLoading(false);
       getUserList();
+      getUsersAPi();
       getResponePopup(response);
       setOpen(false);
       setUserName([]);
