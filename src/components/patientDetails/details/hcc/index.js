@@ -656,9 +656,8 @@ const Hcc = ({
                           selectedDate={selectedDate}
                           setSelectedDate={setSelectedDate}
                         />
-                        {
-                        getStorage("userRole") != "admin" 
-                        &&
+                        {console.log(selectDosValue, "selectDosValue")}
+                        {getStorage("userRole") != "admin" &&
                           selectDosValue && (
                             <YearAndDosStatus
                               setIsLoading={setIsLoading}
@@ -809,7 +808,9 @@ const Hcc = ({
                                 onConfirm={handleApprove}
                               >
                                 <Button
-                                  disabled={isApproved || isReject ? true : false}
+                                  disabled={
+                                    isApproved || isReject ? true : false
+                                  }
                                   className={`px-3 py-1 rounded-md ${styles.approveBtn}`}
                                 >
                                   Approve
@@ -829,7 +830,7 @@ const Hcc = ({
                         )}
 
                       <Nav.Item as="li" className="nav-item">
-                        {isClient &&
+                        {/* {isClient &&
                           ["CODER_1", "CODER_2", "QA"].includes(proxyRole) && (
                             <Button
                               disabled={isQueried}
@@ -838,7 +839,7 @@ const Hcc = ({
                             >
                               Query
                             </Button>
-                          )}
+                          )} */}
                       </Nav.Item>
                     </div>
                   </div>
@@ -1007,60 +1008,6 @@ const Hcc = ({
             </Button>
           </div>
         </div>
-      </Modal>
-      <Modal
-        title="Raise Query"
-        open={isOpen}
-        onOk={handleQueryOk}
-        onCancel={handleQueryCancel}
-        footer={null}
-      >
-        <Form
-          form={form}
-          name="validateOnly"
-          layout="vertical"
-          autoComplete="off"
-          onFinish={onFinish}
-        >
-          <div className="mt-3 samplingSelect">
-            <Form.Item
-              label="Select Role"
-              name="role"
-              rules={[
-                {
-                  required: true,
-                  message: "Select the Role!",
-                },
-              ]}
-            >
-              <Select
-                options={selectOptions}
-                className="w-100"
-                placeholder="Select Role"
-              />
-            </Form.Item>
-          </div>
-          <div className="rejectTextArea">
-            <Form.Item
-              rules={[
-                {
-                  required: true,
-                  message: "Enter Reason",
-                },
-              ]}
-              label="Reason"
-              name="reason"
-            >
-              <TextArea placeholder="Enter Reason" rows={4} maxLength={100} />
-            </Form.Item>
-          </div>
-
-          <Form.Item>
-            <div className="d-flex align-items-center justify-content-center">
-              <RegularButton type="submit" name="Submit" width={100} />
-            </div>
-          </Form.Item>
-        </Form>
       </Modal>
     </div>
   );

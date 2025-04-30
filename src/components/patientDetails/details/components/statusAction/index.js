@@ -12,12 +12,15 @@ import { actions as detailsActions } from "../../../../../stores/patient/details
 import { getStorage } from "../../../../../utils/storages";
 import { getResponePopup } from "../../../../../utils/reusable";
 import { overallStatusUpdate } from "../../../../../stores/patient/details/network";
+import QueryModal from "./queryModal";
+import styles from "../../hcc/styles.module.css";
 
 const StatusAction = ({
   patientDetailsResult,
   patientIdDetailsData,
   getPatientIdData,
 }) => {
+
   const [localOrgId, setLocalOrgId] = useState("");
   const [localUserId, setLocalUserId] = useState("");
   const [localPatientId, setLocalPatientId] = useState("");
@@ -42,9 +45,28 @@ const StatusAction = ({
   const [confirmNotesModal, setConfirmNotesModal] = useState(false);
   const [validated, setValidated] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [isClient, setIsClient] = useState(false);
   const [inputValue, setInputValue] = useState({
     notes: "",
   });
+    const [isQueried, setIsQueried] = useState(false);
+
+  const [isQueryModalOpen, setIsQueryModalOpen] = useState(false);
+  const proxyRole = getStorage("proxyRole");
+
+
+  const showQueryModal = () => {
+    setIsQueryModalOpen(true);
+  };
+
+  const handleQueryCancel = () => {
+    setIsQueryModalOpen(false);
+  };
+
+console.log(isClient, "isClient");
+    useEffect(() => {
+      setIsClient(true);
+    }, []);
   const renderAuditMenu = (value) => {
     var value = (
       <Menu id="auditbtn">
@@ -115,6 +137,7 @@ const StatusAction = ({
 
     return value;
   };
+ 
   const auditPatient = (number) => {
     switch (number) {
       case 1:
@@ -144,11 +167,17 @@ const StatusAction = ({
         setInputValue({ notes: "" });
         setValidated(false);
         break;
+        
       default:
         null;
     }
   };
-
+  console.log({
+    isClient,
+    proxyRole,
+    isQueried,
+   
+  });
   const getPatientIdDetails = async (result) => {
     const userRoleLocal = getStorage("userRole");
     var data = [
@@ -159,8 +188,10 @@ const StatusAction = ({
     ];
     setSelectedRowsId(data);
     const menu = (
+    
       <Menu id="auditbtn">
         {result?.workflow?.[0]?.status != "HOLD" ? (
+          
           <Menu.Item
             key="1"
             onClick={() => {
@@ -175,6 +206,7 @@ const StatusAction = ({
             </div>
           </Menu.Item>
         ) : null}
+
         {result?.workflow?.[0]?.status != "PENDING" &&
         result?.workflow?.[0]?.status != "COMPUTED" ? (
           <Menu.Item
@@ -264,6 +296,21 @@ const StatusAction = ({
             </Menu.Item>
           </>
         )}
+          <Menu.Item key="7">
+            {["CODER_1", "CODER_2", "QA"].includes(proxyRole) && (
+              <Button
+                disabled={isQueried}
+                onClick={() => {
+                  showQueryModal();
+                  setMenuIsOpen(false);
+                }}
+                className={`px-3 py-1 rounded-md ${styles.queryBtn}`}
+              >
+                Query
+              </Button>
+             )}
+          </Menu.Item>
+
       </Menu>
     );
 
@@ -478,6 +525,16 @@ const StatusAction = ({
       setInputValue({ notes: "" });
       setValidated(false);
     }
+      // if (value == "QUERY") {
+      //   setConfirmNotesModal(true);
+      //   setIsValidAction("queryFunction");
+      //   setInputValue({ notes: "" });
+      //   setValidated(false);
+      // }
+      if (value === "QUERY") {
+        setIsQueryModalOpen(true);
+      }
+
     if (value == "DECLINE") {
       setConfirmNotesModal(true);
       setIsValidAction("declineFunction");
@@ -801,6 +858,60 @@ const StatusAction = ({
                     </span>
                   </Button>
                 </Dropdown>
+              ) : patienIdDetails?.workflow?.[0]?.status == "QUERIED" ? (
+                // <Dropdown
+                //   overlay={
+                //     activeTab == 3
+                //       ? actionItems2
+                //       : activeTab == 4
+                //       ? actionItems3
+                //       : actionItems
+                //   }
+                //   onVisibleChange={(v) => setMenuIsOpen(v)}
+                //   visible={menuIsOpen}
+                //   className={`holdBtnHcc ${visitStyles.holdBtnHccs}`}
+                //   disabled={isQueried}
+                //   // className={`px-3 py-1 rounded-md ${styles.queryBtn}`}
+                // >
+                //   {/* <Button
+                //     type="primary"
+                //     className={`holdBtnHcc ${visitStyles.holdBtnHccs}`}
+                //   >
+                //     <span>HOLD</span>
+                //     <span style={{ marginLeft: "10px" }}>
+                //       <DownOutlined />
+                //     </span>
+                //   </Button> */}
+                //   <Button
+                //     disabled={isQueried}
+                //     // className={`px-3 py-1 rounded-md ${styles.queryBtn}`}
+                //   >
+                //     Queried
+                //   </Button>
+                // </Dropdown>
+                <Dropdown
+                  overlay={
+                    activeTab == 3
+                      ? actionItems2
+                      : activeTab == 4
+                      ? actionItems3
+                      : actionItems
+                  }
+                  onVisibleChange={(v) => setMenuIsOpen(v)}
+                  visible={menuIsOpen}
+                  className={`queryBtnHcc ${visitStyles.queryBtnHcc}`}
+                  disabled={
+                    patienIdDetails?.workflow?.[0]?.status === "QUERIED"
+                  } 
+                >
+                  <Button
+                    disabled={
+                      patienIdDetails?.workflow?.[0]?.status === "QUERIED"
+                    } // 👈 Also disable button
+                  >
+                    Queried
+                  </Button>
+                </Dropdown>
               ) : patienIdDetails?.workflow?.[0]?.status == "PENDING" ||
                 patienIdDetails?.workflow?.[0]?.status == "COMPUTED" ? (
                 <Dropdown
@@ -877,6 +988,15 @@ const StatusAction = ({
           </div>
         </div>
       </Modal>
+      <QueryModal
+        isOpen={isQueryModalOpen}
+        onCancel={handleQueryCancel}
+        setIsQueried={setIsQueried}
+        setIsOpen={handleQueryCancel}
+        getStatus={getPatientIdData}
+        localPatientId={localPatientId}
+      />
+
       {confirmCompleteModal ? (
         <div className={visitStyles.completedModal}>
           <Modal

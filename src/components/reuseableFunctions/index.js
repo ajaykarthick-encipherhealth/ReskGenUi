@@ -3,7 +3,7 @@ import { Tooltip, Skeleton } from "antd";
 
 import Image from "next/image";
 import visitStyles from "../../../src/styles/visitdata.module.css";
-import { SVGICON } from "../../jsx/constant/theme";
+import { IMAGES, SVGICON } from "../../jsx/constant/theme";
 import Completed from "../../images/trackingImages/completed.webp";
 import Pending from "../../images/trackingImages/pending.webp";
 import Hold from "../../images/trackingImages/hold.webp";
@@ -15,7 +15,11 @@ import ReAudit from "../../images/trackingImages/reaudited.webp";
 import AuditPending from "../../images/trackingImages/auditpending.webp";
 import AuditedDeclineTrack from "../../images/trackingImages/auditdeclined.webp";
 import Abort from "../../images/trackingImages/abort.webp";
-
+import {
+  FilterOutlined,
+  MonitorOutlined,
+  UndoOutlined,
+} from "@ant-design/icons";
 export const getFlag = (data) => {
   switch (data.flags) {
     case "PATIENT_NAME_MISSED":
@@ -379,29 +383,35 @@ export const getStatusIcon = (status) => {
   switch (status) {
     case "COMPLETED":
       return (
-        <Tooltip  placement="bottom" title="COMPLETED">
+        <Tooltip placement="bottom" title="COMPLETED">
           <div>
-              <Image
-          alt="completed"
-            src={Completed}
-            style={{ height: "20px", width: "20px",marginTop: "1px"}}
-          />
+            <Image
+              alt="completed"
+              src={Completed}
+              style={{ height: "20px", width: "20px", marginTop: "1px" }}
+            />
           </div>
-        
         </Tooltip>
       );
 
+    case "QUERIED":
+      return (
+        <Tooltip placement="bottom" title="COMPLETED">
+          <div>
+            <Image src={IMAGES.queried} />
+          </div>
+        </Tooltip>
+      );
     case "PENDING":
       return (
         <Tooltip placement="bottom" title="PENDING">
           <div>
-             <Image
-          alt ="pending"
-            src={Pending}
-            style={{ height: "20px", width: "20px", marginTop: "1px" }}
-          />
+            <Image
+              alt="pending"
+              src={Pending}
+              style={{ height: "20px", width: "20px", marginTop: "1px" }}
+            />
           </div>
-         
         </Tooltip>
       );
 
@@ -409,13 +419,12 @@ export const getStatusIcon = (status) => {
       return (
         <Tooltip placement="bottom" title="DECLINED">
           <div>
-             <Image
-          alt ="declined"
-            src={Declined}
-            style={{ height: "20px", width: "20px", marginTop: "1px"}}
-          /> 
+            <Image
+              alt="declined"
+              src={Declined}
+              style={{ height: "20px", width: "20px", marginTop: "1px" }}
+            />
           </div>
-        
         </Tooltip>
       );
 
@@ -423,13 +432,12 @@ export const getStatusIcon = (status) => {
       return (
         <Tooltip placement="bottom" title="NOT COMPUTED">
           <div>
-              <Image
-          alt="notComputed"
-            src={Pending}
-            style={{ height: "20px", width: "20px", marginTop: "1px"}}
-          />
+            <Image
+              alt="notComputed"
+              src={Pending}
+              style={{ height: "20px", width: "20px", marginTop: "1px" }}
+            />
           </div>
-        
         </Tooltip>
       );
     case "COMPUTED":
@@ -437,12 +445,11 @@ export const getStatusIcon = (status) => {
         <Tooltip placement="bottom" title="PENDING">
           <div>
             <Image
-          alt="computed"
-            src={Pending}
-            style={{ height: "20px", width: "20px", marginTop: "1px"}}
-          />
+              alt="computed"
+              src={Pending}
+              style={{ height: "20px", width: "20px", marginTop: "1px" }}
+            />
           </div>
-          
         </Tooltip>
       );
     case "HOLD":
@@ -474,12 +481,11 @@ export const getStatusIcon = (status) => {
         <Tooltip placement="bottom" title="AUDIT PENDING">
           <div>
             <Image
-          alt ="auditPending"
-            src={AuditPending}
-            style={{ height: "20px", width: "20px", marginTop: "1px"}}
-          />
+              alt="auditPending"
+              src={AuditPending}
+              style={{ height: "20px", width: "20px", marginTop: "1px" }}
+            />
           </div>
-          
         </Tooltip>
       );
 
@@ -487,26 +493,24 @@ export const getStatusIcon = (status) => {
       return (
         <Tooltip placement="bottom" title=" AUDIT HOLD">
           <div>
-              <Image
-          alt ="auditHold"
-            src={AuditHold}
-            style={{ height: "20px", width: "20px", marginTop: "1px"}}
-          />
+            <Image
+              alt="auditHold"
+              src={AuditHold}
+              style={{ height: "20px", width: "20px", marginTop: "1px" }}
+            />
           </div>
-        
         </Tooltip>
       );
     case "REAUDIT":
       return (
         <Tooltip placement="bottom" title=" REAUDIT">
           <div>
-             <Image
-          alt="reAudit"
-            src={ReAudit}
-            style={{ height: "20px", width: "20px", marginTop: "1px"}}
-          />
+            <Image
+              alt="reAudit"
+              src={ReAudit}
+              style={{ height: "20px", width: "20px", marginTop: "1px" }}
+            />
           </div>
-         
         </Tooltip>
       );
     case "AUDITED":
@@ -514,38 +518,35 @@ export const getStatusIcon = (status) => {
         <Tooltip placement="bottom" title=" AUDITED">
           <div>
             <Image
-          alt ="audited"
-            src={AuditedTrack}
-            style={{ height: "20px", width: "20px", marginTop: "1px"}}
-          />
+              alt="audited"
+              src={AuditedTrack}
+              style={{ height: "20px", width: "20px", marginTop: "1px" }}
+            />
           </div>
-          
         </Tooltip>
       );
     case "NOT_AUDIT":
       return (
         <Tooltip placement="bottom" title=" NOT AUDIT">
           <div>
-              <Image
-          alt="notAudit"
-            src={NotAudited}
-            style={{ height: "20px", width: "20px", marginTop: "1px"}}
-          />
+            <Image
+              alt="notAudit"
+              src={NotAudited}
+              style={{ height: "20px", width: "20px", marginTop: "1px" }}
+            />
           </div>
-        
         </Tooltip>
       );
     case "AUDIT_DECLINED":
       return (
         <Tooltip placement="bottom" title=" AUDIT DECLINED">
           <div>
-             <Image
-          alt ="auditDeclined"
-            src={AuditedDeclineTrack}
-            style={{ height: "20px", width: "20px", marginTop: "1px" }}
-          />
+            <Image
+              alt="auditDeclined"
+              src={AuditedDeclineTrack}
+              style={{ height: "20px", width: "20px", marginTop: "1px" }}
+            />
           </div>
-         
         </Tooltip>
       );
     case null:
