@@ -484,6 +484,7 @@ const AllocateModal = ({
           setSelectedUserIds([]);
           setIsSecondModalOpen(false);
           setAllocateDate(null);
+          setActiveCard("");
         }}
         footer={null}
         width="35%"
@@ -538,16 +539,16 @@ const AllocateModal = ({
                   <li
                     className={`${modalStyle.listing} ${modalStyle.listings}`}
                     key={item.id}
-                    onClick={() =>
-                      setSelectedUserName((prev) =>
-                        prev.filter(
-                          (chart) => chart.patientId !== item.patientId
-                        )
-                      )
-                    }
+                    // onClick={() =>
+                    //   setSelectedUserName((prev) =>
+                    //     prev.filter(
+                    //       (chart) => chart.patientId !== item.patientId
+                    //     )
+                    //   )
+                    // }
                   >
-                    <span>{item.patientName}</span>
-                    <button
+                      <span >{item.patientId}</span>
+                    {/* <button
                       id={createIdGen(`delete ${index}`)}
                       className="btn p-1"
                     >
@@ -557,7 +558,7 @@ const AllocateModal = ({
                         style={{ backgroundColor: "#F99F9F", color: "#F01010" }}
                         icon={<FontAwesomeIcon icon={faXmark} />}
                       />
-                    </button>
+                    </button> */}
                   </li>
                 ))}
               </ul>
