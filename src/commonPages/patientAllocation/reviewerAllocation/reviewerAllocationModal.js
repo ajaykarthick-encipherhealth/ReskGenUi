@@ -157,7 +157,6 @@ const AllocateModal = ({
     setSelectedChart(selectedRowsId);
   }, [selectedRowsId]);
 
-  console.log(selectedUserName,"selectedUserName")
   return (
     <div>
       <Modal

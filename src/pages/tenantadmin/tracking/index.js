@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import Header from "../../../jsx/layouts/nav/Header";
 import { connect } from "react-redux";
 import "react-facebook-loading/dist/react-facebook-loading.css";
-import { notification } from "antd";
+import { notification, Spin } from "antd";
 import {
   generateOptionsForNewStore,
   priorityOptions,
@@ -19,6 +19,8 @@ import { getStorage, setStorage } from "../../../utils/storages";
 import { useRouter } from "next/router";
 import { actions as tableAction } from "../../../stores/tableView";
 import { getResponePopup } from "../../../utils/reusable";
+import visitStyles from "../../../styles/visitdata.module.css";
+import { LoadingOutlined } from "@ant-design/icons";
 
 const statusOptions = [
   { label: "COMPLETED", value: "COMPLETED", status: 2 },
@@ -58,7 +60,7 @@ const Patient = ({
   tableDynamicColumn,
   tableDynamicColumnReset,
   tableLoader,
-  pageLoad
+  pageLoad,
 }) => {
   const commonFilterItems = [
     {
@@ -218,11 +220,12 @@ const Patient = ({
   const [selectedDates, setSelectedDates] = useState([]);
   const [pageNumber, setPageNumber] = useState(0);
   const [open, setOpen] = useState(false);
+  const [parsedData, setParsedData] = useState([]);
   const [test, setTest] = useState(data?.response?.metaDataDTO);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isResetting, setIsResetting] = useState(false);
 
-  console.log(isSubmitting, "isSubmitting");
+
   const onPageChange = (e) => {
     setPaginationFirst(e.first);
     setPageNo(e.page);
@@ -233,6 +236,67 @@ const Patient = ({
   };
   const onClose = () => {
     setOpen(false);
+  };
+  const processstatusBodyTemplate = (rowData) => {
+    const isFinished =
+      parsedData?.length > 0 &&
+      parsedData?.find(
+        (data) =>
+          data?.patientId === rowData?.patientId &&
+          data?.processStageChart === "FINISHED"
+      ) !== undefined;
+
+    const rowStatus =
+      rowData?.computing === 0 && parsedData?.length === 0
+        ? "Not Computed"
+        : rowData?.computing == 1
+        ? "Processing"
+        : isFinished || rowData?.computing == 2
+        ? "Computed"
+        : rowData?.computing == 3
+        ? "Failed"
+        : "Not Computed";
+    return (
+      <div className="patient-status">
+        <div
+          className={visitStyles.roleStyle}
+          style={{
+            backgroundColor:
+              rowStatus === "Computed"
+                ? "#cceeff "
+                : rowStatus === "Processing"
+                ? "#dfd8f3"
+                : rowStatus === "Failed"
+                ? "#e88d8d"
+                : "#F1DEDA",
+            color:
+              rowStatus === "Computed"
+                ? " #285563"
+                : rowStatus === "Processing"
+                ? "#452b90"
+                : rowStatus === "Failed"
+                ? "red"
+                : "#BA704F",
+          }}
+        >
+          {rowStatus === "Processing" && (
+            <Spin
+              indicator={
+                <LoadingOutlined
+                  style={{
+                    fontSize: 16,
+                  }}
+                  spin
+                  className="ant-badge"
+                />
+              }
+              style={{ color: "#452b90", margin: "0 10px 0 0" }}
+            />
+          )}
+          {rowStatus}
+        </div>
+      </div>
+    );
   };
   const handleSubmit = async () => {
     setIsSubmitting(true);
@@ -362,7 +426,7 @@ const Patient = ({
       selectedDateRanges,
       selectedOption,
       searchText,
-      sort
+      sort,
     });
   };
   useEffect(() => {
@@ -377,7 +441,7 @@ const Patient = ({
     selectedDateRanges,
     selectedOption,
     paramsFilter,
-    pageLoad
+    pageLoad,
   ]);
 
   useEffect(() => {
@@ -411,6 +475,7 @@ const Patient = ({
       )
     );
   }, [data?.response?.metaDataDTO]);
+
   return (
     <div className={`show `}>
       <Header />
@@ -475,6 +540,7 @@ const Patient = ({
                   totalRecords={data?.response?.pageResponse?.totalElements}
                   row={15}
                   onPageChange={onPageChange}
+                  statusBodyTemplate={processstatusBodyTemplate}
                 />
               </div>
             </div>
