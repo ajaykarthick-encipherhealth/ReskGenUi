@@ -40,12 +40,21 @@ export async function requestPortalMockoon(url, options) {
 
 export async function requestPortalFiles(url, options) {
   const token = getStorage(tokenKey);
+  const clientId = getStorage("client");
+  const projectId = getStorage("project");
+  const orgId = getStorage("orgId");
+  const userRoleId = getStorage("roleId");
   const actualUrl = `${portalUrl}${url}`;
   const actualOptions = {
     ...options,
     headers: {
-      // "Content-Type": "multipart/form-data",
       Authorization: `${"Bearer" + " " + token}`,
+      // "Content-Type": "application/json",
+      "X-Role-Id": userRoleId,
+      "X-Client":clientId,
+      "X-Org": orgId,
+      "X-Project":projectId,
+      "X-Org-based": "true",
     },
   };
   return fetch(actualUrl, actualOptions).then(checkStatus);

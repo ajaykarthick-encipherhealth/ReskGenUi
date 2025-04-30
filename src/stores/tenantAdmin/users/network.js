@@ -136,3 +136,15 @@ export const usersAssignedList = async ({ data }) => {
   return res;
 };
 
+export async function getUserRole() {
+  const options = {
+    method: "GET",
+  };
+  const data = await requestPortal(
+    `/dbservice/mci/user/getroles`,
+    options
+  );
+  return data;
+}
+
+

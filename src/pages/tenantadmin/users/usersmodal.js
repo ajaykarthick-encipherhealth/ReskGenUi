@@ -136,6 +136,7 @@ const UsersModal = ({
   useEffect(() => {
     getAllRoles();
   }, []);
+
   return (
     <div>
       <Modal
@@ -318,7 +319,7 @@ const UsersModal = ({
         </div>
         {usersLoader ? (
           <TableSkeleton />
-        ) : allRoles?.userRoles?.length > 0 ? (
+        ) : allRoles?.content?.length > 0 ? (
           <div className={modalStyle.scroll}>
             {allRoles?.userRoles?.map((item) => (
               <div className="mt-4 ">
@@ -369,12 +370,12 @@ const UsersModal = ({
 const connector = connect(
   (state) => ({
     usersLoader: state?.tenantAdmin?.users?.usersLoader,
-    allRoles: state?.authReducer?.getAllRoles?.data?.response,
+    allRoles: state?.tenantAdmin?.users?.getUsersRoles?.data?.response,
     usersData:
       state?.tenantAdmin?.users?.getAllUsersData?.data?.response?.content,
   }),
   {
-    getAllRoles: authActions.allRoles,
+    getAllRoles: allActions.usersAllRoles,
     getAllUsersList: allActions.getUsers,
     assignedUsers: allActions.usersAssigned,
   }
