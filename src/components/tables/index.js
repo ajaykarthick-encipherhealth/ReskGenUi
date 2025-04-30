@@ -886,7 +886,7 @@ const TableRow = ({
             </td>
           );
         }
-        if (columnItem.batchStatus) {
+        if (columnItem?.design?.includes("COMPUTATION_STATUS")) {
           return (
             <td
               className={` d-flex align-items-center justify-content-center ${Style.childBorder}`}
