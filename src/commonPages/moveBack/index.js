@@ -30,6 +30,7 @@ const MoveBack = ({
   tableDynamicColumnReset,
   moveBackLevel,
   pageLoad,
+  statusBodyTemplate,
 }) => {
   const commonFilterItems = [
     {
@@ -159,7 +160,7 @@ const MoveBack = ({
     }
   };
   const getMoveBack = async () => {
-      const tin = getStorage("tinNumber");
+    const tin = getStorage("tinNumber");
     const response = await getTableData({
       pageId: "937b0477-f0cd-46e7-b8ab-fefb38f91859",
       pageNo,
@@ -170,7 +171,7 @@ const MoveBack = ({
       selectedOption,
       searchText,
       sort,
-      tin
+      tin,
     });
   };
   const handleSubmit = async () => {
@@ -237,7 +238,7 @@ const MoveBack = ({
     paginationFirst,
     search,
     roleId,
-    pageLoad
+    pageLoad,
   ]);
   useEffect(() => {
     if (routedData) {
@@ -365,47 +366,50 @@ const MoveBack = ({
                           </div>
                         </div>
                       )}
-                         {tableLoader ? (
+                      {tableLoader ? (
                         <CardSkeleton height={50} />
                       ) : (
-                      <div className="d-flex ">
-                        <div style={{width:"100%"}} className={` d-flex gap-3 mt-4 `}>
-                          <ReusableFilters
-                            showFilter={true}
-                            setActiveFilters={setActiveFilters}
-                            setSearchText={setSearchText}
-                            searchText={searchText}
-                            setSelectedOption={setSelectedOption}
-                            selectedOption={selectedOption}
-                            setSelectedDateRanges={setSelectedDateRanges}
-                            selectedDateRanges={selectedDateRanges}
-                            FilterItems={activeFilters}
-                            selectedDates={selectedDates}
-                            setSelectedDates={setSelectedDates}
-                            activeFilters={activeFilters}
-                            setPageNo={setPageNo}
-                            opt={opt}
-                            setSelectAllChecked={setSelectAllChecked}
-                            setSelectedRowsId={setSelectedRowsId}
-                            setSelectedRows={setSelectedRows}
-                            selectedRowsId={selectedRowsId}
-                            setSearch={setSearch}
-                            search={search}
-                            //customize table
-                            open={open}
-                            onClose={onClose}
-                            selectedColumns={test}
-                            setSelectedColumns={setTest}
-                            commonFilterItems={commonFilterItems}
-                            showCustomizeTable={false}
-                            showDrawer={showDrawer}
-                            handleSubmit={handleSubmit}
-                            handleReset={handleReset}
-                            isSubmitting={isSubmitting}
-                            isResetting={isResetting}
-                          />
+                        <div className="d-flex ">
+                          <div
+                            style={{ width: "100%" }}
+                            className={` d-flex gap-3 mt-4 `}
+                          >
+                            <ReusableFilters
+                              showFilter={true}
+                              setActiveFilters={setActiveFilters}
+                              setSearchText={setSearchText}
+                              searchText={searchText}
+                              setSelectedOption={setSelectedOption}
+                              selectedOption={selectedOption}
+                              setSelectedDateRanges={setSelectedDateRanges}
+                              selectedDateRanges={selectedDateRanges}
+                              FilterItems={activeFilters}
+                              selectedDates={selectedDates}
+                              setSelectedDates={setSelectedDates}
+                              activeFilters={activeFilters}
+                              setPageNo={setPageNo}
+                              opt={opt}
+                              setSelectAllChecked={setSelectAllChecked}
+                              setSelectedRowsId={setSelectedRowsId}
+                              setSelectedRows={setSelectedRows}
+                              selectedRowsId={selectedRowsId}
+                              setSearch={setSearch}
+                              search={search}
+                              //customize table
+                              open={open}
+                              onClose={onClose}
+                              selectedColumns={test}
+                              setSelectedColumns={setTest}
+                              commonFilterItems={commonFilterItems}
+                              showCustomizeTable={false}
+                              showDrawer={showDrawer}
+                              handleSubmit={handleSubmit}
+                              handleReset={handleReset}
+                              isSubmitting={isSubmitting}
+                              isResetting={isResetting}
+                            />
+                          </div>
                         </div>
-                      </div>
                       )}
                       <Tab.Content>
                         <Tab.Pane eventKey={activeTab}>
@@ -424,6 +428,7 @@ const MoveBack = ({
                             tableLoader={tableLoader}
                             roleId={roleId}
                             selectedRole={selectedRole}
+                            statusBodyTemplate={statusBodyTemplate}
                           />
                         </Tab.Pane>
                       </Tab.Content>

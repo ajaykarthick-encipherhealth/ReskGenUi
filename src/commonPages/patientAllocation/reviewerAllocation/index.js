@@ -22,6 +22,7 @@ const ReviewerAllocation = ({
   roleId,
   checkedHeader,
   setCheckedHeader,
+  statusBodyTemplate,
 }) => {
   const [checkedLoader, setCheckedLoader] = useState(false);
   const onPageChange = (e) => {
@@ -106,10 +107,11 @@ const ReviewerAllocation = ({
         )}
         checkedHeader={
           selectedRows?.length ===
-          data?.response?.pageResponse?.totalElements &&
+            data?.response?.pageResponse?.totalElements &&
           data?.response?.pageResponse?.totalElements !== 0
         }
         setCheckedHeader={setCheckedHeader}
+        statusBodyTemplate={statusBodyTemplate}
       />
     </div>
   );

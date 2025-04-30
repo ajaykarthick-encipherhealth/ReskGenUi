@@ -30,6 +30,7 @@ const PatientAllocation = ({
   tableDynamicColumn,
   tableDynamicColumnReset,
   pageLoad,
+  statusBodyTemplate,
 }) => {
   const commonFilterItems = [
     {
@@ -166,7 +167,7 @@ const PatientAllocation = ({
   };
 
   const getAllAllocation = async () => {
-     const tin = getStorage("tinNumber");
+    const tin = getStorage("tinNumber");
     const response = await getTableData({
       pageId: "6cd166eb-79ac-4c12-ab0f-07be2983ca70",
       pageNo,
@@ -176,7 +177,7 @@ const PatientAllocation = ({
       selectedOption,
       searchText,
       sort,
-      tin
+      tin,
     });
   };
   const handleSubmit = async () => {
@@ -296,8 +297,8 @@ const PatientAllocation = ({
                       activeKey={activeTab}
                       onSelect={handleTabChange}
                     >
-                      { rolesLoader ? (
-                        <CardSkeleton height={50}/>
+                      {rolesLoader ? (
+                        <CardSkeleton height={50} />
                       ) : (
                         <div className="d-flex justify-content-between align-items-end w-100   custom-tab-header">
                           <Nav
@@ -468,6 +469,7 @@ const PatientAllocation = ({
                             roleId={roleId}
                             checkedHeader={checkedHeader}
                             setCheckedHeader={setCheckedHeader}
+                            statusBodyTemplate={statusBodyTemplate}
                           />
                         </Tab.Pane>
                       </Tab.Content>

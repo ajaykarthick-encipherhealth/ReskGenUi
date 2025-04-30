@@ -12,7 +12,8 @@ const QueryTable = ({
   tableLoader,
   gotoPatientDetails,
   setSort,
-  sort
+  sort,
+  statusBodyTemplate,
 }) => {
   const buttons = ["Pending", "Approved", "Rejected"];
   const [pageNo, setPageNo] = useState(0);
@@ -32,10 +33,9 @@ const QueryTable = ({
   const handleCancel = () => {
     setIsModalOpen(false);
   };
-  const handleClick = ()=>{
+  const handleClick = () => {
     setIsModalOpen(false);
-
-  }
+  };
 
   return (
     <div className="mt-3">
@@ -46,8 +46,7 @@ const QueryTable = ({
             name={btn}
             type={active === btn ? "primary" : "outline"}
             onClick={() => {
-              setSort(""),
-              setActive(btn);
+              setSort(""), setActive(btn);
               setActiveStatus(btn.toLocaleUpperCase());
             }}
           />
@@ -63,18 +62,30 @@ const QueryTable = ({
           totalRecords={data?.response?.pageResponse?.totalElements}
           row={15}
           onPageChange={onPageChange}
-          onRowClick={(active === "Approved" || active === "Rejected") ? showModal :gotoPatientDetails}
+          onRowClick={
+            active === "Approved" || active === "Rejected"
+              ? showModal
+              : gotoPatientDetails
+          }
           setSort={setSort}
           sort={sort}
+          statusBodyTemplate={statusBodyTemplate}
         />
       </div>
       <div>
-      <Modal  open={isModalOpen} footer={null} onOk={handleOk} onCancel={handleCancel}>
-       <div className=" d-flex align-items-center justify-content-center mt-2">You are Unable to Open this file</div>
-       <div className="d-flex align-items-center justify-content-center mt-4">
-        <RegularButton onClick={handleClick} name={"Ok"}/>
-       </div>
-      </Modal>
+        <Modal
+          open={isModalOpen}
+          footer={null}
+          onOk={handleOk}
+          onCancel={handleCancel}
+        >
+          <div className=" d-flex align-items-center justify-content-center mt-2">
+            You are Unable to Open this file
+          </div>
+          <div className="d-flex align-items-center justify-content-center mt-4">
+            <RegularButton onClick={handleClick} name={"Ok"} />
+          </div>
+        </Modal>
       </div>
     </div>
   );

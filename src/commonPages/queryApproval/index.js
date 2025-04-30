@@ -29,6 +29,7 @@ const QueryApproval = ({
   tableDynamicColumnReset,
   route,
   pageLoad,
+  statusBodyTemplate,
 }) => {
   const commonFilterItems = [
     {
@@ -144,7 +145,7 @@ const QueryApproval = ({
     }
   };
   const getQueryApproval = async () => {
-       const tin = getStorage("tinNumber");
+    const tin = getStorage("tinNumber");
     const response = await getTableData({
       pageId: "8c1eebaf-eb20-4758-b968-6ae15e6fc031",
       pageNo,
@@ -156,7 +157,7 @@ const QueryApproval = ({
       selectedOption,
       searchText,
       sort,
-      tin
+      tin,
     });
   };
 
@@ -379,6 +380,7 @@ const QueryApproval = ({
                             gotoPatientDetails={gotoPatientDetails}
                             setSort={setSort}
                             sort={sort}
+                            statusBodyTemplate={statusBodyTemplate}
                           />
                         </Tab.Pane>
                       </Tab.Content>

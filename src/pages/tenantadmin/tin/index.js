@@ -11,6 +11,8 @@ import AppTable from "../../../components/tables";
 import { actions as allActions } from "../../../stores/reviewer/workqueue";
 import { getStorage, setStorage } from "../../../utils/storages";
 import { statusOptions } from "../../reviewer/patients";
+import visitStyles from "../../../styles/visitdata.module.css";
+
 import {
   findItemWithTrueKey,
   getAccessTabItems,
@@ -193,7 +195,8 @@ const Tin = ({
   const [selectedRows, setSelectedRows] = useState([]);
   const [checkedLoader, setCheckedLoader] = useState(false);
   const [checkedHeader, setCheckedHeader] = useState(false);
-
+  const [parsedData, setParsedData] = useState([]);
+  
   const gotoPatientDetails = (rowData) => {
     setStorage("patientId", rowData.patientId);
     setStorage("tinNumber", rowData.tinNumber);
@@ -339,7 +342,67 @@ const Tin = ({
       getResponePopup(error?.response);
     }
   };
+  const processstatusBodyTemplate = (rowData) => {
+    const isFinished =
+      parsedData?.length > 0 &&
+      parsedData?.find(
+        (data) =>
+          data?.patientId === rowData?.patientId &&
+          data?.processStageChart === "FINISHED"
+      ) !== undefined;
 
+    const rowStatus =
+      rowData?.computing === 0 && parsedData?.length === 0
+        ? "Not Computed"
+        : rowData?.computing == 1
+        ? "Processing"
+        : isFinished || rowData?.computing == 2
+        ? "Computed"
+        : rowData?.computing == 3
+        ? "Failed"
+        : "Not Computed";
+    return (
+      <div className="patient-status">
+        <div
+          className={visitStyles.roleStyle}
+          style={{
+            backgroundColor:
+              rowStatus === "Computed"
+                ? "#cceeff "
+                : rowStatus === "Processing"
+                ? "#dfd8f3"
+                : rowStatus === "Failed"
+                ? "#e88d8d"
+                : "#F1DEDA",
+            color:
+              rowStatus === "Computed"
+                ? " #285563"
+                : rowStatus === "Processing"
+                ? "#452b90"
+                : rowStatus === "Failed"
+                ? "red"
+                : "#BA704F",
+          }}
+        >
+          {rowStatus === "Processing" && (
+            <Spin
+              indicator={
+                <LoadingOutlined
+                  style={{
+                    fontSize: 16,
+                  }}
+                  spin
+                  className="ant-badge"
+                />
+              }
+              style={{ color: "#452b90", margin: "0 10px 0 0" }}
+            />
+          )}
+          {rowStatus}
+        </div>
+      </div>
+    );
+  };
   const handleTinStatus = async () => {
     const payload = {
       ids: selectedRows,
@@ -565,6 +628,7 @@ const Tin = ({
                 idKey={"id"}
                 checkBoxLoader={checkedLoader}
                 setCheckedHeader={setCheckedHeader}
+                statusBodyTemplate={processstatusBodyTemplate}
               />
             )}
             {activeTab === "InActive" && (
@@ -600,6 +664,7 @@ const Tin = ({
                 selectedRows={selectedRows}
                 idKey={"id"}
                 checkBoxLoader={checkedLoader}
+                statusBodyTemplate={processstatusBodyTemplate}
               />
             )}
             {activeTab === "Providers" && (
@@ -631,6 +696,7 @@ const Tin = ({
                 setSelectedRowsId={setSelectedRowsId}
                 setSelectedRows={setSelectedRows}
                 selectedUserName={selectedUserName}
+                statusBodyTemplate={processstatusBodyTemplate}
               />
             )}
           </div>

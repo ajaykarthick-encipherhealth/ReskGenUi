@@ -24,6 +24,7 @@ const MoveBackTable = ({
   data,
   roleId,
   selectedRole,
+  statusBodyTemplate,
 }) => {
   const [selectAllChecked, setSelectAllChecked] = useState(false);
   const [checkedLoader, setCheckedLoader] = useState(false);
@@ -42,7 +43,7 @@ const MoveBackTable = ({
           pageNo: 0,
           pageSize: 15,
           roleId: roleId,
-          selectedRole:selectedRole
+          selectedRole: selectedRole,
         });
 
         if (response?.status === "SUCCESS") {
@@ -98,9 +99,10 @@ const MoveBackTable = ({
           )}
           checkedHeader={
             selectedRows?.length ===
-            data?.response?.pageResponse?.totalElements &&
+              data?.response?.pageResponse?.totalElements &&
             data?.response?.pageResponse?.totalElements !== 0
           }
+          statusBodyTemplate={statusBodyTemplate}
         />
       </div>
     </div>
