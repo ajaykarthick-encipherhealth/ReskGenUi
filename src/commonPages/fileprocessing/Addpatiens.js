@@ -92,7 +92,7 @@ const Addpatients = ({
                   </div>
                 </Form.Item>
               </Col>
-              <Col span={24}>
+              {/* <Col span={24}>
                 <Form.Item
                   label="Select Organization"
                   name="organizationId"
@@ -111,7 +111,7 @@ const Addpatients = ({
                     style={{ height: "42px" }}
                   />
                 </Form.Item>
-              </Col>
+              </Col> */}
             </Row>
             <div style={{ display: "flex", gap: "8px" }}>
               <Form.Item>

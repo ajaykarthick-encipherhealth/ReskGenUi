@@ -226,7 +226,7 @@ const UserList = ({
   const handleSubmit = async (userFormData) => {
     const encryptedData = encyptingPass(userFormData?.password);
     userFormData.tenantId = localTenantId;
-    userFormData.organizationId = userFormData.orgId;
+    // userFormData.organizationId = userFormData.orgId;
     userFormData.role = [userFormData?.role];
     userFormData.password = encryptedData?.pass;
     userFormData.passwordIv = encryptedData.iv;
@@ -914,7 +914,7 @@ const UserList = ({
                     </Select>
                   </Form.Item>
                 </Col>
-                <Col span={12}>
+                {/* <Col span={12}>
                   <Form.Item
                     label="Select Organization"
                     name="orgId"
@@ -933,6 +933,35 @@ const UserList = ({
                       style={{ height: "42px" }}
                       allowClear
                     />
+                  </Form.Item>
+                </Col> */}
+                   <Col span={12}>
+                  <Form.Item
+                    label="Mobile Number"
+                    name="mobileNumber"
+                    rules={[
+                      {
+                        required: true,
+                        max: 10,
+                        message: "Please enter your mobile number!",
+                      },
+                      {
+                        pattern: /^[0-9]{10}$/,
+                        message: "Please enter a valid 10-digit mobile number!",
+                      },
+                    ]}
+                  >
+                    <div>
+                      <Input
+                        id="mobileNumber"
+                        name="mobileNumber"
+                        type="text"
+                        placeholder="Enter mobile number"
+                        autoComplete="off"
+                        value={getDisplayValue(mobileNumber)}
+                        onChange={handleChange}
+                      />
+                    </div>
                   </Form.Item>
                 </Col>
               </Row>
@@ -1017,35 +1046,7 @@ const UserList = ({
                     </div>
                   </Form.Item>
                 </Col>
-                <Col span={12}>
-                  <Form.Item
-                    label="Mobile Number"
-                    name="mobileNumber"
-                    rules={[
-                      {
-                        required: true,
-                        max: 10,
-                        message: "Please enter your mobile number!",
-                      },
-                      {
-                        pattern: /^[0-9]{10}$/,
-                        message: "Please enter a valid 10-digit mobile number!",
-                      },
-                    ]}
-                  >
-                    <div>
-                      <Input
-                        id="mobileNumber"
-                        name="mobileNumber"
-                        type="text"
-                        placeholder="Enter mobile number"
-                        autoComplete="off"
-                        value={getDisplayValue(mobileNumber)}
-                        onChange={handleChange}
-                      />
-                    </div>
-                  </Form.Item>
-                </Col>
+             
               </Row>
               <div
                 id="fake-user"

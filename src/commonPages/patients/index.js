@@ -556,7 +556,7 @@ const Patient = ({
     formData.append("tenantid", tenantId);
     formData.append("userid", localUserId);
     formData.append("patientid", inputValue.patientId);
-    formData.append("patientname", inputValue.name);
+    // formData.append("patientname", inputValue.name);
     formData.append("emrtype", emrType);
     const response = await uploadFiles({ obj: formData });
     if (response?.status === "SUCCESS") {
@@ -587,7 +587,7 @@ const Patient = ({
     formData.append("tenantid", tenantId);
     formData.append("userid", localUserId);
     formData.append("patientid", inputValue.patientId);
-    formData.append("patientname", inputValue.name);
+    // formData.append("patientname", inputValue.name);
     formData.append("emrtype", emrType);
     setSelectFile(formData);
     const response = await uploadFilesRadiology({ obj: formData });

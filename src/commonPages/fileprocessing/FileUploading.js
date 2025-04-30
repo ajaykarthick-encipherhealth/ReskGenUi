@@ -78,7 +78,7 @@ const FileUploading = ({
               </div>
 
               <div className="col-xl-12 mb-3">
-                <Form.Label>
+                {/* <Form.Label>
                   Patient Name <span className="text-danger">*</span>{" "}
                 </Form.Label>
                 <Form.Control
@@ -88,7 +88,7 @@ const FileUploading = ({
                   type="text"
                   value={inputValue?.name}
                   onChange={(e) => handleChange(e)}
-                />
+                /> */}
               </div>
 
               <div className="col-xl-12 mb-3">
