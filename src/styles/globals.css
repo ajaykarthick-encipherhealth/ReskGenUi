@@ -13649,6 +13649,31 @@ tbody > tr {
   border: none !important;
   box-shadow: none !important;
 }
+.queryBtnHcc button.ant-btn.ant-btn-compact-first-item {
+  color: #fff;
+  background: #4C4C9D !important;
+  border: none !important;
+  box-shadow: none !important;
+  border-radius: 10px;
+  width: 100% !important;
+}
+
+.queryBtnHcc
+  > .ant-btn.ant-btn-primary.ant-btn-icon-only.ant-btn-compact-item.ant-btn-compact-last-item.ant-dropdown-trigger {
+  color: #ad94fa;
+  background:  #4C4C9D  !important;
+  border: none !important;
+  border-radius: 6px;
+  box-shadow: none;
+}
+
+.queryBtnHcc
+  > .ant-btn.ant-btn-primary.ant-btn-icon-only.ant-btn-compact-item.ant-btn-compact-last-item.ant-dropdown-trigger::before {
+  height: calc(100% + 1px) !important;
+  background:  #4C4C9D  !important;
+  border: none !important;
+  box-shadow: none !important;
+}
 
 .bouncing-loader {
   display: flex;
