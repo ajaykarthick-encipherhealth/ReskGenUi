@@ -200,7 +200,6 @@ export const commonFilterItems = [
 const Patient = ({
   getAllOrganizationList,
   organizationList,
-  getAllPatients,
   allPatientList,
   webSocketData,
   tableLoader,
@@ -1018,7 +1017,6 @@ const enhancer = connect(
   {
     getAllOrganizationList: tenantAdminAction.getAllOrganizationAction,
     getAllBatchList: tenantAdminAction.getAllBatchAction,
-    getAllPatients: tenantAdminAction.getAllPatientAction,
     getPatientId: tenantAdminAction.submitPatientId,
     uploadFiles: tenantAdminAction.uploadFiles,
     getFilters: allocationAction.getFiltersList,

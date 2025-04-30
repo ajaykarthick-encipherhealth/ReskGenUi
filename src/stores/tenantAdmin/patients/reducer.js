@@ -52,7 +52,7 @@ const getReportLoading = (type) =>
 const adminPatientsReducer = combineReducers({
   allOrganization: createReducer(getAllOrganizationAction),
   allBatch: createReducer(getAllBatchAction),
-  allPatients: createReducer(getAllPatientAction),
+  // allPatients: createReducer(getAllPatientAction),
   submitPatientId: createReducer(submitPatientId),
   getRetreggerPatient: createReducer(getRetreggerPatient),
   // loaders
