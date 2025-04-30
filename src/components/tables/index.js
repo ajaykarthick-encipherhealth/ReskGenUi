@@ -889,7 +889,7 @@ const TableRow = ({
         if (columnItem?.design?.includes("COMPUTATION_STATUS")) {
           return (
             <td
-              className={` d-flex align-items-center justify-content-center ${Style.childBorder}`}
+              className={` d-flex align-items-start justify-content-start ${Style.childBorder}`}
             >
               {statusBodyTemplate(item)}
             </td>
