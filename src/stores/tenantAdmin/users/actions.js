@@ -16,3 +16,13 @@ export const getEnableUser = createActionThunk(
   "ENABLE_USER_USERS_MODULE",
   network.enableUser
 );
+
+export const getUsers = createActionThunk(
+  "GET_ALL_USERS_DETAILS",
+  network.getAllUser
+);
+
+export const usersAssigned = createActionThunk(
+  "USERS_ASSIGNED_DETIALS",
+  network.usersAssignedList
+);

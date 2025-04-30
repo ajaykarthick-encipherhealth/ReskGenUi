@@ -71,4 +71,4 @@ const connector = connect(
   }),
   {}
 );
-export default connector(TinRoasterTable);
+  export default connector(TinRoasterTable);

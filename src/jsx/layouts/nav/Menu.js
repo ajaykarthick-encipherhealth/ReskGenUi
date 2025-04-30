@@ -325,7 +325,7 @@ export const ProviderMenuList = (data) => {
         title: "Users",
         iconStyle: <UserOutlined />,
         activeIcon: <FontAwesomeIcon icon={faUser} />,
-        to: "/tenantadmin/user",
+        to: "/tenantadmin/users",
       });
     }
     if (res?.title == "Tin" && res?.active) {

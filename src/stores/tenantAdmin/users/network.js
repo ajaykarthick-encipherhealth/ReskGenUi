@@ -64,6 +64,7 @@ export async function addPatient({ data }) {
   return res;
 }
 
+getAllUser
 export const enableUser = async ({
   checked,
   user,
@@ -112,3 +113,26 @@ export const enableUser = async ({
     }
   }
 };
+
+export async function getAllUser() {
+  const options = {
+    method: "GET",
+  };
+  const data = await requestPortal(
+    `/dbservice/mci/user/unassigned`,
+    options
+  );
+  return data;
+}
+
+export const usersAssignedList = async ({ data }) => {
+  const url = `dbservice/mci/user/assignuser`;
+  const options = {
+    method: "POST",
+    body:JSON.stringify(data)
+  };
+
+  const res = await requestPortal(`${url}`, options);
+  return res;
+};
+

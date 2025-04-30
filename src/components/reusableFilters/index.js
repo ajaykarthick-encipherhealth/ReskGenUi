@@ -140,8 +140,6 @@ const ReusableFilters = ({
     }
     getAllReviewerALlocation();
   }; 
-  
-  console.log(activeFilters,"activeFilters")
   return (
     <div className="d-flex gap-5 w-100">
       <div className="row" style={{ width: showFilter ? "98%" : "auto" }}>

@@ -1,6 +1,6 @@
 import { combineReducers } from "redux";
 import { handleActions } from "redux-actions";
-import { getAllOrganizationAction, getAllUsersAction } from "./actions";
+import { getAllOrganizationAction, getAllUsersAction,getUsers,usersAssigned } from "./actions";
 
 const initialState = {
   loading: true,
@@ -44,10 +44,13 @@ const getReportLoading = (type) =>
 const tenantAminUsersReducer = combineReducers({
   allOrganization: createReducer(getAllOrganizationAction),
   allUsers: createReducer(getAllUsersAction),
+  getAllUsersData:createReducer(getUsers),
+  assignedUsers:createReducer(usersAssigned),
 
   // loaders
   allOrganizationLoader: getReportLoading(getAllOrganizationAction),
   allUsersLoading: getReportLoading(getAllUsersAction),
+  usersLoader:getReportLoading(getUsers)
 });
 
 export default tenantAminUsersReducer;

@@ -1117,6 +1117,7 @@ const TableRow = ({
                 }
                 className={`${Style.checkBoxDiv} d-flex justify-content-start align-items-start`}
               >
+                {console.log(selectedRows,columnItem.value,"selectedRows")}
                 {checkBoxLoader ? (
                   <Spin
                     indicator={<LoadingOutlined className="font2" />}

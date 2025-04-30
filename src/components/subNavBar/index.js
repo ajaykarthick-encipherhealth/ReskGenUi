@@ -77,7 +77,7 @@ const SubNavBar = ({ handleBack, hideBackArrow, pageLoad ,tableLoader}) => {
                   className={`cr-pointer px-2 ${styles.headerContent}`}
                 >
                   <div className={`pb-1 fw-bold ${styles.headerTitle}`}>
-                    {field.headerName.toUpperCase()}
+                    {field?.headerName?.toUpperCase()}
                   </div>
                   <div
                     className="d-flex align-items-center justify-content-between"

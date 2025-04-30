@@ -74,7 +74,7 @@ const RandomSamplingModal = ({
     form.resetFields();
   };
 
-  const getUserList = async ({roleId}) => {
+  const getUserList = async ({ roleId }) => {
     const response = await getL1UsersList({
       roleId: roleId || "",
     });
@@ -101,7 +101,7 @@ const RandomSamplingModal = ({
       dueDate: formatDateForIndex({ date: values.duedate, index: 1 }),
       allocatedBy: userId,
       hccFoundFilesPercentage: Number(values?.hccpercentage),
-      noHccFoundFilesPercentage:Number(values?.nohccpercentage),
+      noHccFoundFilesPercentage: Number(values?.nohccpercentage),
       tin: values?.tin,
     });
     if (response?.status == "SUCCESS") {
@@ -186,30 +186,34 @@ const RandomSamplingModal = ({
               }
             }}
           />
-          <div className="d-flex align-items-center ">
-            <div className="fontWeight3 font3">Select All</div>
-            <input
-              style={{
-                width: "20px",
-                height: "20px",
-                flexShrink: "0",
-                borderRadius: "4px",
-                cursor: "pointer",
-              }}
-              className={`mx-4  ${styles.checkbox}${
-                selectedUserIds.length === userDetails.length
-                  ? styles.customChecked2
-                  : ""
-              } `}
-              type="checkbox"
-              id="selectAll"
-              checked={
-                userDetails.length > 0 &&
-                selectedUserIds.length === userDetails.length
-              }
-              onChange={handleSelectAll}
-            />
-          </div>
+          {userDetails.length > 0 ? (
+            <div className="d-flex align-items-center ">
+              <div className="fontWeight3 font3">Select All</div>
+              <input
+                style={{
+                  width: "20px",
+                  height: "20px",
+                  flexShrink: "0",
+                  borderRadius: "4px",
+                  cursor: "pointer",
+                }}
+                className={`mx-4  ${styles.checkbox}${
+                  selectedUserIds.length === userDetails.length
+                    ? styles.customChecked2
+                    : ""
+                } `}
+                type="checkbox"
+                id="selectAll"
+                checked={
+                  userDetails.length > 0 &&
+                  selectedUserIds.length === userDetails.length
+                }
+                onChange={handleSelectAll}
+              />
+            </div>
+          ) : (
+            ""
+          )}
         </div>
 
         {usersLoader ? (
@@ -251,7 +255,7 @@ const RandomSamplingModal = ({
                           />
                         )}
                       </Avatar>
-          
+
                       <div className="p-3">
                         <p className={`${modalStyle.listName} mb-1`}>
                           {item.firstName + " " + item.lastName}
@@ -393,7 +397,7 @@ const RandomSamplingModal = ({
             </button>
           </div>
         )}
-        {selectedUserIds.length && userDetails.length > 0 ? (
+        {userDetails.length > 0 ? (
           <div className="d-flex justify-content-center mt-3">
             <RegularButton
               name={"Next"}
@@ -403,6 +407,7 @@ const RandomSamplingModal = ({
                 setOpen(false);
                 form.resetFields();
               }}
+              disabled={activeEmail.length === 0}
             >
               Next
             </RegularButton>
