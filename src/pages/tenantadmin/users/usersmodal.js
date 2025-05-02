@@ -52,6 +52,8 @@ const UsersModal = ({
         };
       });
       setUserDetails(user);
+      {
+      }
     }
   };
 
@@ -61,7 +63,7 @@ const UsersModal = ({
     setIsLoading(true);
     const response = await assignedUsers({
       data: {
-        userName: userName?.toString(),
+        userNames: userName,
         authorizedDetails: [
           {
             clientId: clientId,
