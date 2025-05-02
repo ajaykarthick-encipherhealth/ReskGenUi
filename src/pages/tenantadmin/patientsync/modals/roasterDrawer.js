@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import { connect } from "react-redux";
 import { Button, Drawer, Form, Input, Upload, message } from "antd";
 import { UploadOutlined } from "@ant-design/icons";
@@ -21,6 +21,7 @@ const RoasterDrawer = ({
   pageNumber,
 }) => {
   const [form] = Form.useForm();
+   const [loading, setLoading] = useState(false);
   const onClose = () => {
     setIsDrawerOpen(false);
     form.resetFields();
@@ -32,10 +33,14 @@ const RoasterDrawer = ({
         message.error("No file selected.");
         return;
       }
+
+      setLoading(true); 
+
       const formData = new FormData();
       formData.append("file", file);
       formData.append("projectId", formVal.projectname);
       if (reUpload) formData.append("retryId", reUpload);
+
       const uploadActions = {
         "Provider Roaster": {
           postApi: providerRoasterExcel,
@@ -54,6 +59,7 @@ const RoasterDrawer = ({
           getApi: getTinRoaster,
         },
       };
+
       const action = uploadActions[reportActiveTab];
       if (action) {
         const res = await action.postApi({ obj: formData });
@@ -61,13 +67,14 @@ const RoasterDrawer = ({
           getResponePopup(res);
           action.getApi({ pageNo: pageNumber });
           onClose();
-        }
-        else{
-          getResponePopup(res)
+        } else {
+          getResponePopup(res);
         }
       }
     } catch (error) {
       console.error("Upload error:", error);
+    } finally {
+      setLoading(false); 
     }
   };
   
@@ -145,8 +152,10 @@ const RoasterDrawer = ({
                 className="btn btn-sm ms-2 flr width-max-content custom-btn-style"
                 type="primary"
                 htmlType="submit"
+                loading={loading}
+                disabled={loading}
               >
-                Upload
+                <span className="p-2">Upload</span>
               </Button>
             </div>
           </Form.Item>

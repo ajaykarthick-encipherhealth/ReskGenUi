@@ -414,6 +414,7 @@ const Tin = ({
       const response = await setTinStatus({ payload });
       if (response?.status === "SUCCESS") {
         getAllTins();
+        getTinCountData();
         onClose();
         getResponePopup(response);
       }
