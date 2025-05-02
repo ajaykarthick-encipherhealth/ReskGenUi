@@ -454,7 +454,9 @@ const AllocateModal = ({
           </div>
         ) : (
           <div className="m-4">
-            <Empty />
+         <div className="d-flex align-items-center justify-content-center mt-5">
+              No users available. Please create and assign users.
+            </div>
           </div>
         )}
         {userDetails.length > 0 ? (

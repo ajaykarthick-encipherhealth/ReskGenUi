@@ -43,9 +43,7 @@ const SelectClient = ({ projectDetails, getAllProjects }) => {
       const response = await getAllProjects();
       if (response?.status !== "SUCCESS") {
         getResponePopup(response);
-      } else {
-        getResponePopup(response);
-      }
+      } 
     } catch (error) {
       getResponePopup(error);
     } finally {

@@ -505,7 +505,8 @@ const UserList = ({
       searchText,
       selectedDateRanges,
       selectedOption,
-      sort
+      sort,
+      cilentBased : false
     });
   };
   useEffect(() => {

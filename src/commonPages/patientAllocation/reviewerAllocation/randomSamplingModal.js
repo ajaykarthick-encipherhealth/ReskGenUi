@@ -385,16 +385,9 @@ const RandomSamplingModal = ({
           </div>
         ) : (
           <div className="m-4">
-            <button
-              id="addUser-btn"
-              name="addUser-btn"
-              onClick={() => {
-                Router.push("/tenantadmin/user");
-              }}
-              className={`btn btn-outline-primary btn-sm ms-2 ${modalStyle.modalBtn}`}
-            >
-              Add User
-            </button>
+            <div className="d-flex align-items-center justify-content-center mt-5">
+              No users available. Please create and assign users.
+            </div>
           </div>
         )}
         {userDetails.length > 0 ? (

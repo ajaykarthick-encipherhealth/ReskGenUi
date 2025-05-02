@@ -21,6 +21,7 @@ export async function getTableView({
   isAdmin,
   tin = "",
   allTinIds,
+  cilentBased
 }) {
 
   const options = { method: "GET" };
@@ -56,11 +57,18 @@ export async function getTableView({
     "a9d5c555-7954-4382-a2ef-3f66b292cf8f",
     "da4958c3-7795-4bcc-8ab0-24d93cd52c25",
   ];
+  const clientBasesPageIds = [
+    "8e4f1d2a-7b3c-45e6-9f1d-2a7b3c45e6f1"
+  ]
 
   if (allowedPageIds.includes(pageId)) {
     baseUrl += `&isReAssigned=${isReAssigned || false}&isQueried=${
       isQueried || false
     }`;
+  }
+
+  if (clientBasesPageIds.includes(pageId)) {
+    baseUrl += `&cilentBased=${cilentBased || false}`;
   }
   if (role !== "TENANT_ADMIN") {
     baseUrl += `&patientAllocated=${patientAllocated || ""}`;

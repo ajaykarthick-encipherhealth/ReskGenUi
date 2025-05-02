@@ -22,7 +22,7 @@ const UsersModal = ({
   allRoles,
   getAllUsersList,
   assignedUsers,
-  getUsersAPi
+  getUsersAPi,
 }) => {
   const [activeCard, setActiveCard] = useState("");
   const [search, setSearch] = useState("");
@@ -248,8 +248,10 @@ const UsersModal = ({
             ))}
           </div>
         ) : (
-          <div className="m-4">
-            <Empty />
+          <div className="mt-4">
+            <div className="d-flex align-items-center justify-content-center mt-5">
+              No users available. Please create users.
+            </div>
           </div>
         )}
         {userDetails.length > 0 ? (
