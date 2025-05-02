@@ -129,14 +129,9 @@ const SelectClient = ({ projectDetails, getAllProjects }) => {
                   id="next-btn"
                   name="next-btn"
                 >
-                  <RegularButton
-                    onClick={() => {
-                      router?.push(`/projects`);
-                    }}
-                    type="outline"
-                    name="BACK"
-                    width="240px"
-                  />
+                 <Button className={styles.outer}  onClick={() => {
+                      router?.push('/projects'); 
+                    }} > BACK </Button>
                   <RegularButton
                     type="submit"
                     name="NEXT"
