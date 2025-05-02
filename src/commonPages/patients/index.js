@@ -713,11 +713,38 @@ const Patient = ({
       setSort(sort);
     }
   }, [routedData]);
+
+  // const getPatients = async () => {
+  //   const tin = getStorage("tinNumber");
+  //   const userId = getStorage("userId");
+  //   const response = await getTableData({
+  //     pageId: "c41d4ea9-6da4-495c-84f4-95b25d6c13b4",
+  //     pageNo,
+  //     pageSize: 15,
+  //     roleId: "",
+  //     tin,
+  //     patientAllocated: userId,
+  //     isAdmin: true,
+  //     selectedOption,
+  //     selectedDateRanges,
+  //     searchText,
+  //     sort
+  //   });
+  // };
+
+
   const getPatients = async () => {
     const tin = getStorage("tinNumber");
     const userId = getStorage("userId");
+    let pageId = "d80f80fd-aab8-496e-a9fc-89677d5ac174";
+
+
+    if (navigate.pathname === "/tenantadmin/project") {
+      pageId = "c41d4ea9-6da4-495c-84f4-95b25d6c13b4";
+    }
+
     const response = await getTableData({
-      pageId: "c41d4ea9-6da4-495c-84f4-95b25d6c13b4",
+      pageId,
       pageNo,
       pageSize: 15,
       roleId: "",
@@ -727,9 +754,10 @@ const Patient = ({
       selectedOption,
       selectedDateRanges,
       searchText,
-      sort
+      sort,
     });
   };
+
   useEffect(() => {
     setParamsFilter("check");
     let tenId = getStorage("tenantId");

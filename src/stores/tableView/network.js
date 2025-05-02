@@ -46,10 +46,9 @@ export async function getTableView({
   let baseUrl = `dbservice/table/view?pageId=${pageId}&page=${pageNo}&size=${
     pageSize || 15
 
-  }&${statusKey}=${activeStatus || ""}&roleId=${roleId || ""}&aliasName=${selectedRole || ""}&queryStatus=${queryStatus || ""}&isAdmin=${isAdmin || ""}&tin=${tin || ""}&sortDirection=${
+  }&${statusKey}=${activeStatus || ""}&roleId=${roleId || ""}&aliasName=${selectedRole || ""}&queryStatus=${queryStatus || ""}&isAdmin=${isAdmin || ""}&sortDirection=${
       sort?.sortDir ? sort?.sortDir : ""
-    }&
-allTinIds=${allTinIds || false}&sortField=${sort?.sortField ? sort?.sortField : ""}`;
+    }&sortField=${sort?.sortField ? sort?.sortField : ""}`;
 
 
   const allowedPageIds = [
@@ -66,7 +65,11 @@ allTinIds=${allTinIds || false}&sortField=${sort?.sortField ? sort?.sortField : 
   if (role !== "TENANT_ADMIN") {
     baseUrl += `&patientAllocated=${patientAllocated || ""}`;
   }
-
+const tinPageIds = ["d80f80fd-aab8-496e-a9fc-89677d5ac174"];
+if (tinPageIds.includes(pageId)) {
+  baseUrl += `&tin=${tin || ""}&
+allTinIds=${allTinIds || false}`;
+}
   const finalUrl = `${baseUrl}${searchTextParams || ""}${selectParams || ""}${
     dateRagngesParams || ""
   }`;
