@@ -25,6 +25,13 @@ const PdfViewer = ({
   const [ids, setIds] = useState();
   useEffect(() => {
     const page = selectedPageNumber ? selectedPageNumber : pageNumber;
+    const header = {
+      "X-Role-Id": getStorage("roleId"),
+      "X-Client": getStorage("client"),
+      "X-Org": getStorage("orgId"),
+      "X-Project":getStorage("project"),
+      "X-Org-based": "true",
+    }
     if (!Array.isArray(src)) {
       const getData = pdfEncrypt(getStorage("fileId"));
       const pdfUrl = encodeURIComponent(getData.pass);
@@ -35,7 +42,9 @@ const PdfViewer = ({
         setIds(getData.iv);
         searchUrl = `${portalPdfUrl}?file=${pdfUrl}&salt=${
           getData.iv
-        }&token=${getStorage("token")}&baseEnv=${serverControl}&pdfEnv=${pdfControl}`;
+        }&token=${getStorage("token")}&baseEnv=${serverControl}&pdfEnv=${pdfControl}&header=${JSON.stringify(
+          header
+        )}`;
         // let searchUrl = `https://pdffile.javagcai.com/web/viewer.html?file=${pdfUrl}`;
         if (searchQuery || page || headerContent) {
           const queryParams = [];
