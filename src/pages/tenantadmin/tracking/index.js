@@ -483,7 +483,7 @@ const Patient = ({
         <div className="container-fluid">
           <div className="table-responsive active-projects task-table">
             <div className="row p-3 ">
-              <div className="col-10 ">
+              <div className="col-12 ">
                 <ReusableFilters
                   showFilter={true}
                   setActiveFilters={setActiveFilters}
@@ -515,11 +515,6 @@ const Patient = ({
                   isSubmitting={isSubmitting}
                   isResetting={isResetting}
                 />
-              </div>
-              <div className="col-2 d-flex align-items-center justify-content-center">
-                <div className="row">
-                  <DailyTask trackChart={trackingList?.processStatusCount} />
-                </div>
               </div>
             </div>
 
