@@ -73,7 +73,12 @@ export async function getTableView({
   if (role !== "TENANT_ADMIN") {
     baseUrl += `&patientAllocated=${patientAllocated || ""}`;
   }
-const tinPageIds = ["d80f80fd-aab8-496e-a9fc-89677d5ac174"];
+const tinPageIds = [
+  "d80f80fd-aab8-496e-a9fc-89677d5ac174",
+  "6cd166eb-79ac-4c12-ab0f-07be2983ca70",
+  "937b0477-f0cd-46e7-b8ab-fefb38f91859",
+ "8c1eebaf-eb20-4758-b968-6ae15e6fc031"
+];
 if (tinPageIds.includes(pageId)) {
   baseUrl += `&tin=${tin || ""}&
 allTinIds=${allTinIds || false}`;

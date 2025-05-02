@@ -889,9 +889,15 @@ const TableRow = ({
         if (columnItem?.design?.includes("COMPUTATION_STATUS")) {
           return (
             <td
-              className={` d-flex align-items-start justify-content-start ${Style.childBorder}`}
+              className={`${
+                index == 0
+                  ? Style.firstTdBorder
+                  : column.length - 1 == index
+                  ? Style.lastBorder
+                  : Style.childBorder
+              } `}
             >
-              {statusBodyTemplate(item)}
+              {statusBodyTemplate && statusBodyTemplate(item)}
             </td>
           );
         }
