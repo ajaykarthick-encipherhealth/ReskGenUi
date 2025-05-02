@@ -21,9 +21,10 @@ export async function getTableView({
   isAdmin,
   tin = "",
   allTinIds,
-  cilentBased
+  cilentBased,
+  reloadTrue
 }) {
-
+  if(!reloadTrue){
   const options = { method: "GET" };
   let searchTextParams = null;
   let selectParams = null;
@@ -89,6 +90,9 @@ allTinIds=${allTinIds || false}`;
 
   const data = await requestPortal(finalUrl, options);
   return data;
+}else{
+  return null;
+}
 }
 
 export async function getStatusTableView({

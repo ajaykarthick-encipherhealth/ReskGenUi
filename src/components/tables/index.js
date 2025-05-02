@@ -159,7 +159,7 @@ const AppTable = ({
                 </tr>
               </thead>
               <tbody>
-                {loader ? (
+                {loader || data == null ? (
                   [...Array.from({ length: 15 })]?.map((_, rowIndex) => (
                     <tr key={rowIndex}>
                       {columnsArr?.map((_, colIndex) => (
@@ -786,7 +786,7 @@ const TableRow = ({
           );
         }
 
-        if (findItemWithTrueOrFalse(columnItem.design, "TOGGLE")) {
+        if (findItemWithTrueOrFalse(columnItem.design, "TOGGLE") && switchStates) {
           return (
             <td
               className={
@@ -815,8 +815,8 @@ const TableRow = ({
               >
                 <Switch
                   className="user-switch"
-                  // checked={switchStates[item?.userName]}
-                  checked={true}
+                  checked={item?.userName ? switchStates[item?.userName] : true}
+                  // checked={true}
                   onChange={(checked) => onSwitchToggle(item, checked)}
                 />
               </div>

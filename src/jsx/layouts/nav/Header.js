@@ -49,6 +49,7 @@ import Profile from "./profile";
 import { getResponePopup } from "../../../utils/reusable";
 import { getHeaderLoge } from "../../../pages/twofactorauthentication/reusableFun";
 import { actions as tinActions } from "../../../stores/tenantAdmin/tin";
+import { actions as tableAction } from "../../../stores/tableView";
 
 const Header = ({
   notificationResponse,
@@ -84,6 +85,7 @@ const Header = ({
   getPageRendering,
   getAllTin,
   tinDetails,
+  getTableData,
 }) => {
   const router = useRouter();
   const fileInputRef = useRef(null);
@@ -269,6 +271,11 @@ const Header = ({
   const handleSettingsClick = () => {
     router.push("/tenantadmin/settings");
   };
+
+  useEffect(() => {
+    getTableData({reloadTrue:true});
+  }, []);
+
   useEffect(() => {
     if (selectedbtn) {
       getCoderDetails({
@@ -1158,6 +1165,7 @@ const enhancer = connect(
     getAllRoles: authActions.allRoles,
     getPageRendering: tinActions.pageRendering,
     getAllTin: authActions.tinsDropdown,
+    getTableData: tableAction.tableViewAction,
   }
 );
 export default enhancer(Header);

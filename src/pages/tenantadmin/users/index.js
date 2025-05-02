@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import { useRouter } from "next/router";
 import "react-facebook-loading/dist/react-facebook-loading.css";
 import { actions as tableAction } from "../../../stores/tableView";
+import { actions as tenantAdminAction } from "../../../stores/tenantAdmin/users";
 import { getStorage, setStorage } from "../../../utils/storages";
 import ReusableFilters from "../../../components/reusableFilters";
 import AppTable from "../../../components/tables";
@@ -23,9 +24,13 @@ const Users = ({
   isReAssigned,
   patientAllocated,
   tableDynamicColumnReset,
+  getEnableUser
 }) => {
   const router = useRouter();
   const [activeFilters, setActiveFilters] = useState([]);
+  const [switchStates, setSwitchStates] = useState({});
+  const [isLoading, setIsLoading] = useState(false);
+  
   const [sort, setSort] = useState({
     allocatedOn: {
       sortDir: "DESC",
@@ -125,6 +130,28 @@ const Users = ({
       getResponePopup(error?.response);
     }
   };
+  const handleSwitchToggle = async (item, checked) => {
+    if (isLoading) return;
+    setIsLoading(true);
+    setSwitchStates((prevStates) => ({
+      ...prevStates,
+      [item.userName]: checked,
+    }));
+
+    try {
+      const res = await getEnableUser({
+        checked: checked ? "yes" : "no",
+        user: item,
+      });
+      if (res?.status === "SUCCESS") {
+        getUsersAPi();
+      }
+    } catch (error) {
+      console.error("Error toggling switch:", error);
+    }
+    setIsLoading(false);
+  };
+
   const handleReset = async () => {
     setIsResetting(true);
 
@@ -151,6 +178,16 @@ const Users = ({
       )
     );
   }, [data?.response?.metaDataDTO]);
+
+    useEffect(() => {
+      if (data?.response?.pageResponse?.content) {
+        const initialSwitchStates = {};
+        data?.response?.pageResponse?.content.forEach((user) => {
+          initialSwitchStates[user.userName] = user.active;
+        });
+        setSwitchStates(initialSwitchStates);
+      }
+    }, [data?.response?.pageResponse?.content]);
 
   return (
     <div className={`show `}>
@@ -217,6 +254,8 @@ const Users = ({
               totalRecords={data?.response?.pageResponse?.totalElements}
               row={15}
               onPageChange={onPageChange}
+              switchStates={switchStates}
+              onSwitchToggle={handleSwitchToggle}
             />
           </div>
           <div>
@@ -238,6 +277,8 @@ const enhancer = connect(
     getTableData: tableAction.tableViewAction,
     tableDynamicColumn: tableAction.tableDynamicColumn,
     tableDynamicColumnReset: tableAction.tableDynamicColumnReset,
+    getEnableUser: tenantAdminAction.getEnableUser,
+    
   }
 );
 export default enhancer(Users);

@@ -155,7 +155,6 @@ const Tin = ({
   tinCount,
   setTinStatus,
   getTableDataChecked,
-
 }) => {
   const tabs = getAccessTabItems({ page: "Tin", tabsMenu: "tabMenuList" });
   const activeTab = activeTabName || tabs?.[0] || "Active";
@@ -196,16 +195,16 @@ const Tin = ({
   const [checkedLoader, setCheckedLoader] = useState(false);
   const [checkedHeader, setCheckedHeader] = useState(false);
   const [parsedData, setParsedData] = useState([]);
-  
+
   const gotoPatientDetails = (rowData) => {
     setStorage("patientId", rowData.patientId);
     setStorage("tinNumber", rowData.tinNumber);
     setStorage("routeBackTo", "/tenantadmin/tin");
     setStorage("activeTabTin", activeTab);
 
-    getProjectActiveTab({
-      tinFilter: params,
-    });
+    // getProjectActiveTab({
+    //   tinFilter: params,
+    // });
 
     router.push("/tenantadmin/tin/tindetails?tab=Patients");
   };
@@ -216,8 +215,8 @@ const Tin = ({
     getProjectActiveTab({ tinTabName: name });
     setPageNo(0);
     getAllTins(name);
-    setSelectedRowsId([])
-    setSelectedRows([])
+    setSelectedRowsId([]);
+    setSelectedRows([]);
   };
   const onPageChange = (e) => {
     setPaginationFirst(e.first);
@@ -268,7 +267,6 @@ const Tin = ({
           );
           setSelectedRowsId(result);
           setSelectedUserName(result);
-          
         }
         setCheckedLoader(false);
       } else {
@@ -300,7 +298,6 @@ const Tin = ({
       });
     }
   };
-
 
   const handleSubmit = async () => {
     setIsSubmitting(true);
@@ -409,7 +406,6 @@ const Tin = ({
       isActive: activeTab === "InActive" ? true : false,
     };
 
-
     try {
       const response = await setTinStatus({ payload });
       if (response?.status === "SUCCESS") {
@@ -479,7 +475,7 @@ const Tin = ({
       roleId: "",
       projectId: "test",
       allTinIds: false,
-      sort
+      sort,
     });
   };
   const handleSwitchToggle = async (item, checked) => {};
@@ -490,7 +486,14 @@ const Tin = ({
       getAllTins();
       getTinCountData();
     }
-  }, [pageNo, paramsFilter, pageLoad, selectedDateRanges, selectedOption,sort]);
+  }, [
+    pageNo,
+    paramsFilter,
+    pageLoad,
+    selectedDateRanges,
+    selectedOption,
+    sort,
+  ]);
 
   useEffect(() => {
     setActiveFilters(
@@ -499,6 +502,16 @@ const Tin = ({
       )
     );
   }, [data?.response?.metaDataDTO]);
+
+  // useEffect(() => {
+  //   if (data?.response?.pageResponse?.content) {
+  //     const initialSwitchStates = {};
+  //     data?.response?.pageResponse?.content.forEach((user) => {
+  //       initialSwitchStates[user.providerNpi] = user.active;
+  //     });
+  //     setSwitchStates(initialSwitchStates);
+  //   }
+  // }, [data?.response?.pageResponse?.content]);
 
   return (
     <div className={`show`}>
