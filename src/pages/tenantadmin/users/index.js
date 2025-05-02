@@ -183,7 +183,7 @@ const Users = ({
       if (data?.response?.pageResponse?.content) {
         const initialSwitchStates = {};
         data?.response?.pageResponse?.content.forEach((user) => {
-          initialSwitchStates[user.userName] = user.active;
+          initialSwitchStates[user.userName] = user.accountStatus;
         });
         setSwitchStates(initialSwitchStates);
       }

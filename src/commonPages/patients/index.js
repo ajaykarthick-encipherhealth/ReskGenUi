@@ -411,7 +411,7 @@ const Patient = ({
       setIsLoadingBtn(true);
       const response = await getPatientId({ obj: formData });
       if (response?.status === "SUCCESS") {
-      getPatients()
+        getPatients();
         setPageNo(0);
         setAddPatientId(false);
         setIsLoadingBtn(false);
@@ -449,13 +449,11 @@ const Patient = ({
       setStorage("patientId", data?.patientId);
       var role = getStorage("userRole");
 
-        // setStorage("routeBackTo", "/tenantadmin/tin/tindetails");
-        getRoutedData(page);
-        navigate.push({
-          pathname: route ? route : "/tenantadmin/patients/details",
-        });
-
-    
+      // setStorage("routeBackTo", "/tenantadmin/tin/tindetails");
+      getRoutedData(page);
+      navigate.push({
+        pathname: route ? route : "/tenantadmin/patients/details",
+      });
     } else {
       notification.warning({
         message: data?.patientId + " file not processed. Please wait.",
@@ -563,12 +561,12 @@ const Patient = ({
       form.resetFields();
       setEmrType("");
       setInputValue({});
-      getPatients()
+      getPatients();
     }
     if (response?.result == "SUCCESS") {
       setAddPatient(false);
       setSelectFile(formData);
-      getPatients()
+      getPatients();
       setPageNo(0);
       handleClose();
       setIsLoadingBtn(false);
@@ -605,7 +603,7 @@ const Patient = ({
       const res = await getRetreggerPatient({ patientId: data.patientId });
       if (res.status == "SUCCESS") {
         getResponePopup(res);
-      getPatients()
+        getPatients();
       }
     } catch (error) {}
   };
@@ -732,12 +730,10 @@ const Patient = ({
   //   });
   // };
 
-
   const getPatients = async () => {
     const tin = getStorage("tinNumber");
     const userId = getStorage("userId");
     let pageId = "d80f80fd-aab8-496e-a9fc-89677d5ac174";
-
 
     if (navigate.pathname === "/tenantadmin/project") {
       pageId = "c41d4ea9-6da4-495c-84f4-95b25d6c13b4";
@@ -776,7 +772,7 @@ const Patient = ({
     selectedDateRanges,
     sort,
     paramsFilter,
-    pageLoad
+    pageLoad,
   ]);
   useEffect(() => {
     getAllBatchList();
@@ -810,8 +806,13 @@ const Patient = ({
   };
   const handleSubmitInsert = async () => {
     setIsSubmitting(true);
+    let pageId = "d80f80fd-aab8-496e-a9fc-89677d5ac174";
+
+    if (navigate.pathname === "/tenantadmin/project") {
+      pageId = "c41d4ea9-6da4-495c-84f4-95b25d6c13b4";
+    }
     const payload = {
-      pageId: "c41d4ea9-6da4-495c-84f4-95b25d6c13b4",
+      pageId,
       headerNames: test
         .filter((col) => col.active)
         .map((col) => col.actualField),
@@ -831,9 +832,13 @@ const Patient = ({
   };
   const handleReset = async () => {
     setIsResetting(true);
+    let pageId = "d80f80fd-aab8-496e-a9fc-89677d5ac174";
 
+    if (navigate.pathname === "/tenantadmin/project") {
+      pageId = "c41d4ea9-6da4-495c-84f4-95b25d6c13b4";
+    }
     const payload = {
-      pageId: "c41d4ea9-6da4-495c-84f4-95b25d6c13b4",
+      pageId,
     };
     try {
       const response = await tableDynamicColumnReset({ payload });
@@ -882,13 +887,13 @@ const Patient = ({
     setTest(data?.response?.metaDataDTO);
   }, []);
 
-   useEffect(() => {
-      setActiveFilters(
-        data?.response?.metaDataDTO.filter(
-          (item) => item.active && item?.filter?.style
-        )
-      );
-    }, [data?.response?.metaDataDTO]);
+  useEffect(() => {
+    setActiveFilters(
+      data?.response?.metaDataDTO.filter(
+        (item) => item.active && item?.filter?.style
+      )
+    );
+  }, [data?.response?.metaDataDTO]);
 
   return (
     <div className={`show `}>
@@ -973,7 +978,11 @@ const Patient = ({
                 // }
                 getRetregger={getRetregger}
                 // column={columns}
-                data={statusUpdateWebSocket?statusUpdateWebSocket:data?.response?.pageResponse?.content}
+                data={
+                  statusUpdateWebSocket
+                    ? statusUpdateWebSocket
+                    : data?.response?.pageResponse?.content
+                }
                 column={data?.response?.metaDataDTO.filter(
                   (item) => item.active
                 )}
