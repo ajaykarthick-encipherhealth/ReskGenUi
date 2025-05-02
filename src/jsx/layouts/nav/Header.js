@@ -122,8 +122,13 @@ const Header = ({
   const [selectedFile, setSelectedFile] = useState(null);
   const [loading, setLoading] = useState(false);
   const [selectedClient, setSelectedClient] = useState(null);
+  const [backupSelectedClient, setBackupSelectedClient] = useState(null);
+  const [backupSelectedProject, setBackupSelectedProject] = useState(null);
   const [selectedProject, setSelectedProject] = useState(null);
   const [selectedTin, setSelectedTin] = useState(null);
+  const [roles, setRoles] = useState([]);
+  const [projectList, setProjectList] = useState([]);
+
   const proxyRole = getStorage("proxyRole");
   const showDrawer = () => {
     setOpened(true);
@@ -208,23 +213,18 @@ const Header = ({
   }));
 
   const onClick = ({ key }) => {
-    const allRoles = JSON.parse(getStorage("userAllRoles"));
-    const selectedRoleObj = allRoles?.find((res) => res.proxyRole === key);
+    setStorage("proxyRole", key);
     setStorage("userRole", key);
-    setStorage("proxyRole", selectedRoleObj?.proxyRole);
-    setStorage("roleId", selectedRoleObj?.roleId);
-    setStorage("aliasName", selectedRoleObj?.aliasName);
     if (key === "Admin") {
       router.push("/admin/dashboard");
     } else if (key === "CODER_1" || key === "CODER_2" || key === "QA") {
-      // router.push("/reviewer/dashboard");
-      if (router?.pathname != "/reviewer/dashboard") {
-        router.push("/reviewer/dashboard");
-      } else {
-        router.push("/reviewer/dashboard").then(() => {
-          window.location.reload();
-        });
-      }
+      // if (router?.pathname != "/reviewer/dashboard") {
+      router.push("/reviewer/dashboard");
+      // } else {
+      //   router.push("/reviewer/dashboard").then(() => {
+      //     window.location.reload();
+      //   });
+      // }
     } else if (key === "Supervisor") {
       router.push("/supervisor/dashboard");
     } else if (key === "TENANT_ADMIN") {
@@ -235,21 +235,19 @@ const Header = ({
   };
   const getMenuListByRole = (role) => {
     const accessMenuList = JSON.parse(getStorage("accessMenuList"));
-    const allRoles = JSON.parse(getStorage("userAllRoles"));
-    const selectedRoleObj = allRoles?.find((res) => res.proxyRole === role);
     switch (role) {
       case "admin":
         return AdminMenuList;
       case "CODER_1":
-        return PhysicanMenuList(selectedRoleObj?.accessList);
+        return PhysicanMenuList(accessMenuList);
       case "CODER_2":
-        return PhysicanMenuList(selectedRoleObj?.accessList);
+        return PhysicanMenuList(accessMenuList);
       case "QA":
-        return PhysicanMenuList(selectedRoleObj?.accessList);
+        return PhysicanMenuList(accessMenuList);
       case "supervisor":
         return L2AuditorMenuList;
       case "TENANT_ADMIN":
-        return ProviderMenuList(selectedRoleObj?.accessList);
+        return ProviderMenuList(accessMenuList);
       case "ehr":
         return EHRMenuList;
       case "record analyst":
@@ -376,7 +374,7 @@ const Header = ({
     const userId = getStorage("userId");
     const userRole = getStorage("proxyRole");
     const tenentId = getStorage("tenantId");
-    getCurrentUserInfo({ userId });
+    // getCurrentUserInfo({ userId });
     setUserRole(userRoleLocal);
     setCurrentRole(userRole);
     setTenentId(tenentId);
@@ -595,7 +593,7 @@ const Header = ({
           status: "SUCCESS",
           message: "Profile Deleted Successfully!",
         });
-        getCurrentUserInfo({ userId });
+        // getCurrentUserInfo({ userId });
       } else {
         getResponePopup(res);
       }
@@ -603,10 +601,6 @@ const Header = ({
       console.error("error deleting profile", error);
     }
   };
-  const projectOptions = projectDetails?.map((client) => ({
-    label: client.projectName,
-    value: client.id,
-  }));
 
   const TinOptions = tinDetails?.map((client) => ({
     label: client.tinName,
@@ -623,14 +617,28 @@ const Header = ({
     const defaultProject = getStorage("project");
 
     if (defaultClient) setSelectedClient(defaultClient);
+    setBackupSelectedClient(defaultClient);
     if (defaultProject) setSelectedProject(defaultProject);
+    setBackupSelectedProject(defaultProject);
   }, []);
 
-  const handleClientChange = (value) => {
+  const handleClientChange = async (value) => {
+    setStorage("client", value.value);
     setSelectedClient(value);
-    setSelectedProject(null);
-    setStorage("client", value);
-    getPageRendering(value);
+    const res = await getAllProjects();
+    if (res?.response?.length === 0) {
+      setSelectedClient(backupSelectedClient);
+      setStorage("client", backupSelectedClient);
+      return getResponePopup({
+        status: "EXCEPTION",
+        message: "No projects",
+        duration: 5,
+      });
+    } else {
+      getProjectDataList();
+      setSelectedProject(res?.response[0]?.id);
+      setStorage("project", res?.response[0]?.id);
+    }
   };
 
   const handleTinChange = (value) => {
@@ -639,24 +647,108 @@ const Header = ({
     getPageRendering(value);
   };
 
-  const handleProjectChange = (value) => {
+  const handleProjectChange = async (value) => {
     setSelectedProject(value);
-    setStorage("project", value);
-    getPageRendering(value);
+    setStorage("project", value.value);
+
+    const res = await getAllRoles();
+    if (res?.response?.userRoles?.length === 0) {
+      setSelectedProject(backupSelectedProject);
+      setStorage("project", backupSelectedProject);
+      return getResponePopup({
+        status: "EXCEPTION",
+        message: "No Roles",
+        duration: 5,
+      });
+    } else {
+      // getProjectDataList();
+      getPageRendering(value);
+      getRoles();
+    }
+  };
+
+  const getRoles = async () => {
+    const res = await getAllRoles();
+    if (res.status == "SUCCESS") {
+      const data = res?.response?.userRoles?.map((data) => ({
+        label: data.proxyRole,
+        key: data.proxyRole,
+        details: data,
+      }));
+      if (data?.length > 0) {
+        setRoles(data);
+        setStorage(
+          "accessMenuList",
+          JSON.stringify(data[0].details.accessList)
+        );
+        setStorage("roleId", data[0].details?.roleId);
+        // setStorage("proxyRole", data[0].label);
+        onClick({ key: data[0].label });
+        setCurrentRole(data[0].label);
+        setMenuList(getMenuListByRole(data[0].label));
+      }
+    }
+  };
+
+  const getRole = async () => {
+    const res = await getAllRoles();
+    if (res.status == "SUCCESS") {
+      const data = res?.response?.userRoles?.map((data) => ({
+        label: data.proxyRole,
+        key: data.proxyRole,
+        details: data,
+      }));
+
+      setRoles(data);
+      setCurrentRole(data[0].label);
+    }
+  };
+
+  const getProjectDataList = async () => {
+    const res = await getAllProjects();
+    if (res.status == "SUCCESS") {
+      const projectOptions = res.response?.map((client) => ({
+        label: client.projectName,
+        value: client.id,
+      }));
+      setProjectList(projectOptions);
+      const res1 = await getAllRoles();
+      if (res1?.response?.userRoles?.length === 0) {
+        setSelectedClient(backupSelectedProject);
+        setStorage("project", backupSelectedProject);
+        return getResponePopup({
+          status: "EXCEPTION",
+          message: "No Roles",
+        });
+      } else {
+        getRoles();
+      }
+    }
+  };
+  const getProjectDataLists = async () => {
+    const res = await getAllProjects();
+    if (res.status == "SUCCESS") {
+      const projectOptions = res.response?.map((client) => ({
+        label: client.projectName,
+        value: client.id,
+      }));
+      setProjectList(projectOptions);
+    }
   };
 
   useEffect(() => {
-    getAllProjects();
-  }, [selectedProject, pageLoad]);
+    getProjectDataLists();
+  }, [pageLoad]);
+
   useEffect(() => {
     getAllClientDetails();
-  }, [selectedClient, pageLoad]);
+  }, [pageLoad]);
 
   useEffect(() => {
     getAllTin();
-  }, [selectedTin, pageLoad]);
+  }, [pageLoad]);
   useEffect(() => {
-    getAllRoles();
+    getRole();
   }, []);
   return (
     <div className={`header ${headerFix ? "is-fixed" : ""}`}>
@@ -690,7 +782,7 @@ const Header = ({
                     placeholder="Client"
                     style={{ width: 150 }}
                     value={selectedClient}
-                    onChange={handleClientChange}
+                    onChange={(e, value) => handleClientChange(value)}
                     options={clientOptions}
                   />
                 </div>
@@ -699,8 +791,8 @@ const Header = ({
                     placeholder="Sample Project"
                     style={{ width: 150 }}
                     value={selectedProject}
-                    onChange={handleProjectChange}
-                    options={projectOptions}
+                    onChange={(e, value) => handleProjectChange(value)}
+                    options={projectList}
                   />
                 </div>
                 {proxyRole === "QA" && (
@@ -809,27 +901,6 @@ const Header = ({
                             setDrawerWidth={setDrawerWidth}
                           />
                         </Drawer>
-                        {/* NOTE i remove userRole !== "admin" logic because PRAVIN
-                        told me to show admin also, so if Logesh ask anything to
-                        this please tell him like this */}
-                        {/* {(userRole !== "tenant_admin" || userRole != "reviewer") && (
-                          <Popover
-                            content={PopContent}
-                            placement="bottom"
-                            trigger={"click"}
-                            open={popoverVisible}
-                            onOpenChange={handleOpenChange}
-                          >
-                            <Button className={styles.codeBtn}>
-                              <div style={{ margin: " -7px 0 0 -25px" }}>
-                                <CodeIcon />
-                              </div>
-                              <div style={{ margin: " -6px 0 0 -7px" }}>
-                                Codes
-                              </div>
-                            </Button>
-                          </Popover>
-                        )} */}
                         {userRole === "CODER_1" ||
                           (userRole === "CODER_2" && (
                             <Tooltip
@@ -975,12 +1046,12 @@ const Header = ({
                             {userName}
                           </div>
 
-                          {items?.length > 0 && userIdDetails != "" ? (
+                          {roles?.length > 0 && userIdDetails != "" ? (
                             <span className="ms-2 d-flex mt-1 d-flex">
                               <Dropdown
                                 menu={{
-                                  items,
-                                  defaultSelectedKeys: userRole,
+                                  items: roles,
+                                  defaultSelectedKeys: currentRole,
                                   onClick,
                                 }}
                                 trigger={["click"]}
@@ -1005,7 +1076,8 @@ const Header = ({
                               className="text-[#4F4F4F] ms-2 text-truncate subHeader-name d-flex mr-3"
                               style={{ fontWeight: "500", fontSize: "6px" }}
                             >
-                              {currentRole?.replace(/_/g, " ")}
+                              {/* {currentRole?.replace(/_/g, " ")} */}
+                              {proxyRole}
                             </span>
                           )}
                         </div>
