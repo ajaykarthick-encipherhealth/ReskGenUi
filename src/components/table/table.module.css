@@ -107,7 +107,7 @@
   margin-left: 20px;
 }
 .classTable tbody tr:hover {
-  cursor: pointer;
+  /* cursor: pointer; */
   border-radius: 10px 10px 10px 10px !important;
   background-color: #ffff !important;
 }
