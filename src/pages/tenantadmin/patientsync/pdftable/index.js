@@ -181,7 +181,7 @@ const DetailedViewPdfTable = ({
     // removeStorage("patientSyn  cEncodedValue");
     // router.push("/tenantadmin/patientSync");
     setSelectedDates(params?.selectedDates);
-    setSelecteddateRanges(params?.selectedDateRanges);
+      // setSelecteddateRanges(params?.selectedDateRanges);
     setListSearch(params?.search);
     setSelectedOptions(params?.selectedOptions);
     setListPageNo(params?.pageNo);

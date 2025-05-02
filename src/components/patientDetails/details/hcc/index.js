@@ -767,7 +767,7 @@ const Hcc = ({
                         ) : null}
                       </div>
                     </Nav.Item>
-                    <div className="d-flex gap-3 mt-1">
+            
                       <Nav.Item as="li" className="nav-item">
                         <Popover
                           open={actions.showActionsPop}
@@ -781,8 +781,9 @@ const Hcc = ({
                             })
                           }
                         >
+                       
                           <button
-                            className={`${visitStyles.actionBtn} px-3 py-1 rounded-md`}
+                            className={`${visitStyles.actionBtn} px-3 py-1 mx-2 rounded-md`}
                             onClick={() =>
                               setActions({
                                 ...actions,
@@ -795,10 +796,10 @@ const Hcc = ({
                         </Popover>
                       </Nav.Item>
 
-                      {activeTabName?.tinDetailsTab == "Query Approval" &&
-                        (proxyRole === "OWNER" ||
+                      {
+                        (
                           proxyRole === "TENANT_ADMIN") && (
-                          <>
+                          <div className="d-flex gap-2">
                             <Nav.Item as="li" className="nav-item">
                               <Popconfirm
                                 placement="bottom"
@@ -826,7 +827,7 @@ const Hcc = ({
                                 Reject
                               </Button>
                             </Nav.Item>
-                          </>
+                          </div>
                         )}
 
                       <Nav.Item as="li" className="nav-item">
@@ -841,7 +842,7 @@ const Hcc = ({
                             </Button>
                           )} */}
                       </Nav.Item>
-                    </div>
+         
                   </div>
                 </Nav>
               </div>

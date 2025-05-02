@@ -253,8 +253,8 @@ const File = ({
         }
       >
         <div
-        id="hcc-container"
-        name="hcc-container"
+          id="hcc-container"
+          name="hcc-container"
           className="my-post-content row pt-3 px-2"
           style={{ height: "100%" }}
         >
@@ -264,13 +264,15 @@ const File = ({
                 {(provided) => {
                   return (
                     <div
-                    id="hcc-content"
-                    name="hcc-content"
+                      id="hcc-content"
+                      name="hcc-content"
                       className="timeline"
                       {...provided.droppableProps}
                       ref={provided.innerRef}
                     >
-                      <div id="hcc-title" name="hcc-title"
+                      <div
+                        id="hcc-title"
+                        name="hcc-title"
                         className={`valid-text d-flex justify-content-sm-between ${visitStyles.hcc_title_card}`}
                       >
                         <span className={`${visitStyles.hcc_title_name}`}>
@@ -288,8 +290,16 @@ const File = ({
                           </span>
                         </div>
                       </div>
-                      <div className={visitStyles.HccContainer} id="hcc-content-container" name="hcc-content-container">
-                        <div className={visitStyles.hccStickey_head} id="hcc-sticky" name="hcc-sticky">
+                      <div
+                        className={visitStyles.HccContainer}
+                        id="hcc-content-container"
+                        name="hcc-content-container"
+                      >
+                        <div
+                          className={visitStyles.hccStickey_head}
+                          id="hcc-sticky"
+                          name="hcc-sticky"
+                        >
                           {isSpinnerLoading ? (
                             <CardSkeleton count={6} />
                           ) : (
@@ -339,7 +349,7 @@ const File = ({
             </div>
           ) : null}
           {isFileFormShow && (
-            <div className={"col-1"}>
+            <div className={"col-1"} onClick={() => handleCloseModal()}>
               <Button
                 onClick={() => handleCloseModal()}
                 className={`ms-2 ${visitStyles.backArrowBtn}`}
@@ -790,7 +800,11 @@ const File = ({
           <div className="col-4">
             <div
               // className="px-1"
-              style={{ height: "90vh", overflowY: "scroll" ,overflowX: "hidden"}}
+              style={{
+                height: "90vh",
+                overflowY: "scroll",
+                overflowX: "hidden",
+              }}
             >
               <ManuallyAdd
                 handleCloseModal={handleCloseModal}
