@@ -26,6 +26,8 @@ const SelectProject = ({
   const [isLoading, setIsLoading] = useState(true);
   const [loading, setLoading] = useState(false);
   const [loadingClients, setLoadingClients] = useState(true);
+  const [selectValue, setSelectValue] = useState([]);
+
 
   const clientOptions = clientDetails?.map((client) => ({
     label: client.clientName,
@@ -47,6 +49,11 @@ const SelectProject = ({
     setConfirmModal(false);
     loginSuccessCallBack();
   };
+
+  
+
+
+
   useEffect(() => {
     if (clientIdData?.userName) {
       setStorage("userId", clientIdData.userName);
@@ -75,6 +82,8 @@ const SelectProject = ({
 
   useEffect(() => {
     getAllClientId();
+    setSelectValue(getStorage("client") && getStorage("client"))
+    setSelectClient(getStorage("client") && getStorage("client"))
   }, []);
 
   // useEffect(() => {
@@ -107,6 +116,8 @@ const SelectProject = ({
   if (isLoading) {
     return <div>{/* <PageLoading /> */}</div>;
   }
+
+
   return (
     <div className="page-wraper">
       <div className="login-account">
@@ -179,7 +190,9 @@ const SelectProject = ({
                       onChange={(value) => {
                         setSelectClient(value?.toLowerCase());
                         setClientError(false);
+                        setSelectValue(value)
                       }}
+                      value={selectValue}
                       options={clientOptions}
                       notFoundContent={
                         loadingClients ? (

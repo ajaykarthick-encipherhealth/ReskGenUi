@@ -16,7 +16,8 @@ const SelectClient = ({ projectDetails, getAllProjects }) => {
   const [clientError, setClientError] = useState(false);
   const [confirmModal, setConfirmModal] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [loadingProject, setLoadingProject] = useState(true); 
+  const [loadingProject, setLoadingProject] = useState(true);
+  const [selectValue, setSelectValue] = useState([]);
 
   const onSubmit = async (e) => {
     e.preventDefault();
@@ -38,20 +39,26 @@ const SelectClient = ({ projectDetails, getAllProjects }) => {
     value: client.id,
   }));
   const projectGetApi = async () => {
-        setLoadingProject(true);
+    setLoadingProject(true);
     try {
       const response = await getAllProjects();
       if (response?.status !== "SUCCESS") {
         getResponePopup(response);
-      } 
+      }
     } catch (error) {
       getResponePopup(error);
     } finally {
-      setLoadingProject(false); 
+      setLoadingProject(false);
     }
   };
+
   useEffect(() => {
     projectGetApi();
+  }, []);
+
+  useEffect(() => {
+    setSelectValue(getStorage("project") && getStorage("project"));
+    setSelectClient(getStorage("project") && getStorage("project"));
   }, []);
 
   return (
@@ -98,15 +105,17 @@ const SelectClient = ({ projectDetails, getAllProjects }) => {
                       onChange={(value) => {
                         setSelectClient(value?.toLowerCase());
                         setClientError(false);
+                        setSelectValue(value);
                       }}
                       options={projectOptions}
+                      value={selectValue}
                       notFoundContent={
                         loadingProject ? (
                           <div className="d-flex justify-content-center align-items-center">
                             <Spin size="small" />
                           </div>
                         ) : null
-                      } 
+                      }
                     />
                     {clientError && (
                       <span className="text-danger fs-12">
@@ -121,9 +130,17 @@ const SelectClient = ({ projectDetails, getAllProjects }) => {
                   name="next-btn"
                 >
                   <RegularButton
+                    onClick={() => {
+                      router?.push(`/projects`);
+                    }}
+                    type="outline"
+                    name="BACK"
+                    width="240px"
+                  />
+                  <RegularButton
                     type="submit"
                     name="NEXT"
-                    width="440px"
+                    width="240px"
                     loading={loading}
                   />
                 </div>
