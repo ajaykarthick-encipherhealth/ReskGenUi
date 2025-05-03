@@ -4,14 +4,14 @@ import { useRouter } from "next/router";
 import "react-facebook-loading/dist/react-facebook-loading.css";
 import { actions as tableAction } from "../../../stores/tableView";
 import { actions as tenantAdminAction } from "../../../stores/tenantAdmin/users";
-import { getStorage, setStorage } from "../../../utils/storages";
 import ReusableFilters from "../../../components/reusableFilters";
 import AppTable from "../../../components/tables";
 import Header from "../../../jsx/layouts/nav/Header";
-import { getResponePopup } from "../../../utils/reusable";
+import { findItemWithTrueKey, getResponePopup } from "../../../utils/reusable";
 import CardSkeleton from "../../../components/skeleton/card";
-import { Button } from "antd";
+import { Button, Popover, Select } from "antd";
 import Usersmodal from "./usersmodal";
+import {actions as allActions} from '../../../stores/tenantAdmin/users'
 
 const Users = ({
   pageLoad,
@@ -20,17 +20,17 @@ const Users = ({
   tableDynamicColumn,
   pageId,
   data,
-  isQueried,
-  isReAssigned,
-  patientAllocated,
+  getAllRoles,
   tableDynamicColumnReset,
-  getEnableUser
+  getEnableUser,
+  allRoles
 }) => {
   const router = useRouter();
   const [activeFilters, setActiveFilters] = useState([]);
   const [switchStates, setSwitchStates] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   
+
   const [sort, setSort] = useState({
     allocatedOn: {
       sortDir: "DESC",
@@ -59,6 +59,9 @@ const Users = ({
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isResetting, setIsResetting] = useState(false);
   const [usersModal, setUsersModal] = useState(false);
+  const [selectedItem, setSelectedItem] = useState(null);
+const [selectedRole, setSelectedRole] = useState(null);
+
 
   const onPageChange = (e) => {
     setPaginationFirst(e.first);
@@ -86,8 +89,8 @@ const Users = ({
       sort: sort,
       selectedDateRanges,
       searchText: searchText,
-      pageId:"8e4f1d2a-7b3c-45e6-9f1d-2a7b3c45e6f1",
-      cilentBased : true
+      pageId: "8e4f1d2a-7b3c-45e6-9f1d-2a7b3c45e6f1",
+      cilentBased: true,
     });
   };
 
@@ -171,6 +174,44 @@ const Users = ({
     }
   };
 
+  const roles = allRoles?.content?.map((item) => ({
+      value: item?.roleId,
+      label: `${item?.roleName}`,
+    }))
+    const content = () => (
+      <>
+        <Select
+          options={roles}
+          placeholder="Select the role"
+          style={{ width: "100%" }}
+          value={selectedRole}
+          onChange={(value) => setSelectedRole(value)}
+        />
+        <div className="d-flex align-items-center justify-content-center mt-3">
+          <Button
+            data-testid="table-custom"
+            name="table-custom"
+            onClick={() => {
+              // You can trigger your API here using selectedItem and selectedRole
+              console.log("Submitting role change for:", selectedItem?.id, selectedRole);
+            }}
+            className="btn btn-sm w-full text-ellipsis tableButton"
+          >
+            Submit
+          </Button>
+        </div>
+      </>
+    );
+    
+
+  const handleAction = (item) => {
+    console.log(item,"item")
+    setSelectedItem(item);
+    setSelectedRole(item?.roleId);
+  };
+  console.log(selectedRole)
+  
+
   useEffect(() => {
     setActiveFilters(
       data?.response?.metaDataDTO.filter(
@@ -179,15 +220,20 @@ const Users = ({
     );
   }, [data?.response?.metaDataDTO]);
 
-    useEffect(() => {
-      if (data?.response?.pageResponse?.content) {
-        const initialSwitchStates = {};
-        data?.response?.pageResponse?.content.forEach((user) => {
-          initialSwitchStates[user.userName] = user.accountStatus;
-        });
-        setSwitchStates(initialSwitchStates);
-      }
-    }, [data?.response?.pageResponse?.content]);
+  useEffect(() => {
+    if (data?.response?.pageResponse?.content) {
+      const initialSwitchStates = {};
+      data?.response?.pageResponse?.content.forEach((user) => {
+        initialSwitchStates[user.userName] = user.accountStatus;
+      });
+      setSwitchStates(initialSwitchStates);
+    }
+  }, [data?.response?.pageResponse?.content]);
+
+
+  useEffect(()=>{
+    getAllRoles()
+  },[])
 
   return (
     <div className={`show `}>
@@ -229,7 +275,7 @@ const Users = ({
               </div>
               <div
                 id="assign-btn"
-                name="assign-btn" 
+                name="assign-btn"
                 className="d-flex justify-content-center align-items-center  mt-4"
               >
                 <Button
@@ -256,10 +302,17 @@ const Users = ({
               onPageChange={onPageChange}
               switchStates={switchStates}
               onSwitchToggle={handleSwitchToggle}
+              isEdit={findItemWithTrueKey(data?.response?.staticDesign, "edit")}
+              handleAction={handleAction}
+              content={content}
             />
           </div>
           <div>
-            <Usersmodal getUsersAPi={getUsersAPi} open={usersModal} setOpen={setUsersModal} />
+            <Usersmodal
+              getUsersAPi={getUsersAPi}
+              open={usersModal}
+              setOpen={setUsersModal}
+            />
           </div>
         </div>
       </div>
@@ -272,13 +325,14 @@ const enhancer = connect(
     data: state?.tableView?.tableView?.data,
     tableStatus: state?.tableView?.TableStatusView?.data?.response,
     pageLoad: state?.tenantAdmin?.tin?.getPageRendering,
+    allRoles: state?.tenantAdmin?.users?.getUsersRoles?.data?.response,
   }),
   {
     getTableData: tableAction.tableViewAction,
     tableDynamicColumn: tableAction.tableDynamicColumn,
     tableDynamicColumnReset: tableAction.tableDynamicColumnReset,
     getEnableUser: tenantAdminAction.getEnableUser,
-    
+    getAllRoles: allActions.usersAllRoles,
   }
 );
 export default enhancer(Users);

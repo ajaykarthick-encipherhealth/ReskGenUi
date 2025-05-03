@@ -61,7 +61,7 @@ function StatusCard({
             </div>
           </>
         )}
-        <div className="text-muted small mt-2">{date}</div>
+        <div className="text-muted small mt-2">{date?date:"---"}</div>
       </div>
     </div>
   );

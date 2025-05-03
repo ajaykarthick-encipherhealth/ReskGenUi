@@ -2,6 +2,7 @@ import React from "react";
 import StatusCard from "./card";
 import { Empty } from "antd";
 import TableSkeleton from "../../../../skeleton/table";
+import { convertUsFormat } from "../../../../../utils/reusable";
 
 const Index = ({ queriedData, queriedLoader }) => {
   return (
@@ -22,8 +23,8 @@ const Index = ({ queriedData, queriedLoader }) => {
               name={item.queryByName.toUpperCase()}
               status={item.approvalStatus}
               reason={item.queryReason}
-              date={item.queriedOn}
-              queriedto={item.queryToName}
+              date={convertUsFormat(item.performedOn)}
+              queriedto={item.queriedTo}
               queriedByUserName={item.queriedBy}
             />
           ))

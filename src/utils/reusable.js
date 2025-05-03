@@ -1063,3 +1063,21 @@ export const convertToCustomParamsDatePicker = (obj) => {
 export const checkWithIncludesKey=(list,key) =>{
   return list?.includes(key);
 }
+
+export const convertUsFormat = (indiaDate) => {
+  if (!indiaDate) {
+    return "---";
+  }
+  // Parse the date and time in IST
+  const indiaTime = moment.tz(
+    indiaDate,
+    "YYYY-MM-DDTHH:mm:ss.SSSZ",
+    "Asia/Kolkata"
+  );
+  // Convert the time to US Eastern Standard Time (EST)
+  const usFormattedDate = indiaTime
+    .clone()
+    .tz("America/New_York")
+    .format("MM-DD-YYYY hh:mm A");
+  return usFormattedDate;
+};

@@ -47,6 +47,7 @@ import { faArrowsRotate, faUpload } from "@fortawesome/free-solid-svg-icons";
 import { batchBullets } from "../../commonPages/patients";
 import { useRouter } from "next/router";
 import { Paginator } from "primereact/paginator";
+import { useState } from "react";
 
 const AppTable = ({
   switchStates,
@@ -110,6 +111,7 @@ const AppTable = ({
   idKey,
   handleAction,
   isEdit,
+  content
 }) => {
   if (isCheckBox) {
     column.push({
@@ -124,15 +126,12 @@ const AppTable = ({
       value: "patientId",
     });
   }
-console.log(isEdit,"isEdit")
   if (isEdit) {
     column.push({
       edit: true,
       value: "patientId",
     });
   }
-
-  
   const router = useRouter();
   const columnsArr = Array.from({ length: column?.length || 5 });
   return (
@@ -165,7 +164,7 @@ console.log(isEdit,"isEdit")
                       handleRowCheckboxChange={handleRowCheckboxChange}
                       checkedHeader={checkedHeader}
                       isUpload={isUpload}
-                      isEdit = {isEdit}
+                      isEdit={isEdit}
                     />
                   ))}
                 </tr>
@@ -231,7 +230,8 @@ console.log(isEdit,"isEdit")
                       renderCountDetailsPopover={renderCountDetailsPopover}
                       isUpload={isUpload}
                       handleAction={handleAction}
-                      isEdit = {isEdit}
+                      isEdit={isEdit}
+                      content={content}
                     />
                   ))
                 ) : (
@@ -275,7 +275,7 @@ const TableHeadItem = ({
   handleRowCheckboxChange,
   checkedHeader,
   isUpload,
-  isEdit
+  isEdit,
 }) => {
   if (item.checkBox) {
     return (
@@ -450,9 +450,11 @@ const TableRow = ({
   renderCountDetailsPopover,
   isUpload,
   handleAction,
-  isEdit 
+  content,
 }) => {
   const router = useRouter();
+  const [visiblePopoverKey, setVisiblePopoverKey] = useState(null);
+
   return (
     <tr
       id={
@@ -694,9 +696,7 @@ const TableRow = ({
             </td>
           );
         }
-        console.log(columnItem,"item")
         if (columnItem.edit) {
-        
           return item.accountStatus === true ? (
             <td
               className={Style.childBorder}
@@ -705,27 +705,44 @@ const TableRow = ({
                   item.accountStatus === false ? "#0000001a" : "",
               }}
             >
-                <div
-                  style={{
-                    backgroundColor:
-                      item.accountStatus === false ? "#0000001a" : "",
-                  }}
-                  id={
-                    tableId
-                      ? createIdGen("edit " + tableId + colIndex)
-                      : createIdGen(
-                          "edit " +
-                            router.pathname.replaceAll("/", " ") +
-                            colIndex
-                        )
-                  }
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    handleAction(item);
+              <div
+                style={{
+                  backgroundColor:
+                    item.accountStatus === false ? "#0000001a" : "",
+                }}
+                id={
+                  tableId
+                    ? createIdGen("edit " + tableId + colIndex)
+                    : createIdGen(
+                        "edit " +
+                          router.pathname.replaceAll("/", " ") +
+                          colIndex
+                      )
+                }
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleAction(item);
+                }}
+              >
+                <Popover
+                  content={content}
+                  title="Change Role"
+                  placement="bottom" 
+                  trigger="click"
+                  open={visiblePopoverKey === item.id} 
+                  onOpenChange={(visible) => {
+                    if (visible) {
+                      setVisiblePopoverKey(item.id);
+                    } else {
+                      setVisiblePopoverKey(null);
+                    }
                   }}
                 >
-                  <EditButton />
-                </div>
+                  <div onClick={() => handleAction(item.id)}>
+                    <EditButton />
+                  </div>
+                </Popover>
+              </div>
             </td>
           ) : (
             <td
@@ -751,7 +768,6 @@ const TableRow = ({
             </td>
           );
         }
-
         if (
           columnItem?.design?.includes("DATE") ||
           columnItem?.design === "DATE_TIME"
@@ -791,7 +807,10 @@ const TableRow = ({
           );
         }
 
-        if (findItemWithTrueOrFalse(columnItem.design, "TOGGLE") && switchStates) {
+        if (
+          findItemWithTrueOrFalse(columnItem.design, "TOGGLE") &&
+          switchStates
+        ) {
           return (
             <td
               className={
@@ -1149,11 +1168,9 @@ const TableRow = ({
                     onClick={(e) => {
                       e.stopPropagation();
                     }}
-                 
                     checked={selectedRows?.some(
                       (row) => row === item[columnItem.value]
                     )}
-                    
                     id={
                       tableId
                         ? createIdGen("checkBox " + tableId + colIndex)
