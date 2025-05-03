@@ -221,11 +221,7 @@ const MoveBack = ({
 
   useEffect(() => {
     setParamsFilter("check");
-    if (
-      window !== "undefined" &&
-      paramsFilter &&
-      allRoles?.allocationRoles?.length > 0
-    ) {
+    if (window !== "undefined" && paramsFilter && roleId) {
       getMoveBack();
     }
   }, [
@@ -269,7 +265,6 @@ const MoveBack = ({
       });
     }
   }, [roleId]);
-
   useEffect(() => {
     setActiveFilters(
       data?.response?.metaDataDTO.filter(

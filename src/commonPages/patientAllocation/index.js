@@ -252,7 +252,7 @@ const PatientAllocation = ({
     if (
       window !== "undefined" &&
       paramsFilter &&
-      allRoles?.allocationRoles?.length > 0
+      roleId
     ) {
       getAllAllocation();
     }

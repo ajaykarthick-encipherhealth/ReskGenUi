@@ -163,11 +163,7 @@ const QueryApproval = ({
 
   useEffect(() => {
     setParamsFilter("check");
-    if (
-      window !== "undefined" &&
-      paramsFilter &&
-      allRoles?.allocationRoles?.length > 0
-    ) {
+    if (window !== "undefined" && paramsFilter && roleId) {
       getQueryApproval();
     }
   }, [

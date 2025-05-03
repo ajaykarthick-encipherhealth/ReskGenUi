@@ -75,7 +75,6 @@ const MoveBackTable = ({
       });
     }
   };
-
   return (
     <div className="mt-3">
       <div className="mt-3">

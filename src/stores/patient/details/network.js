@@ -407,7 +407,7 @@ export async function getTimelineList({ patientId, dos }) {
     method: "GET",
   };
   const res = await requestPortal(
-    `dbservice/actioneventaudit?patientid=${patientId}&dos=${
+    `dbservice/actioneventaudit?patientid=${patientId}&dateOfService=${
       dos ? dos : ""
     }&pageno=${0}&pagesize=${100}`,
     options

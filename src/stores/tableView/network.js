@@ -176,24 +176,19 @@ export async function getTableViewChecked({
   pageId,
   pageNo,
   pageSize,
-  selectedOption,
-  sort,
-  selectedDateRanges,
-  searchText,
   activeStatus,
   roleId,
-  projectId,
   selectedRole,
   allPatientIds,
 }) {
   const options = {
     method: "GET",
   };
-  const uId = getStorage("userId");
+  const tin = getStorage("tinNumber");
   const data = await requestPortal(
     `dbservice/table/view?pageId=${pageId}&page=${pageNo}&size=${pageSize}&status=${
       activeStatus ? activeStatus : ""
-    }&roleId=${roleId ? roleId : ""}&aliasName=${selectedRole?selectedRole:''}&allPatientIds=${allPatientIds?allPatientIds:""}`,
+    }&roleId=${roleId ? roleId : ""}&aliasName=${selectedRole?selectedRole:''}&allPatientIds=${allPatientIds?allPatientIds:""}&tin=${tin || ""}`,
     options
   );
   return data;
