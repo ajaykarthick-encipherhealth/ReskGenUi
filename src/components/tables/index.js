@@ -108,6 +108,8 @@ const AppTable = ({
   checkedHeader,
   isUpload,
   idKey,
+  handleAction,
+  isEdit,
 }) => {
   if (isCheckBox) {
     column.push({
@@ -122,6 +124,15 @@ const AppTable = ({
       value: "patientId",
     });
   }
+console.log(isEdit,"isEdit")
+  if (isEdit) {
+    column.push({
+      edit: true,
+      value: "patientId",
+    });
+  }
+
+  
   const router = useRouter();
   const columnsArr = Array.from({ length: column?.length || 5 });
   return (
@@ -154,6 +165,7 @@ const AppTable = ({
                       handleRowCheckboxChange={handleRowCheckboxChange}
                       checkedHeader={checkedHeader}
                       isUpload={isUpload}
+                      isEdit = {isEdit}
                     />
                   ))}
                 </tr>
@@ -218,6 +230,8 @@ const AppTable = ({
                       getStatusStyles={getStatusStyles}
                       renderCountDetailsPopover={renderCountDetailsPopover}
                       isUpload={isUpload}
+                      handleAction={handleAction}
+                      isEdit = {isEdit}
                     />
                   ))
                 ) : (
@@ -261,6 +275,7 @@ const TableHeadItem = ({
   handleRowCheckboxChange,
   checkedHeader,
   isUpload,
+  isEdit
 }) => {
   if (item.checkBox) {
     return (
@@ -292,7 +307,7 @@ const TableHeadItem = ({
       </th>
     );
   }
-  if (item.statusButton) {
+  if (item.statusButton || item.edit) {
     return <th>Action</th>;
   }
 
@@ -434,6 +449,8 @@ const TableRow = ({
   getStatusStyles,
   renderCountDetailsPopover,
   isUpload,
+  handleAction,
+  isEdit 
 }) => {
   const router = useRouter();
   return (
@@ -677,7 +694,9 @@ const TableRow = ({
             </td>
           );
         }
-        if (columnItem?.isAction) {
+        console.log(columnItem,"item")
+        if (columnItem.edit) {
+        
           return item.accountStatus === true ? (
             <td
               className={Style.childBorder}
@@ -686,13 +705,6 @@ const TableRow = ({
                   item.accountStatus === false ? "#0000001a" : "",
               }}
             >
-              <Popover
-                id="antd-popover"
-                name="antd-popover"
-                content={() => getContent(item)}
-                trigger="click"
-                open={popoverVisible === item?.id}
-              >
                 <div
                   style={{
                     backgroundColor:
@@ -707,20 +719,13 @@ const TableRow = ({
                             colIndex
                         )
                   }
-                  onClick={() => {
-                    setRowData(item);
-                    setPopoverVisible(item?.id);
-                    setSelectedRoles(item?.role);
-
-                    const manager = optionsUser?.find(
-                      (data) => data.value === item.managerId
-                    );
-                    setSelectedManager(manager?.value);
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleAction(item);
                   }}
                 >
                   <EditButton />
                 </div>
-              </Popover>
             </td>
           ) : (
             <td
@@ -1173,7 +1178,7 @@ const TableRow = ({
               style={{ textAlign: "center" }}
               onClick={(e) => e.stopPropagation()}
             >
-              {actionBodyTemplate(item)}
+              {actionBodyTemplate && actionBodyTemplate(item)}
             </td>
           );
         }

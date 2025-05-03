@@ -16633,5 +16633,10 @@ input::-webkit-inner-spin-button {
   min-height: 322px;
   box-shadow: 0px 2px 6px 0px #00000029;
 }
-
+.content-body .container-users {
+  min-height: 100vh;
+  height: auto;
+  background-color: #f0f6fe;
+  padding: 15px;
+}
 

@@ -9,7 +9,7 @@ import { encyptingPass } from "../../../components/headerFilters/functions";
 import { actions as tenantAdminAction } from "../../../stores/tenantAdmin/users";
 import { actions as adminAction } from "../../../stores/admin/dashboard";
 import { getStorage } from "../../../utils/storages";
-import { getResponePopup } from "../../../utils/reusable";
+import { findItemWithTrueKey, getResponePopup } from "../../../utils/reusable";
 import ReusableFilters from "../../../components/reusableFilters";
 import { PlusCircleFilled } from "@ant-design/icons";
 import AppTable from "../../../components/tables";
@@ -28,19 +28,16 @@ const RoleList = [
 const intialValues = {
   firstName: "",
   lastName: "",
-  emailId: "",
-  password: "",
-  role: "",
+  email: "",
+
   userName: "",
-  mobileNumber: "",
-  confirmPassword: "",
 };
 const UserList = ({
   getAllOrganizationList,
   organizationList,
   getAllUsersList,
   usersListData,
-  hideHeader= true,
+  hideHeader = true,
   getAddUser,
   addPatients,
   getEnableUser,
@@ -53,101 +50,6 @@ const UserList = ({
   tableLoader,
   pageLoad,
 }) => {
-  const commonFilterItems = [
-    {
-      id: 1,
-      title: "Search",
-      type: "search",
-      value: null,
-      placeholder: "Search",
-      active: true,
-      header: "Search by UserName",
-    },
-
-    {
-      id: 2,
-      title: "role",
-      type: "select",
-      value: null,
-      placeholder: " Role",
-      options: RoleList,
-      active: false,
-    },
-    {
-      id: 3,
-      title: "status",
-      type: "select",
-      value: null,
-      placeholder: "Status",
-      options: options3,
-      active: false,
-    },
-    {
-      id: 4,
-      title: "organization",
-      type: "select",
-      value: null,
-      placeholder: "Organization",
-      options: organizationList?.response?.map((item) => ({
-        value: item?.id,
-        label: `${item?.name}`,
-      })),
-      active: false,
-    },
-    {
-      id: 5,
-      title: "createdDateRange",
-      type: "rangePicker",
-      value: null,
-      placeholder: "Created Date Range",
-      pickerType: "year",
-      active: false,
-    },
-  ];
-
-  const columns = [
-    {
-      name: "Name",
-      value: {
-        first: "firstName",
-        last: "lastName",
-        img: "profileImageUrl",
-      },
-      isImage: true,
-    },
-    {
-      name: "user name",
-      value: "userName",
-    },
-
-    {
-      name: "ORGANIZATION",
-      value: { firstValue: "organizationDTO", secondValue: "name" },
-      objValue: true,
-    },
-    { name: "ROLE", value: "role", isComma: true },
-
-    {
-      name: "DATE CREATED ",
-      value: "createdDate",
-      isDateAndTime: "true",
-      sortable: true,
-    },
-    {
-      name: "MFA Status",
-      value: "mfaEnabled",
-      isBoolean: true,
-      truthValue: "Enabled",
-      falseValue: "Disabled",
-    },
-    {
-      name: "Action",
-      value: "action",
-      isAction: true,
-    },
-    { name: "status", value: "status", isSwitchStatus: true },
-  ];
-
   const [sort, setSort] = useState({
     createdDate: {
       sortDir: "DESC",
@@ -200,8 +102,8 @@ const UserList = ({
     setMobileNumber(val);
   };
   const getDisplayValue = (number) => {
-    if (number.length === 10) {
-      return number.slice(0, 5) + "*****";
+    if (number?.length === 10) {
+      return number?.slice(0, 5) + "*****";
     }
     return number;
   };
@@ -224,24 +126,14 @@ const UserList = ({
   const [form] = Form.useForm();
 
   const handleSubmit = async (userFormData) => {
-    const encryptedData = encyptingPass(userFormData?.password);
-    userFormData.tenantId = localTenantId;
-    // userFormData.organizationId = userFormData.orgId;
-    userFormData.role = [userFormData?.role];
-    userFormData.password = encryptedData?.pass;
-    userFormData.passwordIv = encryptedData.iv;
     const response = await getAddUser(userFormData, setFormData);
     if (response?.status == "SUCCESS") {
       getAllUsers();
       setFormData({
         firstName: "",
         lastName: "",
-        emailId: "",
-        password: "",
-        role: "",
+        email: "",
         userName: "",
-        mobileNumber: "",
-        confirmPassword: "",
       });
       setPaginationFirst(0);
       setMobileNumber("");
@@ -278,7 +170,6 @@ const UserList = ({
     //   ...prevStates,
     //   [item.userName]: checked,
     // }));
-
     // try {
     //   const res = await getEnableUser({
     //     checked: checked ? "yes" : "no",
@@ -369,7 +260,7 @@ const UserList = ({
             style={{ width: "300px" }}
             mode={"multiple"}
             onChange={(e) => handleRows(e, data?.role)}
-            options={items || []} 
+            options={items || []}
             placeholder={"Select Role"}
             defaultValue={isMultiple ? data.role : data?.role}
             onDropdownVisibleChange={(visible) => setOpen(visible)}
@@ -506,7 +397,7 @@ const UserList = ({
       selectedDateRanges,
       selectedOption,
       sort,
-      cilentBased : false
+      cilentBased: false,
     });
   };
   useEffect(() => {
@@ -543,6 +434,17 @@ const UserList = ({
     status: options3,
   };
 
+  const handleAction = (data) => {
+    setAddUser(true);
+    form.setFieldsValue({
+      firstName: data.firstName,
+      lastName: data.lastName,
+      email: data.email,
+      userName: data.userName,
+      isEdit: true,
+    });
+  };
+
   useEffect(() => {
     setActiveFilters(
       data?.response?.metaDataDTO.filter(
@@ -553,12 +455,9 @@ const UserList = ({
 
   return (
     <div className={`show `}>
-      {hideHeader && (
-      <Header />
-
-      )}
+      {hideHeader && <Header />}
       <div className="content-body">
-        <div className="container-fluid">
+        <div className="container-users">
           <div className="table-responsive active-projects task-table">
             <div className="d-flex tbl-caption  align-items-center">
               <div style={{ width: "90%" }}>
@@ -588,7 +487,6 @@ const UserList = ({
                   onClose={onClose}
                   selectedColumns={test}
                   setSelectedColumns={setTest}
-                  commonFilterItems={commonFilterItems}
                   showCustomizeTable={true}
                   showDrawer={showDrawer}
                   handleSubmit={handleSubmitInsert}
@@ -656,6 +554,11 @@ const UserList = ({
                   rows={15}
                   totalRecords={data?.response?.pageResponse?.totalElements}
                   onPageChange={onPageChange}
+                  isEdit={findItemWithTrueKey(
+                    data?.response?.staticDesign,
+                    "edit"
+                  )}
+                  handleAction={handleAction}
                 />
               </>
             </div>
@@ -759,8 +662,9 @@ const UserList = ({
           setRole("");
           form.resetFields();
         }}
-        className="offcanvas-end offcanvas-md-size"
+        // className="offcanvas-end offcanvas-md-size"
         placement="end"
+        style={{ width: "700px" }}
       >
         <div className="offcanvas-header">
           <h5 className="modal-title" id="#gridSystemModal">
@@ -797,7 +701,11 @@ const UserList = ({
               <Row gutter={16}>
                 <Col span={12}>
                   <Form.Item
-                    label="First Name"
+                    label={
+                      <span>
+                        First Name <span style={{ color: "red" }}>*</span>
+                      </span>
+                    }
                     name="firstName"
                     rules={[
                       {
@@ -816,7 +724,11 @@ const UserList = ({
                 </Col>
                 <Col span={12}>
                   <Form.Item
-                    label="Last Name"
+                    label={
+                      <span>
+                        Last Name <span style={{ color: "red" }}>*</span>
+                      </span>
+                    }
                     name="lastName"
                     rules={[
                       {
@@ -837,8 +749,12 @@ const UserList = ({
               <Row gutter={16}>
                 <Col span={12}>
                   <Form.Item
-                    label="Email"
-                    name="emailId"
+                    label={
+                      <span>
+                        Email <span style={{ color: "red" }}>*</span>
+                      </span>
+                    }
+                    name="email"
                     rules={[
                       { required: true, message: "Please enter your email!" },
                       {
@@ -859,7 +775,11 @@ const UserList = ({
                 </Col>
                 <Col span={12}>
                   <Form.Item
-                    label="User Name"
+                    label={
+                      <span>
+                        User Name <span style={{ color: "red" }}>*</span>
+                      </span>
+                    }
                     name="userName"
                     rules={[
                       {
@@ -887,172 +807,10 @@ const UserList = ({
                   </Form.Item>
                 </Col>
               </Row>
-              <Row gutter={16}>
-                <Col span={12}>
-                  <Form.Item
-                    name="role"
-                    label="Role"
-                    rules={[
-                      {
-                        required: true,
-                      },
-                    ]}
-                  >
-                    <Select
-                      data-testid="role"
-                      name="role"
-                      placeholder="Select role"
-                      allowClear
-                      style={{ height: "42px" }}
-                    >
-                      <Select.Option value="REVIEWER">REVIEWER</Select.Option>
-                      <Select.Option value="SUPERVISOR">
-                        SUPERVISOR
-                      </Select.Option>
-                      <Select.Option value="TENANT_ADMIN">
-                        TENANT ADMIN
-                      </Select.Option>
-                    </Select>
-                  </Form.Item>
-                </Col>
-                {/* <Col span={12}>
-                  <Form.Item
-                    label="Select Organization"
-                    name="orgId"
-                    rules={[
-                      {
-                        required: true,
-                        message: "Please select Organization!",
-                      },
-                    ]}
-                  >
-                    <Select
-                      data-testid="orgId"
-                      name="orgId"
-                      placeholder="Select"
-                      options={orgAllList}
-                      style={{ height: "42px" }}
-                      allowClear
-                    />
-                  </Form.Item>
-                </Col> */}
-                   <Col span={12}>
-                  <Form.Item
-                    label="Mobile Number"
-                    name="mobileNumber"
-                    rules={[
-                      {
-                        required: true,
-                        max: 10,
-                        message: "Please enter your mobile number!",
-                      },
-                      {
-                        pattern: /^[0-9]{10}$/,
-                        message: "Please enter a valid 10-digit mobile number!",
-                      },
-                    ]}
-                  >
-                    <div>
-                      <Input
-                        id="mobileNumber"
-                        name="mobileNumber"
-                        type="text"
-                        placeholder="Enter mobile number"
-                        autoComplete="off"
-                        value={getDisplayValue(mobileNumber)}
-                        onChange={handleChange}
-                      />
-                    </div>
-                  </Form.Item>
-                </Col>
-              </Row>
-
-              <input type="password" style={{ display: "none" }} />
-
-              <Row gutter={16}>
-                <Col span={12}>
-                  <Form.Item
-                    label="Password"
-                    name="password"
-                    dependencies={["password"]}
-                    rules={[
-                      {
-                        required: true,
-                        message: "Please enter your password!",
-                      },
-                      {
-                        validator: (_, value) =>
-                          value &&
-                          value.length >= 8 &&
-                          /[a-z]/.test(value) &&
-                          /[A-Z]/.test(value) &&
-                          /\d/.test(value) &&
-                          /[!@#$%^&*(),.?":{}|<>]/.test(value)
-                            ? Promise.resolve()
-                            : Promise.reject(
-                                "Password must be at least 8 characters, with at least one lowercase, one uppercase, one number, and one special character!"
-                              ),
-                      },
-                    ]}
-                  >
-                    <div
-                      id="input-password"
-                      name="input-password"
-                      className="confirmPass"
-                    >
-                      <input type="password" style={{ display: "none" }} />
-                      <Input.Password
-                        name="password"
-                        data-testid="password"
-                        placeholder="Enter password"
-                        autoComplete="new-password"
-                      />
-                    </div>
-                  </Form.Item>
-                </Col>
-                <Col span={12}>
-                  <Form.Item
-                    label="Confirm Password"
-                    name="confirmPassword"
-                    dependencies={["password"]}
-                    rules={[
-                      {
-                        required: true,
-                        message: "Please confirm your password!",
-                      },
-                      ({ getFieldValue }) => ({
-                        validator(_, value) {
-                          if (!value || getFieldValue("password") === value) {
-                            return Promise.resolve();
-                          }
-                          return Promise.reject(
-                            "Passwords do not match. Please verify and re-enter."
-                          );
-                        },
-                      }),
-                    ]}
-                  >
-                    <div
-                      id="input-confirmpassword"
-                      name="input-confirmpassword"
-                      className="confirmPass"
-                    >
-                      <input type="password" style={{ display: "none" }} />
-                      <Input.Password
-                        id="confirmPassword"
-                        name="confirmPassword"
-                        placeholder="Re-enter the password"
-                        autoComplete="new-password"
-                      />
-                    </div>
-                  </Form.Item>
-                </Col>
-             
-              </Row>
               <div
                 id="fake-user"
                 name="fake-user"
-                style={{ display: "flex", gap: "8px" }}
+                className="d-flex align-items-center justify-content-center mt-4 gap-3"
               >
                 <input
                   type="text"

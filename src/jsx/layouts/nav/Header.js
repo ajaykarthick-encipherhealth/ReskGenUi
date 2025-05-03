@@ -692,7 +692,7 @@ const Header = ({
 
   const getRole = async () => {
     const res = await getAllRoles();
-    if (res.status == "SUCCESS") {
+    if (res?.status == "SUCCESS") {
       const data = res?.response?.userRoles?.map((data) => ({
         label: data.proxyRole,
         key: data.proxyRole,
@@ -727,7 +727,7 @@ const Header = ({
   };
   const getProjectDataLists = async () => {
     const res = await getAllProjects();
-    if (res.status == "SUCCESS") {
+    if (res?.status == "SUCCESS") {
       const projectOptions = res.response?.map((client) => ({
         label: client.projectName,
         value: client.id,

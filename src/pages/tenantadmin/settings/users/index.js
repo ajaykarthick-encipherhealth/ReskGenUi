@@ -5,8 +5,6 @@ const Users = () => {
   return (
     <div>
      <UserList hideHeader={false}/>
-
-      
     </div>
   )
 }

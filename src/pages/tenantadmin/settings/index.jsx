@@ -21,7 +21,7 @@ import HistoryCodes from "./coding/historyCodes";
 import DownCodes from "./coding/downCodes";
 import DirectConfirmCodes from "./coding/directConfirmCodes";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faFileImport, faFireFlameCurved, faHospital, faSliders ,faFile} from "@fortawesome/free-solid-svg-icons";
+import { faFileImport, faFireFlameCurved, faHospital, faSliders ,faFile, faUser} from "@fortawesome/free-solid-svg-icons";
 import QueryTemplateConfig from "./configuration/queryTemplateCofig";
 import DiagnosticReportConfig from "./coding/diagnosticReportConfig";
 import MeatConfig from "./coding/meatCofig";
@@ -202,7 +202,7 @@ const menuList =(activePage)=> [
     key: `Add Users`,
     icon: (
       <span className="">
-        <FontAwesomeIcon icon={faFile}
+        <FontAwesomeIcon  icon={faUser} 
         style={{
           color: activePage==="Add Users"?"#fff":"#04306f",
           fontSize:"20px"
