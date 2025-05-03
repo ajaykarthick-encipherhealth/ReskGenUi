@@ -69,6 +69,8 @@ const RoasterDrawer = ({
           onClose();
         } else {
           getResponePopup(res);
+          action.getApi({ pageNo: pageNumber });
+          onClose();
         }
       }
     } catch (error) {
