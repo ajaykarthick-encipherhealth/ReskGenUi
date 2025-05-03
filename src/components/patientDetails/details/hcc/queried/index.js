@@ -24,7 +24,7 @@ const Index = ({ queriedData, queriedLoader }) => {
               status={item.approvalStatus}
               reason={item.queryReason}
               date={convertUsFormat(item.performedOn)}
-              queriedto={item.queriedTo}
+              queriedto={item.queryToName}
               queriedByUserName={item.queriedBy}
             />
           ))
