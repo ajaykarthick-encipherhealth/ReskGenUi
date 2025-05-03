@@ -435,9 +435,9 @@ const CodersTable = ({
 
       <div className="content-body">
         <div className="container-fluid table-responsive active-projects task-table">
-          {tableLoader ? (
+          {/* {tableLoader ? (
             <CardSkeleton />
-          ) : (
+          ) : ( */}
             <div className="d-flex p-3">
               <div style={{ width: "100%" }}>
                 <ReusableFilters
@@ -474,7 +474,7 @@ const CodersTable = ({
                 />
               </div>
             </div>
-          )}
+          {/* )} */}
           <div className="profile-tab  mt-3">
             {pageId === "a9d5c555-7954-4382-a2ef-3f66b292cf8f" ? (
               <div className="custom-tab-1">

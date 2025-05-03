@@ -655,7 +655,6 @@ const Hcc = ({
                           selectedDate={selectedDate}
                           setSelectedDate={setSelectedDate}
                         />
-                        {console.log(selectDosValue, "selectDosValue")}
                         {getStorage("userRole") != "admin" &&
                           selectDosValue && (
                             <YearAndDosStatus
@@ -766,71 +765,64 @@ const Hcc = ({
                         ) : null}
                       </div>
                     </Nav.Item>
-            
-                      <Nav.Item as="li" className="nav-item">
-                        <Popover
-                          open={actions.showActionsPop}
-                          trigger={["click"]}
-                          placement="bottom"
-                          content={hideDiseasePopContent}
-                          onOpenChange={() =>
+                    <Nav.Item as="li" className="nav-item">
+                      <Popover
+                        open={actions.showActionsPop}
+                        trigger={["click"]}
+                        placement="bottom"
+                        content={hideDiseasePopContent}
+                        onOpenChange={() =>
+                          setActions({
+                            ...actions,
+                            showActionsPop: !actions.showActionsPop,
+                          })
+                        }
+                      >
+                        <button
+                          className={`${visitStyles.actionBtn} px-3 py-1 mx-2 rounded-md`}
+                          onClick={() =>
                             setActions({
                               ...actions,
                               showActionsPop: !actions.showActionsPop,
                             })
                           }
                         >
-                       
-                          <button
-                            className={`${visitStyles.actionBtn} px-3 py-1 mx-2 rounded-md`}
-                            onClick={() =>
-                              setActions({
-                                ...actions,
-                                showActionsPop: !actions.showActionsPop,
-                              })
-                            }
-                          >
-                            Action
-                          </button>
-                        </Popover>
-                      </Nav.Item>
-
-                      {
-                        (
-                          proxyRole === "TENANT_ADMIN") && (
-                          <div className="d-flex gap-2">
-                            <Nav.Item as="li" className="nav-item">
-                              <Popconfirm
-                                placement="bottom"
-                                description="Are you sure you want to approve?"
-                                okText="Yes"
-                                cancelText="No"
-                                onConfirm={handleApprove}
-                              >
-                                <Button
-                                  disabled={
-                                    isApproved || isReject ? true : false
-                                  }
-                                  className={`px-3 py-1 rounded-md ${styles.approveBtn}`}
-                                >
-                                  Approve
-                                </Button>
-                              </Popconfirm>
-                            </Nav.Item>
-                            <Nav.Item as="li" className="nav-item">
-                              <Button
-                                disabled={isApproved || isReject ? true : false}
-                                className={`px-3 py-1 rounded-md ${styles.rejectBtn}`}
-                                onClick={showModal}
-                              >
-                                Reject
-                              </Button>
-                            </Nav.Item>
-                          </div>
-                        )}
-
+                          Action
+                        </button>
+                      </Popover>
+                    </Nav.Item>
+                    {activeTabName?.tinDetailsTab == "Query Approval" &&
+                    (proxyRole === "OWNER" || proxyRole === "TENANT_ADMIN") && (
+                    <div className="d-flex gap-2">
                       <Nav.Item as="li" className="nav-item">
-                        {/* {isClient &&
+                        <Popconfirm
+                          placement="bottom"
+                          description="Are you sure you want to approve?"
+                          okText="Yes"
+                          cancelText="No"
+                          onConfirm={handleApprove}
+                        >
+                          <Button
+                            disabled={isApproved || isReject ? true : false}
+                            className={`px-3 py-1 rounded-md ${styles.approveBtn}`}
+                          >
+                            Approve
+                          </Button>
+                        </Popconfirm>
+                      </Nav.Item>
+                      <Nav.Item as="li" className="nav-item">
+                        <Button
+                          disabled={isApproved || isReject ? true : false}
+                          className={`px-3 py-1 rounded-md ${styles.rejectBtn}`}
+                          onClick={showModal}
+                        >
+                          Reject
+                        </Button>
+                      </Nav.Item>
+                    </div>
+                    )}
+                    <Nav.Item as="li" className="nav-item">
+                      {/* {isClient &&
                           ["CODER_1", "CODER_2", "QA"].includes(proxyRole) && (
                             <Button
                               disabled={isQueried}
@@ -840,8 +832,7 @@ const Hcc = ({
                               Query
                             </Button>
                           )} */}
-                      </Nav.Item>
-         
+                    </Nav.Item>
                   </div>
                 </Nav>
               </div>

@@ -327,9 +327,9 @@ const QueryApproval = ({
                           </div>
                         </div>
                       )}
-                      {tableLoader ? (
+                      {/* {tableLoader ? (
                         <CardSkeleton height={50} />
-                      ) : (
+                      ) : ( */}
                         <div className="d-flex">
                           <div className="mt-4 w-100">
                             <ReusableFilters
@@ -365,7 +365,7 @@ const QueryApproval = ({
                             />
                           </div>
                         </div>
-                      )}
+                      {/* )} */}
                       <Tab.Content>
                         <Tab.Pane eventKey={activeTab}>
                           <QueryTable

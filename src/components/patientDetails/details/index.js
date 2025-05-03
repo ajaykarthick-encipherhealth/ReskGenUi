@@ -455,7 +455,7 @@ const Details = ({
     );
     patientDetailsLoad(false);
     getFlagCharts({ dos: e });
-    getAllRevertDetails({ dos: e });
+    // getAllRevertDetails({ dos: e });
   };
 
   const addComments = async (value) => {

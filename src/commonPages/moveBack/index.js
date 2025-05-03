@@ -361,9 +361,9 @@ const MoveBack = ({
                           </div>
                         </div>
                       )}
-                      {tableLoader ? (
+                      {/* {tableLoader ? (
                         <CardSkeleton height={50} />
-                      ) : (
+                      ) : ( */}
                         <div className="d-flex ">
                           <div
                             style={{ width: "100%" }}
@@ -405,7 +405,7 @@ const MoveBack = ({
                             />
                           </div>
                         </div>
-                      )}
+                   
                       <Tab.Content>
                         <Tab.Pane eventKey={activeTab}>
                           <MoveBackTable

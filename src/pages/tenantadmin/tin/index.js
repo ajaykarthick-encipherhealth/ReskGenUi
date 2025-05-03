@@ -20,7 +20,8 @@ import {
 } from "../../../utils/reusable";
 import { actions as tableAction } from "../../../stores/tableView";
 import styles from "../../../styles/visitdata.module.css";
-import { Button, Popconfirm } from "antd";
+import { Button, Popconfirm, Spin } from "antd";
+import { LoadingOutlined, PlusCircleFilled } from "@ant-design/icons";
 import {
   generateOptionsForNewStore,
   priorityOptions,

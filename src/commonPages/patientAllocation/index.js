@@ -401,9 +401,9 @@ const PatientAllocation = ({
                           </div>
                         </div>
                       )}
-                      {tableLoader ? (
+                      {/* {tableLoader ? (
                         <CardSkeleton />
-                      ) : (
+                      ) : ( */}
                         <div className={` d-flex gap-3 mt-4`}>
                           <ReusableFilters
                             showFilter={true}
@@ -445,7 +445,7 @@ const PatientAllocation = ({
                             isResetting={isResetting}
                           />
                         </div>
-                      )}
+              
 
                       <Tab.Content>
                         <Tab.Pane eventKey={activeTab}>

@@ -19,6 +19,7 @@ const SubNavBar = ({ handleBack, hideBackArrow, pageLoad ,tableLoader}) => {
   const role = getStorage("userRole");
   const [metaData, setMetaData] = useState([]);
   const [tableData, setTableData] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   const getAllTins = async (tabOverride) => {
     const activeTab = getStorage("activeTabTin");
@@ -27,6 +28,7 @@ const SubNavBar = ({ handleBack, hideBackArrow, pageLoad ,tableLoader}) => {
     const userId = getStorage("userId");
     const tin = getStorage("tinNumber");
     const projectId = getStorage("project");
+    setLoading(true);
     const result = await getTableView({
       pageId,
       pageNo: 0,
@@ -36,6 +38,7 @@ const SubNavBar = ({ handleBack, hideBackArrow, pageLoad ,tableLoader}) => {
       isAdmin: true,
     });
     const response = result?.response || {};
+    setLoading(false);
     setMetaData(response.metaDataDTO || []);
     setTableData(response.pageResponse?.content || []);
   };
@@ -59,7 +62,7 @@ const SubNavBar = ({ handleBack, hideBackArrow, pageLoad ,tableLoader}) => {
       )}
 
       <div className={`w-100 ${styles.tabContainer}`}>
-        {tableLoader ? (
+        {loading ? (
           <div className="w-100">
             <CardSkeleton />
           </div>
