@@ -27,6 +27,10 @@ export const usersAssigned = createActionThunk(
   network.usersAssignedList
 );
 
+export const  usersSoftDelete = createActionThunk(
+  "USERS_SOFT_DELETE",
+  network.usersSoftDelete
+)
 export const usersAllRoles = createActionThunk(
   "GET_USERS_ROLES",
   network.getUserRole

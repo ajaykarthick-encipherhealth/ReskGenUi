@@ -135,6 +135,16 @@ export const usersAssignedList = async ({ data }) => {
   const res = await requestPortal(`${url}`, options);
   return res;
 };
+export const usersSoftDelete = async ({ data }) => {
+  const url = `dbservice/mci/user/softdelete`;
+  const options = {
+    method: "POST",
+    body: JSON.stringify(data),
+  };
+
+  const res = await requestPortal(`${url}`, options);
+  return res;
+};
 
 export async function getUserRole() {
   const options = {

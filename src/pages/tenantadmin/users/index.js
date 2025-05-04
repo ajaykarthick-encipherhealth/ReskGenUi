@@ -140,11 +140,14 @@ const [selectedRole, setSelectedRole] = useState(null);
       ...prevStates,
       [item.userName]: checked,
     }));
-
+const data = {
+  userName: item.userName,
+  isActive: checked ? "yes" : "false",
+  isCilentBased: true,
+};
     try {
       const res = await getEnableUser({
-        checked: checked ? "yes" : "no",
-        user: item,
+        data
       });
       if (res?.status === "SUCCESS") {
         getUsersAPi();
@@ -331,7 +334,7 @@ const enhancer = connect(
     getTableData: tableAction.tableViewAction,
     tableDynamicColumn: tableAction.tableDynamicColumn,
     tableDynamicColumnReset: tableAction.tableDynamicColumnReset,
-    getEnableUser: tenantAdminAction.getEnableUser,
+    getEnableUser: tenantAdminAction.usersSoftDelete,
     getAllRoles: allActions.usersAllRoles,
   }
 );
