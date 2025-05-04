@@ -1,6 +1,10 @@
 import React, { useState } from "react";
 import { Offcanvas, Button } from "react-bootstrap";
 import { Form, Input, Select, Row, Col } from "antd";
+import { actions as tinActions } from "../../stores/tenantAdmin/tin";
+import { connect } from "react-redux";
+import { getStorage, setStorage } from "../../utils/storages";
+import { useRouter } from "next/router";
 
 const Addpatients = ({
   addPatientId,
@@ -9,15 +13,29 @@ const Addpatients = ({
   handleSubmitPatientId,
   handleChangePatientId,
   orgAllList,
+  tinDetails,
+  getPageRendering,
 }) => {
+  const router = useRouter();
+  const isProjectRoute = router.pathname === "/tenantadmin/project";
+
   const [form] = Form.useForm();
+  const TinOptions = tinDetails?.map((client) => ({
+    label: client.tinName,
+    value: client.tinNumber,
+  }));
+  
   const handleCancel = () => {
     form.resetFields();
     setAddPatientId(false);
   };
+  const handleTinChange = (value) => {
+    setStorage("tinId", value);
+    getPageRendering(value);
+  };
   return (
     <Offcanvas
-     data-testid="add-patient-details"
+      data-testid="add-patient-details"
       onHide={() => {
         setAddPatientId(false);
         form.resetFields();
@@ -46,8 +64,21 @@ const Addpatients = ({
           <Form
             data-testid="add-patient-form"
             form={form}
+            // onFinish={(values) => {
+            //   handleSubmitPatientId(values, form);
+            // }}
             onFinish={(values) => {
-              handleSubmitPatientId(values, form);
+              const selectedTinObj = tinDetails?.find(
+                (tin) => tin.tinNumber === values.tin
+              );
+
+              const payload = {
+                ...values,
+
+                tin: selectedTinObj?.tinNumber || getStorage("tinNumber"),
+              };
+
+              handleSubmitPatientId(payload, form);
             }}
             labelCol={{ span: 24 }}
             wrapperCol={{ span: 24 }}
@@ -71,7 +102,11 @@ const Addpatients = ({
                     },
                   ]}
                 >
-                  <Input  id="patientId" name="patientId" placeholder="Enter patient ID" />
+                  <Input
+                    id="patientId"
+                    name="patientId"
+                    placeholder="Enter patient ID"
+                  />
                 </Form.Item>
               </Col>
               <Col span={24}>
@@ -88,9 +123,32 @@ const Addpatients = ({
                 >
                   <div>
                     {" "}
-                    <Input  id="patientName" name="patientName" placeholder="Enter patient name" />
+                    <Input
+                      id="patientName"
+                      name="patientName"
+                      placeholder="Enter patient name"
+                    />
                   </div>
                 </Form.Item>
+                {isProjectRoute && (
+                  <Form.Item
+                    label="Tin Number"
+                    name="tin"
+                    id="tinNumber"
+                    rules={[
+                      {
+                        required: true,
+                        message: "Please select Tin!",
+                      },
+                    ]}
+                  >
+                    <Select
+                      placeholder="Select Tin"
+                      onChange={handleTinChange}
+                      options={TinOptions}
+                    />
+                  </Form.Item>
+                )}
               </Col>
               {/* <Col span={24}>
                 <Form.Item
@@ -116,8 +174,8 @@ const Addpatients = ({
             <div style={{ display: "flex", gap: "8px" }}>
               <Form.Item>
                 <Button
-                id="submit-btn"
-                name="submit-btn"
+                  id="submit-btn"
+                  name="submit-btn"
                   type="submit"
                   className="btn btn-sm ms-2 flr width-max-content custom-btn-style"
                 >
@@ -126,8 +184,8 @@ const Addpatients = ({
               </Form.Item>
               <Form.Item>
                 <Button
-                id="cancel-btn"
-                name="cancel-btn"
+                  id="cancel-btn"
+                  name="cancel-btn"
                   className="btn btn-danger btn-sm light ms-1"
                   onClick={() => handleCancel()}
                 >
@@ -141,5 +199,12 @@ const Addpatients = ({
     </Offcanvas>
   );
 };
-
-export default Addpatients;
+const enhancer = connect(
+  (state) => ({
+    tinDetails: state.authReducer?.getTinDropdown?.data?.response,
+  }),
+  {
+    getPageRendering: tinActions.pageRendering,
+  }
+);
+export default enhancer(Addpatients);
