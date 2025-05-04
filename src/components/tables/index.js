@@ -955,10 +955,10 @@ const TableRow = ({
           );
         }
 
-        if (columnItem.design === "UPLOAD") {
+        if (columnItem?.design?.includes("RE_UPLOAD")) {
           return (
             <td className={Style.lastBorder} style={{ textAlign: "center" }}>
-              {item?.processedStatus === "FAILED" && (
+              {item?.status === "FAILED" ? (
                 <div
                   id={
                     tableId
@@ -998,6 +998,8 @@ const TableRow = ({
                     </Popover>
                   </div>
                 </div>
+              ) : (
+                <div className="text-start">---</div>
               )}
             </td>
           );
@@ -1152,7 +1154,7 @@ const TableRow = ({
                     indicator={<LoadingOutlined className="font2" />}
                     className={Style.spinnerStyle}
                   />
-                ) : item.processedStatus === "FAILED" ? (
+                ) : item.status === "FAILED" ? (
                   "---"
                 ) : (
                   <input

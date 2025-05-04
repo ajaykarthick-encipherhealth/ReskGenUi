@@ -1,9 +1,11 @@
 import React, { useRef, useState } from "react";
 import { connect } from "react-redux";
-import { Button, Drawer, Form, Input, Upload, message } from "antd";
+import { Button, Drawer, Form, Input, Select, Upload, message } from "antd";
 import { UploadOutlined } from "@ant-design/icons";
 import { actions as patientSyncAction } from "../../../../stores/tenantAdmin/patientSync";
 import { getResponePopup } from "../../../../utils/reusable";
+import { priorityOptions } from "../../../../components/headerFilters/functions";
+import modalStyle from "../../../../pages/tenantadmin/allocateduser/allocate/style.module.css";
 
 const RoasterDrawer = ({
   isDrawerOpen,
@@ -21,7 +23,9 @@ const RoasterDrawer = ({
   pageNumber,
 }) => {
   const [form] = Form.useForm();
-   const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [priority, setPriority] = useState([]);
+
   const onClose = () => {
     setIsDrawerOpen(false);
     form.resetFields();
@@ -34,11 +38,11 @@ const RoasterDrawer = ({
         return;
       }
 
-      setLoading(true); 
+      setLoading(true);
 
       const formData = new FormData();
       formData.append("file", file);
-      formData.append("projectId", formVal.projectname);
+      formData.append("priority", formVal.priority);
       if (reUpload) formData.append("retryId", reUpload);
 
       const uploadActions = {
@@ -76,10 +80,9 @@ const RoasterDrawer = ({
     } catch (error) {
       console.error("Upload error:", error);
     } finally {
-      setLoading(false); 
+      setLoading(false);
     }
   };
-  
 
   const beforeUpload = (file) => {
     const isExcel =
@@ -91,7 +94,9 @@ const RoasterDrawer = ({
     }
     return isExcel || Upload.LIST_IGNORE;
   };
-
+  const handleChange = (value) => {
+    setPriority(value);
+  };
   return (
     <Drawer
       title={"Add Roaster Details"}
@@ -111,19 +116,27 @@ const RoasterDrawer = ({
           <Form.Item
             label={
               <label>
-                Project Name & ID <span className="text-danger">*</span>{" "}
+                Priority <span className="text-danger">*</span>
               </label>
             }
-            name="projectname"
+            name="priority"
             rules={[
               {
                 required: true,
-                message: "Please Enter Project Name ",
+                message: "Please select a priority",
               },
             ]}
           >
-            <Input placeholder="Project Name" />
+            <Select
+              id="select-priority"
+              className={modalStyle.prioritySelect}
+              options={priorityOptions}
+              placeholder="Set priority"
+              onChange={handleChange}
+              value={priority}
+            />
           </Form.Item>
+
           <Form.Item
             label="Upload Excel File"
             name="excelFile"

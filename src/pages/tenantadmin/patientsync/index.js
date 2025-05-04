@@ -1149,9 +1149,7 @@ const PatientSync = ({
                             style={{ marginTop: "20px" }}
                           >
                             <div className="custom-tab-1">
-                              <Tab.Container
-                                defaultActiveKey="fhir"
-                              >
+                              <Tab.Container defaultActiveKey="fhir">
                                 <Nav as="ul" className="nav nav-tabs">
                                   <Nav.Item
                                     as="li"
