@@ -990,7 +990,13 @@ const TableRow = ({
                     </button>
                     <Popover
                       title="Reason"
-                      content={item?.failedReason ? item?.failedReason : ""}
+                      content={
+                        <div
+                          style={{ width: 200, height: 100, overflow: "auto" }}
+                        >
+                          {item?.failedReason ? item.failedReason : "---"}
+                        </div>
+                      }
                     >
                       <InfoCircleOutlined
                         style={{ fontSize: "20px", color: "#df3a3a" }}

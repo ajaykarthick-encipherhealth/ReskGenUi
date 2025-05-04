@@ -44,11 +44,11 @@ const UsersModal = ({
       let result = response?.response?.content;
       const user = result?.map((item) => {
         return {
-          firstName: item.firstName,
-          lastName: item.lastName,
-          id: item.id,
-          role: item.role,
-          email: item.userName,
+          firstName: item?.firstName,
+          lastName: item?.lastName,
+          id: item?.id,
+          role: item?.role,
+          email: item?.userName,
         };
       });
       setUserDetails(user);
@@ -106,12 +106,12 @@ const UsersModal = ({
   };
 
   const handleSelectAll = () => {
-    if (selectedUserIds.length === userDetails.length) {
+    if (selectedUserIds?.length === userDetails?.length) {
       setSelectedUserIds([]);
     } else {
-      const allIds = userDetails.map((user) => user.id);
+      const allIds = userDetails?.map((user) => user?.id);
       setSelectedUserIds(allIds);
-      setUserName(userDetails.map((user) => user.email));
+      setUserName(userDetails?.map((user) => user?.email));
     }
   };
 
@@ -177,7 +177,7 @@ const UsersModal = ({
               }
             }}
           />
-          {userDetails.length > 0 ? (
+          {userDetails?.length > 0 ? (
             <div className="d-flex align-items-center ">
               <div className="fontWeight3 font3">Select All</div>
               <input
@@ -204,7 +204,7 @@ const UsersModal = ({
               <div className="mt-4 ">
                 <div
                   className={`form-control new-item-control my-2 p-0 ${
-                    item.id == activeCard
+                    item?.id == activeCard
                       ? modalStyle.listContentLarge
                       : modalStyle.listContent
                   }`}
@@ -216,8 +216,8 @@ const UsersModal = ({
                         shape="square"
                         style={{ backgroundColor: "#04306F" }}
                       >
-                        {item.firstName || item.lastName ? (
-                          getInitials(item.firstName, item.lastName)
+                        {item?.firstName || item?.lastName ? (
+                          getInitials(item?.firstName, item?.lastName)
                         ) : (
                           <FontAwesomeIcon
                             className="fa fa-search"
@@ -227,11 +227,11 @@ const UsersModal = ({
                       </Avatar>
                       <div className="p-3">
                         <p className={`${modalStyle.listName} mb-1`}>
-                          {item.firstName + " " + item.lastName}
+                          {item?.firstName + " " + item?.lastName}
                         </p>
                         <p className={`${modalStyle.listRole}`}>
-                          {item.role
-                            ? item.role.map((item) => (
+                          {item?.role
+                            ? item?.role?.map((item) => (
                                 <span className="px-1">{item}</span>
                               ))
                             : null}
@@ -240,8 +240,8 @@ const UsersModal = ({
                     </div>
                     <input
                       type="checkbox"
-                      checked={selectedUserIds.includes(item.id)}
-                      onChange={() => handleUserSelect(item.id, item.email)}
+                      checked={selectedUserIds?.includes(item?.id)}
+                      onChange={() => handleUserSelect(item?.id, item?.email)}
                       className={` me-2 ms-3 align-self-center cursor-pointer rounded  ${styles.bodyCheckbox}`}
                     />
                   </div>
@@ -256,7 +256,7 @@ const UsersModal = ({
             </div>
           </div>
         )}
-        {userDetails.length > 0 ? (
+        {userDetails?.length > 0 ? (
           <div className="d-flex justify-content-center mt-3">
             <RegularButton
               name={"Next"}
@@ -265,7 +265,7 @@ const UsersModal = ({
                 setIsSecondModalOpen(true);
                 setOpen(false);
               }}
-              disabled={userName.length === 0}
+              disabled={userName?.length === 0}
             />
           </div>
         ) : (
@@ -328,7 +328,7 @@ const UsersModal = ({
               <div className="mt-4 ">
                 <div
                   className={`form-control new-item-control my-2 p-0 ${
-                    item.id == activeCard
+                    item?.id == activeCard
                       ? modalStyle.listContentLarge
                       : modalStyle.listContent
                   }`}
@@ -341,8 +341,8 @@ const UsersModal = ({
                     </div>
                     <input
                       type="checkbox"
-                      checked={roleIds.includes(item.roleId)}
-                      onChange={() => handleRoleSelect(item.roleId)}
+                      checked={roleIds?.includes(item?.roleId)}
+                      onChange={() => handleRoleSelect(item?.roleId)}
                       className={` me-2 ms-3 align-self-center cursor-pointer rounded  ${styles.bodyCheckbox}`}
                     />
                   </div>
@@ -361,7 +361,7 @@ const UsersModal = ({
               name="Assign"
               onClick={setRoles}
               loading={isLoading}
-              disabled={roleIds.length === 0}
+              disabled={roleIds?.length === 0}
             />
           </div>
         </>
