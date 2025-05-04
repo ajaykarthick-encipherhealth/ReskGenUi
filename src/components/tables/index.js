@@ -111,7 +111,9 @@ const AppTable = ({
   idKey,
   handleAction,
   isEdit,
-  content
+  content,
+  visiblePopoverKey,
+  setVisiblePopoverKey,
 }) => {
   if (isCheckBox) {
     column.push({
@@ -232,6 +234,8 @@ const AppTable = ({
                       handleAction={handleAction}
                       isEdit={isEdit}
                       content={content}
+                      visiblePopoverKey={visiblePopoverKey}
+                      setVisiblePopoverKey={setVisiblePopoverKey}
                     />
                   ))
                 ) : (
@@ -451,9 +455,10 @@ const TableRow = ({
   isUpload,
   handleAction,
   content,
+  visiblePopoverKey,
+  setVisiblePopoverKey,
 }) => {
   const router = useRouter();
-  const [visiblePopoverKey, setVisiblePopoverKey] = useState(null);
 
   return (
     <tr
@@ -727,9 +732,9 @@ const TableRow = ({
                 <Popover
                   content={content}
                   title="Change Role"
-                  placement="bottom" 
+                  placement="bottom"
                   trigger="click"
-                  open={visiblePopoverKey === item.id} 
+                  open={visiblePopoverKey === item.id}
                   onOpenChange={(visible) => {
                     if (visible) {
                       setVisiblePopoverKey(item.id);

@@ -31,7 +31,9 @@ const intialValues = {
   email: "",
 
   userName: "",
+  isEdit: false,
 };
+console.log(intialValues, "intialValues");
 const UserList = ({
   getAllOrganizationList,
   organizationList,
@@ -96,6 +98,8 @@ const UserList = ({
   const [test, setTest] = useState(data?.response?.metaDataDTO);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isResetting, setIsResetting] = useState(false);
+  const [visiblePopoverKey, setVisiblePopoverKey] = useState(null);
+  const [isEdit, setIsEdit] = useState(false);
   const handleChange = (e) => {
     let value = e.target.value;
     const val = getDisplayValue(value);
@@ -126,6 +130,7 @@ const UserList = ({
   const [form] = Form.useForm();
 
   const handleSubmit = async (userFormData) => {
+    console.log(userFormData, "userFormData");
     const response = await getAddUser(userFormData, setFormData);
     if (response?.status == "SUCCESS") {
       getAllUsers();
@@ -163,17 +168,15 @@ const UserList = ({
     }));
   };
 
- 
-
-  useEffect(() => {
-    if (usersListData?.data?.response?.content) {
-      const initialSwitchStates = {};
-      usersListData.data.response.content.forEach((user) => {
-        initialSwitchStates[user.email] = user.accountStatus;
-      });
-      setSwitchStates(initialSwitchStates);
-    }
-  }, [usersListData]);
+   useEffect(() => {
+     if (data?.response?.pageResponse?.content) {
+       const initialSwitchStates = {};
+       data?.response?.pageResponse?.content.forEach((user) => {
+         initialSwitchStates[user.userName] = user.accountStatus;
+       });
+       setSwitchStates(initialSwitchStates);
+     }
+   }, [data?.response?.pageResponse?.content]);
 
   const handleSubmitPatientId = async (event) => {
     const form = event.currentTarget;
@@ -381,30 +384,30 @@ const UserList = ({
       cilentBased: false,
     });
   };
-   const handleSwitchToggle = async (item, checked) => {
-     if (isLoading) return;
-     setIsLoading(true);
-     setSwitchStates((prevStates) => ({
-       ...prevStates,
-       [item.userName]: checked,
-     }));
-     const data = {
-       userName: item.userName,
-       isActive: checked ? true : false,
-       isCilentBased: false,
-     };
-     try {
-       const res = await getEnableUser({
-         data,
-       });
-       if (res?.status === "SUCCESS") {
-         getAllUsers();
-       }
-     } catch (error) {
-       console.error("Error toggling switch:", error);
-     }
-     setIsLoading(false);
-   };
+  const handleSwitchToggle = async (item, checked) => {
+    if (isLoading) return;
+    setIsLoading(true);
+    setSwitchStates((prevStates) => ({
+      ...prevStates,
+      [item.userName]: checked,
+    }));
+    const data = {
+      userName: item.userName,
+      isActive: checked ? true : false,
+      isCilentBased: false,
+    };
+    try {
+      const res = await getEnableUser({
+        data,
+      });
+      if (res?.status === "SUCCESS") {
+        getAllUsers();
+      }
+    } catch (error) {
+      console.error("Error toggling switch:", error);
+    }
+    setIsLoading(false);
+  };
   useEffect(() => {
     var tenId = getStorage("tenantId");
     var uId = getStorage("userId");
@@ -428,8 +431,10 @@ const UserList = ({
   }, []);
 
   const onFinish = (values) => {
-    handleSubmit(values);
+    handleSubmit({ isEdit, ...values });
   };
+
+  console.log(data?.response?.staticDesign?.actualField, "visiblePopoverKey");
   const opt = {
     organization: organizationList?.response?.map((item) => ({
       value: item?.id,
@@ -444,10 +449,14 @@ const UserList = ({
     form.setFieldsValue({
       firstName: data.firstName,
       lastName: data.lastName,
-      email: data.email,
+      emailId: data.email,
       userName: data.userName,
-      isEdit: true,
+      mobileNumber: data.mobileNumber,
+      password: data.password,
+      confirmPassword: data.confirmPassword,
     });
+    setIsEdit(true);
+    setAddUser(true);
   };
 
   useEffect(() => {
@@ -564,6 +573,8 @@ const UserList = ({
                     "edit"
                   )}
                   handleAction={handleAction}
+                  visiblePopoverKey={visiblePopoverKey}
+                  setVisiblePopoverKey={setVisiblePopoverKey}
                 />
               </>
             </div>
@@ -665,6 +676,7 @@ const UserList = ({
           setAddUser(false);
           setRoleValue([]);
           setRole("");
+          setIsEdit(false);
           form.resetFields();
         }}
         // className="offcanvas-end offcanvas-md-size"
@@ -759,7 +771,7 @@ const UserList = ({
                         Email <span style={{ color: "red" }}>*</span>
                       </span>
                     }
-                    name="email"
+                    name="emailId"
                     rules={[
                       { required: true, message: "Please enter your email!" },
                       {
@@ -812,6 +824,124 @@ const UserList = ({
                   </Form.Item>
                 </Col>
               </Row>
+              {!isEdit && (
+                <>
+                  <input type="password" style={{ display: "none" }} />
+                  <Row gutter={16}>
+                    <Col span={12}>
+                      <Form.Item
+                        label="Password"
+                        name="password"
+                        dependencies={["password"]}
+                        rules={[
+                          {
+                            required: false,
+                            message: "Please enter your password!",
+                          },
+                          {
+                            validator: (_, value) =>
+                              value &&
+                              value.length >= 8 &&
+                              /[a-z]/.test(value) &&
+                              /[A-Z]/.test(value) &&
+                              /\d/.test(value) &&
+                              /[!@#$%^&*(),.?":{}|<>]/.test(value)
+                                ? Promise.resolve()
+                                : Promise.reject(
+                                    "Password must be at least 8 characters, with at least one lowercase, one uppercase, one number, and one special character!"
+                                  ),
+                          },
+                        ]}
+                      >
+                        <div
+                          id="input-password"
+                          name="input-password"
+                          className="confirmPass"
+                        >
+                          <input type="password" style={{ display: "none" }} />
+                          <Input.Password
+                            name="password"
+                            data-testid="password"
+                            placeholder="Enter password"
+                            autoComplete="new-password"
+                          />
+                        </div>
+                      </Form.Item>
+                    </Col>
+                    <Col span={12}>
+                      <Form.Item
+                        label="Confirm Password"
+                        name="confirmPassword"
+                        dependencies={["password"]}
+                        rules={[
+                          {
+                            required: false,
+                            message: "Please confirm your password!",
+                          },
+                          ({ getFieldValue }) => ({
+                            validator(_, value) {
+                              if (
+                                !value ||
+                                getFieldValue("password") === value
+                              ) {
+                                return Promise.resolve();
+                              }
+                              return Promise.reject(
+                                "Passwords do not match. Please verify and re-enter."
+                              );
+                            },
+                          }),
+                        ]}
+                      >
+                        <div
+                          id="input-confirmpassword"
+                          name="input-confirmpassword"
+                          className="confirmPass"
+                        >
+                          <input type="password" style={{ display: "none" }} />
+                          <Input.Password
+                            id="confirmPassword"
+                            name="confirmPassword"
+                            placeholder="Re-enter the password"
+                            autoComplete="new-password"
+                          />
+                        </div>
+                      </Form.Item>
+                    </Col>
+                    <Col span={12}>
+                      <Form.Item
+                        label="Mobile Number"
+                        name="mobileNumber"
+                        rules={[
+                          {
+                            required: false,
+                            max: 10,
+                            message: "Please enter your mobile number!",
+                          },
+                          {
+                            pattern: /^[0-9]{10}$/,
+                            message:
+                              "Please enter a valid 10-digit mobile number!",
+                          },
+                        ]}
+                      >
+                        <div>
+                          <Input
+                            id="mobileNumber"
+                            name="mobileNumber"
+                            type="text"
+                            placeholder="Enter mobile number"
+                            autoComplete="off"
+                            value={getDisplayValue(mobileNumber)}
+                            onChange={handleChange}
+                          />
+                        </div>
+                      </Form.Item>
+                    </Col>
+                  </Row>
+                </>
+              )}
+
               <div
                 id="fake-user"
                 name="fake-user"
@@ -857,6 +987,7 @@ const UserList = ({
                       setRole("");
                       form.resetFields();
                       setMobileNumber("");
+                      setIsEdit(false);
                     }}
                   >
                     Cancel

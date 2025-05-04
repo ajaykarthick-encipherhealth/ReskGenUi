@@ -49,7 +49,7 @@ export const AddUser = async (data, setFormData) => {
   };
 
   const response = await requestPortal(
-    `dbservice/mci/user/updateuser`,
+    `securityservice/admin/getusers/createuser`,
     options
   );
   return response;

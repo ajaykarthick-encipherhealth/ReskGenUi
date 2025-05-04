@@ -60,6 +60,7 @@ const Users = ({
   const [usersModal, setUsersModal] = useState(false);
   const [selectedItem, setSelectedItem] = useState(null);
   const [selectedRole, setSelectedRole] = useState([]);
+  const [visiblePopoverKey, setVisiblePopoverKey] = useState(null);
 
   const onPageChange = (e) => {
     setPaginationFirst(e.first);
@@ -108,6 +109,11 @@ const Users = ({
     pageNumber,
     pageLoad,
   ]);
+// useEffect(() => {
+//   if (editingUser) {
+//     setSelectedRole(editingUser.roles); // editingUser.roles = ['admin', 'user']
+//   }
+// }, [editingUser]);
 
   const handleSubmit = async () => {
     setIsSubmitting(true);
@@ -138,14 +144,14 @@ const Users = ({
       ...prevStates,
       [item.userName]: checked,
     }));
-const data = {
-  userName: item.userName,
-  isActive: checked ? true : false,
-  isCilentBased: true,
-};
+    const data = {
+      userName: item.userName,
+      isActive: checked ? true : false,
+      isClientBased: true,
+    };
     try {
       const res = await getEnableUser({
-        data
+        data,
       });
       if (res?.status === "SUCCESS") {
         getUsersAPi();
@@ -174,7 +180,7 @@ const data = {
       getResponePopup(error?.response);
     }
   };
-  const handleRoleSubmit =  async () => {
+  const handleRoleSubmit = async () => {
     const payload = {
       userName: selectedItem,
       roles: selectedRole,
@@ -182,8 +188,8 @@ const data = {
     const response = await editUserRoles(payload);
     if (response?.status === "SUCCESS") {
       getUsersAPi();
-      setSelectedItem(null)
-      setSelectedRole([])
+      setSelectedItem(null);
+      setSelectedRole([]);
       getResponePopup(response);
     }
   };
@@ -191,42 +197,40 @@ const data = {
     value: item?.roleId,
     label: `${item?.roleName}`,
   }));
-
   const handleCancel = () => {
     setPopoverVisible(false);
     setSelectedRole([]); // Clear selected roles
   };
 
-   const content = () => (
-     <>
-       <div className="d-flex justify-content-end mb-2">
-         {/* <CloseOutlined
+  const content = () => (
+    <>
+      <div className="d-flex justify-content-end mb-2">
+        {/* <CloseOutlined
            onClick={handleCancel}
            style={{ cursor: "pointer", fontSize: "16px" }}
          /> */}
-       </div>
-       <Select
-         options={roles}
-         placeholder="Select the role"
-         style={{ width: "100%" }}
-         value={selectedRole}
-         mode="multiple"
-         onChange={(value) => setSelectedRole(value)}
-       />
-       <div className="d-flex align-items-center justify-content-center mt-3 gap-2">
-         <Button onClick={handleRoleSubmit} className="btn btn-sm w-full">
-           Submit
-         </Button>
-         <Button onClick={handleCancel} className="btn btn-sm w-full" danger>
-           Cancel
-         </Button>
-       </div>
-     </>
-   );
-
+      </div>
+      <Select
+        options={roles}
+        placeholder="Select the role"
+        style={{ width: "100%" }}
+        value={selectedRole}
+        mode="multiple"
+        onChange={(value) => setSelectedRole(value)}
+      />
+      <div className="d-flex align-items-center justify-content-center mt-3 gap-2">
+        <Button onClick={handleRoleSubmit} className="btn btn-sm w-full">
+          Submit
+        </Button>
+        <Button onClick={handleCancel} className="btn btn-sm w-full" danger>
+          Cancel
+        </Button>
+      </div>
+    </>
+  );
 
   const handleAction = (item) => {
-    setSelectedItem(item?.userName)
+    setSelectedItem(item?.userName);
   };
 
   useEffect(() => {
@@ -321,6 +325,8 @@ const data = {
               isEdit={findItemWithTrueKey(data?.response?.staticDesign, "edit")}
               handleAction={handleAction}
               content={content}
+              visiblePopoverKey={visiblePopoverKey}
+              setVisiblePopoverKey={setVisiblePopoverKey}
             />
           </div>
           <div>

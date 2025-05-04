@@ -59,7 +59,8 @@ export async function getTableView({
     "da4958c3-7795-4bcc-8ab0-24d93cd52c25",
   ];
   const clientBasesPageIds = [
-    "8e4f1d2a-7b3c-45e6-9f1d-2a7b3c45e6f1"
+    "8e4f1d2a-7b3c-45e6-9f1d-2a7b3c45e6f1",
+    "1406dafa-46fa-4f69-ac1b-e354ebc03dad"
   ]
 
   if (allowedPageIds.includes(pageId)) {

@@ -132,7 +132,7 @@ const Addpatients = ({
                 </Form.Item>
                 {isProjectRoute && (
                   <Form.Item
-                    label="Tin Number"
+                    label="Tin Name"
                     name="tin"
                     id="tinNumber"
                     rules={[
@@ -146,6 +146,13 @@ const Addpatients = ({
                       placeholder="Select Tin"
                       onChange={handleTinChange}
                       options={TinOptions}
+                      showSearch={true}
+                      allowClear={true}
+                      filterOption={(input, option) =>
+                        (option?.label ?? "")
+                          .toLowerCase()
+                          .includes(input.toLowerCase())
+                      }
                     />
                   </Form.Item>
                 )}
