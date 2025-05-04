@@ -10,10 +10,12 @@ import {
   faUser,
   faCircle,
 } from "@fortawesome/free-solid-svg-icons";
+
 import { disablePastDate } from "../../../../components/headerFilters/functions";
 import { actions as allActions } from "../../../../stores/admin/patientAllocation";
 import { connect } from "react-redux";
 import { getResponePopup } from "../../../../utils/reusable";
+
 
 const AllocateModal = ({
   open,

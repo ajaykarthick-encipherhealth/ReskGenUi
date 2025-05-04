@@ -156,5 +156,15 @@ export async function getUserRole() {
   );
   return data;
 }
+export const editRoles = async ( data ) => {
+  const url = `dbservice/mci/user/edit-role`;
+  const options = {
+    method: "POST",
+    body: JSON.stringify(data),
+  };
+
+  const res = await requestPortal(`${url}`, options);
+  return res;
+};
 
 

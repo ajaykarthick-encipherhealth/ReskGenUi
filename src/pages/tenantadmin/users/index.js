@@ -18,18 +18,17 @@ const Users = ({
   tableLoader,
   getTableData,
   tableDynamicColumn,
-  pageId,
+  editUserRoles,
   data,
   getAllRoles,
   tableDynamicColumnReset,
   getEnableUser,
-  allRoles
+  allRoles,
 }) => {
   const router = useRouter();
   const [activeFilters, setActiveFilters] = useState([]);
   const [switchStates, setSwitchStates] = useState({});
   const [isLoading, setIsLoading] = useState(false);
-  
 
   const [sort, setSort] = useState({
     allocatedOn: {
@@ -60,8 +59,7 @@ const Users = ({
   const [isResetting, setIsResetting] = useState(false);
   const [usersModal, setUsersModal] = useState(false);
   const [selectedItem, setSelectedItem] = useState(null);
-const [selectedRole, setSelectedRole] = useState(null);
-
+  const [selectedRole, setSelectedRole] = useState([]);
 
   const onPageChange = (e) => {
     setPaginationFirst(e.first);
@@ -176,44 +174,60 @@ const data = {
       getResponePopup(error?.response);
     }
   };
-
+  const handleRoleSubmit =  async () => {
+    const payload = {
+      userName: selectedItem,
+      roles: selectedRole,
+    };
+    const response = await editUserRoles(payload);
+    if (response?.status === "SUCCESS") {
+      getUsersAPi();
+      setSelectedItem(null)
+      setSelectedRole([])
+      getResponePopup(response);
+    }
+  };
   const roles = allRoles?.content?.map((item) => ({
-      value: item?.roleId,
-      label: `${item?.roleName}`,
-    }))
-    const content = () => (
-      <>
-        <Select
-          options={roles}
-          placeholder="Select the role"
-          style={{ width: "100%" }}
-          value={selectedRole}
-          onChange={(value) => setSelectedRole(value)}
-        />
-        <div className="d-flex align-items-center justify-content-center mt-3">
-          <Button
-            data-testid="table-custom"
-            name="table-custom"
-            onClick={() => {
-              // You can trigger your API here using selectedItem and selectedRole
-              console.log("Submitting role change for:", selectedItem?.id, selectedRole);
-            }}
-            className="btn btn-sm w-full text-ellipsis tableButton"
-          >
-            Submit
-          </Button>
-        </div>
-      </>
-    );
-    
+    value: item?.roleId,
+    label: `${item?.roleName}`,
+  }));
+
+  const handleCancel = () => {
+    setPopoverVisible(false);
+    setSelectedRole([]); // Clear selected roles
+  };
+
+   const content = () => (
+     <>
+       <div className="d-flex justify-content-end mb-2">
+         {/* <CloseOutlined
+           onClick={handleCancel}
+           style={{ cursor: "pointer", fontSize: "16px" }}
+         /> */}
+       </div>
+       <Select
+         options={roles}
+         placeholder="Select the role"
+         style={{ width: "100%" }}
+         value={selectedRole}
+         mode="multiple"
+         onChange={(value) => setSelectedRole(value)}
+       />
+       <div className="d-flex align-items-center justify-content-center mt-3 gap-2">
+         <Button onClick={handleRoleSubmit} className="btn btn-sm w-full">
+           Submit
+         </Button>
+         <Button onClick={handleCancel} className="btn btn-sm w-full" danger>
+           Cancel
+         </Button>
+       </div>
+     </>
+   );
+
 
   const handleAction = (item) => {
-    console.log(item,"item")
-    setSelectedItem(item);
-    setSelectedRole(item?.roleId);
+    setSelectedItem(item?.userName)
   };
-  console.log(selectedRole)
-  
 
   useEffect(() => {
     setActiveFilters(
@@ -233,10 +247,9 @@ const data = {
     }
   }, [data?.response?.pageResponse?.content]);
 
-
-  useEffect(()=>{
-    getAllRoles()
-  },[])
+  useEffect(() => {
+    getAllRoles();
+  }, []);
 
   return (
     <div className={`show `}>
@@ -336,6 +349,7 @@ const enhancer = connect(
     tableDynamicColumnReset: tableAction.tableDynamicColumnReset,
     getEnableUser: tenantAdminAction.usersSoftDelete,
     getAllRoles: allActions.usersAllRoles,
+    editUserRoles: allActions.userEditRoles,
   }
 );
 export default enhancer(Users);

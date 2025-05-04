@@ -41,7 +41,7 @@ const UsersModal = ({
   const getUserList = async () => {
     const response = await getAllUsersList();
     if (response?.status === "SUCCESS") {
-      let result = response?.response?.content;
+      let result = response?.response;
       const user = result?.map((item) => {
         return {
           firstName: item?.firstName,

@@ -35,5 +35,9 @@ export const usersAllRoles = createActionThunk(
   "GET_USERS_ROLES",
   network.getUserRole
 );
-
+export const userEditRoles = createActionThunk(
+  "EDIT_USERS_ROLES",
+  network.editRoles
+);
+;
 
