@@ -42,7 +42,7 @@ const MoveBackModal = ({
       const response = await moveBack({
         patientIdList: selectedRowsId,
         roleDetailsToMoveBack: selectLevel,
-        isRevertSelected: isSwitchOn,
+        revertSelected: isSwitchOn,
       });
 
       if (response?.status === "SUCCESS") {

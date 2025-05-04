@@ -163,26 +163,7 @@ const UserList = ({
     }));
   };
 
-  const handleSwitchToggle = async (item, checked) => {
-    // if (isLoading) return;
-    // setIsLoading(true);
-    // setSwitchStates((prevStates) => ({
-    //   ...prevStates,
-    //   [item.userName]: checked,
-    // }));
-    // try {
-    //   const res = await getEnableUser({
-    //     checked: checked ? "yes" : "no",
-    //     user: item,
-    //   });
-    //   if (res?.status === "SUCCESS") {
-    //     getAllUsers();
-    //   }
-    // } catch (error) {
-    //   console.error("Error toggling switch:", error);
-    // }
-    // setIsLoading(false);
-  };
+ 
 
   useEffect(() => {
     if (usersListData?.data?.response?.content) {
@@ -400,6 +381,30 @@ const UserList = ({
       cilentBased: false,
     });
   };
+   const handleSwitchToggle = async (item, checked) => {
+     if (isLoading) return;
+     setIsLoading(true);
+     setSwitchStates((prevStates) => ({
+       ...prevStates,
+       [item.userName]: checked,
+     }));
+     const data = {
+       userName: item.userName,
+       isActive: checked ? true : false,
+       isCilentBased: false,
+     };
+     try {
+       const res = await getEnableUser({
+         data,
+       });
+       if (res?.status === "SUCCESS") {
+         getAllUsers();
+       }
+     } catch (error) {
+       console.error("Error toggling switch:", error);
+     }
+     setIsLoading(false);
+   };
   useEffect(() => {
     var tenId = getStorage("tenantId");
     var uId = getStorage("userId");
@@ -881,7 +886,7 @@ const enhancer = connect(
     getAllUsersList: tenantAdminAction.getAllUsersAction,
     getAddUser: tenantAdminAction.getAddUser,
     addPatients: tenantAdminAction.addPatient,
-    getEnableUser: tenantAdminAction.getEnableUser,
+    getEnableUser: tenantAdminAction.usersSoftDelete,
     getTenantAdminSelectUserList: adminAction.getSelectUserList,
     getTableData: tableAction.tableViewAction,
     tableDynamicColumn: tableAction.tableDynamicColumn,

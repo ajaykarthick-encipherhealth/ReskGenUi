@@ -140,7 +140,7 @@ const Users = ({
     }));
 const data = {
   userName: item.userName,
-  isActive: checked ? "yes" : "false",
+  isActive: checked ? true : false,
   isCilentBased: true,
 };
     try {

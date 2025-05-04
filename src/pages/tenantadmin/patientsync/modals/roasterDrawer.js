@@ -29,6 +29,7 @@ const RoasterDrawer = ({
   const onClose = () => {
     setIsDrawerOpen(false);
     form.resetFields();
+    setPriority([]);
   };
   const onFinish = async (formVal) => {
     try {
@@ -39,10 +40,12 @@ const RoasterDrawer = ({
       }
 
       setLoading(true);
-
       const formData = new FormData();
       formData.append("file", file);
-      formData.append("priority", formVal.priority);
+      if (reportActiveTab === "Tin Roaster") {
+        formData.append("priority", formVal.priority);
+      }
+
       if (reUpload) formData.append("retryId", reUpload);
 
       const uploadActions = {
@@ -113,29 +116,31 @@ const RoasterDrawer = ({
           layout="vertical"
           onFinish={onFinish}
         >
-          <Form.Item
-            label={
-              <label>
-                Priority <span className="text-danger">*</span>
-              </label>
-            }
-            name="priority"
-            rules={[
-              {
-                required: true,
-                message: "Please select a priority",
-              },
-            ]}
-          >
-            <Select
-              id="select-priority"
-              className={modalStyle.prioritySelect}
-              options={priorityOptions}
-              placeholder="Set priority"
-              onChange={handleChange}
-              value={priority}
-            />
-          </Form.Item>
+          {reportActiveTab === "Tin Roaster" && (
+            <Form.Item
+              label={
+                <label>
+                  Priority <span className="text-danger">*</span>
+                </label>
+              }
+              name="priority"
+              rules={[
+                {
+                  required: true,
+                  message: "Please select a priority",
+                },
+              ]}
+            >
+              <Select
+                id="select-priority"
+                className={modalStyle.prioritySelect}
+                options={priorityOptions}
+                placeholder="Set priority"
+                onChange={handleChange}
+                value={priority}
+              />
+            </Form.Item>
+          )}
 
           <Form.Item
             label="Upload Excel File"
