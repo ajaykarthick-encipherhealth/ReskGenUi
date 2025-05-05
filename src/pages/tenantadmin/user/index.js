@@ -695,6 +695,7 @@ const UserList = ({
             onClick={() => {
               setAddUser(false);
               form.resetFields();
+                setIsEdit(!isEdit);
             }}
           >
             <i className="fa-solid fa-xmark"></i>
@@ -987,7 +988,7 @@ const UserList = ({
                       setRole("");
                       form.resetFields();
                       setMobileNumber("");
-                      setIsEdit(false);
+                      setIsEdit(!isEdit);
                     }}
                   >
                     Cancel

@@ -12,6 +12,8 @@ import QueryApproval from "../../../../commonPages/queryApproval";
 import Patients from "../../../../commonPages/patients";
 import { getAccessTabItems } from "../../../../utils/reusable";
 import visitStyles from "../../../../styles/visitdata.module.css";
+import { Spin } from "antd";
+import { LoadingOutlined } from "@ant-design/icons";
 
 const TinDetails = ({ activeTabName, getProjectActiveTab }) => {
   const router = useRouter();

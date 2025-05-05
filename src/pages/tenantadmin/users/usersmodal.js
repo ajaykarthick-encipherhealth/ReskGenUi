@@ -39,7 +39,7 @@ const UsersModal = ({
   const [roleIds, setRoleIds] = useState([]);
 
   const getUserList = async () => {
-    const response = await getAllUsersList();
+    const response = await getAllUsersList({ searchText : search });
     if (response?.status === "SUCCESS") {
       let result = response?.response;
       const user = result?.map((item) => {
@@ -132,12 +132,12 @@ const UsersModal = ({
   };
 
   useEffect(() => {
-    getUserList();
-  }, []);
+    getUserList({ search });
+  }, [search]);
 
   useEffect(() => {
-    getAllRoles();
-  }, []);
+    getAllRoles({ searchText: search || "" });
+  }, [search]);
   return (
     <div>
       <Modal

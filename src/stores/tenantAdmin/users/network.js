@@ -114,16 +114,19 @@ export const enableUser = async ({
   }
 };
 
-export async function getAllUser() {
+export async function getAllUser({ searchText }) {
   const options = {
     method: "GET",
   };
   const data = await requestPortal(
-    `/dbservice/mci/user/unassigned`,
+    `/dbservice/mci/user/unassigned?&searchString=${
+      searchText ? searchText : ""
+    }`,
     options
   );
   return data;
 }
+
 
 export const usersAssignedList = async ({ data }) => {
   const url = `dbservice/mci/user/assignuser`;
@@ -146,12 +149,14 @@ export const usersSoftDelete = async ({ data }) => {
   return res;
 };
 
-export async function getUserRole() {
+export async function getUserRole({ searchText }) {
   const options = {
     method: "GET",
   };
   const data = await requestPortal(
-    `/dbservice/mci/user/getroles`,
+    `/dbservice/mci/user/getroles?&searchString=${
+      searchText ? searchText : ""
+    }`,
     options
   );
   return data;
