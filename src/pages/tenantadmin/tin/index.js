@@ -196,7 +196,7 @@ const Tin = ({
   const [checkedLoader, setCheckedLoader] = useState(false);
   const [checkedHeader, setCheckedHeader] = useState(false);
   const [parsedData, setParsedData] = useState([]);
-
+  const [pageSize, setPageSize] = useState(15);
   const gotoPatientDetails = (rowData) => {
     setStorage("patientId", rowData.patientId);
     setStorage("tinNumber", rowData.tinNumber);

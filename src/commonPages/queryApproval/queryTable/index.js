@@ -18,6 +18,8 @@ const QueryTable = ({
   const buttons = ["Pending", "Approved", "Rejected"];
   const [pageNo, setPageNo] = useState(0);
   const [paginationFirst, setPaginationFirst] = useState(0);
+    const [pageSize, setPageSize] = useState(15);
+
   const onPageChange = (e) => {
     setPaginationFirst(e.first);
     setPageNo(e.page);
