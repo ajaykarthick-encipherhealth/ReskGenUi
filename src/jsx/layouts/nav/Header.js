@@ -218,7 +218,7 @@ const Header = ({
     if(!selectedRoleObj){
       selectedRoleObj = allRoles?.find((res) => res?.details?.proxyRole === key);
     } 
-    const accessMenuList = selectedRoleObj?.accessList ? selectedRoleObj?.accessList : selectedRoleObj?.details;
+    const accessMenuList = selectedRoleObj ? selectedRoleObj : selectedRoleObj?.details;    
     setStorage("userRole", key);
     setStorage("proxyRole", accessMenuList?.proxyRole);
     setStorage("roleId", accessMenuList?.roleId);
