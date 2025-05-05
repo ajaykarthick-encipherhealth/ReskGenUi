@@ -480,6 +480,9 @@ const Tin = ({
       projectId: "test",
       allTinIds: false,
       sort,
+      selectedDateRanges,
+      selectedOption,
+      searchText
     });
   };
   // const handlePriorityChange = async (
@@ -540,6 +543,7 @@ const Tin = ({
     selectedDateRanges,
     selectedOption,
     sort,
+    searchText
   ]);
 
   useEffect(() => {
