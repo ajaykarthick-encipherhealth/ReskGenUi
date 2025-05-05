@@ -807,7 +807,7 @@ const Patient = ({
     status: statusOptions,
     flag: flagPostList,
   };
-  const handleSubmitInsert = async () => {
+  const handleSubmitInsert = async (data) => {
     setIsSubmitting(true);
     let pageId = "d80f80fd-aab8-496e-a9fc-89677d5ac174";
 
@@ -816,9 +816,7 @@ const Patient = ({
     }
     const payload = {
       pageId,
-      headerNames: test
-        .filter((col) => col.active)
-        .map((col) => col.actualField),
+      headerNames: data.map((col) => col.id),
     };
 
     try {

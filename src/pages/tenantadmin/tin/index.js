@@ -300,13 +300,11 @@ const Tin = ({
     }
   };
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (data) => {
     setIsSubmitting(true);
     const payload = {
       pageId: pageIds,
-      headerNames: test
-        .filter((col) => col.active)
-        .map((col) => col.actualField),
+      headerNames: data.map((col) => col.id),
     };
 
     try {

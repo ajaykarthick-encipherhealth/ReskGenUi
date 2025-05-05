@@ -61,6 +61,8 @@ const Users = ({
   const [selectedItem, setSelectedItem] = useState(null);
   const [selectedRole, setSelectedRole] = useState([]);
   const [visiblePopoverKey, setVisiblePopoverKey] = useState(null);
+  const [editingUser, setEditingUser] = useState([]);
+
 
   const onPageChange = (e) => {
     setPaginationFirst(e.first);
@@ -109,20 +111,18 @@ const Users = ({
     pageNumber,
     pageLoad,
   ]);
-// useEffect(() => {
-//   if (editingUser) {
-//     setSelectedRole(editingUser.roles); // editingUser.roles = ['admin', 'user']
-//   }
-// }, [editingUser]);
+useEffect(() => {  
+  if (editingUser) {
+    setSelectedRole(editingUser.roleNames); // editingUser.roles = ['admin', 'user']
+  }
+}, [editingUser]);
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (data) => {
     setIsSubmitting(true);
 
     const payload = {
       pageId: "8e4f1d2a-7b3c-45e6-9f1d-2a7b3c45e6f1",
-      headerNames: test
-        .filter((col) => col.active)
-        .map((col) => col.actualField),
+      headerNames: data.map((col) => col.id),
     };
 
     try {
@@ -198,7 +198,7 @@ const Users = ({
     label: `${item?.roleName}`,
   }));
   const handleCancel = () => {
-    setPopoverVisible(false);
+    setVisiblePopoverKey(false);
     setSelectedRole([]); // Clear selected roles
   };
 
@@ -219,7 +219,7 @@ const Users = ({
         onChange={(value) => setSelectedRole(value)}
       />
       <div className="d-flex align-items-center justify-content-center mt-3 gap-2">
-        <Button onClick={handleRoleSubmit} className="btn btn-sm w-full">
+        <Button onClick={handleRoleSubmit} className="btn tableButton btn-sm w-full">
           Submit
         </Button>
         <Button onClick={handleCancel} className="btn btn-sm w-full" danger>
@@ -327,6 +327,7 @@ const Users = ({
               content={content}
               visiblePopoverKey={visiblePopoverKey}
               setVisiblePopoverKey={setVisiblePopoverKey}
+              setEditingUser={setEditingUser}
             />
           </div>
           <div>

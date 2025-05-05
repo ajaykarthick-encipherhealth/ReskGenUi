@@ -296,13 +296,11 @@ const UserList = ({
   const onClose = () => {
     setOpenTable(false);
   };
-  const handleSubmitInsert = async () => {
+  const handleSubmitInsert = async (data) => {
     setIsSubmitting(true);
     const payload = {
       pageId: "1406dafa-46fa-4f69-ac1b-e354ebc03dad",
-      headerNames: test
-        .filter((col) => col.active)
-        .map((col) => col.actualField),
+      headerNames: data.map((col) => col.id),
     };
 
     try {

@@ -105,14 +105,12 @@ const Clients = ({
       searchText,
     });
   };
-  const handleTableSubmit = async () => {
+  const handleTableSubmit = async (data) => {
     setIsSubmitting(true);
 
     const payload = {
       pageId: "1b4e28ba-2fa1-11d2-883f-0016d3cca427",
-      headerNames: test
-        .filter((col) => col.active)
-        .map((col) => col.actualField),
+      headerNames: data.map((col) => col.id),
     };
 
     try {

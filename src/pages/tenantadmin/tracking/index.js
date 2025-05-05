@@ -298,13 +298,11 @@ const Patient = ({
       </div>
     );
   };
-  const handleSubmit = async () => {
+  const handleSubmit = async (data) => {
     setIsSubmitting(true);
     const payload = {
       pageId: "ea046971-08de-4ee2-bf47-10c62c0eaa18",
-      headerNames: test
-        .filter((col) => col.active)
-        .map((col) => col.actualField),
+      headerNames: data.map((col) => col.id),
     };
 
     try {

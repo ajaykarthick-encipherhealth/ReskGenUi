@@ -197,14 +197,12 @@ const QueryApproval = ({
     setOpen(false);
   };
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (data) => {
     setIsSubmitting(true);
 
     const payload = {
       pageId: "8c1eebaf-eb20-4758-b968-6ae15e6fc031",
-      headerNames: test
-        .filter((col) => col.active)
-        .map((col) => col.actualField),
+      headerNames: data.map((col) => col.id),
     };
 
     try {

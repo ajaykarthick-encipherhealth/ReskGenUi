@@ -811,14 +811,12 @@ const PatientSync = ({
       : reportActiveTab === "Tin Roaster"
       ? "1ff437a0-18a8-47de-893d-41dc669e3cbd"
       : "";
-  const handleSubmitInsert = async () => {
+  const handleSubmitInsert = async (data) => {
     setIsSubmitting(true);
 
     const payload = {
       pageId: pageIds,
-      headerNames: test
-        .filter((col) => col.active)
-        .map((col) => col.actualField),
+      headerNames: data.map((col) => col.id),
     };
 
     try {

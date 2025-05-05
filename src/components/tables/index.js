@@ -114,6 +114,7 @@ const AppTable = ({
   content,
   visiblePopoverKey,
   setVisiblePopoverKey,
+  setEditingUser
 }) => {
   if (isCheckBox) {
     column.push({
@@ -236,6 +237,7 @@ const AppTable = ({
                       content={content}
                       visiblePopoverKey={visiblePopoverKey}
                       setVisiblePopoverKey={setVisiblePopoverKey}
+                      setEditingUser={setEditingUser}
                     />
                   ))
                 ) : (
@@ -457,6 +459,7 @@ const TableRow = ({
   content,
   visiblePopoverKey,
   setVisiblePopoverKey,
+  setEditingUser
 }) => {
   const router = useRouter();
 
@@ -737,6 +740,7 @@ const TableRow = ({
                   open={visiblePopoverKey === item.id}
                   onOpenChange={(visible) => {
                     if (visible) {
+                      setEditingUser(item)
                       setVisiblePopoverKey(item.id);
                     } else {
                       setVisiblePopoverKey(null);

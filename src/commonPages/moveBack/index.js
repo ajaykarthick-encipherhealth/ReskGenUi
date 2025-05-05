@@ -174,16 +174,12 @@ const MoveBack = ({
       tin,
     });
   };
-  const handleSubmit = async () => {
+  const handleSubmit = async (data) => {
     setIsSubmitting(true);
-
     const payload = {
       pageId: "937b0477-f0cd-46e7-b8ab-fefb38f91859",
-      headerNames: test
-        .filter((col) => col.active)
-        .map((col) => col.actualField),
+      headerNames: data.map((col) => col.id),
     };
-
     try {
       const response = await tableDynamicColumn({ payload });
       if (response?.status === "SUCCESS") {

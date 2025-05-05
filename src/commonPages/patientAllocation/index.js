@@ -180,14 +180,12 @@ const PatientAllocation = ({
       tin,
     });
   };
-  const handleSubmit = async () => {
+  const handleSubmit = async (data) => {
     setIsSubmitting(true);
 
     const payload = {
       pageId: "6cd166eb-79ac-4c12-ab0f-07be2983ca70",
-      headerNames: test
-        .filter((col) => col.active)
-        .map((col) => col.actualField),
+      headerNames: data.map((col) => col.id),
     };
 
     try {

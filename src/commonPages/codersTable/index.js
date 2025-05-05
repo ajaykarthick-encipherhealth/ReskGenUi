@@ -330,16 +330,12 @@ const CodersTable = ({
     setActiveStatus(name);
   };
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (data) => {
     setIsSubmitting(true);
-
     const payload = {
       pageId: pageId,
-      headerNames: test
-        .filter((col) => col.active)
-        .map((col) => col.actualField),
-    };
-
+      headerNames: data.map((col) => col.id),
+    };        
     try {
       const response = await tableDynamicColumn({ payload });
       if (response?.status === "SUCCESS") {

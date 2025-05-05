@@ -131,14 +131,12 @@ const Projects = ({
       searchText,
     });
   };
-  const handleTableSubmit = async () => {
+  const handleTableSubmit = async (data) => {
     setIsSubmitting(true);
 
     const payload = {
       pageId: "7e57d004-2b97-0e7a-b45f-5387367791cd",
-      headerNames: test
-        .filter((col) => col.active)
-        .map((col) => col.actualField),
+      headerNames: data.map((col) => col.id),
     };
 
     try {
