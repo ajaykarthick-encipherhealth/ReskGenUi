@@ -32,16 +32,27 @@ export async function SearchPatientsList({ pagenum, search }) {
   return res;
 }
 
-export async function ChangePriority({ patientId, year, priority }) {
+// export async function ChangePriority({ patientId, year, priority }) {
+//   const options = {
+//     method: "PUT",
+//   };
+//   const data = await requestPortal(
+//     `dbservice/change/priority?patientId=${patientId}&year=${year}&priority=${priority}`,
+//     options
+//   );
+//   return data;
+// }
+
+export const ChangePriority = async (data) => {
+  const url = `/dbservice/tin/edit`;
   const options = {
-    method: "PUT",
+    method: "POST",
+    body: JSON.stringify(data),
   };
-  const data = await requestPortal(
-    `dbservice/change/priority?patientId=${patientId}&year=${year}&priority=${priority}`,
-    options
-  );
-  return data;
-}
+
+  const res = await requestPortal(`${url}`, options);
+  return res;
+};
 
 export async function GetWorkListFilters({ data }) {
   const options = {

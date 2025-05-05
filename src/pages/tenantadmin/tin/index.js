@@ -12,6 +12,7 @@ import { actions as allActions } from "../../../stores/reviewer/workqueue";
 import { getStorage, setStorage } from "../../../utils/storages";
 import { statusOptions } from "../../reviewer/patients";
 import visitStyles from "../../../styles/visitdata.module.css";
+import { actions as supervisorActions } from "../../../stores/supervisor/auditedQueue";
 
 import {
   findItemWithTrueKey,
@@ -156,6 +157,7 @@ const Tin = ({
   tinCount,
   setTinStatus,
   getTableDataChecked,
+  tinPriority,
 }) => {
   const tabs = getAccessTabItems({ page: "Tin", tabsMenu: "tabMenuList" });
   const activeTab = activeTabName || tabs?.[0] || "Active";
@@ -197,6 +199,8 @@ const Tin = ({
   const [checkedHeader, setCheckedHeader] = useState(false);
   const [parsedData, setParsedData] = useState([]);
   const [pageSize, setPageSize] = useState(15);
+  const [priority, setPriority] = useState(null);
+
   const gotoPatientDetails = (rowData) => {
     setStorage("patientId", rowData.patientId);
     setStorage("tinNumber", rowData.tinNumber);
@@ -462,6 +466,7 @@ const Tin = ({
       setSort(sort);
     }
   }, [routedData]);
+
   const getAllTins = async (tabOverride) => {
     const currentTab = tabOverride || activeTab;
     const pageId = getPageId(currentTab);
@@ -477,6 +482,49 @@ const Tin = ({
       sort,
     });
   };
+  // const handlePriorityChange = async (
+  //   patientId,
+  //   selectedValue,
+  // ) => {
+  //   console.log(patientId, selectedValue,"tin");
+  //   const tinNumber = getStorage("tinNumber");
+  //   cosnole.log(priority, "priority");
+
+  //   const data = {
+  //     tin: tinNumber,
+  //     priority: selectedValue,
+  //   };
+  //   console.log(data, "data");
+  //   const res = await supervisorPriority(data);
+  //   getResponePopup(res);
+  //   setPriority({ selectedValue: selectedValue});
+  //   if (res.status === "SUCCESS") {
+  //     getAllTins();
+  //     setParamsFilter("check");
+  //   }
+  // };
+  const handlePriorityChange = async (tinNumber, selectedValue) => {
+    console.log(tinNumber, selectedValue, "tin");
+    const data = {
+      tin: tinNumber,
+      priority: selectedValue,
+    };
+    console.log(data, "data");
+
+    try {
+      const res = await tinPriority(data);
+      getResponePopup(res);
+
+      if (res.status === "SUCCESS") {
+        setPriority((prev) => ({ ...prev, [tinNumber]: selectedValue }));
+        getAllTins();
+        setParamsFilter("check");
+      }
+    } catch (error) {
+      console.error("Failed to update priority", error);
+    }
+  };
+
   const handleSwitchToggle = async (item, checked) => {};
 
   useEffect(() => {
@@ -642,6 +690,7 @@ const Tin = ({
                 checkBoxLoader={checkedLoader}
                 setCheckedHeader={setCheckedHeader}
                 statusBodyTemplate={processstatusBodyTemplate}
+                handlePriorityChange={handlePriorityChange}
               />
             )}
             {activeTab === "InActive" && (
@@ -737,6 +786,7 @@ const enhancer = connect(
     getTinCountData: tableAction.getTinCountAction,
     setTinStatus: tableAction.setTinStatus,
     getTableDataChecked: tableAction.tinDynamicChecked,
+    tinPriority: supervisorActions.getPriorityChange,
   }
 );
 

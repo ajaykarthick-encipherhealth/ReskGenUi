@@ -130,7 +130,6 @@ const UserList = ({
   const [form] = Form.useForm();
 
   const handleSubmit = async (userFormData) => {
-    console.log(userFormData, "userFormData");
     const response = await getAddUser(userFormData, setFormData);
     if (response?.status == "SUCCESS") {
       getAllUsers();

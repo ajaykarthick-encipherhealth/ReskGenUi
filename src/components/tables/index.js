@@ -484,27 +484,23 @@ const TableRow = ({
       {column?.map((columnItem, index) => {
         if (columnItem?.design?.includes("PRIORITY")) {
           return (
-            <td
-              style={{ cursor: "not-allowed" }}
-              className={`font2 ${
-                index == 0
-                  ? Style.firstTdBorder
-                  : column.length - 1 == index
-                  ? Style.lastBorder
-                  : Style.childBorder
-              }`}
-            >
-              <span className="text-secondary">
-                {" "}
-                {item?.priority
-                  ? priorityStatus(item?.priority)
-                  : "Set Priority"}
-              </span>
-            </td>
-          );
-        }
-        if (columnItem.name == "priority") {
-          return (
+            // <td
+            //   style={{ cursor: "not-allowed" }}
+            //   className={`font2 ${
+            //     index == 0
+            //       ? Style.firstTdBorder
+            //       : column.length - 1 == index
+            //       ? Style.lastBorder
+            //       : Style.childBorder
+            //   }`}
+            // >
+            //   <span className="text-secondary">
+            //     {" "}
+            //     {item?.priority
+            //       ? priorityStatus(item?.priority)
+            //       : "Set Priority"}
+            //   </span>
+            // </td>
             <td
               className={`font2 ${
                 disableUser && !item?.accountStatus && Style.disableUser
@@ -528,7 +524,7 @@ const TableRow = ({
                 }
                 className="text-secondary"
               >
-                <Select
+                {/* <Select
                   options={priorityOptions}
                   placeholder="Set priority"
                   className={`custom-ant-select ${Style.customAntSelect}`}
@@ -536,20 +532,83 @@ const TableRow = ({
                   value={
                     item?.priority
                       ? item?.priority
-                      : priority?.patientId === item?.patientId
-                      ? priority?.selectedValue
-                      : "Set Priority"
+                      : // : priority?.patientId === item?.patientId
+                        // ? priority?.selectedValue
+                        "Set Priority"
                   }
                   onClick={(e) => e.stopPropagation()}
                   onChange={(value) =>
-                    handlePriorityChange(item?.patientId, value)
+                    handlePriorityChange(item?.tinNumber, value)
                   }
+                  style={{ width: "100%" }}
+                /> */}
+              
+                <Select
+                  options={priorityOptions}
+                  placeholder="Set priority"
+                  className={`custom-ant-select ${Style.customAntSelect}`}
+                  showSearch={false}
+                  value={item?.priority || undefined}
+                  onClick={(e) => e.stopPropagation()}
+                  onChange={
+                    handlePriorityChange
+                      ? (value) => handlePriorityChange(item?.tinNumber, value)
+                      : undefined
+                  }
+                  disabled={!handlePriorityChange} 
                   style={{ width: "100%" }}
                 />
               </span>
             </td>
           );
         }
+        // if (columnItem.name == "priority") {
+        //   return (
+        //     <td
+        //       className={`font2 ${
+        //         disableUser && !item?.accountStatus && Style.disableUser
+        //       } ${
+        //         index == 0
+        //           ? Style.firstTdBorder
+        //           : column.length - 1 === index
+        //           ? Style.lastBorder
+        //           : Style.childBorder
+        //       }`}
+        //     >
+        //       <span
+        //         id={
+        //           tableId
+        //             ? createIdGen("selectpriority " + tableId + colIndex)
+        //             : createIdGen(
+        //                 "selectpriority " +
+        //                   router.pathname.replaceAll("/", " ") +
+        //                   colIndex
+        //               )
+        //         }
+        //         className="text-secondary"
+        //       >
+        //         <Select
+        //           options={priorityOptions}
+        //           placeholder="Set priority"
+        //           className={`custom-ant-select ${Style.customAntSelect}`}
+        //           showSearch={false}
+        //           value={
+        //             item?.priority
+        //               ? item?.priority
+        //               // : priority?.patientId === item?.patientId
+        //               // ? priority?.selectedValue
+        //               : "Set Priority"
+        //           }
+        //           onClick={(e) => e.stopPropagation()}
+        //           onChange={(value) =>
+        //             handlePriorityChange(item?.patientId, value)
+        //           }
+        //           style={{ width: "100%" }}
+        //         />
+        //       </span>
+        //     </td>
+        //   );
+        // }
 
         if (findItemWithTrueOrFalse(columnItem.design, "PROFILE")) {
           return (
