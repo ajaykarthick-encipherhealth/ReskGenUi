@@ -221,9 +221,9 @@ const Header = ({
     setStorage("aliasName", selectedRoleObj?.aliasName);
     if (key === "Admin") {
       router.push("/admin/dashboard");
-    } else if (key === "CODER_1" || key === "CODER_2" || key === "QA" || key === "DOWNLOADER" || key === "OWNER") {
+    } else if (key === "CODER_1" || key === "CODER_2" || key === "QA") {
       if (router?.pathname != "/reviewer/dashboard") {
-      router.push("/reviewer/dashboard");
+        router.push("/reviewer/dashboard");
       } else {
         router.push("/reviewer/dashboard").then(() => {
           window.location.reload();
@@ -231,8 +231,18 @@ const Header = ({
       }
     } else if (key === "Supervisor") {
       router.push("/supervisor/dashboard");
-    } else if (key === "TENANT_ADMIN") {
-      router.push("/tenantadmin/dashboard");
+    } else if (
+      key === "TENANT_ADMIN" ||
+      key === "DOWNLOADER" ||
+      key === "OWNER"
+    ) {
+      if (router?.pathname != "/tenantadmin/dashboard") {
+        router.push("/tenantadmin/dashboard");
+      } else {
+        router.push("/tenantadmin/dashboard").then(() => {
+          window.location.reload();
+        });
+      }
     } else if (key === "Ehr") {
       router.push("/ehr/patients");
     }
@@ -250,6 +260,10 @@ const Header = ({
         return PhysicanMenuList(selectedRoleObj?.accessList);
       case "QA":
         return PhysicanMenuList(selectedRoleObj?.accessList);
+      case "DOWNLOADER":
+        return ProviderMenuList(selectedRoleObj?.accessList);
+      case "OWNER":
+        return ProviderMenuList(selectedRoleObj?.accessList);
       case "supervisor":
         return L2AuditorMenuList;
       case "TENANT_ADMIN":
@@ -277,7 +291,7 @@ const Header = ({
   };
 
   useEffect(() => {
-    getTableData({reloadTrue:true});
+    getTableData({ reloadTrue: true });
   }, []);
 
   useEffect(() => {
@@ -631,7 +645,7 @@ const Header = ({
   const handleClientChange = async (value) => {
     setStorage("client", value.value);
     setSelectedClient(value);
-    const res = await getAllProjects();    
+    const res = await getAllProjects();
     if (res?.response?.length === 0) {
       setSelectedClient(backupSelectedClient);
       setStorage("client", backupSelectedClient);
@@ -680,7 +694,7 @@ const Header = ({
         label: data.proxyRole,
         key: data.proxyRole,
         details: data,
-      }));      
+      }));
       if (data?.length > 0) {
         setRoles(data);
         setStorage(
@@ -1058,7 +1072,7 @@ const Header = ({
                               <Dropdown
                                 menu={{
                                   items: roles,
-                                  defaultSelectedKeys: currentRole,
+                                  defaultSelectedKeys: userRole,
                                   onClick,
                                 }}
                                 trigger={["click"]}
