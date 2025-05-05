@@ -215,14 +215,14 @@ const Header = ({
   const onClick = ({ key }) => {
     const allRoles = JSON.parse(getStorage("userAllRoles"));
     let selectedRoleObj = allRoles?.find((res) => res.proxyRole === key);
-    if(!selectedRoleObj){
+    if(!selectedRoleObj){      
       selectedRoleObj = allRoles?.find((res) => res?.details?.proxyRole === key);
     } 
-    const accessMenuList = selectedRoleObj ? selectedRoleObj : selectedRoleObj?.details;    
+    const accessMenuList = selectedRoleObj ? selectedRoleObj : selectedRoleObj?.details;        
     setStorage("userRole", key);
-    setStorage("proxyRole", accessMenuList?.proxyRole);
-    setStorage("roleId", accessMenuList?.roleId);
-    setStorage("aliasName", accessMenuList?.aliasName);
+    setStorage("proxyRole", accessMenuList?.proxyRole ? accessMenuList?.proxyRole : accessMenuList?.details.proxyRole);
+    setStorage("roleId", accessMenuList?.roleId ? accessMenuList?.roleId : accessMenuList?.details.roleId);
+    setStorage("aliasName",accessMenuList?.aliasName ? accessMenuList?.aliasName : accessMenuList?.details.aliasName);
     if (key === "Admin") {
       router.push("/admin/dashboard");
     } else if (key === "CODER_1" || key === "CODER_2" || key === "QA") {
@@ -701,7 +701,7 @@ const Header = ({
         label: data.proxyRole,
         key: data.proxyRole,
         details: data,
-      }));
+      }));      
       if (data?.length > 0) {
         setRoles(data);
         setStorage(
