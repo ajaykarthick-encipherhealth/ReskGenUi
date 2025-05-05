@@ -116,13 +116,13 @@ const ManuallyAdd = ({
 
   const getPageNumbers = () => {
     const getFilter = patientDosResult?.data?.response
-      ?.find((item) => item.dateOfService == getSelectedDos)
-      .fileDetailDTO.dosSummaries.find((item) => item.dos == getSelectedDos);
+      ?.find((item) => item?.dateOfService == getSelectedDos)
+      .fileDetailDTO?.dosSummaries?.find((item) => item?.dos == getSelectedDos);
 
     let pageNumber = [];
     for (
-      let index = getFilter.startPageNumber;
-      index <= getFilter.endPagNumber;
+      let index = getFilter?.startPageNumber;
+      index <= getFilter?.endPagNumber;
       index++
     ) {
       pageNumber.push({
@@ -201,7 +201,7 @@ const ManuallyAdd = ({
             patientId: getStorage("patientId"),
             dateOfService: [getSelectedDos],
             fileId: patientDetailsResult?.data?.response?.fileId
-              ? patientDetailsResult.data.response.fileId
+              ? patientDetailsResult?.data?.response?.fileId
               : "",
           });
           if (res.status == "SUCCESS") {
@@ -250,12 +250,12 @@ const ManuallyAdd = ({
         let res = await getValidate(value);
         if (res?.status === "SUCCESS") {
           const displayCodeOptions = res?.response?.map((item) => ({
-            value: item.code,
-            description: item.description,
+            value: item?.code,
+            description: item?.description,
             label: (
               <div className="d-flex gap-1">
                 <span>
-                  {item.code} - {item.description}
+                  {item?.code} - {item?.description}
                 </span>
               </div>
             ),
@@ -459,7 +459,7 @@ const ManuallyAdd = ({
     const selectedSection = sections[selectMeat];
     const selectedCount = counts[selectMeat];
 
-    const res = selectedCount.map((item, i) => ({
+    const res = selectedCount?.map((item, i) => ({
       header: selectedSection,
       // dateOfService: form[
       //   `encounterDate_${selectedSection?.replaceAll(
@@ -519,9 +519,9 @@ const ManuallyAdd = ({
   const disableOption = () => {
     const sec = capturedSections.map((item) => {
       return {
-        label: item.label,
-        value: item.value,
-        disabled: listOfSection?.map((ls) => ls.section).includes(item.value),
+        label: item?.label,
+        value: item?.value,
+        disabled: listOfSection?.map((ls) => ls.section).includes(item?.value),
       };
     });
     setCapturedSections(sec);
@@ -529,7 +529,7 @@ const ManuallyAdd = ({
   };
 
   useEffect(() => {
-    if (listOfSection.length > 0) {
+    if (listOfSection?.length > 0) {
       disableOption();
     }
   }, [listOfSection]);
@@ -539,11 +539,11 @@ const ManuallyAdd = ({
     listOfSection,
     setCapturedSections
   ) => {
-    const sec = capturedSections.map((item) => {
+    const sec = capturedSections?.map((item) => {
       return {
-        label: item.label,
-        value: item.value,
-        disabled: listOfSection?.map((ls) => ls.section).includes(item.value),
+        label: item?.label,
+        value: item?.value,
+        disabled: listOfSection?.map((ls) => ls?.section).includes(item?.value),
       };
     });
     setCapturedSections(sec);
@@ -599,7 +599,7 @@ const ManuallyAdd = ({
   ]);
 
   const handleReset = () => {
-    listOfSection.map((item, i) => {
+    listOfSection?.map((item, i) => {
       form.resetFields([
         `section`,
         `encounterDate_${section?.replaceAll(" ", "-")}_${i}`,
@@ -687,46 +687,46 @@ const ManuallyAdd = ({
 
       data = {
         patientId: getStorage("patientId"),
-        oldDiagnosisCode: isEditValue.diagnosisCode,
+        oldDiagnosisCode: isEditValue?.diagnosisCode,
         diagnosisCode: selectDisDetails?.diagnosisCode,
         newDiagnosisCode: code,
-        description: forms.description ? forms.description : description,
+        description: forms?.description ? forms?.description : description,
         dateOfServices: forms.dos,
-        providerNames: providerDetails.map((item) => item.providerName),
+        providerNames: providerDetails?.map((item) => item.providerName),
         hyperlinks: listOfSection
-          .map((item) => item.hyperlinks)
-          .flat(capturedSections.length + 1),
+          .map((item) => item?.hyperlinks)
+          .flat(capturedSections?.length + 1),
         monitorAspect:
-          listOfSectionM.length > 0 ? listOfSectionM[0].aspect : null,
+          listOfSectionM?.length > 0 ? listOfSectionM[0]?.aspect : null,
         evaluateAspect:
-          listOfSectionE.length > 0 ? listOfSectionE[0].aspect : null,
+          listOfSectionE?.length > 0 ? listOfSectionE[0]?.aspect : null,
         assessmentAspect:
-          listOfSectionA.length > 0 ? listOfSectionA[0].aspect : null,
+          listOfSectionA?.length > 0 ? listOfSectionA[0]?.aspect : null,
         treatmentAspect:
-          listOfSectionT.length > 0 ? listOfSectionT[0].aspect : null,
+          listOfSectionT?.length > 0 ? listOfSectionT[0]?.aspect : null,
         monitorHyperLink:
-          listOfSectionM.length > 0
+          listOfSectionM?.length > 0
             ? listOfSectionM
-                .map((item) => item.hyperlinks)
-                .flat(capturedSections.length + 1)
+                .map((item) => item?.hyperlinks)
+                .flat(capturedSections?.length + 1)
             : null,
         evaluateHyperLink:
           listOfSectionE.length > 0
             ? listOfSectionE
-                .map((item) => item.hyperlinks)
-                .flat(capturedSections.length + 1)
+                .map((item) => item?.hyperlinks)
+                .flat(capturedSections?.length + 1)
             : null,
         assessmentHyperLink:
           listOfSectionA.length > 0
             ? listOfSectionA
-                .map((item) => item.hyperlinks)
-                .flat(capturedSections.length + 1)
+                .map((item) => item?.hyperlinks)
+                .flat(capturedSections?.length + 1)
             : null,
         treatmentHyperLink:
           listOfSectionT.length > 0
             ? listOfSectionT
-                .map((item) => item.hyperlinks)
-                .flat(capturedSections.length + 1)
+                .map((item) => item?.hyperlinks)
+                .flat(capturedSections?.length + 1)
             : null,
         chartProcessType: getSelectedDos ? "DATE_OF_SERVICE" : "YEAR",
         dateOfServiceIfDosWiseCompute: getSelectedDos ? getSelectedDos : null,
@@ -735,7 +735,7 @@ const ManuallyAdd = ({
     } else if (isEditMeat) {
       data = {
         patientId: getStorage("patientId"),
-        diagnosisCode: isEditMeatValue.diagnosisCode,
+        diagnosisCode: isEditMeatValue?.diagnosisCode,
         monitorHyperLink:
           listOfSectionM.length > 0
             ? listOfSectionM
