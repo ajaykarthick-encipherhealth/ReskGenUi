@@ -213,18 +213,22 @@ const Header = ({
   }));
 
   const onClick = ({ key }) => {
-    setStorage("proxyRole", key);
+    const allRoles = JSON.parse(getStorage("userAllRoles"));
+    const selectedRoleObj = allRoles?.find((res) => res.proxyRole === key);
     setStorage("userRole", key);
+    setStorage("proxyRole", selectedRoleObj?.proxyRole);
+    setStorage("roleId", selectedRoleObj?.roleId);
+    setStorage("aliasName", selectedRoleObj?.aliasName);
     if (key === "Admin") {
       router.push("/admin/dashboard");
-    } else if (key === "CODER_1" || key === "CODER_2" || key === "QA") {
-      // if (router?.pathname != "/reviewer/dashboard") {
+    } else if (key === "CODER_1" || key === "CODER_2" || key === "QA" || key === "DOWNLOADER" || key === "OWNER") {
+      if (router?.pathname != "/reviewer/dashboard") {
       router.push("/reviewer/dashboard");
-      // } else {
-      //   router.push("/reviewer/dashboard").then(() => {
-      //     window.location.reload();
-      //   });
-      // }
+      } else {
+        router.push("/reviewer/dashboard").then(() => {
+          window.location.reload();
+        });
+      }
     } else if (key === "Supervisor") {
       router.push("/supervisor/dashboard");
     } else if (key === "TENANT_ADMIN") {
@@ -235,19 +239,21 @@ const Header = ({
   };
   const getMenuListByRole = (role) => {
     const accessMenuList = JSON.parse(getStorage("accessMenuList"));
+    const allRoles = JSON.parse(getStorage("userAllRoles"));
+    const selectedRoleObj = allRoles?.find((res) => res.proxyRole === role);
     switch (role) {
       case "admin":
         return AdminMenuList;
       case "CODER_1":
-        return PhysicanMenuList(accessMenuList);
+        return PhysicanMenuList(selectedRoleObj?.accessList);
       case "CODER_2":
-        return PhysicanMenuList(accessMenuList);
+        return PhysicanMenuList(selectedRoleObj?.accessList);
       case "QA":
-        return PhysicanMenuList(accessMenuList);
+        return PhysicanMenuList(selectedRoleObj?.accessList);
       case "supervisor":
         return L2AuditorMenuList;
       case "TENANT_ADMIN":
-        return ProviderMenuList(accessMenuList);
+        return ProviderMenuList(selectedRoleObj?.accessList);
       case "ehr":
         return EHRMenuList;
       case "record analyst":
@@ -625,7 +631,7 @@ const Header = ({
   const handleClientChange = async (value) => {
     setStorage("client", value.value);
     setSelectedClient(value);
-    const res = await getAllProjects();
+    const res = await getAllProjects();    
     if (res?.response?.length === 0) {
       setSelectedClient(backupSelectedClient);
       setStorage("client", backupSelectedClient);
@@ -674,13 +680,14 @@ const Header = ({
         label: data.proxyRole,
         key: data.proxyRole,
         details: data,
-      }));
+      }));      
       if (data?.length > 0) {
         setRoles(data);
         setStorage(
           "accessMenuList",
           JSON.stringify(data[0].details.accessList)
         );
+        setStorage("userAllRoles", JSON.stringify(data));
         setStorage("roleId", data[0].details?.roleId);
         // setStorage("proxyRole", data[0].label);
         onClick({ key: data[0].label });

@@ -60,13 +60,15 @@ const SelectRole = ({
       message: "Login Successfully",
       duration: 1,
     });
-    setRoleError(false);
+    setRoleError(false);    
     const rolesMapping = {
       admin: { userRole: "admin", route: "/admin/dashboard" },
       reviewer: { userRole: "reviewer", route: "/reviewer/dashboard" },
       CODER_1: { userRole: "CODER_1", route: "/reviewer/dashboard" },
       CODER_2: { userRole: "CODER_2", route: "/reviewer/dashboard" },
       QA: { userRole: "QA", route: "/reviewer/dashboard" },
+      DOWNLOADER: { userRole: "DOWNLOADER", route: "/reviewer/dashboard" },
+      OWNER: { userRole: "OWNER", route: "/reviewer/dashboard" },
       supervisor: { userRole: "supervisor", route: "/supervisor/dashboard" },
       provider: { userRole: "provider", route: "/provider/fhirTable" },
       TENANT_ADMIN: {
