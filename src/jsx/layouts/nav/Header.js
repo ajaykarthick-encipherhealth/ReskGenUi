@@ -214,11 +214,15 @@ const Header = ({
 
   const onClick = ({ key }) => {
     const allRoles = JSON.parse(getStorage("userAllRoles"));
-    const selectedRoleObj = allRoles?.find((res) => res.proxyRole === key);
+    let selectedRoleObj = allRoles?.find((res) => res.proxyRole === key);
+    if(!selectedRoleObj){
+      selectedRoleObj = allRoles?.find((res) => res?.details?.proxyRole === key);
+    } 
+    const accessMenuList = selectedRoleObj?.accessList ? selectedRoleObj?.accessList : selectedRoleObj?.details;
     setStorage("userRole", key);
-    setStorage("proxyRole", selectedRoleObj?.proxyRole);
-    setStorage("roleId", selectedRoleObj?.roleId);
-    setStorage("aliasName", selectedRoleObj?.aliasName);
+    setStorage("proxyRole", accessMenuList?.proxyRole);
+    setStorage("roleId", accessMenuList?.roleId);
+    setStorage("aliasName", accessMenuList?.aliasName);
     if (key === "Admin") {
       router.push("/admin/dashboard");
     } else if (key === "CODER_1" || key === "CODER_2" || key === "QA") {
@@ -248,26 +252,29 @@ const Header = ({
     }
   };
   const getMenuListByRole = (role) => {
-    const accessMenuList = JSON.parse(getStorage("accessMenuList"));
     const allRoles = JSON.parse(getStorage("userAllRoles"));
-    const selectedRoleObj = allRoles?.find((res) => res.proxyRole === role);
+    let selectedRoleObj = allRoles?.find((res) => res.proxyRole === role);
+    if(!selectedRoleObj){
+      selectedRoleObj = allRoles?.find((res) => res?.details?.proxyRole === role);
+    }    
+    const accessMenuList = selectedRoleObj?.accessList ? selectedRoleObj?.accessList : selectedRoleObj?.details?.accessList;
     switch (role) {
       case "admin":
         return AdminMenuList;
       case "CODER_1":
-        return PhysicanMenuList(selectedRoleObj?.accessList);
+        return PhysicanMenuList(accessMenuList);
       case "CODER_2":
-        return PhysicanMenuList(selectedRoleObj?.accessList);
+        return PhysicanMenuList(accessMenuList);
       case "QA":
-        return PhysicanMenuList(selectedRoleObj?.accessList);
+        return PhysicanMenuList(accessMenuList);
       case "DOWNLOADER":
-        return ProviderMenuList(selectedRoleObj?.accessList);
+        return ProviderMenuList(accessMenuList);
       case "OWNER":
-        return ProviderMenuList(selectedRoleObj?.accessList);
+        return ProviderMenuList(accessMenuList);
       case "supervisor":
         return L2AuditorMenuList;
       case "TENANT_ADMIN":
-        return ProviderMenuList(selectedRoleObj?.accessList);
+        return ProviderMenuList(accessMenuList);
       case "ehr":
         return EHRMenuList;
       case "record analyst":
@@ -700,13 +707,14 @@ const Header = ({
         setStorage(
           "accessMenuList",
           JSON.stringify(data[0].details.accessList)
-        );
+        );        
         setStorage("userAllRoles", JSON.stringify(data));
         setStorage("roleId", data[0].details?.roleId);
-        // setStorage("proxyRole", data[0].label);
-        onClick({ key: data[0].label });
+        setStorage("proxyRole", data[0].label);
         setCurrentRole(data[0].label);
         setMenuList(getMenuListByRole(data[0].label));
+        getMenuListByRole(data[0].label);
+        onClick({ key: data[0].label });        
       }
     }
   };
