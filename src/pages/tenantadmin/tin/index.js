@@ -518,7 +518,7 @@ const Tin = ({
       const res = await tinPriority(data);
       getResponePopup(res);
 
-      if (res.status === "SUCCESS") {
+      if (res?.status === "SUCCESS") {
         setPriority((prev) => ({ ...prev, [tinNumber]: selectedValue }));
         getAllTins();
         setParamsFilter("check");

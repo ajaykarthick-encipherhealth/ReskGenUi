@@ -184,7 +184,7 @@ const QueryApproval = ({
 
   const getRolesList = async () => {
     const res = await getAllTabRoles();
-    if (res.status === "SUCCESS") {
+    if (res?.status === "SUCCESS") {
       setRoleId(res?.response?.allocationRoles[0]?.roleId);
       setSelectedRole(res?.response?.allocationRoles[0]?.aliasName);
     }

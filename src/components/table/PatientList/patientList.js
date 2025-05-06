@@ -49,7 +49,7 @@ function PatientTable({
       year: dayjs(lastModifiedDate).format("YYYY"),
       priority: selectedValue,
     });
-    if (res.status === "SUCCESS") {
+    if (res?.status === "SUCCESS") {
       getFilteApi({ pageNo: page.pageNo });
     }
   };

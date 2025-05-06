@@ -743,7 +743,7 @@ const PatientSync = ({
       ftpRequestFrom: "COGENT_AI",
     };
     const res = await getTriggerBatch({ obj: triggerData });
-    if (res.status === "SUCCESS") {
+    if (res?.status === "SUCCESS") {
       getResponePopup(res);
       getAllBatches({ page: pageNo });
     }

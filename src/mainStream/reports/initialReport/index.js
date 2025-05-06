@@ -81,7 +81,7 @@ const InitialCard = ({
         selectAllFlags,
         selectAll,
       });
-      if (res.status === "SUCCESS") {
+      if (res?.status === "SUCCESS") {
         setSelectAll(true);
         setSelectedRows(res?.response?.patientIds);
         getSelectedRow(res?.response?.patientIds);

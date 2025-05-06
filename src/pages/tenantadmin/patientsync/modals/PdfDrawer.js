@@ -88,7 +88,7 @@ const PdfDrawer = ({
             totalFileCount:parseInt(formVal?.totalFileCount)
           },
         });
-        if (res.status === "SUCCESS") {
+        if (res?.status === "SUCCESS") {
           await getAllBatches({ page: pageNo });
           form.resetFields();
           setFileList([]);

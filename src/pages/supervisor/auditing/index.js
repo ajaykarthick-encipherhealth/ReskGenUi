@@ -274,7 +274,7 @@ const Patient = ({
     });
     getResponePopup(res);
     setPriority({ selectedValue: selectedValue, patientId: patientId });
-    if (res.status === "SUCCESS") {
+    if (res?.status === "SUCCESS") {
       auditQueue();
       setParamsFilter("check");
     }
