@@ -831,13 +831,13 @@ const Header = ({
                 </div>
               )}
               <div className="d-flex gap-3">
-                {projectListCheck  ?
+                {/* {projectListCheck  ?
                 <div className="mt-3 d-flex">
                   <CardSkeleton  height={30}/>
                   <div className="mx-2">
                   <CardSkeleton  height={30}/>
                   </div>
-                </div>:
+                </div>: */}
                  <>
                  <div className="mt-3">
                   <Select
@@ -852,7 +852,7 @@ const Header = ({
                   <Select
                     placeholder="Sample Project"
                     style={{ width: 150 }}
-                    value={projectList && selectedProject}
+                    value={!projectListCheck ? selectedProject : []}
                     onChange={(e, value) => handleProjectChange(value)}
                     options={projectList}
                   />
@@ -868,14 +868,15 @@ const Header = ({
                     />
                   </div>
                 )}
-                 </>}
+                 </>
+                 {/* } */}
               </div>
             </div>
-            {projectListCheck  ?
+            {/* {projectListCheck  ?
                 <div className="w-100 mt-1 me-2">
                   <CardSkeleton  height={30}/>
                   </div>
-             :
+             : */}
             <>
             {stateActive != "/reviewer/home" ? (
               <div header-transition>
@@ -1156,7 +1157,8 @@ const Header = ({
                 </li>
               </ul>
             </div>
-            </>}
+            </>
+            {/* } */}
           </div>
         </nav>
       </div>

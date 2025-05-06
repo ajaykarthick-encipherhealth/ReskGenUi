@@ -65,7 +65,9 @@ const PdfViewer = ({
       } else {
         searchUrl = `${portalPdfUrl}?file=${url}&salt=${ids}&token=${getStorage(
           "token"
-        )}&baseEnv=${serverControl}&pdfEnv=${pdfControl}`;
+        )}&baseEnv=${serverControl}&pdfEnv=${pdfControl}&header=${JSON.stringify(
+          header
+        )}`;
         // let searchUrl = `https://pdffile.javagcai.com/web/viewer.html?file=${pdfUrl}`;
         if (searchQuery || page || headerContent) {
           const queryParams = [];
