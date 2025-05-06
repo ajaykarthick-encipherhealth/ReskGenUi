@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, use } from "react";
 import { connect } from "react-redux";
 import { useRouter } from "next/router";
 import Swal from "sweetalert2";
@@ -779,7 +779,8 @@ const Header = ({
   }, []);
 
  useEffect(() => {
-   if (tinDetails?.length > 0 && (!selectedTin || selectedTin === "")) {
+  const userRole = getStorage("proxyRole");
+   if (tinDetails?.length > 0 && (!selectedTin || selectedTin === "") && userRole==="QA") {
      const defaultTinNumber = tinDetails[0].tinNumber;
      setSelectedTin(defaultTinNumber);
      setStorage("tinNumber", defaultTinNumber);
@@ -857,7 +858,7 @@ const Header = ({
                     options={projectList}
                   />
                 </div>
-                {proxyRole === "QA" && (
+                {proxyRole === "QA" ? (
                   <div className="mt-3">
                     <Select
                       placeholder="Select Tin"
@@ -867,7 +868,7 @@ const Header = ({
                       options={TinOptions}
                     />
                   </div>
-                )}
+                ): null}
                  </>
                  {/* } */}
               </div>

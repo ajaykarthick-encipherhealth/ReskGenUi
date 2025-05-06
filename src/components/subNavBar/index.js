@@ -69,7 +69,7 @@ const SubNavBar = ({ handleBack, hideBackArrow, pageLoad ,tableLoader}) => {
         ) : tableData.length === 0 ? (
           <div className="mx-3">No records found.</div>
         ) : (
-          [tableData[0]].map((row, rowIndex) => (
+          tableData.map((row, rowIndex) => (
             <section
               key={rowIndex}
               className="d-flex mx-3 gap-4 pb-2 flex-wrap border-bottom py-2"

@@ -95,7 +95,7 @@ allTinIds=${allTinIds || false}`;
       "da4958c3-7795-4bcc-8ab0-24d93cd52c25",
       "a9d5c555-7954-4382-a2ef-3f66b292cf8f",
       "e76aaa6c-319e-44d3-b7ae-aadb17dfb664",
-      "2d7cb7f7-6dad-41fb-970b-d805fb3f195f",
+      // "2d7cb7f7-6dad-41fb-970b-d805fb3f195f",
     ];
 
 //     if (qaCodersPageIds.includes(pageId)) {
