@@ -11,6 +11,7 @@ const Reassign = () => {
         isReAssigned={true}
         pageId="e76aaa6c-319e-44d3-b7ae-aadb17dfb664"
         route="/reviewer/reassign/details"
+        tin
       />
     </div>
   );

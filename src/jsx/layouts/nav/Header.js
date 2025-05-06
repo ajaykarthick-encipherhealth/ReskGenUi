@@ -635,7 +635,7 @@ const Header = ({
 
   const TinOptions = tinDetails?.map((client) => ({
     label: client.tinName,
-    value: client.id,
+    value: client.tinNumber,
   }));
 
   const clientOptions = clientDetails?.map((client) => ({
@@ -666,8 +666,9 @@ const Header = ({
 
   const handleTinChange = (value) => {
     setSelectedTin(value);
-    setStorage("tinId", value);
+    setStorage("tinNumber", value?.value);
     getPageRendering(value);
+    
   };
 
   const handleProjectChange = async (value) => {
@@ -777,6 +778,17 @@ const Header = ({
     getRole();
   }, []);
 
+ useEffect(() => {
+   if (tinDetails?.length > 0 && (!selectedTin || selectedTin === "")) {
+     const defaultTinNumber = tinDetails[0].tinNumber;
+     setSelectedTin(defaultTinNumber);
+     setStorage("tinNumber", defaultTinNumber);
+     getPageRendering(defaultTinNumber);
+   }
+ }, [tinDetails, selectedTin]);
+
+
+
   useEffect(() => {
     if(projectListCheck){
     // setTimeout(() => {
@@ -791,6 +803,7 @@ const Header = ({
   // }, 2000);
   }, [projectListCheck]);
   
+
   return (
     <div className={`header ${headerFix ? "is-fixed" : ""}`}>
       <div className="header-content">
@@ -847,10 +860,10 @@ const Header = ({
                 {proxyRole === "QA" && (
                   <div className="mt-3">
                     <Select
-                      placeholder="Select Tin "
+                      placeholder="Select Tin"
                       style={{ width: 150 }}
                       value={selectedTin}
-                      onChange={handleTinChange}
+                      onChange={(e, value) => handleTinChange(value)}
                       options={TinOptions}
                     />
                   </div>

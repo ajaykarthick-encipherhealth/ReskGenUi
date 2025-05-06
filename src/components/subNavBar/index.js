@@ -30,7 +30,7 @@ const SubNavBar = ({ handleBack, hideBackArrow, pageLoad ,tableLoader}) => {
     const projectId = getStorage("project");
     setLoading(true);
     const result = await getTableView({
-      pageId,
+      pageId:"2d7cb7f7-6dad-41fb-970b-d805fb3f195f",
       pageNo: 0,
       projectId: projectId,
       tin,

@@ -12,6 +12,7 @@ const Patients =  () => {
         isReAssigned={false}
         isQueried={false}
         route="/reviewer/patients/details"
+        tin
       />
     </div>
   );
