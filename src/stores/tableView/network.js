@@ -98,10 +98,10 @@ allTinIds=${allTinIds || false}`;
       "2d7cb7f7-6dad-41fb-970b-d805fb3f195f",
     ];
 
-    if (qaCodersPageIds.includes(pageId)) {
-      baseUrl += `&tin=${tin || ""}&
-allTinIds=${allTinIds || false}`;
-    }
+//     if (qaCodersPageIds.includes(pageId)) {
+//       baseUrl += `&tin=${tin || ""}&
+// allTinIds=${allTinIds || false}`;
+//     }
     if (role === "QA" && qaCodersPageIds.includes(pageId)) {
       baseUrl += `&tin=${tin || ""}&allTinIds=${allTinIds || false}`;
     }
