@@ -855,16 +855,17 @@ const VersionHistory = ({
 
     return sectionMapArr;
   };
+
   const handleConfirm = async (item) => {
     const response = await confirmRevert({
       dos: isDosSelected,
-      year: dosYearDefalutSelect?.value,
+      year: dosYearDefalutSelect,
       versionHistory: item,
     });
     if (response?.status == "SUCCESS") {
       setIsModalComments(false);
       getResponePopup(response);
-      getpatientDetailsData(userId, dosYearDefalutSelect?.value, isDosSelected);
+      getpatientDetailsData(userId, dosYearDefalutSelect, isDosSelected);
     }
   };
 
