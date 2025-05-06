@@ -5,7 +5,7 @@ import styles from "../timline/styles.module.css";
 import { CloseCircleFilled } from "@ant-design/icons";
 import { getProviderNameTagList } from "../components/function/ProviderHyperlinks";
 import { getDateOfServiceBackground } from "../components/function/DateOfServices";
-import { getSectionHeaderBackground } from "../components/function/SectionHeader";
+import { getSectionHeaderBackground, getSectionHeadersBackground } from "../components/function/SectionHeader";
 import CardSkeleton from "../../../skeleton/card";
 import { formatDateTime, getResponePopup } from "../../../../utils/reusable";
 import { getBadgeClassName, getStatusColors, underScoreRemove } from "../timline";
