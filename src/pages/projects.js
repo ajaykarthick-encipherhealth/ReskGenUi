@@ -191,6 +191,7 @@ const SelectProject = ({
                         setSelectClient(value?.toLowerCase());
                         setClientError(false);
                         setSelectValue(value)
+                        removeStorage("project");
                       }}
                       value={selectValue}
                       options={clientOptions}

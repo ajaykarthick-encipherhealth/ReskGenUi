@@ -50,6 +50,7 @@ import { getResponePopup } from "../../../utils/reusable";
 import { getHeaderLoge } from "../../../pages/twofactorauthentication/reusableFun";
 import { actions as tinActions } from "../../../stores/tenantAdmin/tin";
 import { actions as tableAction } from "../../../stores/tableView";
+import CardSkeleton from "../../../components/skeleton/card";
 
 const Header = ({
   notificationResponse,
@@ -128,6 +129,8 @@ const Header = ({
   const [selectedTin, setSelectedTin] = useState(null);
   const [roles, setRoles] = useState([]);
   const [projectList, setProjectList] = useState([]);
+  const [projectListCheck, setProjectListCheck] = useState(true);
+
 
   const proxyRole = getStorage("proxyRole");
   const showDrawer = () => {
@@ -213,6 +216,7 @@ const Header = ({
   }));
 
   const onClick = ({ key }) => {
+    setProjectListCheck(true);
     const allRoles = JSON.parse(getStorage("userAllRoles"));
     let selectedRoleObj = allRoles?.find((res) => res.proxyRole === key);
     if(!selectedRoleObj){      
@@ -639,15 +643,7 @@ const Header = ({
     value: client.clientId,
   }));
 
-  useEffect(() => {
-    const defaultClient = getStorage("client");
-    const defaultProject = getStorage("project");
 
-    if (defaultClient) setSelectedClient(defaultClient);
-    setBackupSelectedClient(defaultClient);
-    if (defaultProject) setSelectedProject(defaultProject);
-    setBackupSelectedProject(defaultProject);
-  }, []);
 
   const handleClientChange = async (value) => {
     setStorage("client", value.value);
@@ -663,7 +659,7 @@ const Header = ({
       });
     } else {
       getProjectDataList();
-      setSelectedProject(res?.response[0]?.id);
+      setSelectedProject(res?.response[0]?.projectName);
       setStorage("project", res?.response[0]?.id);
     }
   };
@@ -762,6 +758,7 @@ const Header = ({
         value: client.id,
       }));
       setProjectList(projectOptions);
+      setProjectListCheck(false);
     }
   };
 
@@ -779,6 +776,21 @@ const Header = ({
   useEffect(() => {
     getRole();
   }, []);
+
+  useEffect(() => {
+    if(projectListCheck){
+    // setTimeout(() => {
+    const defaultClient = getStorage("client");
+    const defaultProject = getStorage("project");
+
+    if (defaultClient) setSelectedClient(defaultClient);
+    setBackupSelectedClient(defaultClient);
+    if (defaultProject) setSelectedProject(defaultProject);
+    setBackupSelectedProject(defaultProject);
+}
+  // }, 2000);
+  }, [projectListCheck]);
+  
   return (
     <div className={`header ${headerFix ? "is-fixed" : ""}`}>
       <div className="header-content">
@@ -806,11 +818,19 @@ const Header = ({
                 </div>
               )}
               <div className="d-flex gap-3">
-                <div className="mt-3">
+                {projectListCheck  ?
+                <div className="mt-3 d-flex">
+                  <CardSkeleton  height={30}/>
+                  <div className="mx-2">
+                  <CardSkeleton  height={30}/>
+                  </div>
+                </div>:
+                 <>
+                 <div className="mt-3">
                   <Select
                     placeholder="Client"
                     style={{ width: 150 }}
-                    value={selectedClient}
+                    value={clientOptions && selectedClient}
                     onChange={(e, value) => handleClientChange(value)}
                     options={clientOptions}
                   />
@@ -819,7 +839,7 @@ const Header = ({
                   <Select
                     placeholder="Sample Project"
                     style={{ width: 150 }}
-                    value={selectedProject}
+                    value={projectList && selectedProject}
                     onChange={(e, value) => handleProjectChange(value)}
                     options={projectList}
                   />
@@ -835,8 +855,15 @@ const Header = ({
                     />
                   </div>
                 )}
+                 </>}
               </div>
             </div>
+            {projectListCheck  ?
+                <div className="w-100 mt-1 me-2">
+                  <CardSkeleton  height={30}/>
+                  </div>
+             :
+            <>
             {stateActive != "/reviewer/home" ? (
               <div header-transition>
                 <ul
@@ -1116,6 +1143,7 @@ const Header = ({
                 </li>
               </ul>
             </div>
+            </>}
           </div>
         </nav>
       </div>
