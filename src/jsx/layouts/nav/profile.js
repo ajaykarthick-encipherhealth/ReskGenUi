@@ -6,6 +6,7 @@ import { renderUserPrfoile } from "../../../components/headerFilters/functions";
 import { connect } from "react-redux";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPen } from "@fortawesome/free-solid-svg-icons";
+import { getStorage } from "../../../utils/storages";
 
 const Profile = ({
   openContent,
@@ -19,6 +20,7 @@ const Profile = ({
   profileImageUrl,
   userName,
 }) => {
+  const userRole = getStorage("userRole");
   return (
     <>
       <div id="profileTab" name="profileTab" className="header-media d-flex">
@@ -27,10 +29,14 @@ const Profile = ({
           open={openContent}
           content={
             <div className={styles.popDIv}>
-              <div id="profile-close" name="profile-close" className={styles.closeContainer2}>
+              <div
+                id="profile-close"
+                name="profile-close"
+                className={styles.closeContainer2}
+              >
                 <CloseCircleOutlined
-                id ="close-profileTab"
-                name="close-profileTab"
+                  id="close-profileTab"
+                  name="close-profileTab"
                   onClick={() => setOpenContent(false)}
                   className={styles.close_icon}
                 />
@@ -75,7 +81,7 @@ const Profile = ({
                     </span>
                   </div>
                 </div>
-                <div style={{ margin: "10px 0 0 5px" }}>
+                <div className="d-flex">
                   <span
                     className="ms-2 header-name d-flex mr-3"
                     style={{
@@ -92,21 +98,23 @@ const Profile = ({
                       fontSize: "6px",
                     }}
                   >
-                    {currentRole
-                      ?.replace(/_/g, " ")
-                      ?.split(" ")
-                      .map(
-                        (item) => item?.charAt(0).toUpperCase() + item?.slice(1)
-                      )
-                      .join(" ")}
+                    {userRole?.split("_")?.join(" ")}
                   </span>
                 </div>
               </div>
 
               <Divider className={styles.divider} />
-              <div  id="logout-btn" name="logout-btn" className={styles.footerDiv} onClick={logoutFunction}>
+              <div
+                id="logout-btn"
+                name="logout-btn"
+                className={styles.footerDiv}
+                onClick={logoutFunction}
+              >
                 {/* <Image src={logout} /> */}
-                <span id="logout" name="logout" className={styles.footerCont}> Log out</span>
+                <span id="logout" name="logout" className={styles.footerCont}>
+                  {" "}
+                  Log out
+                </span>
               </div>
             </div>
           }
