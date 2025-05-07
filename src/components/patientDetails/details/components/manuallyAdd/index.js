@@ -117,7 +117,7 @@ const ManuallyAdd = ({
   const getPageNumbers = () => {
     const getFilter = patientDosResult?.data?.response
       ?.find((item) => item?.dateOfService == getSelectedDos)
-      .fileDetailDTO?.dosSummaries?.find((item) => item?.dos == getSelectedDos);
+      ?.fileDetailDTO?.dosSummaries?.find((item) => item?.dos == getSelectedDos);
 
     let pageNumber = [];
     for (
