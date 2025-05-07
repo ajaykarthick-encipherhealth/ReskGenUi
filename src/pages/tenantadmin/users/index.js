@@ -194,7 +194,7 @@ useEffect(() => {
     }
   };
   const roles = allRoles?.content?.map((item) => ({
-    value: item?.roleId,
+    value: item?.roleName,
     label: `${item?.roleName}`,
   }));
   const handleCancel = () => {
