@@ -839,38 +839,38 @@ const Header = ({
                   <CardSkeleton  height={30}/>
                   </div>
                 </div>: */}
-                 <>
-                 <div className="mt-3">
-                  <Select
-                    placeholder="Client"
-                    style={{ width: 150 }}
-                    value={clientOptions && selectedClient}
-                    onChange={(e, value) => handleClientChange(value)}
-                    options={clientOptions}
-                  />
-                </div>
-                <div className="mt-3">
-                  <Select
-                    placeholder="Sample Project"
-                    style={{ width: 150 }}
-                    value={!projectListCheck ? selectedProject : []}
-                    onChange={(e, value) => handleProjectChange(value)}
-                    options={projectList}
-                  />
-                </div>
-                {proxyRole === "QA" ? (
+                <>
                   <div className="mt-3">
                     <Select
-                      placeholder="Select Tin"
+                      placeholder="Client"
                       style={{ width: 150 }}
-                      value={selectedTin}
-                      onChange={(e, value) => handleTinChange(value)}
-                      options={TinOptions}
+                      value={clientOptions && selectedClient}
+                      onChange={(e, value) => handleClientChange(value)}
+                      options={clientOptions}
                     />
                   </div>
-                ): null}
-                 </>
-                 {/* } */}
+                  <div className="mt-3">
+                    <Select
+                      placeholder="Sample Project"
+                      style={{ width: 150 }}
+                      value={!projectListCheck ? selectedProject : []}
+                      onChange={(e, value) => handleProjectChange(value)}
+                      options={projectList}
+                    />
+                  </div>
+                  {proxyRole === "QA" ? (
+                    <div className="mt-3">
+                      <Select
+                        placeholder="Select Tin"
+                        style={{ width: 150 }}
+                        value={selectedTin}
+                        onChange={(e, value) => handleTinChange(value)}
+                        options={TinOptions}
+                      />
+                    </div>
+                  ) : null}
+                </>
+                {/* } */}
               </div>
             </div>
             {/* {projectListCheck  ?
@@ -879,285 +879,283 @@ const Header = ({
                   </div>
              : */}
             <>
-            {stateActive != "/reviewer/home" ? (
-              <div header-transition>
-                <ul
-                  className={`metismenu header-menu d-flex`}
-                  id="menuList"
-                  name="menuList"
-                >
-                  {nextMenuList && screenSize?.width <= 1527 && (
-                    <div className="d-flex justify-content-center align-items-center">
-                      <div
-                        className={`d-flex justify-content-center align-items-center cursor-pointer rounded-4 ${styles.addonDiv}`}
-                        onClick={() => {
-                          setNextMenuList(false);
-                        }}
-                      >
-                        <FontAwesomeIcon
-                          icon={faChevronLeft}
-                          className="fs-6"
-                        />
-                      </div>
-                    </div>
-                  )}
-                  {renderMenuItems(
-                    screenSize?.width <= 1527 &&
-                      screenSize?.width != null &&
-                      screenSize?.height != null
-                      ? nextMenuList
-                        ? menuList?.slice(5)
-                        : menuList?.slice(0, 5)
-                      : menuList
-                  )}
-
-                  {menuList?.length > 5 &&
-                    !nextMenuList &&
-                    screenSize?.width <= 1527 &&
-                    screenSize?.width != null &&
-                    screenSize?.height != null &&
-                    menuList?.length > menuItemsPerPage &&
-                    !nextMenuList && (
+              {stateActive != "/reviewer/home" ? (
+                <div header-transition>
+                  <ul
+                    className={`metismenu header-menu d-flex`}
+                    id="menuList"
+                    name="menuList"
+                  >
+                    {nextMenuList && screenSize?.width <= 1527 && (
                       <div className="d-flex justify-content-center align-items-center">
                         <div
                           className={`d-flex justify-content-center align-items-center cursor-pointer rounded-4 ${styles.addonDiv}`}
                           onClick={() => {
-                            setNextMenuList(true);
+                            setNextMenuList(false);
                           }}
                         >
                           <FontAwesomeIcon
-                            icon={faChevronRight}
+                            icon={faChevronLeft}
                             className="fs-6"
                           />
                         </div>
                       </div>
                     )}
-                </ul>
-              </div>
-            ) : null}
-            <div className="header-right d-flex align-items-center">
-              <ul className="navbar-nav ">
-                <li className="nav-item">
-                  <div className="header-profile2">
-                    <div className="nav-link i-false " as="div">
-                      <div className="header-info2 d-flex align-items-center">
-                        <div
-                          id="coderoot"
-                          name="coderoot"
-                          className={styles.codify}
-                        >
-                          {/* <div>{SVGICON.codify}</div> */}
-                          <Tooltip placement="bottom" title={"CodeRoot"}>
-                            <img
-                              id="codify"
-                              name="codify"
-                              src={CodeRoot.src}
-                              width={"35px"}
-                              height={"27px"}
-                              onClick={showDrawer}
-                            />
-                          </Tooltip>
-                          {/* <FontAwesomeIcon onClick={showDrawer} icon={faBook} /> */}
-                        </div>
+                    {renderMenuItems(
+                      screenSize?.width <= 1527 &&
+                        screenSize?.width != null &&
+                        screenSize?.height != null
+                        ? nextMenuList
+                          ? menuList?.slice(5)
+                          : menuList?.slice(0, 5)
+                        : menuList
+                    )}
 
-                        <Drawer
-                          title={titleWithIcons}
-                          onClose={onClosed}
-                          open={opened}
-                          width={drawerWidth}
-                          destroyOnClose={true}
-                        >
-                          <Codify
-                            drawerWidth={drawerWidth}
-                            setDrawerWidth={setDrawerWidth}
-                          />
-                        </Drawer>
-                        {userRole === "CODER_1" ||
-                          (userRole === "CODER_2" && (
-                            <Tooltip
-                              title={` Quality : ${
-                                accuracy ? Math.round(accuracy) : 100
-                              }%`}
-                            >
-                              <div className="header-progress">
-                                <div style={{ width: 40, height: 40 }}>
-                                  <CircularProgressbar
-                                    value={
-                                      accuracy
-                                        ? Math.round(accuracy)
-                                        : Math.round(100)
-                                    }
-                                    text={`${
-                                      accuracy
-                                        ? Math.round(accuracy)
-                                        : Math.round(100)
-                                    }%`}
-                                  />
-                                </div>
-                              </div>
-                            </Tooltip>
-                          ))}
-                        {userRole === "TENANT_ADMIN" && (
+                    {menuList?.length > 5 &&
+                      !nextMenuList &&
+                      screenSize?.width <= 1527 &&
+                      screenSize?.width != null &&
+                      screenSize?.height != null &&
+                      menuList?.length > menuItemsPerPage &&
+                      !nextMenuList && (
+                        <div className="d-flex justify-content-center align-items-center">
                           <div
-                            id="settingsIcon"
-                            name="settingsIcon"
-                            className="chatheaderIcon cr-pointer"
-                            onClick={handleSettingsClick}
+                            className={`d-flex justify-content-center align-items-center cursor-pointer rounded-4 ${styles.addonDiv}`}
+                            onClick={() => {
+                              setNextMenuList(true);
+                            }}
                           >
-                            <SettingOutlined
-                              data-testid="settings-icon"
-                              name="settings-icon"
-                              style={{
-                                width:
-                                  stateActive === "/tenantadmin/settings"
-                                    ? "30px"
-                                    : "23px",
-                                height:
-                                  stateActive === "/tenantadmin/settings"
-                                    ? "30px"
-                                    : "26px",
-                                marginTop: "8px",
-                                fontWeight: "700",
-                                marginRight: "10px",
-                                fontSize: "30px",
-                                cursor: "pointer",
-                                color:
-                                  stateActive === "/tenantadmin/settings"
-                                    ? "#fff"
-                                    : "#04306F",
-                                backgroundColor:
-                                  stateActive === "/tenantadmin/settings"
-                                    ? "#04306F"
-                                    : "",
-                                padding:
-                                  stateActive === "/tenantadmin/settings"
-                                    ? "6px"
-                                    : "",
-                                borderRadius:
-                                  stateActive === "/tenantadmin/settings"
-                                    ? "9px"
-                                    : "",
-                              }}
+                            <FontAwesomeIcon
+                              icon={faChevronRight}
+                              className="fs-6"
                             />
                           </div>
-                        )}
-                        {tenentId != "7f41538e-2329-4ecc-890f-03c93cccb934" && (
+                        </div>
+                      )}
+                  </ul>
+                </div>
+              ) : null}
+              <div className="header-right d-flex align-items-center">
+                <ul className="navbar-nav ">
+                  <li className="nav-item">
+                    <div className="header-profile2">
+                      <div className="nav-link i-false " as="div">
+                        <div className="header-info2 d-flex align-items-center">
                           <div
-                            className="chatheaderIcon cursor-pointer"
-                            id="chatIcon"
-                            name="chatIcon"
-                            onClick={() => gotoChat()}
+                            id="coderoot"
+                            name="coderoot"
+                            className={styles.codify}
                           >
-                            {/* <div style={{ color: "#04306F" }}> */}
+                            {/* <div>{SVGICON.codify}</div> */}
+                            <Tooltip placement="bottom" title={"CodeRoot"}>
+                              <img
+                                id="codify"
+                                name="codify"
+                                src={CodeRoot.src}
+                                width={"35px"}
+                                height={"27px"}
+                                onClick={showDrawer}
+                              />
+                            </Tooltip>
+                            {/* <FontAwesomeIcon onClick={showDrawer} icon={faBook} /> */}
+                          </div>
+
+                          <Drawer
+                            title={titleWithIcons}
+                            onClose={onClosed}
+                            open={opened}
+                            width={drawerWidth}
+                            destroyOnClose={true}
+                          >
+                            <Codify
+                              drawerWidth={drawerWidth}
+                              setDrawerWidth={setDrawerWidth}
+                            />
+                          </Drawer>
+                          {userRole === "CODER_1" ||
+                            (userRole === "CODER_2" && (
+                              <Tooltip
+                                title={` Quality : ${
+                                  accuracy ? Math.round(accuracy) : 100
+                                }%`}
+                              >
+                                <div className="header-progress">
+                                  <div style={{ width: 40, height: 40 }}>
+                                    <CircularProgressbar
+                                      value={
+                                        accuracy
+                                          ? Math.round(accuracy)
+                                          : Math.round(100)
+                                      }
+                                      text={`${
+                                        accuracy
+                                          ? Math.round(accuracy)
+                                          : Math.round(100)
+                                      }%`}
+                                    />
+                                  </div>
+                                </div>
+                              </Tooltip>
+                            ))}
+                          {userRole === "TENANT_ADMIN" && (
                             <div
-                              id="chat-icon"
-                              name="chat-icon"
-                              style={{ color: "#04306F" }}
+                              id="settingsIcon"
+                              name="settingsIcon"
+                              className="chatheaderIcon cr-pointer"
+                              onClick={handleSettingsClick}
                             >
-                              <FontAwesomeIcon
-                                icon={faMessage}
-                                className={styles.bellIcon}
+                              <SettingOutlined
+                                data-testid="settings-icon"
+                                name="settings-icon"
                                 style={{
-                                  width: "20px",
-                                  height: "20px",
+                                  width:
+                                    stateActive === "/tenantadmin/settings"
+                                      ? "30px"
+                                      : "23px",
+                                  height:
+                                    stateActive === "/tenantadmin/settings"
+                                      ? "30px"
+                                      : "26px",
                                   marginTop: "8px",
                                   fontWeight: "700",
                                   marginRight: "10px",
-                                  color: "#04306F",
+                                  fontSize: "30px",
+                                  cursor: "pointer",
+                                  color:
+                                    stateActive === "/tenantadmin/settings"
+                                      ? "#fff"
+                                      : "#04306F",
+                                  backgroundColor:
+                                    stateActive === "/tenantadmin/settings"
+                                      ? "#04306F"
+                                      : "",
+                                  padding:
+                                    stateActive === "/tenantadmin/settings"
+                                      ? "6px"
+                                      : "",
+                                  borderRadius:
+                                    stateActive === "/tenantadmin/settings"
+                                      ? "9px"
+                                      : "",
                                 }}
                               />
-                              {/* </div> */}
                             </div>
-                          </div>
-                        )}
-                        <div
-                          className={`notificationIcon ${
-                            notificationCount < 9 ? "me-3" : "me-4"
-                          }`}
-                          onClick={() => notificationDrawer()}
-                          id="notificationIcon"
-                          name="notificationIcon"
-                        >
-                          <Badge
-                            id="notification-badge"
-                            name="notification-badge"
-                            count={notificationCount}
-                            color="#04306F"
-                          >
-                            <div
-                              id="notification-icon"
-                              name="notification-icon"
-                              style={{ color: "#04306F" }}
-                            >
-                              <FontAwesomeIcon
-                                icon={faBell}
-                                className={`fa-regular ${styles.bellIcon}`}
-                                styles={{ color: "#04306F" }}
-                              />
-                            </div>
-                          </Badge>
-                        </div>
-                        <Profile
-                          openContent={openContent}
-                          setOpenContent={setOpenContent}
-                          setOpenUploader={setOpenUploader}
-                          openUploader={openUploader}
-                          profileUploadedTime={profileUploadedTime}
-                          currentRole={currentRole}
-                          currentUserInfo={currentUserInfo}
-                          logoutFunction={logoutFunction}
-                          profileImageUrl={profileImg}
-                          userName={userName}
-                        />
-                        <div className="mx-15">
-                          <div
-                            className="text-dark-50 ms-2 header-name d-flex mr-3"
-                            style={{ fontWeight: "700", fontSize: "16px" }}
-                          >
-                            {userName}
-                          </div>
-
-                          {roles?.length > 0 && userIdDetails != "" ? (
-                            <span className="ms-2 d-flex mt-1 d-flex">
-                              <Dropdown
-                                menu={{
-                                  items: roles,
-                                  defaultSelectedKeys: userRole,
-                                  onClick,
-                                }}
-                                trigger={["click"]}
-                              >
-                                <span
-                                  className="header-name d-flex"
-                                  style={{ margin: "-5px 0px 0 10px" }}
-                                >
-                                  {currentRole == "Record Analyst"
-                                    ? "Analyst"
-                                    : userRole
-                                        ?.replace(/_/g, " ")
-                                        ?.toLowerCase()}
-                                  <DownOutlined
-                                    style={{ margin: "0 0 0 5px" }}
-                                  />
-                                </span>
-                              </Dropdown>
-                            </span>
-                          ) : (
-                            <span
-                              className="text-[#4F4F4F] ms-2 text-truncate subHeader-name d-flex mr-3"
-                              style={{ fontWeight: "500", fontSize: "6px" }}
-                            >
-                              {/* {currentRole?.replace(/_/g, " ")} */}
-                              {proxyRole}
-                            </span>
                           )}
+                          {tenentId !=
+                            "7f41538e-2329-4ecc-890f-03c93cccb934" && (
+                            <div
+                              className="chatheaderIcon cursor-pointer"
+                              id="chatIcon"
+                              name="chatIcon"
+                              onClick={() => gotoChat()}
+                            >
+                              {/* <div style={{ color: "#04306F" }}> */}
+                              <div
+                                id="chat-icon"
+                                name="chat-icon"
+                                style={{ color: "#04306F" }}
+                              >
+                                <FontAwesomeIcon
+                                  icon={faMessage}
+                                  className={styles.bellIcon}
+                                  style={{
+                                    width: "20px",
+                                    height: "20px",
+                                    marginTop: "8px",
+                                    fontWeight: "700",
+                                    marginRight: "10px",
+                                    color: "#04306F",
+                                  }}
+                                />
+                                {/* </div> */}
+                              </div>
+                            </div>
+                          )}
+                          <div
+                            className={`notificationIcon ${
+                              notificationCount < 9 ? "me-3" : "me-4"
+                            }`}
+                            onClick={() => notificationDrawer()}
+                            id="notificationIcon"
+                            name="notificationIcon"
+                          >
+                            <Badge
+                              id="notification-badge"
+                              name="notification-badge"
+                              count={notificationCount}
+                              color="#04306F"
+                            >
+                              <div
+                                id="notification-icon"
+                                name="notification-icon"
+                                style={{ color: "#04306F" }}
+                              >
+                                <FontAwesomeIcon
+                                  icon={faBell}
+                                  className={`fa-regular ${styles.bellIcon}`}
+                                  styles={{ color: "#04306F" }}
+                                />
+                              </div>
+                            </Badge>
+                          </div>
+                          <Profile
+                            openContent={openContent}
+                            setOpenContent={setOpenContent}
+                            setOpenUploader={setOpenUploader}
+                            openUploader={openUploader}
+                            profileUploadedTime={profileUploadedTime}
+                            currentRole={currentRole}
+                            currentUserInfo={currentUserInfo}
+                            logoutFunction={logoutFunction}
+                            profileImageUrl={profileImg}
+                            userName={userName}
+                          />
+                          <div className="mx-15">
+                            <div
+                              className="text-dark-50 ms-2 header-name d-flex mr-3"
+                              style={{ fontWeight: "700", fontSize: "16px" }}
+                            >
+                              {userName}
+                            </div>
+
+                            {roles?.length > 0 && userIdDetails != "" ? (
+                              <span className="ms-2 d-flex mt-1 d-flex">
+                                <Dropdown
+                                  menu={{
+                                    items: roles,
+                                    defaultSelectedKeys: userRole,
+                                    onClick,
+                                  }}
+                                  trigger={["click"]}
+                                >
+                                  <span
+                                    className="header-name d-flex"
+                                    style={{ margin: "-5px 0px 0 10px" }}
+                                  >
+                                    {userRole?.split("_")?.join(" ")}
+                                    {/* {proxyRole?.split("_")?.join(" ")} */}
+                                    <DownOutlined
+                                      style={{ margin: "0 0 0 5px" }}
+                                    />
+                                  </span>
+                                </Dropdown>
+                              </span>
+                            ) : (
+                              <span
+                                className="text-[#4F4F4F] ms-2 text-truncate subHeader-name d-flex mr-3"
+                                style={{ fontWeight: "500", fontSize: "6px" }}
+                              >
+                                {/* {proxyRole?.split("_")?.join(" ")} */}
+                                {userRole?.split("_")?.join(" ")}
+                              </span>
+                            )}
+                          </div>
                         </div>
                       </div>
                     </div>
-                  </div>
-                </li>
-              </ul>
-            </div>
+                  </li>
+                </ul>
+              </div>
             </>
             {/* } */}
           </div>

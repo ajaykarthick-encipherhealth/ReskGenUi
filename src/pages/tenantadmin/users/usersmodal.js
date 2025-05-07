@@ -108,6 +108,7 @@ const UsersModal = ({
   const handleSelectAll = () => {
     if (selectedUserIds?.length === userDetails?.length) {
       setSelectedUserIds([]);
+      setUserName([])
     } else {
       const allIds = userDetails?.map((user) => user?.id);
       setSelectedUserIds(allIds);

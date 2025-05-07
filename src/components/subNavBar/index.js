@@ -96,7 +96,7 @@ const SubNavBar = ({ handleBack, hideBackArrow, pageLoad ,tableLoader}) => {
                     {/* <span className={styles.count}>
                       {row[field.actualField] || "--"}
                     </span> */}
-                    {field.headerName === "Tin Id" &&
+                    {field.headerName === "Tin Name" &&
                       row[field.actualField] && (
                         <FontAwesomeIcon
                           icon={faCopy}

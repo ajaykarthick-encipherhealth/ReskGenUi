@@ -122,7 +122,6 @@ const ReusableFilters = ({
       setFilterBatchCount(true);
       setSelectAllChecked(false);
       setSelectedRowsId([]);
-      getAllReviewerALlocation();
       setSelectedRows([]);
       setBatchCount("");
     } else {
@@ -138,7 +137,6 @@ const ReusableFilters = ({
       setSelectedRowsId([]);
       setSelectedRows([]);
     }
-    getAllReviewerALlocation();
   }; 
   return (
     <div className="d-flex gap-5 w-100">
