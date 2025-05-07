@@ -144,18 +144,21 @@ const AllocateModal = ({
   const handleSelectAll = () => {
     if (selectedUserIds.length === userDetails.length) {
       setSelectedUserIds([]);
+      setActiveEmail([]);
     } else {
       const allIds = userDetails.map((user) => user.id);
       setSelectedUserIds(allIds);
       setActiveEmail(userDetails.map((user) => user.email));
     }
   };
+
   useEffect(() => {
     getUserList({ roleId: roleId });
   }, [roleId]);
   useEffect(() => {
     setSelectedChart(selectedRowsId);
   }, [selectedRowsId]);
+  console.log(activeEmail, "email");
 
   return (
     <div>
@@ -408,7 +411,7 @@ const AllocateModal = ({
                                 //   setSelectedUserName(remove);
                                 // }}
                               >
-                                <span >{item.patientId}</span>
+                                <span>{item.patientId}</span>
                                 {/* <button
                                   id={
                                     id
@@ -454,7 +457,7 @@ const AllocateModal = ({
           </div>
         ) : (
           <div className="m-4">
-         <div className="d-flex align-items-center justify-content-center mt-5">
+            <div className="d-flex align-items-center justify-content-center mt-5">
               No users available. Please create and assign users.
             </div>
           </div>
@@ -486,6 +489,7 @@ const AllocateModal = ({
           setIsSecondModalOpen(false);
           setAllocateDate(null);
           setActiveCard("");
+          setActiveEmail([]);
         }}
         footer={null}
         width="35%"
@@ -548,7 +552,7 @@ const AllocateModal = ({
                     //   )
                     // }
                   >
-                      <span >{item.patientId}</span>
+                    <span>{item.patientId}</span>
                     {/* <button
                       id={createIdGen(`delete ${index}`)}
                       className="btn p-1"

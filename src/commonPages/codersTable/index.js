@@ -126,7 +126,8 @@ const CodersTable = ({
   tableDynamicColumnReset,
   tableStatus,
   getTableStatus,
-  route
+  route,
+  backRoute,
 }) => {
   const columns = [
     {
@@ -245,12 +246,11 @@ const CodersTable = ({
       const controller = new AbortController();
       controller.abort();
       setStorage("patientId", data.patientId);
-      setStorage("routeBackTo", "/reviewer/patients");
+      setStorage("routeBackTo", backRoute ? backRoute : "/reviewer/patients");
       getRoutedData(params);
       router.push({
         pathname: route ? route : "/reviewer/patients/details",
       });
-
     } else {
       notification.warning({
         message: data.patientId + " file not processed Please wait",
@@ -286,7 +286,7 @@ const CodersTable = ({
       isReAssigned,
       isQueried,
       patientAllocated,
-      tin ,
+      tin,
     });
     if (res?.status == "SUCCESS") {
       setTotalElements(res.response?.patientDTOList?.totalElements);
@@ -335,7 +335,7 @@ const CodersTable = ({
     const payload = {
       pageId: pageId,
       headerNames: data.map((col) => col.id),
-    };        
+    };
     try {
       const response = await tableDynamicColumn({ payload });
       if (response?.status === "SUCCESS") {
@@ -416,7 +416,7 @@ const CodersTable = ({
         (item) => item.active && item?.filter?.style
       )
     );
-  }, [data?.response?.metaDataDTO]);  
+  }, [data?.response?.metaDataDTO]);
 
   return (
     <div className={`show `}>
@@ -434,42 +434,42 @@ const CodersTable = ({
           {/* {tableLoader ? (
             <CardSkeleton />
           ) : ( */}
-            <div className="d-flex p-3">
-              <div style={{ width: "100%" }}>
-                <ReusableFilters
-                  showFilter={true}
-                  setActiveFilters={setActiveFilters}
-                  setSearchText={setSearchText}
-                  searchText={searchText}
-                  setSelectedOption={setSelectedOption}
-                  selectedOption={selectedOption}
-                  setSelectedDateRanges={setSelectedDateRanges}
-                  selectedDateRanges={selectedDateRanges}
-                  setPageNumber={setPageNumber}
-                  FilterItems={activeFilters}
-                  selectedDates={selectedDates}
-                  setSelectedDates={setSelectedDates}
-                  activeFilters={activeFilters}
-                  setClear={setClear}
-                  clear={clear}
-                  setPageNo={setPageNo}
-                  opt={opt}
-                  columns={columns}
-                  //customize table
-                  open={open}
-                  onClose={onClose}
-                  selectedColumns={test}
-                  setSelectedColumns={setTest}
-                  commonFilterItems={commonFilterItems}
-                  showCustomizeTable={true}
-                  showDrawer={showDrawer}
-                  handleSubmit={handleSubmit}
-                  handleReset={handleReset}
-                  isSubmitting={isSubmitting}
-                  isResetting={isResetting}
-                />
-              </div>
+          <div className="d-flex p-3">
+            <div style={{ width: "100%" }}>
+              <ReusableFilters
+                showFilter={true}
+                setActiveFilters={setActiveFilters}
+                setSearchText={setSearchText}
+                searchText={searchText}
+                setSelectedOption={setSelectedOption}
+                selectedOption={selectedOption}
+                setSelectedDateRanges={setSelectedDateRanges}
+                selectedDateRanges={selectedDateRanges}
+                setPageNumber={setPageNumber}
+                FilterItems={activeFilters}
+                selectedDates={selectedDates}
+                setSelectedDates={setSelectedDates}
+                activeFilters={activeFilters}
+                setClear={setClear}
+                clear={clear}
+                setPageNo={setPageNo}
+                opt={opt}
+                columns={columns}
+                //customize table
+                open={open}
+                onClose={onClose}
+                selectedColumns={test}
+                setSelectedColumns={setTest}
+                commonFilterItems={commonFilterItems}
+                showCustomizeTable={true}
+                showDrawer={showDrawer}
+                handleSubmit={handleSubmit}
+                handleReset={handleReset}
+                isSubmitting={isSubmitting}
+                isResetting={isResetting}
+              />
             </div>
+          </div>
           {/* )} */}
           <div className="profile-tab  mt-3">
             {pageId === "a9d5c555-7954-4382-a2ef-3f66b292cf8f" ? (

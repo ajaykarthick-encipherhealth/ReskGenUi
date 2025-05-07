@@ -222,6 +222,7 @@ const Patient = ({
   tableDynamicColumn,
   tableDynamicColumnReset,
   pageLoad,
+  backRoute,
 }) => {
   const columns = [
     {
@@ -451,8 +452,7 @@ const Patient = ({
       controller.abort();
       setStorage("patientId", data?.patientId);
       var role = getStorage("userRole");
-
-      // setStorage("routeBackTo", "/tenantadmin/tin/tindetails");
+      setStorage("routeBackTo",backRoute?backRoute: "/tenantadmin/tin/tindetails");
       getRoutedData(page);
       navigate.push({
         pathname: route ? route : "/tenantadmin/patients/details",

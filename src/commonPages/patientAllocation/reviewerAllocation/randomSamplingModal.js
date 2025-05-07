@@ -136,6 +136,7 @@ const RandomSamplingModal = ({
   const handleSelectAll = () => {
     if (selectedUserIds.length === userDetails.length) {
       setSelectedUserIds([]);
+       setActiveEmail([]); 
     } else {
       const allIds = userDetails.map((user) => user.id);
       setSelectedUserIds(allIds);

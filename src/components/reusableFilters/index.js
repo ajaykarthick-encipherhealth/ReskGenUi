@@ -294,9 +294,11 @@ const ReusableFilters = ({
                         disabledDate(
                           currentDate,
                           selectedDates?.[item?.actualField],
-                          item?.actualField === "dueDate" ||
-                            item?.actualField == "auditedDueDate" ||
-                            item?.actualField == "auditDueDate"
+                          item?.actualField === "coder1DueDate" ||
+                            item?.actualField == "coder2DueDate" ||
+                            item?.actualField == "qaDueDate" ||
+                            item?.actualField == "downloaderDueDate" ||
+                            item?.actualField == "ownerDueDate"
                         )
                       }
                     />

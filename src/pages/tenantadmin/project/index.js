@@ -22,7 +22,12 @@ const Project = ({ getProjectActiveTab, activeTabName }) => {
         <Tab icon activeTab={activeTab} handleTabs={handleTabs} tabs={tabs} />
       </div>
       <div>
-        {activeTab === "Patients" && <Patients route={`/tenantadmin/project/details`}/>}
+        {activeTab === "Patients" && (
+          <Patients
+            backRoute={"/tenantadmin/project"}
+            route={`/tenantadmin/project/details`}
+          />
+        )}
         {activeTab === "Sync" && (
           <div>
             <Patientsync />

@@ -583,10 +583,10 @@ const Details = ({
     const backRoute = getStorage("routeBackTo");
 
     getRoutedData(routedData);
-    // navigate.push(backRoute);
-    navigate.back(
+    navigate.push(backRoute);
+    // navigate.back(
       
-    )
+    // )
     setSelectDosValue("");
     getSelectedDosPageNumber(1);
     getPatientID(null);
