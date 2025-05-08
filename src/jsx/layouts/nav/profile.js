@@ -21,6 +21,7 @@ const Profile = ({
   userName,
 }) => {
   const userRole = getStorage("userRole");
+   const userEmail=getStorage("userName")
   return (
     <>
       <div id="profileTab" name="profileTab" className="header-media d-flex">
@@ -81,16 +82,18 @@ const Profile = ({
                     </span>
                   </div>
                 </div>
-                <div className="d-flex">
+
+                <div className="">
                   <span
-                    className="ms-2 header-name d-flex mr-3"
+                    className="  d-flex mt-3"
                     style={{
-                      fontWeight: "700",
-                      fontSize: "16px",
+                      fontWeight: "600",
+                      fontSize: "12px",
                     }}
                   >
-                    {userName}
+                    {userEmail}
                   </span>
+
                   <span
                     className="text-[#4F4F4F] ms-2 subHeader-name d-flex mr-3 "
                     style={{

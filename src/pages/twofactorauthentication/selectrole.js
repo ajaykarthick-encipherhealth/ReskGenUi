@@ -24,10 +24,10 @@ const SelectRole = ({
   const [loading, setLoading] = useState(false);
 
   const roleOptions = allRolesData?.userRoles?.map((client) => ({
-    label: client.proxyRole.replaceAll('_', ' '),
+    label: client.proxyRole.replaceAll("_", " "),
     value: client.proxyRole,
   }));
-  
+
   const onSubmitRole = async (e) => {
     e.preventDefault();
 
@@ -38,12 +38,15 @@ const SelectRole = ({
     const selectedRoleObj = allRolesData?.userRoles?.find(
       (role) => role.proxyRole === selectedRole
     );
-    if (selectedRoleObj) {
+    const userName    = allRolesData?.userName
+    if (selectedRoleObj || userName ) {
       setStorage("proxyRole", selectedRoleObj?.proxyRole);
       setStorage("userAllRoles", JSON.stringify(allRolesData?.userRoles));
       setStorage("accessMenuList", JSON.stringify(selectedRoleObj?.accessList));
       setStorage("roleId", selectedRoleObj?.roleId);
       setStorage("aliasName", selectedRoleObj?.aliasName);
+      setStorage("userName", allRolesData?.userName);
+
       loginSuccessCallBack();
     } else {
       console.error("Selected role not found in userRoles array");
@@ -60,7 +63,7 @@ const SelectRole = ({
       message: "Login Successfully",
       duration: 1,
     });
-    setRoleError(false);    
+    setRoleError(false);
     const rolesMapping = {
       admin: { userRole: "admin", route: "/admin/dashboard" },
       reviewer: { userRole: "reviewer", route: "/reviewer/dashboard" },
@@ -89,20 +92,21 @@ const SelectRole = ({
       router?.push(selectedRoleInfo?.route);
     }
   };
-   const getRolesApi = async () => {
-      try {
-        const response = await getAllRoles();
-        if (response?.status !== "SUCCESS") {
-          getResponePopup(response);
-        }
-      } catch (error) {
-        getResponePopup(error);
+  const getRolesApi = async () => {
+    try {
+      const response = await getAllRoles();
+      if (response?.status !== "SUCCESS") {
+        getResponePopup(response);
       }
-    };
+    } catch (error) {
+      getResponePopup(error);
+    }
+  };
 
   useEffect(() => {
     getRolesApi();
   }, []);
+
 
 
   return (

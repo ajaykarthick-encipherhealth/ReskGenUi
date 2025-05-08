@@ -90,6 +90,7 @@ const Header = ({
 }) => {
   const router = useRouter();
   const fileInputRef = useRef(null);
+  const userEmail = getStorage("userName");
   const menuItemsPerPage = 5;
   const stateActive = router.pathname;
   const [headerFix, setheaderFix] = useState(false);
@@ -130,7 +131,6 @@ const Header = ({
   const [roles, setRoles] = useState([]);
   const [projectList, setProjectList] = useState([]);
   const [projectListCheck, setProjectListCheck] = useState(true);
-
 
   const proxyRole = getStorage("proxyRole");
   const showDrawer = () => {
@@ -219,14 +219,33 @@ const Header = ({
     setProjectListCheck(true);
     const allRoles = JSON.parse(getStorage("userAllRoles"));
     let selectedRoleObj = allRoles?.find((res) => res.proxyRole === key);
-    if(!selectedRoleObj){      
-      selectedRoleObj = allRoles?.find((res) => res?.details?.proxyRole === key);
-    } 
-    const accessMenuList = selectedRoleObj ? selectedRoleObj : selectedRoleObj?.details;        
+    if (!selectedRoleObj) {
+      selectedRoleObj = allRoles?.find(
+        (res) => res?.details?.proxyRole === key
+      );
+    }
+    const accessMenuList = selectedRoleObj
+      ? selectedRoleObj
+      : selectedRoleObj?.details;
     setStorage("userRole", key);
-    setStorage("proxyRole", accessMenuList?.proxyRole ? accessMenuList?.proxyRole : accessMenuList?.details.proxyRole);
-    setStorage("roleId", accessMenuList?.roleId ? accessMenuList?.roleId : accessMenuList?.details.roleId);
-    setStorage("aliasName",accessMenuList?.aliasName ? accessMenuList?.aliasName : accessMenuList?.details.aliasName);
+    setStorage(
+      "proxyRole",
+      accessMenuList?.proxyRole
+        ? accessMenuList?.proxyRole
+        : accessMenuList?.details.proxyRole
+    );
+    setStorage(
+      "roleId",
+      accessMenuList?.roleId
+        ? accessMenuList?.roleId
+        : accessMenuList?.details.roleId
+    );
+    setStorage(
+      "aliasName",
+      accessMenuList?.aliasName
+        ? accessMenuList?.aliasName
+        : accessMenuList?.details.aliasName
+    );
     if (key === "Admin") {
       router.push("/admin/dashboard");
     } else if (key === "CODER_1" || key === "CODER_2" || key === "QA") {
@@ -258,10 +277,14 @@ const Header = ({
   const getMenuListByRole = (role) => {
     const allRoles = JSON.parse(getStorage("userAllRoles"));
     let selectedRoleObj = allRoles?.find((res) => res.proxyRole === role);
-    if(!selectedRoleObj){
-      selectedRoleObj = allRoles?.find((res) => res?.details?.proxyRole === role);
-    }    
-    const accessMenuList = selectedRoleObj?.accessList ? selectedRoleObj?.accessList : selectedRoleObj?.details?.accessList;
+    if (!selectedRoleObj) {
+      selectedRoleObj = allRoles?.find(
+        (res) => res?.details?.proxyRole === role
+      );
+    }
+    const accessMenuList = selectedRoleObj?.accessList
+      ? selectedRoleObj?.accessList
+      : selectedRoleObj?.details?.accessList;
     switch (role) {
       case "admin":
         return AdminMenuList;
@@ -643,8 +666,6 @@ const Header = ({
     value: client.clientId,
   }));
 
-
-
   const handleClientChange = async (value) => {
     setStorage("client", value.value);
     setSelectedClient(value);
@@ -668,7 +689,6 @@ const Header = ({
     setSelectedTin(value);
     setStorage("tinNumber", value?.value);
     getPageRendering(value);
-    
   };
 
   const handleProjectChange = async (value) => {
@@ -698,20 +718,20 @@ const Header = ({
         label: data.proxyRole,
         key: data.proxyRole,
         details: data,
-      }));      
+      }));
       if (data?.length > 0) {
         setRoles(data);
         setStorage(
           "accessMenuList",
           JSON.stringify(data[0].details.accessList)
-        );        
+        );
         setStorage("userAllRoles", JSON.stringify(data));
         setStorage("roleId", data[0].details?.roleId);
         setStorage("proxyRole", data[0].label);
         setCurrentRole(data[0].label);
         setMenuList(getMenuListByRole(data[0].label));
         getMenuListByRole(data[0].label);
-        onClick({ key: data[0].label });        
+        onClick({ key: data[0].label });
       }
     }
   };
@@ -778,32 +798,33 @@ const Header = ({
     getRole();
   }, []);
 
- useEffect(() => {
-  const userRole = getStorage("proxyRole");
-   if (tinDetails?.length > 0 && (!selectedTin || selectedTin === "") && userRole==="QA") {
-     const defaultTinNumber = tinDetails[0].tinNumber;
-     setSelectedTin(defaultTinNumber);
-     setStorage("tinNumber", defaultTinNumber);
-     getPageRendering(defaultTinNumber);
-   }
- }, [tinDetails, selectedTin]);
-
-
+  useEffect(() => {
+    const userRole = getStorage("proxyRole");
+    if (
+      tinDetails?.length > 0 &&
+      (!selectedTin || selectedTin === "") &&
+      userRole === "QA"
+    ) {
+      const defaultTinNumber = tinDetails[0].tinNumber;
+      setSelectedTin(defaultTinNumber);
+      setStorage("tinNumber", defaultTinNumber);
+      getPageRendering(defaultTinNumber);
+    }
+  }, [tinDetails, selectedTin]);
 
   useEffect(() => {
-    if(projectListCheck){
-    // setTimeout(() => {
-    const defaultClient = getStorage("client");
-    const defaultProject = getStorage("project");
+    if (projectListCheck) {
+      // setTimeout(() => {
+      const defaultClient = getStorage("client");
+      const defaultProject = getStorage("project");
 
-    if (defaultClient) setSelectedClient(defaultClient);
-    setBackupSelectedClient(defaultClient);
-    if (defaultProject) setSelectedProject(defaultProject);
-    setBackupSelectedProject(defaultProject);
-}
-  // }, 2000);
+      if (defaultClient) setSelectedClient(defaultClient);
+      setBackupSelectedClient(defaultClient);
+      if (defaultProject) setSelectedProject(defaultProject);
+      setBackupSelectedProject(defaultProject);
+    }
+    // }, 2000);
   }, [projectListCheck]);
-  
 
   return (
     <div className={`header ${headerFix ? "is-fixed" : ""}`}>
@@ -1113,9 +1134,9 @@ const Header = ({
                           <div className="mx-15">
                             <div
                               className="text-dark-50 ms-2 header-name d-flex mr-3"
-                              style={{ fontWeight: "700", fontSize: "16px" }}
+                              style={{ fontWeight: "600", fontSize: "18px" }}
                             >
-                              {userName}
+                              {userEmail?.split("@")[0]}
                             </div>
 
                             {roles?.length > 0 && userIdDetails != "" ? (
@@ -1129,11 +1150,11 @@ const Header = ({
                                   trigger={["click"]}
                                 >
                                   <span
-                                    className="header-name d-flex"
+                                    className="header-name d-flex font1"
                                     style={{ margin: "-5px 0px 0 10px" }}
                                   >
                                     {userRole?.split("_")?.join(" ")}
-                                    {/* {proxyRole?.split("_")?.join(" ")} */}
+
                                     <DownOutlined
                                       style={{ margin: "0 0 0 5px" }}
                                     />
