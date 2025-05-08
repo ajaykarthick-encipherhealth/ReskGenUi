@@ -100,6 +100,8 @@ const UserList = ({
   const [isResetting, setIsResetting] = useState(false);
   const [visiblePopoverKey, setVisiblePopoverKey] = useState(null);
   const [isEdit, setIsEdit] = useState(false);
+  const [isFilter, setIsFilter] = useState(true);
+
   const handleChange = (e) => {
     let value = e.target.value;
     const val = getDisplayValue(value);
@@ -457,12 +459,15 @@ const UserList = ({
   };
 
   useEffect(() => {
-    setActiveFilters(
-      data?.response?.metaDataDTO.filter(
-        (item) => item.active && item?.filter?.style
-      )
-    );
-  }, [data?.response?.metaDataDTO]);
+     if (isFilter && data?.response?.metaDataDTO) {
+       setActiveFilters(
+         data?.response?.metaDataDTO.filter(
+           (item) => item.active && item?.filter?.style
+         )
+       );
+       setIsFilter(false);
+     }
+   }, [data?.response?.metaDataDTO]);
 
   return (
     <div className={`show `}>

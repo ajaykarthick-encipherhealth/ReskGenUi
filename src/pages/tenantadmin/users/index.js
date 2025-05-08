@@ -62,7 +62,7 @@ const Users = ({
   const [selectedRole, setSelectedRole] = useState([]);
   const [visiblePopoverKey, setVisiblePopoverKey] = useState(null);
   const [editingUser, setEditingUser] = useState([]);
-
+  const [isFilter, setIsFilter] = useState(true);
 
   const onPageChange = (e) => {
     setPaginationFirst(e.first);
@@ -234,11 +234,14 @@ useEffect(() => {
   };
 
   useEffect(() => {
-    setActiveFilters(
-      data?.response?.metaDataDTO.filter(
-        (item) => item.active && item?.filter?.style
-      )
-    );
+    if (isFilter && data?.response?.metaDataDTO) {
+      setActiveFilters(
+        data?.response?.metaDataDTO.filter(
+          (item) => item.active && item?.filter?.style
+        )
+      );
+      setIsFilter(false);
+    }
   }, [data?.response?.metaDataDTO]);
 
   useEffect(() => {

@@ -52,7 +52,8 @@ const Projects = ({
   const [test, setTest] = useState(data?.response?.metaDataDTO);
   const [pageSize, setPageSize] = useState(15);
   const [drawerOpen, setDrawerOpen] = useState(false);
-
+  const [isFilter, setIsFilter] = useState(true);
+  
   const showProjectDrawer = () => {
     setDrawerOpen(true);
   };
@@ -163,13 +164,17 @@ const Projects = ({
     paginationFirst,
     pageLoad,
   ]);
-    useEffect(() => {
+
+  useEffect(() => {
+    if (isFilter && data?.response?.metaDataDTO) {
       setActiveFilters(
         data?.response?.metaDataDTO.filter(
           (item) => item.active && item?.filter?.style
         )
       );
-    }, [data?.response?.metaDataDTO]);
+      setIsFilter(false);
+    }
+  }, [data?.response?.metaDataDTO]);
 
   return (
     <div>

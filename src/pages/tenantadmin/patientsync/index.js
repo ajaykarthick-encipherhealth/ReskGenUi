@@ -450,7 +450,8 @@ const PatientSync = ({
   const [selectedOption, setSelectedOption] = useState({});
   const [clear, setClear] = useState(false);
   const [sort, setSort] = useState(null);
-
+  const [isFilter, setIsFilter] = useState(true);
+  
   const handleUploadButtonClick = (e) => {
     setIsDrawerOpen(!isDrawerOpen);
     setUploadType(e.target.name);
@@ -884,12 +885,16 @@ const PatientSync = ({
     selectedDateRanges,
     sort,
   ]);
+
   useEffect(() => {
-    setActiveFilters(
-      data?.response?.metaDataDTO.filter(
-        (item) => item.active && item?.filter?.style
-      )
-    );
+    if (isFilter && data?.response?.metaDataDTO) {
+      setActiveFilters(
+        data?.response?.metaDataDTO.filter(
+          (item) => item.active && item?.filter?.style
+        )
+      );
+      setIsFilter(false);
+    }
   }, [data?.response?.metaDataDTO]);
 
   return (

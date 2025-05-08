@@ -322,7 +322,8 @@ const Patient = ({
   const [test, setTest] = useState(data?.response?.metaDataDTO);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isResetting, setIsResetting] = useState(false);
-
+  const [isFilter, setIsFilter] = useState(true);
+  
   const addPatientFormId = () => {
     setValidated(false);
     setAddPatientId(true);
@@ -889,11 +890,14 @@ const Patient = ({
   }, []);
 
   useEffect(() => {
-    setActiveFilters(
-      data?.response?.metaDataDTO.filter(
-        (item) => item.active && item?.filter?.style
-      )
-    );
+    if (isFilter && data?.response?.metaDataDTO) {
+      setActiveFilters(
+        data?.response?.metaDataDTO.filter(
+          (item) => item.active && item?.filter?.style
+        )
+      );
+      setIsFilter(false);
+    }
   }, [data?.response?.metaDataDTO]);
 
   return (

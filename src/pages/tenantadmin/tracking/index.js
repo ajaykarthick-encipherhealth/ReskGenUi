@@ -224,7 +224,7 @@ const Patient = ({
   const [test, setTest] = useState(data?.response?.metaDataDTO);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isResetting, setIsResetting] = useState(false);
-
+  const [isFilter, setIsFilter] = useState(true);
 
   const onPageChange = (e) => {
     setPaginationFirst(e.first);
@@ -467,11 +467,14 @@ const Patient = ({
     priority: priorityOptions,
   };
   useEffect(() => {
-    setActiveFilters(
-      data?.response?.metaDataDTO.filter(
-        (item) => item.active && item?.filter?.style
-      )
-    );
+    if (isFilter && data?.response?.metaDataDTO) {
+      setActiveFilters(
+        data?.response?.metaDataDTO.filter(
+          (item) => item.active && item?.filter?.style
+        )
+      );
+      setIsFilter(false);
+    }
   }, [data?.response?.metaDataDTO]);
 
   return (

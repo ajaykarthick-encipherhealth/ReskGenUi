@@ -200,6 +200,7 @@ const Tin = ({
   const [parsedData, setParsedData] = useState([]);
   const [pageSize, setPageSize] = useState(15);
   const [priority, setPriority] = useState(null);
+  const [isFilter, setIsFilter] = useState(true);
 
   const gotoPatientDetails = (rowData) => {
     setStorage("patientId", rowData.patientId);
@@ -541,13 +542,16 @@ const Tin = ({
     searchText
   ]);
 
-  useEffect(() => {
-    setActiveFilters(
-      data?.response?.metaDataDTO.filter(
-        (item) => item.active && item?.filter?.style
-      )
-    );
-  }, [data?.response?.metaDataDTO]);
+ useEffect(() => {
+     if (isFilter && data?.response?.metaDataDTO) {
+       setActiveFilters(
+         data?.response?.metaDataDTO.filter(
+           (item) => item.active && item?.filter?.style
+         )
+       );
+       setIsFilter(false);
+     }
+   }, [data?.response?.metaDataDTO]);
 
   // useEffect(() => {
   //   if (data?.response?.pageResponse?.content) {

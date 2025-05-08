@@ -34,6 +34,7 @@ const Clients = ({
   const [test, setTest] = useState(data?.response?.metaDataDTO);
   const [pageSize, setPageSize] = useState(15);
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const [isFilter, setIsFilter] = useState(true);
 
   const showClientDrawer = () => {
     setDrawerOpen(true);
@@ -137,13 +138,17 @@ const Clients = ({
     paginationFirst,
     pageLoad,
   ]);
+  
   useEffect(() => {
-    setActiveFilters(
-      data?.response?.metaDataDTO.filter(
-        (item) => item.active && item?.filter?.style
-      )
-    );
-  }, [data?.response?.metaDataDTO]);
+     if (isFilter && data?.response?.metaDataDTO) {
+       setActiveFilters(
+         data?.response?.metaDataDTO.filter(
+           (item) => item.active && item?.filter?.style
+         )
+       );
+       setIsFilter(false);
+     }
+   }, [data?.response?.metaDataDTO]);
 
   return (
     <div>

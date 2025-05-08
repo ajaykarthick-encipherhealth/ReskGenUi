@@ -121,7 +121,8 @@ const MoveBack = ({
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isResetting, setIsResetting] = useState(false);
   const [moveBackLoader, setIsMoveBackLoader] = useState(false);
-
+  const [isFilter, setIsFilter] = useState(true);
+  
   const handleTabChange = (key) => {
     setActiveTab(key);
     setSelectedSupervisor(null);
@@ -261,14 +262,17 @@ const MoveBack = ({
       });
     }
   }, [roleId]);
-  useEffect(() => {
-    setActiveFilters(
-      data?.response?.metaDataDTO.filter(
-        (item) => item.active && item?.filter?.style
-      )
-    );
-  }, [data?.response?.metaDataDTO]);
 
+  useEffect(() => {
+    if (isFilter && data?.response?.metaDataDTO) {
+      setActiveFilters(
+        data?.response?.metaDataDTO.filter(
+          (item) => item.active && item?.filter?.style
+        )
+      );
+      setIsFilter(false);
+    }
+  }, [data?.response?.metaDataDTO]);
   return (
     <div>
       <Header />

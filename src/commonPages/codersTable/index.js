@@ -239,6 +239,8 @@ const CodersTable = ({
   const [activeStatus, setActiveStatus] = useState("PENDING");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isResetting, setIsResetting] = useState(false);
+  const [isFilter, setIsFilter] = useState(true);
+  
   const gotoPatientDetails = (data) => {
     patientDetails(data);
     setStorage("patientId", data.patientId);
@@ -411,11 +413,14 @@ const CodersTable = ({
   }, [routedData]);
 
   useEffect(() => {
-    setActiveFilters(
-      data?.response?.metaDataDTO.filter(
-        (item) => item.active && item?.filter?.style
-      )
-    );
+    if (isFilter && data?.response?.metaDataDTO) {
+      setActiveFilters(
+        data?.response?.metaDataDTO.filter(
+          (item) => item.active && item?.filter?.style
+        )
+      );
+      setIsFilter(false);
+    }
   }, [data?.response?.metaDataDTO]);
 
   return (

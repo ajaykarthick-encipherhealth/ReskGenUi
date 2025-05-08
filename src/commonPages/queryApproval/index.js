@@ -116,6 +116,7 @@ const QueryApproval = ({
   const [selectedRole, setSelectedRole] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isResetting, setIsResetting] = useState(false);
+  const [isFilter, setIsFilter] = useState(true);
 
   const handleTabChange = (key) => {
     setActiveTab(key);
@@ -257,12 +258,16 @@ const QueryApproval = ({
   }, []);
 
   useEffect(() => {
-    setActiveFilters(
-      data?.response?.metaDataDTO.filter(
-        (item) => item.active && item?.filter?.style
-      )
-    );
-  }, [data?.response?.metaDataDTO]);
+     if (isFilter && data?.response?.metaDataDTO) {
+       setActiveFilters(
+         data?.response?.metaDataDTO.filter(
+           (item) => item.active && item?.filter?.style
+         )
+       );
+       setIsFilter(false);
+     }
+   }, [data?.response?.metaDataDTO]);
+   
   return (
     <div>
       <Header />

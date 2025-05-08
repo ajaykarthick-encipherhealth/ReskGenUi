@@ -126,7 +126,7 @@ const PatientAllocation = ({
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isResetting, setIsResetting] = useState(false);
   const [isAllocate, setIsAllocate] = useState(false);
-
+  const [isFilter, setIsFilter] = useState(true);
   const disbaleAllocate = allRoles?.allocationRoles?.map(
     (item) => item.disableAllocation
   );
@@ -274,12 +274,16 @@ const PatientAllocation = ({
   }, []);
 
   useEffect(() => {
-    setActiveFilters(
-      data?.response?.metaDataDTO.filter(
-        (item) => item.active && item?.filter?.style
-      )
-    );
+    if (isFilter && data?.response?.metaDataDTO) {
+      setActiveFilters(
+        data?.response?.metaDataDTO.filter(
+          (item) => item.active && item?.filter?.style
+        )
+      );
+      setIsFilter(false);
+    }
   }, [data?.response?.metaDataDTO]);
+  
   return (
     <div>
       <Header />
