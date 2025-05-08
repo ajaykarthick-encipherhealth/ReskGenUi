@@ -4,6 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   ArrowDownOutlined,
   ArrowUpOutlined,
+  DownloadOutlined,
   InfoCircleFilled,
   InfoCircleOutlined,
   LoadingOutlined,
@@ -114,12 +115,15 @@ const AppTable = ({
   content,
   visiblePopoverKey,
   setVisiblePopoverKey,
-  setEditingUser
+  setEditingUser,
+  isGenerateReport,
+  isGenerateReportDownload,
 }) => {
   if (isCheckBox) {
     column.push({
       checkBox: true,
       value: idKey ? idKey : "patientId",
+      header: true,
     });
   }
 
@@ -135,6 +139,22 @@ const AppTable = ({
       value: "patientId",
     });
   }
+
+  if (isGenerateReport) {
+    column?.push({
+      checkBox: true,
+      value: idKey ? idKey : "patientId",
+      header: false,
+    });
+  }
+  if (isGenerateReportDownload) {
+    column?.push({
+      reportDownload: true,
+      value: idKey ? idKey : "patientId",
+      header: false,
+    });
+  }
+
   const router = useRouter();
   const columnsArr = Array.from({ length: column?.length || 5 });
   return (
@@ -283,7 +303,7 @@ const TableHeadItem = ({
   isUpload,
   isEdit,
 }) => {
-  if (item.checkBox) {
+  if (item.checkBox && item?.header) {
     return (
       <th>
         <input
@@ -315,6 +335,9 @@ const TableHeadItem = ({
   }
   if (item.statusButton || item.edit) {
     return <th>Action</th>;
+  }
+  if (item.reportDownload) {
+    return <th>Download</th>;
   }
 
   if (checkWithIncludesKey(item?.design, "SORTABLE")) {
@@ -459,7 +482,7 @@ const TableRow = ({
   content,
   visiblePopoverKey,
   setVisiblePopoverKey,
-  setEditingUser
+  setEditingUser,
 }) => {
   const router = useRouter();
 
@@ -542,7 +565,7 @@ const TableRow = ({
                   }
                   style={{ width: "100%" }}
                 /> */}
-              
+
                 <Select
                   options={priorityOptions}
                   placeholder="Set priority"
@@ -555,7 +578,7 @@ const TableRow = ({
                       ? (value) => handlePriorityChange(item?.tinNumber, value)
                       : undefined
                   }
-                  disabled={!handlePriorityChange} 
+                  disabled={!handlePriorityChange}
                   style={{ width: "100%" }}
                 />
               </span>
@@ -799,7 +822,7 @@ const TableRow = ({
                   open={visiblePopoverKey === item.id}
                   onOpenChange={(visible) => {
                     if (visible) {
-                      setEditingUser(item)
+                      setEditingUser(item);
                       setVisiblePopoverKey(item.id);
                     } else {
                       setVisiblePopoverKey(null);
@@ -1152,16 +1175,16 @@ const TableRow = ({
               } `}
             >
               <div className="d-flex  justify-content-start">
-                <Tooltip title={` Quality : ${Math.round(item?.accuracy)}%`}>
-                  <div className="notificationIcon">
-                    <div style={{ width: 40, height: 40 }}>
-                      <CircularProgressbar
-                        value={Math.round(item?.accuracy)}
-                        text={`${Math.round(item?.accuracy)}%`}
-                      />
-                    </div>
-                  </div>
-                </Tooltip>
+                <Progress
+                  percent={80}
+                  strokeColor={
+                    columnItem.value === "processing" ||
+                    columnItem.value === "failed"
+                      ? "#263E50"
+                      : "#263E50"
+                  }
+                  className={`w-100 ${Style.progreddBr}`}
+                />
               </div>
             </td>
           );
@@ -1416,6 +1439,31 @@ const TableRow = ({
                     </div>
                   )}
                 </div>
+              </div>
+            </td>
+          );
+        }
+
+        if (columnItem.reportDownload) {
+          return (
+            <td className={Style.lastBorder} style={{ textAlign: "center" }}>
+              <div
+                onClick={(e) => {
+                  e.stopPropagation();
+                  // getRetregger(item);
+                }}
+                id={
+                  tableId
+                    ? createIdGen("trigger " + tableId + colIndex)
+                    : createIdGen(
+                        "trigger " +
+                          router.pathname.replaceAll("/", " ") +
+                          colIndex
+                      )
+                }
+                className="d-flex align-items-center"
+              >
+             <DownloadOutlined style={{ fontSize: '16px' }} />
               </div>
             </td>
           );

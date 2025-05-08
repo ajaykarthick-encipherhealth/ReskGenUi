@@ -1,5 +1,5 @@
 import React from "react";
-import Reports from "../../../mainStream/reports";
+import Reports from "../../../commonPages/reports";
 
 const index = () => {
   return <Reports tab="Admin"/>;

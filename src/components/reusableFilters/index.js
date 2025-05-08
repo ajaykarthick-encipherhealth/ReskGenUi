@@ -69,6 +69,9 @@ const ReusableFilters = ({
   handleReset,
   isSubmitting,
   isResetting,
+  showGenerateReport,
+  selectedRows,
+  setIsModalOpen
 }) => {
   const pickerRefs = useRef({});
   const router = useRouter();
@@ -398,6 +401,32 @@ const ReusableFilters = ({
             />
           </div>
         ):""}
+              {showGenerateReport && (
+          <>
+            <div
+              id="addPatient-btn"
+              name="addPatient-btn"
+              className="d-flex justify-content-center align-items-center   mt-4"
+            >
+              <Button
+                data-testid="table-custom"
+                name="table-custom"
+                onClick={()=>{setIsModalOpen(true)}}
+                style={{
+                  background: "#04306f",
+                  color: "#fff",
+                  width: "100%",
+                  fontSize: "12px",
+                  marginLeft: "10px",
+                }}
+                className="btn btn-sm w-full text-ellipsis"
+                disabled={selectedRows?.length == 0 ? true : false}
+              >
+               Generate Report
+              </Button>
+            </div>
+          </>
+        )}
         {showCustomizeTable && (
           <>
             <div
