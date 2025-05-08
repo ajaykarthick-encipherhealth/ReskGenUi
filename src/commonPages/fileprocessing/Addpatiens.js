@@ -30,7 +30,7 @@ const Addpatients = ({
     setAddPatientId(false);
   };
   const handleTinChange = (value) => {
-    setStorage("tinId", value);
+    setStorage("tinNumber", value);
     getPageRendering(value);
   };
   return (
@@ -77,6 +77,7 @@ const Addpatients = ({
 
                 tin: selectedTinObj?.tinNumber || getStorage("tinNumber"),
               };
+
 
               handleSubmitPatientId(payload, form);
             }}
