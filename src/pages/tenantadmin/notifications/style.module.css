@@ -1,6 +1,6 @@
-.cardGrid {
+/* .cardGrid {
   grid-template-columns: repeat(2, 1fr) !important;
-}
+} */
 .commentsFormControl > textarea {
   min-height: 120px !important;
 }

@@ -14,10 +14,11 @@ const ConnectWebSocket = ({
 }) => {
   const token =
     typeof window !== "undefined" ? getStorage("token") : null;
-
+ const client = getStorage("client");
+ const role = getStorage("roleId");
   const WS_URL =
-  `wss://${webSocketUrl}chatservice/chatservice/websocket?token=Bearer` +
-  token;
+    `wss://${webSocketUrl}chatservice/chatservice/websocket?clientId=${client}&roleId=${role}&token=Bearer` +
+    token;
   const { lastJsonMessage } = useWebSocket(WS_URL, {
     share: false,
     shouldReconnect: () => true,
