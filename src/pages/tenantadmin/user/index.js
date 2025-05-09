@@ -808,11 +808,11 @@ const UserList = ({
                       },
                       {
                         validator: (_, value) => {
-                          if (value && value.includes("@")) {
-                            return Promise.reject(
-                              "Username should not contain @ symbol"
-                            );
-                          }
+                          // if (value && value.includes("@")) {
+                          //   return Promise.reject(
+                          //     "Username should not contain @ symbol"
+                          //   );
+                          // }
                           return Promise.resolve();
                         },
                       },
@@ -842,19 +842,19 @@ const UserList = ({
                             required: false,
                             message: "Please enter your password!",
                           },
-                          {
-                            validator: (_, value) =>
-                              value &&
-                              value.length >= 8 &&
-                              /[a-z]/.test(value) &&
-                              /[A-Z]/.test(value) &&
-                              /\d/.test(value) &&
-                              /[!@#$%^&*(),.?":{}|<>]/.test(value)
-                                ? Promise.resolve()
-                                : Promise.reject(
-                                    "Password must be at least 8 characters, with at least one lowercase, one uppercase, one number, and one special character!"
-                                  ),
-                          },
+                          // {
+                          //   validator: (_, value) =>
+                          //     value &&
+                          //     value.length >= 8 &&
+                          //     /[a-z]/.test(value) &&
+                          //     /[A-Z]/.test(value) &&
+                          //     /\d/.test(value) &&
+                          //     /[!@#$%^&*(),.?":{}|<>]/.test(value)
+                          //       ? Promise.resolve()
+                          //       : Promise.reject(
+                          //           "Password must be at least 8 characters, with at least one lowercase, one uppercase, one number, and one special character!"
+                          //         ),
+                          // },
                         ]}
                       >
                         <div
