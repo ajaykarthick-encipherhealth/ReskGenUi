@@ -38,14 +38,13 @@ const SelectRole = ({
     const selectedRoleObj = allRolesData?.userRoles?.find(
       (role) => role.proxyRole === selectedRole
     );
-    const userName    = allRolesData?.userName
-    if (selectedRoleObj || userName ) {
+    if (selectedRoleObj  ) {
       setStorage("proxyRole", selectedRoleObj?.proxyRole);
       setStorage("userAllRoles", JSON.stringify(allRolesData?.userRoles));
       setStorage("accessMenuList", JSON.stringify(selectedRoleObj?.accessList));
       setStorage("roleId", selectedRoleObj?.roleId);
       setStorage("aliasName", selectedRoleObj?.aliasName);
-      setStorage("userName", allRolesData?.userName);
+
 
       loginSuccessCallBack();
     } else {

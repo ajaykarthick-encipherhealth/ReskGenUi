@@ -90,7 +90,7 @@ const Header = ({
 }) => {
   const router = useRouter();
   const fileInputRef = useRef(null);
-  const userEmail = getStorage("userName");
+  // const userEmail = getStorage("userName");
   const menuItemsPerPage = 5;
   const stateActive = router.pathname;
   const [headerFix, setheaderFix] = useState(false);
@@ -131,6 +131,7 @@ const Header = ({
   const [roles, setRoles] = useState([]);
   const [projectList, setProjectList] = useState([]);
   const [projectListCheck, setProjectListCheck] = useState(true);
+  const [userEmail,setUserEmail] = useState(null)
 
   const proxyRole = getStorage("proxyRole");
   const showDrawer = () => {
@@ -736,19 +737,27 @@ const Header = ({
     }
   };
 
-  const getRole = async () => {
-    const res = await getAllRoles();
-    if (res?.status == "SUCCESS") {
-      const data = res?.response?.userRoles?.map((data) => ({
-        label: data.proxyRole,
-        key: data.proxyRole,
-        details: data,
-      }));
+ const getRole = async () => {
+   const res = await getAllRoles();
+   if (res?.status === "SUCCESS") {
+     console.log(res, "response");
 
-      setRoles(data);
-      setCurrentRole(data[0]?.label);
-    }
-  };
+     const userName = res?.response?.userName;
+
+     setStorage(userName, "userName");
+
+     setUserEmail(userName);
+
+     const data = res?.response?.userRoles?.map((data) => ({
+       label: data.proxyRole,
+       key: data.proxyRole,
+       details: data,
+     }));
+
+     setRoles(data);
+     setCurrentRole(data[0]?.label);
+   }
+ };
 
   const getProjectDataList = async () => {
     const res = await getAllProjects();
@@ -797,7 +806,7 @@ const Header = ({
   useEffect(() => {
     getRole();
   }, []);
-
+console.log(userEmail, "userEmail");
   useEffect(() => {
     const userRole = getStorage("proxyRole");
     if (
@@ -1130,6 +1139,7 @@ const Header = ({
                             logoutFunction={logoutFunction}
                             profileImageUrl={profileImg}
                             userName={userName}
+                            userEmail={userEmail}
                           />
                           <div className="mx-15">
                             <div

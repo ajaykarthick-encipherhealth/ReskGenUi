@@ -19,9 +19,9 @@ const Profile = ({
   logoutFunction,
   profileImageUrl,
   userName,
+  userEmail,
 }) => {
   const userRole = getStorage("userRole");
-   const userEmail=getStorage("userName")
   return (
     <>
       <div id="profileTab" name="profileTab" className="header-media d-flex">
