@@ -264,14 +264,14 @@ const MoveBack = ({
   }, [roleId]);
 
   useEffect(() => {
-    if (isFilter && data?.response?.metaDataDTO) {
+    // if (isFilter && data?.response?.metaDataDTO) {
       setActiveFilters(
         data?.response?.metaDataDTO.filter(
           (item) => item.active && item?.filter?.style
         )
       );
       setIsFilter(false);
-    }
+    // }
   }, [data?.response?.metaDataDTO]);
   return (
     <div>
