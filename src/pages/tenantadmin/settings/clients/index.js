@@ -1,12 +1,10 @@
 import React, { useEffect, useState } from "react";
 import ReusableFilters from "../../../../components/reusableFilters";
 import AppTable from "../../../../components/tables";
-import { Button, Drawer, Form, Input } from "antd";
+import { Button, DatePicker, Drawer, Form, Input } from "antd";
 import { connect } from "react-redux";
 import { actions as settingActions } from "../../../../stores/tenantAdmin/settings";
-import {
-  getResponePopup,
-} from "../../../../utils/reusable";
+import { formatDateForIndex, getResponePopup } from "../../../../utils/reusable";
 import { actions as tableAction } from "../../../../stores/tableView";
 
 const Clients = ({
@@ -43,7 +41,6 @@ const Clients = ({
     setDrawerOpen(false);
     form.resetFields();
   };
-
   const onPageChange = (e) => {
     setPaginationFirst(e.first);
     setPageNo(e.page);
@@ -58,24 +55,33 @@ const Clients = ({
   };
 
   const handleSubmit = async (values) => {
+      const projectInitiatedDate = formatDateForIndex({
+          date: values.projectInitiatedDate,
+          index: 0,
+        });
+        const projectEndDate = formatDateForIndex({
+          date: values.projectEndDate,
+          index: 1,
+        });
     const data = {
       clientName: values?.clientName,
-      clientId: values?.clientId,
+      // clientId: values?.clientId,
+      projectName: values?.projectName,
+      projectInitiatedDate,
+      projectEndDate,
     };
     try {
       const res = await createClient(data);
-      if (res?.status === "SUCCESS") {
-        form.resetFields();
-        getClientsDetails();
-        onDrawerClose();
-        getResponePopup(res);
-        setOpen(false);
-      } else {
-        setOpen(true);
-      }
+     if (res?.status === "SUCCESS") {
+       form.resetFields();
+       getClientsDetails();
+       onDrawerClose();
+       getResponePopup(res);
+     } else {
+       getResponePopup(res);
+     }
     } catch (error) {
       console.error("client creation error:", error);
-      setOpen(false);
     }
   };
   const handleReset = async () => {
@@ -138,17 +144,17 @@ const Clients = ({
     paginationFirst,
     pageLoad,
   ]);
-  
+
   useEffect(() => {
-     if (isFilter && data?.response?.metaDataDTO) {
-       setActiveFilters(
-         data?.response?.metaDataDTO.filter(
-           (item) => item.active && item?.filter?.style
-         )
-       );
-       setIsFilter(false);
-     }
-   }, [data?.response?.metaDataDTO]);
+    if (isFilter && data?.response?.metaDataDTO) {
+      setActiveFilters(
+        data?.response?.metaDataDTO.filter(
+          (item) => item.active && item?.filter?.style
+        )
+      );
+      setIsFilter(false);
+    }
+  }, [data?.response?.metaDataDTO]);
 
   return (
     <div>
@@ -224,7 +230,7 @@ const Clients = ({
                 autoComplete="off"
                 style={{ maxWidth: 300 }}
               >
-                <Form.Item
+                {/* <Form.Item
                   label="Client ID"
                   name="clientId"
                   rules={[
@@ -235,7 +241,7 @@ const Clients = ({
                   ]}
                 >
                   <Input placeholder="Client ID" />
-                </Form.Item>
+                </Form.Item> */}
                 <Form.Item
                   label="Client Name"
                   name="clientName"
@@ -247,6 +253,48 @@ const Clients = ({
                   ]}
                 >
                   <Input placeholder="Client Name" />
+                </Form.Item>
+                <Form.Item
+                  label="Project Name"
+                  name="projectName"
+                  rules={[
+                    {
+                      required: true,
+                      message: "Please enter Project Name",
+                    },
+                  ]}
+                >
+                  <Input placeholder="Project Name" />
+                </Form.Item>
+                <Form.Item
+                  name="projectInitiatedDate"
+                  rules={[
+                    {
+                      required: true,
+                      message: "Please enter Start Date",
+                    },
+                  ]}
+                  label="Start Date"
+                >
+                  <DatePicker
+                    style={{ border: "1px solid #d9d9d9" }}
+                    placeholder="Start Date"
+                  />
+                </Form.Item>
+                <Form.Item
+                  name="projectEndDate"
+                  rules={[
+                    {
+                      required: true,
+                      message: "Please enter End Date",
+                    },
+                  ]}
+                  label="End Date"
+                >
+                  <DatePicker
+                    style={{ border: "1px solid #d9d9d9" }}
+                    placeholder="End Date"
+                  />
                 </Form.Item>
                 <Form.Item>
                   <div className="d-flex align-items-center justify-content-center">

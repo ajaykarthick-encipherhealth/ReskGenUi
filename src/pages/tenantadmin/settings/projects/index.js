@@ -4,7 +4,10 @@ import AppTable from "../../../../components/tables";
 import { Button, DatePicker, Drawer, Form, Input } from "antd";
 import { connect } from "react-redux";
 import { actions as settingActions } from "../../../../stores/tenantAdmin/settings";
-import { formatDateForIndex, getResponePopup } from "../../../../utils/reusable";
+import {
+  formatDateForIndex,
+  getResponePopup,
+} from "../../../../utils/reusable";
 import { actions as tableAction } from "../../../../stores/tableView";
 
 const Projects = ({
@@ -53,7 +56,7 @@ const Projects = ({
   const [pageSize, setPageSize] = useState(15);
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [isFilter, setIsFilter] = useState(true);
-  
+
   const showProjectDrawer = () => {
     setDrawerOpen(true);
   };
@@ -95,13 +98,11 @@ const Projects = ({
         getProjects();
         onDrawerClose();
         getResponePopup(res);
-        setOpen(false);
       } else {
-        setOpen(true);
+        getResponePopup(res);
       }
     } catch (error) {
       console.error("Project creation error:", error);
-      setOpen(false);
     }
   };
   const handleReset = async () => {
