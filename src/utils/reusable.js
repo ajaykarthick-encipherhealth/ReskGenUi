@@ -604,7 +604,7 @@ export const renderUserProfile = (data, columnItem) => {
     return (
       <div
         className="d-flex align-items-center text-truncate"
-        style={{ width: "95%", margin: "auto" }}
+        style={{ width: "100%", margin: "auto" }}
       >
         <span style={{ marginRight: "10px" }}>
           {renderUserPrfoileAvatar(

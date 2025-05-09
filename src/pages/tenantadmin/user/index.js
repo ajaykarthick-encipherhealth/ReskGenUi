@@ -697,7 +697,7 @@ const UserList = ({
             onClick={() => {
               setAddUser(false);
               form.resetFields();
-                setIsEdit(!isEdit);
+              setIsEdit(!isEdit);
             }}
           >
             <i className="fa-solid fa-xmark"></i>
@@ -823,6 +823,7 @@ const UserList = ({
                       name="userName"
                       placeholder="Enter user name"
                       autoComplete="off"
+                      disabled={isEdit}
                     />
                   </Form.Item>
                 </Col>

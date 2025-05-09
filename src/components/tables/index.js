@@ -822,7 +822,7 @@ const TableRow = ({
                   open={visiblePopoverKey === item.id}
                   onOpenChange={(visible) => {
                     if (visible) {
-                      setEditingUser(item);
+                   setEditingUser && setEditingUser(item) ;
                       setVisiblePopoverKey(item.id);
                     } else {
                       setVisiblePopoverKey(null);
@@ -1463,7 +1463,7 @@ const TableRow = ({
                 }
                 className="d-flex align-items-center"
               >
-             <DownloadOutlined style={{ fontSize: '16px' }} />
+                <DownloadOutlined style={{ fontSize: "16px" }} />
               </div>
             </td>
           );
