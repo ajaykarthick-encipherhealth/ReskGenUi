@@ -107,7 +107,6 @@ const PatientAllocation = ({
   const [selectedOption, setSelectedOption] = useState({});
   const [selectedDateRanges, setSelectedDateRanges] = useState({});
   const [selectedDates, setSelectedDates] = useState([]);
-  const [batchCount, setBatchCount] = useState("");
   const [pageNo, setPageNo] = useState(0);
   const [pageSize, setPageSize] = useState(15);
   const [roleId, setRoleId] = useState(null);
@@ -115,7 +114,6 @@ const PatientAllocation = ({
   const [selectAllChecked, setSelectAllChecked] = useState(false);
   const [paramsFilter, setParamsFilter] = useState(null);
   const [selectedUserName, setSelectedUserName] = useState([]);
-  const [filterBatchCount, setFilterBatchCount] = useState(false);
   const [search, setSearch] = useState({});
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [samplingModal, setSamplingModal] = useState(false);
@@ -140,7 +138,6 @@ const PatientAllocation = ({
     setSearchText("");
     setSelectedDateRanges([]);
     setSelectedOption({});
-    setBatchCount("");
     setPageNo(0);
     setSearch({});
     setSelectedRowsId([]);
@@ -263,7 +260,6 @@ const PatientAllocation = ({
     sort,
     paginationFirst,
     search,
-    batchCount,
     roleId,
     pageLoad,
   ]);
@@ -422,18 +418,13 @@ const PatientAllocation = ({
                             activeFilters={activeFilters}
                             setPageNo={setPageNo}
                             opt={opt}
-                            batchCount={batchCount}
-                            setBatchCount={setBatchCount}
-                            setFilterBatchCount={setFilterBatchCount}
                             setSelectAllChecked={setSelectAllChecked}
                             setSelectedRowsId={setSelectedRowsId}
                             setSelectedRows={setSelectedRows}
-                            showBatchCount={true}
                             selectedRowsId={selectedRowsId}
                             setSearch={setSearch}
                             search={search}
                             //customize table
-
                             open={open}
                             onClose={onClose}
                             selectedColumns={test}
@@ -456,7 +447,6 @@ const PatientAllocation = ({
                             setSelectedRows={setSelectedRows}
                             selectedRows={selectedRows}
                             setSelectedRowsId={setSelectedRowsId}
-                            setBatchCount={setBatchCount}
                             pageNo={pageNo}
                             setPageNo={setPageNo}
                             paginationFirst={paginationFirst}
@@ -465,7 +455,6 @@ const PatientAllocation = ({
                             setSelectedUserName={setSelectedUserName}
                             setSort={setSort}
                             sort={sort}
-                            batchCount={batchCount}
                             data={data}
                             tableLoader={tableLoader}
                             roleId={roleId}
@@ -497,7 +486,6 @@ const PatientAllocation = ({
         activeTab={activeTab}
         selectedUserName={selectedUserName}
         setSelectedUserName={setSelectedUserName}
-        setBatchCount={setBatchCount}
         selectedRoleId={selectedRoleId}
         getAllAllocation={getAllAllocation}
         roleId={roleId}

@@ -41,15 +41,6 @@ const ReusableFilters = ({
   addUserForm,
   btnTitle,
   form,
-  //batchCount
-  batchCount,
-  setBatchCount,
-  setFilterBatchCount,
-  setSelectAllChecked,
-  setSelectedRowsId,
-  getAllReviewerALlocation,
-  setSelectedRows,
-  showBatchCount,
   selectedRowsId,
   //filters
   showFilter,
@@ -115,32 +106,6 @@ const ReusableFilters = ({
     setPageNo && setPageNo(0);
   };
 
-  const handleInputChange = (e) => {
-    let inputValue = e.target.value.replace(/[^\d]/g, "");
-    if (inputValue.length > 5) {
-      inputValue = inputValue.slice(0, 5);
-    }
-    setBatchCount(inputValue);
-    if (inputValue.length <= 0) {
-      setFilterBatchCount(true);
-      setSelectAllChecked(false);
-      setSelectedRowsId([]);
-      setSelectedRows([]);
-      setBatchCount("");
-    } else {
-      setFilterBatchCount(true);
-    }
-  };
-
-  const handleSelectClick = () => {
-    setFilterBatchCount(true);
-    setPageNo(0);
-    if (batchCount != selectedRowsId.length) {
-      setSelectAllChecked(false);
-      setSelectedRowsId([]);
-      setSelectedRows([]);
-    }
-  }; 
   return (
     <div className="d-flex gap-5 w-100">
       <div className="row" style={{ width: showFilter ? "98%" : "auto" }}>
@@ -342,39 +307,6 @@ const ReusableFilters = ({
               return null;
           }
         })}
-        {showBatchCount && (
-          <div className="default-filter-size mb-2">
-            <label className="responsiveLabel">Batch Count</label>
-            <Space.Compact id="batch-count" name="batch-count">
-              <div style={{ width: "250px" }} className="batchInput">
-                <Input
-                  data-testid="batchCount"
-                  name="batchCount"
-                  type="number"
-                  onChange={handleInputChange}
-                  value={batchCount}
-                  placeholder="Batch Count"
-                  onKeyDown={(e) => {
-                    if (e.key === "\\") {
-                      e.preventDefault();
-                    }
-                  }}
-                  className="batch-form-control"
-                />
-
-                <button
-                  id="select-btn"
-                  name="select-btn"
-                  onClick={handleSelectClick}
-                  style={{ borderRadius: "0px 10px 10px 0px" }}
-                  className="btn btn-outline-secondary py-0 px-2 select-count"
-                >
-                  Select
-                </button>
-              </div>
-            </Space.Compact>
-          </div>
-        )}
       </div>
       <div className="d-flex " style={{ alignContent: "flex-end" }}>
         {showFilter && columns?.length != 0  && activeFilters?.length ? (

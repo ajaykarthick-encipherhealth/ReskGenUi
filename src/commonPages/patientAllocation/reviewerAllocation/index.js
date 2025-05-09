@@ -15,7 +15,6 @@ const ReviewerAllocation = ({
   setSelectedUserName,
   sort,
   setSort,
-  batchCount,
   data,
   tableLoader,
   getTableData,
@@ -37,7 +36,6 @@ const ReviewerAllocation = ({
         const response = await getTableData({
           fromTenant: true,
           allPatientIds: checked,
-          batchCount: batchCount,
           pageId: "6cd166eb-79ac-4c12-ab0f-07be2983ca70",
           pageNo: 0,
           pageSize: 15,

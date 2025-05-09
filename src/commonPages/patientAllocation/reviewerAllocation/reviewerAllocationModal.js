@@ -42,7 +42,6 @@ const AllocateModal = ({
   selectedUserName,
   setSelectedUserName,
   usersLoader,
-  setBatchCount,
   id,
   getAllAllocation,
   setIsAllocate,
@@ -122,7 +121,6 @@ const AllocateModal = ({
       setSelectedRowsId([]);
       setSelectedRows([]);
       setSelectedUserName([]);
-      setBatchCount("");
       setSelectedUserIds([]);
       setActiveCard("");
       setIsSecondModalOpen(false);
