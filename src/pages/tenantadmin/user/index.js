@@ -697,7 +697,7 @@ const UserList = ({
             onClick={() => {
               setAddUser(false);
               form.resetFields();
-              setIsEdit(!isEdit);
+              setIsEdit(false);
             }}
           >
             <i className="fa-solid fa-xmark"></i>
