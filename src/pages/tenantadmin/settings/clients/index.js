@@ -6,6 +6,7 @@ import { connect } from "react-redux";
 import { actions as settingActions } from "../../../../stores/tenantAdmin/settings";
 import { formatDateForIndex, getResponePopup } from "../../../../utils/reusable";
 import { actions as tableAction } from "../../../../stores/tableView";
+import { actions as authActions } from "../../../../stores/authFlows";
 
 const Clients = ({
   createClient,
@@ -15,6 +16,7 @@ const Clients = ({
   tableDynamicColumn,
   tableDynamicColumnReset,
   pageLoad,
+  getAllClientDetails,
 }) => {
   const [form] = Form.useForm();
 
@@ -55,14 +57,14 @@ const Clients = ({
   };
 
   const handleSubmit = async (values) => {
-      const projectInitiatedDate = formatDateForIndex({
-          date: values.projectInitiatedDate,
-          index: 0,
-        });
-        const projectEndDate = formatDateForIndex({
-          date: values.projectEndDate,
-          index: 1,
-        });
+    const projectInitiatedDate = formatDateForIndex({
+      date: values.projectInitiatedDate,
+      index: 0,
+    });
+    const projectEndDate = formatDateForIndex({
+      date: values.projectEndDate,
+      index: 1,
+    });
     const data = {
       clientName: values?.clientName,
       // clientId: values?.clientId,
@@ -72,14 +74,15 @@ const Clients = ({
     };
     try {
       const res = await createClient(data);
-     if (res?.status === "SUCCESS") {
-       form.resetFields();
-       getClientsDetails();
-       onDrawerClose();
-       getResponePopup(res);
-     } else {
-       getResponePopup(res);
-     }
+      if (res?.status === "SUCCESS") {
+        form.resetFields();
+        getAllClientDetails();
+        getClientsDetails();
+        onDrawerClose();
+        getResponePopup(res);
+      } else {
+        getResponePopup(res);
+      }
     } catch (error) {
       console.error("client creation error:", error);
     }
@@ -331,6 +334,7 @@ const enhancer = connect(
     tableDynamicColumnReset: tableAction.tableDynamicColumnReset,
     getTableData: tableAction.tableViewAction,
     createClient: settingActions.createClientAction,
+    getAllClientDetails: authActions.clientDetails,
   }
 );
 export default enhancer(Clients);
