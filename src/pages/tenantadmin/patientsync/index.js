@@ -475,6 +475,37 @@ const PatientSync = ({
     setPaginationFirst(e.first);
     setPageNo(e.page);
   };
+const handleExcelDownload = () => {
+  let fileName = "";
+  switch (reportActiveTab) {
+    case "Patient Roaster":
+      fileName =
+        "https://mcibeforeocrdev.blob.core.windows.net/test/Patient%20Roaster%201.xlsx?sp=r&st=2025-05-09T09:43:22Z&se=2025-05-09T17:43:22Z&spr=https&sv=2024-11-04&sr=b&sig=P05%2BiFcmzCwhh9FjPFtdNxdIM6krYhJPRiKRrNUWT18%3D";
+      break;
+    case "Practice Roaster":
+      fileName =
+        "https://mcibeforeocrdev.blob.core.windows.net/test/Practice%20Roaster.xlsx?sp=r&st=2025-05-09T09:55:29Z&se=2025-05-09T17:55:29Z&spr=https&sv=2024-11-04&sr=b&sig=6dQDr1cD9nspYUrKuOWX1dMcFyXVMalcERE0Lct8ssk%3D";
+      break;
+    case "Provider Roaster":
+      fileName =
+        "https://mcibeforeocrdev.blob.core.windows.net/test/Provider%20Roaster.xlsx?sp=r&st=2025-05-09T09:55:53Z&se=2025-05-09T17:55:53Z&spr=https&sv=2024-11-04&sr=b&sig=wWR0xFEoXjIfAsqoqPrqUDIqDGYYlG0htqpWfipz2rQ%3D";
+      break;
+    case "Tin Roaster":
+      fileName =
+        "https://mcibeforeocrdev.blob.core.windows.net/test/Tin%20Roaster.xlsx?sp=r&st=2025-05-09T09:56:16Z&se=2025-05-09T17:56:16Z&spr=https&sv=2024-11-04&sr=b&sig=Bhnjq%2B24RpuxUgjO8%2Fn2ELF5sjc3QzQ3LFn8z0G393o%3D";
+      break;
+    default:
+      console.error("no tabs ");
+      return;
+  }
+
+  const link = document.createElement("a");
+  link.href = `${fileName}`; 
+  link.download = fileName;
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+};
 
   const renderButton = () => {
     switch (reportActiveTab) {
@@ -503,13 +534,22 @@ const PatientSync = ({
       case "Provider Roaster":
       case "Tin Roaster":
         return (
-          <RegularButton
-            name="Add Roaster"
-            onClick={handleRoasterBtn}
-            padding={"5px 10px"}
-            height={"35px"}
-            width={"120px"}
-          />
+          <>
+            <RegularButton
+              name="Add Roaster"
+              onClick={handleRoasterBtn}
+              padding={"5px 10px"}
+              height={"35px"}
+              width={"120px"}
+            />
+            <RegularButton
+              name="Dummy Roaster File"
+              onClick={handleExcelDownload}
+              padding={"5px 10px"}
+              height={"35px"}
+              width={"150px"}
+            />
+          </>
         );
       default:
         return (
@@ -698,6 +738,7 @@ const PatientSync = ({
       getActiveTab("FHIR");
     // }
   }, []);
+
 
   useEffect(() => {
     if (reportActiveTab === "PDF") {
@@ -897,6 +938,7 @@ const PatientSync = ({
     // }
   }, [data?.response?.metaDataDTO]);
 
+
   return (
     <>
       <Header />
@@ -1082,15 +1124,15 @@ const PatientSync = ({
                             </div>
                           ) : (
                             <div
-                              className="d-flex flex-wrap col-10 "
-                              style={{ width: "85%" }}
+                              className="d-flex flex-wrap  "
+                              style={{ width: "80%" }}
                             >
                               {reportActiveTab === "Tin Roaster" ||
                               reportActiveTab === "Patient Roaster" ||
                               reportActiveTab === "Practice Roaster" ||
                               reportActiveTab === "Provider Roaster" ? (
                                 <ReusableFilters
-                                  showFilter={true}
+                                  showFilter={false}
                                   setActiveFilters={setActiveFilters}
                                   setSearchText={setSearchText}
                                   searchText={searchText}
@@ -1123,24 +1165,33 @@ const PatientSync = ({
                           )}
                           <div
                             className="d-flex justify-content-center align-items-center"
-                            style={{ width: "10%" }}
+                            // style={{ width: "10%" }}
                           >
-                            <div className=" mt-4">{renderButton()}</div>
-                            <div
-                              id="table-btn"
-                              name="table-btn"
-                              className="d-flex justify-content-center align-items-center  mt-4"
-                            >
-                              <Button
-                                data-testid="table-custom"
-                                name="table-custom"
-                                onClick={showDrawer}
-                                className="btn btn-sm w-full text-ellipsis tableButton"
-                              >
-                                Table Customization
-                              </Button>
+                            <div className=" d-flex  mt-4">
+                              {renderButton()}
                             </div>
-                          </div>{" "}
+                            {reportActiveTab === "Tin Roaster" ||
+                            reportActiveTab === "Patient Roaster" ||
+                            reportActiveTab === "Practice Roaster" ||
+                            reportActiveTab === "Provider Roaster" ? (
+                              <div
+                                id="table-btn"
+                                name="table-btn"
+                                className="d-flex justify-content-center align-items-center  mt-4"
+                              >
+                                <Button
+                                  data-testid="table-custom"
+                                  name="table-custom"
+                                  onClick={showDrawer}
+                                  className="btn btn-sm w-full text-ellipsis tableButton"
+                                >
+                                  Table Customization
+                                </Button>
+                              </div>
+                            ) : (
+                              ""
+                            )}
+                          </div>
                         </div>
 
                         <div
@@ -1216,7 +1267,7 @@ const PatientSync = ({
                                       to="#my-posts"
                                       eventKey="practiceRoaster"
                                     >
-                                      Practice
+                                      Practice Roaster
                                     </Nav.Link>
                                   </Nav.Item>
                                   <Nav.Item
@@ -1249,7 +1300,7 @@ const PatientSync = ({
                                       to="#my-posts"
                                       eventKey="patientRoaster"
                                     >
-                                      Patient
+                                      Patient Roaster
                                     </Nav.Link>
                                   </Nav.Item>
                                 </Nav>

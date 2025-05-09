@@ -746,7 +746,7 @@ const Header = ({
       }));
 
       setRoles(data);
-      setCurrentRole(data[0].label);
+      setCurrentRole(data[0]?.label);
     }
   };
 
