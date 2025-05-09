@@ -24,7 +24,7 @@ const SelectRole = ({
   const [loading, setLoading] = useState(false);
 
   const roleOptions = allRolesData?.userRoles?.map((client) => ({
-    label: client.proxyRole.replaceAll("_", " "),
+    label: client.aliasName.replaceAll("_", " "),
     value: client.proxyRole,
   }));
 
