@@ -90,7 +90,6 @@ const Header = ({
 }) => {
   const router = useRouter();
   const fileInputRef = useRef(null);
-  // const userEmail = getStorage("userName");
   const menuItemsPerPage = 5;
   const stateActive = router.pathname;
   const [headerFix, setheaderFix] = useState(false);
@@ -131,7 +130,7 @@ const Header = ({
   const [roles, setRoles] = useState([]);
   const [projectList, setProjectList] = useState([]);
   const [projectListCheck, setProjectListCheck] = useState(true);
-  const [userEmail,setUserEmail] = useState(null)
+  const [userEmail, setUserEmail] = useState(null);
 
   const proxyRole = getStorage("proxyRole");
   const showDrawer = () => {
@@ -427,7 +426,7 @@ const Header = ({
     var loginCheck = getStorage("loginCheck");
     const userRoleLocal = getStorage("userRole");
     const userId = getStorage("userId");
-    const userRole = getStorage("proxyRole");
+    const userRole = getStorage("aliasName");
     const tenentId = getStorage("tenantId");
     // getCurrentUserInfo({ userId });
     setUserRole(userRoleLocal);
@@ -737,23 +736,17 @@ const Header = ({
     }
   };
 
- const getRole = async () => {
-   const res = await getAllRoles();
-   if (res?.status === "SUCCESS") {
-     console.log(res, "response");
-
-     const userName = res?.response?.userName;
-
-     setStorage(userName, "userName");
-
-     setUserEmail(userName);
-
-     const data = res?.response?.userRoles?.map((data) => ({
-       label: data.proxyRole,
-       key: data.proxyRole,
-       details: data,
-     }));
-
+  const getRole = async () => {
+    const res = await getAllRoles();
+    if (res?.status === "SUCCESS") {
+      const userName = res?.response?.userName;
+      setStorage(userName, "userName");
+      setUserEmail(userName);
+      const data = res?.response?.userRoles?.map((data) => ({
+        label: data.aliasName,
+        key: data.proxyRole,
+        details: data,
+      }));
      setRoles(data);
      setCurrentRole(data[0]?.label);
    }
@@ -806,7 +799,6 @@ const Header = ({
   useEffect(() => {
     getRole();
   }, []);
-console.log(userEmail, "userEmail");
   useEffect(() => {
     const userRole = getStorage("proxyRole");
     if (
@@ -834,7 +826,6 @@ console.log(userEmail, "userEmail");
     }
     // }, 2000);
   }, [projectListCheck]);
-
   return (
     <div className={`header ${headerFix ? "is-fixed" : ""}`}>
       <div className="header-content">
@@ -1163,7 +1154,7 @@ console.log(userEmail, "userEmail");
                                     className="header-name d-flex font1"
                                     style={{ margin: "-5px 0px 0 10px" }}
                                   >
-                                    {userRole?.split("_")?.join(" ")}
+                                    {currentRole?.split("_")?.join(" ")}
 
                                     <DownOutlined
                                       style={{ margin: "0 0 0 5px" }}
@@ -1176,7 +1167,6 @@ console.log(userEmail, "userEmail");
                                 className="text-[#4F4F4F] ms-2 text-truncate subHeader-name d-flex mr-3"
                                 style={{ fontWeight: "500", fontSize: "6px" }}
                               >
-                                {/* {proxyRole?.split("_")?.join(" ")} */}
                                 {userRole?.split("_")?.join(" ")}
                               </span>
                             )}
