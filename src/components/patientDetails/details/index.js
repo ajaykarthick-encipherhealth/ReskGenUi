@@ -1,8 +1,12 @@
 import React, { useState, useEffect, useRef } from "react";
 import NavBar from "../../../jsx/layouts/nav/Header";
-import visitStyles from '../../../styles/visitdata.module.css'
+import visitStyles from "../../../styles/visitdata.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { FilterOutlined, MonitorOutlined, UndoOutlined } from "@ant-design/icons";
+import {
+  FilterOutlined,
+  MonitorOutlined,
+  UndoOutlined,
+} from "@ant-design/icons";
 import {
   faFlag,
   faComment,
@@ -149,7 +153,7 @@ const Details = ({
   confirmRevert,
   getQueryDetails,
   queriedData,
-  queriedLoader
+  queriedLoader,
 }) => {
   const navigate = useRouter();
   const [count, setCount] = useState(0);
@@ -488,7 +492,7 @@ const Details = ({
     }
     if (value == "Queried") {
       setFlagContainerActiveTitle("Queried");
-      getQueryDetails()
+      getQueryDetails();
     }
   };
 
@@ -523,7 +527,7 @@ const Details = ({
     },
     {
       name: "Queried",
-      icon:   <MonitorOutlined />,
+      icon: <MonitorOutlined />,
     },
   ];
 
@@ -583,9 +587,11 @@ const Details = ({
     const backRoute = getStorage("routeBackTo");
 
     getRoutedData(routedData);
+
     navigate.push(backRoute);
+
     // navigate.back(
-      
+
     // )
     setSelectDosValue("");
     getSelectedDosPageNumber(1);
@@ -984,7 +990,7 @@ const Details = ({
                           {flagList?.map((data, index) => {
                             // if (
                             //   data.name === "Version History" &&
-                            //   userRole !== "CODER_1" || userRole !== "CODER_2" 
+                            //   userRole !== "CODER_1" || userRole !== "CODER_2"
                             // ) {
                             //   return null;
                             // }
@@ -1124,13 +1130,12 @@ const Details = ({
                       selectedDosValue={selectedDosValue}
                       dosYearDefalutSelect={dosYearDefalutSelect}
                     />
-                  ) 
-                  : flagContainerActive === "Queried" ?( <Queried
-                    queriedData={queriedData} queriedLoader={queriedLoader}
-
-                  />)
-                  : flagContainerActive === "Version History"
-                    ? (
+                  ) : flagContainerActive === "Queried" ? (
+                    <Queried
+                      queriedData={queriedData}
+                      queriedLoader={queriedLoader}
+                    />
+                  ) : flagContainerActive === "Version History" ? (
                     <VersionHistory
                       getRevertDetails={getRevertDetails}
                       revertLoading={revertLoading}
@@ -1200,9 +1205,8 @@ const enhancer = connect(
     getRevertDetails:
       state?.patientDetails?.details?.getRevertDetails?.data?.response,
     revertLoading: state?.patientDetails?.details?.revertLoading,
-    queriedData:
-    state?.patientDetails?.details?.getQueriedDetails?.data,
-    queriedLoader:state.patientDetails?.details?.getQueryLoader
+    queriedData: state?.patientDetails?.details?.getQueriedDetails?.data,
+    queriedLoader: state.patientDetails?.details?.getQueryLoader,
   }),
   {
     workFgetFlagsowData: workflowActions.flagsAction,
@@ -1237,7 +1241,7 @@ const enhancer = connect(
     patientDetailsLoad: detailsActions.patientDetailsLoad,
     getAllRevertDetails: detailsActions.revertDetails,
     confirmRevert: detailsActions.confirmRevertDetails,
-    getQueryDetails:detailsActions.getQuery,
+    getQueryDetails: detailsActions.getQuery,
   }
 );
 export default enhancer(Details);
