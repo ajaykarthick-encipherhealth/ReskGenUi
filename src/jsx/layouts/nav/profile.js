@@ -101,7 +101,7 @@ const Profile = ({
                       fontSize: "6px",
                     }}
                   >
-                    {userRole?.split("_")?.join(" ")}
+                    {currentRole?.split("_")?.join(" ")}
                   </span>
                 </div>
               </div>

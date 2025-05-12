@@ -728,7 +728,7 @@ const Header = ({
         setStorage("userAllRoles", JSON.stringify(data));
         setStorage("roleId", data[0].details?.roleId);
         setStorage("proxyRole", data[0].label);
-        setCurrentRole(data[0].label);
+        // setCurrentRole(data[0].label);
         setMenuList(getMenuListByRole(data[0].label));
         getMenuListByRole(data[0].label);
         onClick({ key: data[0].label });
@@ -748,7 +748,7 @@ const Header = ({
         details: data,
       }));
      setRoles(data);
-     setCurrentRole(data[0]?.label);
+    //  setCurrentRole(data[0]?.label);
    }
  };
 
@@ -1167,7 +1167,7 @@ const Header = ({
                                 className="text-[#4F4F4F] ms-2 text-truncate subHeader-name d-flex mr-3"
                                 style={{ fontWeight: "500", fontSize: "6px" }}
                               >
-                                {userRole?.split("_")?.join(" ")}
+                                {currentRole?.split("_")?.join(" ")}
                               </span>
                             )}
                           </div>
