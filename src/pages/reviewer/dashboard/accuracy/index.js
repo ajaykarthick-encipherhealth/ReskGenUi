@@ -106,13 +106,13 @@ const Accuracy = ({ accuracyDatas, getAccuracyScore, accuracyLoading }) => {
     (_, index) => `Week ${index + 1}`
   );
 
-  useEffect(() => {
-    getAccuracyScore({
-      btn: currentBtn,
-      month: selectedMonth,
-      year: selectedYear,
-    });
-  }, [currentBtn, selectedMonth, selectedYear]);
+  // useEffect(() => {
+  //   getAccuracyScore({
+  //     btn: currentBtn,
+  //     month: selectedMonth,
+  //     year: selectedYear,
+  //   });
+  // }, [currentBtn, selectedMonth, selectedYear]);
 
   const handleButtonClick = (index, btn) => {
     setActiveButton(index);

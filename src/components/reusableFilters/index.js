@@ -107,8 +107,8 @@ const ReusableFilters = ({
   };
 
   return (
-    <div className="d-flex gap-5 w-100">
-      <div className="row" style={{ width: showFilter ? "98%" : "auto" }}>
+    <div className="d-flex  w-100">
+      <div className="row " style={{ width: showFilter ? "98%" : "auto" }}>
         {FilterItems?.filter((item) => item?.active).map((item) => {
           switch (item?.filter?.style) {
             case "SEARCH":

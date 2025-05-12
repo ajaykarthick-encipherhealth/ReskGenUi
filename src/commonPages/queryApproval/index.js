@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from "react";
 import { Tab, Nav } from "react-bootstrap";
 import { Button, Input, Tooltip, Space } from "antd";
@@ -30,6 +31,7 @@ const QueryApproval = ({
   route,
   pageLoad,
   statusBodyTemplate,
+  backRoute,
 }) => {
   const commonFilterItems = [
     {
@@ -139,12 +141,13 @@ const QueryApproval = ({
   const gotoPatientDetails = (data) => {
     setStorage("patientId", data?.patientId);
     setStorage("aliasName", selectedRole);
-    var role = getStorage("userRole");
-    if (role == "TENANT_ADMIN") {
-      navigate.push({
-        pathname: route ? route : "/tenantadmin/tin/details",
-      });
-    }
+    setStorage(
+      "routeBackTo",
+      backRoute ? backRoute : "/tenantadmin/tin/tindetails?tab=Query+Approval"
+    );
+    navigate.push({
+      pathname: route ? route : "/tenantadmin/tin/details",
+    });
   };
   const getQueryApproval = async () => {
     const tin = getStorage("tinNumber");
@@ -271,7 +274,7 @@ const QueryApproval = ({
       setIsFilter(false);
     }
   }, [data?.response?.metaDataDTO]);
-   
+
   return (
     <div>
       <Header />
@@ -337,42 +340,42 @@ const QueryApproval = ({
                       {/* {tableLoader ? (
                         <CardSkeleton height={50} />
                       ) : ( */}
-                        <div className="d-flex">
-                          <div className="mt-4 w-100">
-                            <ReusableFilters
-                              showFilter={true}
-                              setActiveFilters={setActiveFilters}
-                              setSearchText={setSearchText}
-                              searchText={searchText}
-                              setSelectedOption={setSelectedOption}
-                              selectedOption={selectedOption}
-                              setSelectedDateRanges={setSelectedDateRanges}
-                              selectedDateRanges={selectedDateRanges}
-                              FilterItems={activeFilters}
-                              selectedDates={selectedDates}
-                              setSelectedDates={setSelectedDates}
-                              activeFilters={activeFilters}
-                              setPageNo={setPageNo}
-                              opt={opt}
-                              setSearch={setSearch}
-                              search={search}
-                              //customize table
+                      <div className="d-flex">
+                        <div className="mt-4 w-100">
+                          <ReusableFilters
+                            showFilter={true}
+                            setActiveFilters={setActiveFilters}
+                            setSearchText={setSearchText}
+                            searchText={searchText}
+                            setSelectedOption={setSelectedOption}
+                            selectedOption={selectedOption}
+                            setSelectedDateRanges={setSelectedDateRanges}
+                            selectedDateRanges={selectedDateRanges}
+                            FilterItems={activeFilters}
+                            selectedDates={selectedDates}
+                            setSelectedDates={setSelectedDates}
+                            activeFilters={activeFilters}
+                            setPageNo={setPageNo}
+                            opt={opt}
+                            setSearch={setSearch}
+                            search={search}
+                            //customize table
 
-                              open={open}
-                              onClose={onClose}
-                              selectedColumns={test}
-                              setSelectedColumns={setTest}
-                              commonFilterItems={commonFilterItems}
-                              showCustomizeTable={false}
-                              showDrawer={showDrawer}
-                              handleSubmit={handleSubmit}
-                              handleReset={handleReset}
-                              isSubmitting={isSubmitting}
-                              isResetting={isResetting}
-                              setClear={setClear}
-                            />
-                          </div>
+                            open={open}
+                            onClose={onClose}
+                            selectedColumns={test}
+                            setSelectedColumns={setTest}
+                            commonFilterItems={commonFilterItems}
+                            showCustomizeTable={false}
+                            showDrawer={showDrawer}
+                            handleSubmit={handleSubmit}
+                            handleReset={handleReset}
+                            isSubmitting={isSubmitting}
+                            isResetting={isResetting}
+                            setClear={setClear}
+                          />
                         </div>
+                      </div>
                       {/* )} */}
                       <Tab.Content>
                         <Tab.Pane eventKey={activeTab}>

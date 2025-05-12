@@ -453,7 +453,10 @@ const Patient = ({
       controller.abort();
       setStorage("patientId", data?.patientId);
       var role = getStorage("userRole");
-      setStorage("routeBackTo",backRoute?backRoute: "/tenantadmin/tin/tindetails");
+      setStorage(
+        "routeBackTo",
+        backRoute ? backRoute : "/tenantadmin/tin/tindetails?tab=Patients"
+      );
       getRoutedData(page);
       navigate.push({
         pathname: route ? route : "/tenantadmin/patients/details",
