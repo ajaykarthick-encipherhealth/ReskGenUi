@@ -266,7 +266,6 @@ export const getEncounterDateBackgroundLab = ({
               datas,
               patientDocumentResult
             );
-             
           }}
           style={{
             borderColor: stringToColour(res) + 33,
@@ -402,7 +401,6 @@ const getEncounterDetails = async ({
   datas,
   storeFileDetails,
 }) => {
-  
   selectMeatResult ? selectMeatResult(datas) : "";
   const findPageNumber = !fileDosPageNumberList
     ? []
@@ -411,7 +409,7 @@ const getEncounterDetails = async ({
           moment(i.dos).format("MM-DD-YYYY") ===
           moment(date).format("MM-DD-YYYY")
       );
-   
+
   if (findPageNumber?.length != 0) {
     storeFileDetails && storeFileDetails(findPageNumber[0]?.fileId);
     if (setIsModalOpenValidCodes) {
@@ -1292,6 +1290,7 @@ export const handleSubmitValidNotes = async ({
   patientDetailsResult,
   handleCloseModal,
   patientDetailsLoad,
+  getPatientIdData,
 }) => {
   setFileLoading(true);
   setConfirmNotesModalValid(false);
@@ -1508,6 +1507,7 @@ export const handleSubmitValidNotes = async ({
       //   duration: 1,
       // });
       getResponePopup(response);
+
       getpatientDetailsData(
         patientId,
         patientDetailsResult?.data?.response?.processedYear,
@@ -1515,6 +1515,8 @@ export const handleSubmitValidNotes = async ({
         setFileLoading,
         ""
       );
+      getPatientIdData(patientId);
+
       patientDetailsLoad(false);
     } else {
       setFileLoading(false);

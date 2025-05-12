@@ -6,6 +6,8 @@ import SelectButton from "../../../../btnSelect";
 import style from "../../../../../components/button/style.module.css";
 import { connect } from "react-redux";
 import { actions as patientDetailsAction } from "../../../../../stores/patient/details";
+import { actions as detailsActions } from "../../../../../stores/patient/details";
+
 import { getStorage } from "../../../../../utils/storages";
 import {
   getProviderNameManually,
@@ -58,6 +60,7 @@ const ManuallyAdd = ({
   selectCardTitle,
   setOpens,
   open,
+  getPatientIdData,
 }) => {
   const [form] = Form.useForm();
   const [isMeat, setIsMeat] = useState(true);
@@ -117,7 +120,9 @@ const ManuallyAdd = ({
   const getPageNumbers = () => {
     const getFilter = patientDosResult?.data?.response
       ?.find((item) => item?.dateOfService == getSelectedDos)
-      ?.fileDetailDTO?.dosSummaries?.find((item) => item?.dos == getSelectedDos);
+      ?.fileDetailDTO?.dosSummaries?.find(
+        (item) => item?.dos == getSelectedDos
+      );
 
     let pageNumber = [];
     for (
@@ -876,6 +881,8 @@ const ManuallyAdd = ({
 
     form.resetFields();
     getPatient(reload);
+    getPatientId(reload);
+
     setValidCode("");
     setProviderDetails([]);
     setCode("");
@@ -926,6 +933,11 @@ const ManuallyAdd = ({
       getStorage("userRole")
     );
     // }
+  };
+  const getPatientId = async (reload) => {
+    const res = await getPatientIdData(
+      patientDetailsResult?.data?.response?.patientId
+    );
   };
 
   const sectionDelete = (item) => {
@@ -1657,6 +1669,7 @@ const enhancer = connect(
     diseaseEditMeat: patientDetailsAction.diseaseEditMeat,
     getpatientDetailsData: patientDetailsAction.patientDetailsAction,
     suggestedToValidMove: patientDetailsAction.suggestedToValidMove,
+    getPatientIdData: detailsActions.patientIdDetailsAction,
   }
 );
 

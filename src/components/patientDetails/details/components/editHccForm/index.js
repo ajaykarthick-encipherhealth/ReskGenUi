@@ -20,7 +20,8 @@ const EditHccForm = ({
   setIsEditHccForm,
   formEditPlace,
   patientDetailsResult,
-  getpatientDetailsData
+  getpatientDetailsData,
+  getPatientIdData,
 }) => {
   const [form] = Form.useForm();
   const [addValidCodeCheck, setAddValidCodeCheck] = useState(true);
@@ -79,7 +80,12 @@ const EditHccForm = ({
             placement: "top",
             duration: 1,
           });
-          getpatientDetailsData(patientId,patientDetailsResult?.data?.response?.processedYear,patientDetailsResult?.data?.response?.dateOfService);
+          getpatientDetailsData(
+            patientId,
+            patientDetailsResult?.data?.response?.processedYear,
+            patientDetailsResult?.data?.response?.dateOfService
+          );
+          getPatientIdData(patientId);
         } else {
         }
       } catch (e) {}
@@ -446,9 +452,9 @@ const EditHccForm = ({
                   </Form.Item>
                 </div>
               </div>
-              <Form.Item style={{display:"flex",justifyContent:"end"}}>
+              <Form.Item style={{ display: "flex", justifyContent: "end" }}>
                 <Space>
-                  <RegularButton type="submit" name="Update" width={100}/>
+                  <RegularButton type="submit" name="Update" width={100} />
                   {/* <RegularButton
                     type="outline"
                     name="Cancel"
@@ -472,7 +478,9 @@ const enhancer = connect(
     patientDetailsResult :state?.patientDetails?.details?.patientResult
   }),
   {
-    getpatientDetailsData:detailsActions.patientDetailsAction
+    getpatientDetailsData:detailsActions.patientDetailsAction,
+        getPatientIdData: detailsActions.patientIdDetailsAction,
+
   }
 );
 export default enhancer(EditHccForm);

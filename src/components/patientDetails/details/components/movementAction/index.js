@@ -36,7 +36,8 @@ const MovementAction = ({
   setSelectCardTitle,
   isShow,
   fromMeat,
-  patientDetailsLoad
+  patientDetailsLoad,
+  getPatientIdData,
 }) => {
   const [selectDisDetails, setSelectDisDetails] = useState(false);
   const onChangeValues = (data) => {
@@ -69,7 +70,8 @@ const MovementAction = ({
           getpatientDetailsData,
           patientDetailsResult,
           handleCloseModal,
-          patientDetailsLoad
+          patientDetailsLoad,
+          getPatientIdData,
         });
       }
     } else {
@@ -82,7 +84,8 @@ const MovementAction = ({
         getpatientDetailsData,
         patientDetailsResult,
         handleCloseModal,
-        patientDetailsLoad
+        patientDetailsLoad,
+        getPatientIdData,
       });
     }
   };
@@ -93,7 +96,7 @@ const MovementAction = ({
       <div className={styles.container}>
         {validAction && (
           <Tooltip title="Move to valid" placement="bottom">
-            {isShow ||fromMeat? (
+            {isShow || fromMeat ? (
               <Popconfirm
                 onConfirm={() => {
                   onConfirmValidMove();
@@ -123,7 +126,7 @@ const MovementAction = ({
         )}
         {suggestedAction && (
           <Tooltip title="Move to Care Gap" placement="bottom">
-            {isShow||fromMeat ? (
+            {isShow || fromMeat ? (
               <Popconfirm
                 onConfirm={() => {
                   handleSubmitValidNotes({
@@ -135,7 +138,8 @@ const MovementAction = ({
                     getpatientDetailsData,
                     patientDetailsResult,
                     handleCloseModal,
-                    patientDetailsLoad
+                    patientDetailsLoad,
+                    getPatientIdData,
                   });
                 }}
                 title="You want move to Care Gap?"
@@ -163,7 +167,7 @@ const MovementAction = ({
         )}
         {potentialAction && !isComboCode && (
           <Tooltip title="Move to potential" placement="bottom">
-            {isShow||fromMeat ? (
+            {isShow || fromMeat ? (
               <Popconfirm
                 onConfirm={() => {
                   handleSubmitValidNotes({
@@ -175,7 +179,8 @@ const MovementAction = ({
                     getpatientDetailsData,
                     patientDetailsResult,
                     handleCloseModal,
-                    patientDetailsLoad
+                    patientDetailsLoad,
+                    getPatientIdData,
                   });
                 }}
                 title="You want move to potential?"
@@ -191,8 +196,8 @@ const MovementAction = ({
                       "Move to Potential",
                       cardTitle
                     );
-                      onchangeValid(result.diagnosisCode, result);
-                      onChangeValues(result);
+                    onchangeValid(result.diagnosisCode, result);
+                    onChangeValues(result);
                   }}
                 >
                   <FontAwesomeIcon
@@ -215,7 +220,7 @@ const MovementAction = ({
         )}
         {deleteAction && !isComboCode ? (
           <Tooltip title="Move to delete" placement="bottom">
-            {isShow ||fromMeat? (
+            {isShow || fromMeat ? (
               <Popconfirm
                 onConfirm={() => {
                   handleSubmitValidNotes({
@@ -227,7 +232,8 @@ const MovementAction = ({
                     getpatientDetailsData,
                     patientDetailsResult,
                     handleCloseModal,
-                    patientDetailsLoad
+                    patientDetailsLoad,
+                    getPatientIdData,
                   });
                 }}
                 title="Do you want to move to delete?"
@@ -270,7 +276,8 @@ const enhancer = connect(
   }),
   {
     getpatientDetailsData: detailsActions.patientDetailsAction,
-    patientDetailsLoad: detailsActions.patientDetailsLoad
+    patientDetailsLoad: detailsActions.patientDetailsLoad,
+    getPatientIdData: detailsActions.patientIdDetailsAction,
   }
 );
 export default enhancer(MovementAction);

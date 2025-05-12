@@ -71,6 +71,7 @@ const CamboTree = ({
   editFormPlace,
   formValues,
   patientDetailsLoad,
+  getPatientIdData,
 }) => {
   const [trees, setTrees] = useState(Tree);
   const [isLoading, setLoading] = useState(tree);
@@ -145,6 +146,7 @@ const CamboTree = ({
       patientDetailsResult,
       handleCloseModal,
       patientDetailsLoad,
+      getPatientIdData,
     });
   };
   const onchangeCombo = (data, code, diseaseSource) => {
@@ -502,6 +504,7 @@ const enhancer = connect(
     getRadiologyDetails: detailsActions.radiologyDetailsAction,
     getLabDetails: detailsActions.labDetailsAction,
     patientDetailsLoad: detailsActions.patientDetailsLoad,
+    getPatientIdData: detailsActions.patientIdDetailsAction,
   }
 );
 export default enhancer(CamboTree);

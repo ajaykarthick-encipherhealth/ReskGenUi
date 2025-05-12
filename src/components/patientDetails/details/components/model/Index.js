@@ -45,7 +45,8 @@ const ModelIndex = ({
   setSelectCardTitle,
   dragItem,
   year,
-  patientDetailsLoad
+  patientDetailsLoad,
+  getPatientIdData
 }) => {
   const [form] = Form.useForm();
   const { TextArea } = Input;
@@ -85,7 +86,8 @@ const ModelIndex = ({
           getLabDetails,
           getRadiologyDetails,
           handleCloseModal,
-          patientDetailsLoad
+          patientDetailsLoad,
+          getPatientIdData,
         });
       }
     } else {
@@ -100,7 +102,8 @@ const ModelIndex = ({
         getLabDetails,
         getRadiologyDetails,
         handleCloseModal,
-        patientDetailsLoad
+        patientDetailsLoad,
+        getPatientIdData,
       });
     }
   };
@@ -186,6 +189,7 @@ const ModelIndex = ({
                             getRadiologyDetails,
                             handleCloseModal,
                             patientDetailsLoad,
+                            getPatientIdData,
                           });
                           form.resetFields();
                         }}
@@ -256,7 +260,9 @@ const enhancer = connect(
     getpatientDetailsData: detailsActions.patientDetailsAction,
     getRadiologyDetails: detailsActions.radiologyDetailsAction,
     getLabDetails: detailsActions.labDetailsAction,
-    patientDetailsLoad:detailsActions.patientDetailsLoad
+    patientDetailsLoad:detailsActions.patientDetailsLoad,
+    getPatientIdData: detailsActions.patientIdDetailsAction,
+
   }
 );
 export default enhancer(ModelIndex);

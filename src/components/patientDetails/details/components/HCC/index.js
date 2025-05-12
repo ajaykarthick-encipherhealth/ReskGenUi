@@ -85,7 +85,8 @@ const HccCards = ({
   patientDetailsLoad,
   isSpinnerLoading,
   patientDetailsLoading,
-  id
+  id,
+  getPatientIdData,
 }) => {
   const [fileInitialPage, setFileInitialPage] = useState(null);
   const [openEdit, setOpenEdit] = useState(false);
@@ -227,7 +228,9 @@ const HccCards = ({
       oldDiagnosisCode: data?.diagnosisCode,
     });
     if (res?.status === "SUCCESS") {
+     
       getPatientDetailsData(patientId, null, selectDosValue, "", role);
+    getPatientIdData(patientId);
       setOpenContent(false);
       getResponePopup(res);
       patientDetailsLoad(false);
@@ -240,7 +243,12 @@ const HccCards = ({
   return (
     <>
       {provided && (
-        <div id="hcc-list" name="hcc-list" ref={provided?.innerRef} {...provided?.droppableProps}>
+        <div
+          id="hcc-list"
+          name="hcc-list"
+          ref={provided?.innerRef}
+          {...provided?.droppableProps}
+        >
           {loading || patientDetailsLoading || isSpinnerLoading ? (
             <div>
               {/* <Spinner /> */}
@@ -252,7 +260,11 @@ const HccCards = ({
                 data,
                 i // this condation we added for vignesh suggest to remove isCombo pracent
               ) => (
-                <li id={`${id}-hcc-visit-data-card-${i}`} key={data?.id} style={{ margin: i !== 0 && "10px 0 0 0" }}>
+                <li
+                  id={`${id}-hcc-visit-data-card-${i}`}
+                  key={data?.id}
+                  style={{ margin: i !== 0 && "10px 0 0 0" }}
+                >
                   <Draggable
                     key={data.diagnosisCode}
                     draggableId={data.diagnosisCode}
@@ -812,7 +824,6 @@ const HccCards = ({
                                     setLabData,
                                     storeFileDetails: storeFileDetails,
                                     isShow: data?.isShow,
-                                   
                                   })}
                                 </div>
                                 <div
@@ -1362,6 +1373,7 @@ const enhancer = connect(
     getPatientDetailsData: detailsActions.patientDetailsAction,
     diseaseEdit: detailsActions.diseaseEdit,
     patientDetailsLoad: detailsActions.patientDetailsLoad,
+    getPatientIdData: detailsActions.patientIdDetailsAction,
   }
 );
 export default enhancer(HccCards);

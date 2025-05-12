@@ -1034,7 +1034,7 @@ const enhancer = connect(
     raiseQuery: detailsActions.raiseQueryAction,
     getAllRoles: detailsActions.getAllRolesAction,
     updateReEvaluate: detailsActions.updateReEvaluate,
-       getPatientIdData: detailsActions.patientIdDetailsAction,
+    getPatientIdData: detailsActions.patientIdDetailsAction,
   }
 );
 export default enhancer(Hcc);
