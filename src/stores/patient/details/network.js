@@ -720,3 +720,16 @@ export async function getAllRoles() {
   );
   return data;
 }
+
+export async function reEvaluate() {
+  const patientId = getStorage("patientId")
+
+  const options = {
+    method: "POST",
+  };
+  const data = await requestPortal(
+    `dbservice/patient/re-evaluate/update?patientId=${patientId}`,
+    options
+  );
+  return data;
+}

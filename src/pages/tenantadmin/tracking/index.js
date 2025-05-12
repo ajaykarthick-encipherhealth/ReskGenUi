@@ -442,12 +442,7 @@ const Patient = ({
     pageLoad,
   ]);
 
-  useEffect(() => {
-    getFilters({ field: "auditAllocatedBy" });
-    getPatientAllocatedList({ field: "patientAllocated" });
-    getAuditAssignedList({ field: "auditedAssigned" });
-    getAllocatedByList({ field: "allocatedBy" });
-  }, []);
+
 
   const opt = {
     Reviewer: generateOptionsForNewStore(

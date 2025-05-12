@@ -44,7 +44,8 @@ import {
   getQuery,
   getQueryApproval,
   raiseQueryAction,
-  getAllRolesAction
+  getAllRolesAction,
+  updateReEvaluate,
 } from "./actions";
 
 
@@ -163,15 +164,16 @@ const patientDetailsReducer = combineReducers({
   CommentListLoader: getPatientsLoading(getCommentListAction),
   getFlagChartsList: createReducer(getFlagCharts),
   getFlagChartsLoader: getPatientsLoading(getFlagCharts),
-  getRevertDetails:createReducer(revertDetails),
-  revertLoading:getPatientsLoading(revertDetails),
-  confirmRevertDetails:createReducer(confirmRevertDetails),
-  getStatusAction:createReducer(getProxyStatus),
-  getQueriedDetails:createReducer(getQuery),
-  getQueryApproval:createReducer(getQueryApproval),
-  raiseQuery:createReducer(raiseQueryAction),
-  allRoles:createReducer(getAllRolesAction),
-  getQueryLoader:getPatientsLoading(getQuery),
+  getRevertDetails: createReducer(revertDetails),
+  revertLoading: getPatientsLoading(revertDetails),
+  confirmRevertDetails: createReducer(confirmRevertDetails),
+  getStatusAction: createReducer(getProxyStatus),
+  getQueriedDetails: createReducer(getQuery),
+  getQueryApproval: createReducer(getQueryApproval),
+  raiseQuery: createReducer(raiseQueryAction),
+  allRoles: createReducer(getAllRolesAction),
+  getQueryLoader: getPatientsLoading(getQuery),
+  reEvaluate: createReducer(updateReEvaluate),
 });
 
 export default patientDetailsReducer;

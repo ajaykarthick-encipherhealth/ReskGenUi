@@ -23,6 +23,7 @@ import {
   Input,
   Form,
   Popconfirm,
+  Switch,
 } from "antd";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -74,10 +75,14 @@ const Hcc = ({
   raiseQuery,
   getAllRoles,
   roles,
-  activeTabName
-}) => {  
+  activeTabName,
+  patientIdDetailsData,
+  updateReEvaluate,
+  getPatientIdData,
+}) => {
   const { TextArea } = Input;
   const [form] = Form.useForm();
+  const patientId = getStorage("patientId");
   const [activeTabHead, setActiveTabHead] = useState(1);
   const [flagTagActive, setFlagTagActive] = useState(false);
   const [popoverVisible, setPopoverVisible] = useState(false);
@@ -100,6 +105,8 @@ const Hcc = ({
   const [isApproved, setIsApproved] = useState(false);
   const [isQueried, setIsQueried] = useState(false);
   const [isReject, setIsReject] = useState(false);
+  const [isChecked, setIsChecked] = useState(false);
+
   const handleChange = (e) => {
     setQueryText(e.target.value);
   };
@@ -375,6 +382,23 @@ const Hcc = ({
       </div>
     </div>
   );
+  useEffect(() => {
+    if (patientIdDetailsData?.data?.response) {
+      setIsChecked(patientIdDetailsData.data.response);
+    }
+  }, [patientIdDetailsData]);
+
+  const onChange = async (checked) => {
+    setIsChecked((prev) => ({
+      ...prev,
+      isReEvaluateNeed: checked,
+    }));
+    const response = await updateReEvaluate();
+    if (response?.status === "SUCCESS") {
+      getPatientIdData(patientId)
+      getResponePopup(response);
+    }
+  };
 
   const hideDiseasePopContent = (
     <>
@@ -382,15 +406,20 @@ const Hcc = ({
         <div className="col-xl-6 my-2">Re-Evaluate</div>
         <div
           className="col-xl-6 d-flex justify-content-end align-items-center cursor-pointer"
-          onClick={() =>
-            setActions({
-              showDisease: actions?.showDisease,
-              reEvaluate: true,
-              showActionsPop: false,
-            })
-          }
+          // onClick={() =>
+          //   setActions({
+          //     showDisease: actions?.showDisease,
+          //     reEvaluate: true,
+          //     showActionsPop: false,
+          //   })
+          // }
         >
-          <FontAwesomeIcon icon={faAngleRight} style={{ color: "#04306f" }} />
+          <Switch
+            checked={isChecked?.isReEvaluateNeed}
+            disabled={isChecked?.movedAfterReEvaluateIsOff}
+            onChange={onChange}
+          />
+          {/* <FontAwesomeIcon icon={faAngleRight} style={{ color: "#04306f" }} /> */}
         </div>
         <Divider className="p-0 m-0" />
         <div className="col-xl-6 my-2">Disease</div>
@@ -439,29 +468,7 @@ const Hcc = ({
       </div> */}
     </>
   );
-  const selectOptions = roles?.data?.response?.map((role) => ({
-    label: role.aliasName,
-    value: role.aliasName,
-  }));
-  const onFinish = async (values) => {
-    const patientId = getStorage("patientId");
-    const aliasName = getStorage("aliasName");
-    const data = {
-      patientId: patientId,
-      aliasName: aliasName,
-      queryReason: values?.reason,
-      queriedToAliasName: values?.role,
-    };
-    const response = await raiseQuery(data);
-    if (response?.status === "SUCCESS") {
-      setIsQueried(true);
-      getResponePopup(response);
-      setIsOpen(false);
-      form.resetFields();
-    } else {
-      getResponePopup(response);
-    }
-  };
+
 
   const handleSubmit = async () => {
     const patientId = getStorage("patientId");
@@ -792,35 +799,36 @@ const Hcc = ({
                       </Popover>
                     </Nav.Item>
                     {activeTabName?.tinDetailsTab == "Query Approval" &&
-                    (proxyRole === "OWNER" || proxyRole === "TENANT_ADMIN") && (
-                    <div className="d-flex gap-2">
-                      <Nav.Item as="li" className="nav-item">
-                        <Popconfirm
-                          placement="bottom"
-                          description="Are you sure you want to approve?"
-                          okText="Yes"
-                          cancelText="No"
-                          onConfirm={handleApprove}
-                        >
-                          <Button
-                            disabled={isApproved || isReject ? true : false}
-                            className={`px-3 py-1 rounded-md ${styles.approveBtn}`}
-                          >
-                            Approve
-                          </Button>
-                        </Popconfirm>
-                      </Nav.Item>
-                      <Nav.Item as="li" className="nav-item">
-                        <Button
-                          disabled={isApproved || isReject ? true : false}
-                          className={`px-3 py-1 rounded-md ${styles.rejectBtn}`}
-                          onClick={showModal}
-                        >
-                          Reject
-                        </Button>
-                      </Nav.Item>
-                    </div>
-                    )}
+                      (proxyRole === "OWNER" ||
+                        proxyRole === "TENANT_ADMIN") && (
+                        <div className="d-flex gap-2">
+                          <Nav.Item as="li" className="nav-item">
+                            <Popconfirm
+                              placement="bottom"
+                              description="Are you sure you want to approve?"
+                              okText="Yes"
+                              cancelText="No"
+                              onConfirm={handleApprove}
+                            >
+                              <Button
+                                disabled={isApproved || isReject ? true : false}
+                                className={`px-3 py-1 rounded-md ${styles.approveBtn}`}
+                              >
+                                Approve
+                              </Button>
+                            </Popconfirm>
+                          </Nav.Item>
+                          <Nav.Item as="li" className="nav-item">
+                            <Button
+                              disabled={isApproved || isReject ? true : false}
+                              className={`px-3 py-1 rounded-md ${styles.rejectBtn}`}
+                              onClick={showModal}
+                            >
+                              Reject
+                            </Button>
+                          </Nav.Item>
+                        </div>
+                      )}
                     <Nav.Item as="li" className="nav-item">
                       {/* {isClient &&
                           ["CODER_1", "CODER_2", "QA"].includes(proxyRole) && (
@@ -1011,6 +1019,7 @@ const enhancer = connect(
     isDosSelected: state.patientDetails.details?.getSelectedDosDetails,
     roles: state.patientDetails.details?.allRoles,
     activeTabName: state.tenantAdmin.tin?.activeTabRoutedData,
+    patientIdDetailsData: state?.patientDetails.details?.patientIdResult,
   }),
   {
     getpatientDetailsData: detailsActions.patientDetailsAction,
@@ -1024,6 +1033,8 @@ const enhancer = connect(
     queryApproval: detailsActions.getQueryApproval,
     raiseQuery: detailsActions.raiseQueryAction,
     getAllRoles: detailsActions.getAllRolesAction,
+    updateReEvaluate: detailsActions.updateReEvaluate,
+       getPatientIdData: detailsActions.patientIdDetailsAction,
   }
 );
 export default enhancer(Hcc);

@@ -778,11 +778,7 @@ const Patient = ({
     paramsFilter,
     pageLoad,
   ]);
-  useEffect(() => {
-    getAllBatchList();
-    getAllOrganizationList();
-    getFilters({ field: "createdBy" });
-  }, []);
+
   const flagPostList = getFlagsData?.response?.map((item) => ({
     value: item?.flagName,
     label: (
@@ -794,20 +790,7 @@ const Patient = ({
     name: item?.flagName,
   }));
 
-  const opt = {
-    createdBy: generateOptionsForNewStore(filteredList?.data?.response),
-    auditAllocatedBy: generateOptionsForNewStore(filteredList?.data?.response),
-    organization: organizationList?.response?.map((item) => ({
-      value: item?.id,
-      label: `${item?.name}`,
-    })),
-    Batch: batchList?.response?.map((item) => ({
-      value: item?.id,
-      label: `${item?.name}`,
-    })),
-    status: statusOptions,
-    flag: flagPostList,
-  };
+
   const handleSubmitInsert = async (data) => {
     setIsSubmitting(true);
     let pageId = "d80f80fd-aab8-496e-a9fc-89677d5ac174";
@@ -933,7 +916,6 @@ const Patient = ({
                 btnTitle={"Add Patient"}
                 form={form}
                 setPageNo={setPageNo}
-                opt={opt}
                 //customize table
 
                 open={open}

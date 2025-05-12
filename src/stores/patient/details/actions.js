@@ -227,4 +227,10 @@ export const getAllRolesAction = createActionThunk(
   "GET_ALL_ROLES_QUERIED",
   network.getAllRoles
 );
+export const updateReEvaluate = createActionThunk(
+  "UPDATE_REEVALUATE",
+  network.reEvaluate
+);
+
+
 
