@@ -18,7 +18,7 @@ import AppTable from "../../../components/tables";
 import { getStorage, setStorage } from "../../../utils/storages";
 import { useRouter } from "next/router";
 import { actions as tableAction } from "../../../stores/tableView";
-import { getResponePopup } from "../../../utils/reusable";
+import { findMatchesByField, getResponePopup } from "../../../utils/reusable";
 import visitStyles from "../../../styles/visitdata.module.css";
 import { LoadingOutlined } from "@ant-design/icons";
 
@@ -466,15 +466,19 @@ const Patient = ({
     })),
     priority: priorityOptions,
   };
+
   useEffect(() => {
-    // if (isFilter && data?.response?.metaDataDTO) {
+    if (
+      (isFilter && data?.response?.metaDataDTO) ||
+      !findMatchesByField(activeFilters, data?.response?.metaDataDTO)
+    ) {
       setActiveFilters(
         data?.response?.metaDataDTO.filter(
           (item) => item.active && item?.filter?.style
         )
       );
       setIsFilter(false);
-    // }
+    }
   }, [data?.response?.metaDataDTO]);
 
   return (

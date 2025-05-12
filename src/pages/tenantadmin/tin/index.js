@@ -16,6 +16,7 @@ import { actions as supervisorActions } from "../../../stores/supervisor/audited
 
 import {
   findItemWithTrueKey,
+  findMatchesByField,
   getAccessTabItems,
   getResponePopup,
 } from "../../../utils/reusable";
@@ -478,7 +479,7 @@ const Tin = ({
       sort,
       selectedDateRanges,
       selectedOption,
-      searchText
+      searchText,
     });
   };
   // const handlePriorityChange = async (
@@ -539,19 +540,22 @@ const Tin = ({
     selectedDateRanges,
     selectedOption,
     sort,
-    searchText
+    searchText,
   ]);
 
- useEffect(() => {
-    //  if (isFilter && data?.response?.metaDataDTO) {
-       setActiveFilters(
-         data?.response?.metaDataDTO.filter(
-           (item) => item.active && item?.filter?.style
-         )
-       );
-       setIsFilter(false);
-    //  }
-   }, [data?.response?.metaDataDTO]);
+  useEffect(() => {
+    if (
+      (isFilter && data?.response?.metaDataDTO) ||
+      !findMatchesByField(activeFilters, data?.response?.metaDataDTO)
+    ) {
+      setActiveFilters(
+        data?.response?.metaDataDTO.filter(
+          (item) => item.active && item?.filter?.style
+        )
+      );
+      setIsFilter(false);
+    }
+  }, [data?.response?.metaDataDTO]);
 
   // useEffect(() => {
   //   if (data?.response?.pageResponse?.content) {

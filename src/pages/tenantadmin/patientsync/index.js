@@ -25,6 +25,7 @@ import UploadModal from "./uploadfile/uploadModal";
 import { useRouter } from "next/router";
 import {
   disabledDate,
+  findMatchesByField,
   formatDateForIndex,
   getResponePopup,
 } from "../../../utils/reusable";
@@ -928,14 +929,17 @@ const handleExcelDownload = () => {
   ]);
 
   useEffect(() => {
-    // if (isFilter && data?.response?.metaDataDTO) {
+    if (
+      (isFilter && data?.response?.metaDataDTO) ||
+      !findMatchesByField(activeFilters, data?.response?.metaDataDTO)
+    ) {
       setActiveFilters(
         data?.response?.metaDataDTO.filter(
           (item) => item.active && item?.filter?.style
         )
       );
       setIsFilter(false);
-    // }
+    }
   }, [data?.response?.metaDataDTO]);
 
 

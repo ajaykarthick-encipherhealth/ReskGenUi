@@ -5,6 +5,7 @@ import { Button, DatePicker, Drawer, Form, Input } from "antd";
 import { connect } from "react-redux";
 import { actions as settingActions } from "../../../../stores/tenantAdmin/settings";
 import {
+  findMatchesByField,
   formatDateForIndex,
   getResponePopup,
 } from "../../../../utils/reusable";
@@ -167,14 +168,17 @@ const Projects = ({
   ]);
 
   useEffect(() => {
-    // if (isFilter && data?.response?.metaDataDTO) {
+    if (
+      (isFilter && data?.response?.metaDataDTO) ||
+      !findMatchesByField(activeFilters, data?.response?.metaDataDTO)
+    ) {
       setActiveFilters(
         data?.response?.metaDataDTO.filter(
           (item) => item.active && item?.filter?.style
         )
       );
       setIsFilter(false);
-    // }
+    }
   }, [data?.response?.metaDataDTO]);
 
   return (

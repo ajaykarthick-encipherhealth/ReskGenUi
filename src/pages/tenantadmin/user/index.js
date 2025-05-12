@@ -9,7 +9,7 @@ import { encyptingPass } from "../../../components/headerFilters/functions";
 import { actions as tenantAdminAction } from "../../../stores/tenantAdmin/users";
 import { actions as adminAction } from "../../../stores/admin/dashboard";
 import { getStorage } from "../../../utils/storages";
-import { findItemWithTrueKey, getResponePopup } from "../../../utils/reusable";
+import { findItemWithTrueKey, findMatchesByField, getResponePopup } from "../../../utils/reusable";
 import ReusableFilters from "../../../components/reusableFilters";
 import { PlusCircleFilled } from "@ant-design/icons";
 import AppTable from "../../../components/tables";
@@ -458,15 +458,18 @@ const UserList = ({
     setAddUser(true);
   };
 
-  useEffect(() => {
-    //  if (isFilter && data?.response?.metaDataDTO) {
+   useEffect(() => {
+     if (
+       (isFilter && data?.response?.metaDataDTO) ||
+       !findMatchesByField(activeFilters, data?.response?.metaDataDTO)
+     ) {
        setActiveFilters(
          data?.response?.metaDataDTO.filter(
            (item) => item.active && item?.filter?.style
          )
        );
        setIsFilter(false);
-    //  }
+     }
    }, [data?.response?.metaDataDTO]);
 
   return (

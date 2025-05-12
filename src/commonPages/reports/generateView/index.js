@@ -7,7 +7,7 @@ import { PlusCircleFilled } from "@ant-design/icons";
 import { actions as tenantAdminAction } from "../../../stores/tenantAdmin/patients";
 import { connect } from "react-redux";
 import { getStorage, setStorage } from "../../../utils/storages";
-import { findItemWithTrueKey, getResponePopup } from "../../../utils/reusable";
+import { findItemWithTrueKey, findMatchesByField, getResponePopup } from "../../../utils/reusable";
 import { actions as allocationAction } from "../../../stores/admin/patientAllocation";
 import { actions as allActions } from "../../../stores/admin/workqueue";
 import ReusableFilters from "../../../components/reusableFilters";
@@ -246,14 +246,17 @@ const GenerateView = ({
   }, []);
 
   useEffect(() => {
-    // if (isFilter && data?.response?.metaDataDTO) {
+    if (
+      (isFilter && data?.response?.metaDataDTO) ||
+      !findMatchesByField(activeFilters, data?.response?.metaDataDTO)
+    ) {
       setActiveFilters(
         data?.response?.metaDataDTO.filter(
           (item) => item.active && item?.filter?.style
         )
       );
       setIsFilter(false);
-    // }
+    }
   }, [data?.response?.metaDataDTO]);
 
   return (

@@ -13,7 +13,7 @@ import Header from "../../jsx/layouts/nav/Header";
 import RandomSamplingModal from "./reviewerAllocation/randomSamplingModal";
 import { actions as tableAction } from "../../stores/tableView";
 import CardSkeleton from "../../components/skeleton/card";
-import { getResponePopup } from "../../utils/reusable";
+import { findMatchesByField, getResponePopup } from "../../utils/reusable";
 import { getStorage } from "../../utils/storages";
 
 const PatientAllocation = ({
@@ -270,14 +270,17 @@ const PatientAllocation = ({
   }, []);
 
   useEffect(() => {
-    // if (isFilter && data?.response?.metaDataDTO) {
+    if (
+      (isFilter && data?.response?.metaDataDTO) ||
+      !findMatchesByField(activeFilters, data?.response?.metaDataDTO)
+    ) {
       setActiveFilters(
         data?.response?.metaDataDTO.filter(
           (item) => item.active && item?.filter?.style
         )
       );
       setIsFilter(false);
-    // }
+    }
   }, [data?.response?.metaDataDTO]);
   
   return (

@@ -1081,3 +1081,11 @@ export const convertUsFormat = (indiaDate) => {
     .format("MM-DD-YYYY hh:mm A");
   return usFormattedDate;
 };
+
+export const findMatchesByField = (arr1, arr2) => {
+   return arr1?.some(obj1 =>
+    arr2?.some(obj2 =>
+      JSON.stringify(obj1) === JSON.stringify(obj2)
+    )
+  );
+}

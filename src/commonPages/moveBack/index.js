@@ -13,7 +13,7 @@ import MoveBackModal from "./moveBackModal";
 import MoveBackTable from "./moveBackTable";
 import { actions as tableAction } from "../../stores/tableView";
 import CardSkeleton from "../../components/skeleton/card";
-import { getResponePopup } from "../../utils/reusable";
+import { findMatchesByField, getResponePopup } from "../../utils/reusable";
 import { getStorage } from "../../utils/storages";
 
 const MoveBack = ({
@@ -263,16 +263,20 @@ const MoveBack = ({
     }
   }, [roleId]);
 
-  useEffect(() => {
-    // if (isFilter && data?.response?.metaDataDTO) {
-      setActiveFilters(
-        data?.response?.metaDataDTO.filter(
-          (item) => item.active && item?.filter?.style
-        )
-      );
-      setIsFilter(false);
-    // }
-  }, [data?.response?.metaDataDTO]);
+    useEffect(() => {
+      if (
+        (isFilter && data?.response?.metaDataDTO) ||
+        !findMatchesByField(activeFilters, data?.response?.metaDataDTO)
+      ) {
+        setActiveFilters(
+          data?.response?.metaDataDTO.filter(
+            (item) => item.active && item?.filter?.style
+          )
+        );
+        setIsFilter(false);
+      }
+    }, [data?.response?.metaDataDTO]);
+    
   return (
     <div>
       <Header />

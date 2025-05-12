@@ -15,7 +15,7 @@ import AppTable from "../../components/tables";
 import { actions as allReportActions } from "../../stores/admin/report";
 import { Tab, Nav } from "react-bootstrap";
 import Header from "../../jsx/layouts/nav/Header";
-import { getResponePopup } from "../../utils/reusable";
+import { findMatchesByField, getResponePopup } from "../../utils/reusable";
 import SubNavBar from "../../components/subNavBar";
 import CardSkeleton from "../../components/skeleton/card";
 const role = getStorage("proxyRole");
@@ -413,14 +413,17 @@ const CodersTable = ({
   }, [routedData]);
 
   useEffect(() => {
-    // if (isFilter && data?.response?.metaDataDTO) {
+    if (
+      (isFilter && data?.response?.metaDataDTO) ||
+      !findMatchesByField(activeFilters, data?.response?.metaDataDTO)
+    ) {
       setActiveFilters(
         data?.response?.metaDataDTO.filter(
           (item) => item.active && item?.filter?.style
         )
       );
       setIsFilter(false);
-    // }
+    }
   }, [data?.response?.metaDataDTO]);
 
   return (

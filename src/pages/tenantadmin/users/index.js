@@ -7,7 +7,7 @@ import { actions as tenantAdminAction } from "../../../stores/tenantAdmin/users"
 import ReusableFilters from "../../../components/reusableFilters";
 import AppTable from "../../../components/tables";
 import Header from "../../../jsx/layouts/nav/Header";
-import { findItemWithTrueKey, getResponePopup } from "../../../utils/reusable";
+import { findItemWithTrueKey, findMatchesByField, getResponePopup } from "../../../utils/reusable";
 import CardSkeleton from "../../../components/skeleton/card";
 import { Button, Popover, Select } from "antd";
 import Usersmodal from "./usersmodal";
@@ -233,16 +233,19 @@ useEffect(() => {
     setSelectedItem(item?.userName);
   };
 
-  useEffect(() => {
-    // if (isFilter && data?.response?.metaDataDTO) {
-      setActiveFilters(
-        data?.response?.metaDataDTO.filter(
-          (item) => item.active && item?.filter?.style
-        )
-      );
-      setIsFilter(false);
-    // }
-  }, [data?.response?.metaDataDTO]);
+   useEffect(() => {
+     if (
+       (isFilter && data?.response?.metaDataDTO) ||
+       !findMatchesByField(activeFilters, data?.response?.metaDataDTO)
+     ) {
+       setActiveFilters(
+         data?.response?.metaDataDTO.filter(
+           (item) => item.active && item?.filter?.style
+         )
+       );
+       setIsFilter(false);
+     }
+   }, [data?.response?.metaDataDTO]);
 
   useEffect(() => {
     if (data?.response?.pageResponse?.content) {

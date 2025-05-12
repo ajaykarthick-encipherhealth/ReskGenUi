@@ -4,7 +4,7 @@ import AppTable from "../../../../components/tables";
 import { Button, DatePicker, Drawer, Form, Input } from "antd";
 import { connect } from "react-redux";
 import { actions as settingActions } from "../../../../stores/tenantAdmin/settings";
-import { formatDateForIndex, getResponePopup } from "../../../../utils/reusable";
+import { findMatchesByField, formatDateForIndex, getResponePopup } from "../../../../utils/reusable";
 import { actions as tableAction } from "../../../../stores/tableView";
 import { actions as authActions } from "../../../../stores/authFlows";
 
@@ -148,16 +148,19 @@ const Clients = ({
     pageLoad,
   ]);
 
-  useEffect(() => {
-    // if (isFilter && data?.response?.metaDataDTO) {
-      setActiveFilters(
-        data?.response?.metaDataDTO.filter(
-          (item) => item.active && item?.filter?.style
-        )
-      );
-      setIsFilter(false);
-    // }
-  }, [data?.response?.metaDataDTO]);
+   useEffect(() => {
+     if (
+       (isFilter && data?.response?.metaDataDTO) ||
+       !findMatchesByField(activeFilters, data?.response?.metaDataDTO)
+     ) {
+       setActiveFilters(
+         data?.response?.metaDataDTO.filter(
+           (item) => item.active && item?.filter?.style
+         )
+       );
+       setIsFilter(false);
+     }
+   }, [data?.response?.metaDataDTO]);
 
   return (
     <div>
