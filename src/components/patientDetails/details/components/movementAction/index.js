@@ -122,7 +122,7 @@ const MovementAction = ({
           </Tooltip>
         )}
         {suggestedAction && (
-          <Tooltip title="Move to suggested" placement="bottom">
+          <Tooltip title="Move to Care Gap" placement="bottom">
             {isShow||fromMeat ? (
               <Popconfirm
                 onConfirm={() => {
@@ -138,7 +138,7 @@ const MovementAction = ({
                     patientDetailsLoad
                   });
                 }}
-                title="You want move to suggested?"
+                title="You want move to Care Gap?"
                 placement="bottom"
                 okText="Yes"
                 cancelText="No"

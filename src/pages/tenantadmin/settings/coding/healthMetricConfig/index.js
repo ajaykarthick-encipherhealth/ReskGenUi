@@ -481,7 +481,7 @@ const HealthMetricConfig = ({
                 {isGuidelines.isHeightWeightNeededForBMI ? "Enable" : "Disable"}
               </div>
             </div>
-            <div className="mx-3">{"Move to suggested"}</div>
+            <div className="mx-3">{"Move to Care Gap"}</div>
             <div className="d-flex">
               <Switch
                 checked={isGuidelines.shouldMoveToSuggested}

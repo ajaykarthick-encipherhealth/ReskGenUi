@@ -2,8 +2,7 @@ import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
 import { useRouter } from "next/router";
 import "react-facebook-loading/dist/react-facebook-loading.css";
-import { notification, Table } from "antd";
-import { actions as workqueueActions } from "../../stores/reviewer/workqueue";
+import { notification } from "antd";
 import { actions as tenantAdminAction } from "../../stores/tenantAdmin/patients";
 import { actions as tableAction } from "../../stores/tableView";
 import { priorityOptions } from "../../components/headerFilters/functions";
@@ -17,7 +16,6 @@ import { Tab, Nav } from "react-bootstrap";
 import Header from "../../jsx/layouts/nav/Header";
 import { findMatchesByField, getResponePopup } from "../../utils/reusable";
 import SubNavBar from "../../components/subNavBar";
-import CardSkeleton from "../../components/skeleton/card";
 const role = getStorage("proxyRole");
 export const bullets = [
   {
@@ -44,75 +42,12 @@ export const reviewedBullets = [
     name: "COMPLETED",
   },
 ];
-export const statusOptions = [
-  { label: "CODER 1 COMPLETED", value: "COMPLETED" },
-  { label: "CODER 1 PENDING", value: "PENDING" },
-  { label: "CODER 1 DECLINED", value: "DECLINED" },
-  { label: "CODER 1 HOLD", value: "HOLD" },
-];
-export const commonFilterItems = [
-  {
-    id: "01",
-    title: "Search",
-    type: "search",
-    value: null,
-    placeholder: "Search",
-    header: "Patient Name / ID",
-    active: true,
-  },
-  {
-    id: "03",
-    title: "dueDate",
-    type: "rangePicker",
-    value: null,
-    placeholder: "Due Date",
-    pickerType: "year",
-    active: false,
-  },
-  {
-    id: "04",
-    title: "completedDate",
-    type: "rangePicker",
-    value: null,
-    placeholder: "Completed  Date",
-    pickerType: "year",
-    active: false,
-  },
-  {
-    id: "05",
-    title: "allocatedDate",
-    type: "rangePicker",
-    value: null,
-    placeholder: "Allocated  Date",
-    pickerType: "year",
-    active: true,
-  },
-  {
-    id: "06",
-    title: "Priority",
-    type: "select",
-    value: null,
-    placeholder: "Priority",
-    options: null,
-    active: true,
-  },
-  {
-    id: "07",
-    title: "batch",
-    type: "select",
-    value: null,
-    placeholder: "Batch",
-    showSearch: true,
-    options: null,
-    active: true,
-  },
-];
+
+
 const CodersTable = ({
   patientDetails,
   routedData,
   getRoutedData,
-  getAllBatchList,
-  batchList,
   getActiveTab,
   pageLoad,
   tableLoader,
@@ -129,80 +64,7 @@ const CodersTable = ({
   route,
   backRoute,
 }) => {
-  const columns = [
-    {
-      name: "Patient Id",
-      value: "patientId",
-      isShow: true,
-      filterKey: "Search",
-    },
-    {
-      name: "Batch Name",
-      value: "batchName",
-      isShow: true,
-      filterKey: "batch",
-    },
-    {
-      name: "File Name",
-      value: "fileName",
-      isShow: true,
-    },
-    {
-      name: "HCC Count",
-      value: "validDiseaseCount",
-      isShow: true,
-    },
-    {
-      name: "Allocated Date",
-      value: "allocatedOn",
-      sortable: true,
-      isDate: true,
-      isShow: true,
-      filterKey: "allocatedDate",
-    },
-    {
-      name: "Due Date",
-      value: "dueDate",
-      sortable: true,
-      isDate: true,
-      isShow: true,
-      filterKey: "dueDate",
-    },
-    {
-      name: "Completed Date",
-      value: "processedDate",
-      sortable: true,
-      isDate: true,
-      isShow: true,
-      filterKey: "completedDate",
-    },
 
-    {
-      name: "Allocated By",
-      sortable: true,
-      isImage: true,
-      value: {
-        first: "allocatedByFirstName",
-        last: "allocatedBylastName",
-        img: "allocatedByProfileImage",
-      },
-      isShow: true,
-    },
-    {
-      name: "Priority",
-      value: "priority",
-      isShow: true,
-      filterKey: "Priority",
-    },
-    {
-      name: "Status",
-      value: "statusProxy",
-      proxcystatus: true,
-      infoIcon: true,
-      isShow: true,
-      filterKey: "Status",
-    },
-  ];
   const router = useRouter();
   const [activeFilters, setActiveFilters] = useState(
     data?.response?.metaDataDTO.filter((item) => item.active)
@@ -319,14 +181,7 @@ const CodersTable = ({
     pageLoad,
   ]);
 
-  const opt = {
-    batch: batchList?.map((item) => ({
-      value: item?.id,
-      label: `${item?.name}`,
-    })),
-    Status: statusOptions,
-    Priority: priorityOptions,
-  };
+
   const handleTabs = (name) => {
     getActiveTab(name);
     setActiveStatus(name);
@@ -368,9 +223,7 @@ const CodersTable = ({
       getResponePopup(error?.response);
     }
   };
-  useEffect(() => {
-    getAllBatchList();
-  }, []);
+
 
   const params = {
     pageNo,
@@ -439,9 +292,6 @@ const CodersTable = ({
 
       <div className="content-body">
         <div className="container-fluid table-responsive active-projects task-table">
-          {/* {tableLoader ? (
-            <CardSkeleton />
-          ) : ( */}
           <div className="d-flex p-3">
             <div style={{ width: "100%" }}>
               <ReusableFilters
@@ -461,14 +311,11 @@ const CodersTable = ({
                 setClear={setClear}
                 clear={clear}
                 setPageNo={setPageNo}
-                opt={opt}
-                columns={columns}
                 //customize table
                 open={open}
                 onClose={onClose}
                 selectedColumns={test}
                 setSelectedColumns={setTest}
-                commonFilterItems={commonFilterItems}
                 showCustomizeTable={true}
                 showDrawer={showDrawer}
                 handleSubmit={handleSubmit}
@@ -690,11 +537,9 @@ const enhancer = connect(
     pageLoad: state?.tenantAdmin?.tin?.getPageRendering,
   }),
   {
-    getpatientsListFilter: workqueueActions.patientsAction,
     patientDetails: allActions.getPatientDetails,
     getRoutedData: allPatientSyncAction.getRoutedData,
     getAllBatchList: tenantAdminAction.getAllBatchAction,
-    getFilteApi: allActions.getReviewerPatients,
     getActiveTab: allReportActions.activeTab,
     getStatus: allActions.getStatusAction,
     getTableStatus: tableAction.getTableStatusAction,
