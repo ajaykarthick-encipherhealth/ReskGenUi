@@ -11,6 +11,7 @@ import { getLogoImage } from "./twofactorauthentication/reusableFun";
 import { useMsal } from "@azure/msal-react";
 import PageLoading from "../components/page-loading";
 import { getResponePopup } from "../utils/reusable";
+import { ssoLogout } from "../../lib/authService";
 
 const SelectProject = ({
   getAllClientId,
@@ -27,7 +28,6 @@ const SelectProject = ({
   const [loading, setLoading] = useState(false);
   const [loadingClients, setLoadingClients] = useState(true);
   const [selectValue, setSelectValue] = useState([]);
-
 
   const clientOptions = clientDetails?.map((client) => ({
     label: client.clientName,
@@ -49,10 +49,6 @@ const SelectProject = ({
     setConfirmModal(false);
     loginSuccessCallBack();
   };
-
-  
-
-
 
   useEffect(() => {
     if (clientIdData?.userName) {
@@ -80,10 +76,21 @@ const SelectProject = ({
     }
   }, [clientIdData]);
 
+  const clientIdApi = async () => {
+    try {
+      const response = await getAllClientId();
+      if (response?.status == "USER_DEFINED_ERROR") {
+        ssoLogout();
+      }
+    } catch (error) {
+      getResponePopup(error);
+    }
+  };
+
   useEffect(() => {
-    getAllClientId();
-    setSelectValue(getStorage("client") && getStorage("client"))
-    setSelectClient(getStorage("client") && getStorage("client"))
+    clientIdApi();
+    setSelectValue(getStorage("client") && getStorage("client"));
+    setSelectClient(getStorage("client") && getStorage("client"));
   }, []);
 
   // useEffect(() => {
@@ -116,7 +123,6 @@ const SelectProject = ({
   if (isLoading) {
     return <div>{/* <PageLoading /> */}</div>;
   }
-
 
   return (
     <div className="page-wraper">
@@ -190,7 +196,7 @@ const SelectProject = ({
                       onChange={(value) => {
                         setSelectClient(value?.toLowerCase());
                         setClientError(false);
-                        setSelectValue(value)
+                        setSelectValue(value);
                         removeStorage("project");
                       }}
                       value={selectValue}

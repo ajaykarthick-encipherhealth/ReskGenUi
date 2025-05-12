@@ -46,6 +46,7 @@ const Profile = ({
                 style={{
                   margin: "20px 0px 0 30px",
                   display: "flex",
+                  gap: "20px",
                 }}
               >
                 <div style={{ width: "80px", height: "80px" }}>
@@ -85,17 +86,20 @@ const Profile = ({
 
                 <div className="">
                   <span
-                    className="  d-flex mt-3"
+                    className="d-flex mt-3 align-items-center"
                     style={{
                       fontWeight: "600",
-                      fontSize: "12px",
+                      fontSize: "16px",
                     }}
                   >
-                    {userEmail}
+                    {userEmail &&
+                      userEmail
+                        .split("@")[0]
+                        .replace(/^./, (c) => c.toUpperCase())}
                   </span>
 
                   <span
-                    className="text-[#4F4F4F] ms-2 subHeader-name d-flex mr-3 "
+                    className="text-[#4F4F4F]  subHeader-name d-flex mr-3 "
                     style={{
                       fontWeight: "500",
                       fontSize: "6px",
