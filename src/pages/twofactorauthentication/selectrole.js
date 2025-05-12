@@ -69,8 +69,8 @@ const SelectRole = ({
       CODER_1: { userRole: "CODER_1", route: "/reviewer/dashboard" },
       CODER_2: { userRole: "CODER_2", route: "/reviewer/dashboard" },
       QA: { userRole: "QA", route: "/reviewer/dashboard" },
-      DOWNLOADER: { userRole: "DOWNLOADER", route: "/reviewer/dashboard" },
-      OWNER: { userRole: "OWNER", route: "/reviewer/dashboard" },
+      DOWNLOADER: { userRole: "DOWNLOADER", route: "/tenantadmin/dashboard" },
+      OWNER: { userRole: "OWNER", route: "/tenantadmin/dashboard" },
       supervisor: { userRole: "supervisor", route: "/supervisor/dashboard" },
       provider: { userRole: "provider", route: "/provider/fhirTable" },
       TENANT_ADMIN: {
