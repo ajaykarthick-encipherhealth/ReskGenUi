@@ -57,6 +57,7 @@ const Projects = ({
   const [pageSize, setPageSize] = useState(15);
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [isFilter, setIsFilter] = useState(true);
+  const [clear, setClear] = useState(false);
 
   const showProjectDrawer = () => {
     setDrawerOpen(true);
@@ -211,6 +212,7 @@ const Projects = ({
             handleReset={handleReset}
             isSubmitting={isSubmitting}
             isResetting={isResetting}
+            setClear={setClear}
           />
         </div>
 

@@ -35,6 +35,7 @@ const Clients = ({
   const [pageSize, setPageSize] = useState(15);
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [isFilter, setIsFilter] = useState(true);
+  const [clear, setClear] = useState(false);
 
   const showClientDrawer = () => {
     setDrawerOpen(true);
@@ -191,6 +192,7 @@ const Clients = ({
             handleReset={handleReset}
             isSubmitting={isSubmitting}
             isResetting={isResetting}
+            setClear={setClear}
           />
         </div>
 

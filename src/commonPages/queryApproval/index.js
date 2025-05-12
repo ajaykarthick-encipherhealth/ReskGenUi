@@ -117,6 +117,7 @@ const QueryApproval = ({
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isResetting, setIsResetting] = useState(false);
   const [isFilter, setIsFilter] = useState(true);
+  const [clear, setClear] = useState(false);
 
   const handleTabChange = (key) => {
     setActiveTab(key);
@@ -368,6 +369,7 @@ const QueryApproval = ({
                               handleReset={handleReset}
                               isSubmitting={isSubmitting}
                               isResetting={isResetting}
+                              setClear={setClear}
                             />
                           </div>
                         </div>

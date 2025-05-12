@@ -125,6 +125,8 @@ const PatientAllocation = ({
   const [isResetting, setIsResetting] = useState(false);
   const [isAllocate, setIsAllocate] = useState(false);
   const [isFilter, setIsFilter] = useState(true);
+  const [clear, setClear] = useState(false);
+  
   const disbaleAllocate = allRoles?.allocationRoles?.map(
     (item) => item.disableAllocation
   );
@@ -439,6 +441,7 @@ const PatientAllocation = ({
                             handleReset={handleReset}
                             isSubmitting={isSubmitting}
                             isResetting={isResetting}
+                            setClear={setClear}
                           />
                         </div>
               

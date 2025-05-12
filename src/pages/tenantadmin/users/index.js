@@ -63,6 +63,7 @@ const Users = ({
   const [visiblePopoverKey, setVisiblePopoverKey] = useState(null);
   const [editingUser, setEditingUser] = useState([]);
   const [isFilter, setIsFilter] = useState(true);
+  const [clear, setClear] = useState(false);
 
   const onPageChange = (e) => {
     setPaginationFirst(e.first);
@@ -297,6 +298,7 @@ useEffect(() => {
                   handleReset={handleReset}
                   isSubmitting={isSubmitting}
                   isResetting={isResetting}
+                  setClear={setClear}
                 />
               </div>
               <div
