@@ -102,7 +102,7 @@ const RandomSamplingModal = ({
       allocatedBy: userId,
       hccFoundFilesPercentage: Number(values?.hccpercentage),
       noHccFoundFilesPercentage: Number(values?.nohccpercentage),
-      tin: values?.tin,
+      // tin: values?.tin,
     });
     if (response?.status == "SUCCESS") {
       setIsAllocate(false);
@@ -425,13 +425,13 @@ const RandomSamplingModal = ({
           onFinish={onFinish}
         >
           <div className="mt-3 samplingSelect">
-            <Form.Item
+            {/* <Form.Item
               label="Select Tin"
               name="tin"
               rules={[{ required: true, message: "Select the Tin!" }]}
             >
               <Input className="w-75" placeholder=" Tin" />
-            </Form.Item>
+            </Form.Item> */}
           </div>
 
           <Form.Item
