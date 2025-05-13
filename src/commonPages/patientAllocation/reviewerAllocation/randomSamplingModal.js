@@ -41,6 +41,7 @@ const RandomSamplingModal = ({
   setIsAllocate,
 }) => {
   const router = useRouter();
+  const tinNumber = getStorage("tinNumber");
   const userId = getStorage("userId");
   const [activeCard, setActiveCard] = useState("");
   const [search, setSearch] = useState("");
@@ -102,7 +103,7 @@ const RandomSamplingModal = ({
       allocatedBy: userId,
       hccFoundFilesPercentage: Number(values?.hccpercentage),
       noHccFoundFilesPercentage: Number(values?.nohccpercentage),
-      // tin: values?.tin,
+      tin: tinNumber,
     });
     if (response?.status == "SUCCESS") {
       setIsAllocate(false);
