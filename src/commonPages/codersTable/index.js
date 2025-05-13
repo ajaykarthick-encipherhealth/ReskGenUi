@@ -63,6 +63,7 @@ const CodersTable = ({
   getTableStatus,
   route,
   backRoute,
+  roleId,
 }) => {
 
   const router = useRouter();
@@ -151,6 +152,7 @@ const CodersTable = ({
       isQueried,
       patientAllocated,
       tin,
+      roleId,
     });
     if (res?.status == "SUCCESS") {
       setTotalElements(res.response?.patientDTOList?.totalElements);

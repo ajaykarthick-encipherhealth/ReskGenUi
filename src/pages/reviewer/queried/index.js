@@ -4,6 +4,7 @@ import { getStorage } from '../../../utils/storages';
 
 const Queried =  () => {
   const userId = getStorage("userId")
+  const roleId = getStorage("roleId")
   return (
     <div>
       <CodersTable
@@ -13,6 +14,7 @@ const Queried =  () => {
         route="/reviewer/queried/details"
         tin
         backRoute="/reviewer/queried"
+        roleId={roleId}
       />
     </div>
   );
