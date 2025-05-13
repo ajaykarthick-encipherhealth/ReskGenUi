@@ -396,6 +396,7 @@ const PatientAllocation = ({
                                     name="random-sampling"
                                     onClick={showModal}
                                     className="tableButton"
+                                    disabled={!selectedRows?.length == 0}
                                   >
                                     Random Sampling
                                   </Button>
@@ -408,44 +409,43 @@ const PatientAllocation = ({
                       {/* {tableLoader ? (
                         <CardSkeleton />
                       ) : ( */}
-                        <div className={` d-flex gap-3 mt-4`}>
-                          <ReusableFilters
-                            showFilter={true}
-                            setActiveFilters={setActiveFilters}
-                            setSearchText={setSearchText}
-                            searchText={searchText}
-                            setSelectedOption={setSelectedOption}
-                            selectedOption={selectedOption}
-                            setSelectedDateRanges={setSelectedDateRanges}
-                            selectedDateRanges={selectedDateRanges}
-                            FilterItems={activeFilters}
-                            selectedDates={selectedDates}
-                            setSelectedDates={setSelectedDates}
-                            activeFilters={activeFilters}
-                            setPageNo={setPageNo}
-                            opt={opt}
-                            setSelectAllChecked={setSelectAllChecked}
-                            setSelectedRowsId={setSelectedRowsId}
-                            setSelectedRows={setSelectedRows}
-                            selectedRowsId={selectedRowsId}
-                            setSearch={setSearch}
-                            search={search}
-                            //customize table
-                            open={open}
-                            onClose={onClose}
-                            selectedColumns={test}
-                            setSelectedColumns={setTest}
-                            commonFilterItems={commonFilterItems}
-                            showCustomizeTable={false}
-                            showDrawer={showDrawer}
-                            handleSubmit={handleSubmit}
-                            handleReset={handleReset}
-                            isSubmitting={isSubmitting}
-                            isResetting={isResetting}
-                            setClear={setClear}
-                          />
-                        </div>
-              
+                      <div className={` d-flex gap-3 mt-4`}>
+                        <ReusableFilters
+                          showFilter={true}
+                          setActiveFilters={setActiveFilters}
+                          setSearchText={setSearchText}
+                          searchText={searchText}
+                          setSelectedOption={setSelectedOption}
+                          selectedOption={selectedOption}
+                          setSelectedDateRanges={setSelectedDateRanges}
+                          selectedDateRanges={selectedDateRanges}
+                          FilterItems={activeFilters}
+                          selectedDates={selectedDates}
+                          setSelectedDates={setSelectedDates}
+                          activeFilters={activeFilters}
+                          setPageNo={setPageNo}
+                          opt={opt}
+                          setSelectAllChecked={setSelectAllChecked}
+                          setSelectedRowsId={setSelectedRowsId}
+                          setSelectedRows={setSelectedRows}
+                          selectedRowsId={selectedRowsId}
+                          setSearch={setSearch}
+                          search={search}
+                          //customize table
+                          open={open}
+                          onClose={onClose}
+                          selectedColumns={test}
+                          setSelectedColumns={setTest}
+                          commonFilterItems={commonFilterItems}
+                          showCustomizeTable={false}
+                          showDrawer={showDrawer}
+                          handleSubmit={handleSubmit}
+                          handleReset={handleReset}
+                          isSubmitting={isSubmitting}
+                          isResetting={isResetting}
+                          setClear={setClear}
+                        />
+                      </div>
 
                       <Tab.Content>
                         <Tab.Pane eventKey={activeTab}>

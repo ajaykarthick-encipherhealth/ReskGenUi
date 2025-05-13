@@ -329,12 +329,10 @@ export async function moveBack(data) {
 }
 
 export async function getRoles() {
+  const tin = getStorage("tinNumber")
   const options = {
     method: "GET",
   };
-  const res = await requestPortal(
-    `dbservice/allocation/roles`,
-    options
-  );
+  const res = await requestPortal(`dbservice/allocation/roles?tin=${tin}`, options);
   return res;
 }

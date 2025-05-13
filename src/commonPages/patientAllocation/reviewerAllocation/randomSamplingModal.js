@@ -437,7 +437,10 @@ const RandomSamplingModal = ({
 
           <Form.Item
             rules={[
-              { required: true, message: "Select the Tin!" },
+              {
+                required: true,
+                message: "Enter Percentage !",
+              },
               {
                 pattern: /^[0-9]+$/,
                 message: "Percentage must contain only numbers",
@@ -450,7 +453,11 @@ const RandomSamplingModal = ({
           </Form.Item>
           <Form.Item
             rules={[
-              { required: true, message: "Select the Tin!" },
+              {
+                required: true,
+                message:
+                  "Enter Percentage !",
+              },
               {
                 pattern: /^[0-9]+$/,
                 message: "Percentage must contain only numbers",
