@@ -1083,7 +1083,7 @@ const TableRow = ({
                       title="Reason"
                       content={
                         <div
-                          style={{ width: 200, height: 100, overflow: "auto" }}
+                          style={{ maxWidth: 200, maxHeight: 100, overflow: "auto" }}
                         >
                           {item?.failedReason ? item.failedReason : "---"}
                         </div>

@@ -155,15 +155,15 @@ const Notification = ({
                     </div>
 
                     <div className="d-flex pt-3 justify-content-between align-items-center">
-                      <Button
+                      {/* <Button
                         className="text-white"
                         style={{ backgroundColor: "#3A88F8" }}
                         onClick={() => gotoPatientDetails(notification)}
                       >
                         GO TO FILE
-                      </Button>
+                      </Button> */}
 
-                      <div>
+                      <div className="px-1">
                         {notification?.createdDate
                           ? formatDateTime({
                               date: notification?.createdDate,
