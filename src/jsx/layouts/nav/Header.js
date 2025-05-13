@@ -275,7 +275,7 @@ const Header = ({
     }
   };
   const getMenuListByRole = (role) => {
-    const allRoles = JSON.parse(getStorage("userAllRoles"));
+    const allRoles = JSON?.parse(getStorage("userAllRoles"));
     let selectedRoleObj = allRoles?.find((res) => res.proxyRole === role);
     if (!selectedRoleObj) {
       selectedRoleObj = allRoles?.find(
@@ -722,9 +722,9 @@ const Header = ({
         setRoles(data);
         setStorage(
           "accessMenuList",
-          JSON.stringify(data[0].details.accessList)
+          JSON?.stringify(data[0].details.accessList)
         );
-        setStorage("userAllRoles", JSON.stringify(data));
+        setStorage("userAllRoles", JSON?.stringify(data));
         setStorage("roleId", data[0].details?.roleId);
         setStorage("proxyRole", data[0].label);
         // setCurrentRole(data[0].label);
@@ -758,7 +758,7 @@ const Header = ({
     details: data,
   }));
  setRoles(data);
- setStorage("userAllRoles", JSON.stringify(data));
+ setStorage("userAllRoles", JSON?.stringify(data));
  },[allRolesData])
  
   const getProjectDataList = async () => {
