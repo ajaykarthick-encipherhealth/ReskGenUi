@@ -396,7 +396,7 @@ const PatientAllocation = ({
                                     name="random-sampling"
                                     onClick={showModal}
                                     className="tableButton"
-                                    disabled={!selectedRows?.length == 0}
+                                    disabled={!selectedRows?.length == 0 || allRoles?.randomSamplingCompleted}
                                   >
                                     Random Sampling
                                   </Button>
