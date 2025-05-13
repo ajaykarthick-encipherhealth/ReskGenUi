@@ -12,6 +12,7 @@ import CardSkeleton from "../../../components/skeleton/card";
 import { Button, Popover, Select } from "antd";
 import Usersmodal from "./usersmodal";
 import {actions as allActions} from '../../../stores/tenantAdmin/users'
+import {actions as authActions} from '../../../stores/authFlows'
 
 const Users = ({
   pageLoad,
@@ -24,6 +25,7 @@ const Users = ({
   tableDynamicColumnReset,
   getEnableUser,
   allRoles,
+  getRoles,
 }) => {
   const router = useRouter();
   const [activeFilters, setActiveFilters] = useState([]);
@@ -112,11 +114,11 @@ const Users = ({
     pageNumber,
     pageLoad,
   ]);
-useEffect(() => {  
-  if (editingUser) {
-    setSelectedRole(editingUser.roleNames); // editingUser.roles = ['admin', 'user']
-  }
-}, [editingUser]);
+  useEffect(() => {
+    if (editingUser) {
+      setSelectedRole(editingUser.roleNames); // editingUser.roles = ['admin', 'user']
+    }
+  }, [editingUser]);
 
   const handleSubmit = async (data) => {
     setIsSubmitting(true);
@@ -190,6 +192,7 @@ useEffect(() => {
     const response = await editUserRoles(payload);
     if (response?.status === "SUCCESS") {
       getUsersAPi();
+      getRoles();
       setSelectedItem(null);
       setSelectedRole([]);
       getResponePopup(response);
@@ -221,7 +224,10 @@ useEffect(() => {
         onChange={(value) => setSelectedRole(value)}
       />
       <div className="d-flex align-items-center justify-content-center mt-3 gap-2">
-        <Button onClick={handleRoleSubmit} className="btn tableButton btn-sm w-full">
+        <Button
+          onClick={handleRoleSubmit}
+          className="btn tableButton btn-sm w-full"
+        >
           Submit
         </Button>
         <Button onClick={handleCancel} className="btn btn-sm w-full" danger>
@@ -235,19 +241,19 @@ useEffect(() => {
     setSelectedItem(item?.userName);
   };
 
-   useEffect(() => {
-     if (
-       (isFilter && data?.response?.metaDataDTO) ||
-       !findMatchesByField(activeFilters, data?.response?.metaDataDTO)
-     ) {
-       setActiveFilters(
-         data?.response?.metaDataDTO.filter(
-           (item) => item.active && item?.filter?.style
-         )
-       );
-       setIsFilter(false);
-     }
-   }, [data?.response?.metaDataDTO]);
+  useEffect(() => {
+    if (
+      (isFilter && data?.response?.metaDataDTO) ||
+      !findMatchesByField(activeFilters, data?.response?.metaDataDTO)
+    ) {
+      setActiveFilters(
+        data?.response?.metaDataDTO.filter(
+          (item) => item.active && item?.filter?.style
+        )
+      );
+      setIsFilter(false);
+    }
+  }, [data?.response?.metaDataDTO]);
 
   useEffect(() => {
     if (data?.response?.pageResponse?.content) {
@@ -366,6 +372,7 @@ const enhancer = connect(
     getEnableUser: tenantAdminAction.usersSoftDelete,
     getAllRoles: allActions.usersAllRoles,
     editUserRoles: allActions.userEditRoles,
+     getRoles: authActions.allRoles,
   }
 );
 export default enhancer(Users);

@@ -323,7 +323,6 @@ const Header = ({
   const handleSettingsClick = () => {
     router.push("/tenantadmin/settings");
   };
-
   useEffect(() => {
     getTableData({ reloadTrue: true });
   }, []);
@@ -751,7 +750,17 @@ const Header = ({
     //  setCurrentRole(data[0]?.label);
    }
  };
-
+ 
+ useEffect(()=>{
+  const data = allRolesData?.userRoles?.map((data) => ({
+    label: data.aliasName,
+    key: data.proxyRole,
+    details: data,
+  }));
+ setRoles(data);
+ setStorage("userAllRoles", JSON.stringify(data));
+ },[allRolesData])
+ 
   const getProjectDataList = async () => {
     const res = await getAllProjects();
     if (res.status == "SUCCESS") {
@@ -826,6 +835,7 @@ const Header = ({
     }
     // }, 2000);
   }, [projectListCheck]);
+  console.log(roles,"roles")
   return (
     <div className={`header ${headerFix ? "is-fixed" : ""}`}>
       <div className="header-content">
