@@ -127,6 +127,7 @@ const Clients = ({
     try {
       const response = await tableDynamicColumn({ payload });
       if (response?.status === "SUCCESS") {
+        setIsFilter(true);
         getClientsDetails();
         onClose();
         getResponePopup(response);

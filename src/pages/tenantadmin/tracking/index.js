@@ -308,6 +308,7 @@ const Patient = ({
     try {
       const response = await tableDynamicColumn({ payload });
       if (response?.status === "SUCCESS") {
+        setIsFilter(true);
         getAllTracking();
         onClose();
         getResponePopup(response);

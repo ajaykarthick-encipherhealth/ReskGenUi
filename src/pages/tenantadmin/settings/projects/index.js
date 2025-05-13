@@ -146,6 +146,7 @@ const Projects = ({
     try {
       const response = await tableDynamicColumn({ payload });
       if (response?.status === "SUCCESS") {
+        setIsFilter(true);
         getProjects();
         onClose();
         getResponePopup(response);

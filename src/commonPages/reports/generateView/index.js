@@ -179,6 +179,7 @@ const GenerateView = ({
     try {
       const response = await tableDynamicColumn({ payload });
       if (response?.status === "SUCCESS") {
+        setIsFilter(true);
         getPatients();
         onClose();
         getResponePopup(response);

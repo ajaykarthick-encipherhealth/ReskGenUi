@@ -307,6 +307,7 @@ const UserList = ({
     try {
       const response = await tableDynamicColumn({ payload });
       if (response?.status === "SUCCESS") {
+        setIsFilter(true);
         getAllUsers();
         onClose();
         getResponePopup(response);
