@@ -1,57 +1,57 @@
 .btnColor {
-  background-color: #043069;
-  color: #fff;
+  background-color: #043069 !important;
+  color: #fff !important;
 }
 
 .btnColor:disabled {
-  background-color: #043069;
-  color: #fff;
-  cursor:no-drop;
+  background-color: #043069 !important;
+  color: #fff !important;
+  cursor: no-drop;
 }
 
 .btnColor:hover {
-  background-color: #6c9ddd;
-  color: #fff;
+  background-color: #6c9ddd !important;
+  color: #fff !important;
 }
 
 .outer {
-  border: 1px solid #043069;
-  color: #043069;
+  border: 1px solid #043069 !important;
+  color: #043069 !important;
 }
 
 .outer:hover {
-  background-color: #6c9ddd;
-  color: #fff;
+  background-color: #6c9ddd !important;
+  color: #fff !important;
 }
 
-.both{
-  background-color: #241571;
-  color:white;
+.both {
+  background-color: #241571 !important;
+  color: white !important;
   border-color: #241571;
 }
-.code{
-  background-color: #F0F6FE;
-  color:black;
-  border-color: #F0F6FE;
+.code {
+  background-color: #f0f6fe !important;
+  color: black !important;
+  border-color: #f0f6fe !important;
 }
-.submitBtn{
- height:45px;
-  background:#04306f;
-  color:white;
-  width:30%;
+.submitBtn {
+  height: 45px;
+  background: #04306f !important;
+  color: white !important;
+  width: 30%;
 }
-.subHeader{
+.subHeader {
   font-weight: 500;
   font-size: 18px;
-  margin:10px 0 10px 0;
+  margin: 10px 0 10px 0;
 }
-.inputField{
-  height:42px;
+.inputField {
+  height: 42px;
 }
 .picker,
 .picker:hover,
 .picker:focus,
-.picker:active{
-  border:1px solid #d9d9d9 !important;
+.picker:active {
+  border: 1px solid #d9d9d9 !important;
   box-shadow: none !important;
 }
