@@ -75,7 +75,7 @@ export async function getTableView({
     if (clientBasesPageIds.includes(pageId)) {
       baseUrl += `&cilentBased=${cilentBased || false}`;
     }
-    if (role !== "TENANT_ADMIN") {
+    if (role !== "TENANT_ADMIN" && role !== "OWNER" && role !== "DOWNLOADER") {
       baseUrl += `&patientAllocated=${patientAllocated || ""}`;
     }
     const tinPageIds = [

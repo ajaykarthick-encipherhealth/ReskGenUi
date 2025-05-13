@@ -697,7 +697,9 @@ console.log(isClient, "isClient");
       {patientIdDetailsData?.data?.response && (
         <>
           {(userRole && userRole?.toLowerCase() == "admin") ||
-          (userRole && userRole === "TENANT_ADMIN") ? (
+          (userRole && userRole === "TENANT_ADMIN") ||
+          userRole === "DOWNLOADER" ||
+          userRole === "OWNER" ? (
             <div
               id="allocate-action"
               name="allocate-action"
