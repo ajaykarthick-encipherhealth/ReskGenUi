@@ -567,7 +567,9 @@ console.log(userRole, "userRole");
                 </Button>
               </Dropdown>
             </div>
-          ) : userRole == "CODER_1" || userRole == "CODER_2" || userRole == "QA" ? (
+          ) : userRole == "CODER_1" ||
+            userRole == "CODER_2" ||
+            userRole == "QA" ? (
             <div className={`${visitStyles.yearactionbtnContainer} ant-badge`}>
               {patienIdDetails?.workflow?.[0]?.status == "COMPLETED" ? (
                 <Dropdown
@@ -644,6 +646,31 @@ console.log(userRole, "userRole");
                     </span>
                   </Button>
                 </Dropdown>
+              ) : patienIdDetails?.workflow?.[0]?.status == "QUERIED" ? (
+                <Dropdown
+                  overlay={
+                    activeTab == 3
+                      ? actionItems2
+                      : activeTab == 4
+                      ? actionItems3
+                      : actionItems
+                  }
+                  onVisibleChange={(v) => setMenuIsOpen(v)}
+                  visible={menuIsOpen}
+                  className={`ant-badge queryBtnHcc ${visitStyles.queryBtnHcc}`}
+                >
+                  <Button
+                    type="primary"
+                    className={`ant-badge ${visitStyles.queryBtnHcc} ${
+                      isDosStatus && `${visitStyles.statusBtn}`
+                    } queryBtnHcc`}
+                  >
+                    <span className="ant-badge">QUERIED</span>
+                    <span style={{ marginLeft: "10px" }}>
+                      <DownOutlined />
+                    </span>
+                  </Button>
+                </Dropdown>
               ) : patienIdDetails?.workflow?.[0]?.status == "PENDING" ||
                 patienIdDetails?.workflow?.[0]?.status == "COMPUTED" ||
                 patienIdDetails?.workflow?.[0]?.status == null ? (
@@ -659,7 +686,6 @@ console.log(userRole, "userRole");
                   visible={menuIsOpen}
                   className={`ant-badge pendingBtn${visitStyles.pendingBtn}`}
                 >
-                  
                   <Button
                     type="primary"
                     className={`ant-badge ${visitStyles.pendingBtn} ${
