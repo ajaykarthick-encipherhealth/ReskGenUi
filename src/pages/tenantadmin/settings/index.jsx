@@ -21,7 +21,15 @@ import HistoryCodes from "./coding/historyCodes";
 import DownCodes from "./coding/downCodes";
 import DirectConfirmCodes from "./coding/directConfirmCodes";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faFileImport, faFireFlameCurved, faHospital, faSliders ,faFile, faUser} from "@fortawesome/free-solid-svg-icons";
+import {
+  faFileImport,
+  faFireFlameCurved,
+  faHospital,
+  faSliders,
+  faFile,
+  faUser,
+  faUsers,
+} from "@fortawesome/free-solid-svg-icons";
 import QueryTemplateConfig from "./configuration/queryTemplateCofig";
 import DiagnosticReportConfig from "./coding/diagnosticReportConfig";
 import MeatConfig from "./coding/meatCofig";
@@ -39,7 +47,7 @@ import Users from "./users";
 
 const { Sider } = Layout;
 
-const menuList =(activePage)=> [
+const menuList = (activePage) => [
   {
     key: `Configuration`,
     icon: (
@@ -47,7 +55,6 @@ const menuList =(activePage)=> [
         icon={faSliders}
         style={{
           color: "#04306f",
-          
         }}
         className="fs-4 fa-rotate-90"
       />
@@ -151,10 +158,13 @@ const menuList =(activePage)=> [
     key: `EMR-FHIR`,
     icon: (
       <span className="">
-        <FontAwesomeIcon icon={faFireFlameCurved} className={`${activePage==="EMR-FHIR"&& "text-white"} fs-3`}
-        style={{
-          color: activePage==="EMR-FHIR" ?"#fff": "#04306f",
-        }} />
+        <FontAwesomeIcon
+          icon={faFireFlameCurved}
+          className={`${activePage === "EMR-FHIR" && "text-white"} fs-3`}
+          style={{
+            color: activePage === "EMR-FHIR" ? "#fff" : "#04306f",
+          }}
+        />
       </span>
     ),
     label: `EMR-FHIR`,
@@ -163,11 +173,13 @@ const menuList =(activePage)=> [
     key: `FTP-SFTP`,
     icon: (
       <span className="">
-        <FontAwesomeIcon icon={faFileImport}
-        style={{
-          color: activePage==="FTP-SFTP"?"#fff":"#04306f",
-          fontSize:"20px"
-        }} />
+        <FontAwesomeIcon
+          icon={faFileImport}
+          style={{
+            color: activePage === "FTP-SFTP" ? "#fff" : "#04306f",
+            fontSize: "20px",
+          }}
+        />
       </span>
     ),
     label: `FTP-SFTP`,
@@ -176,11 +188,13 @@ const menuList =(activePage)=> [
     key: `Projects`,
     icon: (
       <span className="">
-        <FontAwesomeIcon icon={faFile}
-        style={{
-          color: activePage==="Projects"?"#fff":"#04306f",
-          fontSize:"20px"
-        }} />
+        <FontAwesomeIcon
+          icon={faFile}
+          style={{
+            color: activePage === "Projects" ? "#fff" : "#04306f",
+            fontSize: "20px",
+          }}
+        />
       </span>
     ),
     label: `Projects`,
@@ -189,11 +203,13 @@ const menuList =(activePage)=> [
     key: `Clients`,
     icon: (
       <span className="">
-        <FontAwesomeIcon icon={faFile}
-        style={{
-          color: activePage==="Clients"?"#fff":"#04306f",
-          fontSize:"20px"
-        }} />
+        <FontAwesomeIcon
+          icon={faUsers}
+          style={{
+            color: activePage === "Clients" ? "#fff" : "#04306f",
+            fontSize: "20px",
+          }}
+        />
       </span>
     ),
     label: `Clients`,
@@ -202,11 +218,13 @@ const menuList =(activePage)=> [
     key: `Add Users`,
     icon: (
       <span className="">
-        <FontAwesomeIcon  icon={faUser} 
-        style={{
-          color: activePage==="Add Users"?"#fff":"#04306f",
-          fontSize:"20px"
-        }} />
+        <FontAwesomeIcon
+          icon={faUser}
+          style={{
+            color: activePage === "Add Users" ? "#fff" : "#04306f",
+            fontSize: "20px",
+          }}
+        />
       </span>
     ),
     label: `Add Users`,
