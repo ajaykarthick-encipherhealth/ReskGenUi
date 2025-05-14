@@ -338,7 +338,7 @@ const TableHeadItem = ({
     );
   }
   if (item.statusButton || item.edit) {
-    return <th className="text-center">Action</th>;
+    return <th className="">Action</th>;
   }
   if (item.reportDownload) {
     return <th>Download</th>;
@@ -830,7 +830,7 @@ const TableRow = ({
                     if (visible) {
                       setEditingUser && setEditingUser(item);
                       setVisiblePopoverKey(item.id);
-                      setRole(selectedRole);
+                      setRole && setRole(selectedRole);
                     }
                   }}
                 >

@@ -435,7 +435,7 @@ const UserList = ({
     handleSubmit({ isEdit, ...values });
   };
 
-  console.log(data?.response?.staticDesign?.actualField, "visiblePopoverKey");
+  
   const opt = {
     organization: organizationList?.response?.map((item) => ({
       value: item?.id,
@@ -580,7 +580,7 @@ const UserList = ({
                     "edit"
                   )}
                   handleAction={handleAction}
-                  visiblePopoverKey={visiblePopoverKey}
+                  visiblePopoverKey={false}
                   setVisiblePopoverKey={setVisiblePopoverKey}
                 />
               </>
