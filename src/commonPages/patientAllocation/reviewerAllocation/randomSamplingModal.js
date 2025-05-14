@@ -39,6 +39,7 @@ const RandomSamplingModal = ({
   isAllocate,
   roleId,
   setIsAllocate,
+  getAllTabRoles,
 }) => {
   const router = useRouter();
   const tinNumber = getStorage("tinNumber");
@@ -108,6 +109,7 @@ const RandomSamplingModal = ({
     if (response?.status == "SUCCESS") {
       setIsAllocate(false);
       getResponePopup(response);
+      getAllTabRoles()
       getAllAllocation();
       setOpen(false);
       setIsModalOpen(false);
@@ -137,7 +139,7 @@ const RandomSamplingModal = ({
   const handleSelectAll = () => {
     if (selectedUserIds.length === userDetails.length) {
       setSelectedUserIds([]);
-       setActiveEmail([]); 
+      setActiveEmail([]);
     } else {
       const allIds = userDetails.map((user) => user.id);
       setSelectedUserIds(allIds);
@@ -146,9 +148,9 @@ const RandomSamplingModal = ({
   };
 
   useEffect(() => {
-    if (roleId){
+    if (roleId) {
       getUserList({ roleId: roleId });
-    } 
+    }
   }, [roleId]);
 
   return (
@@ -457,8 +459,7 @@ const RandomSamplingModal = ({
             rules={[
               {
                 required: true,
-                message:
-                  "Enter Percentage !",
+                message: "Enter Percentage !",
               },
               {
                 pattern: /^[0-9]+$/,
@@ -510,6 +511,7 @@ const RandomSamplingModal = ({
                 type="submit"
                 name="Save"
                 width={150}
+                disabled={isAllocate}
               />
             </div>
           </Form.Item>
@@ -527,6 +529,7 @@ const connector = connect(
     getL1UsersList: allActions.getL1UsersList,
     getAllocateUsers: allActions.getAllocateUsers,
     randomSampling: allAction.randomSamplingAction,
+    getAllTabRoles: allAction.getAllRoles,
   }
 );
 export default connector(RandomSamplingModal);

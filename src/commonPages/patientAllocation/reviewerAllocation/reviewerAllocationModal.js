@@ -159,7 +159,6 @@ const AllocateModal = ({
   useEffect(() => {
     setSelectedChart(selectedRowsId);
   }, [selectedRowsId]);
-  console.log(activeEmail, "email");
 
   return (
     <div>
@@ -576,7 +575,8 @@ const AllocateModal = ({
                 !selectedChart?.length ||
                 !allocateDate ||
                 !priority ||
-                selectedChart?.length + chart?.hold + chart?.pending > 100
+                selectedChart?.length + chart?.hold + chart?.pending > 100 ||
+                isAllocate
               }
               name="Allocate"
               onClick={setAllocate}

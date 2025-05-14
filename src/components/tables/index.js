@@ -338,7 +338,7 @@ const TableHeadItem = ({
     );
   }
   if (item.statusButton || item.edit) {
-    return <th>Action</th>;
+    return <th className="text-center">Action</th>;
   }
   if (item.reportDownload) {
     return <th>Download</th>;
