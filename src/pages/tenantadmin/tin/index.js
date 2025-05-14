@@ -574,7 +574,7 @@ const Tin = ({
       <Header />
       <div
         className="d-flex justify-content-end position-relative"
-        style={{ marginTop: "5%", width: "100%" }}
+        style={{ marginTop: "6%", width: "100%" }}
       >
         <div
           style={{
@@ -592,7 +592,6 @@ const Tin = ({
             padding={"50px"}
           />
         </div>
-        {activeTab !== "Providers" && (
           <div className="d-flex align-items-center justify-content-end gap-4">
             <div className={styles.font}>
               Total Tin : {tinCount?.totalTin ? tinCount?.totalTin : 0}
@@ -624,7 +623,7 @@ const Tin = ({
               </Popconfirm>
             </div>
           </div>
-        )}
+        {/* )} */}
       </div>
 
       <div className=" mt-3  container-fluid table-responsive active-projects task-table">

@@ -110,18 +110,20 @@ const CustomizableDrawer = ({
             name="Reset"
             onClick={handleReset}
             loading={isResetting}
+            disabled={isResetting}
           />
           <RegularButton
             name="Insert"
             onClick={onInsert}
             loading={isSubmitting}
+            disabled={isSubmitting}
           />
         </div>
       }
     >
       <div className="mt-3 mx-3 d-flex flex-column gap-3">
         {selectedColumns?.length > 0 ? (
-          selectedColumns?.map(col => {
+          selectedColumns?.map((col) => {
             const isActive = col.active;
             const displayNumber = displayIndexMap[col.actualField];
             return (
