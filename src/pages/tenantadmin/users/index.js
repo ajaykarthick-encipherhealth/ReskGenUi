@@ -192,6 +192,7 @@ const Users = ({
     const response = await editUserRoles(payload);
     if (response?.status === "SUCCESS") {
       getUsersAPi();
+      setVisiblePopoverKey(false);
       getRoles();
       setSelectedItem(null);
       setSelectedRole([]);
