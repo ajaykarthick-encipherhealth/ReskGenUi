@@ -751,15 +751,15 @@ const Header = ({
    }
  };
  
- useEffect(()=>{
-  const data = allRolesData?.userRoles?.map((data) => ({
-    label: data.aliasName,
-    key: data.proxyRole,
-    details: data,
-  }));
- setRoles(data);
- setStorage("userAllRoles", JSON?.stringify(data));
- },[allRolesData])
+//  useEffect(()=>{
+//   const data = allRolesData?.userRoles?.map((data) => ({
+//     label: data.aliasName,
+//     key: data.proxyRole,
+//     details: data,
+//   }));
+//  setRoles(data);
+//  setStorage("userAllRoles", JSON?.stringify(data));
+//  },[allRolesData])
  
   const getProjectDataList = async () => {
     const res = await getAllProjects();
