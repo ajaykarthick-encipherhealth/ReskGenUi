@@ -345,7 +345,7 @@ export const ProviderMenuList = (data) => {
         iconStyle: <ProjectOutlined />,
         activeIcon: <ProjectFilled />,
         to: "/tenantadmin/project",
-        childRoute: "/tenantadmin/project/patients/details",
+        childRoute: "/tenantadmin/project/details",
         childRoute2: "/tenantadmin/patientsync/batchfilesview",
         childRoute3: "/tenantadmin/patientsync/pdftable",
       });
