@@ -448,7 +448,7 @@ const PatientSync = ({
     reUpload: null,
   });
   const [searchText, setSearchText] = useState(null);
-  const [selectedOption, setSelectedOption] = useState({});
+  const [selectedOption, setSelectedOption] = useState([]);
   const [clear, setClear] = useState(false);
   const [sort, setSort] = useState(null);
   const [isFilter, setIsFilter] = useState(true);
@@ -611,6 +611,7 @@ const handleExcelDownload = () => {
     setSearchVal(null);
     setSelectedDates(null);
     setSelectedDateRanges([]);
+    setSelectedOption([])
   };
   const debouncedSearch = useCallback(
     debounce((text, setSearchVal, field) => {
@@ -813,6 +814,7 @@ const handleExcelDownload = () => {
       pageSize: 15,
       roleId,
       projectId: projectId,
+      selectedOption,
       searchText,
       selectedDateRanges,
       sort,
@@ -826,6 +828,7 @@ const handleExcelDownload = () => {
       pageSize: 15,
       roleId,
       projectId: projectId,
+      selectedOption,
       searchText,
       selectedDateRanges,
       sort,
@@ -839,6 +842,7 @@ const handleExcelDownload = () => {
       pageSize: 15,
       roleId,
       projectId: projectId,
+      selectedOption,
       searchText,
       selectedDateRanges,
       sort,
@@ -925,6 +929,7 @@ const handleExcelDownload = () => {
     pageNumber,
     pagination,
     pageLoad,
+    selectedOption,
     searchText,
     selectedDateRanges,
     sort,
