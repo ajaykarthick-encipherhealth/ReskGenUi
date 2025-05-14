@@ -210,19 +210,17 @@ const Users = ({
   const content = () => (
     <>
       <div className="d-flex justify-content-end mb-2">
-        {/* <CloseOutlined
-           onClick={handleCancel}
-           style={{ cursor: "pointer", fontSize: "16px" }}
-         /> */}
       </div>
       <Select
         options={roles}
         placeholder="Select the role"
-        style={{ width: "100%" }}
+        style={{ width: 250 }} 
+        dropdownStyle={{ width: 250 }} 
         value={selectedRole}
         mode="multiple"
         onChange={(value) => setSelectedRole(value)}
       />
+
       <div className="d-flex align-items-center justify-content-center mt-3 gap-2">
         <Button
           onClick={handleRoleSubmit}
