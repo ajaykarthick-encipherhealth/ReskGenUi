@@ -295,6 +295,7 @@ const Header = ({
     const accessMenuList = selectedRoleObj?.accessList
       ? selectedRoleObj?.accessList
       : selectedRoleObj?.details?.accessList;
+
     switch (role) {
       case "admin":
         return AdminMenuList;
@@ -710,8 +711,8 @@ const Header = ({
       setStorage("project", backupSelectedProject);
       return getResponePopup({
         status: "EXCEPTION",
-        message: "No Roles",
-        duration: 5,
+        message: "No Role for this project",
+        duration: 8,
       });
     } else {
       // getProjectDataList();
@@ -749,7 +750,7 @@ const Header = ({
     const res = await getAllRoles();
     if (res?.status === "SUCCESS") {
       const userName = res?.response?.userName;
-      setStorage(userName, "userName");
+      setStorage("userName", userName);
       setUserEmail(userName);
       const data = res?.response?.userRoles?.map((data) => ({
         label: data.aliasName,
@@ -848,6 +849,15 @@ const Header = ({
     // }, 2000);
   }, [projectListCheck]);
 
+  useEffect(() => {
+    if (projectDetails) {
+      const projectOptions = projectDetails?.map((client) => ({
+        label: client.projectName,
+        value: client.id,
+      }));
+      setProjectList(projectOptions);
+    }
+  }, [projectDetails]);
   return (
     <div className={`header ${headerFix ? "is-fixed" : ""}`}>
       <div className="header-content">

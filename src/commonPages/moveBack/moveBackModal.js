@@ -95,11 +95,11 @@ const MoveBackModal = ({
             ></Select>
           </div>
           <div className="mt-4 ">
-              <div className="d-flex gap-2 fontWeight2">
-                Revert
-                <Switch checked={isSwitchOn} onChange={onChange} />
-              </div>
+            <div className="d-flex gap-2 fontWeight2">
+              Revert
+              <Switch checked={isSwitchOn} onChange={onChange} />
             </div>
+          </div>
           <div>
             {revertDescription && (
               <div className="font1 text-muted mt-2">{revertDescription}</div>
@@ -108,7 +108,7 @@ const MoveBackModal = ({
 
           <div className=" h-100 d-flex align-items-center justify-content-center">
             <RegularButton
-              disabled={!selectLevel}
+              disabled={!selectLevel || moveBackLoader}
               type="submit"
               onClick={handleSubmit}
               name={"Done"}

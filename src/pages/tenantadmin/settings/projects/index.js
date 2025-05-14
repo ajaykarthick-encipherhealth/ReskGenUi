@@ -10,6 +10,7 @@ import {
   getResponePopup,
 } from "../../../../utils/reusable";
 import { actions as tableAction } from "../../../../stores/tableView";
+import {actions as authActions } from '../../../../stores/authFlows'
 
 const Projects = ({
   createProject,
@@ -19,6 +20,8 @@ const Projects = ({
   tableDynamicColumn,
   tableDynamicColumnReset,
   pageLoad,
+  getAllProjects,
+
 }) => {
   const [form] = Form.useForm();
   const commonFilterItems = [
@@ -98,6 +101,7 @@ const Projects = ({
       if (res?.status === "SUCCESS") {
         form.resetFields();
         getProjects();
+        getAllProjects()
         onDrawerClose();
         getResponePopup(res);
       } else {
@@ -335,6 +339,7 @@ const enhancer = connect(
     tableDynamicColumn: tableAction.tableDynamicColumn,
     tableDynamicColumnReset: tableAction.tableDynamicColumnReset,
     getTableData: tableAction.tableViewAction,
+        getAllProjects: authActions.projectDetails,
   }
 );
 export default enhancer(Projects);
