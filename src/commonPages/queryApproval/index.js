@@ -233,6 +233,7 @@ const QueryApproval = ({
     try {
       const response = await tableDynamicColumnReset({ payload });
       if (response?.status === "SUCCESS") {
+        setIsFilter(true);
         getQueryApproval();
         onClose();
         getResponePopup(response);

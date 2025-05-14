@@ -204,6 +204,7 @@ const MoveBack = ({
     try {
       const response = await tableDynamicColumnReset({ payload });
       if (response?.status === "SUCCESS") {
+        setIsFilter(true);
         getMoveBack();
         onClose();
         getResponePopup(response);

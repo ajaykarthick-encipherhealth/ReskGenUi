@@ -892,6 +892,7 @@ const handleExcelDownload = () => {
     try {
       const response = await tableDynamicColumnReset({ payload });
       if (response?.status === "SUCCESS") {
+        setIsFilter(true);
         if (reportActiveTab === "Provider Roaster") {
           getAllProviderApi();
         } else if (reportActiveTab === "Practice Roaster") {

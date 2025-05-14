@@ -209,6 +209,7 @@ const PatientAllocation = ({
     try {
       const response = await tableDynamicColumnReset({ payload });
       if (response?.status === "SUCCESS") {
+        setIsFilter(true);
         getAllAllocation();
         onClose();
         getResponePopup(response);

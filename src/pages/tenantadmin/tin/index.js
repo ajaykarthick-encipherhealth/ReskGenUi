@@ -331,6 +331,7 @@ const Tin = ({
     try {
       const response = await tableDynamicColumnReset({ payload });
       if (response?.status === "SUCCESS") {
+        setIsFilter(true);
         getAllTins();
         onClose();
         getResponePopup(response);

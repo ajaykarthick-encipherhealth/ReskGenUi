@@ -217,6 +217,7 @@ const CodersTable = ({
     try {
       const response = await tableDynamicColumnReset({ payload });
       if (response?.status === "SUCCESS") {
+        setIsFilter(true);
         getCodersApi();
         onClose();
         getResponePopup(response);
