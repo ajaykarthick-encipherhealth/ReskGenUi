@@ -151,7 +151,10 @@ const AllocateModal = ({
   };
 
   useEffect(() => {
-    getUserList({ roleId: roleId });
+    if(roleId){
+      getUserList({ roleId: roleId });
+
+    }
   }, [roleId]);
   useEffect(() => {
     setSelectedChart(selectedRowsId);
