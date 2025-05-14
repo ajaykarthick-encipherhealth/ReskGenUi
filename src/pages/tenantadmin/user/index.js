@@ -772,7 +772,7 @@ const UserList = ({
               </Row>
               <Row gutter={16}>
                 <Col span={12}>
-                  <Form.Item
+                  {/* <Form.Item
                     label={
                       <span>
                         Email <span style={{ color: "red" }}>*</span>
@@ -795,30 +795,21 @@ const UserList = ({
                       placeholder="Enter email"
                       autoComplete="off"
                     />
-                  </Form.Item>
-                </Col>
-                <Col span={12}>
+                  </Form.Item> */}
                   <Form.Item
                     label={
                       <span>
-                        User Name <span style={{ color: "red" }}>*</span>
+                        Email <span style={{ color: "red" }}>*</span>
                       </span>
                     }
                     name="userName"
                     rules={[
+                      { required: true, message: "Please enter your email!" },
                       {
+                        pattern:
+                          "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+.[a-zA-Z]{2,}(?:.[a-zA-Z]{2,})?$",
                         required: true,
-                        message: "Please enter your username!",
-                      },
-                      {
-                        validator: (_, value) => {
-                          // if (value && value.includes("@")) {
-                          //   return Promise.reject(
-                          //     "Username should not contain @ symbol"
-                          //   );
-                          // }
-                          return Promise.resolve();
-                        },
+                        message: "Enter the Valid Email ",
                       },
                     ]}
                   >
@@ -831,8 +822,35 @@ const UserList = ({
                     />
                   </Form.Item>
                 </Col>
+                {/* <Col span={12}>
+                  <Form.Item
+                    label={
+                      <span>
+                        Email <span style={{ color: "red" }}>*</span>
+                      </span>
+                    }
+                    name="userName"
+                    rules={[
+                      { required: true, message: "Please enter your email!" },
+                      {
+                        pattern:
+                          "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+.[a-zA-Z]{2,}(?:.[a-zA-Z]{2,})?$",
+                        required: true,
+                        message: "Enter the Valid Email ",
+                      },
+                    ]}
+                  >
+                    <Input
+                      data-testid="userName"
+                      name="userName"
+                      placeholder="Enter user name"
+                      autoComplete="off"
+                      disabled={isEdit}
+                    />
+                  </Form.Item>
+                </Col> */}
               </Row>
-              {!isEdit && (
+              {/* {!isEdit && (
                 <>
                   <input type="password" style={{ display: "none" }} />
                   <Row gutter={16}>
@@ -948,7 +966,7 @@ const UserList = ({
                     </Col>
                   </Row>
                 </>
-              )}
+              )} */}
 
               <div
                 id="fake-user"

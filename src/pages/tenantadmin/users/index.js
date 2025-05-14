@@ -116,7 +116,7 @@ const Users = ({
   ]);
   useEffect(() => {
     if (editingUser) {
-      setSelectedRole(editingUser.roleNames); // editingUser.roles = ['admin', 'user']
+      setSelectedRole(editingUser.roleNames); 
     }
   }, [editingUser]);
 
@@ -200,11 +200,10 @@ const Users = ({
   };
   const roles = allRoles?.content?.map((item) => ({
     value: item?.roleName,
-    label: `${item?.roleName}`,
+    label: item?.roleName?.split("_")?.join(" "),
   }));
   const handleCancel = () => {
     setVisiblePopoverKey(false);
-    setSelectedRole([]); // Clear selected roles
   };
 
   const content = () => (
@@ -230,7 +229,10 @@ const Users = ({
         >
           Submit
         </Button>
-        <Button onClick={handleCancel} className="btn btn-sm w-full" danger>
+        <Button
+          onClick={handleCancel}
+          className="btn tableButton btn-sm w-full"
+        >
           Cancel
         </Button>
       </div>
