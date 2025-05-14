@@ -246,6 +246,16 @@ const Header = ({
         ? accessMenuList?.aliasName
         : accessMenuList?.details.aliasName
     );
+
+    setStorage(
+      "accessMenuList",
+      JSON.stringify(
+        accessMenuList?.accessList
+          ? accessMenuList.accessList
+          : accessMenuList?.details?.accessList
+      )
+    );
+
     if (key === "Admin") {
       router.push("/admin/dashboard");
     } else if (key === "CODER_1" || key === "CODER_2" || key === "QA") {
@@ -837,7 +847,7 @@ const Header = ({
     }
     // }, 2000);
   }, [projectListCheck]);
-  console.log(roles, "roles");
+
   return (
     <div className={`header ${headerFix ? "is-fixed" : ""}`}>
       <div className="header-content">
