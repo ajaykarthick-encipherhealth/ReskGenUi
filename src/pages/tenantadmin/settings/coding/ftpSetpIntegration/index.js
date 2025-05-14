@@ -42,10 +42,10 @@ const FtpSetpIntegration = ({ getFhirInstructionDetails, getFhirList }) => {
     handleModalClose();
   };
 
-  useEffect(() => {
-    getFhirList();
-    getFhirInstructionDetails();
-  }, []);
+  // useEffect(() => {
+  //   getFhirList();
+  //   getFhirInstructionDetails();
+  // }, []);
 
   return (
     <div>

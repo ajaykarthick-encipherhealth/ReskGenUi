@@ -129,10 +129,10 @@ const EmrFhir = ({
     setIsSelectEMR(value);
   };
 
-  useEffect(() => {
-    getFhirList();
-    getFhirInstructionDetails();
-  }, []);
+  // useEffect(() => {
+  //   getFhirList();
+  //   getFhirInstructionDetails();
+  // }, []);
 
   useEffect(() => {
     setConnectBtn("NEXT");

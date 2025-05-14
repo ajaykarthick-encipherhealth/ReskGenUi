@@ -374,16 +374,11 @@ const Patient = ({
       controller.abort();
       setStorage("patientId", data?.patientId);
       var role = getStorage("userRole");
-      if (role == "tenant_admin") {
-        setStorage("patientId", data.patientId);
-        setStorage("routeBackTo", "/tenantadmin/tracking");
-        getRoutedData(page);
-        navigate.push("/tenantadmin/tracking/details");
-      } else {
-        navigate.push({
-          pathname: "/admin/patients/details",
-        });
-      }
+
+      setStorage("patientId", data.patientId);
+      setStorage("routeBackTo", "/tenantadmin/tracking");
+      getRoutedData(page);
+      navigate.push("/tenantadmin/tracking/details");
     } else {
       notification.warning({
         message: data.patientId + " file not processed. Please wait.",
@@ -443,8 +438,6 @@ const Patient = ({
     paramsFilter,
     pageLoad,
   ]);
-
-
 
   const opt = {
     Reviewer: generateOptionsForNewStore(
