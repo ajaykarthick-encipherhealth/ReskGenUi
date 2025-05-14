@@ -66,6 +66,7 @@ const Users = ({
   const [editingUser, setEditingUser] = useState([]);
   const [isFilter, setIsFilter] = useState(true);
   const [clear, setClear] = useState(false);
+  const [role, setRole] = useState([]);
 
   const onPageChange = (e) => {
     setPaginationFirst(e.first);
@@ -195,8 +196,8 @@ const Users = ({
       getUsersAPi();
       setVisiblePopoverKey(false);
       getRoles();
-      setSelectedItem(null);
-      setSelectedRole([]);
+      // setSelectedItem(null);
+      // setSelectedRole([]);
       getResponePopup(response);
     }
   };
@@ -204,19 +205,19 @@ const Users = ({
     value: item?.roleName,
     label: item?.roleName?.split("_")?.join(" "),
   }));
-  const handleCancel = () => {
+  const handleCancel = (test) => {
+    setSelectedRole(role);
     setVisiblePopoverKey(false);
   };
 
   const content = () => (
     <>
-      <div className="d-flex justify-content-end mb-2">
-      </div>
+      <div className="d-flex justify-content-end mb-2"></div>
       <Select
         options={roles}
         placeholder="Select the role"
-        style={{ width: 250 }} 
-        dropdownStyle={{ width: 250 }} 
+        style={{ width: 250 }}
+        dropdownStyle={{ width: 250 }}
         value={selectedRole}
         mode="multiple"
         onChange={(value) => setSelectedRole(value)}
@@ -233,7 +234,7 @@ const Users = ({
           onClick={handleCancel}
           className="btn tableButton btn-sm w-full"
         >
-          Cancel
+          Cancel{" "}
         </Button>
       </div>
     </>
@@ -345,6 +346,8 @@ const Users = ({
               visiblePopoverKey={visiblePopoverKey}
               setVisiblePopoverKey={setVisiblePopoverKey}
               setEditingUser={setEditingUser}
+              setRole={setRole}
+              selectedRole={selectedRole}
             />
           </div>
           <div>

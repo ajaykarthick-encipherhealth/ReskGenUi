@@ -118,6 +118,8 @@ const AppTable = ({
   setEditingUser,
   isGenerateReport,
   isGenerateReportDownload,
+  setRole,
+  selectedRole,
 }) => {
   if (isCheckBox) {
     column.push({
@@ -258,6 +260,8 @@ const AppTable = ({
                       visiblePopoverKey={visiblePopoverKey}
                       setVisiblePopoverKey={setVisiblePopoverKey}
                       setEditingUser={setEditingUser}
+                      setRole={setRole}
+                      selectedRole={selectedRole}
                     />
                   ))
                 ) : (
@@ -483,6 +487,8 @@ const TableRow = ({
   visiblePopoverKey,
   setVisiblePopoverKey,
   setEditingUser,
+  setRole,
+  selectedRole,
 }) => {
   const router = useRouter();
 
@@ -822,10 +828,9 @@ const TableRow = ({
                   open={visiblePopoverKey === item.id}
                   onOpenChange={(visible) => {
                     if (visible) {
-                   setEditingUser && setEditingUser(item) ;
+                      setEditingUser && setEditingUser(item);
                       setVisiblePopoverKey(item.id);
-                    } else {
-                      setVisiblePopoverKey(null);
+                      setRole(selectedRole);
                     }
                   }}
                 >
@@ -1083,7 +1088,11 @@ const TableRow = ({
                       title="Reason"
                       content={
                         <div
-                          style={{ maxWidth: 200, maxHeight: 100, overflow: "auto" }}
+                          style={{
+                            maxWidth: 200,
+                            maxHeight: 100,
+                            overflow: "auto",
+                          }}
                         >
                           {item?.failedReason ? item.failedReason : "---"}
                         </div>
