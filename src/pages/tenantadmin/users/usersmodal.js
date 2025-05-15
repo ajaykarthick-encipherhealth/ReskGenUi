@@ -117,17 +117,17 @@ const UsersModal = ({
   };
 
   const handleRoleSelect = (id) => {
-    if (roleIds.includes(id)) {
+    if (roleIds?.includes(id)) {
       setRoleIds(roleIds.filter((userId) => userId !== id));
     } else {
       setRoleIds([...roleIds, id]);
     }
   };
   const handleRoleSelectAll = () => {
-    if (roleIds?.length === allRoles?.userRoles?.length) {
+    if (roleIds?.length === allRoles?.content?.length) {
       setRoleIds([]);
     } else {
-      const allIds = allRoles?.userRoles?.map((user) => user.roleId);
+      const allIds = allRoles?.content?.map((user) => user.roleId);
       setRoleIds(allIds);
     }
   };
@@ -310,13 +310,13 @@ const UsersModal = ({
             <div className="fontWeight3 font3">Select All</div>
             <input
               className={`mx-4 ${styles.bodyCheckbox}  ${styles.checkbox}${
-                roleIds.length === allRoles?.userRoles?.length
+                roleIds?.length === allRoles?.userRoles?.length
                   ? styles.customChecked2
                   : ""
               } `}
               type="checkbox"
               id="selectAll"
-              checked={roleIds?.length === allRoles?.userRoles?.length}
+              checked={roleIds?.length === allRoles?.content?.length}
               onChange={handleRoleSelectAll}
             />
           </div>
