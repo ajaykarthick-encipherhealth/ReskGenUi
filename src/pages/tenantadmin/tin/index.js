@@ -213,6 +213,7 @@ const Tin = ({
 
   const handleTabs = (name) => {
     setSort("");
+    setIsFilter(true)
     setSelectedOption({});
     getProjectActiveTab({ tinTabName: name });
     setPageNo(0);
@@ -559,15 +560,6 @@ const Tin = ({
     }
   }, [data?.response?.metaDataDTO]);
 
-  // useEffect(() => {
-  //   if (data?.response?.pageResponse?.content) {
-  //     const initialSwitchStates = {};
-  //     data?.response?.pageResponse?.content.forEach((user) => {
-  //       initialSwitchStates[user.providerNpi] = user.active;
-  //     });
-  //     setSwitchStates(initialSwitchStates);
-  //   }
-  // }, [data?.response?.pageResponse?.content]);
 
   return (
     <div className={`show`}>
