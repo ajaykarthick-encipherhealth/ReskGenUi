@@ -8,7 +8,6 @@ import { getStorage, removeStorage, setStorage } from "../../utils/storages";
 import { connect } from "react-redux";
 import { actions as allActions } from "../../stores/authFlows";
 import { getLogoImage } from "./reusableFun";
-import { priorityOptions } from "../../components/headerFilters/functions";
 import { getResponePopup } from "../../utils/reusable";
 
 const SelectRole = ({
@@ -108,12 +107,15 @@ const SelectRole = ({
     let dynamicRoute = "";
     if (firstAccess?.title) {
       const title = firstAccess.title.toLowerCase().replace(/\s+/g, "");
-      dynamicRoute = `/tenantadmin/${title}`; 
+      if (selectedRoleObj?.role === "REVIEWER" || selectedRoleObj?.role === "QA") {
+        dynamicRoute = `/reviewer/${title}`;
+      } 
+      else {
+        dynamicRoute = `/tenantadmin/${title}`;
+      }
     }
-
     setStorage("userRole", selectedRoleObj?.proxyRole);
     setLoading(true);
-
     router?.push(dynamicRoute);
   };
 

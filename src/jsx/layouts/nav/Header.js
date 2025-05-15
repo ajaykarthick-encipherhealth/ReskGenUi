@@ -315,8 +315,17 @@ const Header = ({
     const firstAccess = accessMenuList[0];
     const dynamicPath =
       firstAccess?.title?.toLowerCase().replace(/\s+/g, "") || "dashboard";
-    const dynamicRoute = `/tenantadmin/${dynamicPath}`;
-
+    // const dynamicRoute = `/tenantadmin/${dynamicPath}`;
+    let dynamicRoute = "";
+    if (
+      selectedRoleObj?.details?.role === "REVIEWER" ||
+      selectedRoleObj?.details?.role === "QA"
+    ) {
+      dynamicRoute = `/reviewer/${dynamicPath}`;
+    }
+    else {
+      dynamicRoute = `/tenantadmin/${dynamicPath}`;
+    }
     if (router.pathname !== dynamicRoute) {
       router.push(dynamicRoute);
     } else {
