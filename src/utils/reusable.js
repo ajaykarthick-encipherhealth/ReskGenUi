@@ -37,7 +37,7 @@ export const getResponePopup = (res) => {
     case "USER_DEFINED_ERROR":
       return notification.warning({
         description: res?.data?.message ? res?.data?.message : res?.message,
-        duration: 1,
+        duration: 3,
       });
     case "SUCCESS":
       return notification.success({
@@ -52,7 +52,7 @@ export const getResponePopup = (res) => {
     case "EXCEPTION":
       return notification.error({
         description: res?.data?.message ? res?.data?.message : res?.message,
-        duration: 1,
+        duration: 3,
       });
     case "CUSTOM_EXCEPTION":
       return notification.error({

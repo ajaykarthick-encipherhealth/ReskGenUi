@@ -8,6 +8,7 @@ import {
   InfoCircleFilled,
   InfoCircleOutlined,
   LoadingOutlined,
+  CloseCircleOutlined,
 } from "@ant-design/icons";
 import {
   Badge,
@@ -120,6 +121,7 @@ const AppTable = ({
   isGenerateReportDownload,
   setRole,
   selectedRole,
+  onCloseIconClick,
 }) => {
   if (isCheckBox) {
     column.push({
@@ -262,6 +264,7 @@ const AppTable = ({
                       setEditingUser={setEditingUser}
                       setRole={setRole}
                       selectedRole={selectedRole}
+                      onCloseIconClick={onCloseIconClick}
                     />
                   ))
                 ) : (
@@ -489,6 +492,7 @@ const TableRow = ({
   setEditingUser,
   setRole,
   selectedRole,
+  onCloseIconClick,
 }) => {
   const router = useRouter();
 
@@ -822,7 +826,15 @@ const TableRow = ({
               >
                 <Popover
                   content={content}
-                  title="Change Role"
+                  title={
+                    <div className="d-flex justify-content-between align-items-center">
+                      <span>Change Role</span>
+                      <CloseCircleOutlined
+                        className="cr-pointer"
+                        onClick={onCloseIconClick}
+                      />
+                    </div>
+                  }
                   placement="bottom"
                   trigger="click"
                   open={visiblePopoverKey === item.id}

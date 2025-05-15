@@ -196,8 +196,6 @@ const Users = ({
       getUsersAPi();
       setVisiblePopoverKey(false);
       getRoles();
-      // setSelectedItem(null);
-      // setSelectedRole([]);
       getResponePopup(response);
     }
   };
@@ -205,14 +203,17 @@ const Users = ({
     value: item?.roleName,
     label: item?.roleName?.split("_")?.join(" "),
   }));
-  const handleCancel = (test) => {
+  const handleCancel = () => {
     setSelectedRole(role);
     setVisiblePopoverKey(false);
   };
+  const onCloseIconClick = () =>{
+    setSelectedRole(role);
+    setVisiblePopoverKey(false);
+  }
 
   const content = () => (
     <>
-      <div className="d-flex justify-content-end mb-2"></div>
       <Select
         options={roles}
         placeholder="Select the role"
@@ -343,6 +344,7 @@ const Users = ({
               setEditingUser={setEditingUser}
               setRole={setRole}
               selectedRole={selectedRole}
+              onCloseIconClick={onCloseIconClick}
             />
           </div>
           <div>
