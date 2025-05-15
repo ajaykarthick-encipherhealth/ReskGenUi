@@ -995,6 +995,7 @@ console.log(isClient, "isClient");
         setIsOpen={handleQueryCancel}
         getStatus={getPatientIdData}
         localPatientId={localPatientId}
+        isQueried={isQueried}
       />
 
       {confirmCompleteModal ? (

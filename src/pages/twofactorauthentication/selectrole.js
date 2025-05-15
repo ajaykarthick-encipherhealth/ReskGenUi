@@ -43,9 +43,7 @@ const SelectRole = ({
       setStorage("userAllRoles", JSON.stringify(allRolesData?.userRoles));
       setStorage("accessMenuList", JSON.stringify(selectedRoleObj?.accessList));
       setStorage("roleId", selectedRoleObj?.roleId);
-      setStorage("headeraliasName", selectedRoleObj?.aliasName);
-
-
+      setStorage("aliasName", selectedRoleObj?.aliasName);
       loginSuccessCallBack();
     } else {
       console.error("Selected role not found in userRoles array");

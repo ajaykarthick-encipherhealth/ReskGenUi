@@ -17,6 +17,7 @@ const QueryModal = ({
   setIsOpen,
   getStatus,
   localPatientId,
+  isQueried
 }) => {
   const [form] = Form.useForm();
 
@@ -41,8 +42,8 @@ const QueryModal = ({
     }
   };
   const selectOptions = roles?.data?.response?.map((role) => ({
-    label: role.aliasName,
-    value: role.aliasName,
+    label: role?.aliasName?.split("_")?.join(" "),
+    value: role?.aliasName,
   }));
   return (
     <Modal
@@ -78,7 +79,13 @@ const QueryModal = ({
 
         <Form.Item>
           <div className="d-flex align-items-center justify-content-center">
-            <RegularButton type="submit" name="Submit" width={100} />
+            <RegularButton
+              disabled={isQueried}
+              type="submit"
+              name="Submit"
+              width={100}
+              loading={isQueried}
+            />
           </div>
         </Form.Item>
       </Form>
