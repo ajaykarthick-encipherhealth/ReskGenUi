@@ -11,6 +11,7 @@ import { connect } from "react-redux";
 import { getStatusIcon } from "../../../reuseableFunctions";
 import YearAndDosStatus from "../components/yearAndDosStatus";
 import { getStorage } from "../../../../utils/storages";
+import DosSelect from "../components/dosSelect";
 
 const { Option } = Select;
 
@@ -24,18 +25,38 @@ const NonHcc = ({
   selectDosValue,
   setSelectDosValue,
   patientDetailsLoad,
+  search,
+  setSearch,
+  setFlagContainerActive,
+  selectedDate,
+  setSelectedDate,
+  storeFileDetails,
+  getSelectedDosPageNumber,
 }) => {
   // const [selectDosValue, setSelectDosValue] = useState("");
   const [dosSummariesList, setDosSummariesList] = useState([]);
+  const [pageNumberOptions, setPageNumberOptions] = useState([]);
+
   const selectTab = async (number) => {};
-  const handleOptions = (value) => {
+  const handleOptions = async (value) => {
     setIsLoading(true);
-    patientDetailsLoad(true)
     setSelectDosValue(value);
-    // const filteredDos = pageNumberOptions?.filter(
-    //   (data) => data?.dos === value
-    // );
-    // getSelectedDosPageNumber(filteredDos?.length>0?filteredDos[0]?.startPageNumber:null);
+    patientDetailsLoad(true);
+    const filteredDos = pageNumberOptions?.filter(
+      (data) => data?.dos === value
+    );
+    const filteredDos1 = dosSummariesList?.find(
+      (data) => data?.value === value
+    );
+    storeFileDetails(filteredDos1?.details?.fileId || null);
+    if (filteredDos1?.details?.stateIndicators?.includes("LAB")) {
+    } else if (filteredDos1?.details?.stateIndicators?.includes("RADIOLOGY")) {
+    } else {
+      getSelectedDosPageNumber(
+        filteredDos?.length > 0 ? filteredDos[0]?.startPageNumber : null
+      );
+    }
+
     if (value) {
       getSelectedDos(value);
     } else {
@@ -45,7 +66,7 @@ const NonHcc = ({
     const role = getStorage("userRole");
 
     if (value) {
-      getpatientDetailsData(
+      await getpatientDetailsData(
         patientId,
         null,
         moment(value).format("YYYY-MM-DD"),
@@ -54,9 +75,9 @@ const NonHcc = ({
       );
       setTimeout(() => {
         patientDetailsLoad(false);
-      }, 800);
+      }, 500);
     } else {
-      getpatientDetailsData(
+      await getpatientDetailsData(
         patientId,
         patientDetailsResult?.data?.response?.processedYear,
         null,
@@ -65,7 +86,7 @@ const NonHcc = ({
       );
       setTimeout(() => {
         patientDetailsLoad(false);
-      }, 800);
+      }, 500);
     }
   };
 
@@ -131,7 +152,15 @@ const NonHcc = ({
                   </Nav.Link>
                 </Nav.Item>
                 <Nav.Item as="li" className="nav-item">
-                  <Select
+                  <DosSelect
+                    options={patientDosResult?.data?.response}
+                    handleOptions={handleOptions}
+                    setSearch={setSearch}
+                    setFlagContainerActive={setFlagContainerActive}
+                    selectedDate={selectedDate}
+                    setSelectedDate={setSelectedDate}
+                  />
+                  {/* <Select
                     placeholder="Select DOS"
                     onChange={handleOptions}
                     className="dosSelect"
@@ -143,7 +172,7 @@ const NonHcc = ({
                         {data.label}
                       </Option>
                     ))}
-                  </Select>
+                  </Select> */}
                 </Nav.Item>
                 <Nav.Item as="li" className="nav-item mx-2">
                   {getStorage("userRole") != "admin" && selectDosValue && (
@@ -159,7 +188,13 @@ const NonHcc = ({
                   <VisitData />
                 </Tab.Pane>
                 <Tab.Pane id="my-posts" eventKey="file">
-                  <File />
+                  <File
+                    pageNumberOptions={pageNumberOptions}
+                    setPageNumberOptions={setPageNumberOptions}
+                    search={search}
+                    setSearch={setSearch}
+                    selectDosValue={selectDosValue}
+                  />
                 </Tab.Pane>
               </Tab.Content>
             </Tab.Container>
@@ -180,6 +215,8 @@ const enhancer = connect(
     getpatientDetailsData: detailsActions.patientDetailsAction,
     getSelectedDos: detailsActions.getSelectedDos,
     patientDetailsLoad: detailsActions.patientDetailsLoad,
+    storeFileDetails: detailsActions.storeFileIdAction,
+    getSelectedDosPageNumber: detailsActions.getSelectedDosPageNumber,
   }
 );
 

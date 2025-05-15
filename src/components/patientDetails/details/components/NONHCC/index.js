@@ -228,6 +228,7 @@ const NonHccCards = ({
                         setSelectMeatResult: "",
                         getSelectedDosPageNumber: getSelectedDosPageNumber,
                         storeFileDetails: storeFileDetails,
+                        isShow: data?.isShow,
                       })}
                     </div>
                     <div
@@ -249,6 +250,7 @@ const NonHccCards = ({
                         patientDocumentResult: patientDocumentResult,
                         storeFileDetails: storeFileDetails,
                         getSelectedDosPageNumber: getSelectedDosPageNumber,
+                        isShow: data?.isShow,
                       })}
                     </div>
                     <div
@@ -283,6 +285,7 @@ const NonHccCards = ({
                         popup: "",
                         getSelectedDosPageNumber: getSelectedDosPageNumber,
                         storeFileDetails: storeFileDetails,
+                        isShow: data?.isShow,
                       })}
                     </div>
                   </div>

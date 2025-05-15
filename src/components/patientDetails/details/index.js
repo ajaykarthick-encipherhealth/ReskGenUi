@@ -957,6 +957,10 @@ const Details = ({
                             setIsLoading={setIsLoading}
                             selectDosValue={selectDosValue}
                             setSelectDosValue={setSelectDosValue}
+                            setSearch={setSearch}
+                            setFlagContainerActive={setFlagContainerActive}
+                            selectedDate={selectedDate}
+                            setSelectedDate={setSelectedDate}
                           />
                         ) : activeTab == 3 ? (
                           <Radiology

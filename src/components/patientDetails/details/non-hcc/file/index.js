@@ -31,6 +31,7 @@ const File = ({
   setActiveComboTree,
   patientDetailsResult,
   hccFileDetails,
+  setPageNumberOptions,
 }) => {
   const [isFileFormShow, setIsFileFormShow] = useState(false);
   const [confirmNotesModalValid, setConfirmNotesModalValid] = useState(false);
@@ -100,7 +101,7 @@ const File = ({
     data.processedYear = patientDetailsResult?.data?.response?.processedYear;
     data.dateOfService = patientDetailsResult?.data?.response?.dateOfService;
     (data.fileId = patientDetailsResult?.data?.response?.fileId),
-    setSelectDisDetails(data);
+      setSelectDisDetails(data);
     setSelectDiseasesName(title);
     // setSelectDisDetails(data);
   };
@@ -147,6 +148,16 @@ const File = ({
       setHccVersionDetails(value);
     }
   };
+
+  const getFileDosPageNumber = async () => {
+    setPageNumberOptions(
+      patientDetailsResult?.data?.response?.fileDetailDTO?.dosSummaries
+    );
+  };
+
+  useEffect(() => {
+    getFileDosPageNumber();
+  }, [patientDetailsResult]);
 
   return (
     <>
