@@ -43,7 +43,7 @@ const SelectRole = ({
       setStorage("userAllRoles", JSON.stringify(allRolesData?.userRoles));
       setStorage("accessMenuList", JSON.stringify(selectedRoleObj?.accessList));
       setStorage("roleId", selectedRoleObj?.roleId);
-      setStorage("aliasName", selectedRoleObj?.aliasName);
+      setStorage("headeraliasName", selectedRoleObj?.aliasName);
 
 
       loginSuccessCallBack();
