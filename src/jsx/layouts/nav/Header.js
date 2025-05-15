@@ -998,6 +998,12 @@ const Header = ({
                         value={selectedTin}
                         onChange={(e, value) => handleTinChange(value)}
                         options={TinOptions}
+                        filterOption={(input, option) =>
+                          (option?.label ?? "")
+                            .toLowerCase()
+                            .includes(input.toLowerCase())
+                        }
+                        showSearch={true}
                       />
                     </div>
                   ) : null}
