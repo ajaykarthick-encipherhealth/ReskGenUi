@@ -77,9 +77,10 @@ const AllocateModal = ({
     setPriority(value);
   };
 
-  const getUserList = async ({ roleId }) => {
+  const getUserList = async ({ roleId, search }) => {
     const response = await getL1UsersList({
       roleId: roleId || "",
+      search: search || "",
     });
     if (response?.status === "SUCCESS") {
       let result = response?.response;
@@ -151,14 +152,17 @@ const AllocateModal = ({
   };
 
   useEffect(() => {
-    if(roleId){
+    if (roleId) {
       getUserList({ roleId: roleId });
-
     }
   }, [roleId]);
   useEffect(() => {
     setSelectedChart(selectedRowsId);
   }, [selectedRowsId]);
+
+  useEffect(() => {
+    getUserList({ roleId: roleId, search: search });
+  }, [search]);
 
   return (
     <div>

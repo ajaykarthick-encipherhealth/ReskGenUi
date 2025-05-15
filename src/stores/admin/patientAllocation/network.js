@@ -203,14 +203,14 @@ export const supervisorCheckedList = async ({
 //   const res = await requestPortal(`${url}`, options);
 //   return res;
 // };
-export async function usersList({ roleId }) {
+export async function usersList({ roleId,search="" }) {
   const orgId = getStorage("orgId");
   const options = {
     method: "GET",
   };
 
   const res = await requestPortal(
-    `dbservice/user/get/role?roleId=${roleId}`,
+    `dbservice/user/get/role?roleId=${roleId}&searchString=${search}`,
     options
   );
   return res;
