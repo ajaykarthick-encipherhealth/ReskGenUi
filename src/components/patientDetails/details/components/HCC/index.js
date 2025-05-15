@@ -1237,7 +1237,7 @@ const HccCards = ({
                                 </div>
                               </div>
                             )}
-                            {!data.isLab && !data.isRadiology && (
+                            {/* {!data.isLab && !data.isRadiology && (
                               <div className={`${styles.meatContainer}`}>
                                 <div
                                   className="cr-pointer "
@@ -1312,7 +1312,7 @@ const HccCards = ({
                                   )}
                                 </div>
                               </div>
-                            )}
+                            )} */}
                           </Popover>
                         </div>
                       );
