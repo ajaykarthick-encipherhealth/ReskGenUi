@@ -125,6 +125,7 @@ const Header = ({
   const [selectedClient, setSelectedClient] = useState(null);
   const [backupSelectedClient, setBackupSelectedClient] = useState(null);
   const [backupSelectedProject, setBackupSelectedProject] = useState(null);
+  const [backupSelectedTin, setBackupSelectedTin] = useState(null);
   const [selectedProject, setSelectedProject] = useState(null);
   const [selectedTin, setSelectedTin] = useState(null);
   const [roles, setRoles] = useState([]);
@@ -322,8 +323,7 @@ const Header = ({
       selectedRoleObj?.details?.role === "QA"
     ) {
       dynamicRoute = `/reviewer/${dynamicPath}`;
-    }
-    else {
+    } else {
       dynamicRoute = `/tenantadmin/${dynamicPath}`;
     }
     if (router.pathname !== dynamicRoute) {
@@ -846,6 +846,7 @@ const Header = ({
       }
     }
   };
+
   const getProjectDataLists = async () => {
     const res = await getAllProjects();
     if (res?.status == "SUCCESS") {
@@ -872,33 +873,60 @@ const Header = ({
   useEffect(() => {
     getRole();
   }, []);
-  useEffect(() => {
-    const userRole = getStorage("proxyRole");
-    if (
-      tinDetails?.length > 0 &&
-      (!selectedTin || selectedTin === "") &&
-      userRole === "QA"
-    ) {
-      const defaultTinNumber = tinDetails[0].tinNumber;
-      setSelectedTin(defaultTinNumber);
-      setStorage("tinNumber", defaultTinNumber);
-      getPageRendering(defaultTinNumber);
-    }
-  }, [tinDetails, selectedTin]);
+  // useEffect(() => {
+  //   const userRole = getStorage("proxyRole");
+  //   if (
+  //     tinDetails?.length > 0 &&
+  //     (!selectedTin || selectedTin === "") &&
+  //     userRole === "QA"
+  //   ) {
+  //     const defaultTinNumber = tinDetails[0].tinNumber;
+  //     setSelectedTin(defaultTinNumber);
+  //     setStorage("tinNumber", defaultTinNumber);
+  //     getPageRendering(defaultTinNumber);
+  //   }
+  // }, [tinDetails, selectedTin]);
+
+  // useEffect(() => {
+  //   if (projectListCheck) {
+  //     // setTimeout(() => {
+  //     const defaultClient = getStorage("client");
+  //     const defaultProject = getStorage("project");
+
+  //     if (defaultClient) setSelectedClient(defaultClient);
+  //     setBackupSelectedClient(defaultClient);
+  //     if (defaultProject) setSelectedProject(defaultProject);
+  //     setBackupSelectedProject(defaultProject);
+
+  //   }
+  //   // }, 2000);
+  // }, [projectListCheck]);
 
   useEffect(() => {
     if (projectListCheck) {
-      // setTimeout(() => {
       const defaultClient = getStorage("client");
       const defaultProject = getStorage("project");
+      const defaultTinNumber = getStorage("tinNumber");
+      const userRole = getStorage("proxyRole");
+      if (
+        tinDetails?.length > 0 &&
+        (!selectedTin || selectedTin === "") &&
+        userRole === "QA"
+      ) {
+        const defaultTinNumberIndex = tinDetails[0].tinNumber;
+        if (defaultTinNumber || defaultTinNumberIndex) {
+          setSelectedTin(defaultTinNumber || defaultTinNumberIndex);
+          setBackupSelectedTin(defaultTinNumber);
+        }
+      }
 
       if (defaultClient) setSelectedClient(defaultClient);
       setBackupSelectedClient(defaultClient);
+
       if (defaultProject) setSelectedProject(defaultProject);
       setBackupSelectedProject(defaultProject);
     }
-    // }, 2000);
-  }, [projectListCheck]);
+  }, [projectListCheck, tinDetails, selectedTin]);
 
   useEffect(() => {
     if (projectDetails) {
