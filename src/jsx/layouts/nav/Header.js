@@ -914,6 +914,7 @@ const Header = ({
         userRole === "QA"
       ) {
         const defaultTinNumberIndex = tinDetails[0].tinNumber;
+        setStorage("tinNumber", defaultTinNumberIndex);
         if (defaultTinNumber || defaultTinNumberIndex) {
           setSelectedTin(defaultTinNumber || defaultTinNumberIndex);
           setBackupSelectedTin(defaultTinNumber);
