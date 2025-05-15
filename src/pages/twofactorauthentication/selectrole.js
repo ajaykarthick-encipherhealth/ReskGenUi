@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Select, notification, Modal } from "antd";
+import { Select, notification, Modal, Spin } from "antd";
 import { useRouter } from "next/router";
 import LoginBack from "../../images/logo/login-back.jpg";
 import styles from "../../styles/auth.module.css";
@@ -21,6 +21,7 @@ const SelectRole = ({
   const [roleError, setRoleError] = useState(false);
   const [confirmModal, setConfirmModal] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [loadingRoles, setLoadingRoles] = useState(true);
 
   const roleOptions = allRolesData?.userRoles?.map((client) => ({
     label: client.aliasName.replaceAll("_", " "),
@@ -120,6 +121,7 @@ const SelectRole = ({
   };
 
   const getRolesApi = async () => {
+     setLoadingRoles(true);
     try {
       const response = await getAllRoles();
       if (response?.status !== "SUCCESS") {
@@ -127,6 +129,8 @@ const SelectRole = ({
       }
     } catch (error) {
       getResponePopup(error);
+    } finally {
+      setLoadingRoles(false);
     }
   };
 
@@ -176,12 +180,20 @@ const SelectRole = ({
                       name="select-role"
                       style={{ width: "100%", height: "2.75rem" }}
                       placeholder="Select Role"
+                      loading={loadingRoles}
                       onChange={(value) => {
                         setSelectedRole(value);
                         setRoleError(false);
                       }}
                       value={selectedRole}
                       options={roleOptions}
+                      notFoundContent={
+                        loadingRoles ? (
+                          <div className="d-flex justify-content-center align-items-center">
+                            <Spin size="small" />
+                          </div>
+                        ) : null
+                      }
                     />
                     {roleError && (
                       <span className="text-danger fs-12">
