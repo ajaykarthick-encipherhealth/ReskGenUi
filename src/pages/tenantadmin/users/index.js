@@ -277,9 +277,6 @@ const Users = ({
       <Header />
       <div className="content-body">
         <div className="container-fluid table-responsive active-projects task-table">
-          {tableLoader ? (
-            <CardSkeleton />
-          ) : (
             <div className="d-flex mt-4 ">
               <div className="p-2" style={{ width: "90%" }}>
                 <ReusableFilters
@@ -325,8 +322,6 @@ const Users = ({
                 </Button>
               </div>
             </div>
-          )}
-
           <div className="mt-4">
             <AppTable
               data={data?.response?.pageResponse?.content}
