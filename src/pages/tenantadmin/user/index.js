@@ -688,7 +688,7 @@ const UserList = ({
         }}
         // className="offcanvas-end offcanvas-md-size"
         placement="end"
-        style={{ width: "700px" }}
+        // style={{ width: "700px" }}
       >
         <div className="offcanvas-header">
           <h5 className="modal-title" id="#gridSystemModal">
@@ -712,7 +712,7 @@ const UserList = ({
           <div
             id="user-form"
             name="user-form"
-            className={`container-fluid ${styles.formAnimation}`}
+            className={`container-fluid `}
           >
             <Form
               data-testid="control-hooks"
@@ -723,57 +723,59 @@ const UserList = ({
               wrapperCol={{ span: 24 }}
               autoComplete="off"
             >
-              <Row gutter={16}>
-                <Col span={12}>
-                  <Form.Item
-                    label={
-                      <span>
-                        First Name <span style={{ color: "red" }}>*</span>
-                      </span>
-                    }
-                    name="firstName"
-                    rules={[
-                      {
-                        required: true,
-                        message: "Please enter your first name!",
-                      },
-                    ]}
-                  >
-                    <Input
-                      data-testid="firstName"
-                      name="firstName"
-                      placeholder="Enter first name"
-                      autoComplete="off"
-                    />
-                  </Form.Item>
-                </Col>
-                <Col span={12}>
-                  <Form.Item
-                    label={
-                      <span>
-                        Last Name <span style={{ color: "red" }}>*</span>
-                      </span>
-                    }
-                    name="lastName"
-                    rules={[
-                      {
-                        required: true,
-                        message: "Please enter your last name!",
-                      },
-                    ]}
-                  >
-                    <Input
-                      data-testid="lastName"
-                      name="lastName"
-                      placeholder="Enter last name"
-                      autoComplete="off"
-                    />
-                  </Form.Item>
-                </Col>
-              </Row>
-              <Row gutter={16}>
-                <Col span={12}>
-                  {/* <Form.Item
+              {/* <Row gutter={16}>
+                <Col span={12}> */}
+              <Form.Item
+                label={
+                  <span>
+                    First Name <span style={{ color: "red" }}>*</span>
+                  </span>
+                }
+                name="firstName"
+                rules={[
+                  {
+                    required: true,
+                    message: "Please enter your first name!",
+                  },
+                ]}
+              >
+                <Input
+                  data-testid="firstName"
+                  name="firstName"
+                  placeholder="Enter first name"
+                  autoComplete="off"
+                  className="w-100"
+                />
+              </Form.Item>
+              {/* </Col> */}
+              {/* <Col span={12}> */}
+              <Form.Item
+                label={
+                  <span>
+                    Last Name <span style={{ color: "red" }}>*</span>
+                  </span>
+                }
+                name="lastName"
+                rules={[
+                  {
+                    required: true,
+                    message: "Please enter your last name!",
+                  },
+                ]}
+              >
+                <Input
+                  data-testid="lastName"
+                  name="lastName"
+                  placeholder="Enter last name"
+                  autoComplete="off"
+                  className="w-100"
+                />
+              </Form.Item>
+              {/* </Col>
+              </Row> */}
+              {/* <Row gutter={16}>
+                <Col span={12}> */}
+              {/* <Form.Item
                     label={
                       <span>
                         Email <span style={{ color: "red" }}>*</span>
@@ -797,33 +799,34 @@ const UserList = ({
                       autoComplete="off"
                     />
                   </Form.Item> */}
-                  <Form.Item
-                    label={
-                      <span>
-                        Email <span style={{ color: "red" }}>*</span>
-                      </span>
-                    }
-                    name="userName"
-                    rules={[
-                      { required: true, message: "Please enter your email!" },
-                      {
-                        pattern:
-                          "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+.[a-zA-Z]{2,}(?:.[a-zA-Z]{2,})?$",
-                        required: true,
-                        message: "Enter the Valid Email ",
-                      },
-                    ]}
-                  >
-                    <Input
-                      data-testid="userName"
-                      name="userName"
-                      placeholder="Enter user name"
-                      autoComplete="off"
-                      disabled={isEdit}
-                    />
-                  </Form.Item>
-                </Col>
-                {/* <Col span={12}>
+              <Form.Item
+                label={
+                  <span>
+                    Email <span style={{ color: "red" }}>*</span>
+                  </span>
+                }
+                name="userName"
+                rules={[
+                  { required: true, message: "Please enter your email!" },
+                  {
+                    pattern:
+                      "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+.[a-zA-Z]{2,}(?:.[a-zA-Z]{2,})?$",
+                    required: true,
+                    message: "Enter the Valid Email ",
+                  },
+                ]}
+              >
+                <Input
+                  data-testid="userName"
+                  name="userName"
+                  placeholder="Enter user name"
+                  autoComplete="off"
+                  disabled={isEdit}
+                  className="w-100"
+                />
+              </Form.Item>
+              {/* </Col> */}
+              {/* <Col span={12}>
                   <Form.Item
                     label={
                       <span>
@@ -850,7 +853,7 @@ const UserList = ({
                     />
                   </Form.Item>
                 </Col> */}
-              </Row>
+              {/* </Row> */}
               {/* {!isEdit && (
                 <>
                   <input type="password" style={{ display: "none" }} />
@@ -974,7 +977,7 @@ const UserList = ({
                 name="fake-user"
                 className="d-flex align-items-center justify-content-center mt-4 gap-3"
               >
-                <input
+                {/* <input
                   type="text"
                   name="fakeusernameremembered"
                   id="fakeusernameremembered"
@@ -987,7 +990,7 @@ const UserList = ({
                   id="fakepasswordremembered"
                   value=""
                   style={{ display: "none" }}
-                />
+                /> */}
                 <Form.Item>
                   <Button
                     type="primary"

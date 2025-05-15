@@ -3000,6 +3000,8 @@ textarea.form-control.is-invalid {
   align-items: center;
   justify-content: space-between;
   padding: var(--bs-offcanvas-padding-y) var(--bs-offcanvas-padding-x);
+  border-bottom: 1px solid rgba(5,5,5,0.06)
+  
 }
 
 .offcanvas-header .btn-close {
