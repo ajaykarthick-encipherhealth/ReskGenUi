@@ -158,17 +158,18 @@ const CodersTable = ({
       setTotalElements(res.response?.patientDTOList?.totalElements);
     }
   };
-  useEffect(() => {
-    getTableStatus({
-      isReAssigned,
-      isQueried,
-      patientAllocated,
-    });
-  }, []);
+  
   useEffect(() => {
     setParamsFilter("check");
     if (window !== "undefined" && paramsFilter) {
+         getTableStatus({
+           isReAssigned,
+           isQueried,
+           patientAllocated,
+           tin,
+         });
       getCodersApi();
+     
     }
   }, [
     selectedOption,
@@ -181,6 +182,7 @@ const CodersTable = ({
     pageNumber,
     activeStatus,
     pageLoad,
+
   ]);
 
 

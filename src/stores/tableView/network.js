@@ -228,6 +228,7 @@ export async function getStatusTableView({
   isReAssigned,
   isQueried,
   patientAllocated,
+  tin
 }) {
   const options = {
     method: "GET",
@@ -247,7 +248,7 @@ export async function getStatusTableView({
   const uId = getStorage("userId");
   const baseUrl = `dbservice/get-count?&isReAssigned=${
     isReAssigned || false
-  }&isQueried=${isQueried || false}&patientAllocated=${patientAllocated || ""}`;
+  }&isQueried=${isQueried || false}&patientAllocated=${patientAllocated || ""}&tin=${tin || ""}`;
 
   const finalUrl = `${baseUrl}${searchTextParams || ""}${selectParams || ""}${
     dateRagngesParams || ""
