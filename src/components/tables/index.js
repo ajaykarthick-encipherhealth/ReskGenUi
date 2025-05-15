@@ -15,6 +15,7 @@ import {
   Empty,
   Image,
   Popover,
+  Progress,
   Select,
   Spin,
   Switch,
@@ -1184,7 +1185,7 @@ const TableRow = ({
             </td>
           );
         }
-        if (columnItem.progressBar) {
+        if (columnItem?.design?.includes("PROGRESS_BAR")) {
           return (
             <td
               className={`${
@@ -1197,7 +1198,7 @@ const TableRow = ({
             >
               <div className="d-flex  justify-content-start">
                 <Progress
-                  percent={80}
+                  percent={item[`${columnItem.actualField}`]}
                   strokeColor={
                     columnItem.value === "processing" ||
                     columnItem.value === "failed"
