@@ -215,6 +215,75 @@ const Header = ({
     key: data.proxyRole,
   }));
 
+  // const onClick = ({ key }) => {
+  //   setProjectListCheck(true);
+  //   const allRoles = JSON.parse(getStorage("userAllRoles"));
+  //   let selectedRoleObj = allRoles?.find((res) => res.proxyRole === key);
+  //   if (!selectedRoleObj) {
+  //     selectedRoleObj = allRoles?.find(
+  //       (res) => res?.details?.proxyRole === key
+  //     );
+  //   }
+  //   const accessMenuList = selectedRoleObj
+  //     ? selectedRoleObj
+  //     : selectedRoleObj?.details;
+  //   setStorage("userRole", key);
+  //   setStorage(
+  //     "proxyRole",
+  //     accessMenuList?.proxyRole
+  //       ? accessMenuList?.proxyRole
+  //       : accessMenuList?.details.proxyRole
+  //   );
+  //   setStorage(
+  //     "roleId",
+  //     accessMenuList?.roleId
+  //       ? accessMenuList?.roleId
+  //       : accessMenuList?.details.roleId
+  //   );
+  //   setStorage(
+  //     "aliasName",
+  //     accessMenuList?.aliasName
+  //       ? accessMenuList?.aliasName
+  //       : accessMenuList?.details.aliasName
+  //   );
+
+  //   setStorage(
+  //     "accessMenuList",
+  //     JSON.stringify(
+  //       accessMenuList?.accessList
+  //         ? accessMenuList.accessList
+  //         : accessMenuList?.details?.accessList
+  //     )
+  //   );
+
+  //   if (key === "Admin") {
+  //     router.push("/admin/dashboard");
+  //   } else if (key === "CODER_1" || key === "CODER_2" || key === "QA") {
+  //     if (router?.pathname != "/reviewer/dashboard") {
+  //       router.push("/reviewer/dashboard");
+  //     } else {
+  //       router.push("/reviewer/dashboard").then(() => {
+  //         window.location.reload();
+  //       });
+  //     }
+  //   } else if (key === "Supervisor") {
+  //     router.push("/supervisor/dashboard");
+  //   } else if (
+  //     key === "TENANT_ADMIN" ||
+  //     key === "DOWNLOADER" ||
+  //     key === "OWNER"
+  //   ) {
+  //     if (router?.pathname != "/tenantadmin/dashboard") {
+  //       router.push("/tenantadmin/dashboard");
+  //     } else {
+  //       router.push("/tenantadmin/dashboard").then(() => {
+  //         window.location.reload();
+  //       });
+  //     }
+  //   } else if (key === "Ehr") {
+  //     router.push("/ehr/patients");
+  //   }
+  // };
   const onClick = ({ key }) => {
     setProjectListCheck(true);
     const allRoles = JSON.parse(getStorage("userAllRoles"));
@@ -224,66 +293,39 @@ const Header = ({
         (res) => res?.details?.proxyRole === key
       );
     }
-    const accessMenuList = selectedRoleObj
-      ? selectedRoleObj
-      : selectedRoleObj?.details;
+
+    const accessMenuList =
+      selectedRoleObj?.accessList || selectedRoleObj?.details?.accessList || [];
+
     setStorage("userRole", key);
     setStorage(
       "proxyRole",
-      accessMenuList?.proxyRole
-        ? accessMenuList?.proxyRole
-        : accessMenuList?.details.proxyRole
+      selectedRoleObj?.proxyRole || selectedRoleObj?.details?.proxyRole
     );
     setStorage(
       "roleId",
-      accessMenuList?.roleId
-        ? accessMenuList?.roleId
-        : accessMenuList?.details.roleId
+      selectedRoleObj?.roleId || selectedRoleObj?.details?.roleId
     );
     setStorage(
       "aliasName",
-      accessMenuList?.aliasName
-        ? accessMenuList?.aliasName
-        : accessMenuList?.details.aliasName
+      selectedRoleObj?.aliasName || selectedRoleObj?.details?.aliasName
     );
+    setStorage("accessMenuList", JSON.stringify(accessMenuList));
 
-    setStorage(
-      "accessMenuList",
-      JSON.stringify(
-        accessMenuList?.accessList
-          ? accessMenuList.accessList
-          : accessMenuList?.details?.accessList
-      )
-    );
+    const firstAccess = accessMenuList[0];
+    const dynamicPath =
+      firstAccess?.title?.toLowerCase().replace(/\s+/g, "") || "dashboard";
+    const dynamicRoute = `/tenantadmin/${dynamicPath}`;
 
-    if (key === "Admin") {
-      router.push("/admin/dashboard");
-    } else if (key === "CODER_1" || key === "CODER_2" || key === "QA") {
-      if (router?.pathname != "/reviewer/dashboard") {
-        router.push("/reviewer/dashboard");
-      } else {
-        router.push("/reviewer/dashboard").then(() => {
-          window.location.reload();
-        });
-      }
-    } else if (key === "Supervisor") {
-      router.push("/supervisor/dashboard");
-    } else if (
-      key === "TENANT_ADMIN" ||
-      key === "DOWNLOADER" ||
-      key === "OWNER"
-    ) {
-      if (router?.pathname != "/tenantadmin/dashboard") {
-        router.push("/tenantadmin/dashboard");
-      } else {
-        router.push("/tenantadmin/dashboard").then(() => {
-          window.location.reload();
-        });
-      }
-    } else if (key === "Ehr") {
-      router.push("/ehr/patients");
+    if (router.pathname !== dynamicRoute) {
+      router.push(dynamicRoute);
+    } else {
+      router.push(dynamicRoute).then(() => {
+        window.location.reload();
+      });
     }
   };
+
   const getMenuListByRole = (role) => {
     const allRoles = JSON?.parse(getStorage("userAllRoles"));
     let selectedRoleObj = allRoles?.find((res) => res.proxyRole === role);

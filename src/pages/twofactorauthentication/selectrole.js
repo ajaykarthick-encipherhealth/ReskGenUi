@@ -57,40 +57,66 @@ const SelectRole = ({
     loginSuccessCallBack();
   };
 
+  // const loginSuccessCallBack = () => {
+  //   notification.success({
+  //     message: "Login Successfully",
+  //     duration: 1,
+  //   });
+  //   setRoleError(false);
+  //   const rolesMapping = {
+  //     admin: { userRole: "admin", route: "/admin/dashboard" },
+  //     reviewer: { userRole: "reviewer", route: "/reviewer/dashboard" },
+  //     CODER_1: { userRole: "CODER_1", route: "/reviewer/dashboard" },
+  //     CODER_2: { userRole: "CODER_2", route: "/reviewer/dashboard" },
+  //     QA: { userRole: "QA", route: "/reviewer/dashboard" },
+  //     DOWNLOADER: { userRole: "DOWNLOADER", route: "/tenantadmin/tin" },
+  //     OWNER: { userRole: "OWNER", route: "/tenantadmin/dashboard" },
+  //     supervisor: { userRole: "supervisor", route: "/supervisor/dashboard" },
+  //     provider: { userRole: "provider", route: "/provider/fhirTable" },
+  //     TENANT_ADMIN: {
+  //       userRole: "TENANT_ADMIN",
+  //       route: "/tenantadmin/dashboard",
+  //     },
+  //     physician: { userRole: "physician", route: "/physicians/dashboard" },
+  //     record_analyst: {
+  //       userRole: "record_analyst",
+  //       route: "/analyst/patients",
+  //     },
+  //   };
+
+  //   const selectedRoleInfo = rolesMapping[selectedRole];
+  //   if (selectedRoleInfo && !roleError) {
+  //     setStorage("userRole", selectedRoleInfo?.userRole);
+  //     setLoading(true);
+  //     router?.push(selectedRoleInfo?.route);
+  //   }
+  // };
   const loginSuccessCallBack = () => {
     notification.success({
       message: "Login Successfully",
       duration: 1,
     });
     setRoleError(false);
-    const rolesMapping = {
-      admin: { userRole: "admin", route: "/admin/dashboard" },
-      reviewer: { userRole: "reviewer", route: "/reviewer/dashboard" },
-      CODER_1: { userRole: "CODER_1", route: "/reviewer/dashboard" },
-      CODER_2: { userRole: "CODER_2", route: "/reviewer/dashboard" },
-      QA: { userRole: "QA", route: "/reviewer/dashboard" },
-      DOWNLOADER: { userRole: "DOWNLOADER", route: "/tenantadmin/dashboard" },
-      OWNER: { userRole: "OWNER", route: "/tenantadmin/dashboard" },
-      supervisor: { userRole: "supervisor", route: "/supervisor/dashboard" },
-      provider: { userRole: "provider", route: "/provider/fhirTable" },
-      TENANT_ADMIN: {
-        userRole: "TENANT_ADMIN",
-        route: "/tenantadmin/dashboard",
-      },
-      physician: { userRole: "physician", route: "/physicians/dashboard" },
-      record_analyst: {
-        userRole: "record_analyst",
-        route: "/analyst/patients",
-      },
-    };
 
-    const selectedRoleInfo = rolesMapping[selectedRole];
-    if (selectedRoleInfo && !roleError) {
-      setStorage("userRole", selectedRoleInfo?.userRole);
-      setLoading(true);
-      router?.push(selectedRoleInfo?.route);
+    const selectedRoleObj = allRolesData?.userRoles?.find(
+      (role) => role.proxyRole === selectedRole
+    );
+
+    const accessList = selectedRoleObj?.accessList || [];
+
+    const firstAccess = accessList[0];
+    let dynamicRoute = "";
+    if (firstAccess?.title) {
+      const title = firstAccess.title.toLowerCase().replace(/\s+/g, "");
+      dynamicRoute = `/tenantadmin/${title}`; 
     }
+
+    setStorage("userRole", selectedRoleObj?.proxyRole);
+    setLoading(true);
+
+    router?.push(dynamicRoute);
   };
+
   const getRolesApi = async () => {
     try {
       const response = await getAllRoles();
