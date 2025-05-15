@@ -217,7 +217,6 @@ const Tin = ({
     setSelectedOption({});
     getProjectActiveTab({ tinTabName: name });
     setPageNo(0);
-    getAllTins(name);
     setSelectedRowsId([]);
     setSelectedRows([]);
   };
@@ -262,7 +261,6 @@ const Tin = ({
             };
           });
 
-          // setSelectedRows(result.map((patient) => patient));
           setSelectedRows(
             result.map((patient) => {
               return patient.patientId;
@@ -485,34 +483,12 @@ const Tin = ({
       searchText,
     });
   };
-  // const handlePriorityChange = async (
-  //   patientId,
-  //   selectedValue,
-  // ) => {
-  //   console.log(patientId, selectedValue,"tin");
-  //   const tinNumber = getStorage("tinNumber");
-  //   cosnole.log(priority, "priority");
-
-  //   const data = {
-  //     tin: tinNumber,
-  //     priority: selectedValue,
-  //   };
-  //   console.log(data, "data");
-  //   const res = await supervisorPriority(data);
-  //   getResponePopup(res);
-  //   setPriority({ selectedValue: selectedValue});
-  //   if (res.status === "SUCCESS") {
-  //     getAllTins();
-  //     setParamsFilter("check");
-  //   }
-  // };
+  
   const handlePriorityChange = async (tinNumber, selectedValue) => {
-    console.log(tinNumber, selectedValue, "tin");
     const data = {
       tin: tinNumber,
       priority: selectedValue,
     };
-    console.log(data, "data");
 
     try {
       const res = await tinPriority(data);
