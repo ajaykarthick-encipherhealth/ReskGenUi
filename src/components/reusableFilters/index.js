@@ -105,7 +105,7 @@ const ReusableFilters = ({
     }));
     setPageNo && setPageNo(0);
   };
-
+console.log(selectedDates, "selectedDates");
   return (
     <div className="d-flex  w-100">
       <div className="row " style={{ width: showFilter ? "98%" : "auto" }}>
@@ -243,12 +243,12 @@ const ReusableFilters = ({
                       }
                       format="MM-DD-YYYY"
                       value={selectedDates?.[item?.actualField]}
-                      onCalendarChange={(val) => {
-                        setSelectedDates((prev) => ({
-                          ...prev,
-                          [item?.actualField]: val,
-                        }));
-                      }}
+                      // onCalendarChange={(val) => {
+                      //   setSelectedDates((prev) => ({
+                      //     ...prev,
+                      //     [item?.actualField]: val,
+                      //   }));
+                      // }}
                       onChange={(date, dateString) => {
                         if (!date || date.length === 0) {
                           handleFocusPicker(item?.actualField);
