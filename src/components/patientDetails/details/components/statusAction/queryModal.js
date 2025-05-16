@@ -1,5 +1,5 @@
 import { Form, Modal, Select, Input } from 'antd';
-import React from 'react';
+import React, { useState } from 'react';
 const { TextArea } = Input;
 import { actions as detailsActions } from "../../../../../stores/patient/details";
 import { connect } from 'react-redux';
@@ -20,8 +20,10 @@ const QueryModal = ({
   isQueried
 }) => {
   const [form] = Form.useForm();
+  const [loading,setLoading] = useState(false)
 
   const onFinish = async (values) => {
+    setLoading(true)
     const patientId = getStorage("patientId");
     const aliasName = getStorage("aliasName");
     const data = {
@@ -32,6 +34,7 @@ const QueryModal = ({
     };
     const response = await raiseQuery(data);
     if (response?.status === "SUCCESS") {
+      setLoading(false);
       setIsQueried(true);
       getStatus(localPatientId);
       getResponePopup(response);
@@ -39,6 +42,7 @@ const QueryModal = ({
       form.resetFields();
     } else {
       getResponePopup(response);
+      setLoading(false)
     }
   };
   const selectOptions = roles?.data?.response?.map((role) => ({
@@ -80,11 +84,11 @@ const QueryModal = ({
         <Form.Item>
           <div className="d-flex align-items-center justify-content-center">
             <RegularButton
-              disabled={isQueried}
+              disabled={loading}
               type="submit"
               name="Submit"
-              width={100}
-              loading={isQueried}
+              width={150}
+              loading={loading}
             />
           </div>
         </Form.Item>
