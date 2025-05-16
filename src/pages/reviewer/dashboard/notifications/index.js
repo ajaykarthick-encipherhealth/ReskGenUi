@@ -46,9 +46,11 @@ const Notifications = ({ notificationResponse, webSocketNotificationData }) => {
                 info?.fromUserDetails?.firstName
                   ? info?.fromUserDetails?.firstName
                   : ""
-              } (${
-                info?.fromUserDetails?.role ? info?.fromUserDetails?.role : ""
-              })`}
+              } ${
+                info?.fromUserDetails?.lastName
+                  ? info?.fromUserDetails?.lastName
+                  : ""
+              }`}
             </div>
           </div>
         </div>
