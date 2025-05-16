@@ -308,6 +308,10 @@ const Header = ({
       selectedRoleObj?.roleId || selectedRoleObj?.details?.roleId
     );
     setStorage(
+      "headerAliasName",
+      selectedRoleObj?.aliasName || selectedRoleObj?.details?.aliasName
+    );
+    setStorage(
       "aliasName",
       selectedRoleObj?.aliasName || selectedRoleObj?.details?.aliasName
     );
@@ -487,7 +491,7 @@ const Header = ({
     var loginCheck = getStorage("loginCheck");
     const userRoleLocal = getStorage("userRole");
     const userId = getStorage("userId");
-    const userRole = getStorage("aliasName");
+    const userRole = getStorage("headerAliasName");
     const tenentId = getStorage("tenantId");
     // getCurrentUserInfo({ userId });
     setUserRole(userRoleLocal);

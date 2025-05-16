@@ -38,12 +38,13 @@ const SelectRole = ({
     const selectedRoleObj = allRolesData?.userRoles?.find(
       (role) => role.proxyRole === selectedRole
     );
-    if (selectedRoleObj  ) {
+    if (selectedRoleObj) {
       setStorage("proxyRole", selectedRoleObj?.proxyRole);
       setStorage("userAllRoles", JSON.stringify(allRolesData?.userRoles));
       setStorage("accessMenuList", JSON.stringify(selectedRoleObj?.accessList));
       setStorage("roleId", selectedRoleObj?.roleId);
       setStorage("aliasName", selectedRoleObj?.aliasName);
+      setStorage("headerAliasName", selectedRoleObj?.aliasName);
       loginSuccessCallBack();
     } else {
       console.error("Selected role not found in userRoles array");
@@ -106,10 +107,12 @@ const SelectRole = ({
     let dynamicRoute = "";
     if (firstAccess?.title) {
       const title = firstAccess.title.toLowerCase().replace(/\s+/g, "");
-      if (selectedRoleObj?.role === "REVIEWER" || selectedRoleObj?.role === "QA") {
+      if (
+        selectedRoleObj?.role === "REVIEWER" ||
+        selectedRoleObj?.role === "QA"
+      ) {
         dynamicRoute = `/reviewer/${title}`;
-      } 
-      else {
+      } else {
         dynamicRoute = `/tenantadmin/${title}`;
       }
     }
@@ -119,7 +122,7 @@ const SelectRole = ({
   };
 
   const getRolesApi = async () => {
-     setLoadingRoles(true);
+    setLoadingRoles(true);
     try {
       const response = await getAllRoles();
       if (response?.status !== "SUCCESS") {
@@ -135,8 +138,6 @@ const SelectRole = ({
   useEffect(() => {
     getRolesApi();
   }, []);
-
-
 
   return (
     <div className="page-wraper">
