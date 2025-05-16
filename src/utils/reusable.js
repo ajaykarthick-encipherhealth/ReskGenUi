@@ -565,7 +565,7 @@ export const proxyStatusBodyTemplate = (rowData) => {
 
 export const formatDateTime = ({ date, formatType = "date" }) => {
   if (!date) return "";
-  const dateType = formatType == "date" ? "MM-DD-YYYY" : "MM-DD-YYYY h:mm a";
+  const dateType = formatType == "date" ? "MM/DD/YYYY" : "MM/DD/YYYY h:mm a";
   if (!date) return date;
   const time = momentTimezone(date);
   const offset = momentTimezone.tz
