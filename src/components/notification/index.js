@@ -81,7 +81,9 @@ const Notification = ({
     >
       {!openMsg && !loading ? (
         <>
-          <div className="d-flex justify-content-end me-3">
+
+          <div className="d-flex justify-content-end me-2">
+
             <div
               className="cr-pointer  text-decoration-underline d-flex align-items-center"
               style={{ color: "#3A88F8" }}

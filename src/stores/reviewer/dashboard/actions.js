@@ -37,3 +37,4 @@ export const unReadCountPostAction = createActionThunk(
 );
 export const dailyTaskData = createAction("GET_DAILY_TASK_DATA");
 export const reviewerFilterList = createAction("GET_FILTERED_LIST");
+export const notificationSound = createAction("GET_NOTIFICATIONN_SOUND");

@@ -93,6 +93,8 @@ const Header = ({
   getAllTin,
   tinDetails,
   getTableData,
+  getNotificationSound,
+  notificationSound,
 }) => {
   const router = useRouter();
   const fileInputRef = useRef(null);
@@ -182,7 +184,6 @@ const Header = ({
       }
     });
   };
-
   const getUserIdDetails = async (currentUserInfo) => {
     const token = getStorage("token");
     const getUserId = getStorage("userId");
@@ -450,34 +451,65 @@ const Header = ({
       </div>
     </div>
   );
+
+  const hasMatchingId = (arr1, arr2) => {
+    const ids2 = new Set(arr2?.map((item) => item?.id));
+    return arr1?.filter((item) => !ids2?.has(item?.id));
+  };
+
   useEffect(() => {
     const count = webSocketNotificationData?.filter(
       (r) => r?.webSocketType == "NOTIFICATION"
     );
+    if (count && count?.length > 0) {
+      var data = {
+        checksound: false,
+        count: count?.length,
+      };
+      getNotificationSound(data);
+    }
+    var webSocketCount = 0;
+    var webSocketData = hasMatchingId(
+      count,
+      notificationResponse?.data?.response?.notificationList?.content
+    )?.length;
+    if (webSocketData) {
+      webSocketCount = webSocketData;
+    }
+
     var countUnread =
-      notificationResponse?.data?.response?.totalUnreadCount + count?.length;
+      notificationResponse?.data?.response?.totalUnreadCount + webSocketCount;
     setNotificationCount(countUnread ? countUnread : 0);
 
     notificationSoundRef.current = new Audio("/messageSound.mp3");
 
     // Play notification sound
-    if (countUnread > 0 && !open) {
+    if (
+      countUnread > 0 &&
+      !open &&
+      notificationSound?.checksound != true &&
+      notificationSound?.count != count?.length
+    ) {
+      var data = {
+        checksound: true,
+        count: count?.length,
+      };
+      getNotificationSound(data);
       notificationSoundRef.current.play().catch((error) => {
         console.error("Error playing notification sound:", error);
       });
     }
   }, [webSocketNotificationData, notificationResponse, open]);
-  useEffect(() => {
-    if (
-      !open &&
-      notificationResponse?.data?.response?.totalUnreadCount !== undefined
-    ) {
-      var countUnread = notificationResponse?.data?.response?.totalUnreadCount;
-      setNotificationCount(countUnread ? countUnread : 0);
-    } else {
-      setNotificationCount(0);
-    }
-  }, [notificationResponse?.data?.response?.totalUnreadCount, open]);
+
+  // useEffect(() => {
+  //   if (
+  //     !open &&
+  //     notificationResponse?.data?.response?.totalUnreadCount !== undefined
+  //   ) {
+  //     var countUnread = notificationResponse?.data?.response?.totalUnreadCount;
+  //     setNotificationCount(countUnread ? countUnread : 0);
+  //   }
+  // }, [notificationResponse?.data?.response?.totalUnreadCount, open]);
 
   useEffect(() => {
     const handleResize = () => {
@@ -1314,8 +1346,7 @@ const Header = ({
       </div>
       <Drawer
         title={
-          <div className="d-flex justify-content-between align-items-center"
-          >
+          <div className="d-flex justify-content-between align-items-center">
             <div className="d-flex align-items-center gap-2">
               <FontAwesomeIcon
                 icon={faBell}
@@ -1463,6 +1494,7 @@ const enhancer = connect(
     allRolesData: state.authReducer?.getAllRoles?.data?.response,
     pageLoad: state?.tenantAdmin?.tin?.getPageRendering,
     tinDetails: state.authReducer?.getTinDropdown?.data?.response,
+    notificationSound: state?.reviewer?.dashboard?.notificationSound,
   }),
   {
     getNotificationList: dashbaordActions.notificationAction,
@@ -1488,6 +1520,7 @@ const enhancer = connect(
     getPageRendering: tinActions.pageRendering,
     getAllTin: authActions.tinsDropdown,
     getTableData: tableAction.tableViewAction,
+    getNotificationSound: dashbaordActions.notificationSound,
   }
 );
 export default enhancer(Header);

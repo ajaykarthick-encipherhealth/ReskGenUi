@@ -1,7 +1,17 @@
-
 import { combineReducers } from "redux";
 import { handleActions } from "redux-actions";
-import { workFlowAction,dailyTaskData, dailyTaskAction, accuracyAction,completedScoreAction, holdStatusAction, notificationAction, tenentLogoAction,reviewerFilterList } from "./actions";
+import {
+  workFlowAction,
+  dailyTaskData,
+  dailyTaskAction,
+  accuracyAction,
+  completedScoreAction,
+  holdStatusAction,
+  notificationAction,
+  tenentLogoAction,
+  reviewerFilterList,
+  notificationSound,
+} from "./actions";
 
 const initialState = {
   loading: true,
@@ -32,19 +42,26 @@ const createReducer = (actionType) =>
     initialState
   );
 
-
-  const getUsersDetailsLoading=(type) => handleActions(
-  {
-    [type.START]: () => true,
-    [type.SUCCEEDED]: () => false,
-    [type.FAILED]: () => false,
-  },
-  false
-);
+const getUsersDetailsLoading = (type) =>
+  handleActions(
+    {
+      [type.START]: () => true,
+      [type.SUCCEEDED]: () => false,
+      [type.FAILED]: () => false,
+    },
+    false
+  );
 const getDailyTaskDatas = (action) =>
   handleActions(
     {
       [action.toString()]: (state, { payload }) => payload,
+    },
+    ""
+  );
+const getNotification = (action) =>
+  handleActions(
+    {
+      [action]: (state, { payload }) => payload,
     },
     ""
   );
@@ -55,14 +72,15 @@ const dashbaordReducer = combineReducers({
   dailyTaskLoader: getUsersDetailsLoading(dailyTaskAction),
   accuracyLoading: getUsersDetailsLoading(accuracyAction),
   accuracy: createReducer(accuracyAction),
-  completedScore:createReducer(completedScoreAction),
+  completedScore: createReducer(completedScoreAction),
   completedScoreLoading: getUsersDetailsLoading(completedScoreAction),
-  holdStatus:createReducer(holdStatusAction),
-  notification:createReducer(notificationAction),
-  notificationLoader:getUsersDetailsLoading(notificationAction),
-  tenentLogo:createReducer(tenentLogoAction),
+  holdStatus: createReducer(holdStatusAction),
+  notification: createReducer(notificationAction),
+  notificationLoader: getUsersDetailsLoading(notificationAction),
+  tenentLogo: createReducer(tenentLogoAction),
   dailyTaskDatas: getDailyTaskDatas(dailyTaskData),
-  reviwerPatientFilterList:createReducer(reviewerFilterList),
+  reviwerPatientFilterList: createReducer(reviewerFilterList),
+  notificationSound: getNotification(notificationSound),
 });
 
 export default dashbaordReducer;
