@@ -9,11 +9,13 @@ import { actions as dashbaordActions } from "../../stores/reviewer/dashboard";
 import { getStorage, setStorage } from "../../utils/storages";
 import { getPriorityStyle } from "../../pages/tenantadmin/notifications/noficationCard";
 import Card from "../card";
-import { formatDateTime } from "../../utils/reusable";
+import { formatDateTime, reusableEllipses } from "../../utils/reusable";
 import RegularButton from "../button";
 import { actions as allActions } from "../../stores/admin/workqueue";
 import { actions as allPatientSyncAction } from "../../stores/tenantAdmin/patientSync";
 import { useRouter } from "next/router";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCheckDouble } from "@fortawesome/free-solid-svg-icons";
 
 const Notification = ({
   open,
@@ -78,106 +80,118 @@ const Notification = ({
       id="DZ_W_Contacts_Body"
     >
       {!openMsg && !loading ? (
-        <div className={`d-grid pt-4 align-items-center ${style.cardGrid}`}>
-          {webSocketNotificationData?.map((notification, index) => (
+        <>
+          <div className="d-flex justify-content-end me-3">
             <div
-              key={index}
-              className="col-12 m-2 col-md-6 col-lg-6 col-xl-3 col-l-6"
+              className="cr-pointer  text-decoration-underline d-flex align-items-center"
+              style={{ color: "#3A88F8" }}
             >
-              <Card padding="20px" borderRadius="5px" width="97%">
-                <div
-                  className={`${style.cardContainer} justify-content-between align-items-center`}
-                >
-                  <div>
-                    <div
-                      className="d-flex justify-content-between p-1 fw-bold align-items-center cr-pointer"
-                      style={{ color: "#2983E3" }}
-                    >
+              <FontAwesomeIcon icon={faCheckDouble} className="me-2" />
+              <span>Mark all as read</span>
+            </div>
+          </div>
+
+          <div className={`d-grid align-items-center ${style.cardGrid}`}>
+            {webSocketNotificationData?.map((notification, index) => (
+              <div
+                key={index}
+                className="col-12 m-2 col-md-6 col-lg-6 col-xl-3 col-l-6"
+              >
+                <Card padding="20px" borderRadius="5px" width="97%">
+                  <div
+                    className={`${style.cardContainer} justify-content-between align-items-center`}
+                  >
+                    <div>
                       <div
-                        className={`${style.cardContent} text-gray-600 text-truncate`}
+                        className="d-flex justify-content-between p-1 fw-bold align-items-center cr-pointer"
+                        style={{ color: "#2983E3" }}
                       >
-                        {notification?.notificationType
-                          ?.replaceAll("_", " ")
-                          .toLowerCase()
-                          .replace(/\b\w/g, (c) => c.toUpperCase())}
-                      </div>
-                      {notification.read === false && (
-                        <span
-                          className="rounded-circle me-2"
-                          style={{
-                            width: "10px",
-                            height: "10px",
-                            backgroundColor: "#3A88F8",
-                          }}
-                        ></span>
-                      )}
-                    </div>
-
-                    <div className="d-flex p-1 fw-bold align-items-center cr-pointer">
-                      <span
-                        className={`${style.cardContent} fw-bold text-gray-600 text-truncate`}
-                      >
-                        {notification?.fromUserDetails?.firstName}{" "}
-                        {notification?.fromUserDetails?.lastName}
-                      </span>
-
-                      <div
-                        id="table-btn"
-                        name="table-btn"
-                        className="d-flex mx-4 justify-content-center align-items-center"
-                      >
-                        <span
-                          style={{ borderRadius: "5px", fontSize: "12px" }}
-                          data-testid="table-custom"
-                          name="table-custom"
-                          className="px-2 w-full font1 text-ellipsis tableButton cursor-default pointer-events-none"
-                        >
-                          {notification?.fromUserDetails?.role
-                            ?.map((role) =>
-                              role
-                                .replaceAll("_", " ")
-                                .toLowerCase()
-                                .replace(/\b\w/g, (c) => c.toUpperCase())
-                            )
-                            .join(", ")}
-                        </span>
-                      </div>
-                    </div>
-
-                    <div className="d-flex p-1 align-items-center cr-pointer">
-                      <Tooltip title={notification?.content}>
-                        <span
+                        <div
                           className={`${style.cardContent} text-gray-600 text-truncate`}
                         >
-                          {notification?.content}
+                          {notification?.notificationType
+                            ?.replaceAll("_", " ")
+                            .toLowerCase()
+                            .replace(/\b\w/g, (c) => c.toUpperCase())}
+                        </div>
+                        {notification.read === false && (
+                          <span
+                            className="rounded-circle me-2"
+                            style={{
+                              width: "10px",
+                              height: "10px",
+                              backgroundColor: "#3A88F8",
+                            }}
+                          ></span>
+                        )}
+                      </div>
+
+                      <div className="d-flex p-1 fw-bold align-items-center cr-pointer">
+                        <span
+                          className={`${style.cardContent} fw-bold text-gray-600 text-truncate`}
+                        >
+                          {notification?.fromUserDetails?.firstName}{" "}
+                          {notification?.fromUserDetails?.lastName}
                         </span>
-                      </Tooltip>
-                    </div>
 
-                    <div className="d-flex pt-3 justify-content-between align-items-center">
-                      {/* <Button
-                        className="text-white"
-                        style={{ backgroundColor: "#3A88F8" }}
-                        onClick={() => gotoPatientDetails(notification)}
-                      >
-                        GO TO FILE
-                      </Button> */}
+                        <div
+                          id="table-btn"
+                          name="table-btn"
+                          className="d-flex mx-4 justify-content-center align-items-center"
+                        >
+                          <span
+                            style={{ borderRadius: "5px", fontSize: "12px" }}
+                            data-testid="table-custom"
+                            name="table-custom"
+                            className="px-2 w-full font1 text-ellipsis tableButton cursor-default pointer-events-none"
+                          >
+                            {notification?.fromUserDetails?.role
+                              ?.map((role) =>
+                                role
+                                  .replaceAll("_", " ")
+                                  .toLowerCase()
+                                  .replace(/\b\w/g, (c) => c.toUpperCase())
+                              )
+                              .join(", ")}
+                          </span>
+                        </div>
+                      </div>
 
-                      <div className="px-1">
-                        {notification?.createdDate
-                          ? formatDateTime({
-                              date: notification?.createdDate,
-                              formatType: "dateTime",
-                            })
-                          : "---"}
+                      <div className="d-flex p-1 align-items-center cr-pointer">
+                        <Tooltip title={notification?.content}>
+                          <span
+                            className={`${style.cardContent} text-gray-600 text-truncate`}
+                          >
+                            {notification?.content}
+                          </span>
+                        </Tooltip>
+                      </div>
+
+                      <div className="d-flex pt-3 justify-content-between align-items-center">
+                        <Button
+                          className="text-white"
+                          style={{ backgroundColor: "#3A88F8" }}
+                          onClick={() => gotoPatientDetails(notification)}
+                        >
+                          Go to File
+                        </Button>
+
+                        <div className="px-1" style={{ color: "#7E7B7B" }}>
+                          {notification?.createdDate
+                            ? formatDateTime({
+                                date: notification?.createdDate,
+                                formatType: "dateTime",
+                              })
+                            : "---"}
+                        </div>
                       </div>
                     </div>
                   </div>
-                </div>
-              </Card>
-            </div>
-          ))}
-        </div>
+                </Card>
+              </div>
+            ))}
+          </div>
+        </>
       ) : null}
       <Chat openMsg={openMsg} offMsg={() => setOpenMsg(false)} />
     </div>

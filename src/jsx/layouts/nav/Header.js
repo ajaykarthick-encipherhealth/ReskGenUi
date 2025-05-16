@@ -28,10 +28,15 @@ import Notification from "../../../components/notification/index";
 import ChatCommunication from "../../../components/chatCommunication/index";
 import ImageUploader from "../../../components/imageUploading/ImageUploader";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faMessage, faBell } from "@fortawesome/free-regular-svg-icons";
+import {
+  faMessage,
+  faBell,
+  faTimes,
+} from "@fortawesome/free-regular-svg-icons";
 import {
   faChevronLeft,
   faChevronRight,
+  faClose,
 } from "@fortawesome/free-solid-svg-icons";
 import { logoutAllDevice } from "../../../stores/authflow/actions";
 import { actions as dashbaordActions } from "../../../stores/reviewer/dashboard";
@@ -51,6 +56,7 @@ import { getHeaderLoge } from "../../../pages/twofactorauthentication/reusableFu
 import { actions as tinActions } from "../../../stores/tenantAdmin/tin";
 import { actions as tableAction } from "../../../stores/tableView";
 import CardSkeleton from "../../../components/skeleton/card";
+
 
 const Header = ({
   notificationResponse,
@@ -1306,14 +1312,42 @@ const Header = ({
           </div>
         </nav>
       </div>
-
       <Drawer
-        title="Notification"
+        title={
+          <div className="d-flex justify-content-between align-items-center"
+          >
+            <div className="d-flex align-items-center gap-2">
+              <FontAwesomeIcon
+                icon={faBell}
+                style={{
+                  color: "#04306F",
+                  fontSize: "22px",
+                  fontWeight: "600px",
+                }}
+              />
+              <span
+                style={{
+                  color: "#04306F",
+                  fontSize: "19px",
+                  fontWeight: "100px",
+                }}
+              >
+                Notification
+              </span>
+            </div>
+            <FontAwesomeIcon
+              style={{ fontSize: "22px", cursor: "pointer" }}
+              icon={faClose}
+              onClick={onClose}
+            />
+          </div>
+        }
         placement="right"
-        closable={true}
+        closable={false}
         onClose={onClose}
         open={open}
-        width={600}
+        width={660}
+        headerStyle={{ borderBottom: "none" }}
       >
         {!openMsg ? <Notification open={open} /> : null}
       </Drawer>
