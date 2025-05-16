@@ -446,8 +446,9 @@ const RandomSamplingModal = ({
                 message: "Enter Percentage !",
               },
               {
-                pattern: /^[0-9]+$/,
-                message: "Percentage must contain only numbers",
+                pattern: /^(100|[1-9][0-9]?|0)$/,
+                message:
+                  "Percentage must be a number between 0 and 100 with no decimals or letters",
               },
             ]}
             label="Enter Percentage of File Related to HCC Condition"
@@ -462,8 +463,9 @@ const RandomSamplingModal = ({
                 message: "Enter Percentage !",
               },
               {
-                pattern: /^[0-9]+$/,
-                message: "Percentage must contain only numbers",
+                pattern: /^(100|[1-9][0-9]?|0)$/,
+                message:
+                  "Percentage must be a number between 0 and 100 with no decimals or letters",
               },
             ]}
             label="Enter Percentage of File Related to No HCC Condition"

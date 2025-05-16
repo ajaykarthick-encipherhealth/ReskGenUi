@@ -1184,36 +1184,38 @@ const Header = ({
                               />
                             </div>
                           )}
-                          {tenentId !=
-                            "7f41538e-2329-4ecc-890f-03c93cccb934" && (
-                            <div
-                              className="chatheaderIcon cursor-pointer"
-                              id="chatIcon"
-                              name="chatIcon"
-                              onClick={() => gotoChat()}
-                            >
-                              {/* <div style={{ color: "#04306F" }}> */}
+                          {/* <>
+                            {tenentId !=
+                              "7f41538e-2329-4ecc-890f-03c93cccb934" && (
                               <div
-                                id="chat-icon"
-                                name="chat-icon"
-                                style={{ color: "#04306F" }}
+                                className="chatheaderIcon cursor-pointer"
+                                id="chatIcon"
+                                name="chatIcon"
+                                onClick={() => gotoChat()}
                               >
-                                <FontAwesomeIcon
-                                  icon={faMessage}
-                                  className={styles.bellIcon}
-                                  style={{
-                                    width: "20px",
-                                    height: "20px",
-                                    marginTop: "8px",
-                                    fontWeight: "700",
-                                    marginRight: "10px",
-                                    color: "#04306F",
-                                  }}
-                                />
+                                {/* <div style={{ color: "#04306F" }}> */}
+                                {/* <div
+                                  id="chat-icon"
+                                  name="chat-icon"
+                                  style={{ color: "#04306F" }}
+                                >
+                                  <FontAwesomeIcon
+                                    icon={faMessage}
+                                    className={styles.bellIcon}
+                                    style={{
+                                      width: "20px",
+                                      height: "20px",
+                                      marginTop: "8px",
+                                      fontWeight: "700",
+                                      marginRight: "10px",
+                                      color: "#04306F",
+                                    }}
+                                  />
+                                  {/* </div> */}
                                 {/* </div> */}
-                              </div>
-                            </div>
-                          )}
+                              {/* </div> */}
+                            {/* )} */}
+                          {/* </> */}
                           <div
                             className={`notificationIcon ${
                               notificationCount < 9 ? "me-3" : "me-4"
