@@ -516,6 +516,7 @@ const AllocateModal = ({
                   onChange={(date, dateS) => {
                     setAllocateDate(dateS || "");
                   }}
+                  format="MM-DD-YYYY"
                   disabledDate={(current) => disablePastDate(current)}
                 />
               </div>
