@@ -236,6 +236,7 @@ export async function getStatusTableView({
   let searchTextParams = null;
   let selectParams = null;
   let dateRagngesParams = null;
+ 
   if (searchText) {
     searchTextParams = convertToCustomParams(searchText);
   }
@@ -246,10 +247,13 @@ export async function getStatusTableView({
     dateRagngesParams = convertToCustomParamsDatePicker(selectedDateRanges);
   }
   const uId = getStorage("userId");
-  const baseUrl = `dbservice/get-count?&isReAssigned=${
+  const role = getStorage("proxyRole");
+  let baseUrl = `dbservice/get-count?&isReAssigned=${
     isReAssigned || false
-  }&isQueried=${isQueried || false}&patientAllocated=${patientAllocated || ""}&tin=${tin || ""}`;
-
+  }&isQueried=${isQueried || false}&patientAllocated=${patientAllocated || ""}`;
+ if (role === "QA") {
+   baseUrl += `&tin=${tin || ""}`;
+ }
   const finalUrl = `${baseUrl}${searchTextParams || ""}${selectParams || ""}${
     dateRagngesParams || ""
   }`;
