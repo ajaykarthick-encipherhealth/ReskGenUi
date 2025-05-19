@@ -915,34 +915,6 @@ const Header = ({
   useEffect(() => {
     getRole();
   }, []);
-  // useEffect(() => {
-  //   const userRole = getStorage("proxyRole");
-  //   if (
-  //     tinDetails?.length > 0 &&
-  //     (!selectedTin || selectedTin === "") &&
-  //     userRole === "QA"
-  //   ) {
-  //     const defaultTinNumber = tinDetails[0].tinNumber;
-  //     setSelectedTin(defaultTinNumber);
-  //     setStorage("tinNumber", defaultTinNumber);
-  //     getPageRendering(defaultTinNumber);
-  //   }
-  // }, [tinDetails, selectedTin]);
-
-  // useEffect(() => {
-  //   if (projectListCheck) {
-  //     // setTimeout(() => {
-  //     const defaultClient = getStorage("client");
-  //     const defaultProject = getStorage("project");
-
-  //     if (defaultClient) setSelectedClient(defaultClient);
-  //     setBackupSelectedClient(defaultClient);
-  //     if (defaultProject) setSelectedProject(defaultProject);
-  //     setBackupSelectedProject(defaultProject);
-
-  //   }
-  //   // }, 2000);
-  // }, [projectListCheck]);
 
   useEffect(() => {
     if (projectListCheck) {
@@ -950,26 +922,26 @@ const Header = ({
       const defaultProject = getStorage("project");
       const defaultTinNumber = getStorage("tinNumber");
       const userRole = getStorage("proxyRole");
-      if (
-        tinDetails?.length > 0 &&
-        (!selectedTin || selectedTin === "") &&
-        userRole === "QA"
-      ) {
-        const defaultTinNumberIndex = tinDetails[0].tinNumber;
-        setStorage("tinNumber", defaultTinNumberIndex);
-        if (defaultTinNumber || defaultTinNumberIndex) {
-          setSelectedTin(defaultTinNumber || defaultTinNumberIndex);
-          setBackupSelectedTin(defaultTinNumber);
+      if (tinDetails?.length > 0 && userRole === "QA") {
+        let initialTin = defaultTinNumber || tinDetails[0].tinNumber;
+        if (!selectedTin) {
+          setSelectedTin(initialTin);
+          setStorage("tinNumber", initialTin);
+          setBackupSelectedTin(initialTin);
         }
       }
+      if (defaultClient) {
+        setSelectedClient(defaultClient);
+        setBackupSelectedClient(defaultClient);
+      }
 
-      if (defaultClient) setSelectedClient(defaultClient);
-      setBackupSelectedClient(defaultClient);
-
-      if (defaultProject) setSelectedProject(defaultProject);
-      setBackupSelectedProject(defaultProject);
+      if (defaultProject) {
+        setSelectedProject(defaultProject);
+        setBackupSelectedProject(defaultProject);
+      }
     }
   }, [projectListCheck, tinDetails, selectedTin]);
+
 
   useEffect(() => {
     if (projectDetails) {
