@@ -3,17 +3,12 @@ import Header from "../../../jsx/layouts/nav/Header";
 import { actions as tinActions } from "../../../stores/tenantAdmin/tin";
 import Tab from "../../../mainStream/components/tags";
 import { connect } from "react-redux";
-import RegularButton from "../../../components/button";
-import CustomizableDrawer from "../../../components/customizeDrawer";
 import { useRouter } from "next/router";
 import ReusableFilters from "../../../components/reusableFilters";
 import AppTable from "../../../components/tables";
 import { actions as allActions } from "../../../stores/reviewer/workqueue";
-import { getStorage, setStorage } from "../../../utils/storages";
-import { statusOptions } from "../../reviewer/patients";
-import visitStyles from "../../../styles/visitdata.module.css";
+import {  setStorage } from "../../../utils/storages";
 import { actions as supervisorActions } from "../../../stores/supervisor/auditedQueue";
-
 import {
   findItemWithTrueKey,
   findMatchesByField,
@@ -24,114 +19,10 @@ import { actions as tableAction } from "../../../stores/tableView";
 import styles from "../../../styles/visitdata.module.css";
 import { Button, Popconfirm, Spin } from "antd";
 import { LoadingOutlined, PlusCircleFilled } from "@ant-design/icons";
-import {
-  generateOptionsForNewStore,
-  priorityOptions,
-} from "../../../components/headerFilters/functions";
+import visitStyles from  '../../../styles/visitdata.module.css'
+import { actions as allPatientSyncAction } from '../../../stores/tenantAdmin/patientSync'
 
-const commonFilterItems = [
-  {
-    id: "01",
-    title: "Tin",
-    type: "search",
-    value: null,
-    placeholder: "Search",
-    pickerType: "search",
-    header: "Tin Name / ID",
-    active: true,
-  },
-  {
-    id: "02",
-    title: "Priority",
-    type: "select",
-    value: null,
-    placeholder: "Priority",
-    options: null,
-    active: true,
-  },
-];
-const columns = [
-  {
-    id: 1,
-    title: "Search",
-    type: "search",
-    value: null,
-    placeholder: "Search",
-    pickerType: "search",
-    header: "Tin",
-    active: true,
-  },
-  {
-    id: 2,
-    title: "Search",
-    type: "search",
-    value: null,
-    placeholder: "Search",
-    pickerType: "search",
-    header: "Batch Name",
-    active: true,
-  },
-  {
-    name: "Providers",
-    value: "fileName",
-    isShow: true,
-  },
-  {
-    name: "Patients",
-    value: "validDiseaseCount",
-    isShow: true,
-  },
-  {
-    name: "Not Assigned",
-    value: "allocatedOn",
-    isShow: true,
-    filterKey: "allocatedDate",
-  },
-  {
-    name: "Downloading",
-    value: "dueDate",
 
-    isDate: true,
-    isShow: true,
-    filterKey: "dueDate",
-  },
-  {
-    name: "Coder 1",
-    value: "processedDate",
-    isDate: true,
-    isShow: true,
-    filterKey: "completedDate",
-  },
-
-  {
-    name: "Coder 2",
-    isShow: true,
-  },
-  {
-    name: "QA",
-    value: "",
-    isShow: true,
-    filterKey: "Priority",
-  },
-  {
-    name: "Downloader Not Complete",
-    value: "statusProxy",
-    isShow: true,
-    filterKey: "Status",
-  },
-  {
-    name: "Complete",
-    value: "statusProxy",
-    isShow: true,
-    filterKey: "Status",
-  },
-  {
-    name: "priority",
-    value: "",
-    isShow: true,
-    filterKey: "",
-  },
-];
 export const getPageId = (activeTab) => {
   switch (activeTab) {
     case "Active":
@@ -159,6 +50,7 @@ const Tin = ({
   setTinStatus,
   getTableDataChecked,
   tinPriority,
+  getRoutedData,
 }) => {
   const tabs = getAccessTabItems({ page: "Tin", tabsMenu: "tabMenuList" });
   const activeTab = activeTabName || tabs?.[0] || "Active";
@@ -191,7 +83,6 @@ const Tin = ({
   const [searchText, setSearchText] = useState(null);
   const [selectedDateRanges, setSelectedDateRanges] = useState({});
   const [selectedDates, setSelectedDates] = useState([]);
-  const [pageNumber, setPageNumber] = useState(0);
   const [clear, setClear] = useState(false);
   const [selectedRowsId, setSelectedRowsId] = useState([]);
   const [selectedUserName, setSelectedUserName] = useState([]);
@@ -199,21 +90,31 @@ const Tin = ({
   const [checkedLoader, setCheckedLoader] = useState(false);
   const [checkedHeader, setCheckedHeader] = useState(false);
   const [parsedData, setParsedData] = useState([]);
-  const [pageSize, setPageSize] = useState(15);
   const [priority, setPriority] = useState(null);
   const [isFilter, setIsFilter] = useState(true);
 
+  const params = {
+    pageNo,
+    paginationFirst,
+    sort,
+    selectedOption,
+    searchText,
+    selectedDateRanges,
+    selectedDates,
+    activeFilters,
+  };
   const gotoPatientDetails = (rowData) => {
     setStorage("patientId", rowData.patientId);
     setStorage("tinNumber", rowData.tinNumber);
     setStorage("routeBackTo", "/tenantadmin/tin");
     setStorage("activeTabTin", activeTab);
+    getRoutedData(params);
     router.push("/tenantadmin/tin/tindetails?tab=Patients");
   };
 
   const handleTabs = (name) => {
     setSort("");
-    setIsFilter(true)
+    setIsFilter(true);
     setSelectedOption({});
     getProjectActiveTab({ tinTabName: name });
     setPageNo(0);
@@ -223,7 +124,6 @@ const Tin = ({
   const onPageChange = (e) => {
     setPaginationFirst(e.first);
     setPageNo(e.page);
-    setPageSize(e.rows);
   };
   const showDrawer = () => {
     setTest(data?.response?.metaDataDTO);
@@ -419,9 +319,7 @@ const Tin = ({
       getResponePopup(error?.response);
     }
   };
-  const opt = {
-    priority: priorityOptions,
-  };
+
   useEffect(() => {
     if (routedData) {
       const {
@@ -431,7 +329,6 @@ const Tin = ({
         selectedOption,
         searchText,
         activeFilters,
-        pageNumber,
         paginationFirst,
         sort,
       } = routedData;
@@ -441,34 +338,16 @@ const Tin = ({
       setSelectedOption(selectedOption);
       setSelectedDates(selectedDates);
       setActiveFilters(activeFilters);
-      setPageNumber(pageNumber);
-      setPaginationFirst(paginationFirst);
-      setSort(sort);
-    }
-  }, [routedData]);
-  const params = {
-    pageNo,
-    paginationFirst,
-    sort,
-    activeFilters,
-    selectedOption,
-  };
-  useEffect(() => {
-    if (routedData) {
-      const { pageNo, selectedOption, activeFilters, paginationFirst, sort } =
-        routedData;
-      setPageNo(pageNo ? pageNo : 0);
-      setSelectedOption(selectedOption);
-      setActiveFilters(activeFilters);
       setPaginationFirst(paginationFirst);
       setSort(sort);
     }
   }, [routedData]);
 
+
+
   const getAllTins = async (tabOverride) => {
     const currentTab = tabOverride || activeTab;
     const pageId = getPageId(currentTab);
-    const projectId = getStorage("project");
 
     await getTableData({
       pageId,
@@ -483,7 +362,7 @@ const Tin = ({
       searchText,
     });
   };
-  
+
   const handlePriorityChange = async (tinNumber, selectedValue) => {
     const data = {
       tin: tinNumber,
@@ -504,7 +383,6 @@ const Tin = ({
     }
   };
 
-  const handleSwitchToggle = async (item, checked) => {};
 
   useEffect(() => {
     setParamsFilter("check");
@@ -535,7 +413,6 @@ const Tin = ({
       setIsFilter(false);
     }
   }, [data?.response?.metaDataDTO]);
-
 
   return (
     <div className={`show`}>
@@ -613,7 +490,6 @@ const Tin = ({
               setClear={setClear}
               clear={clear}
               setPageNo={setPageNo}
-              opt={opt}
               //customize table
               open={open}
               onClose={onClose}
@@ -621,7 +497,6 @@ const Tin = ({
               setSelectedColumns={setTest}
               showCustomizeTable={true}
               showDrawer={showDrawer}
-              commonFilterItems={commonFilterItems}
               handleSubmit={handleSubmit}
               handleReset={handleReset}
               isSubmitting={isSubmitting}
@@ -676,7 +551,6 @@ const Tin = ({
                   (item) => item.active
                 )}
                 loader={tableLoader}
-                // onRowClick={gotoPatientDetails}
                 pagination={false}
                 setSort={setSort}
                 sort={sort}
@@ -719,7 +593,7 @@ const Tin = ({
                 totalRecords={data?.response?.pageResponse?.totalElements}
                 row={15}
                 onPageChange={onPageChange}
-                onSwitchToggle={handleSwitchToggle}
+                // onSwitchToggle={handleSwitchToggle}
                 switchStates={switchStates}
                 isCheckBox={findItemWithTrueKey(
                   data?.response?.staticDesign,
@@ -747,7 +621,7 @@ const Tin = ({
 const enhancer = connect(
   (state) => ({
     activeTabName: state.tenantAdmin.tin?.activeTabRoutedData?.tinTabName,
-    routedData: state.tenantAdmin?.tin?.activeTabRoutedData?.tinFilter,
+    routedData: state.tenantAdmin?.patientSync?.routedData,
     data: state?.tableView?.tableView?.data,
     tableLoader: state?.tableView?.tableViewLoading,
     pageLoad: state?.tenantAdmin?.tin?.getPageRendering,
@@ -763,6 +637,7 @@ const enhancer = connect(
     setTinStatus: tableAction.setTinStatus,
     getTableDataChecked: tableAction.tinDynamicChecked,
     tinPriority: supervisorActions.getPriorityChange,
+    getRoutedData: allPatientSyncAction.getRoutedData,
   }
 );
 
