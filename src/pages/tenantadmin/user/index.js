@@ -150,13 +150,17 @@ const UserList = ({
       setRoleValue([]);
       setValidated(true);
       setAddUser(false);
-    } else if (response?.status == "FAILED") {
+    }
+     else if (response?.status == "FAILED") {
       setAddUser(true);
       notification.warning({
         message: response.message,
         duration: 2,
       });
-    } else setAddUser(false);
+    } else{
+      setAddUser(true);
+      getResponePopup(response);
+    } 
   };
 
   const switchHandler = (event, id) => {
