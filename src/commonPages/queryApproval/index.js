@@ -32,6 +32,7 @@ const QueryApproval = ({
   pageLoad,
   statusBodyTemplate,
   backRoute,
+  getRoutedData
 }) => {
   const commonFilterItems = [
     {
@@ -122,6 +123,10 @@ const QueryApproval = ({
   const [clear, setClear] = useState(false);
 
   const handleTabChange = (key) => {
+    var data = {
+      activeTab : key
+    }
+    getRoutedData(data)
     setActiveTab(key);
     setSearchText("");
     setSelectedDateRanges([]);
@@ -129,6 +134,19 @@ const QueryApproval = ({
     setPageNo(0);
     setSearch({});
   };
+
+   const page = {
+    pageNo,
+    selectedDates,
+    paginationFirst,
+    sort,
+    activeFilters,
+    searchText,
+    selectedOption,
+    selectedDateRanges,
+    activeTab
+  };
+
 
   const opt = {
     organization: organizationList?.response?.map((item) => ({
@@ -145,6 +163,7 @@ const QueryApproval = ({
       "routeBackTo",
       backRoute ? backRoute : "/tenantadmin/tin/tindetails?tab=Query+Approval"
     );
+    getRoutedData(page)
     navigate.push({
       pathname: route ? route : "/tenantadmin/tin/details",
     });
@@ -165,6 +184,29 @@ const QueryApproval = ({
       tin,
     });
   };
+
+   useEffect(() => {
+      if (routedData) {
+        const {
+          pageNo,
+          selectedDates,
+          selectedDateRanges,
+          selectedOption,
+          searchText,
+          activeFilters,
+          paginationFirst,
+          sort,
+        } = routedData;
+        setPageNo(pageNo ? pageNo : 0);
+        setSearchText(searchText);
+        setSelectedDateRanges(selectedDateRanges);
+        setSelectedOption(selectedOption);
+        setSelectedDates(selectedDates);
+        setActiveFilters(activeFilters);
+        setPaginationFirst(paginationFirst);
+        setSort(sort);
+      }
+    }, [routedData]);
 
   useEffect(() => {
     setParamsFilter("check");
