@@ -38,12 +38,13 @@ const ReusableInput = ({
     setLocalStr(value?.trimStart() || "");
   }, [value]);
   return (
-    <div id={id}  className="reusableInput">
+    <div id={id} className="reusableInput">
       <Input
         data-testid={testId}
         {...props}
         placeholder={placeholder}
-        value={localStr || value}
+        // value={localStr || value}
+        value={localStr}
         onChange={(e) => {
           handleChange(e.target.value);
         }}

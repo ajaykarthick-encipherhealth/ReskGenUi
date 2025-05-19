@@ -1199,12 +1199,13 @@ const TableRow = ({
               <div className="d-flex  justify-content-start">
                 <Progress
                   percent={item[`${columnItem.actualField}`]}
-                  strokeColor={
-                    columnItem.value === "processing" ||
-                    columnItem.value === "failed"
-                      ? "#263E50"
-                      : "#263E50"
-                  }
+                  // strokeColor={
+                  //   columnItem.value === "processing" ||
+                  //   columnItem.value === "failed"
+                  //     ? "#263E50"
+                  //     : "#263E50"
+                  // }
+                  format={(percent) => `${percent}%`} 
                   className={`w-100 ${Style.progreddBr}`}
                 />
               </div>
