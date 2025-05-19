@@ -224,51 +224,7 @@ const Patient = ({
   pageLoad,
   backRoute,
 }) => {
-  const columns = [
-    {
-      name: "Flag",
-      value: "",
-      isFlag: "true",
-    },
-    { name: "Patient Id", value: "patientId" },
-    { name: "Batch Name", value: "batchName" },
-    { name: "File Name", value: "fileName" },
-    { name: "Emr Type", value: "emr" },
-    { name: "Total pages", value: "totalPages" },
-    {
-      name: "Created By",
-      value: {
-        first: "createdByFirstName",
-        last: "createdByLastName",
-        img: "createdByProfileImage",
-      },
-      isImage: true,
-    },
-    {
-      name: "Computed Date",
-      value: "computedDate",
-      isDateAndTime: true,
-      sortable: true,
-    },
-    {
-      name: "Created Date",
-      value: "createdDate",
-      isDateAndTime: true,
-      sortable: true,
-    },
-    {
-      name: "Status",
-      value: "processedStatus",
-      batchStatus: true,
-      infoIcon: true,
-    },
-    { name: "Upload", value: "", statusButton: true },
-    {
-      name: "",
-      value: "",
-      isTrigger: true,
-    },
-  ];
+
   const [sort, setSort] = useState({
     computedDate: {
       sortDir: "DESC",
@@ -719,23 +675,6 @@ const Patient = ({
     }
   }, [routedData]);
 
-  // const getPatients = async () => {
-  //   const tin = getStorage("tinNumber");
-  //   const userId = getStorage("userId");
-  //   const response = await getTableData({
-  //     pageId: "c41d4ea9-6da4-495c-84f4-95b25d6c13b4",
-  //     pageNo,
-  //     pageSize: 15,
-  //     roleId: "",
-  //     tin,
-  //     patientAllocated: userId,
-  //     isAdmin: true,
-  //     selectedOption,
-  //     selectedDateRanges,
-  //     searchText,
-  //     sort
-  //   });
-  // };
 
   const getPatients = async () => {
     const tin = getStorage("tinNumber");
@@ -782,16 +721,6 @@ const Patient = ({
     pageLoad,
   ]);
 
-  const flagPostList = getFlagsData?.response?.map((item) => ({
-    value: item?.flagName,
-    label: (
-      <>
-        {item?.flagName ? item?.flagName.replaceAll("_", " ") : ""}
-        <SvgFlag fillColor={item?.flagColour} />
-      </>
-    ),
-    name: item?.flagName,
-  }));
 
 
   const handleSubmitInsert = async (data) => {
@@ -966,13 +895,7 @@ const Patient = ({
           <div id="task-tbl_wrapper" className="dataTables_wrapper no-footer">
             <div className="mt-4">
               <AppTable
-                // data={
-                //   statusUpdateWebSocket
-                //     ? statusUpdateWebSocket
-                //     : allPatientList?.data?.response?.patientDtoList?.content
-                // }
                 getRetregger={getRetregger}
-                // column={columns}
                 data={
                   statusUpdateWebSocket
                     ? statusUpdateWebSocket

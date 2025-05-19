@@ -97,6 +97,7 @@ const TinDetails = ({ activeTabName, getProjectActiveTab,getRoutedData,getRouted
   const handleBack = () => {
     getProjectActiveTab(activeTabName);
     router.push("/tenantadmin/tin");
+    getRoutedData(null) 
   };
   useEffect(() => {
     if (tab) {

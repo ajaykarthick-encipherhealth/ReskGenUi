@@ -345,7 +345,7 @@ const FileProcessing = ({
                   <div className="card-body p-0">
                     <div className="table-responsive active-projects task-table">
                       <div className="tbl-caption  align-items-center">
-                        <HeaderFilters
+                        {/* <HeaderFilters
                           // selectOrg
                           selectlabelOrg="Select Organization"
                           isSelectOrg={true}
@@ -354,7 +354,7 @@ const FileProcessing = ({
                           defaultSelectValueOrg={""}
                           orgValue={selectOrgList}
                           selectedValueOrg={selectOrgList}
-                        />
+                        /> */}
                       </div>
                       <div  className="mt-2" id="task-tbl_wrapper">
                         <FileProcessingTable

@@ -5,7 +5,6 @@ import "react-facebook-loading/dist/react-facebook-loading.css";
 import { notification } from "antd";
 import { actions as tenantAdminAction } from "../../stores/tenantAdmin/patients";
 import { actions as tableAction } from "../../stores/tableView";
-import { priorityOptions } from "../../components/headerFilters/functions";
 import { getStorage, setStorage } from "../../utils/storages";
 import { actions as allActions } from "../../stores/reviewer/workqueue";
 import { actions as allPatientSyncAction } from "../../stores/tenantAdmin/patientSync";

@@ -362,7 +362,9 @@ const Tin = ({
       searchText,
     });
   };
-
+const handleSwitchToggle = ()=>{
+  console.log("toggle")
+}
   const handlePriorityChange = async (tinNumber, selectedValue) => {
     const data = {
       tin: tinNumber,
@@ -593,7 +595,7 @@ const Tin = ({
                 totalRecords={data?.response?.pageResponse?.totalElements}
                 row={15}
                 onPageChange={onPageChange}
-                // onSwitchToggle={handleSwitchToggle}
+                onSwitchToggle={handleSwitchToggle}
                 switchStates={switchStates}
                 isCheckBox={findItemWithTrueKey(
                   data?.response?.staticDesign,
