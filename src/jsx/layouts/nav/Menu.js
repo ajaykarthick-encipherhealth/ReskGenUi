@@ -366,7 +366,7 @@ export const ProviderMenuList = (data) => {
         iconStyle: <EnvironmentOutlined />,
         activeIcon: <EnvironmentFilled />,
         to: "/tenantadmin/tracking",
-        childRoute2: "/admin/patients/details",
+        childRoute2: "/tenantadmin/tracking/details",
       });
     }
     if (res?.title == "Notification" && res?.active) {

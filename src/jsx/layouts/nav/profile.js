@@ -20,6 +20,7 @@ const Profile = ({
   profileImageUrl,
   userName,
   userEmail,
+  allRolesData,
 }) => {
   const userRole = getStorage("userRole");
   return (
@@ -58,9 +59,9 @@ const Profile = ({
                     />
                   ) : (
                     renderUserPrfoile(
-                      currentUserInfo?.firstName,
-                      currentUserInfo?.lastName,
-                      profileImageUrl,
+                      allRolesData?.firstName,
+                      allRolesData?.lastName,
+                      allRolesData?.profileImageUrl,
                       "header",
                       "70px",
                       "70px"
@@ -141,9 +142,9 @@ const Profile = ({
                   />
                 ) : (
                   renderUserPrfoile(
-                    currentUserInfo?.firstName,
-                    currentUserInfo?.lastName,
-                    profileImageUrl,
+                    allRolesData?.firstName,
+                    allRolesData?.lastName,
+                    allRolesData?.profileImageUrl,
                     "header"
                   )
                 )}

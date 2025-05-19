@@ -512,7 +512,7 @@ const Hcc = ({
   useEffect(() => {
     getAllRoles();
   }, []);
-  const proxyRole = getStorage("proxyRole");
+
   return (
     <div className={visitStyles.visitdata_tab_body}>
       <div className={`profile-tab ${visitStyles.visitdata_header_card2}`}>
@@ -799,8 +799,7 @@ const Hcc = ({
                       </Popover>
                     </Nav.Item>
                     {activeTabName?.tinDetailsTab == "Query Approval" &&
-                      (proxyRole === "OWNER" ||
-                        proxyRole === "TENANT_ADMIN") && (
+                     (
                         <div className="d-flex gap-2">
                           <Nav.Item as="li" className="nav-item">
                             <Popconfirm

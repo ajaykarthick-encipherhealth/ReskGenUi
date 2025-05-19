@@ -866,7 +866,6 @@ const Header = ({
       setStorage("userAllRoles", JSON?.stringify(data));
     }
   }, [allRolesData]);
-
   const getProjectDataList = async () => {
     const res = await getAllProjects();
     if (res.status == "SUCCESS") {
@@ -1204,7 +1203,7 @@ const Header = ({
                                 onClick={() => gotoChat()}
                               >
                                 {/* <div style={{ color: "#04306F" }}> */}
-                                {/* <div
+                          {/* <div
                                   id="chat-icon"
                                   name="chat-icon"
                                   style={{ color: "#04306F" }}
@@ -1222,9 +1221,9 @@ const Header = ({
                                     }}
                                   />
                                   {/* </div> */}
-                                {/* </div> */}
-                              {/* </div> */}
-                            {/* )} */}
+                          {/* </div> */}
+                          {/* </div> */}
+                          {/* )} */}
                           {/* </> */}
                           <div
                             className={`notificationIcon ${
@@ -1265,6 +1264,7 @@ const Header = ({
                             profileImageUrl={profileImg}
                             userName={userName}
                             userEmail={userEmail}
+                            allRolesData={allRolesData}
                           />
                           <div className="mx-15">
                             <div
