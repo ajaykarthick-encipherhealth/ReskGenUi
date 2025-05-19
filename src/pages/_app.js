@@ -384,10 +384,8 @@ function MyApp({ Component, pageProps }) {
     return () => clearInterval(interval);
   }, [router.pathname]);
 
-
-
   const hideFooterPaths = [
-    "/admin/patients/details",
+    "/tenantadmin/project/details",
     "/reviewer/patients/details",
     "/supervisor/patients/details",
     "/tenantadmin/patients/details",
@@ -398,6 +396,7 @@ function MyApp({ Component, pageProps }) {
     "/supervisor/report/reportdetails",
     "/tenantadmin/report/reportdetails",
     "/tenantadmin/tracking/details",
+    "/tenantadmin/tin/details",
   ];
   const showFooter = !hideFooterPaths.includes(router.pathname);
   useEffect(() => {

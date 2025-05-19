@@ -345,7 +345,6 @@ const Header = ({
       });
     }
   };
-
   const getMenuListByRole = (role) => {
     const allRoles = JSON?.parse(getStorage("userAllRoles"));
     let selectedRoleObj = allRoles?.find((res) => res.proxyRole === role);
@@ -846,7 +845,7 @@ const Header = ({
       setStorage("userName", userName);
       setUserEmail(userName);
       const data = res?.response?.userRoles?.map((data) => ({
-        label: data.aliasName,
+        label: data.aliasName?.split("_")?.join(" "),
         key: data.proxyRole,
         details: data,
       }));
