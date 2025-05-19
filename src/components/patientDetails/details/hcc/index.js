@@ -404,23 +404,21 @@ const Hcc = ({
     <>
       <div className="row">
         <div className="col-xl-6 my-2">Re-Evaluate</div>
-        <div
-          className="col-xl-6 d-flex justify-content-end align-items-center cursor-pointer"
-          // onClick={() =>
-          //   setActions({
-          //     showDisease: actions?.showDisease,
-          //     reEvaluate: true,
-          //     showActionsPop: false,
-          //   })
-          // }
-        >
-          <Switch
-            checked={isChecked?.isReEvaluateNeed}
-            disabled={isChecked?.movedAfterReEvaluateIsOff}
-            onChange={onChange}
-          />
-          {/* <FontAwesomeIcon icon={faAngleRight} style={{ color: "#04306f" }} /> */}
+        <div className="col-xl-6 d-flex justify-content-end align-items-center cursor-pointer">
+          <Popconfirm
+            title="Are you sure you want to re-evaluate?"
+            onConfirm={onChange}
+            okText="Yes"
+            cancelText="No"
+            disabled={isChecked?.movedAfterReEvaluateIsOff} 
+          >
+            <Switch
+              checked={isChecked?.isReEvaluateNeed}
+              disabled={isChecked?.movedAfterReEvaluateIsOff}
+            />
+          </Popconfirm>
         </div>
+
         <Divider className="p-0 m-0" />
         <div className="col-xl-6 my-2">Disease</div>
         <div
