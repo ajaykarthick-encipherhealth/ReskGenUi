@@ -560,6 +560,7 @@ const Tin = ({
             padding={"50px"}
           />
         </div>
+        {activeTab !== "Providers" && (
           <div className="d-flex align-items-center justify-content-end gap-4">
             <div className={styles.font}>
               Total Tin : {tinCount?.totalTin ? tinCount?.totalTin : 0}
@@ -570,7 +571,6 @@ const Tin = ({
             <div className={styles.font}>
               InActive Tin : {tinCount?.inactiveTin ? tinCount?.inactiveTin : 0}
             </div>
-
             <div className="p-3">
               <Popconfirm
                 title={`Are you sure you want to mark this as ${
@@ -591,12 +591,12 @@ const Tin = ({
               </Popconfirm>
             </div>
           </div>
-        {/* )} */}
+        )}
       </div>
 
-      <div className=" mt-3  container-fluid table-responsive active-projects task-table">
+      <div className=" mt-5 container-fluid table-responsive active-projects task-table">
         <div className="d-flex">
-          <div style={{ width: "100%" }}>
+          <div className="mt-3" style={{ width: "100%" }}>
             <ReusableFilters
               showFilter={true}
               setActiveFilters={setActiveFilters}

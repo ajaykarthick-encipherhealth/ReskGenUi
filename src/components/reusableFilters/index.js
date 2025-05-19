@@ -105,7 +105,6 @@ const ReusableFilters = ({
     }));
     setPageNo && setPageNo(0);
   };
-console.log(selectedDates, "selectedDates");
   return (
     <div className="d-flex  w-100">
       <div className="row " style={{ width: showFilter ? "98%" : "auto" }}>
