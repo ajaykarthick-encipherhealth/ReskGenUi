@@ -22,7 +22,7 @@ const TinDetails = ({ activeTabName, getProjectActiveTab,getRoutedData,getRouted
   const tabs = getAccessTabItems({ page: "Tin", tabsMenu: "tabMenuList2" });
   const { tab } = router.query;
   const activeTab = tab || activeTabName?.tinDetailsTab;
-    const [parsedData, setParsedData] = useState([]);
+  const [parsedData, setParsedData] = useState([]);
 
   const handleTabs = (name) => {
     getRoutedData(null)
@@ -107,9 +107,11 @@ const TinDetails = ({ activeTabName, getProjectActiveTab,getRoutedData,getRouted
   return (
     <div className={`show `}>
       <Header />
-      <div>
+      <div className="header">
         <SubNavBar hideBackArrow={true} handleBack={handleBack} />
-        <div className="mt-5">
+      </div>
+      <div style={{ marginTop: "10%" }}>
+        <div>
           <Tab
             width={"60%"}
             icon
@@ -117,26 +119,24 @@ const TinDetails = ({ activeTabName, getProjectActiveTab,getRoutedData,getRouted
             handleTabs={handleTabs}
             tabs={tabs}
           />
-          {activeTab === "Patients" && (
-            <Patients
-              route={`/tenantadmin/tin/details`}
-            />
-          )}
-          {activeTab === "File Processing" && (
-            <div>
-              <Fileprocessing />
-            </div>
-          )}
-          {activeTab === "Patient Allocation" && (
-            <PatientAllocation statusBodyTemplate={processstatusBodyTemplate} />
-          )}
-          {activeTab === "Moveback" && (
-            <MoveBack statusBodyTemplate={processstatusBodyTemplate} />
-          )}
-          {activeTab === "Query Approval" && (
-            <QueryApproval statusBodyTemplate={processstatusBodyTemplate} />
-          )}
         </div>
+        {activeTab === "Patients" && (
+          <Patients route={`/tenantadmin/tin/details`} />
+        )}
+        {activeTab === "File Processing" && (
+          <div>
+            <Fileprocessing />
+          </div>
+        )}
+        {activeTab === "Patient Allocation" && (
+          <PatientAllocation statusBodyTemplate={processstatusBodyTemplate} />
+        )}
+        {activeTab === "Moveback" && (
+          <MoveBack statusBodyTemplate={processstatusBodyTemplate} />
+        )}
+        {activeTab === "Query Approval" && (
+          <QueryApproval statusBodyTemplate={processstatusBodyTemplate} />
+        )}
       </div>
     </div>
   );

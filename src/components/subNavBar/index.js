@@ -64,7 +64,7 @@ const SubNavBar = ({ handleBack, hideBackArrow, pageLoad ,tableLoader}) => {
       <div className={`w-100 ${styles.tabContainer}`}>
         {loading ? (
           <div className="w-100">
-            <CardSkeleton />
+            <CardSkeleton height={60} />
           </div>
         ) : tableData.length === 0 ? (
           <div className="mx-3">No records found.</div>
