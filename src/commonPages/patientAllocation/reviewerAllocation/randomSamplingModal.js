@@ -22,7 +22,7 @@ import { getStorage } from "../../../utils/storages";
 import TableSkeleton from "../../../components/skeleton/table";
 import RegularButton from "../../../components/button";
 import { actions as allAction } from "../../../stores/tenantAdmin/patientAllocations";
-import { priorityOptions } from "../../../components/headerFilters/functions";
+import { disablePastDate, priorityOptions } from "../../../components/headerFilters/functions";
 
 const RandomSamplingModal = ({
   open,
@@ -502,7 +502,12 @@ const RandomSamplingModal = ({
               label="Due Date"
               name="duedate"
             >
-              <DatePicker className="w-75" placeholder="Due Date" />
+              <DatePicker
+                format="MM-DD-YYYY"
+                 className="w-75"
+                placeholder="Due Date"
+                disabledDate={(current) => disablePastDate(current)}
+              />
             </Form.Item>
           </div>
 
