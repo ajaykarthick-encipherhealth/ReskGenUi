@@ -42,7 +42,7 @@ const ConnectWebSocket = ({
         var push = [...[webSocketData], ...dataMap];
         getNotificationData(push);
       } else {
-        var push = [...[webSocketData], ...oldNotification];
+        // var push = [...[webSocketData], ...oldNotification];
         getNotificationData(push);
       }
     }
