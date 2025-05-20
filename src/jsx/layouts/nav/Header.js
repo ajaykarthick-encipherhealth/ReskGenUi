@@ -758,11 +758,15 @@ const Header = ({
     }
   };
 
-  const TinOptions = tinDetails?.map((client) => ({
-    label: client.tinName,
-    value: client.tinNumber,
-  }));
-
+  const TinOptions = tinDetails?.reduce((acc, current) => {
+    if (!acc.some((item) => item.value === current.tinNumber)) {
+      acc.push({
+        label: current.tinName,
+        value: current.tinNumber,
+      });
+    }
+    return acc;
+  }, []);
   const clientOptions = clientDetails?.map((client) => ({
     label: client.clientName,
     value: client.clientId,
@@ -977,13 +981,6 @@ const Header = ({
                 </div>
               )}
               <div className="d-flex gap-3">
-                {/* {projectListCheck  ?
-                <div className="mt-3 d-flex">
-                  <CardSkeleton  height={30}/>
-                  <div className="mx-2">
-                  <CardSkeleton  height={30}/>
-                  </div>
-                </div>: */}
                 <>
                   <div className="mt-3">
                     <Select
@@ -1003,23 +1000,25 @@ const Header = ({
                       options={projectList}
                     />
                   </div>
-                  {proxyRole === "QA" ? (
-                    <div className="mt-3">
-                      <Select
-                        placeholder="Select Tin"
-                        style={{ width: 150 }}
-                        value={selectedTin}
-                        onChange={(e, value) => handleTinChange(value)}
-                        options={TinOptions}
-                        filterOption={(input, option) =>
-                          (option?.label ?? "")
-                            .toLowerCase()
-                            .includes(input.toLowerCase())
-                        }
-                        showSearch={true}
-                      />
-                    </div>
-                  ) : null}
+                  <div>
+                    {currentRole === "QA" && (
+                      <div className="mt-3">
+                        <Select
+                          placeholder="Select Tin"
+                          style={{ width: 150 }}
+                          value={selectedTin}
+                          onChange={(e, value) => handleTinChange(value)}
+                          options={TinOptions}
+                          filterOption={(input, option) =>
+                            (option?.label ?? "")
+                              .toLowerCase()
+                              .includes(input.toLowerCase())
+                          }
+                          showSearch={true}
+                        />
+                      </div>
+                    )}
+                  </div>
                 </>
                 {/* } */}
               </div>
