@@ -16,6 +16,7 @@ import { actions as allPatientSyncAction } from "../../stores/tenantAdmin/patien
 import { useRouter } from "next/router";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheckDouble } from "@fortawesome/free-solid-svg-icons";
+import CardSkeleton from '../skeleton/card'
 
 const Notification = ({
   open,
@@ -27,6 +28,7 @@ const Notification = ({
   patientDetails,
   backRoute,
   getRoutedData,
+  notificationLoading,
 }) => {
   const [openMsg, setOpenMsg] = useState(false);
   const notificationData = notificationResponse?.notificationList?.content;
@@ -73,7 +75,6 @@ const Notification = ({
   }, [notificationData]);
 
   useEffect(() => {}, [webSocketNotificationData]);
-
   return (
     <div
       className="card-body chatbox contacts_body p-0"
@@ -106,8 +107,7 @@ const Notification = ({
               <span>Mark all as read</span>
             </div>
           </div>
-
-          <div className={`d-grid align-items-center ${style.cardGrid}`}>
+          {notificationLoading ? <CardSkeleton count={10} display={"flex"} gap={"10px"}  height={150}/>: <div className={`d-grid align-items-center ${style.cardGrid}`}>
             {webSocketNotificationData?.map((notification, index) => (
               <div
                 key={index}
@@ -211,7 +211,7 @@ const Notification = ({
                 </Card>
               </div>
             ))}
-          </div>
+          </div>}
         </>
       ) : null}
       <Chat openMsg={openMsg} offMsg={() => setOpenMsg(false)} />
@@ -226,6 +226,7 @@ const enhancer = connect(
     webSocketData: state?.tenantAdmin?.webSocket?.webSocketDetails?.data,
     webSocketNotificationData:
       state?.tenantAdmin?.webSocket?.webSocketNotificationDetails?.data,
+    notificationLoading: state?.reviewer?.dashboard?.notificationLoader,
   }),
   {
     patientDetails: allActions.getPatientDetails,

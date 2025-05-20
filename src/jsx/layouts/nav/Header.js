@@ -729,7 +729,7 @@ const Header = ({
             status: "SUCCESS",
             message: "Profile Upload Successfully!",
           });
-          await getCurrentUserInfo({ userId });
+          await getAllRoles();
           setOpenContent(false);
         }
       }
@@ -750,6 +750,7 @@ const Header = ({
           message: "Profile Deleted Successfully!",
         });
         // getCurrentUserInfo({ userId });
+        getAllRoles()
       } else {
         getResponePopup(res);
       }
@@ -954,6 +955,8 @@ const Header = ({
       setProjectList(projectOptions);
     }
   }, [projectDetails]);
+
+  console.log(profileImg,"profileImg");
   return (
     <div className={`header ${headerFix ? "is-fixed" : ""}`}>
       <div className="header-content">
@@ -1362,22 +1365,6 @@ const Header = ({
           setOpenContent(false);
         }}
         closable={true}
-        // footer={
-        //   profileImg
-        //     ? [
-        //         <div className="customDelete">
-        //           <Button
-        //             onClick={() => {
-        //               deleteProfile();
-        //               setOpenUploader(false);
-        //             }}
-        //           >
-        //             Delete
-        //           </Button>
-        //         </div>,
-        //       ]
-        //     : []
-        // }
         footer={[
           <Button
             key="ok"
@@ -1387,7 +1374,7 @@ const Header = ({
           >
             Ok
           </Button>,
-          profileImg && (
+          allRolesData?.profileImageUrl && (
             <span className="customDelete p-2">
               <Button
                 key="delete"
