@@ -81,9 +81,7 @@ const Notification = ({
     >
       {!openMsg && !loading ? (
         <>
-
           <div className="d-flex justify-content-end me-3">
-
             <div
               className="cr-pointer  text-decoration-underline d-flex align-items-center"
               style={{ color: "#3A88F8" }}
@@ -121,7 +119,7 @@ const Notification = ({
                   >
                     <div>
                       <div
-                        className="d-flex justify-content-between p-1 fw-bold align-items-center cr-pointer"
+                        className="d-flex justify-content-between p-1 fw-bold align-items-center "
                         style={{ color: "#2983E3" }}
                       >
                         <div
@@ -143,36 +141,40 @@ const Notification = ({
                           ></span>
                         )}
                       </div>
-
-                      <div className="d-flex p-1 fw-bold align-items-center cr-pointer">
-                        <span
-                          className={`${style.cardContent} fw-bold text-gray-600 text-truncate`}
-                        >
-                          {notification?.fromUserDetails?.firstName}{" "}
-                          {notification?.fromUserDetails?.lastName}
-                        </span>
-                        {notification?.userFromAliasName && (
-                          <div
-                            id="table-btn"
-                            name="table-btn"
-                            className="d-flex mx-4 justify-content-center align-items-center"
+                      {notification?.notificationType != "TIN_COMPLETED" && (
+                        <div className="d-flex p-1 fw-bold align-items-center ">
+                          <span
+                            className={`${style.cardContent} fw-bold text-gray-600 text-truncate`}
                           >
-                            <span
-                              style={{ borderRadius: "5px", fontSize: "12px" }}
-                              data-testid="table-custom"
-                              name="table-custom"
-                              className="px-2 w-full font1 text-ellipsis tableButton cursor-default pointer-events-none"
+                            {notification?.fromUserDetails?.firstName}{" "}
+                            {notification?.fromUserDetails?.lastName}
+                          </span>
+                          {notification?.userFromAliasName && (
+                            <div
+                              id="table-btn"
+                              name="table-btn"
+                              className="d-flex mx-4 justify-content-center align-items-center"
                             >
-                              {notification?.userFromAliasName
-                                .toString()
-                                .replace(/_/g, " ")
-                                .replace(/,\s*/g, ", ")}
-                            </span>
-                          </div>
-                        )}
-                      </div>
+                              <span
+                                style={{
+                                  borderRadius: "5px",
+                                  fontSize: "12px",
+                                }}
+                                data-testid="table-custom"
+                                name="table-custom"
+                                className="px-2 w-full font1 text-ellipsis tableButton cursor-default pointer-events-none"
+                              >
+                                {notification?.userFromAliasName
+                                  .toString()
+                                  .replace(/_/g, " ")
+                                  .replace(/,\s*/g, ", ")}
+                              </span>
+                            </div>
+                          )}
+                        </div>
+                      )}
 
-                      <div className="d-flex p-1 align-items-center cr-pointer">
+                      <div className="d-flex p-1 align-items-center ">
                         <Tooltip title={notification?.content}>
                           <span
                             className={`${style.cardContent} text-gray-600 text-truncate`}
@@ -183,13 +185,17 @@ const Notification = ({
                       </div>
 
                       <div className="d-flex pt-3 justify-content-between align-items-center">
-                        <Button
-                          className="text-white"
-                          style={{ backgroundColor: "#3A88F8" }}
-                          onClick={() => gotoPatientDetails(notification)}
-                        >
-                          Go to File
-                        </Button>
+                        {notification?.notificationType != "TIN_COMPLETED" ? (
+                          <Button
+                            className="text-white"
+                            style={{ backgroundColor: "#3A88F8" }}
+                            onClick={() => gotoPatientDetails(notification)}
+                          >
+                            Go to File
+                          </Button>
+                        ) : (
+                          <div>&nbsp;</div>
+                        )}
 
                         <div className="px-1" style={{ color: "#7E7B7B" }}>
                           {notification?.createdDate

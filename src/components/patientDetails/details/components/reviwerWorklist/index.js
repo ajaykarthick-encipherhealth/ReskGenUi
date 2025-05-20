@@ -190,7 +190,7 @@ const ReviwerWorkList = ({
                   >
                     <span className="ant-badge">
                       <span id="queue-patient-id" className="ant-badge">
-                        {truncateString(data.patientId, 20)}
+                        {truncateString(data.mbi, 20)}
                       </span>{" "}
                       <span>- </span>
                       <span

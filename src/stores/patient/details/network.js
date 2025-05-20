@@ -607,9 +607,11 @@ export const patientListFilter = async (
   const options = {
     method: "GET",
   };
+const role = getStorage("headerAliasName")?.replace(/_/g, "").toLowerCase();
+
   const pageId = "502745ab-e131-4663-8702-94603ff1e8e6";
   const response = await requestPortal(
-    `dbservice/table/view?pageId=${pageId}&patientAllocated=${userId}&page=${pageNo}&size=${15}&processedStatus=${status}&dueDateStart=${startDate}&dueDateEnd=${endDate}&processedStart=${processedStart}&processedEnd=${processedEnd}&searchString=${searchText}`,
+    `dbservice/table/view?pageId=${pageId}&patientAllocated=${userId}&page=${pageNo}&size=${15}&processedStatus=${status}&${role}DueDateStart=${startDate}&${role}DueDateEnd=${endDate}&${role}CompletedDateStart=${processedStart}&${role}CompletedDateEnd=${processedEnd}&searchString=${searchText}`,
     options
   );
   return response;
