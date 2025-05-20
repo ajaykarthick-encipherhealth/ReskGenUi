@@ -399,22 +399,22 @@ const Header = ({
     getTableData({ reloadTrue: true });
   }, []);
 
-  useEffect(() => {
-    if (selectedbtn) {
-      getCoderDetails({
-        name: selectedbtn?.toLowerCase(),
-        search: search?.toUpperCase(),
-        selectedOption: selectedOption.toLowerCase(),
-      });
-    }
-    if (currentUserInfo) {
-      getUserIdDetails(currentUserInfo);
-    }
-  }, [selectedbtn, search, selectedOption, currentUserInfo]);
+  // useEffect(() => {
+  //   if (selectedbtn) {
+  //     getCoderDetails({
+  //       name: selectedbtn?.toLowerCase(),
+  //       search: search?.toUpperCase(),
+  //       selectedOption: selectedOption.toLowerCase(),
+  //     });
+  //   }
+  //   if (currentUserInfo) {
+  //     getUserIdDetails(currentUserInfo);
+  //   }
+  // }, [selectedbtn, search, selectedOption, currentUserInfo]);
 
-  useEffect(() => {
-    getTenentLogo();
-  }, []);
+  // useEffect(() => {
+  //   getTenentLogo();
+  // }, []);
 
   const handleExpand = () => {
     const newWidth = drawerWidth + 100;

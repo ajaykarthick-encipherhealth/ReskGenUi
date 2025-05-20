@@ -19,7 +19,6 @@ import { getStorage } from "../../utils/storages";
 const MoveBack = ({
   tableLoader,
   organizationList,
-  getAllOrganizationList,
   rolesLoader,
   routedData,
   getTableData,
@@ -249,11 +248,7 @@ const MoveBack = ({
     setSelectedRowsId(selectedRows);
   }, [selectedRows, setSelectedRowsId]);
 
-  useEffect(() => {
-    if (!organizationList?.response) {
-      getAllOrganizationList();
-    }
-  }, []);
+ 
   useEffect(() => {
     if (
       window !== "undefined" &&

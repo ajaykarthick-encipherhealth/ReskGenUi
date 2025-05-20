@@ -18,7 +18,6 @@ import { useRouter } from "next/router";
 
 const QueryApproval = ({
   organizationList,
-  getAllOrganizationList,
   getTableData,
   getAllTabRoles,
   routedData,
@@ -34,66 +33,8 @@ const QueryApproval = ({
   backRoute,
   getRoutedData
 }) => {
-  const commonFilterItems = [
-    {
-      id: 1,
-      title: "Search",
-      type: "search",
-      value: null,
-      placeholder: "Search",
-      header: "Patient Name / ID",
-      active: true,
-    },
-    {
-      id: 2,
-      title: "Search by Code",
-      type: "search1",
-      value: null,
-      placeholder: "Search",
-      header: "Search by Code",
-      active: true,
-    },
-    {
-      id: 3,
-      title: "Search by Description",
-      type: "search1",
-      value: null,
-      placeholder: "Search",
-      header: "Search by Description",
-      active: true,
-    },
-    {
-      id: 4,
-      title: "organization",
-      type: "select",
-      value: null,
-      placeholder: "Organization",
-      options: organizationList?.response?.map((item) => ({
-        value: item?.id,
-        label: `${item?.name}`,
-      })),
-      active: true,
-    },
-    {
-      id: 5,
-      title: "computedDate",
-      type: "rangePicker",
-      value: null,
-      placeholder: "Computed  Date",
-      pickerType: "year",
-      active: true,
-    },
-    {
-      id: 6,
-      title: "priority",
-      type: "select",
-      value: null,
-      placeholder: "Priority",
-      options: priorityOptions,
-      active: true,
-    },
-  ];
-  const [activeFilters, setActiveFilters] = useState(commonFilterItems);
+ 
+  const [activeFilters, setActiveFilters] = useState([]);
   const [sort, setSort] = useState({
     computedDate: {
       sortDir: "DESC",
@@ -107,7 +48,6 @@ const QueryApproval = ({
   const [selectedDateRanges, setSelectedDateRanges] = useState({});
   const [selectedDates, setSelectedDates] = useState([]);
   const [pageNo, setPageNo] = useState(0);
-  const [pageSize, setPageSize] = useState(15);
   const [paginationFirst, setPaginationFirst] = useState(0);
   const [paramsFilter, setParamsFilter] = useState(null);
   const [search, setSearch] = useState({});
@@ -148,13 +88,6 @@ const QueryApproval = ({
   };
 
 
-  const opt = {
-    organization: organizationList?.response?.map((item) => ({
-      value: item?.id,
-      label: `${item?.name}`,
-    })),
-    priority: priorityOptions,
-  };
 
   const gotoPatientDetails = (data) => {
     setStorage("patientId", data?.patientId);
@@ -173,7 +106,6 @@ const QueryApproval = ({
     const response = await getTableData({
       pageId: "8c1eebaf-eb20-4758-b968-6ae15e6fc031",
       pageNo,
-      pageSize,
       roleId,
       queryStatus: activeStatus,
       selectedRole,
@@ -299,11 +231,7 @@ const QueryApproval = ({
   useEffect(() => {
     getRolesList();
   }, []);
-  useEffect(() => {
-    if (!organizationList?.response) {
-      getAllOrganizationList();
-    }
-  }, []);
+ 
 
   useEffect(() => {
     if (
@@ -318,7 +246,6 @@ const QueryApproval = ({
       setIsFilter(false);
     }
   }, [data?.response?.metaDataDTO]);
-
   return (
     <div>
       <Header />
@@ -352,7 +279,8 @@ const QueryApproval = ({
                                   onClick={() => {
                                     setSelectedRole(role.aliasName);
                                     setRoleId(role.roleId);
-
+                                    setActive("Pending");
+                                    setActiveStatus("PENDING")
                                   }}
                                   className="mt-4"
                                   eventKey={index + 1}
@@ -383,9 +311,6 @@ const QueryApproval = ({
                           </div>
                         </div>
                       )}
-                      {/* {tableLoader ? (
-                        <CardSkeleton height={50} />
-                      ) : ( */}
                       <div className="d-flex">
                         <div className="mt-4 w-100">
                           <ReusableFilters
@@ -402,7 +327,6 @@ const QueryApproval = ({
                             setSelectedDates={setSelectedDates}
                             activeFilters={activeFilters}
                             setPageNo={setPageNo}
-                            opt={opt}
                             setSearch={setSearch}
                             search={search}
                             //customize table
@@ -411,7 +335,6 @@ const QueryApproval = ({
                             onClose={onClose}
                             selectedColumns={test}
                             setSelectedColumns={setTest}
-                            commonFilterItems={commonFilterItems}
                             showCustomizeTable={false}
                             showDrawer={showDrawer}
                             handleSubmit={handleSubmit}
@@ -422,7 +345,6 @@ const QueryApproval = ({
                           />
                         </div>
                       </div>
-                      {/* )} */}
                       <Tab.Content>
                         <Tab.Pane eventKey={activeTab}>
                           <QueryTable

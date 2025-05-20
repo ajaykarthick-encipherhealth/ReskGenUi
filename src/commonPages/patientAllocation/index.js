@@ -19,7 +19,6 @@ import { getStorage } from "../../utils/storages";
 const PatientAllocation = ({
   getAllReviewerList,
   organizationList,
-  getAllOrganizationList,
   getAllTabRoles,
   routedData,
   getTableData,
@@ -241,11 +240,7 @@ const PatientAllocation = ({
     setSelectedRowsId(selectedRows);
   }, [selectedRows, setSelectedRowsId]);
 
-  useEffect(() => {
-    if (!organizationList?.response) {
-      getAllOrganizationList();
-    }
-  }, []);
+
   useEffect(() => {
     setParamsFilter("check");
     if (

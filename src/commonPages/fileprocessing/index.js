@@ -316,11 +316,7 @@ const FileProcessing = ({
     setSelectFileRadiology(null);
   };
 
-  useEffect(() => {
-    if (!organizationList?.response) {
-      getAllOrganizationList();
-    }
-  }, []);
+
 
   useEffect(() => {
     var orgListArray = [];

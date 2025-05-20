@@ -339,22 +339,9 @@ const Patient = ({
     }
   };
 
-  useEffect(() => {
-    var orgListArray = [];
-    organizationList?.response?.map((res) => {
-      orgListArray.push({
-        value: res.id,
-        label: res.name,
-      });
-    });
-    setOrgAllList(orgListArray);
-  }, [organizationList]);
+ 
 
-  useEffect(() => {
-    if (!organizationList?.response) {
-      getAllOrganizationList();
-    }
-  }, []);
+
   const page = {
     pageNo,
     paginationFirst,

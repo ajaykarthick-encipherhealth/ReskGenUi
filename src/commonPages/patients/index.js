@@ -198,7 +198,6 @@ export const commonFilterItems = [
   },
 ];
 const Patient = ({
-  getAllOrganizationList,
   organizationList,
   allPatientList,
   webSocketData,
