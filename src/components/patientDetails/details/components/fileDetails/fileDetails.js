@@ -6,20 +6,24 @@ import {
   faVenusMars,
   faCalendarAlt,
   faIdCardClip,
-  faClock,
-  faAngleDoubleRight,
-  faAngleDoubleLeft,
   faFile,
   setCopied,
 } from "@fortawesome/free-solid-svg-icons";
 import styles from "./styles.module.css";
 import { SVGICON } from "../../../../../jsx/constant/theme";
-import { notification, Tooltip } from "antd";
+import {  Popover, Tooltip } from "antd";
 import { truncateString } from "../function/ReusableFunctions";
 import { handleCopyToClipboard } from "../../../../commonFunctions";
 import { formatDateTime } from "../../../../../utils/reusable";
+import { EyeOutlined, EyeInvisibleOutlined } from "@ant-design/icons";
+import { useState } from "react";
 
 const Details = ({ fileResult, fromHcc }) => {
+  const [visible, setVisible] = useState(false);
+
+  const togglePopover = () => {
+    setVisible(!visible);
+  };
   const getMastData = (value) => {
     if (value) {
       return value.split("").splice(0, 3).join("") + "xxxx";
@@ -31,7 +35,6 @@ const Details = ({ fileResult, fromHcc }) => {
       return dayjs().diff(dob, "year");
     }
   };
-  console.log(fileResult, "fileResult");
   return (
     <>
       <div
@@ -61,9 +64,14 @@ const Details = ({ fileResult, fromHcc }) => {
                 })
               }
             >
-              {fileResult?.patientId
-                ? getMastData(fileResult?.patientId)
-                : "--"}
+              {fileResult?.patientId ? (
+                <Tooltip  title={fileResult?.patientId}>
+              {truncateString(fileResult?.patientId, 8)}
+              </Tooltip>
+                  
+              ) : (
+                "--"
+              )}
             </h6>
           </div>
           <div className="col-4" id="patient-name" name="patient-name">
@@ -77,9 +85,25 @@ const Details = ({ fileResult, fromHcc }) => {
               name="patient-name-value"
               className="px-4"
             >
-              {fileResult?.patientName
-                ? getMastData(fileResult?.patientName)
-                : "--"}
+               {truncateString(fileResult?.patientName, 8)}
+              <Popover
+                title={fileResult?.patientName}
+                trigger="click"
+                open={visible}
+                onOpenChange={(open) => setVisible(open)}
+              >
+                {visible ? (
+                  <EyeOutlined
+                    className="cursor-pointer"
+                    onClick={togglePopover}
+                  />
+                ) : (
+                  <EyeInvisibleOutlined
+                    className="cursor-pointer"
+                    onClick={togglePopover}
+                  />
+                )}
+              </Popover>
             </h6>
           </div>
           <div className="col-2" id="patient-mbi" name="patient-mbi">
@@ -104,9 +128,21 @@ const Details = ({ fileResult, fromHcc }) => {
             <h6
               id="patient-mbi-value"
               name="patient-mbi-value"
-              className="px-4"
+              className="px-4 cursor-pointer"
+              onClick={() =>
+                handleCopyToClipboard({
+                  text: fileResult?.mbi,
+                  setCopied: setCopied,
+                })
+              }
             >
-              {fileResult?.mbi ? getMastData(fileResult?.mbi) : "--"}
+              {fileResult?.mbi ? (
+                <Tooltip title={fileResult?.mbi}>
+                  {truncateString(fileResult?.mbi, 6)}
+                </Tooltip>
+              ) : (
+                "--"
+              )}
             </h6>
           </div>
           <div className="col-3" id="patient-age" name="patient-age">
@@ -169,16 +205,6 @@ const Details = ({ fileResult, fromHcc }) => {
                 : "---"}
             </h6>
           </div>
-          {/* <div className="col-3">
-            <FontAwesomeIcon icon={faVenusMars} style={{ color: "#241571"}} />
-            <label
-              // className="px-2 "
-              style={{ fontWeight: 600 }}
-            >
-              Gender
-            </label>
-            <h6 className="px-4">{fileResult?.gender || "--"}</h6>
-          </div> */}
           <div className="col-3" id="gender" name="gender">
             <FontAwesomeIcon icon={faVenusMars} style={{ color: "#241571" }} />
             <div
