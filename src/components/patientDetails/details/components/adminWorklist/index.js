@@ -7,13 +7,14 @@ import visitStyles from "../../../../../styles/visitdata.module.css";
 import LoadingSpinner from "../../../../../components/loadingSpinner";
 import Legends from "../../../../../components/legends";
 import MyWorkQueueFilter from "../MyWorkQueueFilter";
-import { actions as allActions } from "../../../../../stores/admin/workqueue";
+import { actions as patientsActions } from "../../../../../stores/patient/details";
 import { connect } from "react-redux";
 import { Input } from "antd";
 import { SearchOutlined } from "@ant-design/icons";
 import Search from "../../../../search";
 import { truncateString } from "../function/ReusableFunctions";
 import TableSkeleton from "../../../../skeleton/table";
+
 
 export function extractLatestData(notes) {
   let declinedData;
@@ -60,10 +61,21 @@ const AdminWorkList = ({
   const [filterModalOpen, setFilterModalOpen] = useState(false);
 
   const getWorkList = async (data) => {
-    const info = await getPatients({ data: data });
-    if (info) {
-      setPatientList(info?.response?.patientDtoList?.content);
-      setTotalElements(info?.response?.patientDtoList?.totalElements);
+    // const info = await getPatients({ data: data });
+      var result = await getPatients(
+        localUserId,
+        selectedOption != "ALL" ? selectedOption : "",
+        search,
+        completedStartDate,
+        completedEndDate,
+        computedStartDate,
+        computedEndDate,
+
+        pageNo
+      );
+    if (result) {
+      setPatientList(result?.response?.pageResponse?.content);
+      setTotalElements(result?.response?.pageResponse?.totalElements);
       setFilterDataLoading(false);
     }
   };
@@ -155,20 +167,8 @@ const AdminWorkList = ({
 
   useEffect(() => {
     setFilterDataLoading(true);
-    const data = {
-      pageNo,
-      computedStartDate,
-      computedEndDate,
-      selectedOption,
-      search,
-      completedStartDate,
-      completedEndDate,
-      selAllocatedTo,
-      selAllocatedBy,
-      selCreatedBy,
-      sort,
-    };
-    getWorkList(data);
+   
+    getWorkList();
     // getPatients({ data: data });
   }, [
     pageNo,
@@ -294,7 +294,7 @@ const connector = connect(
     result: state.admin.workqueue?.patients,
   }),
   {
-    getPatients: allActions.patientsAction,
+    getPatients: patientsActions.getPatientListFilter,
   }
 );
 export default connector(AdminWorkList);

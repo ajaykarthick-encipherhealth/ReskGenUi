@@ -593,6 +593,29 @@ export const updateMeatQuery = async (data) => {
   return response;
 };
 
+// export const patientListFilter = async (
+//   userId,
+//   status,
+//   searchText,
+//   startDate,
+//   endDate,
+//   processedStart,
+//   processedEnd,
+//   pageNo,
+  
+// ) => {
+//   const options = {
+//     method: "GET",
+//   };
+// const role = getStorage("headerAliasName")?.replace(/_/g, "").toLowerCase();
+
+//   const pageId = "502745ab-e131-4663-8702-94603ff1e8e6";
+//   const response = await requestPortal(
+//     `dbservice/table/view?pageId=${pageId}&patientAllocated=${userId}&page=${pageNo}&size=${15}&processedStatus=${status}&${role}DueDateStart=${startDate}&${role}DueDateEnd=${endDate}&${role}CompletedDateStart=${processedStart}&${role}CompletedDateEnd=${processedEnd}&searchString=${searchText}`,
+//     options
+//   );
+//   return response;
+// };
 export const patientListFilter = async (
   userId,
   status,
@@ -601,21 +624,28 @@ export const patientListFilter = async (
   endDate,
   processedStart,
   processedEnd,
-  pageNo,
-  
+  pageNo
 ) => {
   const options = {
     method: "GET",
   };
-const role = getStorage("headerAliasName")?.replace(/_/g, "").toLowerCase();
 
+  const role = getStorage("headerAliasName")?.replace(/_/g, "").toLowerCase();
   const pageId = "502745ab-e131-4663-8702-94603ff1e8e6";
+
+  const processedFilters =
+    role === "admin"
+      ? `&createdDateStart=${startDate}&createdDateEnd=${endDate}&completedDateStart=${processedStart}&completedDateEnd=${processedEnd}`
+      : `&${role}DueDateStart=${startDate}&${role}DueDateEnd=${endDate}&${role}CompletedDateStart=${processedStart}&${role}CompletedDateEnd=${processedEnd}`;
+console.log(processedFilters, "processedFilters");
   const response = await requestPortal(
-    `dbservice/table/view?pageId=${pageId}&patientAllocated=${userId}&page=${pageNo}&size=${15}&processedStatus=${status}&${role}DueDateStart=${startDate}&${role}DueDateEnd=${endDate}&${role}CompletedDateStart=${processedStart}&${role}CompletedDateEnd=${processedEnd}&searchString=${searchText}`,
+    `dbservice/table/view?pageId=${pageId}&patientAllocated=${userId}&page=${pageNo}&size=15&processedStatus=${status}${processedFilters}&searchString=${searchText}`,
     options
   );
+
   return response;
 };
+
 export const manuallyAddComboCode = async (data) => {
   const options = {
     method: "POST",
