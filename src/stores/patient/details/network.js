@@ -601,13 +601,15 @@ export const patientListFilter = async (
   endDate,
   processedStart,
   processedEnd,
-  pageNo
+  pageNo,
+  
 ) => {
   const options = {
     method: "GET",
   };
+  const pageId = "502745ab-e131-4663-8702-94603ff1e8e6";
   const response = await requestPortal(
-    `dbservice/patient/filter?patientAllocated=${userId}&page=${pageNo}&size=${15}&processedStatus=${status}&dueDateStart=${startDate}&dueDateEnd=${endDate}&processedStart=${processedStart}&processedEnd=${processedEnd}&searchString=${searchText}`,
+    `dbservice/table/view?pageId=${pageId}&patientAllocated=${userId}&page=${pageNo}&size=${15}&processedStatus=${status}&dueDateStart=${startDate}&dueDateEnd=${endDate}&processedStart=${processedStart}&processedEnd=${processedEnd}&searchString=${searchText}`,
     options
   );
   return response;

@@ -44,8 +44,8 @@ const ReviwerWorkList = ({
       processedEnd,
       pageNo
     );
-    setPatientList(result?.response?.patientDTOList?.content);
-    setTotalElements(result?.response?.patientDTOList?.totalElements);
+    setPatientList(result?.response?.pageResponse?.content);
+    setTotalElements(result?.response?.pageResponse?.totalElements);
     setFilterDataLoading(false);
   };
 
@@ -192,11 +192,11 @@ const ReviwerWorkList = ({
                       <span id="queue-patient-id" className="ant-badge">
                         {truncateString(data.patientId, 20)}
                       </span>{" "}
-                      <span>-</span>
+                      <span>- </span>
                       <span
                         id="queue-patient-name"
                         name="queue-patient-name"
-                      >{`ant-badge ${data.patientName}`}</span>
+                      >{`${data.patientName}`}</span>
                     </span>
                     {data.processedStatus == "COMPLETED" ? (
                       <span
