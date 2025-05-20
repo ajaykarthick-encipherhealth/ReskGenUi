@@ -134,7 +134,7 @@ const CustomizableDrawer = ({
                   border: "1px solid #d9d9d9",
                   padding: "10px",
                   borderRadius: 6,
-                  backgroundColor: isActive ? "#f6ffed" : "#fff",
+                  backgroundColor: isActive ? "#EBF3FE" : "#fff",
                   transition: "all 0.3s",
                   cursor: "pointer",
                 }}
