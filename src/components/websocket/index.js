@@ -34,6 +34,7 @@ const ConnectWebSocket = ({
     if (webSocketData && webSocketData?.webSocketType == "NOTIFICATION") {
       var dataMap = null;
       var oldNotification = notificationResponse?.notificationList?.content;
+ 
       if (webSocketNotificationData) {
         dataMap = webSocketNotificationData;
       }
@@ -41,7 +42,7 @@ const ConnectWebSocket = ({
         var push = [...[webSocketData], ...dataMap];
         getNotificationData(push);
       } else {
-        var push = [...[webSocketData], ...oldNotification];
+        // var push = [...[webSocketData], ...oldNotification];
         getNotificationData(push);
       }
     }
