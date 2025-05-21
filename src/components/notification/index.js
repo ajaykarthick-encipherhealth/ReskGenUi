@@ -16,7 +16,7 @@ import { actions as allPatientSyncAction } from "../../stores/tenantAdmin/patien
 import { useRouter } from "next/router";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheckDouble } from "@fortawesome/free-solid-svg-icons";
-import CardSkeleton from '../skeleton/card'
+import CardSkeleton from "../skeleton/card";
 
 const Notification = ({
   open,
@@ -53,24 +53,42 @@ const Notification = ({
     navigate.push({
       pathname: "/tenantadmin/project/details",
     });
-    // } else {
-    //   notification.warning({
-    //     message:
-    //       data?.notificationInfoExtended?.patients[0] +
-    //       " file not processed. Please wait.",
-    //   });
-    // }
   };
 
-const handleRead = (data) => {
-  const id = data?.id; 
-  if (id) {
-    postUnReadCount(id); 
-  } else {
-    postUnReadCount(); 
+
+ const handleRead = async () => {
+  const userId = getStorage("userId");
+
+  try {
+    const response = await postUnReadCount();
+    if (response?.status === "SUCCESS") {
+      getNotificationList(userId);
+    } else {
+      console.warn("Failed to mark all as read", response);
+    }
+  } catch (error) {
+    console.error("Error in marking all as read", error);
   }
 };
 
+
+const handleIdRead = async (notification) => {
+  const id = notification?.id;
+  const userId = getStorage("userId");
+  console.log("Marking notification as read", id);
+
+  try {
+    const response = await postUnReadCount({ id });
+
+     if (response?.status === "SUCCESS")  {
+      getNotificationList(userId);
+    } else {
+      console.warn("Mark as read failed", response);
+    }
+  } catch (error) {
+    console.error("Error marking notification as read", error);
+  }
+};
 
   useEffect(() => {
     if (open) {
@@ -97,7 +115,7 @@ const handleRead = (data) => {
             <div
               className="cr-pointer  text-decoration-underline d-flex align-items-center"
               style={{ color: "#3A88F8" }}
-              // onClick={handleRead}
+              onClick={handleRead}
             >
               {/* <FontAwesomeIcon icon={faCheckDouble} className="me-2" /> */}
               <svg
@@ -130,13 +148,14 @@ const handleRead = (data) => {
             <div className={`d-grid align-items-center ${style.cardGrid}`}>
               {webSocketNotificationData?.map((notification, index) => (
                 <div
+                  onClick={() => handleIdRead(notification)}
                   key={index}
                   className="col-12 m-2 col-md-6 col-lg-6 col-xl-3 col-l-6"
                 >
                   <Card padding="20px" borderRadius="5px" width="97%">
                     <div
                       className={`${style.cardContainer} justify-content-between align-items-center`}
-                      // onClick={handleRead(notification)}
+              
                     >
                       <div>
                         <div

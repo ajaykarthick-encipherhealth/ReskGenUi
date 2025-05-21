@@ -96,13 +96,13 @@ export const tenentLogo = async() => {
   return data;
 }
 
-export const unReadCountPost = async ({}) => {
+export const unReadCountPost = async ({id}) => {
   const options = {
     method: "POST",
   };
   // const patientId = getStorage("patientId");
   const data = await requestPortal(
-    `dbservice/notification/read/notification`,
+    `dbservice/notification/read/notification?id=${id || ""}`,
     options
   );
   return data;
