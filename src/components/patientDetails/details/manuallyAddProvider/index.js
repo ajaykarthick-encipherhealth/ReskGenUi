@@ -49,15 +49,14 @@ const ManuallyAddProvider = ({
     });
     setProvidersList(data);
   };
-
   useEffect(() => {
     if (hccFileDetails?.data?.response) {
       setSelectFileURL(hccFileDetails?.data?.response?.azureBlobPath);
     }
-    if (dosYear) {
-      getAddProviderAndDOSList(dosYear?.length > 0 ? dosYear[0]?.value : "");
+    if (dosYearDefalutSelect) {
+      getAddProviderAndDOSList(dosYearDefalutSelect?.value?dosYearDefalutSelect?.value : dosYearDefalutSelect);
     }
-  }, [hccFileDetails, dosYear]);
+  }, [hccFileDetails, dosYearDefalutSelect]);
 
   return (
     <div className="d-flex p-2 h-100">
@@ -163,4 +162,4 @@ const enhancer = connect(
   }
 );
 
-export default enhancer(ManuallyAddProvider);
+  export default enhancer(ManuallyAddProvider);

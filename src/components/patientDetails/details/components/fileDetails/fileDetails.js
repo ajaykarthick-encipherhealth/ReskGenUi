@@ -163,7 +163,7 @@ const Details = ({ fileResult, fromHcc }) => {
             >
               {fileResult?.fileName ? (
                 <Tooltip title={fileResult?.fileName}>
-                  {truncateString(fileResult?.fileName, 11)}
+                  {truncateString(fileResult?.fileName, 8)}
                 </Tooltip>
               ) : (
                 "--"
