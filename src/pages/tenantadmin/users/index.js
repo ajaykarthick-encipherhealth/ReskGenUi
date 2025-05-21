@@ -198,6 +198,9 @@ const Users = ({
       getRoles();
       getResponePopup(response);
     }
+    else{
+      getResponePopup(response);
+    }
   };
   const roles = allRoles?.content?.map((item) => ({
     value: item?.roleName,

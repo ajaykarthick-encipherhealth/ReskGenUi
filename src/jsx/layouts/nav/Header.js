@@ -56,7 +56,7 @@ import { getHeaderLoge } from "../../../pages/twofactorauthentication/reusableFu
 import { actions as tinActions } from "../../../stores/tenantAdmin/tin";
 import { actions as tableAction } from "../../../stores/tableView";
 import CardSkeleton from "../../../components/skeleton/card";
-
+import { duration } from "moment";
 
 const Header = ({
   notificationResponse,
@@ -211,87 +211,13 @@ const Header = ({
     postUnReadCount();
     setPopoverVisible(false);
   };
-  const formattedRoles = dropdownContent?.map((role) =>
-    role
-      .toLowerCase()
-      .replace(/_/g, " ")
-      .replace(/\b\w/g, (char) => char.toUpperCase())
-  );
+
 
   const items = allRolesData?.userRoles?.map((data) => ({
     label: data.proxyRole,
     key: data.proxyRole,
   }));
 
-  // const onClick = ({ key }) => {
-  //   setProjectListCheck(true);
-  //   const allRoles = JSON.parse(getStorage("userAllRoles"));
-  //   let selectedRoleObj = allRoles?.find((res) => res.proxyRole === key);
-  //   if (!selectedRoleObj) {
-  //     selectedRoleObj = allRoles?.find(
-  //       (res) => res?.details?.proxyRole === key
-  //     );
-  //   }
-  //   const accessMenuList = selectedRoleObj
-  //     ? selectedRoleObj
-  //     : selectedRoleObj?.details;
-  //   setStorage("userRole", key);
-  //   setStorage(
-  //     "proxyRole",
-  //     accessMenuList?.proxyRole
-  //       ? accessMenuList?.proxyRole
-  //       : accessMenuList?.details.proxyRole
-  //   );
-  //   setStorage(
-  //     "roleId",
-  //     accessMenuList?.roleId
-  //       ? accessMenuList?.roleId
-  //       : accessMenuList?.details.roleId
-  //   );
-  //   setStorage(
-  //     "aliasName",
-  //     accessMenuList?.aliasName
-  //       ? accessMenuList?.aliasName
-  //       : accessMenuList?.details.aliasName
-  //   );
-
-  //   setStorage(
-  //     "accessMenuList",
-  //     JSON.stringify(
-  //       accessMenuList?.accessList
-  //         ? accessMenuList.accessList
-  //         : accessMenuList?.details?.accessList
-  //     )
-  //   );
-
-  //   if (key === "Admin") {
-  //     router.push("/admin/dashboard");
-  //   } else if (key === "CODER_1" || key === "CODER_2" || key === "QA") {
-  //     if (router?.pathname != "/reviewer/dashboard") {
-  //       router.push("/reviewer/dashboard");
-  //     } else {
-  //       router.push("/reviewer/dashboard").then(() => {
-  //         window.location.reload();
-  //       });
-  //     }
-  //   } else if (key === "Supervisor") {
-  //     router.push("/supervisor/dashboard");
-  //   } else if (
-  //     key === "TENANT_ADMIN" ||
-  //     key === "DOWNLOADER" ||
-  //     key === "OWNER"
-  //   ) {
-  //     if (router?.pathname != "/tenantadmin/dashboard") {
-  //       router.push("/tenantadmin/dashboard");
-  //     } else {
-  //       router.push("/tenantadmin/dashboard").then(() => {
-  //         window.location.reload();
-  //       });
-  //     }
-  //   } else if (key === "Ehr") {
-  //     router.push("/ehr/patients");
-  //   }
-  // };
   const onClick = ({ key }) => {
     setProjectListCheck(true);
     const allRoles = JSON.parse(getStorage("userAllRoles"));
@@ -327,15 +253,24 @@ const Header = ({
     const firstAccess = accessMenuList[0];
     const dynamicPath =
       firstAccess?.title?.toLowerCase().replace(/\s+/g, "") || "dashboard";
-    // const dynamicRoute = `/tenantadmin/${dynamicPath}`;
     let dynamicRoute = "";
     if (
       selectedRoleObj?.details?.role === "REVIEWER" ||
       selectedRoleObj?.details?.role === "QA"
     ) {
       dynamicRoute = `/reviewer/${dynamicPath}`;
+      getResponePopup({
+        message: "Role changed successfully",
+        status: "SUCCESS",
+        duration:3,
+      });
     } else {
       dynamicRoute = `/tenantadmin/${dynamicPath}`;
+      getResponePopup({
+        message: "Role changed successfully",
+        status: "SUCCESS",
+        duration:3,
+      });
     }
     if (router.pathname !== dynamicRoute) {
       router.push(dynamicRoute);
@@ -750,7 +685,7 @@ const Header = ({
           message: "Profile Deleted Successfully!",
         });
         // getCurrentUserInfo({ userId });
-        getAllRoles()
+        getAllRoles();
       } else {
         getResponePopup(res);
       }
@@ -893,7 +828,7 @@ const Header = ({
         setStorage("project", backupSelectedProject);
         return getResponePopup({
           status: "EXCEPTION",
-          message: "No Roles",
+          message: "No Role for this project",
         });
       } else {
         getRoles();
@@ -954,7 +889,6 @@ const Header = ({
     }
   }, [projectListCheck, tinDetails, selectedTin]);
 
-
   useEffect(() => {
     if (projectDetails) {
       const projectOptions = projectDetails?.map((client) => ({
@@ -965,7 +899,7 @@ const Header = ({
     }
   }, [projectDetails]);
 
-  console.log(profileImg,"profileImg");
+
   return (
     <div className={`header ${headerFix ? "is-fixed" : ""}`}>
       <div className="header-content">
