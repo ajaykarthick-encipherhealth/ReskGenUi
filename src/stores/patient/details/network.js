@@ -632,14 +632,16 @@ export const patientListFilter = async (
 
   const role = getStorage("headerAliasName")?.replace(/_/g, "").toLowerCase();
   const pageId = "502745ab-e131-4663-8702-94603ff1e8e6";
-
+const tin = getStorage("tinNumber");
   const processedFilters =
-    role === "admin"
-      ? `&createdDateStart=${startDate}&createdDateEnd=${endDate}&completedDateStart=${processedStart}&completedDateEnd=${processedEnd}`
-      : `&${role}DueDateStart=${startDate}&${role}DueDateEnd=${endDate}&${role}CompletedDateStart=${processedStart}&${role}CompletedDateEnd=${processedEnd}`;
-console.log(processedFilters, "processedFilters");
+    role === "admin" || role === "owner"
+      ? `&tin=${tin}&createdDateStart=${startDate}&createdDateEnd=${endDate}&completedDateStart=${processedStart}&completedDateEnd=${processedEnd}`
+      : role === "qa"
+      ? `&tin=${tin}&patientAllocated=${userId}&${role}DueDateStart=${startDate}&${role}DueDateEnd=${endDate}&${role}CompletedDateStart=${processedStart}&${role}CompletedDateEnd=${processedEnd}`
+      : `&patientAllocated=${userId}&${role}DueDateStart=${startDate}&${role}DueDateEnd=${endDate}&${role}CompletedDateStart=${processedStart}&${role}CompletedDateEnd=${processedEnd}`;
+
   const response = await requestPortal(
-    `dbservice/table/view?pageId=${pageId}&patientAllocated=${userId}&page=${pageNo}&size=15&processedStatus=${status}${processedFilters}&searchString=${searchText}`,
+    `dbservice/table/view?pageId=${pageId}&page=${pageNo}&size=15&processedStatus=${status}${processedFilters}&searchString=${searchText}`,
     options
   );
 

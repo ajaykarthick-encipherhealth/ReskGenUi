@@ -29,6 +29,7 @@ const Notification = ({
   backRoute,
   getRoutedData,
   notificationLoading,
+  postUnReadCount,
 }) => {
   const [openMsg, setOpenMsg] = useState(false);
   const notificationData = notificationResponse?.notificationList?.content;
@@ -41,7 +42,6 @@ const Notification = ({
     }
   };
   const gotoPatientDetails = (data) => {
-    console.log(data, "test");
     patientDetails(data);
     // if (data?.computing === 2) {
     const controller = new AbortController();
@@ -61,6 +61,17 @@ const Notification = ({
     //   });
     // }
   };
+
+const handleRead = (data) => {
+  const id = data?.id; 
+  if (id) {
+    postUnReadCount(id); 
+  } else {
+    postUnReadCount(); 
+  }
+};
+
+
   useEffect(() => {
     if (open) {
       const userId = getStorage("userId");
@@ -86,6 +97,7 @@ const Notification = ({
             <div
               className="cr-pointer  text-decoration-underline d-flex align-items-center"
               style={{ color: "#3A88F8" }}
+              // onClick={handleRead}
             >
               {/* <FontAwesomeIcon icon={faCheckDouble} className="me-2" /> */}
               <svg
@@ -107,111 +119,121 @@ const Notification = ({
               <span>Mark all as read</span>
             </div>
           </div>
-          {notificationLoading ? <CardSkeleton count={10} display={"flex"} gap={"10px"}  height={150}/>: <div className={`d-grid align-items-center ${style.cardGrid}`}>
-            {webSocketNotificationData?.map((notification, index) => (
-              <div
-                key={index}
-                className="col-12 m-2 col-md-6 col-lg-6 col-xl-3 col-l-6"
-              >
-                <Card padding="20px" borderRadius="5px" width="97%">
-                  <div
-                    className={`${style.cardContainer} justify-content-between align-items-center`}
-                  >
-                    <div>
-                      <div
-                        className="d-flex justify-content-between p-1 fw-bold align-items-center "
-                        style={{ color: "#2983E3" }}
-                      >
+          {notificationLoading ? (
+            <CardSkeleton
+              count={10}
+              display={"flex"}
+              gap={"10px"}
+              height={150}
+            />
+          ) : (
+            <div className={`d-grid align-items-center ${style.cardGrid}`}>
+              {webSocketNotificationData?.map((notification, index) => (
+                <div
+                  key={index}
+                  className="col-12 m-2 col-md-6 col-lg-6 col-xl-3 col-l-6"
+                >
+                  <Card padding="20px" borderRadius="5px" width="97%">
+                    <div
+                      className={`${style.cardContainer} justify-content-between align-items-center`}
+                      // onClick={handleRead(notification)}
+                    >
+                      <div>
                         <div
-                          className={`${style.cardContent} text-gray-600 text-truncate`}
+                          className="d-flex justify-content-between p-1 fw-bold align-items-center "
+                          style={{ color: "#2983E3" }}
                         >
-                          {notification?.notificationType
-                            ?.replaceAll("_", " ")
-                            .toLowerCase()
-                            .replace(/\b\w/g, (c) => c.toUpperCase())}
-                        </div>
-                        {notification.read === false && (
-                          <span
-                            className="rounded-circle me-2"
-                            style={{
-                              width: "10px",
-                              height: "10px",
-                              backgroundColor: "#3A88F8",
-                            }}
-                          ></span>
-                        )}
-                      </div>
-                      {notification?.notificationType != "TIN_COMPLETED" && (
-                        <div className="d-flex p-1 fw-bold align-items-center ">
-                          <span
-                            className={`${style.cardContent} fw-bold text-gray-600 text-truncate`}
-                          >
-                            {notification?.fromUserDetails?.firstName}{" "}
-                            {notification?.fromUserDetails?.lastName}
-                          </span>
-                          {notification?.userFromAliasName && (
-                            <div
-                              id="table-btn"
-                              name="table-btn"
-                              className="d-flex mx-4 justify-content-center align-items-center"
-                            >
-                              <span
-                                style={{
-                                  borderRadius: "5px",
-                                  fontSize: "12px",
-                                }}
-                                data-testid="table-custom"
-                                name="table-custom"
-                                className="px-2 w-full font1 text-ellipsis tableButton cursor-default pointer-events-none"
-                              >
-                                {notification?.userFromAliasName
-                                  .toString()
-                                  .replace(/_/g, " ")
-                                  .replace(/,\s*/g, ", ")}
-                              </span>
-                            </div>
-                          )}
-                        </div>
-                      )}
-
-                      <div className="d-flex p-1 align-items-center ">
-                        <Tooltip title={notification?.content}>
-                          <span
+                          <div
                             className={`${style.cardContent} text-gray-600 text-truncate`}
                           >
-                            {notification?.content}
-                          </span>
-                        </Tooltip>
-                      </div>
-
-                      <div className="d-flex pt-3 justify-content-between align-items-center">
-                        {notification?.notificationType != "TIN_COMPLETED" ? (
-                          <Button
-                            className="text-white"
-                            style={{ backgroundColor: "#3A88F8" }}
-                            onClick={() => gotoPatientDetails(notification)}
-                          >
-                            Go to File
-                          </Button>
-                        ) : (
-                          <div>&nbsp;</div>
+                            {notification?.notificationType
+                              ?.replaceAll("_", " ")
+                              .toLowerCase()
+                              .replace(/\b\w/g, (c) => c.toUpperCase())}
+                          </div>
+                          {notification.read === false && (
+                            <span
+                              className="rounded-circle me-2"
+                              style={{
+                                width: "10px",
+                                height: "10px",
+                                backgroundColor: "#3A88F8",
+                              }}
+                            ></span>
+                          )}
+                        </div>
+                        {notification?.notificationType != "TIN_COMPLETED" && (
+                          <div className="d-flex p-1 fw-bold align-items-center ">
+                            <span
+                              className={`${style.cardContent} fw-bold text-gray-600 text-truncate`}
+                            >
+                              {notification?.fromUserDetails?.firstName}{" "}
+                              {notification?.fromUserDetails?.lastName}
+                            </span>
+                            {notification?.userFromAliasName && (
+                              <div
+                                id="table-btn"
+                                name="table-btn"
+                                className="d-flex mx-4 justify-content-center align-items-center"
+                              >
+                                <span
+                                  style={{
+                                    borderRadius: "5px",
+                                    fontSize: "12px",
+                                  }}
+                                  data-testid="table-custom"
+                                  name="table-custom"
+                                  className="px-2 w-full font1 text-ellipsis tableButton cursor-default pointer-events-none"
+                                >
+                                  {notification?.userFromAliasName
+                                    .toString()
+                                    .replace(/_/g, " ")
+                                    .replace(/,\s*/g, ", ")}
+                                </span>
+                              </div>
+                            )}
+                          </div>
                         )}
 
-                        <div className="px-1" style={{ color: "#7E7B7B" }}>
-                          {notification?.createdDate
-                            ? formatDateTime({
-                                date: notification?.createdDate,
-                                formatType: "dateTime",
-                              })
-                            : "---"}
+                        <div className="d-flex p-1 align-items-center ">
+                          <Tooltip title={notification?.content}>
+                            <span
+                              className={`${style.cardContent} text-gray-600 text-truncate`}
+                            >
+                              {notification?.content}
+                            </span>
+                          </Tooltip>
+                        </div>
+
+                        <div className="d-flex pt-3 justify-content-between align-items-center">
+                          {notification?.notificationType != "TIN_COMPLETED" ? (
+                            <Button
+                              className="text-white"
+                              style={{ backgroundColor: "#3A88F8" }}
+                              onClick={() => gotoPatientDetails(notification)}
+                            >
+                              Go to File
+                            </Button>
+                          ) : (
+                            <div>&nbsp;</div>
+                          )}
+
+                          <div className="px-1" style={{ color: "#7E7B7B" }}>
+                            {notification?.createdDate
+                              ? formatDateTime({
+                                  date: notification?.createdDate,
+                                  formatType: "dateTime",
+                                })
+                              : "---"}
+                          </div>
                         </div>
                       </div>
                     </div>
-                  </div>
-                </Card>
-              </div>
-            ))}
-          </div>}
+                  </Card>
+                </div>
+              ))}
+            </div>
+          )}
         </>
       ) : null}
       <Chat openMsg={openMsg} offMsg={() => setOpenMsg(false)} />
@@ -233,6 +255,7 @@ const enhancer = connect(
     getNotificationData: webSocketActions.websocketNotificationAction,
     getNotificationList: dashbaordActions.notificationAction,
     getRoutedData: allPatientSyncAction.getRoutedData,
+    postUnReadCount: dashbaordActions.unReadCountPostAction,
   }
 );
 export default enhancer(Notification);

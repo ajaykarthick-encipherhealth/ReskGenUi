@@ -100,6 +100,7 @@ export const unReadCountPost = async ({}) => {
   const options = {
     method: "POST",
   };
+  // const patientId = getStorage("patientId");
   const data = await requestPortal(
     `dbservice/notification/read/notification`,
     options

@@ -252,10 +252,10 @@ const AdminWorkList = ({
                   >
                     <span>
                       <span id="dosSelect">
-                        {truncateString(data.patientId, 35)}
+                        {truncateString(data?.mbi ? data?.mbi : "---", 35)}
                       </span>{" "}
                       <span id="dosSelect">-</span>{" "}
-                      <span>{data.patientName}</span>
+                      <span>{data?.patientName ? data?.patientName : "---"}</span>
                     </span>
                     {processstatusBodyTemplate(data)}
                   </li>

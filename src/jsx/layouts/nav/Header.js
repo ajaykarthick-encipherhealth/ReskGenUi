@@ -208,7 +208,7 @@ const Header = ({
   const notificationDrawer = async () => {
     setOpen(true);
     setNotificationCount(0);
-    postUnReadCount();
+    // postUnReadCount();
     setPopoverVisible(false);
   };
 
@@ -223,6 +223,8 @@ const Header = ({
     const allRoles = JSON.parse(getStorage("userAllRoles"));
     let selectedRoleObj = allRoles?.find((res) => res.proxyRole === key);
     if (!selectedRoleObj) {
+      setNotificationCount(0);
+      getNotificationData([]);
       selectedRoleObj = allRoles?.find(
         (res) => res?.details?.proxyRole === key
       );
@@ -334,22 +336,22 @@ const Header = ({
     getTableData({ reloadTrue: true });
   }, []);
 
-  // useEffect(() => {
-  //   if (selectedbtn) {
-  //     getCoderDetails({
-  //       name: selectedbtn?.toLowerCase(),
-  //       search: search?.toUpperCase(),
-  //       selectedOption: selectedOption.toLowerCase(),
-  //     });
-  //   }
-  //   if (currentUserInfo) {
-  //     getUserIdDetails(currentUserInfo);
-  //   }
-  // }, [selectedbtn, search, selectedOption, currentUserInfo]);
+  useEffect(() => {
+    if (selectedbtn) {
+      getCoderDetails({
+        name: selectedbtn?.toLowerCase(),
+        search: search?.toUpperCase(),
+        selectedOption: selectedOption.toLowerCase(),
+      });
+    }
+    if (currentUserInfo) {
+      getUserIdDetails(currentUserInfo);
+    }
+  }, [selectedbtn, search, selectedOption, currentUserInfo]);
 
-  // useEffect(() => {
-  //   getTenentLogo();
-  // }, []);
+  useEffect(() => {
+    getTenentLogo();
+  }, []);
 
   const handleExpand = () => {
     const newWidth = drawerWidth + 100;
@@ -416,12 +418,11 @@ const Header = ({
     setNotificationCount(countUnread ? countUnread : 0);
 
     notificationSoundRef.current = new Audio("/messageSound.mp3");
-
     // Play notification sound
     if (
       countUnread > 0 &&
       !open &&
-      notificationSound?.checksound != true &&
+      // notificationSound?.checksound != true &&
       notificationSound?.count != count?.length
     ) {
       var data = {
@@ -532,6 +533,7 @@ const Header = ({
             getActiveTab(null);
             getReportActiveTab(null);
             getRoutedData(null);
+            
             router.push(
               {
                 pathname: `${data?.to}`,
@@ -1225,6 +1227,7 @@ const Header = ({
                                     items: roles,
                                     defaultSelectedKeys: userRole,
                                     onClick,
+                                 
                                   }}
                                   trigger={["click"]}
                                 >
@@ -1400,7 +1403,7 @@ const enhancer = connect(
     getNotificationList: dashbaordActions.notificationAction,
     getTenentLogo: dashbaordActions.tenentLogoAction,
     getNotificationData: webSocketActions.websocketNotificationAction,
-    postUnReadCount: dashbaordActions.unReadCountPostAction,
+    // postUnReadCount: dashbaordActions.unReadCountPostAction,
     getFilteredList: allActions.getFilteredList,
     getPatientID: detailsActions.getPatientID,
     getCurrentUserInfo: userActions.getCurrentUserInfo,
