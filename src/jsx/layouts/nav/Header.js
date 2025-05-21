@@ -776,6 +776,11 @@ const Header = ({
   const handleClientChange = async (value) => {
     setStorage("client", value.value);
     setSelectedClient(value);
+    getResponePopup({
+      status: "SUCCESS",
+      message: "Client Changed Successfully",
+      duration: 5,
+    })
     const res = await getAllProjects();
     if (res?.response?.length === 0) {
       setSelectedClient(backupSelectedClient);
@@ -801,7 +806,11 @@ const Header = ({
   const handleProjectChange = async (value) => {
     setSelectedProject(value);
     setStorage("project", value.value);
-
+    getResponePopup({
+      status: "SUCCESS",
+      message: "Project Changed Successfully",
+      duration: 5 ,
+    })
     const res = await getAllRoles();
     if (res?.response?.userRoles?.length === 0) {
       setSelectedProject(backupSelectedProject);
