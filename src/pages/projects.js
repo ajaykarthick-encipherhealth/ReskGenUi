@@ -93,18 +93,6 @@ const SelectProject = ({
     setSelectClient(getStorage("client") && getStorage("client"));
   }, []);
 
-  // useEffect(() => {
-  //   if (accounts && accounts.length > 0) {
-  //     setIsLoading(false);
-  //   } else {
-  //     const timeout = setTimeout(() => {
-  //       if (!accounts || accounts.length === 0) {
-  //         router.push("/");
-  //       }
-  //     }, 3000);
-  //     return () => clearTimeout(timeout);
-  //   }
-  // }, [accounts, router]);
   useEffect(() => {
     if (accounts && accounts.length > 0) {
       setTimeout(() => {
@@ -149,34 +137,6 @@ const SelectProject = ({
               </h6>
 
               <form onSubmit={onSubmitClient}>
-                {/* <div className="mb-4">
-                  <label className="mb-1 text-dark">Select Cleint</label>
-                  <div
-                    id="role"
-                    name="role"
-                    style={{
-                      height: "100px",
-                      marginTop: "5px",
-                    }}
-                  >
-                    <Select
-                      id="select-role"
-                      name="select-role"
-                      style={{ width: "100%", height: "2.75rem" }}
-                      placeholder="Select Client"
-                      onChange={(value) => {
-                        setSelectClient(value?.toLowerCase());
-                        setClientError(false);
-                      }}
-                      options={clientOptions}
-                    />
-                    {clientError && (
-                      <span className="text-danger fs-12">
-                        Please Select Client
-                      </span>
-                    )}
-                  </div>
-                </div> */}
                 <div className="mb-4">
                   <label className="mb-1 text-dark">Select Client</label>
                   <div
