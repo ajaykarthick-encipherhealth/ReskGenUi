@@ -246,11 +246,11 @@ const ManuallyAdd = ({
     }
   };
   const handleCodeVaildate = async (e) => {
-    const value = e.toUpperCase();
+    const value = e?.toUpperCase();
     setCode(value);
     setDescription("");
     form.setFieldsValue({ description: "" });
-    if (value.length > 2) {
+    if (value?.length > 2) {
       try {
         let res = await getValidate(value);
         if (res?.status === "SUCCESS") {
@@ -1326,7 +1326,7 @@ const ManuallyAdd = ({
                   className="text-uppercase"
                 /> */}
               </Form.Item>
-              {code.length > 0 &&
+              {code?.length > 0 &&
               validCode.length > 0 &&
               validCode == "Valid Code" ? (
                 <label className="text-success">Valid Code</label>
