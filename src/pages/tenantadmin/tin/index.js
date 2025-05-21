@@ -120,6 +120,7 @@ const Tin = ({
     setPageNo(0);
     setSelectedRowsId([]);
     setSelectedRows([]);
+    setSearchText(null)
   };
   const onPageChange = (e) => {
     setPaginationFirst(e.first);
