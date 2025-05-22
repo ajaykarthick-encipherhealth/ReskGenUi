@@ -12,7 +12,18 @@ const Tab = ({ activeTab, handleTabs, tabs, width, margin, padding }) => {
 
   return (
     <div
-      style={{ width: width || "30%", margin: margin || "auto" }}
+    style={{
+      width:
+        width ||
+        (tabs?.length === 2
+          ? "30%"
+          : tabs?.length === 3
+          ? "45%"
+          : tabs?.length === 4
+          ? "60%"
+          : "60%"), 
+      margin: margin || "auto",
+    }}
       className={styles.buttonContainer}
     >
       <div

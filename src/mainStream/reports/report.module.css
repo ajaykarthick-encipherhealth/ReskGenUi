@@ -614,7 +614,7 @@
 }
 @media (min-width: 1024px) and (max-width: 1400px) {
   .buttonContainer {
-    width:30% !important;
+    width:60% !important;
     height: 42px !important;
   }
   .group button{

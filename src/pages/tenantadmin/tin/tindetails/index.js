@@ -110,10 +110,10 @@ const TinDetails = ({ activeTabName, getProjectActiveTab,getRoutedData,getRouted
       <div className="header">
         <SubNavBar hideBackArrow={true} handleBack={handleBack} />
       </div>
-      <div style={{ marginTop: "10%" }}>
+      <div style={{ marginTop: "8%" }}>
         <div>
           <Tab
-            width={"60%"}
+            // width={"60%"}
             icon
             activeTab={activeTab}
             handleTabs={handleTabs}
