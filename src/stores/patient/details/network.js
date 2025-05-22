@@ -593,29 +593,7 @@ export const updateMeatQuery = async (data) => {
   return response;
 };
 
-// export const patientListFilter = async (
-//   userId,
-//   status,
-//   searchText,
-//   startDate,
-//   endDate,
-//   processedStart,
-//   processedEnd,
-//   pageNo,
-  
-// ) => {
-//   const options = {
-//     method: "GET",
-//   };
-// const role = getStorage("headerAliasName")?.replace(/_/g, "").toLowerCase();
 
-//   const pageId = "502745ab-e131-4663-8702-94603ff1e8e6";
-//   const response = await requestPortal(
-//     `dbservice/table/view?pageId=${pageId}&patientAllocated=${userId}&page=${pageNo}&size=${15}&processedStatus=${status}&${role}DueDateStart=${startDate}&${role}DueDateEnd=${endDate}&${role}CompletedDateStart=${processedStart}&${role}CompletedDateEnd=${processedEnd}&searchString=${searchText}`,
-//     options
-//   );
-//   return response;
-// };
 export const patientListFilter = async (
   userId,
   status,
@@ -631,14 +609,26 @@ export const patientListFilter = async (
   };
 
   const role = getStorage("headerAliasName")?.replace(/_/g, "").toLowerCase();
+  const tin = getStorage("tinNumber");
   const pageId = "502745ab-e131-4663-8702-94603ff1e8e6";
-const tin = getStorage("tinNumber");
+
+  const path = typeof window !== "undefined" ? window.location.pathname : "";
+  let isQueried = false;
+  let isReAssigned = false;
+
+  if (path.endsWith("/reviewer/queried/details")) {
+    isQueried = true;
+  } else if (path.endsWith("/reviewer/reassign/details")) {
+    isReAssigned = true;
+  }
+  const additionalFlags = `&isQueried=${isQueried}&isReAssigned=${isReAssigned}`;
+
   const processedFilters =
     role === "admin" || role === "owner"
       ? `&tin=${tin}&createdDateStart=${startDate}&createdDateEnd=${endDate}&completedDateStart=${processedStart}&completedDateEnd=${processedEnd}`
       : role === "qa"
-      ? `&tin=${tin}&patientAllocated=${userId}&${role}DueDateStart=${startDate}&${role}DueDateEnd=${endDate}&${role}CompletedDateStart=${processedStart}&${role}CompletedDateEnd=${processedEnd}`
-      : `&patientAllocated=${userId}&${role}DueDateStart=${startDate}&${role}DueDateEnd=${endDate}&${role}CompletedDateStart=${processedStart}&${role}CompletedDateEnd=${processedEnd}`;
+      ? `&tin=${tin}&patientAllocated=${userId}&${role}DueDateStart=${startDate}&${role}DueDateEnd=${endDate}&${role}CompletedDateStart=${processedStart}&${role}CompletedDateEnd=${processedEnd}${additionalFlags}`
+      : `&patientAllocated=${userId}&${role}DueDateStart=${startDate}&${role}DueDateEnd=${endDate}&${role}CompletedDateStart=${processedStart}&${role}CompletedDateEnd=${processedEnd}${additionalFlags}`;
 
   const response = await requestPortal(
     `dbservice/table/view?pageId=${pageId}&page=${pageNo}&size=15&processedStatus=${status}${processedFilters}&mbi=${searchText}`,
