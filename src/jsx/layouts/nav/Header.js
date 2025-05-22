@@ -95,6 +95,7 @@ const Header = ({
   getTableData,
   getNotificationSound,
   notificationSound,
+  getProjectActiveTab
 }) => {
   const router = useRouter();
   const fileInputRef = useRef(null);
@@ -220,6 +221,7 @@ const Header = ({
 
   const onClick = ({ key }) => {
     setProjectListCheck(true);
+    getProjectActiveTab(null)
     const allRoles = JSON.parse(getStorage("userAllRoles"));
     let selectedRoleObj = allRoles?.find((res) => res.proxyRole === key);
     if (!selectedRoleObj) {
@@ -1424,6 +1426,7 @@ const enhancer = connect(
     getAllTin: authActions.tinsDropdown,
     getTableData: tableAction.tableViewAction,
     getNotificationSound: dashbaordActions.notificationSound,
+    getProjectActiveTab:tinActions.getProjectActiveTab
   }
 );
 export default enhancer(Header);
