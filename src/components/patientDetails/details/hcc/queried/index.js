@@ -20,17 +20,16 @@ const Index = ({ queriedData, queriedLoader }) => {
           queriedData?.response?.map((item, index) => (
             <StatusCard
               key={index}
-              number={item?.queryByName?.charAt(0).toUpperCase()}
-              name={item?.queryByName?.toUpperCase()}
-              status={item?.approvalStatus}
-              reason={item?.queryReason}
-              // date={convertUsFormat(item?.performedOn)}
+              number={item?.queryDetails?.queryByName?.charAt(0).toUpperCase()}
+              name={item?.queryDetails?.queryByName?.toUpperCase()}
+              status={item?.queryDetails?.approvalStatus}
+              reason={item?.queryDetails?.queryReason}
               date={formatDateTime({
-                date: item?.performedOn,
+                date: item?.createdDate,
                 formatType: "dateTime",
               })}
-              queriedto={item?.queryToName}
-              queriedByUserName={item?.queriedBy}
+              queriedto={item?.queryDetails?.queryToName}
+              queriedByUserName={item?.queryDetails?.queriedBy}
             />
           ))
         )}
