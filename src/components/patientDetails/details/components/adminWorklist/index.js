@@ -223,14 +223,7 @@ const AdminWorkList = ({
                 computedEndDate={computedEndDate}
                 selectedOption={selectedOption}
                 setSelectedOption={setSelectedOption}
-                // statusOptions={statusOptions}
-                statusOptions={
-                  userRole === "OWNER" || userRole == "ADMIN" || userRole == "TENANT_ADMIN"
-                    ? statusOptions
-                    : userRole === "CODER_1" || userRole == "CODER_2" || userRole == "QA"
-                    ? statuses
-                    : []
-                }
+                statusOptions={statusOptions}
                 selectCompletedPicker={selectCompletedPicker}
                 setSelectCompletedPicker={setSelectCompletedPicker}
                 selectComputedPicker={selectComputedPicker}

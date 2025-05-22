@@ -168,15 +168,7 @@ const ReviwerWorkList = ({
               computedEndDate={processedEnd}
               selectedOption={processedStatus}
               setSelectedOption={setProcessedStatus}
-              statusOptions={
-                (role === "OWNER" || role === "ADMIN" || role == "TENANT_ADMIN")
-                  ? statusOptions
-                  : (role === "CODER_1" ||
-                    role === "CODER_2" ||
-                    role === "QA")
-                  ? statuses
-                  : []
-              }
+              statusOptions={statuses}
               selectCompletedPicker={selectCompletedPicker}
               setSelectCompletedPicker={setSelectCompletedPicker}
               selectComputedPicker={selectComputedPicker}
