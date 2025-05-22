@@ -503,7 +503,6 @@ const YearAndDosStatus = ({
     getPatientIdDetails(patientDetailsResult?.data?.response);
     setPatienIdDetails(patientDetailsResult?.data?.response);
   }, [patientDetailsResult?.data?.response]);
-console.log(userRole, "userRole");
   return (
     <>
       {patientDetailsResult?.data?.response && (

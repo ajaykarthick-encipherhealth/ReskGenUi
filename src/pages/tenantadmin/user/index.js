@@ -33,7 +33,6 @@ const intialValues = {
   userName: "",
   isEdit: false,
 };
-console.log(intialValues, "intialValues");
 const UserList = ({
   getAllOrganizationList,
   organizationList,

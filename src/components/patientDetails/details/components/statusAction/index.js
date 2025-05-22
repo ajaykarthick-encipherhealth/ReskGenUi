@@ -65,7 +65,6 @@ const shouldDisable = isOnReviewerPatients ;
     setIsQueryModalOpen(false);
   };
 
-console.log(isClient, "isClient");
     useEffect(() => {
       setIsClient(true);
     }, []);
@@ -174,12 +173,7 @@ console.log(isClient, "isClient");
         null;
     }
   };
-  console.log({
-    isClient,
-    proxyRole,
-    isQueried,
-   
-  });
+
   const getPatientIdDetails = async (result) => {
     const userRoleLocal = getStorage("userRole");
     var data = [

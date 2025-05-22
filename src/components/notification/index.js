@@ -35,7 +35,6 @@ const Notification = ({
   const notificationData = notificationResponse?.notificationList?.content;
   const [loading, setLoading] = useState(false);
   const navigate = useRouter();
-  console.log(webSocketNotificationData, "webSocketNotificationData");
   const splitUserName = (name) => {
     if (name) {
       return name[0]?.toUpperCase();

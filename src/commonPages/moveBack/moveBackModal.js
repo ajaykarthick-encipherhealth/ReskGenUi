@@ -25,7 +25,6 @@ const MoveBackModal = ({
     value: org?.status,
     label: org?.status?.split("_")?.join(" "),
   }));
-  console.log(levelOptions,"levelOptions")
   const handleChange = (value) => {
     setSelectLevel(value);
     const selectedOption = levelOptions?.find((opt) => opt.status === value);
