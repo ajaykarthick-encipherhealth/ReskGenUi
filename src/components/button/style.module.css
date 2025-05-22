@@ -6,12 +6,13 @@
 .btnColor:disabled {
   background-color: #043069 !important;
   color: #fff !important;
-  cursor: no-drop;
+  cursor: not-allowed !important;
 }
 
 .btnColor:hover {
   background-color: #6c9ddd !important;
   color: #fff !important;
+  cursor: not-allowed !important;
 }
 
 .outer {

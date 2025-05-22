@@ -9,7 +9,6 @@ const CustomizableDrawer = ({
   onClose,
   selectedColumns,
   setSelectedColumns,
-  setActiveFilters,
   title = "Table Customize",
   handleSubmit,
   handleReset,
@@ -89,7 +88,6 @@ const CustomizableDrawer = ({
     }));
     handleSubmit(payload);    
   };
-
   return (
     <Drawer
       width={500}
@@ -116,12 +114,14 @@ const CustomizableDrawer = ({
             name="Insert"
             onClick={onInsert}
             loading={isSubmitting}
-            disabled={isSubmitting}
+            disabled={isSubmitting || activeWithImplicitOrder?.length < 3}
           />
         </div>
       }
     >
       <div className="mt-3 mx-3 d-flex flex-column gap-3">
+      {activeWithImplicitOrder?.length < 3?
+       <div className="text-danger"> * Minimum three fields required</div>:"" }
         {selectedColumns?.length > 0 ? (
           selectedColumns?.map((col) => {
             const isActive = col.active;
