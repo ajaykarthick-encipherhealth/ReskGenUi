@@ -3,7 +3,7 @@ import { Input } from "antd";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 
-const ReusableMultiInput = ({
+const ReusableIntegerInput = ({
   setPageNumber,
   disabled,
   placeholder,
@@ -19,37 +19,31 @@ const ReusableMultiInput = ({
   const [localStr, setLocalStr] = useState({});
 
   const debounceFunc = useCallback(
-    debounce((text, name) => {
-      setSearchText && setSearchText((prev) => ({ ...prev, [name]: text }));
-      setPageNumber && setPageNumber(0);
-    }, 700),
-    []
-  );
+     debounce((text) => {
+       setSearchText && setSearchText(text?text.trim():null);
+       setPageNumber && setPageNumber(0);
+     }, 700),
+     []
+   );
+ 
 
   const handleChange = (e) => {
     const text = e.target.value;
-    const name = e.target.name;
-
-    setLocalStr((prev) => ({ ...prev, [name]: text }));
-
-    if (!text) {
-      setSearchText &&
-        setSearchText((prev) => {
-          const updated = { ...prev };
-          delete updated[name];
-          return updated;
-        });
-    }
-
+    const onlyNumbersRegex = /^\d*$/;
+    if (!onlyNumbersRegex.test(text)) return; 
+    setLocalStr(text.trimStart());
+  
     if (isSearch && !handleInputStr) {
-      debounceFunc(text, name);
-    } else {
+      debounceFunc(text);
+    }
+  
+    if (handleInputStr) {
       handleInputStr(text);
     }
   };
 
   useEffect(() => {
-    setLocalStr(value || {});
+    setLocalStr(value?.trimStart() || "");
   }, [value]);
 
   return (
@@ -58,7 +52,7 @@ const ReusableMultiInput = ({
         data-testid={testId}
         {...props}
         placeholder={placeholder}
-        value={localStr[name] || (value ? value[name] : "")}
+        value={localStr}
         onChange={handleChange}
         prefix={<FontAwesomeIcon className="searchPrefix" icon={faSearch} />}
         name={name}
@@ -71,7 +65,7 @@ const ReusableMultiInput = ({
   );
 };
 
-export default ReusableMultiInput;
+export default ReusableIntegerInput;
 
 
 export const debounce = (func, delay) => {

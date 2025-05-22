@@ -19,7 +19,7 @@ const ReviewerAllocation = ({
   tableLoader,
   getTableData,
   roleId,
-  checkedHeader,
+  search,
   setCheckedHeader,
   statusBodyTemplate,
 }) => {
@@ -40,6 +40,7 @@ const ReviewerAllocation = ({
           pageNo: 0,
           pageSize: 15,
           roleId: roleId,
+          search,
         });
 
         if (response?.status === "SUCCESS") {

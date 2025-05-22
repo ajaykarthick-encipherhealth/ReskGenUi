@@ -347,7 +347,7 @@ const Tin = ({
     }
   }, [routedData]);
 
-
+console.log(paginationFirst,routedData,"data")
 
   const getAllTins = async (tabOverride) => {
     const currentTab = tabOverride || activeTab;

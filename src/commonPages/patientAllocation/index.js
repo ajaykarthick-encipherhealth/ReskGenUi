@@ -113,7 +113,7 @@ const PatientAllocation = ({
   const [selectAllChecked, setSelectAllChecked] = useState(false);
   const [paramsFilter, setParamsFilter] = useState(null);
   const [selectedUserName, setSelectedUserName] = useState([]);
-  const [search, setSearch] = useState({});
+  const [search, setSearch] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [samplingModal, setSamplingModal] = useState(false);
   const [selectedRoleId, setSelectedRoleId] = useState("");
@@ -140,7 +140,7 @@ const PatientAllocation = ({
     setSelectedDateRanges([]);
     setSelectedOption({});
     setPageNo(0);
-    setSearch({});
+    setSearch(null);
     setSelectedRowsId([]);
     setCheckedHeader(false);
   };
@@ -176,6 +176,7 @@ const PatientAllocation = ({
       searchText,
       sort,
       tin,
+      search,
     });
   };
   const handleSubmit = async (data) => {
@@ -281,7 +282,6 @@ const PatientAllocation = ({
       setIsFilter(false);
     }
   }, [data?.response?.metaDataDTO]);
-  
   return (
     <div>
       <Header />
@@ -464,6 +464,7 @@ const PatientAllocation = ({
                             checkedHeader={checkedHeader}
                             setCheckedHeader={setCheckedHeader}
                             statusBodyTemplate={statusBodyTemplate}
+                            search={search}
                           />
                         </Tab.Pane>
                       </Tab.Content>

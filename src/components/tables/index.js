@@ -441,11 +441,15 @@ const TableHeadItem = ({
     );
   }
   return (
-    <th className="text-start text-truncate   font2">
-      {typeof item?.headerName === "string"
-        ? item?.headerName?.toUpperCase()
-        : item?.headerName}
-    </th>
+    <>
+    {item?.columnActive && (
+  <th className="text-start text-truncate font2">
+    {typeof item?.headerName === "string"
+      ? item.headerName.toUpperCase()
+      : item.headerName}
+  </th>
+)}
+</>
   );
 };
 const TableRow = ({
@@ -558,25 +562,6 @@ const TableRow = ({
                 }
                 className="text-secondary"
               >
-                {/* <Select
-                  options={priorityOptions}
-                  placeholder="Set priority"
-                  className={`custom-ant-select ${Style.customAntSelect}`}
-                  showSearch={false}
-                  value={
-                    item?.priority
-                      ? item?.priority
-                      : // : priority?.patientId === item?.patientId
-                        // ? priority?.selectedValue
-                        "Set Priority"
-                  }
-                  onClick={(e) => e.stopPropagation()}
-                  onChange={(value) =>
-                    handlePriorityChange(item?.tinNumber, value)
-                  }
-                  style={{ width: "100%" }}
-                /> */}
-
                 <Select
                   options={priorityOptions}
                   placeholder="Set priority"
@@ -596,54 +581,7 @@ const TableRow = ({
             </td>
           );
         }
-        // if (columnItem.name == "priority") {
-        //   return (
-        //     <td
-        //       className={`font2 ${
-        //         disableUser && !item?.accountStatus && Style.disableUser
-        //       } ${
-        //         index == 0
-        //           ? Style.firstTdBorder
-        //           : column.length - 1 === index
-        //           ? Style.lastBorder
-        //           : Style.childBorder
-        //       }`}
-        //     >
-        //       <span
-        //         id={
-        //           tableId
-        //             ? createIdGen("selectpriority " + tableId + colIndex)
-        //             : createIdGen(
-        //                 "selectpriority " +
-        //                   router.pathname.replaceAll("/", " ") +
-        //                   colIndex
-        //               )
-        //         }
-        //         className="text-secondary"
-        //       >
-        //         <Select
-        //           options={priorityOptions}
-        //           placeholder="Set priority"
-        //           className={`custom-ant-select ${Style.customAntSelect}`}
-        //           showSearch={false}
-        //           value={
-        //             item?.priority
-        //               ? item?.priority
-        //               // : priority?.patientId === item?.patientId
-        //               // ? priority?.selectedValue
-        //               : "Set Priority"
-        //           }
-        //           onClick={(e) => e.stopPropagation()}
-        //           onChange={(value) =>
-        //             handlePriorityChange(item?.patientId, value)
-        //           }
-        //           style={{ width: "100%" }}
-        //         />
-        //       </span>
-        //     </td>
-        //   );
-        // }
-
+ 
         if (findItemWithTrueOrFalse(columnItem.design, "PROFILE")) {
           return (
             <td
@@ -1494,44 +1432,48 @@ const TableRow = ({
         }
 
         return (
-          <td
-            className={
-              index == 0
-                ? Style.firstTdBorder
-                : column.length - 1 == index
-                ? Style.lastBorder
-                : Style.childBorder
-            }
-            style={{
-              backgroundColor: item.accountStatus === false ? "#0000001a" : "",
-            }}
-          >
-            <span
-              style={{
-                color: item.accountStatus === false ? " gray" : "",
-              }}
-            >
-              {typeof item[columnItem.value] === "boolean" ? (
-                <div className="d-flex px-4">
-                  {item[columnItem.value] ? "True" : "False"}
-                </div>
-              ) : item[columnItem.actualField] ||
-                item[columnItem.actualField] === 0 ? (
-                <Tooltip title={item[columnItem.value]}>
-                  {reusableEllipses({
-                    str: item[columnItem.actualField],
-                      // .toString()
-                      // .replace(/_/g, " ")
-                      // .replace(/,\s*/g, ", "),
-                    count: count || 20,
-                  })}
-                </Tooltip>
-              ) : (
-                <div>---</div>
-              )}
-            </span>
-          </td>
+          <>
+            {columnItem?.columnActive && (
+              <td
+                className={
+                  index === 0
+                    ? Style.firstTdBorder
+                    : column.length - 1 === index
+                    ? Style.lastBorder
+                    : Style.childBorder
+                }
+                style={{
+                  backgroundColor: item.accountStatus === false ? "#0000001a" : "",
+                }}
+              >
+                <span
+                  style={{
+                    color: item.accountStatus === false ? "gray" : "",
+                  }}
+                >
+                  {typeof item[columnItem.value] === "boolean" ? (
+                    <div className="d-flex px-4">
+                      {item[columnItem.value] ? "True" : "False"}
+                    </div>
+                  ) : item[columnItem.actualField] || item[columnItem.actualField] === 0 ? (
+                    <Tooltip title={item[columnItem.value]}>
+                      {reusableEllipses({
+                        str: item[columnItem.actualField]
+                          .toString()
+                          .replace(/_/g, " ")
+                          .replace(/,\s*/g, ", "),
+                        count: count || 20,
+                      })}
+                    </Tooltip>
+                  ) : (
+                    <div>---</div>
+                  )}
+                </span>
+              </td>
+            )}
+          </>
         );
+        
       })}
     </tr>
   );

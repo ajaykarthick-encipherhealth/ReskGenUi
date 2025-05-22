@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { Button, DatePicker, Input, Select, Space } from "antd";
-import moment from "moment";
 import ReusableInput from "./reusableInput";
 import MoreFilter from "../../pages/tenantadmin/tracking/filters";
 import { useRef } from "react";
@@ -11,10 +10,9 @@ import {
   generateOptions,
   generateOptionsObject,
 } from "../../utils/reusable";
-import ReusableMultiInput from "./reusableInput/multiple";
 import { useRouter } from "next/router";
 import CustomizableDrawer from "../customizeDrawer";
-import RegularButton from "../button";
+import ReusableIntegerInput from "./reusableInput/integerInput";
 const { RangePicker } = DatePicker;
 
 const ReusableFilters = ({
@@ -31,7 +29,7 @@ const ReusableFilters = ({
   setSelectedDates,
   selectedDates,
   // disabledDate,
-  setPageNumber,
+  setSelectedRows,
   activeFilters,
   setActiveFilters,
   setClear,
@@ -41,7 +39,6 @@ const ReusableFilters = ({
   addUserForm,
   btnTitle,
   form,
-  selectedRowsId,
   //filters
   showFilter,
   opt,
@@ -78,6 +75,7 @@ const ReusableFilters = ({
     setSelectedDateRanges({});
     setSelectedDates([]);
     setSelectedOption({});
+    setSearch(null)
   };
   const handleClearFilters = () => {
     setSelectAll(false);
@@ -88,6 +86,7 @@ const ReusableFilters = ({
     setSelectedDates([]);
     setSelectedOption({});
     setSearchText(null);
+    setSearch(null)
   };
 
   const handleRangePicker = (dates, dateString, tabName) => {
@@ -144,7 +143,7 @@ const ReusableFilters = ({
                         ...prev,
                         [item?.actualField]: val,
                       }));
-                      setPageNo(1); 
+                      setPageNo(1);   
                     }}
                     autoComplete="off"
                     setPageNumber={setPageNo}
@@ -266,38 +265,44 @@ const ReusableFilters = ({
                             item?.actualField == "ownerDueDate"
                         )
                       }
-                      inputReadOnly
                     />
                   </div>
                 </div>
               );
-            case "search1":
+            case "SEARCH_INT":
               return (
                 <div key={item?.title} className="default-filter-size mb-2">
-                  <label className="responsiveLabel">{item?.header}</label>
-                  <ReusableMultiInput
+                  <label className="responsiveLabel">{item?.headerName}</label>
+                  <ReusableIntegerInput
                     id={
                       id
-                        ? createIdGen("multipleInputParent " + id)
+                        ? createIdGen("integerInputParent " + id)
                         : createIdGen(
-                            "multipleInputParent" +
+                            "integerInputParent" +
                               item?.title +
                               router.pathname.replaceAll("/", " ")
                           )
                     }
                     testId={
                       id
-                        ? createIdGen("multipleinput " + id)
+                        ? createIdGen("integerInput " + id)
                         : createIdGen(
-                            "multipleinput" +
+                            "integerInput" +
                               item?.title +
                               router.pathname.replaceAll("/", " ")
                           )
                     }
-                    placeholder={"Search"}
-                    value={search}
+                    placeholder={`Search ${item?.headerName}`}
+                    value={search ? search[item?.actualField] : ""}
                     isSearch={true}
-                    setSearchText={setSearch}
+                    setSearchText={(val) => {
+                      setSearch((prev) => ({
+                        ...prev,
+                        [item?.actualField]: val,
+                      }));
+                      setPageNo(1); 
+                      setSelectedRows([])
+                    }}
                     autoComplete="off"
                     setPageNumber={setPageNo}
                   />
