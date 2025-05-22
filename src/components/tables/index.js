@@ -696,7 +696,7 @@ const TableRow = ({
           );
         }
 
-        if (columnItem.isComma) {
+        if (columnItem?.design?.includes("COMMA_SEPARATION")) {
           return (
             <td
               style={{
@@ -717,10 +717,11 @@ const TableRow = ({
                   color: item.accountStatus === false ? "gray" : "",
                 }}
               >
-                {item[columnItem.value]
-                  ? item[columnItem.value]
-                      .map((val) => val.replace(/_/g, " "))
-                      .join(", ")
+                {item[columnItem.actualField]
+                  ? item[columnItem.actualField]
+                      .toString()
+                      .replace(/_/g, " ")
+                      .replace(/,\s*/g, ", ")
                   : "---"}
               </span>
             </td>
@@ -1518,10 +1519,10 @@ const TableRow = ({
                 item[columnItem.actualField] === 0 ? (
                 <Tooltip title={item[columnItem.value]}>
                   {reusableEllipses({
-                    str: item[columnItem.actualField]
-                      .toString()
-                      .replace(/_/g, " ")
-                      .replace(/,\s*/g, ", "),
+                    str: item[columnItem.actualField],
+                      // .toString()
+                      // .replace(/_/g, " ")
+                      // .replace(/,\s*/g, ", "),
                     count: count || 20,
                   })}
                 </Tooltip>
