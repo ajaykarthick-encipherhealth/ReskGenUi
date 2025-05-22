@@ -631,7 +631,7 @@ export const patientListFilter = async (
       : `&patientAllocated=${userId}&${role}DueDateStart=${startDate}&${role}DueDateEnd=${endDate}&${role}CompletedDateStart=${processedStart}&${role}CompletedDateEnd=${processedEnd}${additionalFlags}`;
 
   const response = await requestPortal(
-    `dbservice/table/view?pageId=${pageId}&page=${pageNo}&size=15&processedStatus=${status}${processedFilters}&mbi=${searchText}`,
+    `dbservice/table/view?pageId=${pageId}&page=${pageNo}&size=15&computing=${status}${processedFilters}&mbi=${searchText}`,
     options
   );
 

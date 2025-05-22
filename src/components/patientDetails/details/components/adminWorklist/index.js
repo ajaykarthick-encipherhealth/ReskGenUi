@@ -235,42 +235,33 @@ const AdminWorkList = ({
         </div> */}
 
         {!filterDataLoading ? (
-       
-            <div id="dosSelect" className={visitStyles.patientListHead}>
-              <ul
-                id="dosSelect"
-                className={`${visitStyles.patientDetailsHead}`}
-              >
-                {patientList?.map((data, index) => (
-                  <li
-                    id="dosSelect"
-                    className={`${visitStyles.nameList} ${visitStyles.patientList}`}
-                    key={index}
-                    onClick={() =>
-                      getPatientListToDetails(data.patientId, true)
-                    }
-                  >
-                    <span>
-                      <span id="dosSelect">
-                        {truncateString(data?.mbi ? data?.mbi : "---", 35)}
-                      </span>{" "}
-                      <span id="dosSelect">-</span>{" "}
-                      <span>{data?.patientName ? data?.patientName : "---"}</span>
-                    </span>
-                    {processstatusBodyTemplate(data)}
-                  </li>
-                ))}
-                {patientList?.length == 0 ? (
-                  <h5 className="text-center">NO DATA</h5>
-                ) : null}
-              </ul>
-            </div>
-          
+          <div id="dosSelect" className={visitStyles.patientListHead}>
+            <ul id="dosSelect" className={`${visitStyles.patientDetailsHead}`}>
+              {patientList?.map((data, index) => (
+                <li
+                  id="dosSelect"
+                  className={`${visitStyles.nameList} ${visitStyles.patientList}`}
+                  key={index}
+                  onClick={() => getPatientListToDetails(data.patientId, true)}
+                >
+                  <span>
+                    <span id="dosSelect">
+                      {truncateString(data?.mbi ? data?.mbi : "---", 35)}
+                    </span>{" "}
+                    <span id="dosSelect">-</span>{" "}
+                    <span>{data?.patientName ? data?.patientName : "---"}</span>
+                  </span>
+                  {processstatusBodyTemplate(data)}
+                </li>
+              ))}
+              {patientList?.length == 0 ? (
+                <h5 className="text-center">NO DATA</h5>
+              ) : null}
+            </ul>
+          </div>
         ) : (
           <div className="mt-2">
-         
-            <TableSkeleton/>
-            
+            <TableSkeleton />
           </div>
         )}
       </div>
@@ -278,7 +269,7 @@ const AdminWorkList = ({
         <div className="patient-filte-page">
           <Paginator
             className="paginator-workqueue"
-            first={paginationFirst}
+            first={pageNo === 0 ? 0 : paginationFirst}
             rows={15}
             totalRecords={totalElements}
             onPageChange={onPageChange}
