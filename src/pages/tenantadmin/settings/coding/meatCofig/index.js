@@ -13,9 +13,9 @@ const MeatConfig = ({ getCodingDetails, updateSettings, list }) => {
     suggestAssessmentHeaderMEAT: false,
   });
 
-  useEffect(() => {
-    getCodingDetails({ type: "MEAT" });
-  }, []);
+  // useEffect(() => {
+  //   getCodingDetails({ type: "MEAT" });
+  // }, []);
 
   useEffect(() => {
     if (list?.response) {

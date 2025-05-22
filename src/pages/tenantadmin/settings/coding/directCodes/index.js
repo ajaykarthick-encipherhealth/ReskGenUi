@@ -39,9 +39,9 @@ const DirectCodes = ({ updateSettings, getCodingDetails, list }) => {
       key: "year",
     },
   ];
-  useEffect(() => {
-    getCodingDetails({ type: "DIRECT_CODES" });
-  }, []);
+  // useEffect(() => {
+  //   getCodingDetails({ type: "DIRECT_CODES" });
+  // }, []);
   const handleSubmit = (values) => {
     updateSettings({ directCodes: values });
   };

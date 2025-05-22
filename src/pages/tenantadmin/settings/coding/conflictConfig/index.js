@@ -12,9 +12,9 @@ const ConflictConfig = ({ getCodingDetails, updateSettings, list }) => {
     conflictConditionDontHide: false,
   });
 
-  useEffect(() => {
-    getCodingDetails({ type: "CONFLICT" });
-  }, []);
+  // useEffect(() => {
+  //   getCodingDetails({ type: "CONFLICT" });
+  // }, []);
 
   useEffect(() => {
     if (list?.response) {

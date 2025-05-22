@@ -62,9 +62,9 @@ const RAFConfig = ({
     setIsChecked((prev) => ({ ...prev, [name]: checked }));
   };
 
-  useEffect(() => {
-    getRafConfig();
-  }, [page]);
+  // useEffect(() => {
+  //   getRafConfig();
+  // }, [page]);
 
   const getRafConfig = async () => {
     try {

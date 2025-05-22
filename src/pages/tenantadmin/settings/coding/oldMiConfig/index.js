@@ -11,9 +11,9 @@ const OldMiConfig = ({ getCodingDetails, updateSettings, list }) => {
   const [medical, setMedical] = useState({
     captureOldMiConditions: false,
   });
-  useEffect(() => {
-    getCodingDetails({ type: "OLD_MI" });
-  }, []);
+  // useEffect(() => {
+  //   getCodingDetails({ type: "OLD_MI" });
+  // }, []);
   useEffect(() => {
     if (list?.response) {
       form.setFieldsValue({

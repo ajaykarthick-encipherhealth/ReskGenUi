@@ -81,9 +81,9 @@ const HistoryCodes = ({
       key: "action",
     },
   ];
-  useEffect(() => {
-    getHistorys();
-  }, [page, search]);
+  // useEffect(() => {
+  //   getHistorys();
+  // }, [page, search]);
 
   const getHistorys = async () => {
     try {

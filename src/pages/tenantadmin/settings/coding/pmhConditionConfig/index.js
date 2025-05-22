@@ -11,9 +11,9 @@ const PMHConfig = ({ getCodingDetails, updateSettings, list }) => {
   const [medical, setMedical] = useState({
     enablePmhConditionSegregation: false,
   });
-  useEffect(() => {
-    getCodingDetails({ type: "PMH_CONDITIONS" });
-  }, []);
+  // useEffect(() => {
+  //   getCodingDetails({ type: "PMH_CONDITIONS" });
+  // }, []);
   useEffect(() => {
     if (list?.response) {
       form.setFieldsValue({

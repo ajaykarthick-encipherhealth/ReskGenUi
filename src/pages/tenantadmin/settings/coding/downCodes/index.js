@@ -75,9 +75,9 @@ const DownCodes = ({
       key: "action",
     },
   ];
-  useEffect(() => {
-    getDownCodes();
-  }, [page, search]);
+  // useEffect(() => {
+  //   getDownCodes();
+  // }, [page, search]);
 
   const getDownCodes = async () => {
     try {

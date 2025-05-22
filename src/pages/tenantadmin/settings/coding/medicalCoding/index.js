@@ -16,9 +16,9 @@ const MedicalCoding = ({ getCodingDetails, updateSettings, list }) => {
     considerESRDAsHcc: false,
   });
 
-  useEffect(() => {
-    getCodingDetails({ type: "CODING" });
-  }, []);
+  // useEffect(() => {
+  //   getCodingDetails({ type: "CODING" });
+  // }, []);
 
   useEffect(() => {
     if (list?.response) {

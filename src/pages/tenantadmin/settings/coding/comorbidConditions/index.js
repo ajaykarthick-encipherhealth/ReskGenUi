@@ -60,9 +60,9 @@ const ComorbidConditions = ({
       key: "action",
     },
   ];
-  useEffect(() => {
-    getCodingDetailsDetails();
-  }, [search, page]);
+  // useEffect(() => {
+  //   getCodingDetailsDetails();
+  // }, [search, page]);
 
   const getCodingDetailsDetails = async () => {
     try {

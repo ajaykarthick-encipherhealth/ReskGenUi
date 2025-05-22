@@ -60,9 +60,9 @@ const DirectConfirmCodes = ({
       key: "action",
     },
   ];
-  useEffect(() => {
-    getDirectConfirmDetails();
-  }, [paginationFirst]);
+  // useEffect(() => {
+  //   getDirectConfirmDetails();
+  // }, [paginationFirst]);
 
   const getDirectConfirmDetails = async () => {
     try {

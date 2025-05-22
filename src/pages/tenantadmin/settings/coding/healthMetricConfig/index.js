@@ -355,15 +355,15 @@ const HealthMetricConfig = ({
     },
   ];
 
-  useEffect(() => {
-    getCodingDetails({
-      type: "HEALTH_METRICS",
-      page: page,
-      healthMetricType: select.healthMetricType,
-      gender: select.gender,
-      year: select.year,
-    });
-  }, [select, page]);
+  // useEffect(() => {
+  //   getCodingDetails({
+  //     type: "HEALTH_METRICS",
+  //     page: page,
+  //     healthMetricType: select.healthMetricType,
+  //     gender: select.gender,
+  //     year: select.year,
+  //   });
+  // }, [select, page]);
 
   const submitPatientFile = async () => {
     const formData = new FormData();

@@ -59,9 +59,9 @@ const CriticalConditions = ({
     },
   ];
 
-  useEffect(() => {
-    getCodingDetailsDetails();
-  }, [search, page]);
+  // useEffect(() => {
+  //   getCodingDetailsDetails();
+  // }, [search, page]);
 
   const handleGuidelines = async (value, name) => {
     try {

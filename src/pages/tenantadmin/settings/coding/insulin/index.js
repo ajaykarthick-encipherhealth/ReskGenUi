@@ -60,9 +60,9 @@ const Insulin = ({
     includeGeneralInsulinMedications: false,
   });
 
-  useEffect(() => {
-    getCodingDetails({ type: "INSULIN" });
-  }, []);
+  // useEffect(() => {
+  //   getCodingDetails({ type: "INSULIN" });
+  // }, []);
 
   useEffect(() => {
     setLoading(true);

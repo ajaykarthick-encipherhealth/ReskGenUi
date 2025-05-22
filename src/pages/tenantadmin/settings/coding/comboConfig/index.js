@@ -14,9 +14,9 @@ const ComboConfig = ({ getCodingDetails, updateSettings, list }) => {
     directCombinationAddonRegex: false
   });
 
-  useEffect(() => {
-    getCodingDetails({ type: "COMBO" });
-  }, []);
+  // useEffect(() => {
+  //   getCodingDetails({ type: "COMBO" });
+  // }, []);
 
   useEffect(() => {
     if (list?.response) {

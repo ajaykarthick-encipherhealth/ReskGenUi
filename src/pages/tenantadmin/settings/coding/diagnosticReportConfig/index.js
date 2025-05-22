@@ -26,9 +26,9 @@ const DiagnosticReportConfig = ({ getCodingDetails, updateSettings, list }) => {
     futureDosEnabled: false,
   });
 
-  useEffect(() => {
-    getCodingDetails({ type: "DIAGNOSTIC_REPORT" });
-  }, []);
+  // useEffect(() => {
+  //   getCodingDetails({ type: "DIAGNOSTIC_REPORT" });
+  // }, []);
 
   useEffect(() => {
     if (list?.response) {
