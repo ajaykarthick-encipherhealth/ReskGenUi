@@ -995,7 +995,7 @@ const handleExcelDownload = () => {
                           reportActiveTab === "PDF" ? (
                             <div
                               className="d-flex flex-wrap col-10 "
-                              style={{ width: "85%" }}
+                              style={{ width: "90%" }}
                             >
                               <div className="default-filter-size col-2 col-xl-2 col-md-4 mx-1">
                                 <label>Search by Name or ID</label>
