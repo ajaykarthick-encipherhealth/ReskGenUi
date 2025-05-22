@@ -602,7 +602,8 @@ export const patientListFilter = async (
   endDate,
   processedStart,
   processedEnd,
-  pageNo
+  pageNo,
+  processedStatus
 ) => {
   const options = {
     method: "GET",
@@ -625,13 +626,13 @@ export const patientListFilter = async (
 
   const processedFilters =
     role === "admin" || role === "owner"
-      ? `&tin=${tin}&createdDateStart=${startDate}&createdDateEnd=${endDate}&completedDateStart=${processedStart}&completedDateEnd=${processedEnd}`
+      ? `&tin=${tin}&computing=${status}&createdDateStart=${startDate}&createdDateEnd=${endDate}&completedDateStart=${processedStart}&completedDateEnd=${processedEnd}`
       : role === "qa"
-      ? `&tin=${tin}&patientAllocated=${userId}&${role}DueDateStart=${startDate}&${role}DueDateEnd=${endDate}&${role}CompletedDateStart=${processedStart}&${role}CompletedDateEnd=${processedEnd}${additionalFlags}`
-      : `&patientAllocated=${userId}&${role}DueDateStart=${startDate}&${role}DueDateEnd=${endDate}&${role}CompletedDateStart=${processedStart}&${role}CompletedDateEnd=${processedEnd}${additionalFlags}`;
+      ? `&tin=${tin}&processedStatus=${status}&patientAllocated=${userId}&${role}DueDateStart=${startDate}&${role}DueDateEnd=${endDate}&${role}CompletedDateStart=${processedStart}&${role}CompletedDateEnd=${processedEnd}${additionalFlags}`
+      : `&patientAllocated=${userId}&processedStatus=${status}&${role}DueDateStart=${startDate}&${role}DueDateEnd=${endDate}&${role}CompletedDateStart=${processedStart}&${role}CompletedDateEnd=${processedEnd}${additionalFlags}`;
 
   const response = await requestPortal(
-    `dbservice/table/view?pageId=${pageId}&page=${pageNo}&size=15&computing=${status}${processedFilters}&mbi=${searchText}`,
+    `dbservice/table/view?pageId=${pageId}&page=${pageNo}&size=15${processedFilters}&mbi=${searchText}`,
     options
   );
 
