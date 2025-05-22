@@ -27,20 +27,20 @@ const ReusableIntegerInput = ({
    );
  
 
-  const handleChange = (e) => {
+   const handleChange = (e) => {
     const text = e.target.value;
-    const onlyNumbersRegex = /^\d*$/;
-    if (!onlyNumbersRegex.test(text)) return; 
+    const allowedNumber = /^[1-9]\d*$/;
+    if (text !== '' && !allowedNumber.test(text)) return;
     setLocalStr(text.trimStart());
-  
     if (isSearch && !handleInputStr) {
       debounceFunc(text);
     }
-  
     if (handleInputStr) {
       handleInputStr(text);
     }
   };
+  
+  
 
   useEffect(() => {
     setLocalStr(value?.trimStart() || "");
