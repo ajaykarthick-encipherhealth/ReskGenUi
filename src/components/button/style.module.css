@@ -12,7 +12,6 @@
 .btnColor:hover {
   background-color: #6c9ddd !important;
   color: #fff !important;
-  cursor: not-allowed !important;
 }
 
 .outer {
