@@ -15,7 +15,6 @@ import Search from "../../../../search";
 import { truncateString } from "../function/ReusableFunctions";
 import TableSkeleton from "../../../../skeleton/table";
 
-
 export function extractLatestData(notes) {
   let declinedData;
   if (notes && typeof notes === "object") {
@@ -62,17 +61,17 @@ const AdminWorkList = ({
 
   const getWorkList = async (data) => {
     // const info = await getPatients({ data: data });
-      var result = await getPatients(
-        localUserId,
-        selectedOption != "ALL" ? selectedOption : "",
-        search,
-        completedStartDate,
-        completedEndDate,
-        computedStartDate,
-        computedEndDate,
+    var result = await getPatients(
+      localUserId,
+      selectedOption != "ALL" ? selectedOption : "",
+      search,
+      completedStartDate,
+      completedEndDate,
+      computedStartDate,
+      computedEndDate,
 
-        pageNo
-      );
+      pageNo
+    );
     if (result) {
       setPatientList(result?.response?.pageResponse?.content);
       setTotalElements(result?.response?.pageResponse?.totalElements);
@@ -101,6 +100,13 @@ const AdminWorkList = ({
     { label: "COMPUTED", value: "2", status: 2 },
     { label: "FAILED", value: "3", status: 3 },
     { label: "NOT COMPUTED", value: "0", status: 0 },
+  ];
+  const statuses = [
+    { label: "ALL", value: "ALL" },
+    { label: "PENDING", value: "PENDING" },
+    { label: "COMPLETED", value: "COMPLETED" },
+    { label: "HOLD", value: "HOLD" },
+    { label: "DECLINED", value: "DECLINED" },
   ];
 
   const bullets = [
@@ -167,7 +173,7 @@ const AdminWorkList = ({
 
   useEffect(() => {
     setFilterDataLoading(true);
-   
+
     getWorkList();
     // getPatients({ data: data });
   }, [
@@ -217,7 +223,14 @@ const AdminWorkList = ({
                 computedEndDate={computedEndDate}
                 selectedOption={selectedOption}
                 setSelectedOption={setSelectedOption}
-                statusOptions={statusOptions}
+                // statusOptions={statusOptions}
+                statusOptions={
+                  userRole === "OWNER" || userRole == "ADMIN" || userRole == "TENANT_ADMIN"
+                    ? statusOptions
+                    : userRole === "CODER_1" || userRole == "CODER_2" || userRole == "QA"
+                    ? statuses
+                    : []
+                }
                 selectCompletedPicker={selectCompletedPicker}
                 setSelectCompletedPicker={setSelectCompletedPicker}
                 selectComputedPicker={selectComputedPicker}

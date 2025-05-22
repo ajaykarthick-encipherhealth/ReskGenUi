@@ -10,6 +10,7 @@ import { actions as patientsActions } from "../../../../../stores/patient/detail
 import { connect } from "react-redux";
 import { truncateString } from "../function/ReusableFunctions";
 import TableSkeleton from "../../../../skeleton/table";
+import { getStorage } from "../../../../../utils/storages";
 
 const ReviwerWorkList = ({
   localUserId,
@@ -32,6 +33,7 @@ const ReviwerWorkList = ({
   const [selectCompletedPicker, setSelectCompletedPicker] = useState("");
   const [selectComputedPicker, setSelectComputedPicker] = useState("");
   const [filterModalOpen, setFilterModalOpen] = useState(false);
+  const [role, setRole] = useState([])
 
   const getWorkList = async () => {
     var result = await patientListFilter(
@@ -70,9 +72,19 @@ const ReviwerWorkList = ({
     { label: "DECLINED", value: "DECLINED" },
   ];
 
+  const statusOptions = [
+    { label: "ALL", value: "" },
+    { label: "PROCESSING", value: "1", status: 1 },
+    { label: "COMPUTED", value: "2", status: 2 },
+    { label: "FAILED", value: "3", status: 3 },
+    { label: "NOT COMPUTED", value: "0", status: 0 },
+  ];
+
   useEffect(() => {
+    const userRole = getStorage("userRole");
     setFilterDataLoading(true);
     getWorkList();
+    setRole(userRole)
   }, [
     processedStatus,
     searchtext,
@@ -82,7 +94,8 @@ const ReviwerWorkList = ({
     processedEnd,
     pageNo,
   ]);
-
+  
+  console.log(role, "userRole");
   return (
     <>
       <div className={`row ${visitStyles.patientListHead}`}>
@@ -155,7 +168,15 @@ const ReviwerWorkList = ({
               computedEndDate={processedEnd}
               selectedOption={processedStatus}
               setSelectedOption={setProcessedStatus}
-              statusOptions={statuses}
+              statusOptions={
+                (role === "OWNER" || role === "ADMIN" || role == "TENANT_ADMIN")
+                  ? statusOptions
+                  : (role === "CODER_1" ||
+                    role === "CODER_2" ||
+                    role === "QA")
+                  ? statuses
+                  : []
+              }
               selectCompletedPicker={selectCompletedPicker}
               setSelectCompletedPicker={setSelectCompletedPicker}
               selectComputedPicker={selectComputedPicker}
