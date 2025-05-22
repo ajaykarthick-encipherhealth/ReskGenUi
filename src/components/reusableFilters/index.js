@@ -136,7 +136,7 @@ const ReusableFilters = ({
                               router.pathname.replaceAll("/", " ")
                           )
                     }
-                    placeholder={"Search"}
+                    placeholder={`Search ${item?.headerName}`}
                     value={searchText ? searchText[item?.actualField] : ""}
                     isSearch={true}
                     setSearchText={(val) => {
@@ -144,7 +144,7 @@ const ReusableFilters = ({
                         ...prev,
                         [item?.actualField]: val,
                       }));
-                      setPageNo(1); // optional if resetting page
+                      setPageNo(1); 
                     }}
                     autoComplete="off"
                     setPageNumber={setPageNo}
@@ -266,6 +266,7 @@ const ReusableFilters = ({
                             item?.actualField == "ownerDueDate"
                         )
                       }
+                      inputReadOnly
                     />
                   </div>
                 </div>

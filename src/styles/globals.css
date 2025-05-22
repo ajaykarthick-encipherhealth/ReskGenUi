@@ -16598,7 +16598,7 @@ input::-webkit-inner-spin-button {
   position: relative;
 }
 .reusableInput.ant-input-affix-wrapper > input.ant-input {
-  margin-top: -5px;
+  margin-top: -4px;
 }
 .notificationPicker{
   border-radius: 0px 10px 10px 0px !important

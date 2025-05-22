@@ -121,6 +121,9 @@ const Tin = ({
     setSelectedRowsId([]);
     setSelectedRows([]);
     setSearchText(null)
+    setSelectedDateRanges({})
+    setSelectedDates([])
+
   };
   const onPageChange = (e) => {
     setPaginationFirst(e.first);
