@@ -641,7 +641,7 @@ const tin = getStorage("tinNumber");
       : `&patientAllocated=${userId}&${role}DueDateStart=${startDate}&${role}DueDateEnd=${endDate}&${role}CompletedDateStart=${processedStart}&${role}CompletedDateEnd=${processedEnd}`;
 
   const response = await requestPortal(
-    `dbservice/table/view?pageId=${pageId}&page=${pageNo}&size=15&processedStatus=${status}${processedFilters}&searchString=${searchText}`,
+    `dbservice/table/view?pageId=${pageId}&page=${pageNo}&size=15&processedStatus=${status}${processedFilters}&mbi=${searchText}`,
     options
   );
 
