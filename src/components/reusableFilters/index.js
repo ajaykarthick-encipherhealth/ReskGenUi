@@ -265,6 +265,7 @@ const ReusableFilters = ({
                             item?.actualField == "ownerDueDate"
                         )
                       }
+                      inputReadOnly
                     />
                   </div>
                 </div>
