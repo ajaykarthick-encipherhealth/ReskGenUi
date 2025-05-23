@@ -1458,10 +1458,10 @@ const TableRow = ({
                   ) : item[columnItem.actualField] || item[columnItem.actualField] === 0 ? (
                     <Tooltip title={item[columnItem.value]}>
                       {reusableEllipses({
-                        str: item[columnItem.actualField]
-                          .toString()
-                          .replace(/_/g, " ")
-                          .replace(/,\s*/g, ", "),
+                        str: item[columnItem.actualField],
+                          // .toString()
+                          // .replace(/_/g, " ")
+                          // .replace(/,\s*/g, ", "),
                         count: count || 20,
                       })}
                     </Tooltip>
