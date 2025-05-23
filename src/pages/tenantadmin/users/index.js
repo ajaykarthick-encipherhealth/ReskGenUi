@@ -282,7 +282,7 @@ const Users = ({
       <div className="content-body">
         <div className="container-fluid table-responsive active-projects task-table">
             <div className="d-flex mt-4 ">
-              <div className="p-2" style={{ width: "90%" }}>
+              <div className="p-2" style={{ width: "94%" }}>
                 <ReusableFilters
                   showFilter={true}
                   setActiveFilters={setActiveFilters}
