@@ -3,16 +3,15 @@ import { Avatar, DatePicker, Empty, Modal, Select } from "antd";
 import modalStyle from "../../../pages/tenantadmin/allocateduser/allocate/style.module.css";
 import { InputText } from "primereact/inputtext";
 import { useEffect, useState } from "react";
-import { useRouter } from "next/router";
 import { faSearch, faUser } from "@fortawesome/free-solid-svg-icons";
 import { connect } from "react-redux";
 import styles from "../../../components/tables/table.module.css";
 import TableSkeleton from "../../../components/skeleton/table";
 import RegularButton from "../../../components/button";
-import { actions as authActions } from "../../../stores/authFlows";
 import { actions as allActions } from "../../../stores/tenantAdmin/users";
 import { getStorage } from "../../../utils/storages";
 import { getResponePopup } from "../../../utils/reusable";
+import ReusableInput from "../../../components/reusableFilters/reusableInput";
 
 const UsersModal = ({
   open,
@@ -37,9 +36,10 @@ const UsersModal = ({
   const [isSecondModalOpen, setIsSecondModalOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [roleIds, setRoleIds] = useState([]);
+  const [roleSearch, setRoleSearch] = useState(null)
 
   const getUserList = async () => {
-    const response = await getAllUsersList({ searchText : search });
+    const response = await getAllUsersList({ searchText: search });
     if (response?.status === "SUCCESS") {
       let result = response?.response;
       const user = result?.map((item) => {
@@ -88,6 +88,7 @@ const UsersModal = ({
       setSelectedUserIds([]);
       setRoleIds([]);
       setIsSecondModalOpen(false);
+      setRoleSearch(null)
     } else {
       getResponePopup(response);
       setIsLoading(false);
@@ -137,8 +138,9 @@ const UsersModal = ({
   }, [search]);
 
   useEffect(() => {
-    getAllRoles({ searchText: search || "" });
-  }, [search]);
+    getAllRoles({ searchText: roleSearch || "" });
+  }, [roleSearch]);
+
   return (
     <div>
       <Modal
@@ -150,6 +152,7 @@ const UsersModal = ({
           setSearch("");
           setSelectedUserIds([]);
           setRoleIds([]);
+          setRoleSearch(null)
         }}
         title="Select User"
         footer={false}
@@ -158,35 +161,23 @@ const UsersModal = ({
         className={"custom-modal"}
       >
         <div class="form-group d-flex align-items-center justify-content-between has-search">
-          <FontAwesomeIcon
-            className="fa fa-search form-control-feedback"
-            icon={faSearch}
-          />
-          <InputText
-            autoComplete="off"
-            id="search-input"
-            name="search-input"
-            type="text"
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            className=" w-50 form-control new-form-control"
-            placeholder="Search"
-            maxLength={25}
-            onKeyDown={(e) => {
-              if (e.key === "\\") {
-                e.preventDefault();
-              }
-            }}
-          />
+        <div style={{ border: "1px solid gray", borderRadius: "10px" }}>
+            <ReusableInput
+              placeholder={"Search"}
+              value={search}
+              isSearch={true}
+              setSearchText={setSearch}
+              autoComplete="off"
+            />
+          </div>
           {userDetails?.length > 0 ? (
             <div className="d-flex align-items-center ">
               <div className="fontWeight3 font3">Select All</div>
               <input
-                className={`mx-4  ${styles.checkbox} ${styles.bodyCheckbox}${
-                  selectedUserIds?.length === userDetails?.length
+                className={`mx-4  ${styles.checkbox} ${styles.bodyCheckbox}${selectedUserIds?.length === userDetails?.length
                     ? styles.customChecked2
                     : ""
-                } `}
+                  } `}
                 type="checkbox"
                 id="selectAll"
                 checked={selectedUserIds?.length === userDetails?.length}
@@ -204,11 +195,10 @@ const UsersModal = ({
             {userDetails?.map((item) => (
               <div className="mt-4 ">
                 <div
-                  className={`form-control new-item-control my-2 p-0 ${
-                    item?.id == activeCard
+                  className={`form-control new-item-control my-2 p-0 ${item?.id == activeCard
                       ? modalStyle.listContentLarge
                       : modalStyle.listContent
-                  }`}
+                    }`}
                 >
                   <div className="d-flex justify-content-between">
                     <div className="d-flex">
@@ -233,8 +223,8 @@ const UsersModal = ({
                         <p className={`${modalStyle.listRole}`}>
                           {item?.role
                             ? item?.role?.map((item) => (
-                                <span className="px-1">{item}</span>
-                              ))
+                              <span className="px-1">{item}</span>
+                            ))
                             : null}
                         </p>
                       </div>
@@ -265,6 +255,8 @@ const UsersModal = ({
               onClick={() => {
                 setIsSecondModalOpen(true);
                 setOpen(false);
+                setRoleSearch(null)
+                setSearch("")
               }}
               disabled={userName?.length === 0}
             />
@@ -281,39 +273,30 @@ const UsersModal = ({
           setSelectedUserIds([]);
           setIsLoading(false);
           setUserName([]);
+          setRoleSearch(null)
+          setSearch(null)
         }}
         footer={null}
         width="35%"
       >
         <div class="form-group d-flex align-items-center justify-content-between has-search">
-          <FontAwesomeIcon
-            className="fa fa-search form-control-feedback"
-            icon={faSearch}
-          />
-          <InputText
-            autoComplete="off"
-            id="search-input"
-            name="search-input"
-            type="text"
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            className=" w-50 form-control new-form-control"
-            placeholder="Search"
-            maxLength={25}
-            onKeyDown={(e) => {
-              if (e.key === "\\") {
-                e.preventDefault();
-              }
-            }}
-          />
+          <div style={{ border: "1px solid gray", borderRadius: "10px" }}>
+            <ReusableInput
+              placeholder={"Search"}
+              value={roleSearch}
+              isSearch={true}
+              setSearchText={setRoleSearch}
+              autoComplete="off"
+            />
+          </div>
+
           <div className="d-flex align-items-center ">
             <div className="fontWeight3 font3">Select All</div>
             <input
-              className={`mx-4 ${styles.bodyCheckbox}  ${styles.checkbox}${
-                roleIds?.length === allRoles?.userRoles?.length
+              className={`mx-4 ${styles.bodyCheckbox}  ${styles.checkbox}${roleIds?.length === allRoles?.userRoles?.length
                   ? styles.customChecked2
                   : ""
-              } `}
+                } `}
               type="checkbox"
               id="selectAll"
               checked={roleIds?.length === allRoles?.content?.length}
@@ -328,11 +311,10 @@ const UsersModal = ({
             {allRoles?.content?.map((item) => (
               <div className="mt-4 ">
                 <div
-                  className={`form-control new-item-control my-2 p-0 ${
-                    item?.id == activeCard
+                  className={`form-control new-item-control my-2 p-0 ${item?.id == activeCard
                       ? modalStyle.listContentLarge
                       : modalStyle.listContent
-                  }`}
+                    }`}
                 >
                   <div className="d-flex justify-content-between">
                     <div className="p-3 mt-3">
