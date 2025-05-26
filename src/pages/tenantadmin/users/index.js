@@ -7,12 +7,15 @@ import { actions as tenantAdminAction } from "../../../stores/tenantAdmin/users"
 import ReusableFilters from "../../../components/reusableFilters";
 import AppTable from "../../../components/tables";
 import Header from "../../../jsx/layouts/nav/Header";
-import { findItemWithTrueKey, findMatchesByField, getResponePopup } from "../../../utils/reusable";
-import CardSkeleton from "../../../components/skeleton/card";
+import {
+  findItemWithTrueKey,
+  findMatchesByField,
+  getResponePopup,
+} from "../../../utils/reusable";
 import { Button, Popover, Select } from "antd";
 import Usersmodal from "./usersmodal";
-import {actions as allActions} from '../../../stores/tenantAdmin/users'
-import {actions as authActions} from '../../../stores/authFlows'
+import { actions as allActions } from "../../../stores/tenantAdmin/users";
+import { actions as authActions } from "../../../stores/authFlows";
 
 const Users = ({
   pageLoad,
@@ -27,7 +30,6 @@ const Users = ({
   allRoles,
   getRoles,
 }) => {
-  const router = useRouter();
   const [activeFilters, setActiveFilters] = useState([]);
   const [switchStates, setSwitchStates] = useState({});
   const [isLoading, setIsLoading] = useState(false);
@@ -98,28 +100,6 @@ const Users = ({
       cilentBased: true,
     });
   };
-
-  useEffect(() => {
-    setParamsFilter("check");
-    if (window !== "undefined" && paramsFilter) {
-      getUsersAPi();
-    }
-  }, [
-    selectedOption,
-    selectedDateRanges,
-    searchText,
-    pageSize,
-    pageNo,
-    paramsFilter,
-    sort,
-    pageNumber,
-    pageLoad,
-  ]);
-  useEffect(() => {
-    if (editingUser) {
-      setSelectedRole(editingUser.roleNames); 
-    }
-  }, [editingUser]);
 
   const handleSubmit = async (data) => {
     setIsSubmitting(true);
@@ -210,10 +190,10 @@ const Users = ({
     setSelectedRole(role);
     setVisiblePopoverKey(false);
   };
-  const onCloseIconClick = () =>{
+  const onCloseIconClick = () => {
     setSelectedRole(role);
     setVisiblePopoverKey(false);
-  }
+  };
 
   const content = () => (
     <>
@@ -275,57 +255,78 @@ const Users = ({
   useEffect(() => {
     getAllRoles();
   }, []);
+  useEffect(() => {
+    setParamsFilter("check");
+    if (window !== "undefined" && paramsFilter) {
+      getUsersAPi();
+    }
+  }, [
+    selectedOption,
+    selectedDateRanges,
+    searchText,
+    pageSize,
+    pageNo,
+    paramsFilter,
+    sort,
+    pageNumber,
+    pageLoad,
+  ]);
+  useEffect(() => {
+    if (editingUser) {
+      setSelectedRole(editingUser.roleNames);
+    }
+  }, [editingUser]);
 
   return (
     <div className={`show `}>
       <Header />
       <div className="content-body">
         <div className="container-fluid table-responsive active-projects task-table">
-            <div className="d-flex mt-4 ">
-              <div className="p-2" style={{ width: "94%" }}>
-                <ReusableFilters
-                  showFilter={true}
-                  setActiveFilters={setActiveFilters}
-                  setSearchText={setSearchText}
-                  searchText={searchText}
-                  setSelectedOption={setSelectedOption}
-                  selectedOption={selectedOption}
-                  setSelectedDateRanges={setSelectedDateRanges}
-                  selectedDateRanges={selectedDateRanges}
-                  setPageNumber={setPageNumber}
-                  FilterItems={activeFilters}
-                  selectedDates={selectedDates}
-                  setSelectedDates={setSelectedDates}
-                  activeFilters={activeFilters}
-                  setPageNo={setPageNo}
-                  //customize table
-                  open={open}
-                  onClose={onClose}
-                  selectedColumns={test}
-                  setSelectedColumns={setTest}
-                  showCustomizeTable={true}
-                  showDrawer={showDrawer}
-                  handleSubmit={handleSubmit}
-                  handleReset={handleReset}
-                  isSubmitting={isSubmitting}
-                  isResetting={isResetting}
-                  setClear={setClear}
-                />
-              </div>
-              <div
-                id="assign-btn"
-                name="assign-btn"
-                className="d-flex justify-content-center align-items-center  mt-4"
-              >
-                <Button
-                  data-testid="assign-user"
-                  className="btn btn-sm w-full text-ellipsis tableButton"
-                  onClick={handleOpenModal}
-                >
-                  Assign User
-                </Button>
-              </div>
+          <div className="d-flex mt-4 ">
+            <div className="p-2" style={{ width: "95%" }}>
+              <ReusableFilters
+                showFilter={true}
+                setActiveFilters={setActiveFilters}
+                setSearchText={setSearchText}
+                searchText={searchText}
+                setSelectedOption={setSelectedOption}
+                selectedOption={selectedOption}
+                setSelectedDateRanges={setSelectedDateRanges}
+                selectedDateRanges={selectedDateRanges}
+                setPageNumber={setPageNumber}
+                FilterItems={activeFilters}
+                selectedDates={selectedDates}
+                setSelectedDates={setSelectedDates}
+                activeFilters={activeFilters}
+                setPageNo={setPageNo}
+                //customize table
+                open={open}
+                onClose={onClose}
+                selectedColumns={test}
+                setSelectedColumns={setTest}
+                showCustomizeTable={true}
+                showDrawer={showDrawer}
+                handleSubmit={handleSubmit}
+                handleReset={handleReset}
+                isSubmitting={isSubmitting}
+                isResetting={isResetting}
+                setClear={setClear}
+              />
             </div>
+            <div
+              id="assign-btn"
+              name="assign-btn"
+              className="d-flex justify-content-center align-items-center  mt-4"
+            >
+              <Button
+                data-testid="assign-user"
+                className="btn btn-sm w-full text-ellipsis tableButton"
+                onClick={handleOpenModal}
+              >
+                Assign User
+              </Button>
+            </div>
+          </div>
           <div className="mt-4">
             <AppTable
               data={data?.response?.pageResponse?.content}
@@ -377,7 +378,7 @@ const enhancer = connect(
     getEnableUser: tenantAdminAction.usersSoftDelete,
     getAllRoles: allActions.usersAllRoles,
     editUserRoles: allActions.userEditRoles,
-     getRoles: authActions.allRoles,
+    getRoles: authActions.allRoles,
   }
 );
 export default enhancer(Users);

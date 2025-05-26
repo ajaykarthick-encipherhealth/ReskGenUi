@@ -22,37 +22,15 @@ import { findMatchesByField, getResponePopup } from "../../../utils/reusable";
 import visitStyles from "../../../styles/visitdata.module.css";
 import { LoadingOutlined } from "@ant-design/icons";
 
-const statusOptions = [
-  { label: "COMPLETED", value: "COMPLETED", status: 2 },
-  { label: "PENDING", value: "PENDING", status: 0 },
-  { label: "DECLINED", value: "DECLINED", status: 0 },
-  { label: "HOLD", value: "HOLD", status: 0 },
-];
 
-const auditStatusOptions = [
-  { label: "AUDITHOLD", value: "AUDITHOLD", status: 2 },
-  { label: "REAUDIT", value: "REAUDIT", status: 0 },
-  { label: "AUDIT_PENDING", value: "AUDIT_PENDING", status: 0 },
-  { label: "NOT_AUDIT", value: "NOT_AUDIT", status: 0 },
-  { label: "AUDITED", value: "AUDITED", status: 0 },
-  { label: "AUDIT DECLINED", value: "AUDIT_DECLINED", status: 0 },
-];
 
 const Patient = ({
-  getAllOrganizationList,
   organizationList,
-  getAllTrackingList,
-  trackingList,
-  loader,
   filteredList,
-  getFilters,
   patientDetails,
   patientAllocatedFilters,
   auditAssignedFilters,
   allocatedByFilters,
-  getPatientAllocatedList,
-  getAuditAssignedList,
-  getAllocatedByList,
   getRoutedData,
   routedData,
   getTableData,
@@ -62,131 +40,7 @@ const Patient = ({
   tableLoader,
   pageLoad,
 }) => {
-  const commonFilterItems = [
-    {
-      id: 1,
-      title: "Search",
-      type: "search",
-      value: null,
-      placeholder: "Search",
-      pickerType: "search",
-      header: "Patient Name / ID",
-      active: true,
-    },
-    {
-      id: 2,
-      title: "Reviewer",
-      type: "select",
-      value: null,
-      placeholder: "Reviewer",
-      options: generateOptionsForNewStore(
-        patientAllocatedFilters?.data?.response
-      ),
-      active: false,
-    },
-    {
-      id: 3,
-      title: "supervisor",
-      type: "select",
-      value: null,
-      placeholder: "Supervisor",
-      options: generateOptionsForNewStore(auditAssignedFilters?.data?.response),
-      active: false,
-    },
-    {
-      id: 4,
-      title: "allocatedDate",
-      type: "rangePicker",
-      value: null,
-      placeholder: "Allocated  Date",
-      pickerType: "year",
-      active: false,
-    },
-    {
-      id: 5,
-      title: "auditAllocatedDate",
-      type: "rangePicker",
-      value: null,
-      placeholder: "Audit Allocated  Date",
-      pickerType: "year",
-      active: false,
-    },
-    {
-      id: 6,
-      title: "processedStatus",
-      type: "select",
-      value: null,
-      placeholder: " Processed Status",
-      options: statusOptions,
-      active: false,
-    },
-    {
-      id: 7,
-      title: "auditStatus",
-      type: "select",
-      value: null,
-      placeholder: " Audit Status",
-      options: auditStatusOptions,
-      active: false,
-    },
-    {
-      id: 8,
-      title: "reviewedDate",
-      type: "rangePicker",
-      value: null,
-      placeholder: "Reviewed Date",
-      pickerType: "year",
-      active: false,
-    },
-    {
-      id: 9,
-      title: "auditedDate",
-      type: "rangePicker",
-      value: null,
-      placeholder: "Audited Date",
-      pickerType: "year",
-      active: false,
-    },
-    {
-      id: 10,
-      title: "allocatedBy",
-      type: "select",
-      value: null,
-      placeholder: "Allocated By",
-      options: generateOptionsForNewStore(allocatedByFilters?.data?.response),
-      active: false,
-    },
-    {
-      id: 11,
-      title: "auditAllocatedBy",
-      type: "select",
-      value: null,
-      placeholder: "Audit Allocated By",
-      options: generateOptionsForNewStore(filteredList?.data?.response),
-      active: false,
-    },
-    {
-      id: 12,
-      title: "organization",
-      type: "select",
-      value: null,
-      placeholder: "Organization",
-      options: organizationList?.response?.map((item) => ({
-        value: item?.id,
-        label: `${item?.name}`,
-      })),
-      active: false,
-    },
-    {
-      id: 13,
-      title: "priority",
-      type: "select",
-      value: null,
-      placeholder: "Priority",
-      options: priorityOptions,
-      active: false,
-    },
-  ];
+
   const [pageNo, setPageNo] = useState(0);
   const [paginationFirst, setPaginationFirst] = useState(0);
   const [sort, setSort] = useState({
@@ -208,11 +62,9 @@ const Patient = ({
     },
     sort: { sortDir: "DESC", sortField: "" },
   });
-
   const navigate = useRouter();
   const [clear, setClear] = useState(false);
-  const [orgAllList, setOrgAllList] = useState([]);
-  const [activeFilters, setActiveFilters] = useState(commonFilterItems);
+  const [activeFilters, setActiveFilters] = useState([]);
   const [paramsFilter, setParamsFilter] = useState(null);
   const [searchText, setSearchText] = useState(null);
   const [selectedOption, setSelectedOption] = useState({});
@@ -426,24 +278,6 @@ const Patient = ({
     pageLoad,
   ]);
 
-  const opt = {
-    Reviewer: generateOptionsForNewStore(
-      patientAllocatedFilters?.data?.response
-    ),
-    supervisor: generateOptionsForNewStore(
-      auditAssignedFilters?.data?.response
-    ),
-    processedStatus: statusOptions,
-    auditStatus: auditStatusOptions,
-    allocatedBy: generateOptionsForNewStore(allocatedByFilters?.data?.response),
-    auditAllocatedBy: generateOptionsForNewStore(filteredList?.data?.response),
-    organization: organizationList?.response?.map((item) => ({
-      value: item?.id,
-      label: `${item?.name}`,
-    })),
-    priority: priorityOptions,
-  };
-
   useEffect(() => {
     if (
       (isFilter && data?.response?.metaDataDTO) ||
@@ -483,13 +317,11 @@ const Patient = ({
                   setClear={setClear}
                   clear={clear}
                   setPageNo={setPageNo}
-                  opt={opt}
                   //customize table
                   open={open}
                   onClose={onClose}
                   selectedColumns={test}
                   setSelectedColumns={setTest}
-                  commonFilterItems={commonFilterItems}
                   showCustomizeTable={true}
                   showDrawer={showDrawer}
                   handleSubmit={handleSubmit}

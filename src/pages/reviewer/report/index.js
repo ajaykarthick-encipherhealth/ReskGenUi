@@ -1,17 +1,14 @@
 import React from "react";
-import Reports from "../../../mainStream/reports";
+import Reports from '../../../commonPages/reports'
 
 const index = () => {
   return (
     <div>
-      <Reports tab="Reviewer"/>
+      <Reports tab="Admin"/>
     </div>
   );
 };
 
 export default index;
 
-export const getActiveTab = (val) => ({
-  type: ACTIVETAB,
-  payload: val,
-});
+

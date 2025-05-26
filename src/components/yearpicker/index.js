@@ -3,11 +3,25 @@ import React from "react";
 import styles from "./style.module.css";
 import Image from "next/image";
 import dayjs from "dayjs";
-import { monthNames } from "../../pages/admin/dashboard/accuracy";
 import moment from "moment";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAngleDown } from "@fortawesome/free-solid-svg-icons";
 
+
+export const monthNames = [
+  "JAN",
+  "FEB",
+  "MAR",
+  "APR",
+  "MAY",
+  "JUN",
+  "JUL",
+  "AUG",
+  "SEP",
+  "OCT",
+  "NOV",
+  "DEC",
+];
 const YearPicker = ({
   onChangeMonth,
   onChangeYear,

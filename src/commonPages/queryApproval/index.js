@@ -1,11 +1,9 @@
-
 import React, { useEffect, useState } from "react";
 import { Tab, Nav } from "react-bootstrap";
 import { Button, Input, Tooltip, Space } from "antd";
 import { connect } from "react-redux";
 import { actions as allActions } from "../../stores/tenantAdmin/patientAllocations";
 import ReusableFilters from "../../components/reusableFilters";
-import { priorityOptions } from "../../components/headerFilters/functions";
 import { actions as tenantAdminUsersAction } from "../../stores/tenantAdmin/users";
 import { actions as tinActions } from "../../stores/tenantAdmin/tin";
 import QueryTable from "./queryTable";
@@ -31,9 +29,8 @@ const QueryApproval = ({
   pageLoad,
   statusBodyTemplate,
   backRoute,
-  getRoutedData
+  getRoutedData,
 }) => {
- 
   const [activeFilters, setActiveFilters] = useState([]);
   const [sort, setSort] = useState({
     computedDate: {
@@ -64,9 +61,9 @@ const QueryApproval = ({
 
   const handleTabChange = (key) => {
     var data = {
-      activeTab : key
-    }
-    getRoutedData(data)
+      activeTab: key,
+    };
+    getRoutedData(data);
     setActiveTab(key);
     setSearchText("");
     setSelectedDateRanges([]);
@@ -75,7 +72,7 @@ const QueryApproval = ({
     setSearch({});
   };
 
-   const page = {
+  const page = {
     pageNo,
     selectedDates,
     paginationFirst,
@@ -84,10 +81,8 @@ const QueryApproval = ({
     searchText,
     selectedOption,
     selectedDateRanges,
-    activeTab
+    activeTab,
   };
-
-
 
   const gotoPatientDetails = (data) => {
     setStorage("patientId", data?.patientId);
@@ -96,7 +91,7 @@ const QueryApproval = ({
       "routeBackTo",
       backRoute ? backRoute : "/tenantadmin/tin/tindetails?tab=Query+Approval"
     );
-    getRoutedData(page)
+    getRoutedData(page);
     navigate.push({
       pathname: route ? route : "/tenantadmin/tin/details",
     });
@@ -116,50 +111,6 @@ const QueryApproval = ({
       tin,
     });
   };
-
-   useEffect(() => {
-      if (routedData) {
-        const {
-          pageNo,
-          selectedDates,
-          selectedDateRanges,
-          selectedOption,
-          searchText,
-          activeFilters,
-          paginationFirst,
-          sort,
-        } = routedData;
-        setPageNo(pageNo ? pageNo : 0);
-        setSearchText(searchText);
-        setSelectedDateRanges(selectedDateRanges);
-        setSelectedOption(selectedOption);
-        setSelectedDates(selectedDates);
-        setActiveFilters(activeFilters);
-        setPaginationFirst(paginationFirst);
-        setSort(sort);
-      }
-    }, [routedData]);
-
-  useEffect(() => {
-    setParamsFilter("check");
-    if (window !== "undefined" && paramsFilter && roleId) {
-      getQueryApproval();
-    }
-  }, [
-    selectedOption,
-    selectedDateRanges,
-    searchText,
-    pageNo,
-    paramsFilter,
-    sort,
-    paginationFirst,
-    search,
-    activeStatus,
-    roleId,
-    active,
-    selectedRole,
-    pageLoad,
-  ]);
 
   const getRolesList = async () => {
     const res = await getAllTabRoles();
@@ -231,7 +182,49 @@ const QueryApproval = ({
   useEffect(() => {
     getRolesList();
   }, []);
- 
+  useEffect(() => {
+    if (routedData) {
+      const {
+        pageNo,
+        selectedDates,
+        selectedDateRanges,
+        selectedOption,
+        searchText,
+        activeFilters,
+        paginationFirst,
+        sort,
+      } = routedData;
+      setPageNo(pageNo ? pageNo : 0);
+      setSearchText(searchText);
+      setSelectedDateRanges(selectedDateRanges);
+      setSelectedOption(selectedOption);
+      setSelectedDates(selectedDates);
+      setActiveFilters(activeFilters);
+      setPaginationFirst(paginationFirst);
+      setSort(sort);
+    }
+  }, [routedData]);
+
+  useEffect(() => {
+    setParamsFilter("check");
+    if (window !== "undefined" && paramsFilter && roleId) {
+      getQueryApproval();
+    }
+  }, [
+    selectedOption,
+    selectedDateRanges,
+    searchText,
+    pageNo,
+    paramsFilter,
+    sort,
+    paginationFirst,
+    search,
+    activeStatus,
+    roleId,
+    active,
+    selectedRole,
+    pageLoad,
+  ]);
 
   useEffect(() => {
     if (
@@ -280,7 +273,7 @@ const QueryApproval = ({
                                     setSelectedRole(role.aliasName);
                                     setRoleId(role.roleId);
                                     setActive("Pending");
-                                    setActiveStatus("PENDING")
+                                    setActiveStatus("PENDING");
                                   }}
                                   className="mt-4"
                                   eventKey={index + 1}

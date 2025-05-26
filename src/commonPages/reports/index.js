@@ -7,12 +7,11 @@ import GenerateView from "./generateView";
 import GeneratedReports from "./generatedReports";
 
 const Project = ({ getProjectActiveTab, activeTabName }) => {
-  // const tabs = getAccessTabItems({page:"Project",tabsMenu:"tabMenuList"});
   const tabs = ["Report Generate View","Generated Reports"]
-  const activeTab = activeTabName || tabs?.[0] || "Patients";
+  const activeTab = activeTabName || tabs?.[0] || "Report Generate View";
   const handleTabs = (name) => {
     getProjectActiveTab({
-      projectActiveTab: name,
+      reportTab: name,
     });
   };
   return (
@@ -35,7 +34,7 @@ const Project = ({ getProjectActiveTab, activeTabName }) => {
 
 const enhancer = connect(
   (state) => ({
-    activeTabName: state.tenantAdmin.tin?.activeTabRoutedData?.projectActiveTab,
+    activeTabName: state.tenantAdmin.tin?.activeTabRoutedData?.reportTab,
   }),
   {
     getProjectActiveTab: tinActions.getProjectActiveTab,

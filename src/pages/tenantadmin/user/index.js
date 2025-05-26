@@ -5,25 +5,18 @@ import { Form, Input, Button, Select, Row, Col, notification } from "antd";
 import { CloseCircleOutlined } from "@ant-design/icons";
 import styles from "../../../styles/auth.module.css";
 import Header from "../../../jsx/layouts/nav/Header";
-import { encyptingPass } from "../../../components/headerFilters/functions";
 import { actions as tenantAdminAction } from "../../../stores/tenantAdmin/users";
 import { actions as adminAction } from "../../../stores/admin/dashboard";
 import { getStorage } from "../../../utils/storages";
-import { findItemWithTrueKey, findMatchesByField, getResponePopup } from "../../../utils/reusable";
+import {
+  findItemWithTrueKey,
+  findMatchesByField,
+  getResponePopup,
+} from "../../../utils/reusable";
 import ReusableFilters from "../../../components/reusableFilters";
 import { PlusCircleFilled } from "@ant-design/icons";
 import AppTable from "../../../components/tables";
 import { actions as tableAction } from "../../../stores/tableView";
-
-const options3 = [
-  { value: "true", label: "Enabled" },
-  { value: "false", label: "Disabled" },
-];
-const RoleList = [
-  { value: "REVIEWER", label: "REVIEWER" },
-  { value: "SUPERVISOR", label: "SUPERVISOR" },
-  { value: "TENANT_ADMIN", label: "TENANT ADMIN" },
-];
 
 const intialValues = {
   firstName: "",
@@ -34,9 +27,6 @@ const intialValues = {
   isEdit: false,
 };
 const UserList = ({
-  getAllOrganizationList,
-  organizationList,
-  getAllUsersList,
   usersListData,
   hideHeader = true,
   getAddUser,
@@ -57,6 +47,8 @@ const UserList = ({
       sortField: "createdDate",
     },
   });
+  const [form] = Form.useForm();
+
   const [localUserId, setLocalUserId] = useState("");
   const [localOrgId, setLocalOrgId] = useState("");
   const [localTenantId, setLocalTenantId] = useState("");
@@ -100,35 +92,12 @@ const UserList = ({
   const [visiblePopoverKey, setVisiblePopoverKey] = useState(null);
   const [isEdit, setIsEdit] = useState(false);
   const [isFilter, setIsFilter] = useState(true);
+  const [clear, setClear] = useState(false);
 
-  const handleChange = (e) => {
-    let value = e.target.value;
-    const val = getDisplayValue(value);
-    setMobileNumber(val);
-  };
-  const getDisplayValue = (number) => {
-    if (number?.length === 10) {
-      return number?.slice(0, 5) + "*****";
-    }
-    return number;
-  };
   const addUserForm = () => {
     setValidated(false);
     setAddUser(true);
   };
-  useEffect(() => {
-    var orgListArray = [];
-    organizationList?.response?.map((res) => {
-      orgListArray.push({
-        value: res.id,
-        label: res.name,
-      });
-    });
-    setOrgAllList(orgListArray);
-  }, [organizationList]);
-  const [clear, setClear] = useState(false);
-
-  const [form] = Form.useForm();
 
   const handleSubmit = async (userFormData) => {
     const response = await getAddUser(userFormData, setFormData);
@@ -149,17 +118,16 @@ const UserList = ({
       setRoleValue([]);
       setValidated(true);
       setAddUser(false);
-    }
-     else if (response?.status == "FAILED") {
+    } else if (response?.status == "FAILED") {
       setAddUser(true);
       notification.warning({
         message: response.message,
         duration: 2,
       });
-    } else{
+    } else {
       setAddUser(true);
       getResponePopup(response);
-    } 
+    }
   };
 
   const switchHandler = (event, id) => {
@@ -172,15 +140,15 @@ const UserList = ({
     }));
   };
 
-   useEffect(() => {
-     if (data?.response?.pageResponse?.content) {
-       const initialSwitchStates = {};
-       data?.response?.pageResponse?.content.forEach((user) => {
-         initialSwitchStates[user.userName] = user.accountStatus;
-       });
-       setSwitchStates(initialSwitchStates);
-     }
-   }, [data?.response?.pageResponse?.content]);
+  useEffect(() => {
+    if (data?.response?.pageResponse?.content) {
+      const initialSwitchStates = {};
+      data?.response?.pageResponse?.content.forEach((user) => {
+        initialSwitchStates[user.userName] = user.accountStatus;
+      });
+      setSwitchStates(initialSwitchStates);
+    }
+  }, [data?.response?.pageResponse?.content]);
 
   const handleSubmitPatientId = async (event) => {
     const form = event.currentTarget;
@@ -367,14 +335,7 @@ const UserList = ({
     value: res.userName,
     label: res.firstName + " " + res.lastName,
   }));
-  useEffect(() => {
-    if (usersListData?.data?.response) {
-      setTotalElements(usersListData?.data?.response?.totalElements);
-    }
-  }, [usersListData]);
-  useEffect(() => {
-    getTenantAdminSelectUserList({ role: "SUPERVISOR" });
-  }, []);
+
   const getAllUsers = async () => {
     const response = getTableData({
       pageId: "1406dafa-46fa-4f69-ac1b-e354ebc03dad",
@@ -412,6 +373,10 @@ const UserList = ({
     }
     setIsLoading(false);
   };
+
+  const onFinish = (values) => {
+    handleSubmit({ isEdit, ...values });
+  };
   useEffect(() => {
     var tenId = getStorage("tenantId");
     var uId = getStorage("userId");
@@ -430,24 +395,6 @@ const UserList = ({
     }, 750);
   }, [addUser]);
 
-  useEffect(() => {
-    getAllOrganizationList();
-  }, []);
-
-  const onFinish = (values) => {
-    handleSubmit({ isEdit, ...values });
-  };
-
-  
-  const opt = {
-    organization: organizationList?.response?.map((item) => ({
-      value: item?.id,
-      label: `${item?.name}`,
-    })),
-    role: RoleList,
-    status: options3,
-  };
-
   const handleAction = (data) => {
     setAddUser(true);
     form.setFieldsValue({
@@ -462,20 +409,27 @@ const UserList = ({
     setIsEdit(true);
     setAddUser(true);
   };
-
-   useEffect(() => {
-     if (
-       (isFilter && data?.response?.metaDataDTO) ||
-       !findMatchesByField(activeFilters, data?.response?.metaDataDTO)
-     ) {
-       setActiveFilters(
-         data?.response?.metaDataDTO.filter(
-           (item) => item.active && item?.filter?.style
-         )
-       );
-       setIsFilter(false);
-     }
-   }, [data?.response?.metaDataDTO]);
+  useEffect(() => {
+    if (usersListData?.data?.response) {
+      setTotalElements(usersListData?.data?.response?.totalElements);
+    }
+  }, [usersListData]);
+  useEffect(() => {
+    getTenantAdminSelectUserList({ role: "SUPERVISOR" });
+  }, []);
+  useEffect(() => {
+    if (
+      (isFilter && data?.response?.metaDataDTO) ||
+      !findMatchesByField(activeFilters, data?.response?.metaDataDTO)
+    ) {
+      setActiveFilters(
+        data?.response?.metaDataDTO.filter(
+          (item) => item.active && item?.filter?.style
+        )
+      );
+      setIsFilter(false);
+    }
+  }, [data?.response?.metaDataDTO]);
 
   return (
     <div className={`show `}>
@@ -486,7 +440,6 @@ const UserList = ({
             <div className="d-flex tbl-caption  align-items-center">
               <div style={{ width: "90%" }}>
                 <ReusableFilters
-                  opt={opt}
                   showFilter={true}
                   setActiveFilters={setActiveFilters}
                   setSearchText={setSearchText}
@@ -712,11 +665,7 @@ const UserList = ({
           </button>
         </div>
         <div className="offcanvas-body">
-          <div
-            id="user-form"
-            name="user-form"
-            className={`container-fluid `}
-          >
+          <div id="user-form" name="user-form" className={`container-fluid `}>
             <Form
               data-testid="control-hooks"
               form={form}

@@ -12,11 +12,7 @@ import HeadTitle from "../../../../components/headtitle";
 import { connect } from "react-redux";
 import YearPicker from "../../../../components/yearpicker";
 import spinSTYles from "../../../../styles/auth.module.css";
-import {
-  chartBlockedDates,
-  getGraphData,
-} from "../../../admin/dashboard/accuracy";
-import { renderCardSkeleton } from "../../../reviewer/dashboard/accuracy";
+import { chartBlockedDates, getGraphData, renderCardSkeleton } from "../../../reviewer/dashboard/accuracy";
 import { actions as dashbaordActions } from "../../../../stores/supervisor/dashboard";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faGaugeHigh } from "@fortawesome/free-solid-svg-icons";

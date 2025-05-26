@@ -5,10 +5,8 @@ import { Button, Input, Tooltip, Space } from "antd";
 import { connect } from "react-redux";
 import { actions as allActions } from "../../stores/tenantAdmin/patientAllocations";
 import ReusableFilters from "../../components/reusableFilters";
-import { priorityOptions } from "../../components/headerFilters/functions";
 import { actions as tenantAdminUsersAction } from "../../stores/tenantAdmin/users";
 import { actions as tinActions } from "../../stores/tenantAdmin/tin";
-import styles from "../../components/tables/table.module.css";
 import MoveBackModal from "./moveBackModal";
 import MoveBackTable from "./moveBackTable";
 import { actions as tableAction } from "../../stores/tableView";
@@ -31,66 +29,7 @@ const MoveBack = ({
   pageLoad,
   statusBodyTemplate,
 }) => {
-  const commonFilterItems = [
-    {
-      id: 1,
-      title: "Search",
-      type: "search",
-      value: null,
-      placeholder: "Search",
-      header: "Patient Name / ID",
-      active: true,
-    },
-    {
-      id: 2,
-      title: "Search by Code",
-      type: "search1",
-      value: null,
-      placeholder: "Search",
-      header: "Search by Code",
-      active: true,
-    },
-    {
-      id: 3,
-      title: "Search by Description",
-      type: "search1",
-      value: null,
-      placeholder: "Search",
-      header: "Search by Description",
-      active: true,
-    },
-    {
-      id: 4,
-      title: "organization",
-      type: "select",
-      value: null,
-      placeholder: "Organization",
-      options: organizationList?.response?.map((item) => ({
-        value: item?.id,
-        label: `${item?.name}`,
-      })),
-      active: true,
-    },
-    {
-      id: 5,
-      title: "computedDate",
-      type: "rangePicker",
-      value: null,
-      placeholder: "Computed  Date",
-      pickerType: "year",
-      active: true,
-    },
-    {
-      id: 6,
-      title: "priority",
-      type: "select",
-      value: null,
-      placeholder: "Priority",
-      options: priorityOptions,
-      active: true,
-    },
-  ];
-  const [activeFilters, setActiveFilters] = useState(commonFilterItems);
+  const [activeFilters, setActiveFilters] = useState([]);
   const [sort, setSort] = useState({
     computedDate: {
       sortDir: "DESC",
@@ -122,7 +61,7 @@ const MoveBack = ({
   const [moveBackLoader, setIsMoveBackLoader] = useState(false);
   const [isFilter, setIsFilter] = useState(true);
   const [clear, setClear] = useState(false);
-  
+
   const handleTabChange = (key) => {
     setActiveTab(key);
     setSelectedSupervisor(null);
@@ -139,14 +78,6 @@ const MoveBack = ({
   };
   const onClose = () => {
     setOpen(false);
-  };
-
-  const opt = {
-    organization: organizationList?.response?.map((item) => ({
-      value: item?.id,
-      label: `${item?.name}`,
-    })),
-    priority: priorityOptions,
   };
 
   const showDrawer = () => {
@@ -248,7 +179,6 @@ const MoveBack = ({
     setSelectedRowsId(selectedRows);
   }, [selectedRows, setSelectedRowsId]);
 
- 
   useEffect(() => {
     if (
       window !== "undefined" &&
@@ -261,20 +191,20 @@ const MoveBack = ({
     }
   }, [roleId]);
 
-    useEffect(() => {
-      if (
-        (isFilter && data?.response?.metaDataDTO) ||
-        !findMatchesByField(activeFilters, data?.response?.metaDataDTO)
-      ) {
-        setActiveFilters(
-          data?.response?.metaDataDTO.filter(
-            (item) => item.active && item?.filter?.style
-          )
-        );
-        setIsFilter(false);
-      }
-    }, [data?.response?.metaDataDTO]);
-    
+  useEffect(() => {
+    if (
+      (isFilter && data?.response?.metaDataDTO) ||
+      !findMatchesByField(activeFilters, data?.response?.metaDataDTO)
+    ) {
+      setActiveFilters(
+        data?.response?.metaDataDTO.filter(
+          (item) => item.active && item?.filter?.style
+        )
+      );
+      setIsFilter(false);
+    }
+  }, [data?.response?.metaDataDTO]);
+
   return (
     <div>
       <Header />
@@ -366,49 +296,47 @@ const MoveBack = ({
                       {/* {tableLoader ? (
                         <CardSkeleton height={50} />
                       ) : ( */}
-                        <div className="d-flex ">
-                          <div
-                            style={{ width: "100%" }}
-                            className={` d-flex gap-3 mt-4 `}
-                          >
-                            <ReusableFilters
-                              showFilter={true}
-                              setActiveFilters={setActiveFilters}
-                              setSearchText={setSearchText}
-                              searchText={searchText}
-                              setSelectedOption={setSelectedOption}
-                              selectedOption={selectedOption}
-                              setSelectedDateRanges={setSelectedDateRanges}
-                              selectedDateRanges={selectedDateRanges}
-                              FilterItems={activeFilters}
-                              selectedDates={selectedDates}
-                              setSelectedDates={setSelectedDates}
-                              activeFilters={activeFilters}
-                              setPageNo={setPageNo}
-                              opt={opt}
-                              setSelectAllChecked={setSelectAllChecked}
-                              setSelectedRowsId={setSelectedRowsId}
-                              setSelectedRows={setSelectedRows}
-                              selectedRowsId={selectedRowsId}
-                              setSearch={setSearch}
-                              search={search}
-                              //customize table
-                              open={open}
-                              onClose={onClose}
-                              selectedColumns={test}
-                              setSelectedColumns={setTest}
-                              commonFilterItems={commonFilterItems}
-                              showCustomizeTable={false}
-                              showDrawer={showDrawer}
-                              handleSubmit={handleSubmit}
-                              handleReset={handleReset}
-                              isSubmitting={isSubmitting}
-                              isResetting={isResetting}
-                              setClear={setClear}
-                            />
-                          </div>
+                      <div className="d-flex ">
+                        <div
+                          style={{ width: "100%" }}
+                          className={` d-flex gap-3 mt-4 `}
+                        >
+                          <ReusableFilters
+                            showFilter={true}
+                            setActiveFilters={setActiveFilters}
+                            setSearchText={setSearchText}
+                            searchText={searchText}
+                            setSelectedOption={setSelectedOption}
+                            selectedOption={selectedOption}
+                            setSelectedDateRanges={setSelectedDateRanges}
+                            selectedDateRanges={selectedDateRanges}
+                            FilterItems={activeFilters}
+                            selectedDates={selectedDates}
+                            setSelectedDates={setSelectedDates}
+                            activeFilters={activeFilters}
+                            setPageNo={setPageNo}
+                            setSelectAllChecked={setSelectAllChecked}
+                            setSelectedRowsId={setSelectedRowsId}
+                            setSelectedRows={setSelectedRows}
+                            selectedRowsId={selectedRowsId}
+                            setSearch={setSearch}
+                            search={search}
+                            //customize table
+                            open={open}
+                            onClose={onClose}
+                            selectedColumns={test}
+                            setSelectedColumns={setTest}
+                            showCustomizeTable={false}
+                            showDrawer={showDrawer}
+                            handleSubmit={handleSubmit}
+                            handleReset={handleReset}
+                            isSubmitting={isSubmitting}
+                            isResetting={isResetting}
+                            setClear={setClear}
+                          />
                         </div>
-                   
+                      </div>
+
                       <Tab.Content>
                         <Tab.Pane eventKey={activeTab}>
                           <MoveBackTable

@@ -15,33 +15,21 @@ import { Tab, Nav } from "react-bootstrap";
 import Header from "../../jsx/layouts/nav/Header";
 import { findMatchesByField, getResponePopup } from "../../utils/reusable";
 import SubNavBar from "../../components/subNavBar";
-const role = getStorage("proxyRole");
 export const bullets = [
   {
     color: "#00BC13",
-    name: `${role} COMPLETED`,
+    name: ` COMPLETED`,
   },
   {
     color: "#5da9e4",
-    name: `${role} PENDING`,
+    name: `PENDING`,
   },
   {
     color: "#EB5252",
-    name: `${role} DECLINED`,
+    name: `DECLINED`,
   },
-  { color: "#3C0AD2", name: `${role} HOLD` },
+  { color: "#3C0AD2", name: ` HOLD` },
 ];
-export const reviewedBullets = [
-  {
-    color: "#EB5252",
-    name: "DECLINED",
-  },
-  {
-    color: "#00BC13",
-    name: "COMPLETED",
-  },
-];
-
 
 const CodersTable = ({
   patientDetails,
@@ -66,23 +54,6 @@ const CodersTable = ({
 }) => {
 
   const router = useRouter();
-  const [activeFilters, setActiveFilters] = useState(
-    data?.response?.metaDataDTO.filter((item) => item.active)
-  );
-  const [sort, setSort] = useState({
-    allocatedOn: {
-      sortDir: "DESC",
-      sortField: "allocatedOn",
-    },
-    dueDate: {
-      sortDir: "DESC",
-      sortField: "dueDate",
-    },
-    processedDate: {
-      sortDir: "DESC",
-      sortField: "processedDate",
-    },
-  });
   const proxyRole = getStorage("proxyRole");
   const tin = getStorage("tinNumber");
   const [searchText, setSearchText] = useState(null);
@@ -102,6 +73,23 @@ const CodersTable = ({
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isResetting, setIsResetting] = useState(false);
   const [isFilter, setIsFilter] = useState(true);
+  const [activeFilters, setActiveFilters] = useState(
+    data?.response?.metaDataDTO.filter((item) => item.active)
+  );
+  const [sort, setSort] = useState({
+    allocatedOn: {
+      sortDir: "DESC",
+      sortField: "allocatedOn",
+    },
+    dueDate: {
+      sortDir: "DESC",
+      sortField: "dueDate",
+    },
+    processedDate: {
+      sortDir: "DESC",
+      sortField: "processedDate",
+    },
+  });
   
   const gotoPatientDetails = (data) => {
     patientDetails(data);
@@ -158,31 +146,6 @@ const CodersTable = ({
     }
   };
   
-  useEffect(() => {
-    setParamsFilter("check");
-    if (window !== "undefined" && paramsFilter) {
-         getTableStatus({
-           isReAssigned,
-           isQueried,
-           patientAllocated,
-           tin,
-         });
-      getCodersApi();
-     
-    }
-  }, [
-    selectedOption,
-    selectedDateRanges,
-    searchText,
-    pageSize,
-    pageNo,
-    paramsFilter,
-    sort,
-    pageNumber,
-    activeStatus,
-    pageLoad,
-
-  ]);
 
 
   const handleTabs = (name) => {
@@ -269,6 +232,32 @@ const CodersTable = ({
       setActiveStatus(activeStatus);
     }
   }, [routedData]);
+  useEffect(() => {
+    setParamsFilter("check");
+    if (window !== "undefined" && paramsFilter) {
+         getTableStatus({
+           isReAssigned,
+           isQueried,
+           patientAllocated,
+           tin,
+         });
+      getCodersApi();
+     
+    }
+  }, [
+    selectedOption,
+    selectedDateRanges,
+    searchText,
+    pageSize,
+    pageNo,
+    paramsFilter,
+    sort,
+    pageNumber,
+    activeStatus,
+    pageLoad,
+
+  ]);
+
 
   useEffect(() => {
     if (

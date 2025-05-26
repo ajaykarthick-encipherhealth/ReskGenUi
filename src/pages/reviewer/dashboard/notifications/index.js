@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { connect } from "react-redux";
 import Image from "next/image";
 import moment from "moment";
-import { Modal, Spin } from "antd";
+import { Col, Modal, Row, Skeleton, Spin } from "antd";
 import styles from "./styles.module.css";
 import Card from "../../../../components/card/index";
 import HeadTitle from "../../../../components/headtitle";
@@ -10,9 +10,61 @@ import NoNotification from "../../../../images/dashboard/no-notification.webp";
 import spinSTYles from "../../../../styles/auth.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBell } from "@fortawesome/free-solid-svg-icons";
-import { NotifiAvatar } from "../../../admin/dashboard/notifications";
 import { truncateString } from "../../../../components/patientDetails/details/components/function/ReusableFunctions";
-
+export const NotifiAvatar = () => {
+  return (
+    <div style={{ width: "100%", maxWidth: "600px", margin: "0 auto" }}>
+      <Row gutter={16} align="top" style={{ marginBottom: "16px" }}>
+        <Col>
+          <Skeleton.Avatar active size="large" shape="circle" />
+        </Col>
+        <Col flex="auto">
+          <Skeleton
+            active
+            title={false}
+            paragraph={{ rows: 2, width: "80%" }}
+          />
+        </Col>
+      </Row>
+      <Row gutter={16} align="top" style={{ marginBottom: "16px" }}>
+        <Col>
+          <Skeleton.Avatar active size="large" shape="circle" />
+        </Col>
+        <Col flex="auto">
+          <Skeleton
+            active
+            title={false}
+            paragraph={{ rows: 2, width: "60%" }}
+          />
+        </Col>
+      </Row>
+      <Row gutter={16} align="top" style={{ marginBottom: "16px" }}>
+        <Col>
+          <Skeleton.Avatar active size="large" shape="circle" />
+        </Col>
+        <Col flex="auto">
+          <Skeleton
+            active
+            title={false}
+            paragraph={{ rows: 2, width: "70%" }}
+          />
+        </Col>
+      </Row>
+      <Row gutter={16} align="top" style={{ marginBottom: "16px" }}>
+        <Col>
+          <Skeleton.Avatar active size="large" shape="circle" />
+        </Col>
+        <Col flex="auto">
+          <Skeleton
+            active
+            title={false}
+            paragraph={{ rows: 2, width: "70%" }}
+          />
+        </Col>
+      </Row>
+    </div>
+  );
+};
 const Notifications = ({ notificationResponse, webSocketNotificationData }) => {
   const notificationResult = webSocketNotificationData
     ? webSocketNotificationData

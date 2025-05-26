@@ -404,6 +404,28 @@ const handleSwitchToggle = ()=>{
     sort,
     searchText,
   ]);
+  useEffect(() => {
+    if (routedData) {
+      const {
+        pageNo,
+        selectedDates,
+        selectedDateRanges,
+        selectedOption,
+        searchText,
+        activeFilters,
+        paginationFirst,
+        sort,
+      } = routedData;
+      setPageNo(pageNo ? pageNo : 0);
+      setSearchText(searchText);
+      setSelectedDateRanges(selectedDateRanges);
+      setSelectedOption(selectedOption);
+      setSelectedDates(selectedDates);
+      setActiveFilters(activeFilters);
+      setPaginationFirst(paginationFirst);
+      setSort(sort);
+    }
+  }, [routedData]);
 
   useEffect(() => {
     if (

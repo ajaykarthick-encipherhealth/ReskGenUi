@@ -237,7 +237,7 @@ const Settings = () => {
   const handleMenuClick = (e) => {
     setActivePage(e.key);
   };
-  console.log(activePage)
+  console.log(activePage);
   return (
     <div>
       <HeaderFile />
@@ -245,7 +245,7 @@ const Settings = () => {
         <div className={Style.container_fluid_patient}>
           <div>
             <div className="d-flex py-4">
-              <div style={{height:"90vh"}}>
+              <div style={{ height: "90vh" }}>
                 <div className="font2 m-2 cr-pointer">
                   <div
                     className={`${Style.backButtonStyle}`}
@@ -289,7 +289,7 @@ const Settings = () => {
                 />
               </div>
 
-              <div style={{ height: "100vh", width:  "100%"}}>
+              <div style={{ height: "100vh", width: "100%" }}>
                 {activePage == "Chat_Audit_Config" && <ChatAuditConfig />}
                 {activePage == "Flag_Config" && <FlagConfig />}
                 {activePage == "File_Processing_Config" && (
@@ -318,8 +318,21 @@ const Settings = () => {
                 {activePage == "Down_Codes" && <DownCodes />}
                 {activePage == "Direct_Confirm_Codes" && <DirectConfirmCodes />}
                 {activePage == "EMR-FHIR" && <EmrFhir />}
-                {activePage == "Projects" && <Projects />}
-                {activePage == "Clients" && <Clients />}
+                {activePage == "Projects" && (
+                  <div className="content-body">
+                    <div className="container-users">
+                      <Projects />
+                    </div>
+                  </div>
+                )}
+                {activePage == "Clients" && (
+                  <div className="content-body">
+                    <div className="container-users">
+                      {" "}
+                      <Clients />
+                    </div>
+                  </div>
+                )}
                 {activePage == "Add Users" && <Users />}
               </div>
             </div>

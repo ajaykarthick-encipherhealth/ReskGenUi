@@ -18,7 +18,6 @@ import FileUploading from "../fileprocessing/FileUploading";
 import Addpatients from "../fileprocessing/Addpatiens";
 import { LoadingOutlined, PlusCircleFilled } from "@ant-design/icons";
 import {
-  generateOptionsForNewStore,
   validateYear,
 } from "../../components/headerFilters/functions";
 import { actions as tenantAdminAction } from "../../stores/tenantAdmin/patients";
@@ -53,12 +52,7 @@ export const batchBullets = [
   },
 ];
 
-const statusOptions = [
-  { label: "PROCESSING", value: "1", status: 1 },
-  { label: "COMPUTED", value: "2", status: 2 },
-  { label: "FAILED", value: "3", status: 3 },
-  { label: "NOT COMPUTED", value: "0", status: 0 },
-];
+
 export const flagOptions = [
   { header: "DOS Count", label: "INVALID DOC", value: "UNAPPROVED_DOC", id: 1 },
   {
@@ -122,81 +116,7 @@ export const flagOptions = [
     id: 11,
   },
 ];
-export const commonFilterItems = [
-  {
-    id: "00001",
-    title: "Search",
-    type: "search",
-    value: null,
-    placeholder: "Search",
-    header: "Patient ID / Name",
-    active: true,
-  },
-  {
-    id: "00002",
-    title: "status",
-    type: "select",
-    value: null,
-    placeholder: "Status",
-    options: statusOptions,
-    active: false,
-  },
-  {
-    id: "00003",
-    title: "organization",
-    type: "select",
-    value: null,
-    placeholder: "Organization",
-    options: [],
-    active: false,
-  },
-  {
-    id: "00004",
-    title: "createdDateRange",
-    type: "rangePicker",
-    value: null,
-    placeholder: "Created Date Range",
-    pickerType: "year",
-    active: false,
-  },
-  {
-    id: "00005",
-    title: "createdBy",
-    type: "select",
-    value: null,
-    placeholder: "Created By",
-    options: [],
-    active: false,
-  },
-  {
-    id: "00006",
-    title: "computedDate",
-    type: "rangePicker",
-    value: null,
-    placeholder: "Computed  Date",
-    pickerType: "year",
-    active: false,
-  },
-  {
-    id: "00007",
-    title: "Batch",
-    type: "select",
-    value: null,
-    showSearch: true,
-    placeholder: "Batch",
-    options: [],
-    active: false,
-  },
-  {
-    id: "00008",
-    title: "flag",
-    type: "select",
-    value: null,
-    placeholder: "Flag",
-    options: [],
-    active: false,
-  },
-];
+
 const Patient = ({
   organizationList,
   allPatientList,
@@ -238,7 +158,6 @@ const Patient = ({
   const [form] = Form.useForm();
   const navigate = useRouter();
   const [validated, setValidated] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
   const [isLoadingBtn, setIsLoadingBtn] = useState(true);
   const [addPatient, setAddPatient] = useState(false);
   const [addPatientId, setAddPatientId] = useState(false);
@@ -255,7 +174,6 @@ const Patient = ({
     patientId: "",
     patientName: "",
   });
-  const [patinetListAll, setPatinetListAll] = useState([]);
   const [tenantId, setTenantId] = useState("");
   const [localOrgId, setLocalOrgId] = useState("");
   const [localUserId, setLocalUserId] = useState("");
@@ -266,7 +184,7 @@ const Patient = ({
   const [errors, setErrors] = useState({ year: "", emr: "" });
   const [paramsFilter, setParamsFilter] = useState(null);
   const [clear, setClear] = useState(false);
-  const [activeFilters, setActiveFilters] = useState(commonFilterItems);
+  const [activeFilters, setActiveFilters] = useState([]);
   const [searchText, setSearchText] = useState(null);
   const [selectedOption, setSelectedOption] = useState({});
   const [selectedDateRanges, setSelectedDateRanges] = useState({});
@@ -855,7 +773,6 @@ const Patient = ({
                 onClose={onClose}
                 selectedColumns={test}
                 setSelectedColumns={setTest}
-                commonFilterItems={commonFilterItems}
                 showCustomizeTable={true}
                 showDrawer={showDrawer}
                 handleSubmit={handleSubmitInsert}

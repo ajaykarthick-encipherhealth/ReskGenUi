@@ -31,66 +31,8 @@ const PatientAllocation = ({
   pageLoad,
   statusBodyTemplate,
 }) => {
-  const commonFilterItems = [
-    {
-      id: 1,
-      title: "Search",
-      type: "search",
-      value: null,
-      placeholder: "Search",
-      header: "Patient Name / ID",
-      active: true,
-    },
-    {
-      id: 2,
-      title: "Search by Code",
-      type: "search1",
-      value: null,
-      placeholder: "Search",
-      header: "Search by Code",
-      active: true,
-    },
-    {
-      id: 3,
-      title: "Search by Description",
-      type: "search1",
-      value: null,
-      placeholder: "Search",
-      header: "Search by Description",
-      active: true,
-    },
-    {
-      id: 4,
-      title: "organization",
-      type: "select",
-      value: null,
-      placeholder: "Organization",
-      options: organizationList?.response?.map((item) => ({
-        value: item?.id,
-        label: `${item?.name}`,
-      })),
-      active: true,
-    },
-    {
-      id: 5,
-      title: "computedDate",
-      type: "rangePicker",
-      value: null,
-      placeholder: "Computed  Date",
-      pickerType: "year",
-      active: true,
-    },
-    {
-      id: 6,
-      title: "priority",
-      type: "select",
-      value: null,
-      placeholder: "Priority",
-      options: priorityOptions,
-      active: true,
-    },
-  ];
-  const [activeFilters, setActiveFilters] = useState(commonFilterItems);
+
+  const [activeFilters, setActiveFilters] = useState([]);
   const [sort, setSort] = useState({
     computedDate: {
       sortDir: "DESC",
@@ -432,7 +374,6 @@ const PatientAllocation = ({
                           onClose={onClose}
                           selectedColumns={test}
                           setSelectedColumns={setTest}
-                          commonFilterItems={commonFilterItems}
                           showCustomizeTable={false}
                           showDrawer={showDrawer}
                           handleSubmit={handleSubmit}

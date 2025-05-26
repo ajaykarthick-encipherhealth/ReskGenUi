@@ -616,6 +616,7 @@
   .buttonContainer {
     width:60% !important;
     height: 42px !important;
+    padding: 10px !important;
   }
   .group button{
     padding : 5px !important;

@@ -7,7 +7,7 @@ import { connect } from "react-redux";
 import { DownOutlined } from "@ant-design/icons";
 import AddLabForm from "../addLabForm";
 import AddRadiologyForm from "../addRadiologyForm";
-import AllocateModal from "../../../../../pages/admin/allocateduser/allocate";
+// import AllocateModal from "../../../../../pages/admin/allocateduser/allocate";
 import { actions as detailsActions } from "../../../../../stores/patient/details";
 import { getStorage } from "../../../../../utils/storages";
 import { getResponePopup } from "../../../../../utils/reusable";
@@ -1013,7 +1013,7 @@ const shouldDisable = isOnReviewerPatients ;
           ></Modal>
         </div>
       ) : null}
-      <AllocateModal
+      {/* <AllocateModal
         open={allocateModal}
         setOpen={setAllocateModal}
         selectedRowsId={selectedRowsId}
@@ -1021,7 +1021,7 @@ const shouldDisable = isOnReviewerPatients ;
         setSelectedRowsId={setSelectedRowsId}
         setSelectedChart={setSelectedChart}
         selectedChart={selectedChart}
-      />
+      /> */}
       <AddLabForm setOpen={setLapReportSlider} open={labReportSlider} />
       <AddRadiologyForm setOpen={setAddPatient} open={addPatient} />
     </>

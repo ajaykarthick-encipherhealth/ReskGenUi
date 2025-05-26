@@ -12,11 +12,6 @@ import spinSTYles from "../../../../styles/auth.module.css";
 import HighchartsReact from "highcharts-react-official";
 import Highcharts from "highcharts";
 import { actions as dashbaordActions } from "../../../../stores/reviewer/dashboard";
-import {
-  chartBlockedDates,
-  getGraphData,
-  getHighlightedIndex,
-} from "../../../admin/dashboard/accuracy";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faGaugeHigh } from "@fortawesome/free-solid-svg-icons";
 import CardSkeleton from "../../../../components/skeleton/card";
@@ -49,6 +44,123 @@ export const getDays = (datasLength) => {
   } else {
     return [];
   }
+};
+export const chartBlockedDates = (
+  year,
+  month,
+  data,
+  val,
+  currentBtn,
+  currentDate
+) => {
+  if (data) {
+    const param = Object.values(data);
+    year = Number(year);
+    month = Number(month);
+    if (year < currentDate.getFullYear()) {
+      return param?.map((item) => item);
+    } else if (
+      year == currentDate.getFullYear() &&
+      month < currentDate.getMonth() + 1 &&
+      currentBtn !== "Monthly"
+    ) {
+      return param?.map((item) => item);
+    } else if (
+      year == currentDate.getFullYear() &&
+      month == currentDate.getMonth() + 1 &&
+      currentBtn !== "Monthly"
+    ) {
+      if (currentBtn == "Daily") {
+        return param?.map(
+          (item, index) => index < new Date().getDate() && item
+        );
+      } else if (currentBtn == "Weekly") {
+        return param?.map(
+          (item, index) => index < getDateWeek(currentDate) && item
+        );
+      }
+    } else if (year == currentDate.getFullYear() && currentBtn == "Monthly") {
+      if (parseInt(year) > parseInt(currentDate.getFullYear())) {
+        return false;
+      } else {
+        return param?.map(
+          (item, index) => index < new Date().getMonth() + 1 && item
+        );
+      }
+    } else {
+      return [];
+    }
+  }
+};
+export function getHighlightedIndex(
+  currentBtn,
+  selectedYear,
+  selectedMonth,
+  currentDate
+) {
+  let constHighlitedIndex = -1;
+  if (currentBtn === "Monthly") {
+    if (parseInt(selectedYear) === new Date().getFullYear()) {
+      constHighlitedIndex = currentDate.getMonth();
+    }
+    if (parseInt(selectedYear) < new Date().getFullYear()) {
+      constHighlitedIndex = currentDate.getMonth();
+    }
+    if (parseInt(selectedYear) > new Date().getFullYear()) {
+      constHighlitedIndex = currentDate.getMonth();
+    } else {
+      constHighlitedIndex = selectedMonth - 1;
+    }
+  } else if (currentBtn === "Daily") {
+    if (parseInt(selectedYear) === new Date().getFullYear()) {
+      constHighlitedIndex = currentDate.getDate() - 1;
+    }
+    if (parseInt(selectedYear) < new Date().getFullYear()) {
+      constHighlitedIndex = currentDate.getMonth();
+    }
+    if (parseInt(selectedYear) > new Date().getFullYear()) {
+      constHighlitedIndex = currentDate.getMonth();
+    } else {
+      constHighlitedIndex = selectedMonth - 1;
+    }
+  } else if (currentBtn === "Weekly") {
+    if (parseInt(selectedYear) === new Date().getFullYear()) {
+      const currentWeek = getDateWeek(currentDate);
+      constHighlitedIndex = currentWeek - 1;
+    }
+    if (parseInt(selectedYear) < new Date().getFullYear()) {
+      constHighlitedIndex = currentDate.getMonth();
+    }
+    if (parseInt(selectedYear) > new Date().getFullYear()) {
+      constHighlitedIndex = currentDate.getMonth();
+    } else {
+      constHighlitedIndex = selectedMonth - 1;
+    }
+  }
+
+  return constHighlitedIndex;
+}
+
+export const getGraphData = (
+  param = {},
+  text,
+  month,
+  year,
+  currentBtn,
+  currentDate
+) => {
+  if (
+    currentBtn === "Monthly" &&
+    parseInt(year) <= parseInt(currentDate.getFullYear())
+  ) {
+    return Object.values(param).map((value) => value ?? 0);
+  } else if (currentBtn !== "Monthly") {
+    if (parseInt(month) <= parseInt(currentDate.getMonth() + 1)) {
+      return Object.values(param).map((value) => value ?? 0);
+    }
+  }
+
+  return [];
 };
 export const renderCardSkeleton = (width, height, borderRadius) => (
   <Row style={{ display: "flex", justifyContent: "space-between" }}>

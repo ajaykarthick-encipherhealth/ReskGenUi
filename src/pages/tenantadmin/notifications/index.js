@@ -4,7 +4,6 @@ import NotificationCard from "./noficationCard";
 import { PlusCircleFilled } from "@ant-design/icons";
 import { useEffect, useState } from "react";
 import NotificationModal from "./addNotification";
-import Pagination from "../../../mainStream/components/pagination";
 import { actions as notificationAction } from "../../../stores/admin/notifications";
 import { connect } from "react-redux";
 import { actions as AdminAction } from "../../../stores/admin/users";
@@ -14,43 +13,7 @@ import { actions as tenantAdminActions } from "../../../stores/tenantAdmin/notif
 import Card from "../../../components/card";
 import { Empty } from "antd";
 import style from "./style.module.css";
-const commonFilterItems = [
-  {
-    id: "01",
-    title: "Search",
-    type: "search",
-    header: "Patient Name / ID",
-    placeholder: "Search",
-    active: true,
-  },
-  {
-    id: "02",
-    title: "users",
-    type: "select",
-    value: null,
-    placeholder: "Users",
-    active: false,
-    options: null,
-  },
-  {
-    id: "03",
-    title: "dueDate",
-    type: "rangePicker",
-    value: null,
-    placeholder: "Due Date",
-    pickerType: "year",
-    active: false,
-  },
 
-  {
-    id: "04",
-    title: "Priority",
-    type: "select",
-    value: null,
-    placeholder: "Select Priority",
-    options: null,
-  },
-];
 const NotificationList = ({
   allCustomUsers,
   getUsers,
@@ -63,7 +26,7 @@ const NotificationList = ({
   const [notificationList, setNotificationList] = useState([]);
   const [pageNum, setPageNum] = useState(0);
   const [paginationFirst, setPaginationFirst] = useState(0);
-  const [activeFilters, setActiveFilters] = useState(commonFilterItems);
+  const [activeFilters, setActiveFilters] = useState([]);
   const [searchText, setSearchText] = useState(null);
   const [selectedOption, setSelectedOption] = useState({});
   const [selectedDateRanges, setSelectedDateRanges] = useState({});
