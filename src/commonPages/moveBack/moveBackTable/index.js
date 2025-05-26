@@ -2,16 +2,13 @@ import React, { useState } from "react";
 import AppTable from "../../../components/tables";
 import { connect } from "react-redux";
 import { actions as allActions } from "../../../stores/tenantAdmin/patientAllocations";
-import styles from "../../../components/tables/table.module.css";
-import { Spin } from "antd";
-import { LoadingOutlined } from "@ant-design/icons";
 import { actions as tableAction } from "../../../stores/tableView";
 import { findItemWithTrueKey } from "../../../utils/reusable";
 
 const MoveBackTable = ({
   getTableData,
   tableLoader,
-  getAllCheckedReviewers,
+  selectedDateRanges,
   setSelectedRowsId,
   selectedRows,
   setSelectedRows,
@@ -25,8 +22,9 @@ const MoveBackTable = ({
   roleId,
   selectedRole,
   statusBodyTemplate,
+  searchText,
+  selectedOption
 }) => {
-  const [selectAllChecked, setSelectAllChecked] = useState(false);
   const [checkedLoader, setCheckedLoader] = useState(false);
   const onPageChange = (e) => {
     setPaginationFirst(e.first);
@@ -44,6 +42,9 @@ const MoveBackTable = ({
           pageSize: 15,
           roleId: roleId,
           selectedRole: selectedRole,
+          searchText,
+          selectedOption,
+          selectedDateRanges,
         });
 
         if (response?.status === "SUCCESS") {

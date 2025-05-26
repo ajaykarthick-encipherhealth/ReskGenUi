@@ -153,6 +153,7 @@ const MoveBack = ({
     setParamsFilter("check");
     if (window !== "undefined" && paramsFilter && roleId) {
       getMoveBack();
+      setSelectedRows([])
     }
   }, [
     selectedOption,
@@ -355,6 +356,9 @@ const MoveBack = ({
                             roleId={roleId}
                             selectedRole={selectedRole}
                             statusBodyTemplate={statusBodyTemplate}
+                            searchText={searchText}
+                            selectedOption={selectedOption}
+                            selectedDateRanges={selectedDateRanges}
                           />
                         </Tab.Pane>
                       </Tab.Content>

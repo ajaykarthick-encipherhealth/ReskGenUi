@@ -152,7 +152,7 @@ const AllocateModal = ({
   };
 
   useEffect(() => {
-    if (roleId) {
+    if (roleId ) {
       getUserList({ roleId: roleId });
     }
   }, [roleId]);
@@ -160,9 +160,7 @@ const AllocateModal = ({
     setSelectedChart(selectedRowsId);
   }, [selectedRowsId]);
 
-  useEffect(() => {
-    getUserList({ roleId: roleId, search: search });
-  }, [search]);
+
 
   return (
     <div>

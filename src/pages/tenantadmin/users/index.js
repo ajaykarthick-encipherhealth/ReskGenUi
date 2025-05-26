@@ -78,6 +78,7 @@ const Users = ({
   };
   const handleOpenModal = () => {
     setUsersModal(true);
+    setVisiblePopoverKey(false);
   };
 
   const showDrawer = () => {

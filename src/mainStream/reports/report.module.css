@@ -614,13 +614,13 @@
 }
 @media (min-width: 1024px) and (max-width: 1400px) {
   .buttonContainer {
-    width:60% !important;
+    width:70% !important;
     height: 42px !important;
     padding: 10px !important;
   }
   .group button{
     padding : 5px !important;
-    font-size: 13px !important;
+    font-size: 12px !important;
   }
 }
 .popoverStyle{

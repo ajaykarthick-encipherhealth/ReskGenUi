@@ -148,7 +148,7 @@ const RandomSamplingModal = ({
   };
 
   useEffect(() => {
-    if (roleId) {
+    if (roleId ) {
       getUserList({ roleId: roleId });
     }
   }, [roleId]);

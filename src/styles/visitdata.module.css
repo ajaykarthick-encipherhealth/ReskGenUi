@@ -2317,9 +2317,16 @@
 .isSHowHccBlurHcc {
   filter: blur(1px);
 }
-@media (min-width: 1024px) and (max-width: 1400px) {
+.tab{
+  margin-top: 8%;
+}
+@media (min-width: 1024px) and (max-width: 1500px) {
   .font {
     font-size: 12px !important;
   }
+  .tab{
+    margin-top: 10% !important;
+  }
 }
+
 

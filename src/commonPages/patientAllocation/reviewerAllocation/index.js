@@ -22,6 +22,9 @@ const ReviewerAllocation = ({
   search,
   setCheckedHeader,
   statusBodyTemplate,
+  selectedDateRanges,
+  searchText,
+  selectedOption
 }) => {
   const [checkedLoader, setCheckedLoader] = useState(false);
   const onPageChange = (e) => {
@@ -41,6 +44,9 @@ const ReviewerAllocation = ({
           pageSize: 15,
           roleId: roleId,
           search,
+          searchText,
+          selectedOption,
+          selectedDateRanges,
         });
 
         if (response?.status === "SUCCESS") {

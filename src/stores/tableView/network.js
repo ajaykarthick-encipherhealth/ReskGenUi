@@ -204,20 +204,48 @@ export async function getTableViewChecked({
   selectedRole,
   allPatientIds,
   search,
+  searchText,
+  selectedOption,
+  selectedDateRanges,
+  reloadTrue
 }) {
+  if (!reloadTrue) {
   const options = {
     method: "GET",
   };
   const tin = getStorage("tinNumber");
-  const data = await requestPortal(
-    `dbservice/table/view?pageId=${pageId}&page=${pageNo}&size=${pageSize}&status=${
-      activeStatus ? activeStatus : ""
-    }&roleId=${roleId ? roleId : ""}&aliasName=${
-      selectedRole ? selectedRole : ""
-    }&allPatientIds=${allPatientIds ? allPatientIds : ""}&tin=${tin || ""}&batchCount=${search?.batchCount?search?.batchCount:""}`,
-    options
-  );
+  let searchTextParams = null;
+  let selectParams = null;
+  let dateRagngesParams = null;
+  let searchIntParams = null
+  if (searchText) {
+   
+    searchTextParams = convertToCustomParams(searchText);
+  }
+  if (search) {
+    searchIntParams = convertToCustomParams(search);
+  }
+  if (selectedOption) {
+    selectParams = convertToCustomParams(selectedOption);
+  }
+  if (selectedDateRanges) {
+    dateRagngesParams = convertToCustomParamsDatePicker(selectedDateRanges);
+  }
+let baseUrl =  `dbservice/table/view?pageId=${pageId}&page=${pageNo}&size=${pageSize}&status=${
+  activeStatus ? activeStatus : ""
+}&roleId=${roleId ? roleId : ""}&aliasName=${
+  selectedRole ? selectedRole : ""
+}&allPatientIds=${allPatientIds ? allPatientIds : ""}&tin=${tin || ""}`
+const finalUrl = `${baseUrl}${searchTextParams || ""}${selectParams || ""}${
+  dateRagngesParams || ""
+}${searchIntParams || ""}`;
+    const data = await requestPortal(finalUrl, options);
   return data;
+}
+else {
+  return null;
+}
+
 }
 
 export async function getTinViewChecked({
@@ -225,28 +253,43 @@ export async function getTinViewChecked({
   pageNo,
   pageSize,
   selectedOption,
-  sort,
   selectedDateRanges,
   searchText,
   activeStatus,
   roleId,
-  projectId,
   selectedRole,
   allTinIds,
+  reloadTrue,
 }) {
-  const options = {
-    method: "GET",
-  };
-  const uId = getStorage("userId");
-  const data = await requestPortal(
-    `dbservice/table/view?pageId=${pageId}&page=${pageNo}&size=${pageSize}&status=${
-      activeStatus ? activeStatus : ""
-    }&roleId=${roleId ? roleId : ""}&aliasName=${
-      selectedRole ? selectedRole : ""
-    }&allTinIds=${allTinIds ? allTinIds : ""}`,
-    options
-  );
+  if (!reloadTrue) {
+    const options = { method: "GET" };
+    let searchTextParams = null;
+    let selectParams = null;
+    let dateRagngesParams = null;
+    if (searchText) {
+      searchTextParams = convertToCustomParams(searchText);
+    }
+    if (selectedOption) {
+      selectParams = convertToCustomParams(selectedOption);
+    }
+    if (selectedDateRanges) {
+      dateRagngesParams = convertToCustomParamsDatePicker(selectedDateRanges);
+    }
+
+  let baseUrl =  `dbservice/table/view?pageId=${pageId}&page=${pageNo}&size=${pageSize}&status=${
+    activeStatus ? activeStatus : ""
+  }&roleId=${roleId ? roleId : ""}&aliasName=${
+    selectedRole ? selectedRole : ""
+  }&allTinIds=${allTinIds ? allTinIds : ""}`;
+  const finalUrl = `${baseUrl}${searchTextParams || ""}${selectParams || ""}${
+    dateRagngesParams || ""
+  }`;
+  const data = await requestPortal(finalUrl, options);
   return data;
+}
+else{
+  return null
+}
 }
 
 export async function getTinCount({}) {

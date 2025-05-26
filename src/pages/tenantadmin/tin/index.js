@@ -156,6 +156,9 @@ const Tin = ({
           pageId: pageIds,
           pageNo: 0,
           pageSize: 15,
+          searchText:searchText,
+          selectedOption,
+          selectedDateRanges,
         });
 
         if (response?.status === "SUCCESS") {
@@ -394,6 +397,7 @@ const handleSwitchToggle = ()=>{
     if (paramsFilter === "check") {
       getAllTins();
       getTinCountData();
+      setSelectedRows([])
     }
   }, [
     pageNo,
@@ -440,7 +444,6 @@ const handleSwitchToggle = ()=>{
       setIsFilter(false);
     }
   }, [data?.response?.metaDataDTO]);
-
   return (
     <div className={`show`}>
       <Header />
@@ -465,7 +468,7 @@ const handleSwitchToggle = ()=>{
           />
         </div>
         {activeTab !== "Providers" && (
-          <div className="d-flex align-items-center justify-content-end gap-4">
+          <div className="d-flex align-items-center justify-content-end gap-3">
             <div className={styles.font}>
               Total Tin : {tinCount?.totalTin ? tinCount?.totalTin : 0}
             </div>

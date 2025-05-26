@@ -408,8 +408,7 @@
   color:#241571;
 }
 .heading{
-  color:#241571;
-  
+  color:#241571; 
 }
 .addonDiv{
   width:18px;
@@ -417,5 +416,13 @@
   /* border:1px solid #04306f; */
   /* background-color:#E4EFFE; */
   color:#04306f;
+}
+.selectWidth{
+  width:150px
+}
+@media (min-width: 1024px) and (max-width: 1500px) {
+  .selectWidth{
+    width:100px !important
+  }
 
 }

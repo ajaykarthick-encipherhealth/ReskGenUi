@@ -88,10 +88,13 @@ const SubNavBar = ({ handleBack, hideBackArrow, pageLoad ,tableLoader}) => {
                     id={createIdGen(`${role} tin copyicon`)}
                   >
                     <Tooltip title={row[field.actualField]}>
+                      <div className= {styles.subText}>
                       {reusableEllipses({
                         str: row[field.actualField] || "--".toString(),
                         count: 15,
                       })}
+                      </div>
+                     
                     </Tooltip>
                     {/* <span className={styles.count}>
                       {row[field.actualField] || "--"}

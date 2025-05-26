@@ -140,7 +140,13 @@ const Clients = ({
   };
   useEffect(() => {
     setParamsFilter("check");
-    getClientsDetails();
+    if (
+      window !== "undefined" &&
+      paramsFilter 
+    ){
+      getClientsDetails();
+
+    }
   }, [
     selectedOption,
     selectedDateRanges,

@@ -1145,7 +1145,7 @@ const TableRow = ({
                   //     : "#263E50"
                   // }
                   format={(percent) => `${percent}%`} 
-                  className={`w-75 ${Style.progreddBr}`}
+                  className={` ${Style.progreddBr}`}
                 />
               </div>
             </td>

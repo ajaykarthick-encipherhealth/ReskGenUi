@@ -98,14 +98,7 @@ const PatientAllocation = ({
     setOpen(true);
   };
 
-  const opt = {
-    organization: organizationList?.response?.map((item) => ({
-      value: item?.id,
-      label: `${item?.name}`,
-    })),
-    priority: priorityOptions,
-  };
-
+ 
   const getAllAllocation = async () => {
     const tin = getStorage("tinNumber");
     const response = await getTableData({
@@ -192,6 +185,7 @@ const PatientAllocation = ({
       roleId
     ) {
       getAllAllocation();
+      setSelectedRows([])
     }
   }, [
     selectedOption,
@@ -362,7 +356,6 @@ const PatientAllocation = ({
                           setSelectedDates={setSelectedDates}
                           activeFilters={activeFilters}
                           setPageNo={setPageNo}
-                          opt={opt}
                           setSelectAllChecked={setSelectAllChecked}
                           setSelectedRowsId={setSelectedRowsId}
                           setSelectedRows={setSelectedRows}
@@ -406,6 +399,9 @@ const PatientAllocation = ({
                             setCheckedHeader={setCheckedHeader}
                             statusBodyTemplate={statusBodyTemplate}
                             search={search}
+                            searchText={searchText}
+                            selectedOption={selectedOption}
+                            selectedDateRanges={selectedDateRanges}
                           />
                         </Tab.Pane>
                       </Tab.Content>

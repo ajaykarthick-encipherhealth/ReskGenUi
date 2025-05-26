@@ -10,7 +10,7 @@ import {
   getResponePopup,
 } from "../../../../utils/reusable";
 import { actions as tableAction } from "../../../../stores/tableView";
-import {actions as authActions } from '../../../../stores/authFlows'
+import { actions as authActions } from "../../../../stores/authFlows";
 
 const Projects = ({
   createProject,
@@ -21,30 +21,8 @@ const Projects = ({
   tableDynamicColumnReset,
   pageLoad,
   getAllProjects,
-
 }) => {
   const [form] = Form.useForm();
-  const commonFilterItems = [
-    {
-      id: "01",
-      title: "Tin",
-      type: "search",
-      value: null,
-      placeholder: "Search",
-      pickerType: "search",
-      header: "Tin Name / ID",
-      active: true,
-    },
-    {
-      id: "02",
-      title: "Priority",
-      type: "select",
-      value: null,
-      placeholder: "Priority",
-      options: null,
-      active: true,
-    },
-  ];
   const [activeFilters, setActiveFilters] = useState([]);
   const [paramsFilter, setParamsFilter] = useState(null);
   const [searchText, setSearchText] = useState(null);
@@ -101,7 +79,7 @@ const Projects = ({
       if (res?.status === "SUCCESS") {
         form.resetFields();
         getProjects();
-        getAllProjects()
+        getAllProjects();
         onDrawerClose();
         getResponePopup(res);
       } else {
@@ -163,7 +141,9 @@ const Projects = ({
   };
   useEffect(() => {
     setParamsFilter("check");
-    getProjects();
+    if (window !== "undefined" && paramsFilter) {
+      getProjects();
+    }
   }, [
     selectedOption,
     selectedDateRanges,
@@ -211,7 +191,6 @@ const Projects = ({
             onClose={onClose}
             selectedColumns={test}
             setSelectedColumns={setTest}
-            commonFilterItems={commonFilterItems}
             showCustomizeTable={true}
             showDrawer={showDrawer}
             handleSubmit={handleTableSubmit}
@@ -339,7 +318,7 @@ const enhancer = connect(
     tableDynamicColumn: tableAction.tableDynamicColumn,
     tableDynamicColumnReset: tableAction.tableDynamicColumnReset,
     getTableData: tableAction.tableViewAction,
-        getAllProjects: authActions.projectDetails,
+    getAllProjects: authActions.projectDetails,
   }
 );
 export default enhancer(Projects);

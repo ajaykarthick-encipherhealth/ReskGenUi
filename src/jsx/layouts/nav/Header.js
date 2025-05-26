@@ -55,8 +55,7 @@ import { getResponePopup } from "../../../utils/reusable";
 import { getHeaderLoge } from "../../../pages/twofactorauthentication/reusableFun";
 import { actions as tinActions } from "../../../stores/tenantAdmin/tin";
 import { actions as tableAction } from "../../../stores/tableView";
-import CardSkeleton from "../../../components/skeleton/card";
-import { duration } from "moment";
+
 
 const Header = ({
   notificationResponse,
@@ -935,7 +934,8 @@ const Header = ({
                   <div className="mt-3">
                     <Select
                       placeholder="Client"
-                      style={{ width: 150 }}
+                      className={styles.selectWidth}
+                      // style={{ width: 150 }}
                       value={clientOptions && selectedClient}
                       onChange={(e, value) => handleClientChange(value)}
                       options={clientOptions}
@@ -944,7 +944,8 @@ const Header = ({
                   <div className="mt-3">
                     <Select
                       placeholder="Sample Project"
-                      style={{ width: 150 }}
+                      className={styles.selectWidth}
+                      // style={{ width: 150 }}
                       value={!projectListCheck ? selectedProject : []}
                       onChange={(e, value) => handleProjectChange(value)}
                       options={projectList}
@@ -955,7 +956,8 @@ const Header = ({
                       <div className="mt-3">
                         <Select
                           placeholder="Select Tin"
-                          style={{ width: 150 }}
+                          className={styles.selectWidth}
+                          // style={{ width: 150 }}
                           value={selectedTin}
                           onChange={(e, value) => handleTinChange(value)}
                           options={TinOptions}
