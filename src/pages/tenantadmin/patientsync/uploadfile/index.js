@@ -39,7 +39,7 @@ const UploadFile = ({
         return;
       }
 
-      if (uploadAction === "uploadFolder") {
+      if (uploadAction === "uploadFolder" || uploadAction === "uploadMultipleFiles") {
         // Check if all files are PDFs
         const invalidFiles = fileArray?.filter(
           (file) => !file.name.endsWith(".pdf")
