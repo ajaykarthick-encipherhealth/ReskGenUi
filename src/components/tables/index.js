@@ -1006,7 +1006,7 @@ const TableRow = ({
         if (columnItem?.design?.includes("RE_UPLOAD")) {
           return (
             <td className={Style.lastBorder} style={{ textAlign: "center" }}>
-              {item?.status === "FAILED" ? (
+              {item?.roasterStatus === "FAILED" ? (
                 <div
                   id={
                     tableId
