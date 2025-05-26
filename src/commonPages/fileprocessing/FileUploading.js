@@ -25,16 +25,24 @@ const FileUploading = ({
     return !doubleExtensionPattern.test(fileName);
   };
 
-  const handleFileChange = (files) => {
-    const file = files[0];
-    if (file && validateFileName(file.name)) {
-      onChangeFile(files);
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    const fileInput = e.target;
+  
+    if (!file) return;
+  
+    const isPdf = file.type === "application/pdf";
+    const hasPdfExtension = file.name.toLowerCase().endsWith(".pdf");
+    const hasDoubleExtension = /\.[^/.]+(\.[^/.]+)$/.test(file.name);
+  
+    if (isPdf && hasPdfExtension && !hasDoubleExtension) {
+      onChangeFile([file]); 
     } else {
-      message.error("Invalid files");
-      const fileValue = document.getElementById("fileInput");
-      fileValue.value = "";
+      message.error("Only valid .pdf files are allowed.");
+      fileInput.value = "";
     }
   };
+  
   return (
     <Offcanvas
       onHide={handleClose}
@@ -100,7 +108,7 @@ const FileUploading = ({
                   required
                   type="file"
                   accept=".pdf"
-                  onChange={(e) => handleFileChange(e.target.files)}
+                  onChange={handleFileChange}
                   disabled={isLoadingBtn ? true : false}
                 />
               </div>
