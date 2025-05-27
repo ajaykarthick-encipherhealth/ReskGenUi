@@ -213,15 +213,11 @@ const Header = ({
   };
 
 
-  const items = allRolesData?.userRoles?.map((data) => ({
-    label: data.proxyRole,
-    key: data.proxyRole,
-  }));
-
   const onClick = ({ key }) => {
     setProjectListCheck(true);
-    getProjectActiveTab(null)
+    getProjectActiveTab(null);
     const allRoles = JSON.parse(getStorage("userAllRoles"));
+
     let selectedRoleObj = allRoles?.find((res) => res.proxyRole === key);
     if (!selectedRoleObj) {
       setNotificationCount(0);
@@ -234,6 +230,10 @@ const Header = ({
     const accessMenuList =
       selectedRoleObj?.accessList || selectedRoleObj?.details?.accessList || [];
 
+    const newAliasName =
+      selectedRoleObj?.aliasName || selectedRoleObj?.details?.aliasName;
+    const oldAliasName = getStorage("headerAliasName");
+
     setStorage("userRole", key);
     setStorage(
       "proxyRole",
@@ -243,38 +243,32 @@ const Header = ({
       "roleId",
       selectedRoleObj?.roleId || selectedRoleObj?.details?.roleId
     );
-    setStorage(
-      "headerAliasName",
-      selectedRoleObj?.aliasName || selectedRoleObj?.details?.aliasName
-    );
-    setStorage(
-      "aliasName",
-      selectedRoleObj?.aliasName || selectedRoleObj?.details?.aliasName
-    );
+    setStorage("headerAliasName", newAliasName);
+    setStorage("aliasName", newAliasName);
     setStorage("accessMenuList", JSON.stringify(accessMenuList));
 
     const firstAccess = accessMenuList[0];
     const dynamicPath =
       firstAccess?.title?.toLowerCase().replace(/\s+/g, "") || "dashboard";
+
     let dynamicRoute = "";
     if (
       selectedRoleObj?.details?.role === "REVIEWER" ||
       selectedRoleObj?.details?.role === "QA"
     ) {
       dynamicRoute = `/reviewer/${dynamicPath}`;
-      getResponePopup({
-        message: "Role changed successfully",
-        status: "SUCCESS",
-        duration:3,
-      });
     } else {
       dynamicRoute = `/tenantadmin/${dynamicPath}`;
+    }
+
+    if (newAliasName !== oldAliasName) {
       getResponePopup({
         message: "Role changed successfully",
         status: "SUCCESS",
-        duration:3,
+        duration: 5,
       });
     }
+
     if (router.pathname !== dynamicRoute) {
       router.push(dynamicRoute);
     } else {
@@ -283,6 +277,7 @@ const Header = ({
       });
     }
   };
+
   const getMenuListByRole = (role) => {
     const allRoles = JSON?.parse(getStorage("userAllRoles"));
     let selectedRoleObj = allRoles?.find((res) => res.proxyRole === role);
@@ -902,6 +897,7 @@ const Header = ({
     }
   }, [projectDetails]);
 
+console.log(roles,"roles");
 
   return (
     <div className={`header ${headerFix ? "is-fixed" : ""}`}>
