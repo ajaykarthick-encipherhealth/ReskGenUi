@@ -56,6 +56,7 @@ const CodersTable = ({
   const router = useRouter();
   const proxyRole = getStorage("proxyRole");
   const tin = getStorage("tinNumber");
+  const [proxy,setProxy] = useState(null)
   const [searchText, setSearchText] = useState(null);
   const [selectedOption, setSelectedOption] = useState({});
   const [selectedDateRanges, setSelectedDateRanges] = useState({});
@@ -64,7 +65,6 @@ const CodersTable = ({
   const [pageNo, setPageNo] = useState(0);
   const [pageSize, setPageSize] = useState(15);
   const [paginationFirst, setPaginationFirst] = useState(0);
-  const [totalElements, setTotalElements] = useState("");
   const [clear, setClear] = useState(false);
   const [paramsFilter, setParamsFilter] = useState(null);
   const [test, setTest] = useState(data?.response?.metaDataDTO);
@@ -141,12 +141,7 @@ const CodersTable = ({
       tin,
       roleId,
     });
-    if (res?.status == "SUCCESS") {
-      setTotalElements(res.response?.patientDTOList?.totalElements);
-    }
   };
-  
-
 
   const handleTabs = (name) => {
     getActiveTab(name);
@@ -257,8 +252,6 @@ const CodersTable = ({
     pageLoad,
 
   ]);
-
-
   useEffect(() => {
     if (
       (isFilter && data?.response?.metaDataDTO) ||
@@ -273,10 +266,13 @@ const CodersTable = ({
     }
   }, [data?.response?.metaDataDTO]);
 
+  useEffect(()=>{
+    setProxy(proxyRole)
+  },[proxy])
   return (
     <div className={`show `}>
       <Header />
-      {proxyRole === "QA" ? (
+      {proxy === "QA" ? (
         <div>
           <SubNavBar hideBackArrow={false} />
         </div>
@@ -514,15 +510,7 @@ const CodersTable = ({
 };
 const enhancer = connect(
   (state) => ({
-    patientsListFilter: state?.reviewer?.workQueue?.patients,
-    loading: state?.reviewer?.workQueue?.patientsLoading,
-    filtersData: state.reviewer?.workQueue?.reviewerPatientFilterList,
     routedData: state.tenantAdmin?.patientSync?.routedData,
-    batchList: state?.tenantAdmin?.patients?.allBatch?.data?.response,
-    patinetListAll:
-      state?.reviewer?.workQueue?.getReviewerPatients?.data?.response
-        ?.patientDTOList,
-    statusActiveTab: state.admin?.report?.activeTab,
     status:
       state?.reviewer?.workQueue?.getStatus?.data?.response?.processStatusCount,
     tableLoader: state?.tableView?.tableViewLoading,
@@ -533,7 +521,6 @@ const enhancer = connect(
   {
     patientDetails: allActions.getPatientDetails,
     getRoutedData: allPatientSyncAction.getRoutedData,
-    getAllBatchList: tenantAdminAction.getAllBatchAction,
     getActiveTab: allReportActions.activeTab,
     getStatus: allActions.getStatusAction,
     getTableStatus: tableAction.getTableStatusAction,
