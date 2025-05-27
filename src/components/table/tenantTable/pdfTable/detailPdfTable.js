@@ -226,7 +226,7 @@ const DetailedPdfTable = ({
                               ?.replace(/_/g, " ")
                               .slice(1)
                               .toLowerCase() || ""}
-                          {row?.fileStatus === "FAILED" && (
+                          {/* {row?.fileStatus === "FAILED" && (
                             <div
                               className={`${styles.refreshBtn} mx-2`}
                               onClick={(e) => {
@@ -243,7 +243,7 @@ const DetailedPdfTable = ({
                                 className="text-red px-2"
                               />
                             </div>
-                          )}
+                          )} */}
                         </div>
                         <div
                           className={`d-flex justify-content-center batchProgressBar`}
