@@ -736,6 +736,7 @@ const ManuallyAdd = ({
         chartProcessType: getSelectedDos ? "DATE_OF_SERVICE" : "YEAR",
         dateOfServiceIfDosWiseCompute: getSelectedDos ? getSelectedDos : null,
         processedYear: year?.value,
+        activeHeader:!isMeat,
       };
     } else if (isEditMeat) {
       data = {
@@ -793,6 +794,7 @@ const ManuallyAdd = ({
           .flat(capturedSections.length + 1),
         chartProcessType: getSelectedDos ? "DATE_OF_SERVICE" : "YEAR",
         processedYear: year?.value,
+        activeHeader:!isMeat,
       };
     }
     if (validCode.toLowerCase() == "valid code") {

@@ -239,7 +239,6 @@ const HccCards = ({
       patientDetailsLoad(false);
     }
   };
-
   return (
     <>
       {provided && (
@@ -1232,6 +1231,15 @@ const HccCards = ({
                                       className={`mt-2 text-start  ${visitStyles.manuallyAdded}`}
                                     >
                                       Critical
+                                    </Badge>
+                                  )}
+                                  {data?.stateIndicators?.includes(
+                                    "STATUS_CODE"
+                                  ) && (
+                                    <Badge
+                                      className={`mt-2 text-start  ${visitStyles.statusCode}`}
+                                    >
+                                      Status Code
                                     </Badge>
                                   )}
                                 </div>
