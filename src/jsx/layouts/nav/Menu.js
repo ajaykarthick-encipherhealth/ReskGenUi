@@ -479,21 +479,21 @@ export const EHRMenuList = [
     childRoute: "/ehr/patients/details",
   },
 ];
-export const PhysicianMenuList = [
-  {
-    title: "Dashbaord",
-    iconStyle: <DashboardOutlined />,
-    activeIcon: <DashboardFilled />,
-    to: "/physician/dashboard",
-  },
-  {
-    title: "Patients",
-    iconStyle: <FontAwesomeIcon icon={faHospital} />,
-    activeIcon: <FontAwesomeIcon icon={faHospitalAlt} />,
-    to: "/physician/patients",
-    childRoute: "/physician/comparison",
-  },
-];
+// export const PhysicianMenuList = [
+//   {
+//     title: "Dashbaord",
+//     iconStyle: <DashboardOutlined />,
+//     activeIcon: <DashboardFilled />,
+//     to: "/physician/dashboard",
+//   },
+//   {
+//     title: "Patients",
+//     iconStyle: <FontAwesomeIcon icon={faHospital} />,
+//     activeIcon: <FontAwesomeIcon icon={faHospitalAlt} />,
+//     to: "/physician/patients",
+//     childRoute: "/physician/comparison",
+//   },
+// ];
 
 export const QAMenuList = [
   {

@@ -80,7 +80,7 @@ const GenerateView = ({
   const getPatients = async () => {
     const tin = getStorage("tinNumber");
     const userId = getStorage("userId");
-    let pageId = "d80f80fd-aab8-496e-a9fc-89677d5ac174";
+    let pageId = "6cd166eb-79ac-4c12-ab0f-07be2983ca70";
 
     const response = await getTableData({
       pageId,
@@ -101,7 +101,7 @@ const GenerateView = ({
 
   const handleSubmitInsert = async (data) => {
     setIsSubmitting(true);
-    let pageId = "d80f80fd-aab8-496e-a9fc-89677d5ac174";
+    let pageId = "6cd166eb-79ac-4c12-ab0f-07be2983ca70";
     const payload = {
       pageId,
       headerNames: data.map((col) => col.id),
@@ -122,7 +122,7 @@ const GenerateView = ({
   };
   const handleReset = async () => {
     setIsResetting(true);
-    let pageId = "d80f80fd-aab8-496e-a9fc-89677d5ac174";
+    let pageId = "6cd166eb-79ac-4c12-ab0f-07be2983ca70";
     const payload = {
       pageId,
     };
@@ -238,6 +238,9 @@ const GenerateView = ({
               />
             </div>
           </section>
+          <div className=" font2 d-flex align-items-end justify-content-end gap-2">
+          <span className="text-danger "> *</span> You can choose only one TIN at a time to generate the report
+          </div>
           <div id="task-tbl_wrapper" className="dataTables_wrapper no-footer">
             <div className="mt-4">
               <AppTable
@@ -246,7 +249,6 @@ const GenerateView = ({
                   (item) => item.active
                 )}
                 loader={tableLoader}
-                pagination={false}
                 sort={sort}
                 setSort={setSort}
                 first={pageNo === 0 ? 0 : paginationFirst}
