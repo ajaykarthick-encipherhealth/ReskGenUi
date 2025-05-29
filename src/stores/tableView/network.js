@@ -95,13 +95,13 @@ export async function getTableView({
       baseUrl += `&tin=${tin || ""}&
 allTinIds=${allTinIds || false}`;
     }
-    const reportIds = [
-      "5792cd13-73f5-42c0-b0ca-5db81db947ad",
-      "2d7cb7f7-6dad-41fb-970b-d805fb3f195f",
-    ];
-    if (reportIds.includes(pageId)) {
-      baseUrl += `&tincompleted=${tincompleted || ""}`;
-    }
+    // const reportIds = [
+    //   "5792cd13-73f5-42c0-b0ca-5db81db947ad",
+    //   "2d7cb7f7-6dad-41fb-970b-d805fb3f195f",
+    // ];
+    // if (reportIds.includes(pageId)) {
+    //   baseUrl += `&tincompleted=${tincompleted || ""}`;
+    // }
     const qaCodersPageIds = [
       "da4958c3-7795-4bcc-8ab0-24d93cd52c25",
       "a9d5c555-7954-4382-a2ef-3f66b292cf8f",
