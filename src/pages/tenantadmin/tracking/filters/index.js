@@ -51,8 +51,9 @@ const MoreFilter = ({
         <span style={{ margin: "0 5px" }}>Select All</span>
       </div>
       <Divider className="m-0 p-0" />
+      <div style={{height: activeFilters?.length > 3 ? "170px" : "auto" , overflow:"scroll"}}>
       {activeFilters?.map((filter, index) => (
-        <div key={filter} style={{ margin: "10px 0px" }}>
+        <div key={filter} style={{ margin: "10px 0px"  }}>
           <input
             id={
               id
@@ -71,6 +72,8 @@ const MoreFilter = ({
           <span style={{ margin: "0 5px" }}>{filter.headerName}</span>
         </div>
       ))}
+      </div>
+     
 
       <div className="d-flex justify-content-between">
         <div
