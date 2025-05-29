@@ -60,7 +60,7 @@ export async function getTableView({
       selectedRole || ""
     }&queryStatus=${queryStatus || ""}&isAdmin=${isAdmin || ""}&sortDirection=${
       sort?.sortDir ? sort?.sortDir : ""
-    }&sortField=${sort?.sortField ? sort?.sortField : ""}&tincompleted=${tincompleted ?tincompleted:""}`;
+    }&sortField=${sort?.sortField ? sort?.sortField : ""}`;
 
     const allowedPageIds = [
       "e76aaa6c-319e-44d3-b7ae-aadb17dfb664",
