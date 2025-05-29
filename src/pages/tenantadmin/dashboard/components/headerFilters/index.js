@@ -212,6 +212,7 @@ const index = ({
                       onChange={(e, value) => handleRange(value)}
                       format={"MM-DD-YYYY"}
                       allowClear={true}
+                      inputReadOnly
                     />
                   </div>
                 </div>

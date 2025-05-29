@@ -190,6 +190,7 @@ const MyWorkQueueFilter = ({
                         }}
                         disabledDate={(current) => disableFutureDate(current)}
                         value={selectCompletedPicker}
+                        inputReadOnly
                       />
                     </div>
                   </div>
@@ -212,6 +213,7 @@ const MyWorkQueueFilter = ({
                         }}
                         disabledDate={(current) => disableFutureDate(current)}
                         value={selectComputedPicker}
+                        inputReadOnly
                       />
                     </div>
                   </div>

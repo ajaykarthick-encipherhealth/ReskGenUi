@@ -1077,6 +1077,7 @@ const handleExcelDownload = () => {
                                         selectedRange
                                       );
                                     }}
+                                    inputReadOnly
                                   />
                                 </div>
                               </div>

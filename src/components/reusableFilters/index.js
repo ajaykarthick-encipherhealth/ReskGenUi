@@ -227,7 +227,7 @@ const ReusableFilters = ({
                   >
                     <RangePicker
                       ref={(node) => {
-                        if (node) pickerRefs.current[item?.headerName] = node;
+                        if (node) pickerRefs.current[item?.actualField] = node;
                       }}
                       className="custom-range-picker"
                       data-testid={

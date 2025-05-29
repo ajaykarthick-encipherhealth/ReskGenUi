@@ -466,13 +466,13 @@ const Index = ({
     }
   }, [activeBtn]);
 
-  useEffect(() => {
-    if (activeBtn === "Invalid") {
-      flagNameList.map((item) => {
-        chartData(item);
-      });
-    }
-  }, [selectedOrganization, dateRange, activeBtn]);
+  // useEffect(() => {
+  //   if (activeBtn === "Invalid") {
+  //     flagNameList.map((item) => {
+  //       chartData(item);
+  //     });
+  //   }
+  // }, [selectedOrganization, dateRange, activeBtn]);
   useEffect(() => {
     if (routedData) {
       setActiveBtn("Invalid");

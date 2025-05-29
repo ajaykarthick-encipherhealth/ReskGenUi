@@ -283,6 +283,7 @@ const Index = ({ getActiveTab, reportActiveTab }) => {
                               disabledDate={(current) =>
                                 disableFutureDate(current)
                               }
+                              inputReadOnly
                             />
                           </div>
                         </div>
