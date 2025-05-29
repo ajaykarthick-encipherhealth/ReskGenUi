@@ -300,6 +300,7 @@ const Patient = ({
         form.resetFields();
         setValidated(true);
       } else {
+         setLoader(false);
         setValidated(false);
         getResponePopup(response);
       }
