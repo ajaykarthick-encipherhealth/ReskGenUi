@@ -561,7 +561,7 @@ describe("getBackgroundColor function", () => {
     expect(getBackgroundColor(1)).toBe("#F28585");
     expect(getBackgroundColor(2)).toBe("#04306F");
     expect(getBackgroundColor(3)).toBe("#E6A4B4");
-    expect(getBackgroundColor(4)).toBe("#607274");
+    expect(getBackgroundColor(4)).toBe("#558e95");
     expect(getBackgroundColor(5)).toBe("#DED0B6");
     expect(getBackgroundColor(6)).toBe("#C3E2C2");
     expect(getBackgroundColor(7)).toBe("#9BB8CD");

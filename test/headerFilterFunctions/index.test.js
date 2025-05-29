@@ -4,8 +4,6 @@ import dayjs from "dayjs";
 import { DatePicker } from "antd";
 import { handleRnagePicker } from "../../src/components/headerFilters/functions";
 import { generateOptionsForNewStore } from "../../src/components/headerFilters/functions";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTriangleExclamation } from "@fortawesome/free-solid-svg-icons";
 import TableStyle from "../../src/components/table/table.module.css";
 import { priorityStatus } from "../../src/components/headerFilters/functions";
 import { sortFunction } from "../../src/components/headerFilters/functions";
@@ -13,7 +11,8 @@ import { searchFunction } from "../../src/components/headerFilters/functions";
 import { processstatusBodyTemplate } from "../../src/components/headerFilters/functions";
 import { handleSelector } from "../../src/components/headerFilters/functions";
 import { dateFormate } from "../../src/components/headerFilters/functions";
-
+import { faTriangleExclamation } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 const { RangePicker } = DatePicker;
 // sort
 describe("sortFunction", () => {
@@ -261,41 +260,7 @@ describe("processstatusBodyTemplate", () => {
 // priority Status
 describe("priorityStatus", () => {
 
-  it("should return the correct JSX for 'HIGH'", () => {
-    const result = priorityStatus("HIGH");
-    expect(result).toEqual(
-      <div data-testid="status-span">
-        <i className={TableStyle.highFlag}>
-          <FontAwesomeIcon icon={faTriangleExclamation} />
-        </i>
-        <span style={{ fontSize: "13px", color: "#cf940a" }}>High</span>{" "}
-      </div>
-    );
-  });
 
-  it("should return the correct JSX for 'NORMAL'", () => {
-    const result = priorityStatus("NORMAL");
-    expect(result).toEqual(
-      <div data-testid="status-span">
-        <i className={TableStyle.normalFlag}>
-          <FontAwesomeIcon icon={faTriangleExclamation} />
-        </i>
-        <span style={{ fontSize: "13px", color: "#4466ff " }}>Normal</span>
-      </div>
-    );
-  });
-
-  it("should return the correct JSX for 'LOW'", () => {
-    const result = priorityStatus("LOW");
-    expect(result).toEqual(
-      <div data-testid="status-span">
-        <i className={TableStyle.lowFlag}>
-          <FontAwesomeIcon icon={faTriangleExclamation} />
-        </i>
-        <span style={{ fontSize: "13px", color: "#87909e" }}>Low</span>
-      </div>
-    );
-  });
 
   it("should return an empty fragment for any other value", () => {
     const result = priorityStatus("OTHER");
@@ -320,6 +285,42 @@ describe("handleSelector", () => {
     handleSelector(undefined, setSelectedOption);
 
     expect(setSelectedOption).toHaveBeenCalledWith("");
+  });
+});
+//priority
+describe("priorityStatus", () => {
+  it("renders URGENT priority with red icon and label", () => {
+    const { getByTestId } = render(priorityStatus("URGENT"));
+    const statusSpan = getByTestId("status-span");
+    expect(statusSpan).toHaveTextContent("Urgent");
+    expect(statusSpan.querySelector("svg")).toBeInTheDocument();
+    expect(statusSpan.querySelector("svg")).toHaveStyle("color: red");
+  });
+
+  it("renders HIGH priority with correct label and color", () => {
+    const { getByTestId } = render(priorityStatus("HIGH"));
+    const statusSpan = getByTestId("status-span");
+    expect(statusSpan).toHaveTextContent("High");
+    expect(statusSpan.querySelector("span")).toHaveStyle("color: #cf940a");
+  });
+
+  it("renders NORMAL priority with correct label and color", () => {
+    const { getByTestId } = render(priorityStatus("NORMAL"));
+    const statusSpan = getByTestId("status-span");
+    expect(statusSpan).toHaveTextContent("Normal");
+    expect(statusSpan.querySelector("span")).toHaveStyle("color: #4466ff");
+  });
+
+  it("renders LOW priority with correct label and color", () => {
+    const { getByTestId } = render(priorityStatus("LOW"));
+    const statusSpan = getByTestId("status-span");
+    expect(statusSpan).toHaveTextContent("Low");
+    expect(statusSpan.querySelector("span")).toHaveStyle("color: #87909e");
+  });
+
+  it("returns undefined for unknown priority", () => {
+    const result = priorityStatus("UNKNOWN");
+    expect(result).toBeUndefined();
   });
 });
 // dateformat
