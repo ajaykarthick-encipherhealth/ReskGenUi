@@ -125,6 +125,7 @@ const AppTable = ({
   onCloseIconClick,
   disabled,
   handleReportDownload,
+  isTrigger,
 }) => {
   if (isCheckBox) {
     column.push({
@@ -138,6 +139,11 @@ const AppTable = ({
     column.push({
       statusButton: true,
       value: "patientId",
+    });
+  }
+  if (isTrigger) {
+    column.push({
+      triggerButton: true,
     });
   }
   if (isEdit) {
@@ -160,7 +166,6 @@ const AppTable = ({
       header: true,
     });
   }
- 
 
   const router = useRouter();
   const columnsArr = Array.from({ length: column?.length || 5 });
@@ -194,6 +199,7 @@ const AppTable = ({
                       handleRowCheckboxChange={handleRowCheckboxChange}
                       checkedHeader={checkedHeader}
                       isUpload={isUpload}
+                      isTrigger={isTrigger}
                       isEdit={isEdit}
                       disabled={disabled}
                       handleReportDownload={handleReportDownload}
@@ -261,6 +267,7 @@ const AppTable = ({
                       getStatusStyles={getStatusStyles}
                       renderCountDetailsPopover={renderCountDetailsPopover}
                       isUpload={isUpload}
+                      isTrigger={isTrigger}
                       handleAction={handleAction}
                       isEdit={isEdit}
                       content={content}
@@ -348,6 +355,9 @@ const TableHeadItem = ({
   }
   if (item.statusButton || item.edit) {
     return <th className="">Action</th>;
+  }
+  if (item.triggerButton) {
+    return <th className=""></th>;
   }
   if (item.reportDownload) {
     return <th>Download</th>;
@@ -495,6 +505,7 @@ const TableRow = ({
   getStatusStyles,
   renderCountDetailsPopover,
   isUpload,
+  isTrigger,
   handleAction,
   content,
   visiblePopoverKey,
@@ -970,10 +981,10 @@ const TableRow = ({
             </td>
           );
         }
-        if (columnItem.isTrigger) {
+        if (columnItem?.triggerButton) {
           return (
             <td className={Style.lastBorder} style={{ textAlign: "center" }}>
-              {item?.isRequestForRetry && (
+              {item?.isRequestForRetry === true && (
                 <div
                   onClick={(e) => {
                     e.stopPropagation();

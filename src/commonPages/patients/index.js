@@ -839,6 +839,10 @@ const Patient = ({
                   data?.response?.staticDesign,
                   "upload"
                 )}
+                isTrigger={findItemWithTrueKey(
+                  data?.response?.metaDataDTO,
+                  "isRequestForRetry"
+                )}
               />
               <div></div>
             </div>
