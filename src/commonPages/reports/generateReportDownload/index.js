@@ -29,16 +29,17 @@ const GenerateReportModal = ({
 
   const GenerateReport = async () => {
     setLoading(true);
+    const userId = getStorage("userId")
+
     const response = await generateReport({
       data: {
         tenantId: clientId,
         fileType: "EXCEL",
         reportName: inputValue,
-        // tinId: selectedRows.toString(),
-        tinId:"68356393e8d3601e0db9532c",
+        tinId: selectedRows.toString(),
         userAndAccess: {
-          "abinaya@encipherhealthinternal.onmicrosoft.com": "DOWNLOAD"
-        }
+          [userId]: "DOWNLOAD",
+        },
       }
     });
 

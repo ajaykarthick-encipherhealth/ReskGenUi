@@ -179,7 +179,7 @@ export async function checkStatus(response) {
       await showModal("You don't have permission to access this page.", "Back", true, false, false); 
       break;
     }
-    case 512: {
+    case 513: {
       await showModal(
         "An error occurred due to unhandled exceptions or unexpected conditions within the system. The admin will be notified by email.",
         "Back",
