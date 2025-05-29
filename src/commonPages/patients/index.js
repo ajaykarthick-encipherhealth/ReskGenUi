@@ -196,6 +196,7 @@ const Patient = ({
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isResetting, setIsResetting] = useState(false);
   const [isFilter, setIsFilter] = useState(true);
+  const[loader, setLoader] = useState(false);
   
   const addPatientFormId = () => {
     setValidated(false);
@@ -280,15 +281,16 @@ const Patient = ({
 
   const handleSubmitPatientId = async (formData, form) => {
     const tin = getStorage("tinNumber");
-
     formData.allocatedBy = localUserId;
     formData.computing = 0;
     formData.patientId = formData.patientId.trim();
     formData.tin = tin;
+    setLoader(true);
     try {
       setIsLoadingBtn(true);
       const response = await getPatientId({ obj: formData });
       if (response?.status === "SUCCESS") {
+        setLoader(false);
         getPatients();
         setPageNo(0);
         setAddPatientId(false);
@@ -865,6 +867,7 @@ const Patient = ({
         handleChangePatientId={handleChangePatientId}
         isLoadingBtn={isLoadingBtn}
         orgAllList={orgAllList}
+        loader={loader}
       />
     </div>
   );

@@ -15,6 +15,7 @@ const Addpatients = ({
   orgAllList,
   tinDetails,
   getPageRendering,
+  loader
 }) => {
   const router = useRouter();
   const isProjectRoute = router.pathname === "/tenantadmin/project";
@@ -31,7 +32,6 @@ const Addpatients = ({
   };
   const handleTinChange = (value) => {
     setStorage("tinNumber", value);
-    getPageRendering(value);
   };
   return (
     <Offcanvas
@@ -187,7 +187,7 @@ const Addpatients = ({
                   type="submit"
                   className="btn btn-sm ms-2 flr width-max-content custom-btn-style"
                 >
-                  {"Submit"}
+                  {loader ? "Loading..." : "Submit"}
                 </Button>
               </Form.Item>
               <Form.Item>
