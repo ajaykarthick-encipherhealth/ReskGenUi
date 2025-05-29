@@ -68,7 +68,7 @@ const GeneratedReports = ({
   const getPatients = async () => {
     const tin = getStorage("tinNumber");
     const userId = getStorage("userId");
-    let pageId = "d80f80fd-aab8-496e-a9fc-89677d5ac174";
+    let pageId = "5792cd13-73f5-42c0-b0ca-5db81db947ad";
     const response = await getTableData({
       pageId,
       pageNo,
@@ -88,7 +88,7 @@ const GeneratedReports = ({
 
   const handleSubmitInsert = async (data) => {
     setIsSubmitting(true);
-    let pageId = "d80f80fd-aab8-496e-a9fc-89677d5ac174";
+    let pageId = "5792cd13-73f5-42c0-b0ca-5db81db947ad";
     const payload = {
       pageId,
       headerNames: data.map((col) => col.id),
@@ -109,7 +109,7 @@ const GeneratedReports = ({
   };
   const handleReset = async () => {
     setIsResetting(true);
-    let pageId = "d80f80fd-aab8-496e-a9fc-89677d5ac174";
+    let pageId = "5792cd13-73f5-42c0-b0ca-5db81db947ad";
     const payload = {
       pageId,
     };
@@ -136,58 +136,58 @@ const GeneratedReports = ({
     document.body.removeChild(link);
   };
 
-  const downloadExcels = async () => {
-    setDownloadLoader(true);
-    try {
-      const type =
-        activeButton === "Queried" && typeBtn === "TypeReport"
-          ? "QUERY_TYPE_REPORT"
-          : activeButton === "Needback" && typeBtn === "TypeReport"
-          ? "NEEDBACK_TYPE_REPORT"
-          : activeButton === "Queried"
-          ? "QUERY"
-          : activeButton.toUpperCase().replaceAll(" ", "_");
-      setDownloadLoader(true);
-      const result = await fetch(`${portalUrl}conradai/report/download`, {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${getStorage("token")}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          reportType: type,
-          reportName: "#VIEW#",
-          startDate: generate.select?.startDate
-            ? generate.select?.startDate
-            : "",
-          endDate: generate.select?.endDate ? generate.select?.endDate : "",
-          patientIds: [],
-        }),
-      });
+  // const downloadExcels = async () => {
+  //   setDownloadLoader(true);
+  //   try {
+  //     const type =
+  //       activeButton === "Queried" && typeBtn === "TypeReport"
+  //         ? "QUERY_TYPE_REPORT"
+  //         : activeButton === "Needback" && typeBtn === "TypeReport"
+  //         ? "NEEDBACK_TYPE_REPORT"
+  //         : activeButton === "Queried"
+  //         ? "QUERY"
+  //         : activeButton.toUpperCase().replaceAll(" ", "_");
+  //     setDownloadLoader(true);
+  //     const result = await fetch(`${portalUrl}conradai/report/download`, {
+  //       method: "POST",
+  //       headers: {
+  //         Authorization: `Bearer ${getStorage("token")}`,
+  //         "Content-Type": "application/json",
+  //       },
+  //       body: JSON.stringify({
+  //         reportType: type,
+  //         reportName: "#VIEW#",
+  //         startDate: generate.select?.startDate
+  //           ? generate.select?.startDate
+  //           : "",
+  //         endDate: generate.select?.endDate ? generate.select?.endDate : "",
+  //         patientIds: [],
+  //       }),
+  //     });
 
-      if (result.status === 200) {
-        const blob = await result.blob();
-        const url = window.URL.createObjectURL(blob);
-        const a = document.createElement("a");
-        a.href = url;
-        a.download = `${type}_${moment(new Date()).format(
-          "MM-DD-YYYY-hh:mm"
-        )}_report.xlsx`;
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        window.URL.revokeObjectURL(url);
-        setDownloadLoader(false);
-      } else {
-        getResponsePopup({ status: "FAILED", message: "File Not Fetched!" });
-        setDownloadLoader(false);
-      }
-    } catch (error) {
-      console.error("Error downloading Excel file:", error);
-      setDownloadLoader(false);
-      getResponsePopup({ status: "FAILED", message: "An error occurred!" });
-    }
-  };
+  //     if (result.status === 200) {
+  //       const blob = await result.blob();
+  //       const url = window.URL.createObjectURL(blob);
+  //       const a = document.createElement("a");
+  //       a.href = url;
+  //       a.download = `${type}_${moment(new Date()).format(
+  //         "MM-DD-YYYY-hh:mm"
+  //       )}_report.xlsx`;
+  //       document.body.appendChild(a);
+  //       a.click();
+  //       document.body.removeChild(a);
+  //       window.URL.revokeObjectURL(url);
+  //       setDownloadLoader(false);
+  //     } else {
+  //       getResponsePopup({ status: "FAILED", message: "File Not Fetched!" });
+  //       setDownloadLoader(false);
+  //     }
+  //   } catch (error) {
+  //     console.error("Error downloading Excel file:", error);
+  //     setDownloadLoader(false);
+  //     getResponsePopup({ status: "FAILED", message: "An error occurred!" });
+  //   }
+  // };
 
 
   useEffect(() => {

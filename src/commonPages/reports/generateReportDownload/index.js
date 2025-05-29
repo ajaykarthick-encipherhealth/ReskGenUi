@@ -101,8 +101,10 @@ const GenerateReportModal = ({
   );
 };
 
-const connector = connect(null, {
+const connector = connect((state)=>( {
+}),{
   generateReport: reportActions.reportGenerate
 });
+
 
 export default connector(GenerateReportModal);
