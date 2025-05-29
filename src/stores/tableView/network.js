@@ -27,16 +27,15 @@ export async function getTableView({
   cilentBased,
   reloadTrue,
   search,
-  tincompleted
+  tincompleted,
 }) {
   if (!reloadTrue) {
     const options = { method: "GET" };
     let searchTextParams = null;
     let selectParams = null;
     let dateRagngesParams = null;
-    let searchIntParams = null
+    let searchIntParams = null;
     if (searchText) {
-     
       searchTextParams = convertToCustomParams(searchText);
     }
     if (search) {
@@ -96,7 +95,13 @@ export async function getTableView({
       baseUrl += `&tin=${tin || ""}&
 allTinIds=${allTinIds || false}`;
     }
-
+    const reportIds = [
+      "5792cd13-73f5-42c0-b0ca-5db81db947ad",
+      "2d7cb7f7-6dad-41fb-970b-d805fb3f195f",
+    ];
+    if (reportIds.includes(pageId)) {
+      baseUrl += `&tincompleted=${tincompleted || ""}`;
+    }
     const qaCodersPageIds = [
       "da4958c3-7795-4bcc-8ab0-24d93cd52c25",
       "a9d5c555-7954-4382-a2ef-3f66b292cf8f",
@@ -123,7 +128,7 @@ export async function getStatusTableView({
   isReAssigned,
   isQueried,
   patientAllocated,
-  tin
+  tin,
 }) {
   const options = {
     method: "GET",
@@ -131,7 +136,7 @@ export async function getStatusTableView({
   let searchTextParams = null;
   let selectParams = null;
   let dateRagngesParams = null;
- 
+
   if (searchText) {
     searchTextParams = convertToCustomParams(searchText);
   }
@@ -146,9 +151,9 @@ export async function getStatusTableView({
   let baseUrl = `dbservice/get-count?&isReAssigned=${
     isReAssigned || false
   }&isQueried=${isQueried || false}&patientAllocated=${patientAllocated || ""}`;
- if (role === "QA") {
-   baseUrl += `&tin=${tin || ""}`;
- }
+  if (role === "QA") {
+    baseUrl += `&tin=${tin || ""}`;
+  }
   const finalUrl = `${baseUrl}${searchTextParams || ""}${selectParams || ""}${
     dateRagngesParams || ""
   }`;
@@ -208,45 +213,42 @@ export async function getTableViewChecked({
   searchText,
   selectedOption,
   selectedDateRanges,
-  reloadTrue
+  reloadTrue,
 }) {
   if (!reloadTrue) {
-  const options = {
-    method: "GET",
-  };
-  const tin = getStorage("tinNumber");
-  let searchTextParams = null;
-  let selectParams = null;
-  let dateRagngesParams = null;
-  let searchIntParams = null
-  if (searchText) {
-   
-    searchTextParams = convertToCustomParams(searchText);
-  }
-  if (search) {
-    searchIntParams = convertToCustomParams(search);
-  }
-  if (selectedOption) {
-    selectParams = convertToCustomParams(selectedOption);
-  }
-  if (selectedDateRanges) {
-    dateRagngesParams = convertToCustomParamsDatePicker(selectedDateRanges);
-  }
-let baseUrl =  `dbservice/table/view?pageId=${pageId}&page=${pageNo}&size=${pageSize}&status=${
-  activeStatus ? activeStatus : ""
-}&roleId=${roleId ? roleId : ""}&aliasName=${
-  selectedRole ? selectedRole : ""
-}&allPatientIds=${allPatientIds ? allPatientIds : ""}&tin=${tin || ""}`
-const finalUrl = `${baseUrl}${searchTextParams || ""}${selectParams || ""}${
-  dateRagngesParams || ""
-}${searchIntParams || ""}`;
+    const options = {
+      method: "GET",
+    };
+    const tin = getStorage("tinNumber");
+    let searchTextParams = null;
+    let selectParams = null;
+    let dateRagngesParams = null;
+    let searchIntParams = null;
+    if (searchText) {
+      searchTextParams = convertToCustomParams(searchText);
+    }
+    if (search) {
+      searchIntParams = convertToCustomParams(search);
+    }
+    if (selectedOption) {
+      selectParams = convertToCustomParams(selectedOption);
+    }
+    if (selectedDateRanges) {
+      dateRagngesParams = convertToCustomParamsDatePicker(selectedDateRanges);
+    }
+    let baseUrl = `dbservice/table/view?pageId=${pageId}&page=${pageNo}&size=${pageSize}&status=${
+      activeStatus ? activeStatus : ""
+    }&roleId=${roleId ? roleId : ""}&aliasName=${
+      selectedRole ? selectedRole : ""
+    }&allPatientIds=${allPatientIds ? allPatientIds : ""}&tin=${tin || ""}`;
+    const finalUrl = `${baseUrl}${searchTextParams || ""}${selectParams || ""}${
+      dateRagngesParams || ""
+    }${searchIntParams || ""}`;
     const data = await requestPortal(finalUrl, options);
-  return data;
-}
-else {
-  return null;
-}
-
+    return data;
+  } else {
+    return null;
+  }
 }
 
 export async function getTinViewChecked({
@@ -277,20 +279,19 @@ export async function getTinViewChecked({
       dateRagngesParams = convertToCustomParamsDatePicker(selectedDateRanges);
     }
 
-  let baseUrl =  `dbservice/table/view?pageId=${pageId}&page=${pageNo}&size=${pageSize}&status=${
-    activeStatus ? activeStatus : ""
-  }&roleId=${roleId ? roleId : ""}&aliasName=${
-    selectedRole ? selectedRole : ""
-  }&allTinIds=${allTinIds ? allTinIds : ""}`;
-  const finalUrl = `${baseUrl}${searchTextParams || ""}${selectParams || ""}${
-    dateRagngesParams || ""
-  }`;
-  const data = await requestPortal(finalUrl, options);
-  return data;
-}
-else{
-  return null
-}
+    let baseUrl = `dbservice/table/view?pageId=${pageId}&page=${pageNo}&size=${pageSize}&status=${
+      activeStatus ? activeStatus : ""
+    }&roleId=${roleId ? roleId : ""}&aliasName=${
+      selectedRole ? selectedRole : ""
+    }&allTinIds=${allTinIds ? allTinIds : ""}`;
+    const finalUrl = `${baseUrl}${searchTextParams || ""}${selectParams || ""}${
+      dateRagngesParams || ""
+    }`;
+    const data = await requestPortal(finalUrl, options);
+    return data;
+  } else {
+    return null;
+  }
 }
 
 export async function getTinCount({}) {
