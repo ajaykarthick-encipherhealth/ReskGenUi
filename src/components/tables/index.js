@@ -123,6 +123,8 @@ const AppTable = ({
   setRole,
   selectedRole,
   onCloseIconClick,
+  disabled,
+  handleReportDownload,
 }) => {
   if (isCheckBox) {
     column.push({
@@ -144,14 +146,6 @@ const AppTable = ({
       value: "patientId",
     });
   }
-
-  if (isGenerateReport) {
-    column?.push({
-      checkBox: true,
-      value: idKey ? idKey : "patientId",
-      header: false,
-    });
-  }
   if (isGenerateReportDownload) {
     column?.push({
       reportDownload: true,
@@ -159,6 +153,14 @@ const AppTable = ({
       header: false,
     });
   }
+  if (isGenerateReport) {
+    column?.push({
+      checkBox: true,
+      value: idKey ? idKey : "patientId",
+      header: true,
+    });
+  }
+ 
 
   const router = useRouter();
   const columnsArr = Array.from({ length: column?.length || 5 });
@@ -193,6 +195,8 @@ const AppTable = ({
                       checkedHeader={checkedHeader}
                       isUpload={isUpload}
                       isEdit={isEdit}
+                      disabled={disabled}
+                      handleReportDownload={handleReportDownload}
                     />
                   ))}
                 </tr>
@@ -266,6 +270,7 @@ const AppTable = ({
                       setRole={setRole}
                       selectedRole={selectedRole}
                       onCloseIconClick={onCloseIconClick}
+                      handleReportDownload={handleReportDownload}
                     />
                   ))
                 ) : (
@@ -308,8 +313,7 @@ const TableHeadItem = ({
   setSort,
   handleRowCheckboxChange,
   checkedHeader,
-  isUpload,
-  isEdit,
+  disabled,
 }) => {
   if (item.checkBox && item?.header) {
     return (
@@ -330,12 +334,13 @@ const TableHeadItem = ({
             height: "20px",
             flexShrink: "0",
             borderRadius: "4px",
-            cursor: "pointer",
+            cursor:disabled?"not-allowed": "pointer",
           }}
           type="checkbox"
           id="checkall-header"
           name="checkall-header"
           checked={checkedHeader}
+          disabled ={disabled}
         />
         {item.name}
       </th>
@@ -498,6 +503,7 @@ const TableRow = ({
   setRole,
   selectedRole,
   onCloseIconClick,
+  handleReportDownload,
 }) => {
   const router = useRouter();
 
@@ -505,9 +511,9 @@ const TableRow = ({
     <tr
       id={
         tableId
-          ? createIdGen("row " + tableId + colIndex)
+          ? createIdGen("row" + tableId + colIndex)
           : createIdGen(
-              "row " + router.pathname.replaceAll("/", " ") + colIndex
+              "row" + router.pathname.replaceAll("/", " ") + colIndex
             )
       }
       onClick={(e) => {
@@ -522,23 +528,6 @@ const TableRow = ({
       {column?.map((columnItem, index) => {
         if (columnItem?.design?.includes("PRIORITY")) {
           return (
-            // <td
-            //   style={{ cursor: "not-allowed" }}
-            //   className={`font2 ${
-            //     index == 0
-            //       ? Style.firstTdBorder
-            //       : column.length - 1 == index
-            //       ? Style.lastBorder
-            //       : Style.childBorder
-            //   }`}
-            // >
-            //   <span className="text-secondary">
-            //     {" "}
-            //     {item?.priority
-            //       ? priorityStatus(item?.priority)
-            //       : "Set Priority"}
-            //   </span>
-            // </td>
             <td
               className={`font2 ${
                 disableUser && !item?.accountStatus && Style.disableUser
@@ -553,9 +542,9 @@ const TableRow = ({
               <span
                 id={
                   tableId
-                    ? createIdGen("selectpriority " + tableId + colIndex)
+                    ? createIdGen("selectpriority" + tableId + colIndex)
                     : createIdGen(
-                        "selectpriority " +
+                        "selectpriority" +
                           router.pathname.replaceAll("/", " ") +
                           colIndex
                       )
@@ -752,9 +741,9 @@ const TableRow = ({
                 }}
                 id={
                   tableId
-                    ? createIdGen("edit " + tableId + colIndex)
+                    ? createIdGen("edit" + tableId + colIndex)
                     : createIdGen(
-                        "edit " +
+                        "edit" +
                           router.pathname.replaceAll("/", " ") +
                           colIndex
                       )
@@ -803,9 +792,9 @@ const TableRow = ({
               <div
                 id={
                   tableId
-                    ? createIdGen("editDisabled " + tableId + colIndex)
+                    ? createIdGen("editDisabled" + tableId + colIndex)
                     : createIdGen(
-                        "editDisabled " +
+                        "editDisabled" +
                           router.pathname.replaceAll("/", " ") +
                           colIndex
                       )
@@ -877,9 +866,9 @@ const TableRow = ({
               <div
                 id={
                   tableId
-                    ? createIdGen("switch " + tableId + colIndex)
+                    ? createIdGen("switch" + tableId + colIndex)
                     : createIdGen(
-                        "switch " +
+                        "switch" +
                           router.pathname.replaceAll("/", " ") +
                           colIndex
                       )
@@ -909,9 +898,9 @@ const TableRow = ({
               <div
                 id={
                   tableId
-                    ? createIdGen("processstatus " + tableId + colIndex)
+                    ? createIdGen("reviewedStatus" + tableId + colIndex)
                     : createIdGen(
-                        "processstatus " +
+                        "reviewedStatus" +
                           router.pathname.replaceAll("/", " ") +
                           colIndex
                       )
@@ -941,9 +930,9 @@ const TableRow = ({
               <div
                 id={
                   tableId
-                    ? createIdGen("processstatus " + tableId + colIndex)
+                    ? createIdGen("proxcyStatus" + tableId + colIndex)
                     : createIdGen(
-                        "processstatus " +
+                        "proxcyStatus" +
                           router.pathname.replaceAll("/", " ") +
                           colIndex
                       )
@@ -969,7 +958,15 @@ const TableRow = ({
                   : Style.childBorder
               } `}
             >
-              {statusBodyTemplate && statusBodyTemplate(item)}
+             <div  id={
+                  tableId
+                    ? createIdGen("computationStatus" + tableId + colIndex)
+                    : createIdGen(
+                        "computationStatus" +
+                          router.pathname.replaceAll("/", " ") +
+                          colIndex
+                      )
+                }>{statusBodyTemplate && statusBodyTemplate(item)}</div> 
             </td>
           );
         }
@@ -984,9 +981,9 @@ const TableRow = ({
                   }}
                   id={
                     tableId
-                      ? createIdGen("trigger " + tableId + colIndex)
+                      ? createIdGen("trigger" + tableId + colIndex)
                       : createIdGen(
-                          "trigger " +
+                          "trigger" +
                             router.pathname.replaceAll("/", " ") +
                             colIndex
                         )
@@ -1010,9 +1007,9 @@ const TableRow = ({
                 <div
                   id={
                     tableId
-                      ? createIdGen("isRoasterFailed " + tableId + colIndex)
+                      ? createIdGen("isRoasterFailed" + tableId + colIndex)
                       : createIdGen(
-                          "isRoasterFailed " +
+                          "isRoasterFailed" +
                             router.pathname.replaceAll("/", " ") +
                             colIndex
                         )
@@ -1076,9 +1073,9 @@ const TableRow = ({
               <div
                 id={
                   tableId
-                    ? createIdGen("auditstatus " + tableId + colIndex)
+                    ? createIdGen("auditstatus" + tableId + colIndex)
                     : createIdGen(
-                        "auditstatus " +
+                        "auditstatus" +
                           router.pathname.replaceAll("/", " ") +
                           colIndex
                       )
@@ -1107,9 +1104,9 @@ const TableRow = ({
               <div
                 id={
                   tableId
-                    ? createIdGen("auditstatus " + tableId + colIndex)
+                    ? createIdGen("auditstatus" + tableId + colIndex)
                     : createIdGen(
-                        "auditstatus " +
+                        "auditstatus" +
                           router.pathname.replaceAll("/", " ") +
                           colIndex
                       )
@@ -1138,12 +1135,6 @@ const TableRow = ({
               <div className="d-flex  justify-content-start">
                 <Progress
                   percent={item[`${columnItem.actualField}`]}
-                  // strokeColor={
-                  //   columnItem.value === "processing" ||
-                  //   columnItem.value === "failed"
-                  //     ? "#263E50"
-                  //     : "#263E50"
-                  // }
                   format={(percent) => `${percent}%`} 
                   className={` ${Style.progreddBr}`}
                 />
@@ -1167,11 +1158,6 @@ const TableRow = ({
               ) : (
                 renderUserProfile(item, columnItem)
               )}
-              {/* <div className="d-flex align-items-center justify-content-center mx-5">
-                {columnItem?.value && item[columnItem.value]
-                  ? moment(item[columnItem.value]).format("MM-DD-YYYY")
-                  : "---"}
-              </div> */}
               {columnItem?.value && item[columnItem.value] ? (
                 <div className="d-flex align-items-start justify-content-start mx-5">
                   {moment(item[columnItem.value]).format("MM-DD-YYYY")}
@@ -1199,9 +1185,9 @@ const TableRow = ({
               <div
                 id={
                   tableId
-                    ? createIdGen("checkbox " + tableId + colIndex)
+                    ? createIdGen("checkbox" + tableId + colIndex)
                     : createIdGen(
-                        "checkbox " +
+                        "checkbox" +
                           router.pathname.replaceAll("/", " ") +
                           colIndex
                       )
@@ -1234,9 +1220,9 @@ const TableRow = ({
                     )}
                     id={
                       tableId
-                        ? createIdGen("checkBox " + tableId + colIndex)
+                        ? createIdGen("checkBox" + tableId + colIndex)
                         : createIdGen(
-                            "checkbox " +
+                            "checkbox" +
                               router.pathname.replaceAll("/", " ") +
                               colIndex
                           )
@@ -1264,7 +1250,6 @@ const TableRow = ({
         if (columnItem?.design?.includes("FLAG")) {
           return (
             <td
-              // className={`ant-badge-count ${Style.firstTdBorder}`}
               className={
                 index == 0
                   ? Style.firstTdBorder
@@ -1408,24 +1393,23 @@ const TableRow = ({
 
         if (columnItem.reportDownload) {
           return (
-            <td className={Style.lastBorder} style={{ textAlign: "center" }}>
+            <td  className={`${Style.lastBorder}`} >
               <div
                 onClick={(e) => {
                   e.stopPropagation();
-                  // getRetregger(item);
                 }}
                 id={
                   tableId
-                    ? createIdGen("trigger " + tableId + colIndex)
+                    ? createIdGen("reportDownload" + tableId + colIndex)
                     : createIdGen(
-                        "trigger " +
+                        "reportDownload" +
                           router.pathname.replaceAll("/", " ") +
                           colIndex
                       )
                 }
                 className="d-flex align-items-center"
               >
-                <DownloadOutlined style={{ fontSize: "16px" }} />
+                <DownloadOutlined  onClick = {handleReportDownload}style={{ fontSize: "16px" }} />
               </div>
             </td>
           );

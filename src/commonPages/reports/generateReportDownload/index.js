@@ -4,21 +4,58 @@ import { connect } from "react-redux";
 import moment from "moment";
 import RegularButton from "../../../components/button";
 import styles from "../style.module.css";
+import { actions as reportActions } from "../../../stores/tenantAdmin/report";
+import { getStorage } from "../../../utils/storages";
+import { getResponePopup } from "../../../utils/reusable";
 
-const GenateReportModal = ({ open, handleOk, handleCancel }) => {
+const GenerateReportModal = ({
+  open,
+  handleOk,
+  handleCancel,
+  generateReport,
+  selectedRows,
+  setIsModalOpen,
+  getGenerateReport,
+  setSelectedRows
+}) => {
+  const clientId = getStorage("client");
   const [loading, setLoading] = useState(false);
-  const [download, setDownload] = useState(null);
-  const [inputValue, setInputValue] = useState(null);
-  const [loader, setLoader] = useState(false);
+  const [inputValue, setInputValue] = useState("");
 
-  const GenerateReport = async () => {};
 
-  const handleInputChange = (name, value) => {
-    setInputValue(value);
+  const handleInputChange = (e) => {
+    setInputValue(e.target.value);
   };
 
+  const GenerateReport = async () => {
+    setLoading(true);
+    const response = await generateReport({
+      data: {
+        tenantId: clientId,
+        fileType: "EXCEL",
+        reportName: inputValue,
+        // tinId: selectedRows.toString(),
+        tinId:"68356393e8d3601e0db9532c",
+        userAndAccess: {
+          "abinaya@encipherhealthinternal.onmicrosoft.com": "DOWNLOAD"
+        }
+      }
+    });
+
+    if (response?.status === "SUCCESS") {
+      getResponePopup(response);
+      getGenerateReport()
+      setIsModalOpen(false);
+      setInputValue("")
+      setSelectedRows([])
+    } else {
+      setIsModalOpen(true);
+    }
+    setLoading(false);
+  };
   useEffect(() => {
-    setInputValue(`Report${moment(new Date()).format("MM-DD-YYYY-hh:mm")}`);
+    const defaultName = `Report${moment(new Date()).format("MM-DD-YYYY-hh:mm")}.xlsx`;
+    setInputValue(defaultName);
   }, []);
 
   return (
@@ -28,14 +65,13 @@ const GenateReportModal = ({ open, handleOk, handleCancel }) => {
       open={open}
       onOk={handleOk}
       onCancel={handleCancel}
-      destroyOnClose={true}
+      destroyOnClose
     >
       <div className="row">
         <div className="d-flex gap-2 align-items-center mt-2">
           <span className="font-weight4 font4">Generate Report</span>
         </div>
       </div>
-
       <div className="row">
         <div className="mt-5">
           <div className="font-weight2 font2">
@@ -43,31 +79,30 @@ const GenateReportModal = ({ open, handleOk, handleCancel }) => {
           </div>
           <div className="w-50 mt-2">
             <Input
-              placeholder={"Report Name"}
+              placeholder="Report Name"
               onChange={handleInputChange}
               value={inputValue}
               style={{ padding: "22px" }}
             />
           </div>
         </div>
-        <div
-          className={`${styles.btnContainer} mt-5 d-flex justify-content-center align-items-center`}
-        >
-          <div>
-            <RegularButton
-              name={"Generate"}
-              onClick={GenerateReport}
-              bg="#263E50"
-              color="#fff"
-              disabled={!inputValue}
-              loading={loading || loader}
-            />
-          </div>
+        <div className={`${styles.btnContainer} mt-5 d-flex justify-content-center align-items-center`}>
+          <RegularButton
+            name="Generate"
+            onClick={GenerateReport}
+            bg="#263E50"
+            color="#fff"
+            disabled={!inputValue}
+            loading={loading}
+          />
         </div>
       </div>
     </Modal>
   );
 };
 
-const connector = connect((state) => ({}), {});
-export default connector(GenateReportModal);
+const connector = connect(null, {
+  generateReport: reportActions.reportGenerate
+});
+
+export default connector(GenerateReportModal);

@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Header from "../../../jsx/layouts/nav/Header";
 import "react-facebook-loading/dist/react-facebook-loading.css";
-import { actions as tenantAdminAction } from "../../../stores/tenantAdmin/patients";
 import { connect } from "react-redux";
 import { getStorage } from "../../../utils/storages";
 import {
@@ -9,10 +8,8 @@ import {
   findMatchesByField,
   getResponePopup,
 } from "../../../utils/reusable";
-import { actions as allocationAction } from "../../../stores/admin/patientAllocation";
 import ReusableFilters from "../../../components/reusableFilters";
 import AppTable from "../../../components/tables";
-import { actions as workflowActions } from "../../../stores/reviewer/workqueue";
 import { actions as tableAction } from "../../../stores/tableView";
 import GenateReportModal from "../generateReportDownload";
 
@@ -49,7 +46,6 @@ const GeneratedReports = ({
   const [test, setTest] = useState(data?.response?.metaDataDTO);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isResetting, setIsResetting] = useState(false);
-  const [selectedRows, setSelectedRows] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isFilter, setIsFilter] = useState(true);
 
@@ -68,15 +64,7 @@ const GeneratedReports = ({
     setTest(data?.response?.metaDataDTO);
     setOpen(true);
   };
-  const handleRowCheckboxChange = async ({ e, row, singleCheck, checked }) => {
-    if (e.target?.checked) {
-      setSelectedRows([row.id]);
-    } else {
-      setSelectedRows([]);
-    }
-  };
-
-
+ 
   const getPatients = async () => {
     const tin = getStorage("tinNumber");
     const userId = getStorage("userId");
@@ -138,6 +126,69 @@ const GeneratedReports = ({
       getResponePopup(error?.response);
     }
   };
+  const handleReportDownload = () => {
+    let fileName = "https://mcibeforeocrdev.blob.core.windows.net/test/Patient%20Roaster.xlsx?sp=r&st=2025-05-12T05:29:09Z&se=2026-05-12T13:29:09Z&spr=https&sv=2024-11-04&sr=b&sig=ianNxwle85tYi3TGVPz5RLD26zBJkRYGU%2FgfrrHFAZM%3D";
+    const link = document.createElement("a");
+    link.href = `${fileName}`; 
+    link.download = fileName;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
+  const downloadExcels = async () => {
+    setDownloadLoader(true);
+    try {
+      const type =
+        activeButton === "Queried" && typeBtn === "TypeReport"
+          ? "QUERY_TYPE_REPORT"
+          : activeButton === "Needback" && typeBtn === "TypeReport"
+          ? "NEEDBACK_TYPE_REPORT"
+          : activeButton === "Queried"
+          ? "QUERY"
+          : activeButton.toUpperCase().replaceAll(" ", "_");
+      setDownloadLoader(true);
+      const result = await fetch(`${portalUrl}conradai/report/download`, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${getStorage("token")}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          reportType: type,
+          reportName: "#VIEW#",
+          startDate: generate.select?.startDate
+            ? generate.select?.startDate
+            : "",
+          endDate: generate.select?.endDate ? generate.select?.endDate : "",
+          patientIds: [],
+        }),
+      });
+
+      if (result.status === 200) {
+        const blob = await result.blob();
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = `${type}_${moment(new Date()).format(
+          "MM-DD-YYYY-hh:mm"
+        )}_report.xlsx`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        window.URL.revokeObjectURL(url);
+        setDownloadLoader(false);
+      } else {
+        getResponsePopup({ status: "FAILED", message: "File Not Fetched!" });
+        setDownloadLoader(false);
+      }
+    } catch (error) {
+      console.error("Error downloading Excel file:", error);
+      setDownloadLoader(false);
+      getResponsePopup({ status: "FAILED", message: "An error occurred!" });
+    }
+  };
+
 
   useEffect(() => {
     setTest(data?.response?.metaDataDTO);
@@ -165,7 +216,6 @@ const GeneratedReports = ({
         selectedOption,
         searchText,
         activeFilters,
-        pageNumber,
         paginationFirst,
         sort,
       } = routedData;
@@ -175,7 +225,6 @@ const GeneratedReports = ({
       setSelectedOption(selectedOption);
       setSelectedDates(selectedDates);
       setActiveFilters(activeFilters);
-      setPageNumber(pageNumber);
       setPaginationFirst(paginationFirst);
       setSort(sort);
     }
@@ -232,7 +281,6 @@ const GeneratedReports = ({
                 handleReset={handleReset}
                 isSubmitting={isSubmitting}
                 isResetting={isResetting}
-                selectedRows={selectedRows}
                 setIsModalOpen={setIsModalOpen}
                 showGenerateReport={false}
               />
@@ -253,14 +301,8 @@ const GeneratedReports = ({
                 totalRecords={data?.response?.pageResponse?.totalElements}
                 row={15}
                 onPageChange={onPageChange}
-                isGenerateReport={true}
-                handleRowCheckboxChange={handleRowCheckboxChange}
-                selectedRows={selectedRows}
-                isCheckBox={findItemWithTrueKey(
-                  data?.response?.staticDesign,
-                  "checkBox"
-                )}
                 isGenerateReportDownload={true}
+                handleReportDownload={handleReportDownload}
               />
               <div></div>
             </div>

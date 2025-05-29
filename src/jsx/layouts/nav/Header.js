@@ -897,7 +897,6 @@ const Header = ({
     }
   }, [projectDetails]);
 
-console.log(roles,"roles");
 
   return (
     <div className={`header ${headerFix ? "is-fixed" : ""}`}>

@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Header from "../../../jsx/layouts/nav/Header";
 import "react-facebook-loading/dist/react-facebook-loading.css";
-import { actions as tenantAdminAction } from "../../../stores/tenantAdmin/patients";
 import { connect } from "react-redux";
 import { getStorage } from "../../../utils/storages";
 import {
@@ -9,10 +8,8 @@ import {
   findMatchesByField,
   getResponePopup,
 } from "../../../utils/reusable";
-import { actions as allocationAction } from "../../../stores/admin/patientAllocation";
 import ReusableFilters from "../../../components/reusableFilters";
 import AppTable from "../../../components/tables";
-import { actions as workflowActions } from "../../../stores/reviewer/workqueue";
 import { actions as tableAction } from "../../../stores/tableView";
 import GenateReportModal from "../generateReportDownload";
 
@@ -52,7 +49,6 @@ const GenerateView = ({
   const [selectedRows, setSelectedRows] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isFilter, setIsFilter] = useState(true);
-
   const onPageChange = (e) => {
     setPaginationFirst(e.first);
     setPageNo(e.page);
@@ -68,32 +64,29 @@ const GenerateView = ({
     setTest(data?.response?.metaDataDTO);
     setOpen(true);
   };
-  const handleRowCheckboxChange = async ({ e, row, singleCheck, checked }) => {
+  const handleRowCheckboxChange = async ({ e, row, }) => {
     if (e.target?.checked) {
       setSelectedRows([row.id]);
-    } else {
+    }  
+     else {
       setSelectedRows([]);
     }
   };
 
 
-  const getPatients = async () => {
-    const tin = getStorage("tinNumber");
-    const userId = getStorage("userId");
-    let pageId = "6cd166eb-79ac-4c12-ab0f-07be2983ca70";
-
+  const getGenerateReport = async () => {
+    let pageId = "2d7cb7f7-6dad-41fb-970b-d805fb3f195f";
     const response = await getTableData({
       pageId,
       pageNo,
       pageSize: 15,
       roleId: "",
-      tin,
-      patientAllocated: userId,
-      isAdmin: true,
-      selectedOption,
-      selectedDateRanges,
-      searchText,
+      allTinIds: false,
       sort,
+      selectedDateRanges,
+      selectedOption,
+      searchText,
+      tincompleted:true,
     });
   };
 
@@ -101,7 +94,7 @@ const GenerateView = ({
 
   const handleSubmitInsert = async (data) => {
     setIsSubmitting(true);
-    let pageId = "6cd166eb-79ac-4c12-ab0f-07be2983ca70";
+    let pageId = "2d7cb7f7-6dad-41fb-970b-d805fb3f195f";
     const payload = {
       pageId,
       headerNames: data.map((col) => col.id),
@@ -111,7 +104,7 @@ const GenerateView = ({
       const response = await tableDynamicColumn({ payload });
       if (response?.status === "SUCCESS") {
         setIsFilter(true);
-        getPatients();
+        getGenerateReport();
         onClose();
         getResponePopup(response);
       }
@@ -122,7 +115,7 @@ const GenerateView = ({
   };
   const handleReset = async () => {
     setIsResetting(true);
-    let pageId = "6cd166eb-79ac-4c12-ab0f-07be2983ca70";
+    let pageId = "2d7cb7f7-6dad-41fb-970b-d805fb3f195f";
     const payload = {
       pageId,
     };
@@ -130,7 +123,7 @@ const GenerateView = ({
       const response = await tableDynamicColumnReset({ payload });
       if (response?.status === "SUCCESS") {
         setIsFilter(true);
-        getPatients();
+        getGenerateReport();
         onClose();
         getResponePopup(response);
       }
@@ -183,7 +176,7 @@ const GenerateView = ({
   useEffect(() => {
     setParamsFilter("check");
     if (paramsFilter === "check") {
-      getPatients();
+      getGenerateReport();
     }
   }, [
     pageNo,
@@ -255,18 +248,19 @@ const GenerateView = ({
                 totalRecords={data?.response?.pageResponse?.totalElements}
                 row={15}
                 onPageChange={onPageChange}
-                isGenerateReport={true}
+                isGenerateReport={false}
                 handleRowCheckboxChange={handleRowCheckboxChange}
                 selectedRows={selectedRows}
                 isCheckBox={findItemWithTrueKey(
                   data?.response?.staticDesign,
                   "checkBox"
                 )}
+                idKey={"id"}
+                disabled={true}
               />
-              <div></div>
             </div>
           </div>
-          <GenateReportModal open={isModalOpen} handleCancel={handleCancel} />
+          <GenateReportModal getGenerateReport={getGenerateReport} setSelectedRows={setSelectedRows} setIsModalOpen={setIsModalOpen} selectedRows={selectedRows}  open={isModalOpen} handleCancel={handleCancel} />
         </div>
       </div>
     </div>

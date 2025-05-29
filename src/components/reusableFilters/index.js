@@ -59,7 +59,7 @@ const ReusableFilters = ({
   isResetting,
   showGenerateReport,
   selectedRows,
-  setIsModalOpen
+  setIsModalOpen,
 }) => {
   const pickerRefs = useRef({});
   const router = useRouter();
@@ -75,7 +75,7 @@ const ReusableFilters = ({
     setSelectedDateRanges({});
     setSelectedDates([]);
     setSelectedOption({});
-    setSearch(null)
+    setSearch(null);
   };
   const handleClearFilters = () => {
     setSelectAll(false);
@@ -86,7 +86,7 @@ const ReusableFilters = ({
     setSelectedDates([]);
     setSelectedOption({});
     setSearchText(null);
-    setSearch(null)
+    setSearch(null);
   };
 
   const handleRangePicker = (dates, dateString, tabName) => {
@@ -143,7 +143,7 @@ const ReusableFilters = ({
                         ...prev,
                         [item?.actualField]: val,
                       }));
-                      setPageNo(1);   
+                      setPageNo(1);
                     }}
                     autoComplete="off"
                     setPageNumber={setPageNo}
@@ -301,8 +301,8 @@ const ReusableFilters = ({
                         ...prev,
                         [item?.actualField]: val,
                       }));
-                      setPageNo(1); 
-                      setSelectedRows([])
+                      setPageNo(1);
+                      setSelectedRows([]);
                     }}
                     autoComplete="off"
                     setPageNumber={setPageNo}
@@ -315,7 +315,7 @@ const ReusableFilters = ({
         })}
       </div>
       <div className="d-flex " style={{ alignContent: "flex-end" }}>
-        {showFilter && columns?.length != 0  && activeFilters?.length ? (
+        {showFilter && columns?.length != 0 && activeFilters?.length ? (
           <div
             id="more-filters"
             name="more-filters"
@@ -338,32 +338,8 @@ const ReusableFilters = ({
               columns={columns}
             />
           </div>
-        ):""}
-              {showGenerateReport && (
-          <>
-            <div
-              id="addPatient-btn"
-              name="addPatient-btn"
-              className="d-flex justify-content-center align-items-center   mt-4"
-            >
-              <Button
-                data-testid="table-custom"
-                name="table-custom"
-                onClick={()=>{setIsModalOpen(true)}}
-                style={{
-                  background: "#04306f",
-                  color: "#fff",
-                  width: "100%",
-                  fontSize: "12px",
-                  marginLeft: "10px",
-                }}
-                className="btn btn-sm w-full text-ellipsis"
-                disabled={selectedRows?.length == 0 ? true : false}
-              >
-               Generate Report
-              </Button>
-            </div>
-          </>
+        ) : (
+          ""
         )}
         {showCustomizeTable && (
           <>
@@ -386,6 +362,34 @@ const ReusableFilters = ({
                 className="btn btn-sm w-full text-ellipsis"
               >
                 Table Customization
+              </Button>
+            </div>
+          </>
+        )}
+        {showGenerateReport && (
+          <>
+            <div
+              id="addPatient-btn"
+              name="addPatient-btn"
+              className="d-flex justify-content-center align-items-center   mt-4"
+            >
+              <Button
+                data-testid="table-custom"
+                name="table-custom"
+                onClick={() => {
+                  setIsModalOpen(true);
+                }}
+                style={{
+                  background: "#04306f",
+                  color: "#fff",
+                  width: "100%",
+                  fontSize: "12px",
+                  marginLeft: "10px",
+                }}
+                className="btn btn-sm w-full text-ellipsis"
+                disabled={selectedRows?.length == 0 ? true : false}
+              >
+                Generate Report
               </Button>
             </div>
           </>

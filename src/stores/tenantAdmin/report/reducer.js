@@ -15,7 +15,8 @@ import {
   receivedReport,
   GetSelectedReport,
   sentReport,
-  getSelectedReportDetails
+  getSelectedReportDetails,
+  reportGenerate
 } from "./actions";
 
 const initialState = {
@@ -104,6 +105,7 @@ const ReportReducer = combineReducers({
   sentReport: createReducer(sentReport),
   uploadFile:createReducer(getSelectedReportDetails),
   updateReportLoader: getReportLoading(updateSentReport),
+  generateReport :createReducer(reportGenerate)
 });
 
 export default ReportReducer;

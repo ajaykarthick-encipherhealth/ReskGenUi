@@ -95,7 +95,6 @@ const ReviwerWorkList = ({
     pageNo,
   ]);
   
-  console.log(role, "userRole");
   return (
     <>
       <div className={`row ${visitStyles.patientListHead}`}>

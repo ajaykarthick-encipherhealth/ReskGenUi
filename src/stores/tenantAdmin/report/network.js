@@ -175,3 +175,18 @@ export async function selectedReportDetails(reportId, reportInfo) {
   );
   return data;
 }
+
+// new report API 
+
+export const generateReport = async({data}) => {
+  const options = {
+    method: "POST",
+    body:JSON.stringify(data)
+  };
+
+  const res = await requestPortal(
+    `management/mci/report/generate`,
+    options
+  );
+  return res;
+};

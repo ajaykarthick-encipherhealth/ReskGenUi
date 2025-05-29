@@ -1136,14 +1136,14 @@ const handleExcelDownload = () => {
                           ) : (
                             <div
                               className="d-flex flex-wrap  "
-                              style={{ width: "80%" }}
+                              style={{ width: "85%" }}
                             >
                               {reportActiveTab === "Tin Roaster" ||
                               reportActiveTab === "Patient Roaster" ||
                               reportActiveTab === "Practice Roaster" ||
                               reportActiveTab === "Provider Roaster" ? (
                                 <ReusableFilters
-                                  showFilter={false}
+                                  showFilter={true}
                                   setActiveFilters={setActiveFilters}
                                   setSearchText={setSearchText}
                                   searchText={searchText}
@@ -1170,38 +1170,20 @@ const handleExcelDownload = () => {
                                   handleReset={handleReset}
                                   isSubmitting={isSubmitting}
                                   isResetting={isResetting}
+                                  showCustomizeTable={reportActiveTab === "Tin Roaster" ||
+                                    reportActiveTab === "Patient Roaster" ||
+                                    reportActiveTab === "Practice Roaster" ||
+                                    reportActiveTab === "Provider Roaster" ?true:false}
                                 />
                               ) : null}
                             </div>
                           )}
                           <div
                             className="d-flex justify-content-center align-items-center"
-                            // style={{ width: "10%" }}
                           >
                             <div className=" d-flex  mt-4">
                               {renderButton()}
                             </div>
-                            {reportActiveTab === "Tin Roaster" ||
-                            reportActiveTab === "Patient Roaster" ||
-                            reportActiveTab === "Practice Roaster" ||
-                            reportActiveTab === "Provider Roaster" ? (
-                              <div
-                                id="table-btn"
-                                name="table-btn"
-                                className="d-flex justify-content-center align-items-center  mt-4"
-                              >
-                                <Button
-                                  data-testid="table-custom"
-                                  name="table-custom"
-                                  onClick={showDrawer}
-                                  className="btn btn-sm w-full text-ellipsis tableButton"
-                                >
-                                  Table Customization
-                                </Button>
-                              </div>
-                            ) : (
-                              ""
-                            )}
                           </div>
                         </div>
 

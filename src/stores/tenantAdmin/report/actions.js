@@ -51,3 +51,9 @@ export const getSelectedReportDetails = createActionThunk(
   "SELECT_REPORT_DETAILS",
   network.selectedReportDetails
 );
+export const reportGenerate = createActionThunk(
+  "REPORT_GENERATE",
+  network.generateReport
+);
+
+
