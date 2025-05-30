@@ -338,9 +338,9 @@ const AddForm = ({
               <label className={style.dateField}>Provider Sign Status</label>
             }
             name="isProviderSigned"
-            rules={[
-              { required: true, message: "Please Switch Provider Sign Status" },
-            ]}
+            // rules={[
+            //   { required: true, message: "Please Switch Provider Sign Status" },
+            // ]}
           >
             <Switch data-testid="providerList-isProviderSigned" />
           </Form.Item>
