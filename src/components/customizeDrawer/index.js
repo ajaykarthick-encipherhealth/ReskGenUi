@@ -15,9 +15,8 @@ const CustomizableDrawer = ({
   isResetting,
   isSubmitting,
 }) => {
-
   const handleSelectAll = () => {
-    setSelectedColumns(prev => {
+    setSelectedColumns((prev) => {
       const updated = prev.map((col, idx) => ({
         ...col,
         active: true,
@@ -28,17 +27,17 @@ const CustomizableDrawer = ({
   };
 
   const handleClearAll = () => {
-    setSelectedColumns(prev =>
-      prev.map(col => ({ ...col, active: false, order: null }))
+    setSelectedColumns((prev) =>
+      prev.map((col) => ({ ...col, active: false, order: null }))
     );
   };
 
-  const toggleColumn = field => {
-    setSelectedColumns(prev => {
-      const clickedCol = prev.find(col => col.actualField === field);
+  const toggleColumn = (field) => {
+    setSelectedColumns((prev) => {
+      const clickedCol = prev.find((col) => col.actualField === field);
 
       // Step 1: Toggle active state of clicked column
-      const updated = prev.map(col => {
+      const updated = prev.map((col) => {
         if (col.actualField === field) {
           // Toggle off
           if (col.active) {
@@ -52,16 +51,20 @@ const CustomizableDrawer = ({
 
       // Step 2: Reassign order to active columns in new sequence
       const activeCols = updated
-        .filter(col => col.active && col.actualField !== field)
+        .filter((col) => col.active && col.actualField !== field)
         .sort((a, b) => a.order - b.order);
 
       // Put newly clicked (now active) column at the end
-      const clickedActive = updated.find(col => col.actualField === field && col.active);
+      const clickedActive = updated.find(
+        (col) => col.actualField === field && col.active
+      );
       if (clickedActive) activeCols.push(clickedActive);
 
-      return updated.map(col => {
+      return updated.map((col) => {
         if (!col.active) return { ...col, order: null };
-        const idx = activeCols.findIndex(c => c.actualField === col.actualField);
+        const idx = activeCols.findIndex(
+          (c) => c.actualField === col.actualField
+        );
         return { ...col, order: idx + 1 };
       });
     });
@@ -72,7 +75,7 @@ const CustomizableDrawer = ({
       ...col,
       implicitOrder: col.order != null ? col.order : idx + 1,
     }))
-    .filter(col => col.active)
+    .filter((col) => col.active)
     .sort((a, b) => a.implicitOrder - b.implicitOrder);
 
   const displayIndexMap = activeWithImplicitOrder?.reduce((map, col, idx) => {
@@ -81,12 +84,12 @@ const CustomizableDrawer = ({
   }, {});
 
   const onInsert = () => {
-    const payload = activeWithImplicitOrder.map(col => ({
+    const payload = activeWithImplicitOrder.map((col) => ({
       id: col.actualField,
       headerName: col.headerName,
       order: displayIndexMap[col.actualField],
     }));
-    handleSubmit(payload);    
+    handleSubmit(payload);
   };
   return (
     <Drawer
@@ -120,13 +123,16 @@ const CustomizableDrawer = ({
       }
     >
       <div className="mt-3 mx-3 d-flex flex-column gap-3">
-      {activeWithImplicitOrder?.length < 3?
-       <div className="text-danger"> * Minimum three fields required</div>:"" }
+        {activeWithImplicitOrder?.length < 3 ? (
+          <div className="text-danger"> * Minimum three fields required</div>
+        ) : (
+          ""
+        )}
         {selectedColumns?.length > 0 ? (
           selectedColumns?.map((col) => {
             const isActive = col.active;
             const displayNumber = displayIndexMap[col.actualField];
-            return (
+            return col.headerName === "Re try" ? null : (
               <div
                 key={col.actualField}
                 className="d-flex align-items-center gap-3"
@@ -171,9 +177,8 @@ const CustomizableDrawer = ({
   );
 };
 
-const enhancer = connect(
-  state => ({}),
-  { tableDynamicColumn: allActions.tableDynamicColumn }
-);
+const enhancer = connect((state) => ({}), {
+  tableDynamicColumn: allActions.tableDynamicColumn,
+});
 
 export default enhancer(CustomizableDrawer);
