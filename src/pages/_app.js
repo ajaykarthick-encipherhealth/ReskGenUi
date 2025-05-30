@@ -22,8 +22,13 @@ import Swal from "sweetalert2";
 import InternetError from "../utils/internetError";
 import { MsalProvider } from "@azure/msal-react";
 import { msalInstance } from "../../lib/msalInstance";
-import { clearInactivityTimer, resetInactivityTimer, startInactivityTimer } from "../utils/inactiveTracker";
+import {
+  clearInactivityTimer,
+  resetInactivityTimer,
+  startInactivityTimer,
+} from "../utils/inactiveTracker";
 import { ssoLogout } from "../../lib/authService";
+import Script from "next/script";
 
 config.autoAddCss = false;
 
@@ -254,8 +259,7 @@ function MyApp({ Component, pageProps }) {
   //     });
   // }, [router]);
 
-
-  // comment this refresh token --- Dev  login 
+  // comment this refresh token --- Dev  login
 
   // useEffect(() => {
   //   let intervalId;
@@ -440,6 +444,17 @@ function MyApp({ Component, pageProps }) {
     <MsalProvider instance={msalInstance}>
       <PrimeReactProvider>
         <Provider store={store}>
+          <Script
+            src="https://www.googletagmanager.com/gtag/js?id=G-3LEJBB5YX0"
+            strategy="afterInteractive"
+          />
+          <Script id="google-analytics" strategy="afterInteractive">
+            {`window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-3LEJBB5YX0');`}
+          </Script>
+
           {showTerminal && <AICHAT openMsg={true} />}
           <span>
             <Component {...pageProps} />
