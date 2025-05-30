@@ -60,6 +60,8 @@ const ReusableFilters = ({
   showGenerateReport,
   selectedRows,
   setIsModalOpen,
+  //btn
+  btnName
 }) => {
   const pickerRefs = useRef({});
   const router = useRouter();
@@ -389,7 +391,8 @@ const ReusableFilters = ({
                 className="btn btn-sm w-full text-ellipsis"
                 disabled={selectedRows?.length == 0 ? true : false}
               >
-                Generate Report
+                {btnName}
+                {/* Generate Report */}
               </Button>
             </div>
           </>

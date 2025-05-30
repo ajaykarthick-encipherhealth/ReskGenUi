@@ -126,6 +126,8 @@ const AppTable = ({
   disabled,
   handleReportDownload,
   isTrigger,
+  showCancelIcon = false,
+  progressCancel,
 }) => {
   if (isCheckBox) {
     column.push({
@@ -278,6 +280,8 @@ const AppTable = ({
                       selectedRole={selectedRole}
                       onCloseIconClick={onCloseIconClick}
                       handleReportDownload={handleReportDownload}
+                      showCancelIcon={showCancelIcon}
+                      progressCancel={progressCancel}
                     />
                   ))
                 ) : (
@@ -360,7 +364,7 @@ const TableHeadItem = ({
     return <th className=""></th>;
   }
   if (item.reportDownload) {
-    return <th>Download</th>;
+    return <th className="text-center">Download</th>;
   }
 
   if (checkWithIncludesKey(item?.design, "SORTABLE")) {
@@ -515,6 +519,9 @@ const TableRow = ({
   selectedRole,
   onCloseIconClick,
   handleReportDownload,
+  showCancelIcon,
+  progressCancel,
+  
 }) => {
   const router = useRouter();
 
@@ -1143,12 +1150,16 @@ const TableRow = ({
                   : Style.childBorder
               } `}
             >
-              <div className="d-flex  justify-content-start">
+              <div className="d-flex  justify-content-start gap-3">
                 <Progress
                   percent={item[`${columnItem.actualField}`]}
                   format={(percent) => `${percent}%`} 
                   className={` ${Style.progreddBr}`}
                 />
+               {showCancelIcon && <div>
+                <CloseCircleOutlined  style={{fontSize:"20px"}}  className = "text-danger" onClick={progressCancel}/>
+               </div>
+                }
               </div>
             </td>
           );
@@ -1418,7 +1429,7 @@ const TableRow = ({
                           colIndex
                       )
                 }
-                className="d-flex align-items-center"
+                className="d-flex align-items-center justify-content-center"
               >
                 <DownloadOutlined  onClick = {handleReportDownload}style={{ fontSize: "16px" }} />
               </div>

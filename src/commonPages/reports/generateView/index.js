@@ -75,7 +75,7 @@ const GenerateView = ({
 
 
   const getGenerateReport = async () => {
-    let pageId = "2d7cb7f7-6dad-41fb-970b-d805fb3f195f";
+    let pageId = "51ccafdf-f18e-4100-8811-63236a79a441";
     const response = await getTableData({
       pageId,
       pageNo,
@@ -94,7 +94,7 @@ const GenerateView = ({
 
   const handleSubmitInsert = async (data) => {
     setIsSubmitting(true);
-    let pageId = "2d7cb7f7-6dad-41fb-970b-d805fb3f195f";
+    let pageId = "51ccafdf-f18e-4100-8811-63236a79a441";
     const payload = {
       pageId,
       headerNames: data.map((col) => col.id),
@@ -115,7 +115,7 @@ const GenerateView = ({
   };
   const handleReset = async () => {
     setIsResetting(true);
-    let pageId = "2d7cb7f7-6dad-41fb-970b-d805fb3f195f";
+    let pageId = "51ccafdf-f18e-4100-8811-63236a79a441";
     const payload = {
       pageId,
     };
@@ -228,6 +228,7 @@ const GenerateView = ({
                 showGenerateReport={true}
                 selectedRows={selectedRows}
                 setIsModalOpen={setIsModalOpen}
+                btnName={"Generate Report"}
               />
             </div>
           </section>

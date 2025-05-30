@@ -11,7 +11,7 @@ import {
 import ReusableFilters from "../../../components/reusableFilters";
 import AppTable from "../../../components/tables";
 import { actions as tableAction } from "../../../stores/tableView";
-import GenateReportModal from "../generateReportDownload";
+import ExportReportModal from "../exportReport";
 
 const GeneratedReports = ({
   tableLoader,
@@ -48,6 +48,7 @@ const GeneratedReports = ({
   const [isResetting, setIsResetting] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isFilter, setIsFilter] = useState(true);
+  const [selectedRows, setSelectedRows] = useState([]);
 
   const onPageChange = (e) => {
     setPaginationFirst(e.first);
@@ -64,7 +65,7 @@ const GeneratedReports = ({
     setTest(data?.response?.metaDataDTO);
     setOpen(true);
   };
- 
+
   const getPatients = async () => {
     const tin = getStorage("tinNumber");
     const userId = getStorage("userId");
@@ -83,8 +84,6 @@ const GeneratedReports = ({
       sort,
     });
   };
-
-
 
   const handleSubmitInsert = async (data) => {
     setIsSubmitting(true);
@@ -127,9 +126,10 @@ const GeneratedReports = ({
     }
   };
   const handleReportDownload = () => {
-    let fileName = "https://mcibeforeocrdev.blob.core.windows.net/test/Patient%20Roaster.xlsx?sp=r&st=2025-05-12T05:29:09Z&se=2026-05-12T13:29:09Z&spr=https&sv=2024-11-04&sr=b&sig=ianNxwle85tYi3TGVPz5RLD26zBJkRYGU%2FgfrrHFAZM%3D";
+    let fileName =
+      "https://mcibeforeocrdev.blob.core.windows.net/test/Patient%20Roaster.xlsx?sp=r&st=2025-05-12T05:29:09Z&se=2026-05-12T13:29:09Z&spr=https&sv=2024-11-04&sr=b&sig=ianNxwle85tYi3TGVPz5RLD26zBJkRYGU%2FgfrrHFAZM%3D";
     const link = document.createElement("a");
-    link.href = `${fileName}`; 
+    link.href = `${fileName}`;
     link.download = fileName;
     document.body.appendChild(link);
     link.click();
@@ -188,8 +188,16 @@ const GeneratedReports = ({
   //     getResponsePopup({ status: "FAILED", message: "An error occurred!" });
   //   }
   // };
-
-
+  const handleRowCheckboxChange = async ({ e, row }) => {
+    if (e.target?.checked) {
+      setSelectedRows([row.id]);
+    } else {
+      setSelectedRows([]);
+    }
+  };
+  const progressCancel = () => {
+    console.log("progress");
+  };
   useEffect(() => {
     setTest(data?.response?.metaDataDTO);
   }, []);
@@ -282,7 +290,9 @@ const GeneratedReports = ({
                 isSubmitting={isSubmitting}
                 isResetting={isResetting}
                 setIsModalOpen={setIsModalOpen}
-                showGenerateReport={false}
+                showGenerateReport={true}
+                //btn
+                btnName={"Export"}
               />
             </div>
           </section>
@@ -301,13 +311,23 @@ const GeneratedReports = ({
                 totalRecords={data?.response?.pageResponse?.totalElements}
                 row={15}
                 onPageChange={onPageChange}
-                isGenerateReportDownload={true}
-                handleReportDownload={handleReportDownload}
+                // isGenerateReportDownload={true}
+                // handleReportDownload={handleReportDownload}
+                handleRowCheckboxChange={handleRowCheckboxChange}
+                selectedRows={selectedRows}
+                showCancelIcon={true}
+                progressCancel={progressCancel}
+                isCheckBox={findItemWithTrueKey(
+                  data?.response?.staticDesign,
+                  "checkBox"
+                )}
+                idKey={"id"}
+                disabled={true}
               />
               <div></div>
             </div>
           </div>
-          <GenateReportModal open={isModalOpen} handleCancel={handleCancel} />
+          <ExportReportModal open={isModalOpen} handleCancel={handleCancel}/>
         </div>
       </div>
     </div>
