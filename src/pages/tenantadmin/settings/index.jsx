@@ -242,7 +242,7 @@ const Settings = () => {
     <div>
       <HeaderFile />
       <div className="row patient-file-container">
-        <div className={Style.container_fluid_patient}>
+        <div className="container-fluid">
           <div>
             <div className="d-flex py-4">
               <div style={{ height: "90vh" }}>
@@ -277,19 +277,19 @@ const Settings = () => {
                   </Sider>
                 </Layout>
               </div>
-              <div style={{ height: "1000px" }}>
+              <div >
                 <hr
                   style={{
                     border: "0.5px solid #8C9097",
                     width: "100%",
-                    margin: "10px 0",
+                    // margin: "10px 0",
                     boxSizing: "border-box",
                     height: "1000px",
                   }}
                 />
               </div>
 
-              <div style={{ height: "100vh", width: "100%" }}>
+              <div style={{ height: "100vh", width: "100%", paddingTop:'35px' }}>
                 {activePage == "Chat_Audit_Config" && <ChatAuditConfig />}
                 {activePage == "Flag_Config" && <FlagConfig />}
                 {activePage == "File_Processing_Config" && (
