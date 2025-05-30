@@ -76,7 +76,7 @@ const DosPieChart = ({ getFlagCounts }) => {
         backgroundColor: "#e6f0ff",
         borderRadius: "6px",
         boxShadow: "0px 2px 6px 0px #0000002",
-        width: "300px",
+        width: "250px",
         height: "100px",
       }}
     >

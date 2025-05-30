@@ -46,7 +46,7 @@ const Details = ({ fileResult, fromHcc }) => {
         >
           <div className="col-3" id="patient-id" name="patient-id">
             <FontAwesomeIcon icon={faIdCardClip} style={{ color: "#241571" }} />
-            <label className="px-2" style={{ fontWeight: 600 }}>
+            <label className="px-1" style={{ fontWeight: 600 }}>
               Patient ID
             </label>
             <h6
@@ -94,8 +94,8 @@ const Details = ({ fileResult, fromHcc }) => {
             {/* <FontAwesomeIcon icon={faUserCircle} style={{ color: "#241571" }} /> */}
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              width="20"
-              height="20"
+              width="15"
+              height="15"
               viewBox="0 0 30 30"
               fill="none"
             >
@@ -143,7 +143,7 @@ const Details = ({ fileResult, fromHcc }) => {
           </div>
           <div className="col-3" id="file-name" name="file-name">
             <FontAwesomeIcon icon={faFile} style={{ color: "#241571" }} />
-            <label className="px-2" style={{ fontWeight: 600 }}>
+            <label className="px-1" style={{ fontWeight: 600 }}>
               File Name
             </label>
             <h6
