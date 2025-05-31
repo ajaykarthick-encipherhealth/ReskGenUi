@@ -136,7 +136,7 @@ const DosSelect = ({
       open={open}
       onDropdownVisibleChange={(visible) => setOpen(visible)}
       dropdownRender={() => (
-        <div style={{ padding: 0, maxHeight: "200px", overflowY: "scroll" }}>
+        <div style={{ padding: 0, maxHeight: "100px", overflowY: "scroll" }}>
           {/* Header row */}
           <div
             style={{
