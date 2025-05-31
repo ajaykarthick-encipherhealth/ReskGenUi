@@ -125,69 +125,6 @@ const GeneratedReports = ({
       getResponePopup(error?.response);
     }
   };
-  const handleReportDownload = () => {
-    let fileName =
-      "https://mcibeforeocrdev.blob.core.windows.net/test/Patient%20Roaster.xlsx?sp=r&st=2025-05-12T05:29:09Z&se=2026-05-12T13:29:09Z&spr=https&sv=2024-11-04&sr=b&sig=ianNxwle85tYi3TGVPz5RLD26zBJkRYGU%2FgfrrHFAZM%3D";
-    const link = document.createElement("a");
-    link.href = `${fileName}`;
-    link.download = fileName;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-  };
-
-  // const downloadExcels = async () => {
-  //   setDownloadLoader(true);
-  //   try {
-  //     const type =
-  //       activeButton === "Queried" && typeBtn === "TypeReport"
-  //         ? "QUERY_TYPE_REPORT"
-  //         : activeButton === "Needback" && typeBtn === "TypeReport"
-  //         ? "NEEDBACK_TYPE_REPORT"
-  //         : activeButton === "Queried"
-  //         ? "QUERY"
-  //         : activeButton.toUpperCase().replaceAll(" ", "_");
-  //     setDownloadLoader(true);
-  //     const result = await fetch(`${portalUrl}conradai/report/download`, {
-  //       method: "POST",
-  //       headers: {
-  //         Authorization: `Bearer ${getStorage("token")}`,
-  //         "Content-Type": "application/json",
-  //       },
-  //       body: JSON.stringify({
-  //         reportType: type,
-  //         reportName: "#VIEW#",
-  //         startDate: generate.select?.startDate
-  //           ? generate.select?.startDate
-  //           : "",
-  //         endDate: generate.select?.endDate ? generate.select?.endDate : "",
-  //         patientIds: [],
-  //       }),
-  //     });
-
-  //     if (result.status === 200) {
-  //       const blob = await result.blob();
-  //       const url = window.URL.createObjectURL(blob);
-  //       const a = document.createElement("a");
-  //       a.href = url;
-  //       a.download = `${type}_${moment(new Date()).format(
-  //         "MM-DD-YYYY-hh:mm"
-  //       )}_report.xlsx`;
-  //       document.body.appendChild(a);
-  //       a.click();
-  //       document.body.removeChild(a);
-  //       window.URL.revokeObjectURL(url);
-  //       setDownloadLoader(false);
-  //     } else {
-  //       getResponsePopup({ status: "FAILED", message: "File Not Fetched!" });
-  //       setDownloadLoader(false);
-  //     }
-  //   } catch (error) {
-  //     console.error("Error downloading Excel file:", error);
-  //     setDownloadLoader(false);
-  //     getResponsePopup({ status: "FAILED", message: "An error occurred!" });
-  //   }
-  // };
   const handleRowCheckboxChange = async ({ e, row }) => {
     if (e.target?.checked) {
       setSelectedRows([row.id]);
@@ -293,9 +230,14 @@ const GeneratedReports = ({
                 showGenerateReport={true}
                 //btn
                 btnName={"Export"}
+                selectedRows={selectedRows}
               />
             </div>
           </section>
+          <div className=" font2 d-flex align-items-end justify-content-end gap-2">
+            <span className="text-danger "> *</span> You can choose only one TIN
+            at a time to generate the report
+          </div>
           <div id="task-tbl_wrapper" className="dataTables_wrapper no-footer">
             <div className="mt-4">
               <AppTable
@@ -324,10 +266,14 @@ const GeneratedReports = ({
                 idKey={"id"}
                 disabled={true}
               />
-              <div></div>
             </div>
           </div>
-          <ExportReportModal open={isModalOpen} handleCancel={handleCancel}/>
+          <ExportReportModal
+            open={isModalOpen}
+            setSelectedRows={setSelectedRows}
+            selectedRows={selectedRows}
+            handleCancel={handleCancel}
+          />
         </div>
       </div>
     </div>
