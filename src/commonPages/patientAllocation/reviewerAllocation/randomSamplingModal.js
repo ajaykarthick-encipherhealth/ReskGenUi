@@ -102,6 +102,7 @@ const RandomSamplingModal = ({
       userIdList: activeEmail,
       dueDate: formatDateForIndex({ date: values.duedate, index: 1 }),
       allocatedBy: userId,
+      randomSamplingPercentage: Number(values?.totalPercentage),
       hccFoundFilesPercentage: Number(values?.hccpercentage),
       noHccFoundFilesPercentage: Number(values?.nohccpercentage),
       tin: tinNumber,
@@ -438,8 +439,24 @@ const RandomSamplingModal = ({
               <Input className="w-75" placeholder=" Tin" />
             </Form.Item> */}
           </div>
-
           <Form.Item
+            rules={[
+              {
+                required: true,
+                message: "Enter Total Percentage !",
+              },
+              {
+                pattern: /^(100|[1-9][0-9]?|0)$/,
+                message:
+                  "Percentage must be a number between 0 and 100 with no decimals or letters",
+              },
+            ]}
+            label="Enter Total Percentage "
+            name="totalPercentage"
+          >
+            <Input className="w-75" placeholder="Percentage" />
+          </Form.Item>
+          {/* <Form.Item
             rules={[
               {
                 required: true,
@@ -472,7 +489,71 @@ const RandomSamplingModal = ({
             name="nohccpercentage"
           >
             <Input className="w-75" placeholder=" Percentage" />
+          </Form.Item> */}
+          <Form.Item
+            label="Enter Percentage of File Related to HCC Condition"
+            name="hccpercentage"
+            rules={[
+              {
+                required: true,
+                message: "Enter Percentage!",
+              },
+              {
+                pattern: /^(100|[1-9][0-9]?|0)$/,
+                message: "Percentage must be a whole number between 0 and 100",
+              },
+              ({ getFieldValue }) => ({
+                validator(_, value) {
+                  const other = getFieldValue("nohccpercentage");
+                  if (
+                    value !== undefined &&
+                    other !== undefined &&
+                    parseInt(value) + parseInt(other) !== 100
+                  ) {
+                    return Promise.reject(
+                      new Error("The total must be exactly 100")
+                    );
+                  }
+                  return Promise.resolve();
+                },
+              }),
+            ]}
+          >
+            <Input className="w-75" placeholder="Percentage" />
           </Form.Item>
+
+          <Form.Item
+            label="Enter Percentage of File Related to No HCC Condition"
+            name="nohccpercentage"
+            rules={[
+              {
+                required: true,
+                message: "Enter Percentage!",
+              },
+              {
+                pattern: /^(100|[1-9][0-9]?|0)$/,
+                message: "Percentage must be a whole number between 0 and 100",
+              },
+              ({ getFieldValue }) => ({
+                validator(_, value) {
+                  const other = getFieldValue("hccpercentage");
+                  if (
+                    value !== undefined &&
+                    other !== undefined &&
+                    parseInt(value) + parseInt(other) !== 100
+                  ) {
+                    return Promise.reject(
+                      new Error("The total must be exactly 100")
+                    );
+                  }
+                  return Promise.resolve();
+                },
+              }),
+            ]}
+          >
+            <Input className="w-75" placeholder="Percentage" />
+          </Form.Item>
+
           <div className="samplingSelect">
             <Form.Item
               rules={[
@@ -504,7 +585,7 @@ const RandomSamplingModal = ({
             >
               <DatePicker
                 format="MM-DD-YYYY"
-                 className="w-75"
+                className="w-75"
                 placeholder="Due Date"
                 disabledDate={(current) => disablePastDate(current)}
               />
