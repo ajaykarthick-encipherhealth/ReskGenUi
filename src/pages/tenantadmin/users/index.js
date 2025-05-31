@@ -64,6 +64,7 @@ const Users = ({
   const [usersModal, setUsersModal] = useState(false);
   const [selectedItem, setSelectedItem] = useState(null);
   const [selectedRole, setSelectedRole] = useState([]);
+  const [selectedRoleList, setSelectedRoleList] = useState([]);
   const [visiblePopoverKey, setVisiblePopoverKey] = useState(null);
   const [editingUser, setEditingUser] = useState([]);
   const [isFilter, setIsFilter] = useState(true);
@@ -178,8 +179,7 @@ const Users = ({
       setVisiblePopoverKey(false);
       getRoles();
       getResponePopup(response);
-    }
-    else{
+    } else {
       getResponePopup(response);
     }
   };
@@ -227,6 +227,7 @@ const Users = ({
 
   const handleAction = (item) => {
     setSelectedItem(item?.userName);
+    setSelectedRole(selectedRoleList);
   };
 
   useEffect(() => {
@@ -275,6 +276,7 @@ const Users = ({
   useEffect(() => {
     if (editingUser) {
       setSelectedRole(editingUser.roleNames);
+      setSelectedRoleList(editingUser.roleNames);
     }
   }, [editingUser]);
 
@@ -350,6 +352,7 @@ const Users = ({
               setRole={setRole}
               selectedRole={selectedRole}
               onCloseIconClick={onCloseIconClick}
+              setSelectedRoleList={setSelectedRoleList}
             />
           </div>
           <div>
