@@ -117,13 +117,13 @@ const CustomizableDrawer = ({
             name="Insert"
             onClick={onInsert}
             loading={isSubmitting}
-            disabled={isSubmitting || activeWithImplicitOrder?.length < 3}
+            disabled={isSubmitting || activeWithImplicitOrder?.length < 2}
           />
         </div>
       }
     >
       <div className="mt-3 mx-3 d-flex flex-column gap-3">
-        {activeWithImplicitOrder?.length < 3 ? (
+        {activeWithImplicitOrder?.length < 2 ? (
           <div className="text-danger"> * Minimum three fields required</div>
         ) : (
           ""
