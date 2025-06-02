@@ -1,5 +1,5 @@
-import React from "react";
-import { Drawer, Empty } from "antd";
+import React, { useState } from "react";
+import { Drawer, Empty, Input } from "antd";
 import RegularButton from "../button";
 import { connect } from "react-redux";
 import { actions as allActions } from "../../stores/tableView";
@@ -15,6 +15,9 @@ const CustomizableDrawer = ({
   isResetting,
   isSubmitting,
 }) => {
+  const { Search } = Input;
+  const [searchText, setSearchText] = useState("");
+
   const handleSelectAll = () => {
     setSelectedColumns((prev) => {
       const updated = prev.map((col, idx) => ({
@@ -91,6 +94,12 @@ const CustomizableDrawer = ({
     }));
     handleSubmit(payload);
   };
+  const filteredColumns = selectedColumns?.filter((col) =>
+    col.headerName.toLowerCase().includes(searchText)
+  );
+
+  const handleSearch = (value) => setSearchText(value.toLowerCase());
+
   return (
     <Drawer
       width={500}
@@ -128,8 +137,18 @@ const CustomizableDrawer = ({
         ) : (
           ""
         )}
-        {selectedColumns?.length > 0 ? (
-          selectedColumns?.map((col) => {
+        <div className="searchInput">
+        <Search
+          placeholder="Search"
+          allowClear
+          onSearch={handleSearch}
+          className="searchInput"
+          onChange={(e) => handleSearch(e.target.value)}
+        />
+        </div>
+       
+        {filteredColumns?.length > 0 ? (
+          filteredColumns?.map((col) => {
             const isActive = col.active;
             const displayNumber = displayIndexMap[col.actualField];
             return col.headerName === "Re try" ? null : (

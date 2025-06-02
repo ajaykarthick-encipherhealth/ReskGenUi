@@ -16641,9 +16641,14 @@ input::-webkit-inner-spin-button {
   background-color: #f0f6fe;
   padding: 15px;
 }
+.searchInput .ant-input-search .ant-input-search-button {
+  height: 45px !important;
+}
+.searchInput .ant-input-search .ant-input-affix-wrapper {
+  height: 45px !important;
+}
 .ant-radio-wrapper .ant-radio-checked .ant-radio-inner{
   border: 1px solid #04306f !important;
   background-color: #04306f !important;
-
 }
 
