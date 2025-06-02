@@ -1,64 +1,54 @@
 import { Radio, Modal } from "antd";
-import React, {  useState } from "react";
+import React, { useState } from "react";
 import { connect } from "react-redux";
 import RegularButton from "../../../components/button";
 import styles from "../style.module.css";
 import { getStorage } from "../../../utils/storages";
 import { getResponePopup } from "../../../utils/reusable";
+import { actions as reportActions } from "../../../stores/tenantAdmin/report";
 
 const ExportReportModal = ({
   open,
   handleOk,
   handleCancel,
-  generateReport,
   selectedRows,
   setIsModalOpen,
   setSelectedRows,
+  downloadReport,
 }) => {
-  const clientId = getStorage("client");
   const [loading, setLoading] = useState(false);
-  const [value, setValue] = useState("1");
-
+  const [value, setValue] = useState("TOOL_GENERATED");
   const options = [
-    { label: "Tool Generated Excel", value: "1" },
-    { label: "ACO Report", value: "2" },
+    { label: "Tool Generated Excel", value: "TOOL_GENERATED" },
+    { label: "ACO Report", value: "ACO" },
   ];
   const onChange = (e) => {
     setValue(e.target.value);
   };
 
-  const downloadReport = async () => {
+  const reportDownload = async () => {
     setLoading(true);
-    const userId = getStorage("userId");
-    // let fileName =
-  //   "https://mcibeforeocrdev.blob.core.windows.net/test/Patient%20Roaster.xlsx?sp=r&st=2025-05-12T05:29:09Z&se=2026-05-12T13:29:09Z&spr=https&sv=2024-11-04&sr=b&sig=ianNxwle85tYi3TGVPz5RLD26zBJkRYGU%2FgfrrHFAZM%3D";
-  // const link = document.createElement("a");
-  // link.href = `${fileName}`;
-  // link.download = fileName;
-  // document.body.appendChild(link);
-  // link.click();
-  // document.body.removeChild(link);
 
-    // const response = await generateReport({
-    //   data: {
-    //     tenantId: clientId,
-    //     fileType: "EXCEL",
-    //     // reportName: inputValue,
-    //     tinId: selectedRows.toString(),
-    //     userAndAccess: {
-    //       [userId]: "DOWNLOAD",
-    //     },
-    //   },
-    // });
+    const response = await downloadReport({
+      reportInfoId: selectedRows.toString(),
+      reportType: value,
+    });
 
-    // if (response?.status === "SUCCESS") {
-    //   getResponePopup(response);
-    //   setValue("1")
-    //   setIsModalOpen(false);
-    //   setSelectedRows([]);
-    // } else {
-    //   setIsModalOpen(true);
-    // }
+    if (response?.status === "SUCCESS" && response?.response) {
+      getResponePopup(response);
+      setValue("TOOL_GENERATED");
+      setIsModalOpen(false);
+      setSelectedRows([]);
+      const link = document.createElement("a");
+      link.href = response.response;
+      link.setAttribute("download", "report.xlsx");
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    } else {
+      setIsModalOpen(true);
+    }
+
     setLoading(false);
   };
 
@@ -78,26 +68,32 @@ const ExportReportModal = ({
           </span>
         </div>
       </div>
-        <div className="mt-5">
-          <Radio.Group  className="d-flex align-items-center gap-3 justify-content-center" onChange={onChange} value={value} options={options} />
-        </div>
-        <div
-          className={`${styles.btnContainer} mt-3 d-flex justify-content-center align-items-center`}
-        >
-          <RegularButton
-            name="Download"
-            onClick={downloadReport}
-            bg="#263E50"
-            color="#fff"
-            disabled={!value }
-            loading={loading}
-          />
-        </div>
+      <div className="mt-5">
+        <Radio.Group
+          className="d-flex align-items-center gap-3 justify-content-center"
+          onChange={onChange}
+          value={value}
+          options={options}
+        />
+      </div>
+      <div
+        className={`${styles.btnContainer} mt-3 d-flex justify-content-center align-items-center`}
+      >
+        <RegularButton
+          name="Download"
+          onClick={reportDownload}
+          bg="#263E50"
+          color="#fff"
+          disabled={!value}
+          loading={loading}
+        />
+      </div>
     </Modal>
   );
 };
 
 const connector = connect((state) => ({}), {
+  downloadReport: reportActions.reportDownload,
 });
 
 export default connector(ExportReportModal);

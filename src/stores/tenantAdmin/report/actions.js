@@ -55,5 +55,11 @@ export const reportGenerate = createActionThunk(
   "REPORT_GENERATE",
   network.generateReport
 );
+export const reportDownload = createActionThunk(
+  "DOWNLOAD_REPORT",
+  network.downloadReport
+);
+
+
 
 

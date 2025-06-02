@@ -190,3 +190,14 @@ export const generateReport = async({data}) => {
   );
   return res;
 };
+export const downloadReport = async({reportType , reportInfoId}) => {
+  const options = {
+    method: "GET",
+  };
+
+  const res = await requestPortal(
+    `management/mci/report/get-blob-url?reportType=${reportType}&reportInfoId=${reportInfoId}`,
+    options
+  );
+  return res;
+};

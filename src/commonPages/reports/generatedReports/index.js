@@ -273,6 +273,7 @@ const GeneratedReports = ({
             setSelectedRows={setSelectedRows}
             selectedRows={selectedRows}
             handleCancel={handleCancel}
+            setIsModalOpen={setIsModalOpen}
           />
         </div>
       </div>
