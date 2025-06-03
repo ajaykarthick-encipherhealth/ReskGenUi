@@ -106,6 +106,7 @@ const RandomSamplingModal = ({
       hccFoundFilesPercentage: Number(values?.hccpercentage),
       noHccFoundFilesPercentage: Number(values?.nohccpercentage),
       tin: tinNumber,
+      priority: values?.priority,
     });
     if (response?.status == "SUCCESS") {
       setIsAllocate(false);
