@@ -25,7 +25,7 @@ import {
 } from "../../../../../stores/patient/details/network";
 import SvgFlag from "../svg/svg";
 import { getResponePopup } from "../../../../../utils/reusable";
-import RegularButton from "../../../../button";
+
 
 const Flag = ({
   setOpen,
@@ -35,8 +35,9 @@ const Flag = ({
   getFlagDetailsData,
   flagsDetailsResult,
   isdeleteFlag,
-  search,
+  getPatientDosList,
   setSearch,
+  selectedDosValue
 }) => {
   const [inputValue, setInputValue] = useState({
     flagId: "",
@@ -61,6 +62,7 @@ const Flag = ({
   }));
 
   const handleDelete = async (flagId) => {
+    const patientId = getStorage("patientId")
     const payload = {
       flagId: flagId || "",
       patientId: patientDetailsResult?.data?.response?.patientId,
@@ -70,12 +72,16 @@ const Flag = ({
     };
     try {
       const response = await isdeleteFlag(payload);
-      getResponePopup(response);
-      getFlagDetailsData(
+      if(response?.status === "SUCCESS"){
+        getPatientDosList(patientId,selectedDosValue)
+        getResponePopup(response);
+       getFlagDetailsData(
         patientDetailsResult?.data?.response?.patientId,
         patientDetailsResult?.data?.response?.processedYear,
         patientDetailsResult?.data?.response?.dateOfService
       );
+      }
+      
     } catch (error) {
       getResponePopup(error?.response);
       console.error(error);
@@ -105,7 +111,7 @@ const Flag = ({
     }
     if (form.checkValidity() === true) {
       setCommentsTrigger(true);
-      const orgId = getStorage("orgId");
+      const patientId = getStorage("patientId")
       var dataFormatSuggested = {
         patientId: patientDetailsResult?.data?.response?.patientId,
         comment: inputValue.comments.trim(),
@@ -115,20 +121,25 @@ const Flag = ({
       };
       try {
         const response = await flagDetailsPost(dataFormatSuggested);
+        if(response?.status === "SUCCESS"){
+          getResponePopup(response)
+          getPatientDosList(patientId,selectedDosValue)
+          // setOpen(false)
+          getFlagDetailsData(
+            patientDetailsResult?.data?.response?.patientId,
+            patientDetailsResult?.data?.response?.processedYear,
+            patientDetailsResult?.data?.response?.dateOfService
+          );
+  
+          setInputValue({
+            flagId: "",
+            comments: "",
+          });
+          setCommentsTrigger(false);
+          setIsModalComments(false);
 
-        getResponePopup(response);
-        getFlagDetailsData(
-          patientDetailsResult?.data?.response?.patientId,
-          patientDetailsResult?.data?.response?.processedYear,
-          patientDetailsResult?.data?.response?.dateOfService
-        );
-
-        setInputValue({
-          flagId: "",
-          comments: "",
-        });
-        setCommentsTrigger(false);
-        setIsModalComments(false);
+        }
+      
       } catch (error) {
         getResponePopup(error);
         setCommentsTrigger(false);
@@ -205,7 +216,6 @@ const Flag = ({
     const patientId = getStorage("patientId");
     setLocalPatientId(patientId);
   }, []);
-
   return (
     <Offcanvas
       id="flag-drawer"
@@ -397,9 +407,9 @@ const Flag = ({
                   </Tooltip>
                 </div>
               </div>
-              {/* <span className={visitStyles.commentsDesc}>
+              <span className={visitStyles.commentsDesc}>
                 {data?.patientFlagDTO?.comment}
-              </span> */}
+              </span>
               <div className={"mb-1"}>
                 {data?.patientFlagDTO?.reason}
                 {data?.patientFlagDTO?.hyperlinks &&
@@ -447,6 +457,7 @@ const enhancer = connect(
   {
     getFlagDetailsData: detailsActions.getFlagDetailsAction,
     isdeleteFlag: detailsActions.isDeleteFlag,
+    getPatientDosList: detailsActions.dosDeatilsAction,
   }
 );
 export default enhancer(Flag);

@@ -1185,6 +1185,7 @@ const Details = ({
           open={flagContainerActive == "Flag" && true}
           search={search}
           setSearch={setSearch}
+          selectedDosValue={selectedDosValue}
         />
       )}
     </>
