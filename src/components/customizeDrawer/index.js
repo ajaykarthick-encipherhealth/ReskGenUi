@@ -14,9 +14,14 @@ const CustomizableDrawer = ({
   handleReset,
   isResetting,
   isSubmitting,
+  setSearchText,
+  setSelectedDateRanges,
+  setSelectedDates,
+  setSelectedOption,
+  setSearch,
 }) => {
   const { Search } = Input;
-  const [searchText, setSearchText] = useState("");
+  const [tableSearch, setTableSearch] = useState("");
 
   const handleSelectAll = () => {
     setSelectedColumns((prev) => {
@@ -33,6 +38,10 @@ const CustomizableDrawer = ({
     setSelectedColumns((prev) =>
       prev.map((col) => ({ ...col, active: false, order: null }))
     );
+    setSearchText(null);
+    setSelectedDateRanges({});
+    setSelectedDates({});
+    setSelectedOption({})
   };
 
   const toggleColumn = (field) => {
@@ -95,10 +104,11 @@ const CustomizableDrawer = ({
     handleSubmit(payload);
   };
   const filteredColumns = selectedColumns?.filter((col) =>
-    col.headerName.toLowerCase().includes(searchText)
+    col.headerName.toLowerCase().includes(tableSearch)
   );
+  console.log(filteredColumns,"filteredColumns")
 
-  const handleSearch = (value) => setSearchText(value.toLowerCase());
+  const handleSearch = (value) => setTableSearch(value.toLowerCase());
 
   return (
     <Drawer

@@ -409,6 +409,11 @@ const ReusableFilters = ({
             handleReset={handleReset}
             isSubmitting={isSubmitting}
             isResetting={isResetting}
+            setSearchText={setSearchText}
+            setSelectedDateRanges={setSelectedDateRanges}
+            setSelectedDates={setSelectedDates}
+            setSelectedOption={setSelectedOption}
+            setSearch={setSearch}
           />
         </div>
       </div>
