@@ -620,18 +620,30 @@ const YearAndDosStatus = ({
                   onVisibleChange={(v) => setMenuIsOpen(v)}
                   visible={menuIsOpen}
                   className={`ant-badge queryBtnHcc ${visitStyles.queryBtnHcc}`}
+                  disabled={
+                   
+                    patienIdDetails?.workflow?.[0]?.status === "QUERIED"
+                  }
                 >
-                  <Button
+                  <button
                     type="primary"
                     className={`ant-badge ${visitStyles.queryBtnHcc} ${
                       isDosStatus && `${visitStyles.statusBtn}`
                     } queryBtnHcc`}
+                 
+                    style={{
+                      cursor:
+                       
+                        patienIdDetails?.workflow?.[0]?.status === "QUERIED"
+                          ? "not-allowed"
+                          : "pointer",
+                    }}
                   >
                     <span className="ant-badge">QUERIED</span>
                     <span style={{ marginLeft: "10px" }}>
                       <DownOutlined />
                     </span>
-                  </Button>
+                  </button>
                 </Dropdown>
               ) : patienIdDetails?.workflow?.[0]?.status == "PENDING" ||
                 patienIdDetails?.workflow?.[0]?.status == "COMPUTED" ||

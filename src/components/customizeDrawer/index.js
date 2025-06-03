@@ -106,7 +106,6 @@ const CustomizableDrawer = ({
   const filteredColumns = selectedColumns?.filter((col) =>
     col.headerName.toLowerCase().includes(tableSearch)
   );
-  console.log(filteredColumns,"filteredColumns")
 
   const handleSearch = (value) => setTableSearch(value.toLowerCase());
 

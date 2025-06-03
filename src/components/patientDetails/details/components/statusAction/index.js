@@ -19,6 +19,7 @@ const StatusAction = ({
   patientDetailsResult,
   patientIdDetailsData,
   getPatientIdData,
+  getPatientDosList
 }) => {
 const router = useRouter();
 const isOnReviewerPatients = router.pathname === "/reviewer/patients/details";
@@ -767,7 +768,6 @@ const shouldDisable = isOnReviewerPatients ;
                   visible={menuIsOpen}
                   className={`completedBtnHcc ant-badge ${visitStyles.completedBtnHcc}`}
                   disabled={
-
                     patienIdDetails?.workflow?.[0]?.status === "COMPLETED"
                   }
                 >
@@ -788,8 +788,7 @@ const shouldDisable = isOnReviewerPatients ;
                     </span>
                   </button>
                 </Dropdown>
-              ) 
-              : patienIdDetails?.workflow?.[0]?.status == "QUERIED" ? (
+              ) : patienIdDetails?.workflow?.[0]?.status == "QUERIED" ? (
                 <Dropdown
                   overlay={
                     activeTab == 3
@@ -802,7 +801,7 @@ const shouldDisable = isOnReviewerPatients ;
                   visible={menuIsOpen}
                   className={`queryBtnHcc ${visitStyles.queryBtnHcc}`}
                   disabled={
-                    shouldDisable &&
+                 
                     patienIdDetails?.workflow?.[0]?.status === "QUERIED"
                   }
                 >
@@ -810,8 +809,8 @@ const shouldDisable = isOnReviewerPatients ;
                     disabled={shouldDisable}
                     style={{
                       cursor:
-                        shouldDisable &&
-                        patienIdDetails?.workflow?.[0]?.status === "COMPLETED"
+                   
+                        patienIdDetails?.workflow?.[0]?.status === "QUERIED"
                           ? "not-allowed"
                           : "pointer",
                     }}
@@ -903,6 +902,7 @@ const shouldDisable = isOnReviewerPatients ;
         getStatus={getPatientIdData}
         localPatientId={localPatientId}
         isQueried={isQueried}
+        getPatientDosList={getPatientDosList}
       />
 
       {confirmCompleteModal ? (
@@ -949,6 +949,7 @@ const enhancer = connect(
   }),
   {
     getPatientIdData: detailsActions.patientIdDetailsAction,
+    getPatientDosList: detailsActions.dosDeatilsAction,
   }
 );
 export default enhancer(StatusAction);

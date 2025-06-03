@@ -17,13 +17,14 @@ const QueryModal = ({
   setIsOpen,
   getStatus,
   localPatientId,
-  isQueried
+  isQueried,
+  getPatientDosList,
 }) => {
   const [form] = Form.useForm();
-  const [loading,setLoading] = useState(false)
+  const [loading, setLoading] = useState(false);
 
   const onFinish = async (values) => {
-    setLoading(true)
+    setLoading(true);
     const patientId = getStorage("patientId");
     const aliasName = getStorage("aliasName");
     const data = {
@@ -37,12 +38,13 @@ const QueryModal = ({
       setLoading(false);
       setIsQueried(true);
       getStatus(localPatientId);
+      getPatientDosList(patientId);
       getResponePopup(response);
       setIsOpen(false);
       form.resetFields();
     } else {
       getResponePopup(response);
-      setLoading(false)
+      setLoading(false);
     }
   };
   const selectOptions = roles?.data?.response?.map((role) => ({
