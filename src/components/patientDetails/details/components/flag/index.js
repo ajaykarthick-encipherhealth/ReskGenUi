@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Button, Offcanvas } from "react-bootstrap";
 import Form from "react-bootstrap/Form";
 import visitStyles from "../../../../../styles/visitdata.module.css";
-import { Popover, Avatar, Tooltip, notification, Select } from "antd";
+import { Popover, Avatar, Tooltip, notification, Select, Popconfirm } from "antd";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faUserCircle,
@@ -26,7 +26,6 @@ import {
 import SvgFlag from "../svg/svg";
 import { getResponePopup } from "../../../../../utils/reusable";
 
-
 const Flag = ({
   setOpen,
   open,
@@ -37,7 +36,7 @@ const Flag = ({
   isdeleteFlag,
   getPatientDosList,
   setSearch,
-  selectedDosValue
+  selectedDosValue,
 }) => {
   const [inputValue, setInputValue] = useState({
     flagId: "",
@@ -62,7 +61,7 @@ const Flag = ({
   }));
 
   const handleDelete = async (flagId) => {
-    const patientId = getStorage("patientId")
+    const patientId = getStorage("patientId");
     const payload = {
       flagId: flagId || "",
       patientId: patientDetailsResult?.data?.response?.patientId,
@@ -72,16 +71,15 @@ const Flag = ({
     };
     try {
       const response = await isdeleteFlag(payload);
-      if(response?.status === "SUCCESS"){
-        getPatientDosList(patientId,selectedDosValue)
+      if (response?.status === "SUCCESS") {
+        getPatientDosList(patientId, selectedDosValue);
         getResponePopup(response);
-       getFlagDetailsData(
-        patientDetailsResult?.data?.response?.patientId,
-        patientDetailsResult?.data?.response?.processedYear,
-        patientDetailsResult?.data?.response?.dateOfService
-      );
+        getFlagDetailsData(
+          patientDetailsResult?.data?.response?.patientId,
+          patientDetailsResult?.data?.response?.processedYear,
+          patientDetailsResult?.data?.response?.dateOfService
+        );
       }
-      
     } catch (error) {
       getResponePopup(error?.response);
       console.error(error);
@@ -111,7 +109,7 @@ const Flag = ({
     }
     if (form.checkValidity() === true) {
       setCommentsTrigger(true);
-      const patientId = getStorage("patientId")
+      const patientId = getStorage("patientId");
       var dataFormatSuggested = {
         patientId: patientDetailsResult?.data?.response?.patientId,
         comment: inputValue.comments.trim(),
@@ -121,25 +119,23 @@ const Flag = ({
       };
       try {
         const response = await flagDetailsPost(dataFormatSuggested);
-        if(response?.status === "SUCCESS"){
-          getResponePopup(response)
-          getPatientDosList(patientId,selectedDosValue)
+        if (response?.status === "SUCCESS") {
+          getResponePopup(response);
+          getPatientDosList(patientId, selectedDosValue);
           // setOpen(false)
           getFlagDetailsData(
             patientDetailsResult?.data?.response?.patientId,
             patientDetailsResult?.data?.response?.processedYear,
             patientDetailsResult?.data?.response?.dateOfService
           );
-  
+
           setInputValue({
             flagId: "",
             comments: "",
           });
           setCommentsTrigger(false);
           setIsModalComments(false);
-
         }
-      
       } catch (error) {
         getResponePopup(error);
         setCommentsTrigger(false);
@@ -362,13 +358,19 @@ const Flag = ({
                 className="position-absolute top-0 end-0 mt-2 me-2"
                 style={{ cursor: "pointer" }}
               >
-                <FontAwesomeIcon
-                  id={`flag-list-close-icon-${index}`}
-                  name={`flag-list-close-icon-${index}`}
-                  icon={faXmarkCircle}
-                  onClick={() => handleDelete(data?.patientFlagDTO?.flagId)}
-                  style={{ color: "#be3144" }}
-                />
+                <Popconfirm
+                  title="Are you sure you want to delete this flag?"
+                  onConfirm={() => handleDelete(data?.patientFlagDTO?.flagId)}
+                  okText="Yes"
+                  cancelText="No"
+                >
+                  <FontAwesomeIcon
+                    id={`flag-list-close-icon-${index}`}
+                    name={`flag-list-close-icon-${index}`}
+                    icon={faXmarkCircle}
+                    style={{ color: "#be3144", cursor: "pointer" }}
+                  />
+                </Popconfirm>
               </div>
 
               <div
@@ -377,7 +379,10 @@ const Flag = ({
                 className={`${visitStyles.commentNameHead}`}
                 style={{ paddingTop: "20px" }}
               >
-                <span id={`flag-value-${index}`} className={visitStyles.commentsName}>
+                <span
+                  id={`flag-value-${index}`}
+                  className={visitStyles.commentsName}
+                >
                   {data?.flagDetails?.flagName && (
                     <>
                       {data?.flagDetails?.flagName
