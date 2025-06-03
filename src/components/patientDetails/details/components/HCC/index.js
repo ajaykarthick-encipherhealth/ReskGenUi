@@ -454,14 +454,14 @@ const HccCards = ({
                                     id="hcc-tree-icon"
                                     name="hcc-tree-icon"
                                     className={visitStyles.tree_icon}
-                                    style={{
-                                      cursor: isDisabled
-                                        ? "not-allowed"
-                                        : "pointer",
-                                      background: "#c7f3c6",
-                                    }}
+                                    // style={{
+                                    //   cursor: isDisabled
+                                    //     ? "not-allowed"
+                                    //     : "pointer",
+                                    //   background: "#c7f3c6",
+                                    // }}
                                     onClick={() => {
-                                      if (isDisabled) return;
+                                      // if (isDisabled) return;
                                       if (data?.isShow) {
                                         setOpens(true);
                                         setCombiTree([

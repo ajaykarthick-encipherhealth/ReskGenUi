@@ -72,6 +72,7 @@ const CamboTree = ({
   formValues,
   patientDetailsLoad,
   getPatientIdData,
+  patientIdDetailsData,
 }) => {
   const [trees, setTrees] = useState(Tree);
   const [isLoading, setLoading] = useState(tree);
@@ -249,7 +250,8 @@ const CamboTree = ({
       );
     }
   };
-
+  const isEditDisabled =
+    patientIdDetailsData?.data?.response?.workflow?.[0]?.status !== "PENDING";
   const nodeTemplate = (node, index) => {
     return (
       <div
@@ -274,60 +276,76 @@ const CamboTree = ({
                   <div className="p-1">
                     <FontAwesomeIcon
                       icon={faPen}
-                      style={{ cursor: "pointer" }}
+                      style={{
+                        cursor: isEditDisabled ? "not-allowed" : "pointer",
+                      }}
                       onClick={() => {
-                        setData(node),
-                          setIsEditHccForm(true),
-                          setFormEditPlace(editFormPlace);
+                        if (isEditDisabled) return;
+                        setData(node);
+                        setIsEditHccForm(true);
+                        setFormEditPlace(editFormPlace);
                       }}
                     />
                   </div>
-
-                  <Popconfirm
-                    title="Do you want to move to Delete?"
-                    description={node.diseaseName}
-                    onConfirm={handleDeleteDisease}
-                    placement="leftTop"
-                    okText="Yes"
-                    cancelText="No"
-                    // onOk={() =>
-                    //   handleSubmitValidNotes({
-                    //     setFileLoading,
-                    //     setConfirmNotesModalValid,
-                    //     getPatientDetailsReload,
-                    //     isValidAction,
-                    //     selectDisDetails,
-                    //     getpatientDetailsData,
-                    //     patientDetailsResult,
-                    //     getLabDetails,
-                    //     getRadiologyDetails,
-                    //     handleCloseModal,
-                    //   })
-                    // }
-                    onOpenChange={() =>
-                      onchangeCombo(
-                        node,
-                        node.diagnosisCodeCombo
-                          ? node.diagnosisCodeCombo
-                          : node.diagnosisCode,
-                        node.diseaseSource
-                      )
-                    }
-                  >
+                  {!isEditDisabled ? (
+                    <Popconfirm
+                      title="Do you want to move to Delete?"
+                      description={node.diseaseName}
+                      onConfirm={handleDeleteDisease}
+                      placement="leftTop"
+                      okText="Yes"
+                      cancelText="No"
+                      // onOk={() =>
+                      //   handleSubmitValidNotes({
+                      //     setFileLoading,
+                      //     setConfirmNotesModalValid,
+                      //     getPatientDetailsReload,
+                      //     isValidAction,
+                      //     selectDisDetails,
+                      //     getpatientDetailsData,
+                      //     patientDetailsResult,
+                      //     getLabDetails,
+                      //     getRadiologyDetails,
+                      //     handleCloseModal,
+                      //   })
+                      // }
+                      onOpenChange={() =>
+                        onchangeCombo(
+                          node,
+                          node.diagnosisCodeCombo
+                            ? node.diagnosisCodeCombo
+                            : node.diagnosisCode,
+                          node.diseaseSource
+                        )
+                      }
+                    >
+                      <div className={visitStyles.close_icon}>
+                        <FontAwesomeIcon
+                          icon={faXmark}
+                          style={{
+                            size: 8,
+                            color: "#a80404",
+                          }}
+                        />
+                      </div>
+                    </Popconfirm>
+                  ) : (
                     <div className={visitStyles.close_icon}>
                       <FontAwesomeIcon
                         icon={faXmark}
                         style={{
                           size: 8,
                           color: "#a80404",
+                          cursor: isEditDisabled ? "not-allowed" : "pointer",
                         }}
                       />
                     </div>
-                  </Popconfirm>
+                  )}
                 </div>
               </>
             )}
         </div>
+
         <Tooltip
           title={
             node.diseaseName
@@ -498,6 +516,7 @@ const enhancer = connect(
     radiologyFile: state?.patientDetails?.details?.radiologyFileResult,
     labFile: state?.patientDetails?.details?.labFileResult,
     currentDiseaseType: state?.patientDetails?.details?.currentDiseaseType,
+    patientIdDetailsData: state?.patientDetails.details?.patientIdResult,
   }),
   {
     getpatientDetailsData: detailsActions.patientDetailsAction,
