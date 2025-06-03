@@ -66,6 +66,7 @@ const NonHccCards = ({
   patientDetailsLoad,
   id,
   isDosSelected,
+  patientIdDetailsData,
 }) => {
   const [fileInitialPage, setFileInitialPage] = useState(null);
   const [openEdit, setOpenEdit] = useState(false);
@@ -79,7 +80,8 @@ const NonHccCards = ({
   const [isMulitpleHeader, setIsMulitpleHeader] = useState(false);
   const [isMulitpleHeaderCode, setIsMulitpleHeadeCode] = useState(null);
   const [isMulitpleProvider, setIsMulitpleProvider] = useState(false);
-
+  const isDisabled =
+    patientIdDetailsData?.data?.response?.workflow?.[0]?.status !== "PENDING";
   return (
     <>
       {patientDetailsLoad ? (
@@ -141,60 +143,88 @@ const NonHccCards = ({
                     name={`${id}-Action-${i}`}
                     className="d-flex"
                   >
-                    <Popconfirm
-                      title="Choose an action"
-                      icon={
-                        <QuestionCircleOutlined
-                          style={{
-                            color: "blue",
-                          }}
-                        />
-                      }
-                      okText={okText}
-                      cancelText={cancelText}
-                      onCancel={() => setConfirmNotesModalValid(false)}
-                      okButtonProps={{
-                        type: "default",
-                      }}
-                      cancelButtonProps={{
-                        type: "default",
-                      }}
-                      description={data.diagnosisCode}
-                      onConfirm={() =>
-                        moveToAnotherAction(
-                          setConfirmNotesModalValid,
-                          setIsValidAction,
-                          okText,
-                          cardTitle
-                        )
-                      }
-                      placement="bottom"
-                      onOpenChange={() =>
-                        onchangeValid(data.diagnosisCode, data)
-                      }
-                    >
-                      {isDosSelected && (
-                        <div
-                          id={`${id}-close-icon-${i}`}
-                          name={`${id}-close-icon-${i}`}
-                          className="cr-pointer d-flex"
-                        >
+                    {!isDisabled ? (
+                      <Popconfirm
+                        title="Choose an action"
+                        icon={
+                          <QuestionCircleOutlined
+                            style={{
+                              color: "blue",
+                            }}
+                          />
+                        }
+                        okText={okText}
+                        cancelText={cancelText}
+                        onCancel={() => setConfirmNotesModalValid(false)}
+                        okButtonProps={{
+                          type: "default",
+                        }}
+                        cancelButtonProps={{
+                          type: "default",
+                        }}
+                        description={data.diagnosisCode}
+                        onConfirm={() =>
+                          moveToAnotherAction(
+                            setConfirmNotesModalValid,
+                            setIsValidAction,
+                            okText,
+                            cardTitle
+                          )
+                        }
+                        placement="bottom"
+                        onOpenChange={() =>
+                          onchangeValid(data.diagnosisCode, data)
+                        }
+                      >
+                        {isDosSelected && (
                           <div
-                            id={`${id}-close-icon-action${i}`}
-                            name={`${id}-close-icon-action${i}`}
-                            className={visitStyles.close_icon}
+                            id={`${id}-close-icon-${i}`}
+                            name={`${id}-close-icon-${i}`}
+                            className="cr-pointer d-flex"
                           >
-                            <FontAwesomeIcon
-                              icon={faArrowsAlt}
-                              style={{
-                                size: 8,
-                                color: "#a80404",
-                              }}
-                            />
+                            <div
+                              id={`${id}-close-icon-action${i}`}
+                              name={`${id}-close-icon-action${i}`}
+                              className={visitStyles.close_icon}
+                            >
+                              <FontAwesomeIcon
+                                icon={faArrowsAlt}
+                                style={{
+                                  size: 8,
+                                  color: "#a80404",
+                                }}
+                              />
+                            </div>
                           </div>
-                        </div>
-                      )}
-                    </Popconfirm>
+                        )}
+                      </Popconfirm>
+                    ) : (
+                    <>
+                    {isDosSelected && (
+                          <div
+                            id={`${id}-close-icon-${i}`}
+                            name={`${id}-close-icon-${i}`}
+                            className="cr-pointer d-flex"
+                          >
+                            <div
+                              id={`${id}-close-icon-action${i}`}
+                              name={`${id}-close-icon-action${i}`}
+                              className={visitStyles.close_icon}
+                              style={{
+                                cursor: isDisabled ? "not-allowed" : "pointer",
+                              }}
+                            >
+                              <FontAwesomeIcon
+                                icon={faArrowsAlt}
+                                style={{
+                                  size: 8,
+                                  color: "#a80404",
+                                }}
+                              />
+                            </div>
+                          </div>
+                        )}</>
+                    )}
                   </div>
                 </div>
                 <div
@@ -335,6 +365,7 @@ const enhancer = connect(
     patientDetailsResult: state?.patientDetails?.details?.patientResult,
     patientDetailsLoad: state?.patientDetails?.details?.patientsLoading,
     isDosSelected: state.patientDetails.details?.getSelectedDosDetails,
+    patientIdDetailsData: state?.patientDetails.details?.patientIdResult,
   }),
   {
     getSelectedDosPageNumber: detailsActions.getSelectedDosPageNumber,

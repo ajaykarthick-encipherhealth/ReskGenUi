@@ -643,6 +643,7 @@ const shouldDisable = isOnReviewerPatients ;
     getPatientIdDetails(patientIdDetailsData?.data?.response);
     setPatienIdDetails(patientIdDetailsData?.data?.response);
   }, [patientIdDetailsData?.data?.response]);
+  console.log(patientIdDetailsData?.data?.response?.workflow?.[0]?.status,"status")
   return (
     <>
       {patientIdDetailsData?.data?.response && (

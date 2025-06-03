@@ -399,6 +399,9 @@ const Hcc = ({
       getResponePopup(response);
     }
   };
+  const isDisabled =
+  patientIdDetailsData?.data?.response
+    ?.workflow?.[0]?.status !== "PENDING";
 
   const hideDiseasePopContent = (
     <>
@@ -785,12 +788,17 @@ const Hcc = ({
                       >
                         <button
                           className={`${visitStyles.actionBtn} px-3 py-1 mx-2 rounded-md`}
-                          onClick={() =>
+                          style={{
+                            cursor:  isDisabled ? "not-allowed" : "pointer"
+                          }}
+                          disabled={ isDisabled}
+                          onClick={() => {
+                            if (isDisabled) return;
                             setActions({
                               ...actions,
                               showActionsPop: !actions.showActionsPop,
-                            })
-                          }
+                            });
+                          }}
                         >
                           Action
                         </button>

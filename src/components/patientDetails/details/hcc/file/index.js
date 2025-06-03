@@ -8,7 +8,7 @@ import {
   faAngleRight,
 } from "@fortawesome/free-solid-svg-icons";
 import visitStyles from "../../../../../styles/visitdata.module.css";
-import { Drawer, Modal,  notification } from "antd";
+import { Drawer, Modal, notification } from "antd";
 import { Button, Spinner } from "react-bootstrap";
 import PdfViewer from "../../PdfViewerComponent";
 import { actions as detailsActions } from "../../../../../stores/patient/details";
@@ -16,9 +16,7 @@ import HccCards from "../../components/HCC";
 import ModelIndex from "../../components/model/Index";
 import { getPatientDetails } from "../../components/function/GetData";
 import { DragDropContext, Droppable } from "react-beautiful-dnd";
-import {
-  onDragEnd,
-} from "../../components/function/ReusableFunctions";
+import { onDragEnd } from "../../components/function/ReusableFunctions";
 import ManuallyAdd from "../../components/manuallyAdd";
 import { getStorage } from "../../../../../utils/storages";
 import { getValidHccDetailsApi } from "../../../../../stores/patient/details/network";
@@ -52,6 +50,7 @@ const File = ({
   actions,
   selectDosValue,
   isSpinnerLoading,
+  patientIdDetailsData,
 }) => {
   const [isFileFormShow, setIsFileFormShow] = useState(false);
   const [confirmNotesModalValid, setConfirmNotesModalValid] = useState(false);
@@ -136,7 +135,6 @@ const File = ({
     // setFileLoading(false);
     setIsEditHccForm(false);
     setOpens(false);
-    
   };
 
   const getValidHccDetails = async (value, code) => {
@@ -235,6 +233,9 @@ const File = ({
       setShowList((prev) => [...prev, value]);
     }
   };
+  const isDisabled =
+  patientIdDetailsData?.data?.response
+    ?.workflow?.[0]?.status !== "PENDING";
 
   return (
     <>
@@ -275,11 +276,17 @@ const File = ({
                         name="hcc-title"
                         className={`valid-text d-flex justify-content-sm-between ${visitStyles.hcc_title_card}`}
                       >
-                        <span className={`${visitStyles.hcc_title_name}`}>
+                        <span className={` ${visitStyles.hcc_title_name}`}>
                           HCC
                           {isDosSelected && (
                             <FontAwesomeIcon
-                              onClick={() => addValidCodeFile()}
+                              onClick={() => {
+                                if (isDisabled) return;
+                                addValidCodeFile();
+                              }}
+                              style={{
+                                cursor: isDisabled ? "not-allowed" : "pointer",
+                              }}
                               icon={faPlus}
                             />
                           )}
@@ -884,6 +891,7 @@ const enhancer = connect(
     loading: state?.patientDetails?.details?.loading,
     isDosSelected: state.patientDetails.details?.getSelectedDosDetails,
     fileLoadingStatus: state.patientDetails.details?.fileLoading,
+    patientIdDetailsData: state?.patientDetails.details?.patientIdResult,
   }),
   {
     getRadiologyFileDetails: detailsActions.radiologyFileAction,

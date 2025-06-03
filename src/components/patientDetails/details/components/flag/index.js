@@ -36,6 +36,7 @@ const Flag = ({
   isdeleteFlag,
   getPatientDosList,
   setSearch,
+  patientIdDetailsData,
   selectedDosValue,
 }) => {
   const [inputValue, setInputValue] = useState({
@@ -48,6 +49,9 @@ const Flag = ({
   const [validated, setValidated] = useState(false);
   const [localPatientId, setLocalPatientId] = useState("");
   const [userDetails, setUserDetails] = useState("");
+  const isDisabled =
+  patientIdDetailsData?.data?.response
+    ?.workflow?.[0]?.status !== "PENDING";
 
   const flagPostList = getFlagsData?.response?.map((item) => ({
     value: item?.id,
@@ -98,6 +102,7 @@ const Flag = ({
       });
       return;
     }
+    if (isDisabled) return;
     if (inputValue.comments.trim() === "") {
       getResponePopup({
         data: {
@@ -331,15 +336,19 @@ const Flag = ({
             </div>
             <div id="flag-btn-row" className="row">
               <div id="flag-btn-save" className="d-flex justify-content-center">
-                <Button
+                <button
                   id="flag-btn-value"
-                  className="btn btn-sm ms-2 flr width-max-content custom-btn-style"
+                  className=" btn-sm ms-2 flr width-max-content custom-btn-style"
                   type="submit"
-                  disabled={commentsTrigger}
+                  style={{
+                    cursor: commentsTrigger || isDisabled ? "not-allowed" : "pointer"
+                  }}
+                  
+                  disabled={commentsTrigger ||  isDisabled}
                   // className={visitStyles.commentSendIcon}
                 >
                   Save
-                </Button>{" "}
+                </button>{" "}
               </div>
             </div>
           </Form>
@@ -358,7 +367,7 @@ const Flag = ({
                 className="position-absolute top-0 end-0 mt-2 me-2"
                 style={{ cursor: "pointer" }}
               >
-                <Popconfirm
+                {!isDisabled ? <Popconfirm
                   title="Are you sure you want to delete this flag?"
                   onConfirm={() => handleDelete(data?.patientFlagDTO?.flagId)}
                   okText="Yes"
@@ -370,7 +379,15 @@ const Flag = ({
                     icon={faXmarkCircle}
                     style={{ color: "#be3144", cursor: "pointer" }}
                   />
-                </Popconfirm>
+                </Popconfirm> :<>
+                <FontAwesomeIcon
+                    id={`flag-list-close-icon-${index}`}
+                    name={`flag-list-close-icon-${index}`}
+                    icon={faXmarkCircle}
+                    style={{ color: "#be3144", cursor: isDisabled ?"not-allowed" :"pointer" }}
+                  /></> }
+
+               
               </div>
 
               <div
@@ -458,6 +475,7 @@ const enhancer = connect(
     patientDetailsResult: state?.patientDetails?.details?.patientResult,
     getFlagsData: state?.reviewer?.workQueue?.flags?.data,
     flagsDetailsResult: state?.patientDetails.details?.flagsDetailsResult.data,
+    patientIdDetailsData: state?.patientDetails.details?.patientIdResult,
   }),
   {
     getFlagDetailsData: detailsActions.getFlagDetailsAction,

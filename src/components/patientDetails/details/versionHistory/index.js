@@ -19,7 +19,7 @@ const VersionHistory = ({
   renderUserDetails,
   isDosSelected,
   dosYearDefalutSelect,
-  getPatientListToDetails,
+  patientIdDetailsData,
   setIsModalComments,
   getpatientDetailsData,
 }) => {
@@ -875,6 +875,8 @@ const VersionHistory = ({
   const getHtmlContent = (item) => {
     return <div dangerouslySetInnerHTML={{ __html: item }} />;
   };
+  const isDisabled =
+  patientIdDetailsData?.data?.response?.workflow?.[0]?.status !== "PENDING";
 
   function renderTimelineItem(item, index) {
     getBadgeClassName(item, index);
@@ -899,7 +901,7 @@ const VersionHistory = ({
             {item?.revertHistory}
           </div>
         </Popover>
-        {!item?.isCurrentVersion ? (
+        {!item?.isCurrentVersion && !isDisabled ? (
           <Popconfirm
             className="custom-pop"
             placement="bottom"
@@ -945,6 +947,7 @@ const VersionHistory = ({
               {formatDateTime({ date: item.createdDate })}
             </span>
           </div>
+          
         )}
       </li>
     );

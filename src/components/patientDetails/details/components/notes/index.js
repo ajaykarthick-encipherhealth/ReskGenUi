@@ -27,6 +27,7 @@ const Notes = ({
   patientDetailsResult,
   isDeleteNotes,
   isAddNotes,
+  patientIdDetailsData
 }) => {
   const [inputValue, setInputValue] = useState({
     patientId: "",
@@ -38,7 +39,9 @@ const Notes = ({
   const [validated, setValidated] = useState(false);
   const [userDetails, setUserDetails] = useState();
   const [localPatientId, setLocalPatientId] = useState("");
-
+  const isDisabled =
+  patientIdDetailsData?.data?.response
+    ?.workflow?.[0]?.status !== "PENDING";
   const handleSubmitNotes = async (event) => {
     const form = event.currentTarget;
     event.preventDefault();
@@ -52,7 +55,7 @@ const Notes = ({
       return;
     }
     const yearData = patientDetailsResult?.data?.response;
-
+    if (isDisabled) return;
     if (form.checkValidity() === true) {
       setCommentsTrigger(true);
       const orgId = getStorage("orgId");
@@ -271,15 +274,18 @@ const Notes = ({
                   type="submit"
                   value={inputValue.comments}
                 ></textarea>
-                <Button
+                <button
                   id="submitNotes"
                   name="submitNotes"
                   type="submit"
-                  disabled={commentsTrigger}
+                  style={{
+                    cursor: commentsTrigger || isDisabled ? "not-allowed" : "pointer"
+                  }}
+                  disabled={commentsTrigger ||  isDisabled}
                   className={visitStyles.commentSendIcon}
                 >
                   {SVGICON.sentMessageIcon}
-                </Button>
+                </button>
               </div>
             </div>
           </Form>
@@ -367,6 +373,7 @@ const Notes = ({
 const enhancer = connect(
   (state) => ({
     patientDetailsResult: state?.patientDetails?.details?.patientResult,
+    patientIdDetailsData: state?.patientDetails.details?.patientIdResult,
   }),
   {
     isDeleteNotes: detailsActions.isDeleteNotes,

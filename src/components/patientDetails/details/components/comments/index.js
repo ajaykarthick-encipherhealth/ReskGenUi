@@ -28,6 +28,7 @@ const Comments = ({
   isDeleteComments,
   isAddComments,
   commentListLoader,
+  patientIdDetailsData,
 }) => {
   const [inputValue, setInputValue] = useState({
     patientId: "",
@@ -39,6 +40,9 @@ const Comments = ({
   const [validated, setValidated] = useState(false);
   const [localPatientId, setLocalPatientId] = useState("");
   const [userDetails, setUserDetails] = useState("");
+  const isDisabled =
+  patientIdDetailsData?.data?.response
+    ?.workflow?.[0]?.status !== "PENDING";
 
   const getCommentsList = async () => {
     const yearData = patientDetailsResult?.data?.response;
@@ -63,7 +67,7 @@ const Comments = ({
       });
       return;
     }
-
+    if (isDisabled) return;
     if (form.checkValidity() === true) {
       setCommentsTrigger(true);
 
@@ -263,15 +267,18 @@ const Comments = ({
                   onKeyPress={handleEnterText}
                   type="submit"
                 ></textarea>
-                <Button
+                <button
                   id="gridSystemModal-comments-button"
                   name="gridSystemModal-comments-button"
                   type="submit"
-                  disabled={commentsTrigger}
+                  style={{
+                    cursor: commentsTrigger || isDisabled ? "not-allowed" : "pointer"
+                  }}
+                  disabled={commentsTrigger ||  isDisabled}
                   className={visitStyles.commentSendIcon}
                 >
                   {SVGICON.sentMessageIcon}
-                </Button>
+                </button>
               </div>
             </div>
           </Form>
@@ -364,10 +371,12 @@ const enhancer = connect(
   (state) => ({
     patientDetailsResult: state?.patientDetails?.details?.patientResult,
     commentListLoader: state?.patientDetails?.details?.CommentListLoader,
+    patientIdDetailsData: state?.patientDetails.details?.patientIdResult,
   }),
   {
     isDeleteComments: detailsActions.isDeleteComments,
     isAddComments: detailsActions.isAddComments,
+    
   }
 );
 export default enhancer(Comments);

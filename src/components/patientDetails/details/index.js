@@ -998,6 +998,9 @@ const Details = ({
                             // ) {
                             //   return null;
                             // }
+                            const isEditDisabled =
+                              patientIdDetailsData?.data?.response
+                                ?.workflow?.[0]?.status !== "PENDING";
                             const isFlagDisabled =
                               data.name === "Flag" && !isDosSelected;
                             const isDosDisabled =
@@ -1005,8 +1008,12 @@ const Details = ({
                               isDosSelected;
                             const isVersionDisabled =
                               data.name === "Version History" && !isDosSelected;
+                              const isEditDisabledList = [
+                                "Add DOS & Provider",
+                              ].includes(data.name);
 
-                            const isDisabled =
+                              const isDisabled =
+                              (isEditDisabled && isEditDisabledList) ||
                               isFlagDisabled ||
                               isDosDisabled ||
                               isVersionDisabled;
@@ -1155,6 +1162,7 @@ const Details = ({
                       getPatientListToDetails={getPatientListToDetails}
                       setIsModalComments={setIsModalComments}
                       getpatientDetailsData={getpatientDetailsData}
+                      patientIdDetailsData={patientIdDetailsData}
                     />
                   ) : null}
                 </Drawer>

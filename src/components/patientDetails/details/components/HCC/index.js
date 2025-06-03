@@ -87,6 +87,7 @@ const HccCards = ({
   patientDetailsLoading,
   id,
   getPatientIdData,
+  patientIdDetailsData,
 }) => {
   const [fileInitialPage, setFileInitialPage] = useState(null);
   const [openEdit, setOpenEdit] = useState(false);
@@ -228,9 +229,8 @@ const HccCards = ({
       oldDiagnosisCode: data?.diagnosisCode,
     });
     if (res?.status === "SUCCESS") {
-     
       getPatientDetailsData(patientId, null, selectDosValue, "", role);
-    getPatientIdData(patientId);
+      getPatientIdData(patientId);
       setOpenContent(false);
       getResponePopup(res);
       patientDetailsLoad(false);
@@ -239,6 +239,8 @@ const HccCards = ({
       patientDetailsLoad(false);
     }
   };
+  const isDisabled =
+    patientIdDetailsData?.data?.response?.workflow?.[0]?.status !== "PENDING";
   return (
     <>
       {provided && (
@@ -270,7 +272,9 @@ const HccCards = ({
                     index={i}
                     draggableData={data.list}
                     isDragDisabled={
-                      isDosSelected && data?.isShow ? false : true
+                      isDosSelected && data?.isShow && !isDisabled
+                        ? false
+                        : true
                     }
                   >
                     {(provided, snapshot) => {
@@ -365,8 +369,13 @@ const HccCards = ({
                                       )) && (
                                       <FontAwesomeIcon
                                         icon={faPen}
-                                        style={{ cursor: "pointer" }}
+                                        style={{
+                                          cursor: isDisabled
+                                            ? "not-allowed"
+                                            : "pointer",
+                                        }}
                                         onClick={() => {
+                                          if (isDisabled) return;
                                           if (data?.isShow) {
                                             setFormValues(data);
                                             setIsEditHccForm(true);
@@ -422,8 +431,14 @@ const HccCards = ({
                                     id="hcc-tree-icon"
                                     name="hcc-tree-icon"
                                     className={visitStyles.tree_icon}
-                                    style={{ background: "#c7f3c6" }}
+                                    style={{
+                                      cursor: isDisabled
+                                        ? "not-allowed"
+                                        : "pointer",
+                                      background: "#c7f3c6",
+                                    }}
                                     onClick={() => {
+                                      if (isDisabled) return;
                                       if (data?.isShow) {
                                         setOpens(true);
                                         setCombiTree([
@@ -578,86 +593,115 @@ const HccCards = ({
                                           {/* </Tooltip> */}
                                         </Popover>
                                       </div>
-
-                                      <Popconfirm
-                                        title="Choose an action"
-                                        icon={
-                                          <QuestionCircleOutlined
-                                            style={{
-                                              color: "blue",
-                                            }}
-                                          />
-                                        }
-                                        okText={
-                                          (data?.isShow &&
-                                            data.getPlace == "Radio") ||
-                                          (data?.isShow &&
-                                            data.getPlace == "Lab")
-                                            ? "Move to Deleted"
-                                            : data?.isShow && okText
-                                        }
-                                        cancelText={
-                                          (data?.isShow &&
-                                            data.getPlace === "Radio") ||
-                                          (data?.isShow &&
-                                            data.getPlace === "Lab")
-                                            ? ""
-                                            : data?.isShow && cancelText
-                                        }
-                                        onCancel={() => {
-                                          if (data?.isShow) {
-                                            moveToAnotherAction(
-                                              setConfirmNotesModalValid,
-                                              setIsValidAction,
-                                              cancelText,
-                                              cardTitle
-                                            );
+                                      {!isDisabled ? (
+                                        <Popconfirm
+                                          title="Choose an action"
+                                          icon={
+                                            <QuestionCircleOutlined
+                                              style={{
+                                                color: "blue",
+                                              }}
+                                            />
                                           }
-                                        }}
-                                        okButtonProps={{
-                                          type: "default",
-                                        }}
-                                        cancelButtonProps={{
-                                          type: "default",
-                                        }}
-                                        description={data.diagnosisCode}
-                                        onConfirm={() => {
-                                          if (data?.isShow) {
-                                            moveToAnotherAction(
-                                              setConfirmNotesModalValid,
-                                              setIsValidAction,
-                                              okText,
-                                              cardTitle
-                                            );
+                                          okText={
+                                            (data?.isShow &&
+                                              data.getPlace == "Radio") ||
+                                            (data?.isShow &&
+                                              data.getPlace == "Lab")
+                                              ? "Move to Deleted"
+                                              : data?.isShow && okText
                                           }
-                                        }}
-                                        placement="bottom"
-                                        onOpenChange={() => {
-                                          if (data?.isShow) {
-                                            onchangeValid(
-                                              data.diagnosisCode,
-                                              data
-                                            );
+                                          cancelText={
+                                            (data?.isShow &&
+                                              data.getPlace === "Radio") ||
+                                            (data?.isShow &&
+                                              data.getPlace === "Lab")
+                                              ? ""
+                                              : data?.isShow && cancelText
                                           }
-                                        }}
-                                      >
-                                        {isDosSelected && (
-                                          <div className="cr-pointer d-flex">
-                                            <div
-                                              className={visitStyles.close_icon}
-                                            >
-                                              <FontAwesomeIcon
-                                                icon={faArrowsAlt}
-                                                style={{
-                                                  size: 8,
-                                                  color: "#a80404",
-                                                }}
-                                              />
+                                          onCancel={() => {
+                                            if (data?.isShow) {
+                                              moveToAnotherAction(
+                                                setConfirmNotesModalValid,
+                                                setIsValidAction,
+                                                cancelText,
+                                                cardTitle
+                                              );
+                                            }
+                                          }}
+                                          okButtonProps={{
+                                            type: "default",
+                                          }}
+                                          cancelButtonProps={{
+                                            type: "default",
+                                          }}
+                                          description={data.diagnosisCode}
+                                          onConfirm={() => {
+                                            if (data?.isShow) {
+                                              moveToAnotherAction(
+                                                setConfirmNotesModalValid,
+                                                setIsValidAction,
+                                                okText,
+                                                cardTitle
+                                              );
+                                            }
+                                          }}
+                                          placement="bottom"
+                                          onOpenChange={() => {
+                                            if (data?.isShow) {
+                                              onchangeValid(
+                                                data.diagnosisCode,
+                                                data
+                                              );
+                                            }
+                                          }}
+                                        >
+                                          {isDosSelected && (
+                                            <div className="cr-pointer d-flex">
+                                              <div
+                                                className={
+                                                  visitStyles.close_icon
+                                                }
+                                              >
+                                                <FontAwesomeIcon
+                                                  icon={faArrowsAlt}
+                                                  style={{
+                                                    size: 8,
+                                                    color: "#a80404",
+                                                  }}
+                                                />
+                                              </div>
+                                              <div className="m-1">Actions</div>
                                             </div>
-                                            <div className="m-1">Actions</div>
-                                          </div>
-                                        )}
-                                      </Popconfirm>
+                                          )}
+                                        </Popconfirm>
+                                      ) : (
+                                        <div>
+                                          {isDosSelected && (
+                                            <div className="cr-pointer d-flex">
+                                              <div
+                                                style={{
+                                                  cursor: isDisabled
+                                                    ? "not-allowed"
+                                                    : "pointer",
+                                                }}
+                                                className={
+                                                  visitStyles.close_icon
+                                                }
+                                              >
+                                                <FontAwesomeIcon
+                                                  icon={faArrowsAlt}
+                                                  style={{
+                                                    size: 8,
+                                                    color: "#a80404",
+                                                  }}
+                                                />
+                                              </div>
+                                              <div className="m-1">Actions</div>
+                                            </div>
+                                          )}
+                                        </div>
+                                      )}
 
                                       {/* {data.isMostSpecific == true && (
                                     <div className="cr-pointer d-flex">
@@ -741,26 +785,38 @@ const HccCards = ({
                                           </div>
                                         )}
                                       {data?.isShow && isDosSelected && (
-                                        <Popconfirm
-                                          title="Are you sure want to hide disease?"
-                                          onConfirm={() =>
-                                            unHideDisease(data, "hide")
-                                          }
-                                        >
-                                          <div
-                                            className="cursor-pointer"
-                                            // onClick={() =>
-                                            //   unHideDisease(data, "hide")
-                                            // }
-                                          >
-                                            <FontAwesomeIcon
-                                              icon={faEyeSlash}
-                                              style={{ color: "#d9d9d9" }}
-                                              className="px-1"
-                                            />
-                                            Hide Disease
-                                          </div>
-                                        </Popconfirm>
+                                        <>
+                                          {isDisabled ? (
+                                            <div
+                                              style={{
+                                                cursor: isDisabled
+                                                  ? "not-allowed"
+                                                  : "pointer",
+                                              }}
+                                            >
+                                              <FontAwesomeIcon
+                                                icon={faEyeSlash}
+                                                className="px-1"
+                                              />
+                                              Hide Disease
+                                            </div>
+                                          ) : (
+                                            <Popconfirm
+                                              title="Are you sure want to hide disease?"
+                                              onConfirm={() =>
+                                                unHideDisease(data, "hide")
+                                              }
+                                            >
+                                              <div className="cursor-pointer">
+                                                <FontAwesomeIcon
+                                                  icon={faEyeSlash}
+                                                  className="px-1"
+                                                />
+                                                Hide Disease
+                                              </div>
+                                            </Popconfirm>
+                                          )}
+                                        </>
                                       )}
                                     </>
                                   )}
@@ -1371,6 +1427,7 @@ const enhancer = connect(
     labFile: state?.patientDetails?.details?.labPDFDetails,
     labDetailsResult: state?.patientDetails?.details?.labResult,
     radiologyDetailsResult: state?.patientDetails?.details?.radiologyResult,
+    patientIdDetailsData: state?.patientDetails.details?.patientIdResult,
   }),
   {
     getSelectedDosPageNumber: detailsActions.getSelectedDosPageNumber,

@@ -60,12 +60,16 @@ const ComboCard = ({
   loading,
   provided,
   patientDetailsLoad,
-  id
+  id,
+  patientIdDetailsData
 }) => {
   const [fileInitialPage, setFileInitialPage] = useState(null);
   const [isMulitpleHeader, setIsMulitpleHeader] = useState(false);
   const [isMulitpleHeaderCode, setIsMulitpleHeadeCode] = useState(null);
   const [isMulitpleProvider, setIsMulitpleProvider] = useState(false);
+
+  const isDragDisabled =
+  patientIdDetailsData?.data?.response?.workflow?.[0]?.status !== "PENDING";
 
   const addOnCodeColor = [
     "magenta",
@@ -78,6 +82,8 @@ const ComboCard = ({
     "geekblue",
     "purple",
   ];
+  const isComboDisabled =
+  patientIdDetailsData?.data?.response?.workflow?.[0]?.status !== "PENDING";
   return (
     <>
       {provided && (
@@ -149,7 +155,12 @@ const ComboCard = ({
                           index={ind}
                           combo-cotent-card-head
                           draggableData={item?.list}
-                          isDragDisabled={isDosSelected ? false : true}
+                          // isDragDisabled={isDosSelected ? false : true}
+                          isDragDisabled={
+                            isDosSelected  && !isDragDisabled
+                              ? false
+                              : true
+                          }
                         >
                           {(provided, snapshot) => {
                             return (
@@ -332,8 +343,9 @@ const ComboCard = ({
                                     {item?.children?.length > 0 && (
                                       <div
                                         className={visitStyles.close_icon}
-                                        style={{ background: "#c7f3c6" }}
+                                        style={{ cursor: isComboDisabled ? "not-allowed" : "pointer"  ,background: "#c7f3c6" }}
                                         onClick={() => {
+                                          if (isComboDisabled) return;
                                           setOpens(true);
                                           setCombiTree([
                                             {
@@ -582,6 +594,7 @@ const enhancer = connect(
     patientDetailsResult: state?.patientDetails?.details?.patientResult,
     loading: state?.patientDetails?.details?.loading,
     patientDetailsLoad: state?.patientDetails?.details?.patientsLoading,
+    patientIdDetailsData: state?.patientDetails.details?.patientIdResult,
   }),
   {
     getSelectedDosPageNumber: detailsAction.getSelectedDosPageNumber,

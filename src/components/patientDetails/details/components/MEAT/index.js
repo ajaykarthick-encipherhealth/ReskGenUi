@@ -61,7 +61,8 @@ const MeatCard = ({
   provided,
   loading,
   patientDetailsLoad,
-  id
+  id,
+  patientIdDetailsData
 }) => {
   const [fileInitialPage, setFileInitialPage] = useState(null);
   const [isMulitpleHeaderCode, setIsMulitpleHeadeCode] = useState(null);
@@ -77,6 +78,9 @@ const MeatCard = ({
     labFile?.data?.response && labData == labFile?.data?.response?.fileId
       ? getPdfEmptyFunction
       : getLabPDFFile;
+
+      const isDisabled =
+      patientIdDetailsData?.data?.response?.workflow?.[0]?.status !== "PENDING";
 
   return (
 
@@ -120,7 +124,12 @@ const MeatCard = ({
                     draggableId={item?.diagnosisCode}
                     index={i}
                     draggableData={item?.list}
-                    isDragDisabled={isDosSelected ? false : true}
+                    // isDragDisabled={isDosSelected ? false : true}
+                    isDragDisabled={
+                      isDosSelected  && !isDisabled
+                        ? false
+                        : true
+                    }
                   >
                     {(provided,snapshot) => {
                       return (
@@ -606,7 +615,9 @@ const MeatCard = ({
                                         id={`${id}-meat-edit-${i}`}
                                         name={`${id}-meat-edit-${i}`}
                                         className={visitStyles.edit_icon}
+                                        style={{ cursor: isDisabled ? "not-allowed" : "pointer" }}
                                         onClick={() => {
+                                          if (isDisabled) return;
                                           setMeatEdit(true);
                                           setEditData(item);
                                         }}
@@ -628,7 +639,7 @@ const MeatCard = ({
                                           id={`${id}-meat-Q-${i}`}
                                           name={`${id}-meat-Q-${i}`}
                                           className={visitStyles.add_meat_query}
-                                          style={{ background: "#edbe4e" }}
+                                          style={{  background: "#edbe4e" , cursor: isDisabled ? "not-allowed" : "pointer" }}
                                         >
                                           <span
                                             style={{
@@ -645,10 +656,13 @@ const MeatCard = ({
                                       <div
                                         id={`${id}-addMeatQuery-${i}`}
                                         name={`${id}-addMeatQuery-${i}`}
-                                        onClick={() =>
+                                        onClick={() =>{
+                                          if (isDisabled) return;
                                           addMeatQuery(item, "Add")
                                         }
+                                        }
                                         className={visitStyles.add_meat_query}
+                                        style={{ cursor: isDisabled ? "not-allowed" : "pointer" }}
                                       >
                                         <span
                                           style={{
@@ -701,6 +715,7 @@ const enhancer = connect(
     labFile: state?.patientDetails?.details?.labFileResult,
     loading: state?.patientDetails?.details?.loading,
     patientDetailsLoad: state?.patientDetails?.details?.patientsLoading,
+    patientIdDetailsData: state?.patientDetails.details?.patientIdResult,
   }),
   {
     getSelectedDosPageNumber: detailsAction.getSelectedDosPageNumber,

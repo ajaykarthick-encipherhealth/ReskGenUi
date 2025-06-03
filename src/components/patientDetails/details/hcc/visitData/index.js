@@ -1,7 +1,11 @@
 import React, { useState, useRef, useEffect } from "react";
 import { connect } from "react-redux";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlus ,faAngleDown,faAngleRight} from "@fortawesome/free-solid-svg-icons";
+import {
+  faPlus,
+  faAngleDown,
+  faAngleRight,
+} from "@fortawesome/free-solid-svg-icons";
 import { Drawer, Modal, notification } from "antd";
 import { Offcanvas } from "react-bootstrap";
 import visitStyles from "../../../../../styles/visitdata.module.css";
@@ -41,7 +45,8 @@ const VisitData = ({
   currentDiseaseType,
   isDosSelected,
   actions,
-  selectDosValue
+  selectDosValue,
+  patientIdDetailsData,
 }) => {
   const [isFileFormShow, setIsFileFormShow] = useState(false);
   const [isModalOpenValid, setIsModalOpenValid] = useState(false);
@@ -81,9 +86,8 @@ const VisitData = ({
   const [deletedMeatList, setDeletedMeatList] = useState([]);
   const [suggestedMeatForm, setSuggestedMeatForm] = useState(false);
   const [showList, setShowList] = useState(["care"]);
-  const [selectCardTitle, setSelectCardTitle] = useState('');
+  const [selectCardTitle, setSelectCardTitle] = useState("");
   const [potentialList, setPotentialList] = useState([]);
-
 
   useEffect(() => {
     var orgId = getStorage("orgId");
@@ -118,7 +122,7 @@ const VisitData = ({
       </div>
     );
     setUserDetails(dotLoading);
-  }, [patientDetailsResult,actions?.showDisease]);
+  }, [patientDetailsResult, actions?.showDisease]);
 
   // useEffect(() => {
   //   if (hccFileDetails?.data?.response) {
@@ -167,7 +171,7 @@ const VisitData = ({
         <div className="bouncing-loader"></div>
       </div>
     );
-    const response = await getValidHccDetailsApi(year.value,code)
+    const response = await getValidHccDetailsApi(year.value, code);
     if (response?.response) {
       var value = [];
       result = response?.response;
@@ -655,7 +659,9 @@ const VisitData = ({
       setShowList((prev) => [...prev, value]);
     }
   };
-
+  const isDisabled =
+  patientIdDetailsData?.data?.response
+    ?.workflow?.[0]?.status !== "PENDING";
   return (
     <>
       {/* {fileLoading ? <LogoLoader /> : null} */}
@@ -691,7 +697,13 @@ const VisitData = ({
                             HCC
                             {isDosSelected && (
                               <FontAwesomeIcon
-                                onClick={() => addValidDiseases()}
+                                onClick={() => {
+                                  if (isDisabled) return;
+                                  addValidDiseases();
+                                }}
+                                style={{
+                                  cursor: isDisabled ? "not-allowed" : "pointer",
+                                }}
                                 icon={faPlus}
                               />
                             )}
@@ -766,7 +778,7 @@ const VisitData = ({
                           <span
                             className={`${visitStyles.suggested_title_name}`}
                           >
-                            CARE GAP 
+                            CARE GAP
                           </span>
                           <div className="d-flex justify-content-center">
                             <span
@@ -1194,6 +1206,7 @@ const enhancer = connect(
     labResult: state?.patientDetails?.details?.labResult,
     currentDiseaseType: state?.patientDetails?.details?.currentDiseaseType,
     isDosSelected: state.patientDetails.details?.getSelectedDosDetails,
+    patientIdDetailsData: state?.patientDetails.details?.patientIdResult,
   }),
   {
     getRadiologyFileDetails: detailsActions.radiologyFileAction,

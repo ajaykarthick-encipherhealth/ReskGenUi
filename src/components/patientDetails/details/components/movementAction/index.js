@@ -38,6 +38,7 @@ const MovementAction = ({
   fromMeat,
   patientDetailsLoad,
   getPatientIdData,
+  patientIdDetailsData,
 }) => {
   const [selectDisDetails, setSelectDisDetails] = useState(false);
   const onChangeValues = (data) => {
@@ -89,6 +90,8 @@ const MovementAction = ({
       });
     }
   };
+  const isDisabled =
+    patientIdDetailsData?.data?.response?.workflow?.[0]?.status !== "PENDING";
 
   const handleCloseModal = () => {};
   return (
@@ -97,166 +100,188 @@ const MovementAction = ({
         {validAction && (
           <Tooltip title="Move to valid" placement="bottom">
             {isShow || fromMeat ? (
-              <Popconfirm
-                onConfirm={() => {
-                  onConfirmValidMove();
-                }}
-                title="You want move to valid?"
-                placement="bottom"
-                okText="Yes"
-                cancelText="No"
-              >
+              !isDisabled ? (
+                <Popconfirm
+                  onConfirm={() => {
+                    onConfirmValidMove();
+                  }}
+                  title="You want move to valid?"
+                  placement="bottom"
+                  okText="Yes"
+                  cancelText="No"
+                >
+                  <CheckCircleFilled
+                    className={styles.validIcon}
+                    onClick={() => {
+                      moveToStrightAction(
+                        setIsValidAction,
+                        "Move to HCC",
+                        cardTitle
+                      ),
+                        onchangeValid(result.diagnosisCode, result),
+                        onChangeValues(result);
+                    }}
+                  />
+                </Popconfirm>
+              ) : (
                 <CheckCircleFilled
                   className={styles.validIcon}
-                  onClick={() => {
-                    moveToStrightAction(
-                      setIsValidAction,
-                      "Move to HCC",
-                      cardTitle
-                    ),
-                      onchangeValid(result.diagnosisCode, result),
-                      onChangeValues(result);
-                  }}
+                  style={{ cursor: isDisabled ? "not-allowed" : "pointer" }}
                 />
-              </Popconfirm>
-            ) : (
-              <CheckCircleFilled className={styles.validIcon} />
-            )}
+              )
+            ) : null}
           </Tooltip>
         )}
         {suggestedAction && (
           <Tooltip title="Move to Care Gap" placement="bottom">
             {isShow || fromMeat ? (
-              <Popconfirm
-                onConfirm={() => {
-                  handleSubmitValidNotes({
-                    values: null,
-                    setFileLoading,
-                    setConfirmNotesModalValid,
-                    isValidAction,
-                    selectDisDetails,
-                    getpatientDetailsData,
-                    patientDetailsResult,
-                    handleCloseModal,
-                    patientDetailsLoad,
-                    getPatientIdData,
-                  });
-                }}
-                title="You want move to Care Gap?"
-                placement="bottom"
-                okText="Yes"
-                cancelText="No"
-              >
+              !isDisabled ? (
+                <Popconfirm
+                  onConfirm={() => {
+                    handleSubmitValidNotes({
+                      values: null,
+                      setFileLoading,
+                      setConfirmNotesModalValid,
+                      isValidAction,
+                      selectDisDetails,
+                      getpatientDetailsData,
+                      patientDetailsResult,
+                      handleCloseModal,
+                      patientDetailsLoad,
+                      getPatientIdData,
+                    });
+                  }}
+                  title="You want move to Care Gap?"
+                  placement="bottom"
+                  okText="Yes"
+                  cancelText="No"
+                >
+                  <RightCircleOutlined
+                    className={styles.suggestedIcon}
+                    style={{ cursor: "pointer" }}
+                    onClick={() => {
+                      moveToStrightAction(
+                        setIsValidAction,
+                        "Move to Suggested",
+                        cardTitle
+                      );
+                      onchangeValid(result.diagnosisCode, result);
+                      onChangeValues(result);
+                    }}
+                  />
+                </Popconfirm>
+              ) : (
                 <RightCircleOutlined
                   className={styles.suggestedIcon}
-                  onClick={() => {
-                    moveToStrightAction(
-                      setIsValidAction,
-                      "Move to Suggested",
-                      cardTitle
-                    ),
-                      onchangeValid(result.diagnosisCode, result),
-                      onChangeValues(result);
-                  }}
+                  style={{ cursor: isDisabled ? "not-allowed" : "pointer" }}
                 />
-              </Popconfirm>
-            ) : (
-              <RightCircleOutlined className={styles.suggestedIcon} />
-            )}
+              )
+            ) : null}
           </Tooltip>
         )}
+
         {potentialAction && !isComboCode && (
           <Tooltip title="Move to potential" placement="bottom">
             {isShow || fromMeat ? (
-              <Popconfirm
-                onConfirm={() => {
-                  handleSubmitValidNotes({
-                    values: null,
-                    setFileLoading,
-                    setConfirmNotesModalValid,
-                    isValidAction,
-                    selectDisDetails,
-                    getpatientDetailsData,
-                    patientDetailsResult,
-                    handleCloseModal,
-                    patientDetailsLoad,
-                    getPatientIdData,
-                  });
-                }}
-                title="You want move to potential?"
-                placement="bottom"
-                okText="Yes"
-                cancelText="No"
-              >
+              !isDisabled ? (
+                <Popconfirm
+                  onConfirm={() => {
+                    handleSubmitValidNotes({
+                      values: null,
+                      setFileLoading,
+                      setConfirmNotesModalValid,
+                      isValidAction,
+                      selectDisDetails,
+                      getpatientDetailsData,
+                      patientDetailsResult,
+                      handleCloseModal,
+                      patientDetailsLoad,
+                      getPatientIdData,
+                    });
+                  }}
+                  title="You want move to potential?"
+                  placement="bottom"
+                  okText="Yes"
+                  cancelText="No"
+                >
+                  <span
+                    className={`d-flex align-items-center justify-content-center ${styles.potentialIcon}`}
+                    onClick={() => {
+                      moveToStrightAction(
+                        setIsValidAction,
+                        "Move to Potential",
+                        cardTitle
+                      );
+                      onchangeValid(result.diagnosisCode, result);
+                      onChangeValues(result);
+                    }}
+                  >
+                    <FontAwesomeIcon
+                      icon={faHandHoldingMedical}
+                      style={{ fontSize: "9px" }}
+                    />
+                  </span>
+                </Popconfirm>
+              ) : (
                 <span
                   className={`d-flex align-items-center justify-content-center ${styles.potentialIcon}`}
-                  onClick={() => {
-                    moveToStrightAction(
-                      setIsValidAction,
-                      "Move to Potential",
-                      cardTitle
-                    );
-                    onchangeValid(result.diagnosisCode, result);
-                    onChangeValues(result);
-                  }}
                 >
                   <FontAwesomeIcon
                     icon={faHandHoldingMedical}
-                    style={{ fontSize: "9px" }}
+                    style={{
+                      fontSize: "9px",
+                      cursor: isDisabled ? "not-allowed" : "pointer",
+                    }}
                   />
                 </span>
-              </Popconfirm>
-            ) : (
-              <span
-                className={`d-flex align-items-center justify-content-center ${styles.potentialIcon}`}
-              >
-                <FontAwesomeIcon
-                  icon={faHandHoldingMedical}
-                  style={{ fontSize: "9px" }}
-                />
-              </span>
-            )}
+              )
+            ) : null}
           </Tooltip>
         )}
         {deleteAction && !isComboCode ? (
           <Tooltip title="Move to delete" placement="bottom">
             {isShow || fromMeat ? (
-              <Popconfirm
-                onConfirm={() => {
-                  handleSubmitValidNotes({
-                    values: null,
-                    setFileLoading,
-                    setConfirmNotesModalValid,
-                    isValidAction,
-                    selectDisDetails,
-                    getpatientDetailsData,
-                    patientDetailsResult,
-                    handleCloseModal,
-                    patientDetailsLoad,
-                    getPatientIdData,
-                  });
-                }}
-                title="Do you want to move to delete?"
-                placement="bottom"
-                okText="Yes"
-                cancelText="No"
-              >
+              !isDisabled ? (
+                <Popconfirm
+                  onConfirm={() => {
+                    handleSubmitValidNotes({
+                      values: null,
+                      setFileLoading,
+                      setConfirmNotesModalValid,
+                      isValidAction,
+                      selectDisDetails,
+                      getpatientDetailsData,
+                      patientDetailsResult,
+                      handleCloseModal,
+                      patientDetailsLoad,
+                      getPatientIdData,
+                    });
+                  }}
+                  title="Do you want to move to delete?"
+                  placement="bottom"
+                  okText="Yes"
+                  cancelText="No"
+                >
+                  <CloseCircleFilled
+                    className={styles.deleteIcon}
+                    onClick={() => {
+                      moveToStrightAction(
+                        setIsValidAction,
+                        "Move to Deleted",
+                        cardTitle
+                      ),
+                        onchangeValid(result.diagnosisCode, result),
+                        onChangeValues(result);
+                    }}
+                  />
+                </Popconfirm>
+              ) : (
                 <CloseCircleFilled
                   className={styles.deleteIcon}
-                  onClick={() => {
-                    moveToStrightAction(
-                      setIsValidAction,
-                      "Move to Deleted",
-                      cardTitle
-                    ),
-                      onchangeValid(result.diagnosisCode, result),
-                      onChangeValues(result);
-                  }}
+                  style={{ cursor: isDisabled ? "not-allowed" : "pointer" }}
                 />
-              </Popconfirm>
-            ) : (
-              <CloseCircleFilled className={styles.deleteIcon} />
-            )}
+              )
+            ) : null}
           </Tooltip>
         ) : (
           //   <CloseCircleFilled
@@ -273,6 +298,7 @@ const MovementAction = ({
 const enhancer = connect(
   (state) => ({
     patientDetailsResult: state?.patientDetails?.details?.patientResult,
+    patientIdDetailsData: state?.patientDetails.details?.patientIdResult,
   }),
   {
     getpatientDetailsData: detailsActions.patientDetailsAction,
