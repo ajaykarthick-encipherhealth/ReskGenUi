@@ -214,30 +214,44 @@ const HccCards = ({
     }
   }, [selectedDos, labFile?.data?.response?.dosSummaries]);
 
-  const unHideDisease = async (data, action) => {
-    patientDetailsLoad(true);
-    const patientId = getStorage("patientId");
-    const role = getStorage("userRole");
-    const res = await diseaseEdit({
-      patientId: patientId,
-      ...data,
-      isShow: action === "hide" ? false : true,
-      chartProcessType: "DATE_OF_SERVICE",
-      dateOfServiceIfDosWiseCompute: data?.dateOfServices[0],
-      processedYear: year?.value,
-      newDiagnosisCode: data?.diagnosisCode,
-      oldDiagnosisCode: data?.diagnosisCode,
-    });
-    if (res?.status === "SUCCESS") {
-      getPatientDetailsData(patientId, null, selectDosValue, "", role);
-      getPatientIdData(patientId);
-      setOpenContent(false);
-      getResponePopup(res);
-      patientDetailsLoad(false);
-    } else {
-      getResponePopup(res);
-      patientDetailsLoad(false);
-    }
+ const unHideDisease = async (data, action,meatCriteriaList) => {
+   const result = meatCriteriaList?.find(
+     (res2) =>
+       res2?.diagnosisCode?.replace(".", "") ===
+       data?.diagnosisCode?.replace(".", "")
+   );
+   patientDetailsLoad(true);
+   const patientId = getStorage("patientId");
+   const role = getStorage("userRole");
+   const res = await diseaseEdit({
+     patientId: patientId,
+     ...data,
+     isShow: action === "hide" ? false : true,
+     chartProcessType: "DATE_OF_SERVICE",
+     dateOfServiceIfDosWiseCompute: data?.dateOfServices[0],
+     processedYear: year?.value,
+     newDiagnosisCode: data?.diagnosisCode,
+     oldDiagnosisCode: data?.diagnosisCode,
+     monitorAspect: result?.monitorAspect,
+     evaluateAspect: result?.evaluateAspect,
+     assessmentAspect: result?.assessmentAspect,
+     treatmentAspect: result?.treatmentAspect,
+     monitorHyperLink: result?.monitorHyperLink,
+     evaluateHyperLink: result?.evaluateHyperLink,
+     assessmentHyperLink: result?.assessmentHyperLink,
+     treatmentHyperLink: result?.treatmentHyperLink,
+   });
+
+   if (res?.status === "SUCCESS") {
+     getPatientDetailsData(patientId, null, selectDosValue, "", role);
+     getPatientIdData(patientId);
+     setOpenContent(false);
+     getResponePopup(res);
+     patientDetailsLoad(false);
+   } else {
+     getResponePopup(res);
+     patientDetailsLoad(false);
+   }
   };
   const isDisabled =
     patientIdDetailsData?.data?.response?.workflow?.[0]?.status !== "PENDING";
@@ -308,7 +322,7 @@ const HccCards = ({
                         >
                           <Popover
                             open={
-                              !data?.isShow &&
+                              !data?.isShow && isDosSelected && 
                               hoveredItem == data?.diagnosisCode
                                 ? true
                                 : false
@@ -319,7 +333,7 @@ const HccCards = ({
                               !isDisabled?(
                               <Popconfirm
                                 title="Are you sure want to unhide the disease?"
-                                onConfirm={() => unHideDisease(data, "show")}
+                                onConfirm={() => unHideDisease(data, "show",meatCriteriaList)}
                               >
                                 <div
                                   className="w-100 d-flex justify-content-center align-items-center cursor-pointer"
@@ -827,7 +841,7 @@ const HccCards = ({
                                             <Popconfirm
                                               title="Are you sure want to hide disease?"
                                               onConfirm={() =>
-                                                unHideDisease(data, "hide")
+                                                unHideDisease(data, "hide",meatCriteriaList)
                                               }
                                             >
                                               <div className="cursor-pointer">
