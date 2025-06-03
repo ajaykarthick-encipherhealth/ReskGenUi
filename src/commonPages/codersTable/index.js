@@ -443,38 +443,6 @@ const CodersTable = ({
                         COMPLETED - {tableStatus?.approvedCount || 0}{" "}
                       </Nav.Link>
                     </Nav.Item>{" "}
-                    <Nav.Item
-                      as="li"
-                      className="nav-item"
-                      onClick={() => {
-                        handleTabs("HOLD");
-                      }}
-                    >
-                      <Nav.Link
-                        id="hold"
-                        name="hold"
-                        to="#my-posts"
-                        eventKey="HOLD"
-                      >
-                        HOLD - {tableStatus?.holdCount || 0}
-                      </Nav.Link>
-                    </Nav.Item>
-                    <Nav.Item
-                      as="li"
-                      className="nav-item"
-                      onClick={() => {
-                        handleTabs("DECLINED");
-                      }}
-                    >
-                      <Nav.Link
-                        id="declined"
-                        name="declined"
-                        to="#my-posts"
-                        eventKey="DECLINED"
-                      >
-                        DECLINED - {tableStatus?.rejectedCount || 0}
-                      </Nav.Link>
-                    </Nav.Item>
                   </Nav>
                   <Tab.Content>
                     <Tab.Pane eventKey={activeStatus}>

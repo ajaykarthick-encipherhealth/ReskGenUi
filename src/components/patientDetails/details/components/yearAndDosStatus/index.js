@@ -125,22 +125,6 @@ const YearAndDosStatus = ({
   const getPatientIdDetails = async (result) => {
     const menu = (
       <Menu className="ant-badge" id="menu-container" name="menu-container">
-        {result?.workflow?.[0]?.status != "HOLD" ? (
-          <Menu.Item
-            id="hold-menu-item"
-            name="hold-menu-item"
-            className="ant-badge"
-            key="1"
-            onClick={() => {
-              handleActionClick("HOLD");
-              setMenuIsOpen(false);
-            }}
-          >
-            <div className="ant-badge patient-status">
-              <span className={`ant-badge badge hold-text`}>HOLD</span>
-            </div>
-          </Menu.Item>
-        ) : null}
         {result?.workflow?.[0]?.status != "PENDING" &&
         result?.workflow?.[0]?.status != "COMPUTED" ? (
           <Menu.Item
@@ -155,27 +139,6 @@ const YearAndDosStatus = ({
           >
             <div className="ant-badge patient-status">
               <span className={`badge ant-badge processing-text`}>PENDING</span>
-            </div>
-          </Menu.Item>
-        ) : null}
-        {result?.workflow?.[0]?.status != "DECLINED" ? (
-          <Menu.Item
-            id="decline-menu-item"
-            name="decline-menu-item"
-            className="ant-badge"
-            key="3"
-            onClick={() => {
-              handleActionClick("DECLINED");
-              setMenuIsOpen(false);
-            }}
-          >
-            <div className="ant-badge patient-status">
-              <span
-                className={`badge ant-badge failed-text`}
-                style={{ color: "red" }}
-              >
-                DECLINE
-              </span>
             </div>
           </Menu.Item>
         ) : null}

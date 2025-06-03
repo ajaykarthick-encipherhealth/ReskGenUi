@@ -186,22 +186,6 @@ const shouldDisable = isOnReviewerPatients ;
     const menu = (
     
       <Menu id="auditbtn">
-        {result?.workflow?.[0]?.status != "HOLD" ? (
-          
-          <Menu.Item
-            key="1"
-            onClick={() => {
-              handleActionClick("HOLD");
-              setMenuIsOpen(false);
-            }}
-          >
-            <div id="auditbtn" className="patient-status">
-              <span id="auditbtn" className={`badge hold-text`}>
-                HOLD
-              </span>
-            </div>
-          </Menu.Item>
-        ) : null}
 
         {result?.workflow?.[0]?.status != "PENDING" &&
         result?.workflow?.[0]?.status != "COMPUTED" ? (
@@ -217,33 +201,6 @@ const shouldDisable = isOnReviewerPatients ;
                 PENDING
               </span>
             </div>
-          </Menu.Item>
-        ) : null}
-        {result?.workflow?.[0]?.status != "DECLINED" ? (
-          <Menu.Item
-            key="3"
-            // disabled={flagFirstData?.flag !== undefined ? false : true}
-            onClick={() => {
-              handleActionClick("DECLINE");
-              setMenuIsOpen(false);
-            }}
-          >
-            <Tooltip
-            // title={
-            //   flagFirstData?.flag === undefined &&
-            //   "Add flag to disable Decline"
-            // }
-            >
-              <div id="auditbtn" className="patient-status">
-                <span
-                  id="auditbtn"
-                  className={`badge failed-text`}
-                  style={{ color: "red" }}
-                >
-                  DECLINE
-                </span>
-              </div>
-            </Tooltip>
           </Menu.Item>
         ) : null}
 
@@ -313,7 +270,7 @@ const shouldDisable = isOnReviewerPatients ;
 
     const menu2 = (
       <Menu>
-        {result?.workflow?.[0]?.status != "HOLD" ? (
+        {/* {result?.workflow?.[0]?.status != "HOLD" ? (
           <Menu.Item
             key="1"
             onClick={() => {
@@ -325,7 +282,7 @@ const shouldDisable = isOnReviewerPatients ;
               <span className={`badge hold-text`}>HOLD</span>
             </div>
           </Menu.Item>
-        ) : null}
+        ) : null} */}
         {result?.workflow?.[0]?.status != "PENDING" ? (
           <Menu.Item
             key="2"
@@ -339,7 +296,7 @@ const shouldDisable = isOnReviewerPatients ;
             </div>
           </Menu.Item>
         ) : null}
-        {result?.workflow?.[0]?.status != "DECLINE" ? (
+        {/* {result?.workflow?.[0]?.status != "DECLINE" ? (
           <Menu.Item
             key="3"
             onClick={() => {
@@ -361,7 +318,7 @@ const shouldDisable = isOnReviewerPatients ;
               </div>
             </Tooltip>
           </Menu.Item>
-        ) : null}
+        ) : null} */}
 
         {result?.workflow?.[0]?.status != "COMPLETE" ? (
           <Menu.Item
@@ -393,7 +350,7 @@ const shouldDisable = isOnReviewerPatients ;
     );
     const menu3 = (
       <Menu>
-        {result?.workflow?.[0]?.status != "HOLD" ? (
+        {/* {result?.workflow?.[0]?.status != "HOLD" ? (
           <Menu.Item
             key="1"
             onClick={() => {
@@ -405,7 +362,7 @@ const shouldDisable = isOnReviewerPatients ;
               <span className={`badge hold-text`}>HOLD</span>
             </div>
           </Menu.Item>
-        ) : null}
+        ) : null} */}
         {result?.workflow?.[0]?.status != "PENDING" ? (
           <Menu.Item
             key="2"
@@ -419,7 +376,7 @@ const shouldDisable = isOnReviewerPatients ;
             </div>
           </Menu.Item>
         ) : null}
-        {result?.workflow?.[0]?.status != "DECLINE" ? (
+        {/* {result?.workflow?.[0]?.status != "DECLINE" ? (
           <Menu.Item
             key="3"
             onClick={() => {
@@ -441,7 +398,7 @@ const shouldDisable = isOnReviewerPatients ;
               </div>
             </Tooltip>
           </Menu.Item>
-        ) : null}
+        ) : null} */}
 
         {result?.workflow?.[0]?.status != "COMPLETE" ? (
           <Menu.Item
@@ -699,24 +656,6 @@ const shouldDisable = isOnReviewerPatients ;
               name="allocate-action"
               className={`${visitStyles.actionbtnContainer} text-truncate`}
             >
-              {/* <Dropdown
-                overlay={adminActionItems}
-                onVisibleChange={(v) => setMenuIsOpen(v)}
-                visible={menuIsOpen}
-                className={`completedBtnHcc ${visitStyles.completedBtnHcc}`}
-              >
-                <Button
-                  type="primary"
-                  className={`completedBtnHcc ${visitStyles.completedBtnHcc}`}
-                >
-                  <span>
-                    {patienIdDetails?.allocatedOn ? "ALLOCATED" : "ALLOCATE"}
-                  </span>
-                  <span style={{ marginLeft: "10px" }}>
-                    <DownOutlined />
-                  </span>
-                </Button>
-              </Dropdown> */}
               <Button
                 type="primary"
                 className={`completedBtnHcc ${visitStyles.completedBtnHcc}`}
@@ -809,85 +748,8 @@ const shouldDisable = isOnReviewerPatients ;
                     </span>
                   </Button>
                 </Dropdown>
-              ) : patienIdDetails?.workflow?.[0]?.status == "DECLINED" ? (
-                <div className={`col-xl-12`}>
-                  <Dropdown
-                    overlay={
-                      activeTab == 3
-                        ? actionItems2
-                        : activeTab == 4
-                        ? actionItems3
-                        : actionItems
-                    }
-                    onVisibleChange={(v) => setMenuIsOpen(v)}
-                    visible={menuIsOpen}
-                    className={`declinedBtnHcc ${visitStyles.declinedBtnHcc}`}
-                  >
-                    <Button
-                      type="primary"
-                      className={`declinedBtnHcc ${visitStyles.declinedBtnHcc}`}
-                    >
-                      <span>DECLINED</span>
-                      <span style={{ marginLeft: "10px" }}>
-                        <DownOutlined />
-                      </span>
-                    </Button>
-                  </Dropdown>
-                </div>
-              ) : patienIdDetails?.workflow?.[0]?.status == "HOLD" ? (
-                <Dropdown
-                  overlay={
-                    activeTab == 3
-                      ? actionItems2
-                      : activeTab == 4
-                      ? actionItems3
-                      : actionItems
-                  }
-                  onVisibleChange={(v) => setMenuIsOpen(v)}
-                  visible={menuIsOpen}
-                  className={`holdBtnHcc ${visitStyles.holdBtnHccs}`}
-                >
-                  <Button
-                    type="primary"
-                    className={`holdBtnHcc ${visitStyles.holdBtnHccs}`}
-                  >
-                    <span>HOLD</span>
-                    <span style={{ marginLeft: "10px" }}>
-                      <DownOutlined />
-                    </span>
-                  </Button>
-                </Dropdown>
-              ) : patienIdDetails?.workflow?.[0]?.status == "QUERIED" ? (
-                // <Dropdown
-                //   overlay={
-                //     activeTab == 3
-                //       ? actionItems2
-                //       : activeTab == 4
-                //       ? actionItems3
-                //       : actionItems
-                //   }
-                //   onVisibleChange={(v) => setMenuIsOpen(v)}
-                //   visible={menuIsOpen}
-                //   className={`holdBtnHcc ${visitStyles.holdBtnHccs}`}
-                //   disabled={isQueried}
-                //   // className={`px-3 py-1 rounded-md ${styles.queryBtn}`}
-                // >
-                //   {/* <Button
-                //     type="primary"
-                //     className={`holdBtnHcc ${visitStyles.holdBtnHccs}`}
-                //   >
-                //     <span>HOLD</span>
-                //     <span style={{ marginLeft: "10px" }}>
-                //       <DownOutlined />
-                //     </span>
-                //   </Button> */}
-                //   <Button
-                //     disabled={isQueried}
-                //     // className={`px-3 py-1 rounded-md ${styles.queryBtn}`}
-                //   >
-                //     Queried
-                //   </Button>
-                // </Dropdown>
+              ) 
+              : patienIdDetails?.workflow?.[0]?.status == "QUERIED" ? (
                 <Dropdown
                   overlay={
                     activeTab == 3
