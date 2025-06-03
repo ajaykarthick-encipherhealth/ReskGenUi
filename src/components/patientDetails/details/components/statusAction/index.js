@@ -725,29 +725,68 @@ const shouldDisable = isOnReviewerPatients ;
               name="auditbtnContainer"
             >
               {patienIdDetails?.workflow?.[0]?.status == "COMPLETED" ? (
+                // <Dropdown
+                //   id="auditbtn"
+                //   overlay={
+                //     activeTab == 3
+                //       ? actionItems2
+                //       : activeTab == 4
+                //       ? actionItems3
+                //       : actionItems
+                //   }
+                //   onVisibleChange={(v) => setMenuIsOpen(v)}
+                //   visible={menuIsOpen}
+                //   style={{cursor:"not-allowed" }}
+                //   className={`completedBtnHcc ant-badge ${visitStyles.completedBtnHcc}`}
+                //   disabled={
+                //     shouldDisable &&
+                //     patienIdDetails?.workflow?.[0]?.status === "COMPLETED"
+                //   }
+                // >
+                //   <Button
+                //     id="auditbtn"
+                //     type="primary"
+                //     className={`completedBtnHcc ant-badge ${visitStyles.completedBtnHcc}`}
+                //   >
+                //     <span>COMPLETED</span>
+                //     <span style={{ marginLeft: "10px" }}>
+                //       <DownOutlined />
+                //     </span>
+                //   </Button>
+                // </Dropdown>
                 <Dropdown
                   id="auditbtn"
                   overlay={
-                    activeTab == 3
+                    activeTab === 3
                       ? actionItems2
-                      : activeTab == 4
+                      : activeTab === 4
                       ? actionItems3
                       : actionItems
                   }
                   onVisibleChange={(v) => setMenuIsOpen(v)}
                   visible={menuIsOpen}
                   className={`completedBtnHcc ant-badge ${visitStyles.completedBtnHcc}`}
+                  disabled={
+
+                    patienIdDetails?.workflow?.[0]?.status === "COMPLETED"
+                  }
                 >
-                  <Button
+                  <button
                     id="auditbtn"
                     type="primary"
                     className={`completedBtnHcc ant-badge ${visitStyles.completedBtnHcc}`}
+                    style={{
+                      cursor:
+                        patienIdDetails?.workflow?.[0]?.status === "COMPLETED"
+                          ? "not-allowed"
+                          : "pointer",
+                    }}
                   >
                     <span>COMPLETED</span>
                     <span style={{ marginLeft: "10px" }}>
                       <DownOutlined />
                     </span>
-                  </Button>
+                  </button>
                 </Dropdown>
               ) 
               : patienIdDetails?.workflow?.[0]?.status == "QUERIED" ? (
@@ -767,7 +806,18 @@ const shouldDisable = isOnReviewerPatients ;
                     patienIdDetails?.workflow?.[0]?.status === "QUERIED"
                   }
                 >
-                  <Button disabled={shouldDisable}>Queried</Button>
+                  <button
+                    disabled={shouldDisable}
+                    style={{
+                      cursor:
+                        shouldDisable &&
+                        patienIdDetails?.workflow?.[0]?.status === "COMPLETED"
+                          ? "not-allowed"
+                          : "pointer",
+                    }}
+                  >
+                    Queried
+                  </button>
                 </Dropdown>
               ) : patienIdDetails?.workflow?.[0]?.status == "PENDING" ||
                 patienIdDetails?.workflow?.[0]?.status == "COMPUTED" ? (
