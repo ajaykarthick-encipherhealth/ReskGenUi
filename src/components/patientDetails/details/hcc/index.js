@@ -408,7 +408,7 @@ const Hcc = ({
       <div className="row">
         <div className="col-xl-6 my-2">Re-Evaluate</div>
         <div className="col-xl-6 d-flex justify-content-end align-items-center cursor-pointer">
-          <Popconfirm
+          {!isDisabled ? <Popconfirm
             title="Are you sure you want to re-evaluate?"
             onConfirm={onChange}
             okText="Yes"
@@ -418,8 +418,17 @@ const Hcc = ({
             <Switch
               checked={isChecked?.isReEvaluateNeed}
               disabled={isChecked?.movedAfterReEvaluateIsOff}
+              style={{
+                cursor:  isDisabled ? "not-allowed" : "pointer"
+              }}
             />
-          </Popconfirm>
+          </Popconfirm>:<>
+          <Switch
+              checked={isChecked?.isReEvaluateNeed}
+              disabled={isChecked?.movedAfterReEvaluateIsOff || isDisabled}
+            />
+          </>}
+         
         </div>
 
         <Divider className="p-0 m-0" />
@@ -788,12 +797,9 @@ const Hcc = ({
                       >
                         <button
                           className={`${visitStyles.actionBtn} px-3 py-1 mx-2 rounded-md`}
-                          style={{
-                            cursor:  isDisabled ? "not-allowed" : "pointer"
-                          }}
-                          disabled={ isDisabled}
+                          // disabled={ isDisabled}
                           onClick={() => {
-                            if (isDisabled) return;
+                            // if (isDisabled) return;
                             setActions({
                               ...actions,
                               showActionsPop: !actions.showActionsPop,

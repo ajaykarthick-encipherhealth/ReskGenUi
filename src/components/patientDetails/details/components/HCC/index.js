@@ -316,6 +316,7 @@ const HccCards = ({
                             placement="center"
                             trigger={["hover", "focus"]}
                             content={
+                              !isDisabled?(
                               <Popconfirm
                                 title="Are you sure want to unhide the disease?"
                                 onConfirm={() => unHideDisease(data, "show")}
@@ -338,7 +339,29 @@ const HccCards = ({
                                     style={{ color: "#d9d9d9" }}
                                   />
                                 </div>
-                              </Popconfirm>
+                              </Popconfirm>):<>
+                              <div
+                                  className="w-100 d-flex justify-content-center align-items-center "
+                                  style={{
+                                    cursor: isDisabled
+                                      ? "not-allowed"
+                                      : "pointer",
+                                  }}
+                                >
+                                  <span
+                                    className="px-2"
+                                    style={{
+                                      width: "50px",
+                                      color: "#d9d9d9",
+                                    }}
+                                  >
+                                    {"Show"}
+                                  </span>
+                                  <FontAwesomeIcon
+                                    icon={faEyeSlash}
+                                    style={{ color: "#d9d9d9" }}
+                                  />
+                                </div></>
                             }
                           >
                             <div
