@@ -266,11 +266,14 @@ const Comments = ({
                   onChange={handleChange}
                   onKeyPress={handleEnterText}
                   type="submit"
+                  style={{
+                    cursor: commentsTrigger || isDisabled ? "not-allowed" : "pointer"
+                  }}  
                 ></textarea>
-                <button
+                <Button
                   id="gridSystemModal-comments-button"
                   name="gridSystemModal-comments-button"
-                  type="submit"
+                  type="submit" 
                   style={{
                     cursor: commentsTrigger || isDisabled ? "not-allowed" : "pointer"
                   }}
@@ -278,7 +281,7 @@ const Comments = ({
                   className={visitStyles.commentSendIcon}
                 >
                   {SVGICON.sentMessageIcon}
-                </button>
+                </Button>
               </div>
             </div>
           </Form>

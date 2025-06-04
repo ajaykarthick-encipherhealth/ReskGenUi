@@ -320,7 +320,9 @@ const Flag = ({
                 className="col-xl-12"
               >
                 <textarea
-                  style={{ cursor: "default !important" }}
+                   style={{
+                    cursor: commentsTrigger || isDisabled ? "not-allowed" : "default"
+                  }}
                   className={visitStyles.commentsFormControl}
                   rows="5"
                   required
@@ -331,12 +333,13 @@ const Flag = ({
                   onChange={handleChange}
                   // onKeyPress={handleEnterTextNotes}
                   // type="submit"
+                 
                 ></textarea>
               </div>
             </div>
             <div id="flag-btn-row" className="row">
               <div id="flag-btn-save" className="d-flex justify-content-center">
-                <button
+                <Button
                   id="flag-btn-value"
                   className=" btn-sm ms-2 flr width-max-content custom-btn-style"
                   type="submit"
@@ -348,7 +351,7 @@ const Flag = ({
                   // className={visitStyles.commentSendIcon}
                 >
                   Save
-                </button>{" "}
+                </Button>{" "}
               </div>
             </div>
           </Form>

@@ -273,8 +273,11 @@ const Notes = ({
                   onKeyPress={handleEnterTextNotes}
                   type="submit"
                   value={inputValue.comments}
+                  style={{
+                    cursor: commentsTrigger || isDisabled ? "not-allowed" : "pointer"
+                  }}
                 ></textarea>
-                <button
+                <Button
                   id="submitNotes"
                   name="submitNotes"
                   type="submit"
@@ -285,7 +288,7 @@ const Notes = ({
                   className={visitStyles.commentSendIcon}
                 >
                   {SVGICON.sentMessageIcon}
-                </button>
+                </Button>
               </div>
             </div>
           </Form>
