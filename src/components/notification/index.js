@@ -73,17 +73,17 @@ const Notification = ({
 
 const handleIdRead = async (notification) => {
   const id = notification?.id;
+  const notificationType = notification?.read;
   const userId = getStorage("userId");
-  console.log("Marking notification as read", id);
 
   try {
     const response = await postUnReadCount({ id });
 
-     if (response?.status === "SUCCESS")  {
-      getNotificationList(userId);
-    } else {
-      console.warn("Mark as read failed", response);
-    }
+     if (response?.status === "SUCCESS" && notificationType === false) {
+       getNotificationList(userId);
+     } else {
+       console.warn("Mark as read failed", response);
+     }
   } catch (error) {
     console.error("Error marking notification as read", error);
   }
