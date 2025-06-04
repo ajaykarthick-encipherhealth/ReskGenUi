@@ -7,6 +7,7 @@ import { faTriangleExclamation } from "@fortawesome/free-solid-svg-icons";
 import SvgFlag from "../svg/svg";
 import { SVGICON } from "../../../../../jsx/constant/theme";
 import PieChart from "./chart";
+import Styles from "./styles.module.css"
 
 const Flag = ({
   patienIdDetails,
@@ -71,7 +72,7 @@ const Flag = ({
         <div
           className={`${styles.flagHccCard2}  ${styles.rafscoreheader} p-2 mx-2`}
         >
-          <h5>Priority</h5>
+          <h5 className={visitStyles.flagTitle}>Priority</h5>
           <div className="">
             <div className={`${visitStyles.priorityStatus} p-0`}>
               {patienIdDetails?.priority == "URGENT" ? (
@@ -133,16 +134,16 @@ const Flag = ({
         <div
           className={`${styles.flagHccCard3} ${styles.rafscoreheader} p-2 mx-2`}
         >
-          <h5>RAF</h5>
+          <h5 className={visitStyles.flagTitle}>RAF</h5>
           <div>
             {patientDetails?.rafScore?.rafVersionDTO?.overAllScore != null ? (
-              <h5 className="pt-3">
+              <h5 className={`pt-3 ${visitStyles.flagTitle}`}>
                 {patientDetails?.rafScore?.rafVersionDTO?.overAllScore?.toFixed(
                   3
                 )}
               </h5>
             ) : (
-              <h5 className="pt-3" style={{ fontWeight: 400 }}>
+             <h5 className={`pt-3 ${visitStyles.flagTitle}`} style={{ fontWeight: 400 }}>
                 0.00
               </h5>
             )}

@@ -16,8 +16,8 @@ const Tab = ({ activeTab, handleTabs, tabs, width, margin, padding }) => {
       width:
         width ||
         (tabs?.length === 2
-          ? "30%"
-          : tabs?.length === 3
+          ? "35%"
+          : tabs?.length === 4
           ? "45%"
           : tabs?.length === 4
           ? "60%"

@@ -448,15 +448,10 @@ const handleSwitchToggle = ()=>{
     <div className={`show`}>
       <Header />
       <div
-        className="d-flex justify-content-end position-relative"
-        style={{ marginTop: "6%", width: "100%" }}
+        className={`d-flex justify-content-end position-relative ${styles.tabContanier}`}
       >
-        <div
-          style={{
-            position: "absolute",
-            left: "50%",
-            transform: "translateX(-50%)",
-          }}
+        <div         
+          className={styles.subContainer}
         >
           <Tab
             activeTab={activeTab}

@@ -440,9 +440,10 @@ const HccCards = ({
                                     <>
                                       {" "}
                                       -{" "}
-                                      {data.dbDescription
+                                      <span className="cr-pointer">{data.dbDescription
                                         ? data.dbDescription
-                                        : data.actualDescription}
+                                        : data.actualDescription}</span>
+                                      
                                     </>
                                   </Popover>
                                 </span>
@@ -1338,7 +1339,7 @@ const HccCards = ({
                                 </div>
                               </div>
                             )}
-                            {/* {!data.isLab && !data.isRadiology && (
+                            {!data.isLab && !data.isRadiology && (
                               <div className={`${styles.meatContainer}`}>
                                 <div
                                   className="cr-pointer "
@@ -1413,7 +1414,7 @@ const HccCards = ({
                                   )}
                                 </div>
                               </div>
-                            )} */}
+                            )}
                           </Popover>
                         </div>
                       );

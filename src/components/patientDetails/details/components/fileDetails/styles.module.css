@@ -3,7 +3,7 @@
   /* margin: 15px 0px 15px -50px; */
 }
 .rafscoreheader h5 {
-  font-size: 15px !important;
+  font-size: 15px ;
   font-weight: 600;
 }
 
@@ -11,7 +11,7 @@
 .HccContainer h5 .flagCard2 h5,
 .flagCard3 h5,
 .flagCard1 h5 {
-  font-size: 15px !important;
+  font-size: 15px ;
 }
 .titleCard {
   width: 117px;
@@ -233,4 +233,31 @@
   margin-right: 5px;
   height: 50px;
   padding: 0 10px;
+}
+
+@media screen and (min-width: 1100px) and (max-width: 1500px) {
+.codesCard h5,
+.HccContainer h5 .flagCard2 h5,
+.flagCard3 h5,
+.flagCard1 h5, .rafscoreheader h5  {
+ font-size: 10px !important;
+}
+.hccCounts{
+  font-size: 10px;
+}
+.rafscoreheader h5 {
+  font-size: 10px !important;
+}
+/* .codesCardHcc {
+  width: 85%;
+  margin-left: 30px;
+} */
+}
+.mbi{
+  padding-left: 5px;
+}
+@media (min-width: 1024px) and (max-width: 1100px) {
+  .mbi {
+    padding-left: 3px !important;
+  }
 }

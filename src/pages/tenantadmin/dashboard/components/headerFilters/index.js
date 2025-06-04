@@ -149,7 +149,7 @@ const index = ({
     <div className={styles.container}>
       <div style={{ width: "80%" }}>
         <div className="d-flex gap-2 ">
-          <div style={{ width: "20%" }}>
+          <div>
             <div className="d-flex">
               <div className={styles.flterContainer}>Organization</div>
               <div id="tenantOrganization" name="tenantOrganization" className="tenantSelector" style={{ width: "100%" }}>

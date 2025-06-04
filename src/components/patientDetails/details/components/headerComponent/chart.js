@@ -1,5 +1,6 @@
 import React, { useEffect, useRef } from "react";
 import * as echarts from "echarts";
+import Styles from "./styles.module.css"
 
 const DosPieChart = ({ getFlagCounts }) => {
   const chartRef = useRef(null);
@@ -70,30 +71,22 @@ const DosPieChart = ({ getFlagCounts }) => {
 
   return (
     <div
-      style={{
-        display: "flex",
-        alignItems: "center",
-        backgroundColor: "#e6f0ff",
-        borderRadius: "6px",
-        boxShadow: "0px 2px 6px 0px #0000002",
-        width: "250px",
-        height: "100px",
-      }}
+      className={Styles.chartContainer}
     >
     
       <div
         style={{
-          width: "100px",
-          height: "100px",
+          // width: "100px",
+          // height: "100px",
           borderRadius: "8px",
         }}
       >
-        <div ref={chartRef} style={{ width: "100%", height: "100%" }} />
+        <div ref={chartRef} style={{ width: "85%", height: "85%" }} />
       </div>
 
 
       <div>
-        <div style={{ fontSize: "14px", fontWeight: "bold" }}>
+        <div className={Styles.chartTitle}>
           Total DOS - {getFlagCounts?.totalNumberOfDos || 0}
         </div>
         <div style={{ display: "flex", alignItems: "center" }}>
@@ -107,8 +100,8 @@ const DosPieChart = ({ getFlagCounts }) => {
               opacity: (getFlagCounts?.dosWithFlags || 0) > 0 ? 1 : 0.4,
             }}
           />
-          <span style={{ fontSize: "12px" }}>
-            Flagged DOS - {getFlagCounts?.dosWithFlags || 0}
+          <span className={Styles.spanCss}>
+            Flagged - {getFlagCounts?.dosWithFlags || 0}
           </span>
         </div>
         <div style={{ display: "flex", alignItems: "center" }}>
@@ -122,8 +115,8 @@ const DosPieChart = ({ getFlagCounts }) => {
               opacity: (getFlagCounts?.dosWithoutFlags || 0) > 0 ? 1 : 0.4,
             }}
           />
-          <span style={{ fontSize: "12px" }}>
-            Non Flagged DOS - {getFlagCounts?.dosWithoutFlags || 0}
+          <span className={Styles.spanCss}>
+            Non Flagged - {getFlagCounts?.dosWithoutFlags || 0}
           </span>
         </div>
       </div>

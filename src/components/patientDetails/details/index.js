@@ -721,7 +721,7 @@ const Details = ({
                           />
                         </Button>
                       </div>
-                      <div className="col-11">
+                      <div  style={{position:"relative",left:"-2%"}}className="col-11">
                         {loading || isSpinnerLoading ? (
                           <div className="my-3">
                             <CardSkeleton height={100} />

@@ -28,7 +28,7 @@ const HeaderComponent = ({
 }) => {
   return (
     <div className={`row mt-3 ${styles.HccContainer}`}>
-      <div className="col-4" style={{ padding: "0px" }}>
+      <div className="col-5" style={{ padding: "0px" }}>
         <Details
           fileResult={patienIdDetails}
           fromHcc={true}

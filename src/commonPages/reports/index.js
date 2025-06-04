@@ -17,7 +17,7 @@ const Project = ({ getProjectActiveTab, activeTabName }) => {
   return (
     <div className={`show`}>
       <Header />
-      <div style={{ marginTop: "5%" }}>
+      <div style={{ marginTop: "7%" }}>
         <Tab icon activeTab={activeTab} handleTabs={handleTabs} tabs={tabs} />
       </div>
       <div>

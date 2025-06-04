@@ -111,7 +111,7 @@ const TinDetails = ({ activeTabName, getProjectActiveTab,getRoutedData,getRouted
         <SubNavBar hideBackArrow={true} handleBack={handleBack} />
       </div>
       <div className={visitStyles.tab} >
-        <div>
+        <div className={visitStyles.tabContainer}>
           <Tab
             icon
             activeTab={activeTab}

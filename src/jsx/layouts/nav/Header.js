@@ -1211,7 +1211,7 @@ const Header = ({
                             userEmail={userEmail}
                             allRolesData={allRolesData}
                           />
-                          <div className="mx-15">
+                          <div className="mx-15 profile_info_header">
                             <div
                               className="text-dark-50 ms-2 header-name d-flex mr-3"
                               style={{ fontWeight: "600", fontSize: "18px" }}

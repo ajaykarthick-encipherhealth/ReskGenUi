@@ -121,7 +121,7 @@ const DosSelect = ({
 
   return (
     <Select
-      style={{ width: 400 }}
+      style={{ width: 350 }}
       placeholder="--- Select DOS ---"
       allowClear
       value={selectedDate}

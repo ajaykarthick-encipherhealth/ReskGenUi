@@ -204,8 +204,7 @@ const Projects = ({
         <div
           id="Project-btn"
           name="Project-btn"
-          className="d-flex justify-content-center align-items-center mt-3"
-          style={{ width: "10%" }}
+          className="d-flex justify-content-center align-items-center mt-3 ms-2"
         >
           <Button
             data-testid="Project-user"
