@@ -264,20 +264,22 @@ const Comments = ({
                   placeholder="Add Comments"
                   value={inputValue.comments}
                   onChange={handleChange}
-                  onKeyPress={handleEnterText}
+                  onKeyPress={isDisabled ? undefined : handleEnterText}
                   type="submit"
                   style={{
-                    cursor: commentsTrigger || isDisabled ? "not-allowed" : "pointer"
-                  }}  
+                    cursor:
+                      commentsTrigger || isDisabled ? "not-allowed" : "pointer",
+                  }}
                 ></textarea>
                 <Button
                   id="gridSystemModal-comments-button"
                   name="gridSystemModal-comments-button"
-                  type="submit" 
+                  type="submit"
                   style={{
-                    cursor: commentsTrigger || isDisabled ? "not-allowed" : "pointer"
+                    cursor:
+                      commentsTrigger || isDisabled ? "not-allowed" : "pointer",
                   }}
-                  disabled={commentsTrigger ||  isDisabled}
+                  disabled={commentsTrigger || isDisabled}
                   className={visitStyles.commentSendIcon}
                 >
                   {SVGICON.sentMessageIcon}
