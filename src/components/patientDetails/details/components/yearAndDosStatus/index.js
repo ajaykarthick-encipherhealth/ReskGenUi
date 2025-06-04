@@ -545,18 +545,28 @@ const YearAndDosStatus = ({
                   onVisibleChange={(v) => setMenuIsOpen(v)}
                   visible={menuIsOpen}
                   className={` ant-badge completedBtnHcc ant-badge ${visitStyles.completedBtnHcc}`}
+                  disabled={
+                    patientIdDetailsData?.data?.response?.workflow?.[0]?.status === "COMPLETED"
+                  }
                 >
-                  <Button
+                  <button
                     type="primary"
                     className={` ant-badge ${visitStyles.completedBtnHcc} ${
                       isDosStatus && `${visitStyles.statusBtn}`
                     } completedBtnHcc`}
+                    style={{
+                      cursor:
+                        patientIdDetailsData?.data?.response?.workflow?.[0]?.status ===
+                        "COMPLETED"
+                          ? "not-allowed"
+                          : "pointer",
+                    }}
                   >
                     <span className="ant-badge">COMPLETED</span>
                     <span style={{ marginLeft: "10px" }}>
                       <DownOutlined />
                     </span>
-                  </Button>
+                  </button>
                 </Dropdown>
               ) : patienIdDetails?.workflow?.[0]?.status == "DECLINED" ? (
                 <Dropdown
@@ -621,7 +631,6 @@ const YearAndDosStatus = ({
                   visible={menuIsOpen}
                   className={`ant-badge queryBtnHcc ${visitStyles.queryBtnHcc}`}
                   disabled={
-                   
                     patienIdDetails?.workflow?.[0]?.status === "QUERIED"
                   }
                 >
@@ -630,10 +639,10 @@ const YearAndDosStatus = ({
                     className={`ant-badge ${visitStyles.queryBtnHcc} ${
                       isDosStatus && `${visitStyles.statusBtn}`
                     } queryBtnHcc`}
+
                  
                     style={{
                       cursor:
-                       
                         patienIdDetails?.workflow?.[0]?.status === "QUERIED"
                           ? "not-allowed"
                           : "pointer",
