@@ -356,7 +356,7 @@ const Meat = ({
                       list={
                         userId == "reviewer@3gencogentai.onmicrosoft.com"
                           ? isBlockRxHcc
-                          : meatCriteriaList
+                          : isBlockRxHcc
                       }
                       captureSectionMatching={captureSectionMatching}
                       encounterDateMatching={encounterDateMatching}
@@ -408,7 +408,7 @@ const Meat = ({
                         list={
                           userId == "reviewer@3gencogentai.onmicrosoft.com"
                             ? isBlockRxHccDeleted
-                            : deletedMeatList
+                            : isBlockRxHccDeleted
                         }
                         captureSectionMatching={captureSectionMatching}
                         encounterDateMatching={encounterDateMatching}

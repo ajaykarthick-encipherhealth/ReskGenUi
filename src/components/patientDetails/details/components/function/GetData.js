@@ -141,7 +141,7 @@ export const getPatientDetails = async (
           res.riskAdjustmentDtoList?.some((item) =>
             item?.cmsHcc?.some((hcc) => hcc.value > 1)
           );
-        if (isShows) {
+        if (isShows && res?.isCmsHcc) {
           hccDisArray.push({
             ...res,
             actualDescription: res.actualDescription,
@@ -172,7 +172,7 @@ export const getPatientDetails = async (
             suspectType: res.suspectType,
             dateOfServices: res.dateOfServices,
           });
-        } else if (userId != "reviewer@3gencogentai.onmicrosoft.com") {
+        } else if (userId != "reviewer@3gencogentai.onmicrosoft.com"&& res?.isCmsHcc) {
           hccDisArray.push({
             ...res,
             actualDescription: res.actualDescription,
@@ -248,7 +248,7 @@ export const getPatientDetails = async (
           res.riskAdjustmentDtoList?.some((item) =>
             item?.cmsHcc?.some((hcc) => hcc.value > 1)
           );
-        if (isShows) {
+        if (isShows && res?.isCmsHcc) {
           var providerList = [];
           var dosList = [];
           res.providerNames?.map((res) => {
@@ -290,7 +290,7 @@ export const getPatientDetails = async (
             dateOfServices: res.dateOfServices,
             dbDescription: res.dbDescription,
           });
-        } else if (userId != "reviewer@3gencogentai.onmicrosoft.com") {
+        } else if (userId != "reviewer@3gencogentai.onmicrosoft.com"&& res?.isCmsHcc) {
           var providerList = [];
           var dosList = [];
           res.providerNames?.map((res) => {
@@ -341,7 +341,7 @@ export const getPatientDetails = async (
           res.riskAdjustmentDtoList?.some((item) =>
             item?.cmsHcc?.some((hcc) => hcc.value > 1)
           );
-        if (isShows) {
+        if (isShows && res?.isCmsHcc) {
           var providerList = [];
           var dosList = [];
           res.providerNames?.map((res) => {
@@ -383,7 +383,7 @@ export const getPatientDetails = async (
             dateOfServices: res.dateOfServices,
             dbDescription: res.dbDescription,
           });
-        } else if (userId != "reviewer@3gencogentai.onmicrosoft.com") {
+        } else if (userId != "reviewer@3gencogentai.onmicrosoft.com" && res?.isCmsHcc) {
           var providerList = [];
           var dosList = [];
           res.providerNames?.map((res) => {
@@ -434,7 +434,7 @@ export const getPatientDetails = async (
           res.riskAdjustmentDtoList?.some((item) =>
             item?.cmsHcc?.some((hcc) => hcc.value > 1)
           );
-        if (isShows) {
+        if (isShows && res?.isCmsHcc) {
           const encounterDatearray = res?.encounterDate?.split(",");
           var providerList = [];
           res.providerNames?.map((res) => {
@@ -469,7 +469,7 @@ export const getPatientDetails = async (
             isRadiology: getStateIndicators(res.stateIndicators, "RADIOLOGY"),
             isLab: getStateIndicators(res.stateIndicators, "LAB"),
           });
-        } else if (userId != "reviewer@3gencogentai.onmicrosoft.com") {
+        } else if (userId != "reviewer@3gencogentai.onmicrosoft.com" && res?.isCmsHcc) {
           const encounterDatearray = res?.encounterDate?.split(",");
           var providerList = [];
           res.providerNames?.map((res) => {
