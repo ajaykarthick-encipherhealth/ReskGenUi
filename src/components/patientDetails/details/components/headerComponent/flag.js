@@ -23,6 +23,7 @@ const Flag = ({
       : [];
 
   const highestPriorityFlag = sortedFlags[0];
+
   return (
     <>
       <div className="w-100 d-flex justify-content-between">
@@ -114,7 +115,7 @@ const Flag = ({
                     Normal
                   </span>
                 </div>
-              ) : (
+              ) : patienIdDetails?.priority == "LOW" ? (
                 <div className={visitStyles.priorityStatusIcon}>
                   <i className={TableStyle.lowFlag}>{SVGICON.alert}</i>
                   <span
@@ -125,6 +126,19 @@ const Flag = ({
                     }}
                   >
                     Low
+                  </span>
+                </div>
+              ) : (
+                <div className={visitStyles.priorityStatusIcon}>
+                  <i className={TableStyle.lowFlag}>{SVGICON.alert}</i>
+                  <span
+                    style={{
+                      fontSize: "13px",
+                      fontWeight: 500,
+                      color: "#87909e",
+                    }}
+                  >
+                    Yet To Set
                   </span>
                 </div>
               )}
@@ -143,7 +157,10 @@ const Flag = ({
                 )}
               </h5>
             ) : (
-             <h5 className={`pt-3 ${visitStyles.flagTitle}`} style={{ fontWeight: 400 }}>
+              <h5
+                className={`pt-3 ${visitStyles.flagTitle}`}
+                style={{ fontWeight: 400 }}
+              >
                 0.00
               </h5>
             )}
