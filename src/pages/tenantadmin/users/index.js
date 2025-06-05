@@ -188,11 +188,11 @@ const Users = ({
     label: item?.roleName?.split("_")?.join(" "),
   }));
   const handleCancel = () => {
-    setSelectedRole(role);
+    setSelectedRole(selectedRoleList);
     setVisiblePopoverKey(false);
   };
   const onCloseIconClick = () => {
-    setSelectedRole(role);
+    setSelectedRole(selectedRoleList);
     setVisiblePopoverKey(false);
   };
 
@@ -227,7 +227,6 @@ const Users = ({
 
   const handleAction = (item) => {
     setSelectedItem(item?.userName);
-    setSelectedRole(selectedRoleList);
   };
 
   useEffect(() => {
