@@ -18,7 +18,7 @@ const ReusableInput = ({
   const [localStr, setLocalStr] = useState(null);
   const debounceFunc = useCallback(
     debounce((text) => {
-      setSearchText && setSearchText(text?text.trim():null);
+      setSearchText && setSearchText(text ? text.trim() : null);
       setPageNumber && setPageNumber(0);
     }, 700),
     []
@@ -26,7 +26,7 @@ const ReusableInput = ({
 
   const handleChange = (text) => {
     setLocalStr(text.trimStart());
-    if (isSearch && !handleInputStr ) {
+    if (isSearch && !handleInputStr) {
       debounceFunc(text);
     }
     if (handleInputStr) {
@@ -43,10 +43,12 @@ const ReusableInput = ({
         data-testid={testId}
         {...props}
         placeholder={placeholder}
-        // value={localStr || value}
         value={localStr}
         onChange={(e) => {
-          handleChange(e.target.value);
+          const newValue = e.target.value;
+          if (newValue === " " || (localStr === "" && newValue.startsWith(" ")))
+            return;
+          handleChange(newValue);
         }}
         prefix={<FontAwesomeIcon className="searchPrefix" icon={faSearch} />}
         allowClear={true}
