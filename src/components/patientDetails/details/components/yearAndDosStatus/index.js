@@ -165,21 +165,6 @@ const YearAndDosStatus = ({
     );
     const menu2 = (
       <Menu id="menu-container2" name="menu-container2">
-        {result?.workflow?.[0]?.status != "HOLD" ? (
-          <Menu.Item
-            id="hold-menu-item2"
-            name="hold-menu-item2"
-            key="1"
-            onClick={() => {
-              handleActionClick("HOLD");
-              setMenuIsOpen(false);
-            }}
-          >
-            <div className="patient-status">
-              <span className={`badge hold-text`}>HOLD</span>
-            </div>
-          </Menu.Item>
-        ) : null}
         {result?.workflow?.[0]?.status != "PENDING" ? (
           <Menu.Item
             id="pending-menu-item2"
@@ -195,24 +180,6 @@ const YearAndDosStatus = ({
             </div>
           </Menu.Item>
         ) : null}
-        {result?.workflow?.[0]?.status != "DECLINED" ? (
-          <Menu.Item
-            id="decline-menu-item2"
-            name="decline-menu-item2"
-            key="3"
-            onClick={() => {
-              handleActionClick("DECLINED");
-              setMenuIsOpen(false);
-            }}
-          >
-            <div className="patient-status">
-              <span className={`badge failed-text`} style={{ color: "red" }}>
-                DECLINE
-              </span>
-            </div>
-          </Menu.Item>
-        ) : null}
-
         {result?.workflow?.[0]?.status != "COMPLETE" ? (
           <Menu.Item
           id="complete-menu-item2"
@@ -247,21 +214,7 @@ const YearAndDosStatus = ({
     );
     const menu3 = (
       <Menu id="menu-container3" name="menu-container3">
-        {result?.workflow?.[0]?.status != "HOLD" ? (
-          <Menu.Item
-          id="hold-menu-item3"
-            name="hold-menu-item3"
-            key="1"
-            onClick={() => {
-              handleActionClick("HOLD");
-              setMenuIsOpen(false);
-            }}
-          >
-            <div className="patient-status">
-              <span className={`badge hold-text`}>HOLD</span>
-            </div>
-          </Menu.Item>
-        ) : null}
+     
         {result?.workflow?.[0]?.status != "PENDING" ? (
           <Menu.Item
           id="pending-menu-item3"
@@ -275,31 +228,6 @@ const YearAndDosStatus = ({
             <div className="patient-status">
               <span className={`badge processing-text`}>PENDING</span>
             </div>
-          </Menu.Item>
-        ) : null}
-        {result?.workflow?.[0]?.status != "DECLINED" ? (
-          <Menu.Item
-          id="decline-menu-item3"
-            name="decline-menu-item3"
-            key="3"
-            onClick={() => {
-              handleActionClick("DECLINED");
-              setMenuIsOpen(false);
-            }}
-            disabled={flagFirstData?.flag !== undefined ? false : true}
-          >
-            <Tooltip
-              title={
-                flagFirstData?.flag === undefined &&
-                "Add flag to disable Decline"
-              }
-            >
-              <div className="patient-status">
-                <span className={`badge failed-text`} style={{ color: "red" }}>
-                  DECLINE
-                </span>
-              </div>
-            </Tooltip>
           </Menu.Item>
         ) : null}
 
@@ -339,14 +267,6 @@ const YearAndDosStatus = ({
   };
   const handleActionClick = (value) => {
     setStatusName(value);
-    if (value == "HOLD") {
-      setConfirmNotesModal(true);
-      setIsValidAction("holdFunction");
-    }
-    if (value == "DECLINED") {
-      setConfirmNotesModal(true);
-      setIsValidAction("declineFunction");
-    }
     if (value == "PENDING") {
       setConfirmNotesModal(true);
       setIsValidAction("pendingFunction");
@@ -568,57 +488,8 @@ const YearAndDosStatus = ({
                     </span>
                   </button>
                 </Dropdown>
-              ) : patienIdDetails?.workflow?.[0]?.status == "DECLINED" ? (
-                <Dropdown
-                  overlay={
-                    activeTab == 3
-                      ? actionItems2
-                      : activeTab == 4
-                      ? actionItems3
-                      : actionItems
-                  }
-                  onVisibleChange={(v) => setMenuIsOpen(v)}
-                  visible={menuIsOpen}
-                  className={`ant-badge declinedBtnHcc ${visitStyles.declinedBtnHcc}`}
-                >
-                  <Button
-                    type="primary"
-                    className={`ant-badge ${visitStyles.declinedBtnHcc} ${
-                      isDosStatus && `${visitStyles.statusBtn}`
-                    } declinedBtnHcc ant-badge`}
-                  >
-                    <span>DECLINE</span>
-                    <span style={{ marginLeft: "10px" }}>
-                      <DownOutlined />
-                    </span>
-                  </Button>
-                </Dropdown>
-              ) : patienIdDetails?.workflow?.[0]?.status == "HOLD" ? (
-                <Dropdown
-                  overlay={
-                    activeTab == 3
-                      ? actionItems2
-                      : activeTab == 4
-                      ? actionItems3
-                      : actionItems
-                  }
-                  onVisibleChange={(v) => setMenuIsOpen(v)}
-                  visible={menuIsOpen}
-                  className={`ant-badge holdBtnHcc ${visitStyles.holdBtnHccs}`}
-                >
-                  <Button
-                    type="primary"
-                    className={`ant-badge ${visitStyles.holdBtnHccs} ${
-                      isDosStatus && `${visitStyles.statusBtn}`
-                    } holdBtnHcc`}
-                  >
-                    <span className="ant-badge">HOLD</span>
-                    <span style={{ marginLeft: "10px" }}>
-                      <DownOutlined />
-                    </span>
-                  </Button>
-                </Dropdown>
-              ) : patienIdDetails?.workflow?.[0]?.status == "QUERIED" ? (
+              )
+              :patienIdDetails?.workflow?.[0]?.status == "QUERIED" ? (
                 <Dropdown
                   overlay={
                     activeTab == 3

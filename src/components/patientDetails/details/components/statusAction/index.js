@@ -271,19 +271,6 @@ const shouldDisable = isOnReviewerPatients ;
 
     const menu2 = (
       <Menu>
-        {/* {result?.workflow?.[0]?.status != "HOLD" ? (
-          <Menu.Item
-            key="1"
-            onClick={() => {
-              handleActionClick("HOLD");
-              setMenuIsOpen(false);
-            }}
-          >
-            <div className="patient-status">
-              <span className={`badge hold-text`}>HOLD</span>
-            </div>
-          </Menu.Item>
-        ) : null} */}
         {result?.workflow?.[0]?.status != "PENDING" ? (
           <Menu.Item
             key="2"
@@ -297,29 +284,6 @@ const shouldDisable = isOnReviewerPatients ;
             </div>
           </Menu.Item>
         ) : null}
-        {/* {result?.workflow?.[0]?.status != "DECLINE" ? (
-          <Menu.Item
-            key="3"
-            onClick={() => {
-              handleActionClick("DECLINE");
-              setMenuIsOpen(false);
-            }}
-            disabled={flagFirstData?.flag !== undefined ? false : true}
-          >
-            <Tooltip
-              title={
-                flagFirstData?.flag === undefined &&
-                "Add flag to disable Decline"
-              }
-            >
-              <div className="patient-status">
-                <span className={`badge failed-text`} style={{ color: "red" }}>
-                  DECLINED
-                </span>
-              </div>
-            </Tooltip>
-          </Menu.Item>
-        ) : null} */}
 
         {result?.workflow?.[0]?.status != "COMPLETE" ? (
           <Menu.Item
@@ -351,19 +315,6 @@ const shouldDisable = isOnReviewerPatients ;
     );
     const menu3 = (
       <Menu>
-        {/* {result?.workflow?.[0]?.status != "HOLD" ? (
-          <Menu.Item
-            key="1"
-            onClick={() => {
-              handleActionClick("HOLD");
-              setMenuIsOpen(false);
-            }}
-          >
-            <div className="patient-status">
-              <span className={`badge hold-text`}>HOLD</span>
-            </div>
-          </Menu.Item>
-        ) : null} */}
         {result?.workflow?.[0]?.status != "PENDING" ? (
           <Menu.Item
             key="2"
@@ -377,29 +328,6 @@ const shouldDisable = isOnReviewerPatients ;
             </div>
           </Menu.Item>
         ) : null}
-        {/* {result?.workflow?.[0]?.status != "DECLINE" ? (
-          <Menu.Item
-            key="3"
-            onClick={() => {
-              handleActionClick("DECLINE");
-              setMenuIsOpen(false);
-            }}
-            disabled={flagFirstData?.flag !== undefined ? false : true}
-          >
-            <Tooltip
-              title={
-                flagFirstData?.flag === undefined &&
-                "Add flag to disable Decline"
-              }
-            >
-              <div className="patient-status">
-                <span className={`badge failed-text`} style={{ color: "red" }}>
-                  DECLINE
-                </span>
-              </div>
-            </Tooltip>
-          </Menu.Item>
-        ) : null} */}
 
         {result?.workflow?.[0]?.status != "COMPLETE" ? (
           <Menu.Item
@@ -474,12 +402,6 @@ const shouldDisable = isOnReviewerPatients ;
     setAdminActionItems(menu4);
   };
   const handleActionClick = (value) => {
-    if (value == "HOLD") {
-      setConfirmNotesModal(true);
-      setIsValidAction("holdFunction");
-      setInputValue({ notes: "" });
-      setValidated(false);
-    }
       // if (value == "QUERY") {
       //   setConfirmNotesModal(true);
       //   setIsValidAction("queryFunction");
@@ -489,13 +411,6 @@ const shouldDisable = isOnReviewerPatients ;
       if (value === "QUERY") {
         setIsQueryModalOpen(true);
       }
-
-    if (value == "DECLINE") {
-      setConfirmNotesModal(true);
-      setIsValidAction("declineFunction");
-      setInputValue({ notes: "" });
-      setValidated(false);
-    }
     if (value == "PENDING") {
       setConfirmNotesModal(true);
       setIsValidAction("pendingFunction");
@@ -543,10 +458,6 @@ const shouldDisable = isOnReviewerPatients ;
 
   const statusCheck = (value) => {
     switch (value) {
-      case "declineFunction":
-        return "DECLINED";
-      case "holdFunction":
-        return "HOLD";
       case "pendingFunction":
         return "PENDING";
       case "complete":
@@ -725,35 +636,6 @@ const shouldDisable = isOnReviewerPatients ;
               name="auditbtnContainer"
             >
               {patienIdDetails?.workflow?.[0]?.status == "COMPLETED" ? (
-                // <Dropdown
-                //   id="auditbtn"
-                //   overlay={
-                //     activeTab == 3
-                //       ? actionItems2
-                //       : activeTab == 4
-                //       ? actionItems3
-                //       : actionItems
-                //   }
-                //   onVisibleChange={(v) => setMenuIsOpen(v)}
-                //   visible={menuIsOpen}
-                //   style={{cursor:"not-allowed" }}
-                //   className={`completedBtnHcc ant-badge ${visitStyles.completedBtnHcc}`}
-                //   disabled={
-                //     shouldDisable &&
-                //     patienIdDetails?.workflow?.[0]?.status === "COMPLETED"
-                //   }
-                // >
-                //   <Button
-                //     id="auditbtn"
-                //     type="primary"
-                //     className={`completedBtnHcc ant-badge ${visitStyles.completedBtnHcc}`}
-                //   >
-                //     <span>COMPLETED</span>
-                //     <span style={{ marginLeft: "10px" }}>
-                //       <DownOutlined />
-                //     </span>
-                //   </Button>
-                // </Dropdown>
                 <Dropdown
                   id="auditbtn"
                   overlay={
