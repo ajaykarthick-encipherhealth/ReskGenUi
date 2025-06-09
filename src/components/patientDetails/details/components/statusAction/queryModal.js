@@ -19,6 +19,7 @@ const QueryModal = ({
   localPatientId,
   isQueried,
   getPatientDosList,
+  patientDetailsResult,
 }) => {
   const [form] = Form.useForm();
   const [loading, setLoading] = useState(false);
@@ -38,7 +39,10 @@ const QueryModal = ({
       setLoading(false);
       setIsQueried(true);
       getStatus(localPatientId);
-      getPatientDosList(patientId);
+      getPatientDosList(
+        patientId,
+        patientDetailsResult?.data?.response?.processedYear
+      );
       getResponePopup(response);
       setIsOpen(false);
       form.resetFields();
@@ -102,12 +106,11 @@ const QueryModal = ({
 
 const enhancer = connect(
   (state) => ({
-
     roles: state.patientDetails.details?.allRoles,
+    patientDetailsResult: state?.patientDetails?.details?.patientResult,
   }),
   {
     raiseQuery: detailsActions.raiseQueryAction,
-   
   }
 );
 export default enhancer(QueryModal);

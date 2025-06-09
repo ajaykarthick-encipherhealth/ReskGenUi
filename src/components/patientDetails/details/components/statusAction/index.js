@@ -48,6 +48,7 @@ const shouldDisable = isOnReviewerPatients ;
   const [confirmNotesModal, setConfirmNotesModal] = useState(false);
   const [validated, setValidated] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [statusLoading, setStatusLoading] = useState(false);
   const [isClient, setIsClient] = useState(false);
   const [inputValue, setInputValue] = useState({
     notes: "",
@@ -477,8 +478,8 @@ const shouldDisable = isOnReviewerPatients ;
         break;
     }
   };
-
   const updateStatus = async (action) => {
+      
     var postData = {
       // orgId: localOrgId,
       patientId: localPatientId,
@@ -511,8 +512,11 @@ const shouldDisable = isOnReviewerPatients ;
     //   apiURL = "dbservice/patient/status/auditDecline";
     // }
     try {
+          setStatusLoading(true);
       const response = await overallStatusUpdate(postData)
+
       if (response?.status == "SUCCESS") {
+          setStatusLoading(false);
         notification.success({
           message: response?.message,
           duration: 1,
@@ -520,11 +524,16 @@ const shouldDisable = isOnReviewerPatients ;
       }
       else{
         getResponePopup(response)
+       
       }
       setConfirmNotesModal(false);
       setConfirmCompleteModal(false);
       setConfirmAuditModal(false);
       getPatientIdData(localPatientId);
+       getPatientDosList(
+         localPatientId,
+         patientDetailsResult?.data?.response?.processedYear
+       );
       setInputValue({
         notes: "",
       });
@@ -763,7 +772,7 @@ const shouldDisable = isOnReviewerPatients ;
 
               <div>
                 <Button type="submit" className="btn btn-primary btn-sm me-1">
-                  {isLoading ? "Loding..." : "Submit"}
+                  {isLoading ? "Loading..." : "Submit"}
                 </Button>
                 <Button
                   onClick={() => handleCloseModal()}
@@ -794,6 +803,7 @@ const shouldDisable = isOnReviewerPatients ;
             open={true}
             onOk={() => updateStatus("complete")}
             onCancel={handleCloseModal}
+            confirmLoading={statusLoading}
           ></Modal>
         </div>
       ) : null}
