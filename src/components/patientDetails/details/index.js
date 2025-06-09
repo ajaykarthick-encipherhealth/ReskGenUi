@@ -93,6 +93,10 @@ export const navigetPageDetails = async (
     setActiveTab(2);
     setIsLoadingDos(false);
   }
+  if (pageTitle == "RX") {
+    setActiveTab(5);
+    setIsLoadingDos(false);
+  }
   if (pageTitle == "Radiology") {
     setActiveTab(3);
   }
@@ -206,6 +210,12 @@ const Details = ({
       type: "NON HCC",
       iconStyle: IMAGES.visitDataNonHcc,
       defaultComplete: "NON_HCC_DISEASE",
+    },
+    {
+      title: "RX",
+      type: "RX",
+      iconStyle: IMAGES.visitDataRx,
+      defaultComplete: "RX",
     },
     {
       title: "Radiology",
@@ -536,7 +546,7 @@ const Details = ({
     patientDetailsLoad(true);
     const getYear = await getAllProcessYear(userId, "HCC");
     const year =
-      getYear.response.length > 0 ? getYear.response[0] : selectedDosValue;
+      getYear?.response.length > 0 ? getYear?.response[0] : selectedDosValue;
     try {
       getFlagCharts({ dos: year });
 
@@ -701,7 +711,7 @@ const Details = ({
             <div className={`${visitStyles.container_fluid_patient}`}>
               <div className="row patient-file-container">
                 <div className="row p-0">
-                  {activeTab == "2" || activeTab == "1" ? (
+                  {activeTab == "2" || activeTab == "1" || activeTab == "5"? (
                     <div className="row">
                       <div
                         id="backArrowBtn"
@@ -950,6 +960,7 @@ const Details = ({
                             setFlagContainerActive={setFlagContainerActive}
                             selectedDate={selectedDate}
                             setSelectedDate={setSelectedDate}
+                            activeTab={activeTab}
                           />
                         ) : activeTab == 2 ? (
                           <NonHcc
@@ -971,7 +982,7 @@ const Details = ({
                             }
                             setDosYearDefalutSelect={setDosYearDefalutSelect}
                           />
-                        ) : (
+                        ) : activeTab == 4 ? (
                           <Lab
                             year={
                               dosYearDefalutSelect?.value
@@ -980,7 +991,22 @@ const Details = ({
                             }
                             setDosYearDefalutSelect={setDosYearDefalutSelect}
                           />
-                        )}
+                        ) : activeTab == 5 ? (
+                          <Hcc
+                            patientHccResult={patientDocumentResult}
+                            year={dosYearDefalutSelect}
+                            setIsLoading={setIsLoading}
+                            selectDosValue={selectDosValue}
+                            setSelectDosValue={setSelectDosValue}
+                            isSpinnerLoading={isSpinnerLoading}
+                            search={search}
+                            setSearch={setSearch}
+                            setFlagContainerActive={setFlagContainerActive}
+                            selectedDate={selectedDate}
+                            setSelectedDate={setSelectedDate}
+                            activeTab={activeTab}
+                          />
+                        ) : ""}
                       </>
                     </div>
 

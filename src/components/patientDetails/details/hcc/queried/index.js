@@ -30,6 +30,7 @@ const Index = ({ queriedData, queriedLoader }) => {
               })}
               queriedto={item?.queryDetails?.queryToName}
               queriedByUserName={item?.queryDetails?.queriedBy}
+              isLast={index === queriedData.length - 1}
             />
           ))
         )}

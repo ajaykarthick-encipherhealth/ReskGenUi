@@ -8,6 +8,7 @@ export const IMAGES = {
   hccWhiteLogo: require("../../images/logo/hcc-white-logo.png"),
   Hcc_LOGO: require("../../images/logo/HCC_LOGO.png"),
   visitDataHcc: require("../../images/visitdata/hcc-ico.webp"),
+  visitDataRx:require("../../images/visitdata/RX.svg"),
   visitDataNonHcc: require("../../images/visitdata/Non-hcc-ico.webp"),
   visitDataRadioloy: require("../../images/visitdata/radiology-ico.webp"), 
   visitDataLabreport: require("../../images/visitdata/lab-ico.webp"),

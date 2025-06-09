@@ -60,6 +60,7 @@ const Meat = ({
   storeFileDetails,
   isSpinnerLoading,
   patientDetailsLoad,
+  activeTab
 
 }) => {
   const [meatEdit, setMeatEdit] = useState(false);
@@ -131,7 +132,11 @@ const Meat = ({
       setDeletedMeatList,
       "",
       "",
-      setAllMeatList
+      setAllMeatList,
+      "",
+      "",
+     "",
+      activeTab
     );
   }, [patientDetailsResult]);
 
@@ -317,7 +322,6 @@ const Meat = ({
       setIsBlockRxHccDeleted(filterMeatDeleted);
     }
   }, [meatCriteriaList]);
-
   const onFinishFailed = (form) => {};
 
   return (
@@ -353,11 +357,18 @@ const Meat = ({
                     <CardSkeleton count={6} />
                   ) : (
                     <MeatCard
+                      // list={
+                      //   userId == "reviewer@3gencogentai.onmicrosoft.com"
+                      //   ? isBlockRxHcc
+                      //   : meatCriteriaList
+                      // }
                       list={
-                        userId == "reviewer@3gencogentai.onmicrosoft.com"
-                          ? isBlockRxHcc
-                          : meatCriteriaList
-                      }
+                        activeTab == 5
+                        // userId == "reviewer@3gencogentai.onmicrosoft.com"
+                        ?meatCriteriaList
+                        : isBlockRxHcc
+
+                        }
                       captureSectionMatching={captureSectionMatching}
                       encounterDateMatching={encounterDateMatching}
                       okText="OK"
@@ -405,10 +416,12 @@ const Meat = ({
                         <span>Deleted MeatCriteria</span>
                       </div>
                       <MeatCard
-                        list={
-                          userId == "reviewer@3gencogentai.onmicrosoft.com"
-                            ? isBlockRxHccDeleted
-                            : deletedMeatList
+                       list={
+                        activeTab == 5
+                        // userId == "reviewer@3gencogentai.onmicrosoft.com"
+                        ?deletedMeatList
+                        : isBlockRxHccDeleted
+
                         }
                         captureSectionMatching={captureSectionMatching}
                         encounterDateMatching={encounterDateMatching}

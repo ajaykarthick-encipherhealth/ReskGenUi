@@ -47,6 +47,7 @@ const VisitData = ({
   actions,
   selectDosValue,
   patientIdDetailsData,
+  activeTab
 }) => {
   const [isFileFormShow, setIsFileFormShow] = useState(false);
   const [isModalOpenValid, setIsModalOpenValid] = useState(false);
@@ -113,7 +114,8 @@ const VisitData = ({
       setAllMeatList,
       "",
       setPotentialList,
-      actions?.showDisease
+      actions?.showDisease,
+      activeTab
     );
 
     var dotLoading = (
@@ -122,7 +124,7 @@ const VisitData = ({
       </div>
     );
     setUserDetails(dotLoading);
-  }, [patientDetailsResult, actions?.showDisease]);
+  }, [patientDetailsResult, actions?.showDisease,activeTab]);
 
   // useEffect(() => {
   //   if (hccFileDetails?.data?.response) {

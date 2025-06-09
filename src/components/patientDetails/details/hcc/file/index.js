@@ -51,6 +51,7 @@ const File = ({
   selectDosValue,
   isSpinnerLoading,
   patientIdDetailsData,
+  activeTab
 }) => {
   const [isFileFormShow, setIsFileFormShow] = useState(false);
   const [confirmNotesModalValid, setConfirmNotesModalValid] = useState(false);
@@ -113,9 +114,10 @@ const File = ({
       setAllMeatList,
       "",
       setPotentialList,
-      actions?.showDisease
+      actions?.showDisease,
+      activeTab
     );
-  }, [patientDetailsResult, actions?.showDisease]);
+  }, [patientDetailsResult, actions?.showDisease,activeTab]);
 
   const onchangeValid = (code, data) => {
     var title = code + " - " + data.actualDescription;
@@ -236,7 +238,6 @@ const File = ({
   const isDisabled =
   patientIdDetailsData?.data?.response
     ?.workflow?.[0]?.status !== "PENDING";
-
   return (
     <>
       {/* {fileLoading ? <LogoLoader /> : null} */}

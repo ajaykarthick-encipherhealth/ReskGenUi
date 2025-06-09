@@ -79,6 +79,7 @@ const Hcc = ({
   patientIdDetailsData,
   updateReEvaluate,
   getPatientIdData,
+  activeTab
 }) => {
   const { TextArea } = Input;
   const [form] = Form.useForm();
@@ -872,6 +873,7 @@ const Hcc = ({
                   actions={actions}
                   selectDosValue={selectDosValue}
                   isSpinnerLoading={isSpinnerLoading}
+                  activeTab={activeTab}
                 />
               </Tab.Pane>
               <Tab.Pane id="my-posts" eventKey={2}>
@@ -882,6 +884,7 @@ const Hcc = ({
                   year={year}
                   actions={actions}
                   selectDosValue={selectDosValue}
+                  activeTab={activeTab}
                 />
               </Tab.Pane>
               <Tab.Pane id="my-posts" eventKey={3}>
@@ -891,6 +894,7 @@ const Hcc = ({
                   activeComboTree={activeComboTree}
                   year={year}
                   actions={actions}
+                  activeTab={activeTab}
                 />
               </Tab.Pane>
               <Tab.Pane id="my-posts" eventKey={4}>
@@ -898,6 +902,7 @@ const Hcc = ({
                   activeMeatTitle={activeMeatTitle}
                   year={year}
                   actions={actions}
+                  activeTab={activeTab}
                 />
               </Tab.Pane>
               <Tab.Pane id="my-posts" eventKey={5}>

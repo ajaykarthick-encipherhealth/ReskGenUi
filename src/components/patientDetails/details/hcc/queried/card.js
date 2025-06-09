@@ -16,15 +16,30 @@ function StatusCard({
   date,
   queriedto,
   queriedByUserName,
+  isLast,
 }) {
   return (
-    <div className="d-flex gap-2 mb-4">
+    <div className="d-flex position-relative gap-2 mb-4">
+        {!isLast && (
+        <div
+          className="position-absolute "
+          style={{
+            top: 30,
+            bottom: 0,
+            left: 14,
+            width: "2px",
+            backgroundColor: "#E3D0F1",
+            zIndex: 0,
+            height:250
+          }}
+        />
+      )}
       <Tooltip title={queriedByUserName}>
         <div
-          className=" mt-2 rounded-circle   d-flex align-items-center justify-content-center"
+          className=" mt-2 rounded-circle cursor-pointer  d-flex align-items-center justify-content-center"
           style={{
-            width: 25,
-            height: 23,
+            width: 35,
+            height: 30,
             background: "#E3D0F1",
             color: "#7F83BD",
             border: "1px solid #E3D0F1",
