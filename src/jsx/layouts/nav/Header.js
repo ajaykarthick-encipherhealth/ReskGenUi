@@ -1183,6 +1183,7 @@ const Header = ({
                               name="notification-badge"
                               count={notificationCount}
                               color="#04306F"
+                              className="mt-2"
                             >
                               <div
                                 id="notification-icon"
