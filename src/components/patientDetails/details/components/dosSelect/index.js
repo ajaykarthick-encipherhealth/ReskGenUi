@@ -136,9 +136,7 @@ const DosSelect = ({
       open={open}
       onDropdownVisibleChange={(visible) => setOpen(visible)}
       dropdownRender={() => (
-        <div
-          style={{ padding: 0, maxHeight: "250px", overflowY: "scroll" }}
-        >
+        <div style={{ padding: 0, maxHeight: "250px", overflowY: "scroll" }}>
           {/* Header row */}
           <div
             style={{
@@ -255,9 +253,9 @@ const DosSelect = ({
                       )}
                     </span>
                     <span>
-                      {/* {item?.flags?.length - 4 == 0 ? (
-                        "" */}
-                      {item?.flags ? (
+                      {item?.flags?.length > 4 &&
+                      item?.flags &&
+                      item?.flags?.length > 0 ? (
                         <span
                           className="px-2 py-1 border rounded"
                           style={{ background: "#002b5b", color: "#fff" }}
@@ -285,9 +283,7 @@ const DosSelect = ({
                           +{item?.flags?.length - 4}
                           {/* </Popover> */}
                         </span>
-                      ) : (
-                        "---"
-                      )}
+                      ) : null}
                     </span>
                   </>
                 )}
