@@ -374,7 +374,7 @@ const YearAndDosStatus = ({
     const value = e.target.value;
     setInputValue({ ...inputValue, [key]: value });
   };
-
+const isLoading = !patienIdDetails || !patienIdDetails?.workflow;
   useEffect(() => {
     const userRoleLocal = getStorage("userRole");
     const uId = getStorage("userId");
@@ -452,8 +452,8 @@ const YearAndDosStatus = ({
           ) : userRole == "CODER_1" ||
             userRole == "CODER_2" ||
             userRole == "QA" ? (
-            <div className={`${visitStyles.yearactionbtnContainer} ant-badge`}>
-              {patienIdDetails?.workflow?.[0]?.status == "COMPLETED" ? (
+            patienIdDetails?.workflow?.[0]?.status == null ? (
+              <div className={visitStyles.yearactionbtnContainer}>
                 <Dropdown
                   overlay={
                     activeTab == 3
@@ -462,12 +462,7 @@ const YearAndDosStatus = ({
                       ? actionItems3
                       : actionItems
                   }
-                  onVisibleChange={(v) => setMenuIsOpen(v)}
-                  visible={menuIsOpen}
-                  className={` ant-badge completedBtnHcc ant-badge ${visitStyles.completedBtnHcc}`}
-                  disabled={
-                    patientIdDetailsData?.data?.response?.workflow?.[0]?.status === "COMPLETED"
-                  }
+                  trigger={["click"]}
                 >
                   <button
                     type="primary"
@@ -476,84 +471,177 @@ const YearAndDosStatus = ({
                     } completedBtnHcc`}
                     style={{
                       cursor:
-                        patientIdDetailsData?.data?.response?.workflow?.[0]?.status ===
-                        "COMPLETED"
+                        patientIdDetailsData?.data?.response?.workflow?.[0]
+                          ?.status === "COMPLETED"
                           ? "not-allowed"
                           : "pointer",
                     }}
                   >
-                    <span className="ant-badge">COMPLETED</span>
+                    <span className="ant-badge">Loading.....</span>
                     <span style={{ marginLeft: "10px" }}>
                       <DownOutlined />
                     </span>
                   </button>
                 </Dropdown>
-              )
-              :patienIdDetails?.workflow?.[0]?.status == "QUERIED" ? (
-                <Dropdown
-                  overlay={
-                    activeTab == 3
-                      ? actionItems2
-                      : activeTab == 4
-                      ? actionItems3
-                      : actionItems
-                  }
-                  onVisibleChange={(v) => setMenuIsOpen(v)}
-                  visible={menuIsOpen}
-                  className={`ant-badge queryBtnHcc ${visitStyles.queryBtnHcc}`}
-                  disabled={
-                    patienIdDetails?.workflow?.[0]?.status === "QUERIED"
-                  }
-                >
-                  <button
-                    type="primary"
-                    className={`ant-badge ${visitStyles.queryBtnHcc} ${
-                      isDosStatus && `${visitStyles.statusBtn}`
-                    } queryBtnHcc`}
-
-                 
-                    style={{
-                      cursor:
-                        patienIdDetails?.workflow?.[0]?.status === "QUERIED"
-                          ? "not-allowed"
-                          : "pointer",
-                    }}
+              </div>
+            ) : (
+              <div
+                className={`${visitStyles.yearactionbtnContainer} ant-badge`}
+              >
+                {patienIdDetails?.workflow?.[0]?.status == "COMPLETED" ? (
+                  <Dropdown
+                    overlay={
+                      activeTab == 3
+                        ? actionItems2
+                        : activeTab == 4
+                        ? actionItems3
+                        : actionItems
+                    }
+                    trigger={["click"]}
+                    onVisibleChange={(v) => setMenuIsOpen(v)}
+                    visible={menuIsOpen}
+                    className={` ant-badge completedBtnHcc ant-badge ${visitStyles.completedBtnHcc}`}
+                    disabled={
+                      patientIdDetailsData?.data?.response?.workflow?.[0]
+                        ?.status === "COMPLETED"
+                    }
                   >
-                    <span className="ant-badge">QUERIED</span>
-                    <span style={{ marginLeft: "10px" }}>
-                      <DownOutlined />
-                    </span>
-                  </button>
-                </Dropdown>
-              ) : patienIdDetails?.workflow?.[0]?.status == "PENDING" ||
-                patienIdDetails?.workflow?.[0]?.status == "COMPUTED" ||
-                patienIdDetails?.workflow?.[0]?.status == null ? (
-                <Dropdown
-                  overlay={
-                    activeTab == 3
-                      ? actionItems2
-                      : activeTab == 4
-                      ? actionItems3
-                      : actionItems
-                  }
-                  onVisibleChange={(v) => setMenuIsOpen(v)}
-                  visible={menuIsOpen}
-                  className={`ant-badge pendingBtn${visitStyles.pendingBtn}`}
-                >
-                  <Button
-                    type="primary"
-                    className={`ant-badge ${visitStyles.pendingBtn} ${
-                      isDosStatus && `${visitStyles.statusBtn}`
-                    } pendingBtn`}
+                    <button
+                      type="primary"
+                      className={` ant-badge ${visitStyles.completedBtnHcc} ${
+                        isDosStatus && `${visitStyles.statusBtn}`
+                      } completedBtnHcc`}
+                      style={{
+                        cursor:
+                          patientIdDetailsData?.data?.response?.workflow?.[0]
+                            ?.status === "COMPLETED"
+                            ? "not-allowed"
+                            : "pointer",
+                      }}
+                    >
+                      <span className="ant-badge">COMPLETED</span>
+                      <span style={{ marginLeft: "10px" }}>
+                        <DownOutlined />
+                      </span>
+                    </button>
+                  </Dropdown>
+                ) : patienIdDetails?.workflow?.[0]?.status == "DECLINED" ? (
+                  <Dropdown
+                    overlay={
+                      activeTab == 3
+                        ? actionItems2
+                        : activeTab == 4
+                        ? actionItems3
+                        : actionItems
+                    }
+                    trigger={["click"]}
+                    onVisibleChange={(v) => setMenuIsOpen(v)}
+                    visible={menuIsOpen}
+                    className={`ant-badge declinedBtnHcc ${visitStyles.declinedBtnHcc}`}
                   >
-                    <span>PENDING</span>
-                    <span style={{ marginLeft: "10px" }}>
-                      <DownOutlined />
-                    </span>
-                  </Button>
-                </Dropdown>
-              ) : null}
-            </div>
+                    <Button
+                      type="primary"
+                      className={`ant-badge ${visitStyles.declinedBtnHcc} ${
+                        isDosStatus && `${visitStyles.statusBtn}`
+                      } declinedBtnHcc ant-badge`}
+                    >
+                      <span>DECLINE</span>
+                      <span style={{ marginLeft: "10px" }}>
+                        <DownOutlined />
+                      </span>
+                    </Button>
+                  </Dropdown>
+                ) : patienIdDetails?.workflow?.[0]?.status == "HOLD" ? (
+                  <Dropdown
+                    overlay={
+                      activeTab == 3
+                        ? actionItems2
+                        : activeTab == 4
+                        ? actionItems3
+                        : actionItems
+                    }
+                    trigger={["click"]}
+                    onVisibleChange={(v) => setMenuIsOpen(v)}
+                    visible={menuIsOpen}
+                    className={`ant-badge holdBtnHcc ${visitStyles.holdBtnHccs}`}
+                  >
+                    <Button
+                      type="primary"
+                      className={`ant-badge ${visitStyles.holdBtnHccs} ${
+                        isDosStatus && `${visitStyles.statusBtn}`
+                      } holdBtnHcc`}
+                    >
+                      <span className="ant-badge">HOLD</span>
+                      <span style={{ marginLeft: "10px" }}>
+                        <DownOutlined />
+                      </span>
+                    </Button>
+                  </Dropdown>
+                ) : patienIdDetails?.workflow?.[0]?.status == "QUERIED" ? (
+                  <Dropdown
+                    overlay={
+                      activeTab == 3
+                        ? actionItems2
+                        : activeTab == 4
+                        ? actionItems3
+                        : actionItems
+                    }
+                    trigger={["click"]}
+                    onVisibleChange={(v) => setMenuIsOpen(v)}
+                    visible={menuIsOpen}
+                    className={`ant-badge queryBtnHcc ${visitStyles.queryBtnHcc}`}
+                    disabled={
+                      patienIdDetails?.workflow?.[0]?.status === "QUERIED"
+                    }
+                  >
+                    <button
+                      type="primary"
+                      className={`ant-badge ${visitStyles.queryBtnHcc} ${
+                        isDosStatus && `${visitStyles.statusBtn}`
+                      } queryBtnHcc`}
+                      style={{
+                        cursor:
+                          patienIdDetails?.workflow?.[0]?.status === "QUERIED"
+                            ? "not-allowed"
+                            : "pointer",
+                      }}
+                    >
+                      <span className="ant-badge">QUERIED</span>
+                      <span style={{ marginLeft: "10px" }}>
+                        <DownOutlined />
+                      </span>
+                    </button>
+                  </Dropdown>
+                ) : patienIdDetails?.workflow?.[0]?.status == "PENDING" ||
+                  patienIdDetails?.workflow?.[0]?.status == "COMPUTED" ? (
+                  <Dropdown
+                    overlay={
+                      activeTab == 3
+                        ? actionItems2
+                        : activeTab == 4
+                        ? actionItems3
+                        : actionItems
+                    }
+                    trigger={["click"]}
+                    onVisibleChange={(v) => setMenuIsOpen(v)}
+                    visible={menuIsOpen}
+                    className={`ant-badge pendingBtn${visitStyles.pendingBtn}`}
+                  >
+                    <Button
+                      type="primary"
+                      className={`ant-badge ${visitStyles.pendingBtn} ${
+                        isDosStatus && `${visitStyles.statusBtn}`
+                      } pendingBtn`}
+                    >
+                      <span>PENDING</span>
+                      <span style={{ marginLeft: "10px" }}>
+                        <DownOutlined />
+                      </span>
+                    </Button>
+                  </Dropdown>
+                ) : null}
+              </div>
+            )
           ) : null}
         </>
       )}

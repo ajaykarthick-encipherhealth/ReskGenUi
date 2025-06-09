@@ -645,6 +645,7 @@ const shouldDisable = isOnReviewerPatients ;
                       ? actionItems3
                       : actionItems
                   }
+                  trigger={["click"]}
                   onVisibleChange={(v) => setMenuIsOpen(v)}
                   visible={menuIsOpen}
                   className={`completedBtnHcc ant-badge ${visitStyles.completedBtnHcc}`}
@@ -678,11 +679,11 @@ const shouldDisable = isOnReviewerPatients ;
                       ? actionItems3
                       : actionItems
                   }
+                  trigger={["click"]}
                   onVisibleChange={(v) => setMenuIsOpen(v)}
                   visible={menuIsOpen}
                   className={`queryBtnHcc ${visitStyles.queryBtnHcc}`}
                   disabled={
-                 
                     patienIdDetails?.workflow?.[0]?.status === "QUERIED"
                   }
                 >
@@ -690,7 +691,6 @@ const shouldDisable = isOnReviewerPatients ;
                     disabled={shouldDisable}
                     style={{
                       cursor:
-                   
                         patienIdDetails?.workflow?.[0]?.status === "QUERIED"
                           ? "not-allowed"
                           : "pointer",
@@ -709,6 +709,7 @@ const shouldDisable = isOnReviewerPatients ;
                       ? actionItems3
                       : actionItems
                   }
+                  trigger={["click"]}
                   onVisibleChange={(v) => setMenuIsOpen(v)}
                   visible={menuIsOpen}
                   className={`pendingBtn ${visitStyles.pendingBtn}`}
