@@ -1231,7 +1231,7 @@ const Header = ({
                                   trigger={["click"]}
                                 >
                                   <span
-                                    className="header-name d-flex font1"
+                                    className="header-name d-flex font1 cursor-pointer"
                                     style={{ margin: "-5px 0px 0 10px" }}
                                   >
                                     {currentRole?.split("_")?.join(" ")}

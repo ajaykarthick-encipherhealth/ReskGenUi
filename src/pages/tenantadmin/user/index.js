@@ -367,9 +367,11 @@ const UserList = ({
       });
       if (res?.status === "SUCCESS") {
         getAllUsers();
+        getResponePopup(res)
       }
     } catch (error) {
       console.error("Error toggling switch:", error);
+      getResponePopup(res)
     }
     setIsLoading(false);
   };
