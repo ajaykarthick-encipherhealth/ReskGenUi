@@ -435,6 +435,7 @@ const shouldDisable = isOnReviewerPatients ;
     setLapReportSlider(true);
   };
 
+
   const allocatePatient = () => {
     setAllocateModal(true);
   };
@@ -488,29 +489,6 @@ const shouldDisable = isOnReviewerPatients ;
       processedStatus: statusCheck(action),
       // dos: patientDetailsResult?.data?.response?.processedYear,
     };
-
-    // var apiURL = "";
-    // if (action == "declineFunction") {
-    //   apiURL = "dbservice/patient/status/decline";
-    // }
-    // if (action == "holdFunction") {
-    //   apiURL = "dbservice/patient/status/hold";
-    // }
-    // if (action == "pendingFunction") {
-    //   apiURL = "dbservice/patient/status/pending";
-    // }
-    // if (action == "reAuditFunction") {
-    //   apiURL = "dbservice/patient/status/reaudit";
-    // }
-    // if (action == "auditPendingFunction") {
-    //   apiURL = "dbservice/patient/status/auditPending";
-    // }
-    // if (action == "auditHoldFunction") {
-    //   apiURL = "dbservice/patient/status/auditHold";
-    // }
-    // if (action == "auditDeclineFunction") {
-    //   apiURL = "dbservice/patient/status/auditDecline";
-    // }
     try {
           setStatusLoading(true);
       const response = await overallStatusUpdate(postData)
@@ -524,7 +502,6 @@ const shouldDisable = isOnReviewerPatients ;
       }
       else{
         getResponePopup(response)
-       
       }
       setConfirmNotesModal(false);
       setConfirmCompleteModal(false);
@@ -543,6 +520,8 @@ const shouldDisable = isOnReviewerPatients ;
           message: e?.message,
           duration: 4,
         });
+         setStatusLoading(false);
+         setConfirmCompleteModal(false);
       }
     }
   };

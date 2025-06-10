@@ -37,6 +37,7 @@ const YearAndDosStatus = ({
     notes: "",
   });
   const [statusName, setStatusName] = useState('');
+  const [statusLoading, setStatusLoading] = useState(false);
 
   const renderAuditMenu = (value) => {
     var value = (
@@ -293,66 +294,65 @@ const YearAndDosStatus = ({
       setValidated(true);
     }
   };
-
-  const handleSubmitHccComplete = async () => {
-    updateStatus("completedFuntion");
-  };
+const handleSubmitHccComplete = async () => {
+  await updateStatus("completedFuntion");
+};
 
   const updateAudit = async () => {
     updateStatus("auditFunction");
   };
 
   const updateStatus = async (action) => {
-    const roleId = getStorage("roleId")
-    const patientId = getStorage("patientId")
+    const roleId = getStorage("roleId");
+    const patientId = getStorage("patientId");
+
     setIsLoading(true);
-    setConfirmNotesModal(false);
-    setConfirmCompleteModal(false);
-    setConfirmAuditModal(false);
+    setStatusLoading(true);
+
     var postData = {
-      patientId: patientId,
+      patientId,
       notes: inputValue.notes,
       processedYear: patientDetailsResult?.data?.response?.processedYear,
       dateOfService: patientDetailsResult?.data?.response?.dateOfService,
-      roleId:getStorage("roleId"),
-      processedStatus:statusName
+      roleId,
+      processedStatus: statusName,
     };
-    var apiURL = "";
-    if (action == "declineFunction") {
-      apiURL = "dbservice/status/update-status";
+
+    let apiURL = "";
+    switch (action) {
+      case "declineFunction":
+      case "holdFunction":
+      case "pendingFunction":
+      case "completedFuntion":
+        apiURL = "dbservice/status/update-status";
+        break;
+      case "reAuditFunction":
+        apiURL = "dbservice/patient/status/reaudit";
+        break;
+      case "auditPendingFunction":
+        apiURL = "dbservice/patient/status/auditPending";
+        break;
+      case "auditHoldFunction":
+        apiURL = "dbservice/patient/status/auditHold";
+        break;
+      case "auditDeclineFunction":
+        apiURL = "dbservice/patient/status/auditDecline";
+        break;
+      case "auditFunction":
+        apiURL = "dbservice/patient/status/audit";
+        break;
     }
-    if (action == "holdFunction") {
-      apiURL = "dbservice/status/update-status";
-    }
-    if (action == "pendingFunction") {
-      apiURL = "dbservice/status/update-status";
-    }
-    if (action == "reAuditFunction") {
-      apiURL = "dbservice/patient/status/reaudit";
-    }
-    if (action == "auditPendingFunction") {
-      apiURL = "dbservice/patient/status/auditPending";
-    }
-    if (action == "auditHoldFunction") {
-      apiURL = "dbservice/patient/status/auditHold";
-    }
-    if (action == "auditDeclineFunction") {
-      apiURL = "dbservice/patient/status/auditDecline";
-    }
-    if (action == "completedFuntion") {
-      apiURL = "dbservice/status/update-status";
-    }
-    if (action == "auditFunction") {
-      apiURL = "dbservice/patient/status/audit";
-    }
+
     try {
       const response = await overallYearStatus(postData, apiURL);
-      if (response?.status == "SUCCESS") {
+      if (response?.status === "SUCCESS") {
+
         notification.success({
           message: response?.message,
           placement: "top",
           duration: 1,
         });
+
         setInputValue({ notes: "" });
         getpatientDetailsData(
           localPatientId,
@@ -363,10 +363,14 @@ const YearAndDosStatus = ({
           localPatientId,
           patientDetailsResult?.data?.response?.processedYear
         );
-      } else {
-        setIsLoading(false);
+        setConfirmCompleteModal(false);
       }
-    } catch (e) {}
+    } catch (error) {
+      console.error("Update status failed", error);
+    } finally {
+      setStatusLoading(false);
+      setIsLoading(false);
+    }
   };
 
   const handleChange = async (e) => {
@@ -678,7 +682,7 @@ const isLoading = !patienIdDetails || !patienIdDetails?.workflow;
 
               <div>
                 <Button type="submit" className="btn btn-primary btn-sm me-1">
-                  Submit
+                 { statusLoading  ? "Loading.." : "Submit"}
                 </Button>
                 <Button
                   onClick={() => handleCloseModal()}
@@ -698,6 +702,7 @@ const isLoading = !patienIdDetails || !patienIdDetails?.workflow;
             open={true}
             onOk={handleSubmitHccComplete}
             onCancel={handleCloseModal}
+            confirmLoading={statusLoading}
           ></Modal>
         </div>
       ) : null}
