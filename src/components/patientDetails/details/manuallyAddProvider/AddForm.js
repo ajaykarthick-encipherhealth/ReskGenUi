@@ -8,7 +8,7 @@ import {
   Select,
   Switch,
 } from "antd";
-import React from "react";
+import React, { useState } from "react";
 import style from "./styles.module.css";
 import { getStorage } from "../../../../utils/storages";
 import { connect } from "react-redux";
@@ -28,7 +28,10 @@ const AddForm = ({
   selectedDosValue,
   dosAndProvidersList,
   dosYearDefalutSelect,
+  getpatientDetailsData,
+  patientDetailsLoad,
 }) => {
+  const [btnName, setBtnName] = useState(null);
   const validateThreeDigitNumber = (_, value) => {
     if (!value || /^\d{1,3}$/.test(value)) {
       return Promise.resolve();
@@ -37,6 +40,7 @@ const AddForm = ({
   };
 
   const AddProvider = async (values, providersLists) => {
+    setBtnName("LOADING...");
     const customFileId =
       values?.fileType === "CHART"
         ? patientDetailsResult?.fileId
@@ -66,6 +70,8 @@ const AddForm = ({
       if (!result) {
         const res = await getAddProviderAndDOS(data);
         if (res.status == "SUCCESS") {
+          setBtnName(null);
+          patientDetailsLoad(true);
           getResponePopup(res);
           getAddProviderAndDOSList(
             dosYear?.length > 0 ? dosYear[0]?.value : ""
@@ -74,11 +80,21 @@ const AddForm = ({
             patientId,
             dosYear?.length > 0 ? dosYear[0]?.value : ""
           );
+          getpatientDetailsData(
+            patientId,
+            patientDetailsResult?.processedYear,
+            patientDetailsResult?.dateOfService,
+            "",
+            ""
+          );
+          patientDetailsLoad(false);
           form.resetFields();
         } else {
+          setBtnName(null);
           getResponePopup(res);
         }
       } else {
+        setBtnName(null);
         return notification.warning({
           description: "DOS already exists",
           duration: 2,
@@ -375,7 +391,9 @@ const AddForm = ({
               >
                 Radiology
               </Radio>
-              <Radio data-testid="providerList-Chart" value={"CHART"}>Chart</Radio>
+              <Radio data-testid="providerList-Chart" value={"CHART"}>
+                Chart
+              </Radio>
             </Radio.Group>
           </Form.Item>
           <Form.Item
@@ -387,8 +405,9 @@ const AddForm = ({
               htmlType="submit"
               type="primary"
               className="btn btn-sm ms-2 flr width-max-content custom-btn-style"
+              disabled={btnName ? true : false}
             >
-              {providersList ? "UPDATE" : "ADD"}
+              {btnName ? btnName : providersList ? "UPDATE" : "ADD"}
             </Button>
           </Form.Item>
         </Form>
@@ -408,6 +427,8 @@ const connector = connect(
     getAddProviderAndDOS: allActions.getAddProviderAndDOS,
     getAddProviderAndDOSList: allActions.getAddProviderAndDOSList,
     dosDeatilsAction: allActions.dosDeatilsAction,
+    getpatientDetailsData: allActions.patientDetailsAction,
+    patientDetailsLoad: allActions.patientDetailsLoad,
   }
 );
 export default connector(AddForm);
