@@ -61,10 +61,11 @@ const Details = ({ fileResult, fromHcc }) => {
                 })
               }
             >
-               <Tooltip title={fileResult?.patientId}>
-              {fileResult?.patientId
-                ? getMastData(fileResult?.patientId)
-                : "--"}</Tooltip>
+              <Tooltip title={fileResult?.patientId}>
+                {fileResult?.patientId
+                  ? getMastData(fileResult?.patientId)
+                  : "--"}
+              </Tooltip>
             </h6>
           </div>
           <div className="col-4" id="patient-name" name="patient-name">
@@ -76,7 +77,7 @@ const Details = ({ fileResult, fromHcc }) => {
             <h6
               id="patient-name-value"
               name="patient-name-value"
-              className="px-4 cursor-pointer" 
+              className="px-4 cursor-pointer"
               onClick={() =>
                 handleCopyToClipboard({
                   text: fileResult?.patientName,
@@ -92,9 +93,9 @@ const Details = ({ fileResult, fromHcc }) => {
             </h6>
           </div>
           <div className="col-2" id="patient-mbi" name="patient-mbi">
-            <FontAwesomeIcon icon={faIdCard}  style={{ color: "#241571" }} />
+            <FontAwesomeIcon icon={faIdCard} style={{ color: "#241571" }} />
 
-            <label className={styles.mbi}  style={{ fontWeight: 600 }}>
+            <label className={styles.mbi} style={{ fontWeight: 600 }}>
               MBI
             </label>
             <h6
@@ -151,7 +152,7 @@ const Details = ({ fileResult, fromHcc }) => {
             >
               {fileResult?.fileName ? (
                 <Tooltip title={fileResult?.fileName}>
-                  {truncateString(fileResult?.fileName, 8)}
+                  {getMastData(fileResult?.fileName)}
                 </Tooltip>
               ) : (
                 "--"
@@ -174,21 +175,20 @@ const Details = ({ fileResult, fromHcc }) => {
                 })
               }
             >
-              {fileResult?.dob
-                ? formatDateTime({ date: fileResult?.dob })
-                : "---"}
+              <Tooltip
+                title={formatDateTime({
+                  date: fileResult?.dob,
+                })}
+              >
+                {fileResult?.dob
+                  ? formatDateTime({ date: fileResult.dob })?.replace(
+                      /\d{4}$/,
+                      "xxxx"
+                    )
+                  : "---"}
+              </Tooltip>
             </h6>
           </div>
-          {/* <div className="col-3">
-            <FontAwesomeIcon icon={faVenusMars} style={{ color: "#241571"}} />
-            <label
-              // className="px-2 "
-              style={{ fontWeight: 600 }}
-            >
-              Gender
-            </label>
-            <h6 className="px-4">{fileResult?.gender || "--"}</h6>
-          </div> */}
           <div className="col-3" id="gender" name="gender">
             <FontAwesomeIcon icon={faVenusMars} style={{ color: "#241571" }} />
             <div

@@ -79,7 +79,7 @@ const Hcc = ({
   patientIdDetailsData,
   updateReEvaluate,
   getPatientIdData,
-  activeTab
+  activeTab,
 }) => {
   const { TextArea } = Input;
   const [form] = Form.useForm();
@@ -101,17 +101,27 @@ const Hcc = ({
   const [selectedReEvaluateItems, setSelectedReEvaluateItems] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [queryText, setQueryText] = useState("");
-  const [isOpen, setIsOpen] = useState(false);
   const [isClient, setIsClient] = useState(false);
   const [isApproved, setIsApproved] = useState(false);
-  const [isQueried, setIsQueried] = useState(false);
   const [isReject, setIsReject] = useState(false);
   const [isChecked, setIsChecked] = useState(false);
-
+  const [isDiseaseOpen, setiIsDiseaseOpen] = useState(false);
+  const showDiseaseModal = () => {
+    setiIsDiseaseOpen(true);
+    if (selectDosValue) {
+      setActions({
+        showDisease: !actions?.showDisease,
+        reEvaluate: actions?.reEvaluate,
+        showActionsPop: actions?.showActionsPop,
+      });
+    }
+  };
+  const handleDiseaseCancel = () => {
+    setiIsDiseaseOpen(false);
+  };
   const handleChange = (e) => {
     setQueryText(e.target.value);
   };
-
   const showModal = () => {
     setIsModalOpen(true);
   };
@@ -123,22 +133,11 @@ const Hcc = ({
     setQueryText("");
   };
 
-  const showQueryModal = () => {
-    setIsOpen(true);
-  };
-  const handleQueryOk = () => {
-    setIsOpen(false);
-  };
-  const handleQueryCancel = () => {
-    setIsOpen(false);
-    form.resetFields();
-  };
   useEffect(() => {
     setIsClient(true);
   }, []);
   useEffect(() => {
     if (patientDosResult?.data?.response) {
-      // setSelectDosValue("");
       var dosList = [];
       patientDosResult?.data?.response?.map((res, index) => {
         if (res) {
@@ -396,54 +395,49 @@ const Hcc = ({
     }));
     const response = await updateReEvaluate();
     if (response?.status === "SUCCESS") {
-      getPatientIdData(patientId)
+      getPatientIdData(patientId);
       getResponePopup(response);
     }
   };
   const isDisabled =
-  patientIdDetailsData?.data?.response
-    ?.workflow?.[0]?.status !== "PENDING";
+    patientIdDetailsData?.data?.response?.workflow?.[0]?.status !== "PENDING";
 
   const hideDiseasePopContent = (
     <>
       <div className="row">
         <div className="col-xl-6 my-2">Re-Evaluate</div>
         <div className="col-xl-6 d-flex justify-content-end align-items-center cursor-pointer">
-          {!isDisabled ? <Popconfirm
-            title="Are you sure you want to re-evaluate?"
-            onConfirm={onChange}
-            okText="Yes"
-            cancelText="No"
-            disabled={isChecked?.movedAfterReEvaluateIsOff} 
-          >
-            <Switch
-              checked={isChecked?.isReEvaluateNeed}
+          {!isDisabled ? (
+            <Popconfirm
+              title="Are you sure you want to re-evaluate?"
+              onConfirm={onChange}
+              okText="Yes"
+              cancelText="No"
               disabled={isChecked?.movedAfterReEvaluateIsOff}
-              style={{
-                cursor:  isDisabled ? "not-allowed" : "pointer"
-              }}
-            />
-          </Popconfirm>:<>
-          <Switch
-              checked={isChecked?.isReEvaluateNeed}
-              disabled={isChecked?.movedAfterReEvaluateIsOff || isDisabled}
-            />
-          </>}
-         
+            >
+              <Switch
+                checked={isChecked?.isReEvaluateNeed}
+                disabled={isChecked?.movedAfterReEvaluateIsOff}
+                style={{
+                  cursor: isDisabled ? "not-allowed" : "pointer",
+                }}
+              />
+            </Popconfirm>
+          ) : (
+            <>
+              <Switch
+                checked={isChecked?.isReEvaluateNeed}
+                disabled={isChecked?.movedAfterReEvaluateIsOff || isDisabled}
+              />
+            </>
+          )}
         </div>
 
         <Divider className="p-0 m-0" />
         <div className="col-xl-6 my-2">Disease</div>
         <div
           className="col-xl-6 d-flex justify-content-end align-items-center cursor-pointer"
-          onClick={() => {
-            // selectDosValue &&
-            setActions({
-              showDisease: !actions?.showDisease,
-              reEvaluate: actions?.reEvaluate,
-              showActionsPop: actions?.showActionsPop,
-            });
-          }}
+          onClick={showDiseaseModal}
         >
           <span
             className="px-2"
@@ -479,7 +473,6 @@ const Hcc = ({
       </div> */}
     </>
   );
-
 
   const handleSubmit = async () => {
     const patientId = getStorage("patientId");
@@ -798,9 +791,7 @@ const Hcc = ({
                       >
                         <button
                           className={`${visitStyles.actionBtn} px-3 py-1 mx-2 rounded-md`}
-                          // disabled={ isDisabled}
                           onClick={() => {
-                            // if (isDisabled) return;
                             setActions({
                               ...actions,
                               showActionsPop: !actions.showActionsPop,
@@ -811,36 +802,35 @@ const Hcc = ({
                         </button>
                       </Popover>
                     </Nav.Item>
-                    {activeTabName?.tinDetailsTab == "Query Approval" &&
-                     (
-                        <div className="d-flex gap-2">
-                          <Nav.Item as="li" className="nav-item">
-                            <Popconfirm
-                              placement="bottom"
-                              description="Are you sure you want to approve?"
-                              okText="Yes"
-                              cancelText="No"
-                              onConfirm={handleApprove}
-                            >
-                              <Button
-                                disabled={isApproved || isReject ? true : false}
-                                className={`px-3 py-1 rounded-md ${styles.approveBtn}`}
-                              >
-                                Approve
-                              </Button>
-                            </Popconfirm>
-                          </Nav.Item>
-                          <Nav.Item as="li" className="nav-item">
+                    {activeTabName?.tinDetailsTab == "Query Approval" && (
+                      <div className="d-flex gap-2">
+                        <Nav.Item as="li" className="nav-item">
+                          <Popconfirm
+                            placement="bottom"
+                            description="Are you sure you want to approve?"
+                            okText="Yes"
+                            cancelText="No"
+                            onConfirm={handleApprove}
+                          >
                             <Button
                               disabled={isApproved || isReject ? true : false}
-                              className={`px-3 py-1 rounded-md ${styles.rejectBtn}`}
-                              onClick={showModal}
+                              className={`px-3 py-1 rounded-md ${styles.approveBtn}`}
                             >
-                              Reject
+                              Approve
                             </Button>
-                          </Nav.Item>
-                        </div>
-                      )}
+                          </Popconfirm>
+                        </Nav.Item>
+                        <Nav.Item as="li" className="nav-item">
+                          <Button
+                            disabled={isApproved || isReject ? true : false}
+                            className={`px-3 py-1 rounded-md ${styles.rejectBtn}`}
+                            onClick={showModal}
+                          >
+                            Reject
+                          </Button>
+                        </Nav.Item>
+                      </div>
+                    )}
                     <Nav.Item as="li" className="nav-item">
                       {/* {isClient &&
                           ["CODER_1", "CODER_2", "QA"].includes(proxyRole) && (
@@ -1023,6 +1013,24 @@ const Hcc = ({
             </Button>
           </div>
         </div>
+      </Modal>
+      <Modal
+        closable={{ "aria-label": "Custom Close Button" }}
+        open={isDiseaseOpen}
+        onOk={() => {
+          setiIsDiseaseOpen(false);
+          setActions({
+            showDisease: !actions?.showDisease,
+            reEvaluate: actions?.reEvaluate,
+            showActionsPop: actions?.showActionsPop,
+          });
+        }}
+        onCancel={handleDiseaseCancel}
+      >
+        <p>
+          Do you want to {actions?.showDisease ? "hide" : "show"} the hidden and
+          less specific diagnosis codes?
+        </p>
       </Modal>
     </div>
   );
