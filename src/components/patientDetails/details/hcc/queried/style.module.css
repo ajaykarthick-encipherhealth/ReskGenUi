@@ -1,0 +1,24 @@
+.line {
+  top: 30;
+  bottom: 0;
+  left: 14;
+  width: 2px;
+  background-color: #e3d0f1;
+  height: 250;
+  z-index: 0;
+}
+.profileLetter {
+  width: 35;
+  height: 30;
+  background-color: #e3d0f1;
+  color: #7f83bd;
+  border: 1px solid #e3d0f1;
+}
+.fontColor {
+  color: #04306f;
+}
+.reason {
+  border: 1px solid #bbe6e3;
+  height: 100px;
+  overflow: scroll;
+}

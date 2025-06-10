@@ -1107,10 +1107,13 @@ const Details = ({
                   onClose={handleCloseModal}
                   open={isModalComments}
                   width={
-                    flagContainerActiveTitle === "Timeline"
+                    flagContainerActiveTitle === "Timeline" || flagContainerActiveTitle === "Version History"
                       ? "460px"
                       : flagContainerActiveTitle === "Add DOS & Provider"
                       ? "1400px"
+                       : flagContainerActiveTitle === "Queried"
+                      ? "500px"
+                      
                       : null
                   }
                   title={flagContainerActiveTitle}

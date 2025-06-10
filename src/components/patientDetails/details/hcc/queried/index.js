@@ -29,8 +29,11 @@ const Index = ({ queriedData, queriedLoader }) => {
                 formatType: "dateTime",
               })}
               queriedto={item?.queryDetails?.queryToName}
+              queryByName={item?.queryDetails?.queryByName}
               queriedByUserName={item?.queryDetails?.queriedBy}
               isLast={index === queriedData.length - 1}
+              queriedToAliasName={item?.queriedToAliasName}
+              queriedByAliasName={item?.queriedByAliasName}
             />
           ))
         )}
