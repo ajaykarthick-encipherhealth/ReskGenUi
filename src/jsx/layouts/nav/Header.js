@@ -14,6 +14,8 @@ import {
 } from "@ant-design/icons";
 import CodeRoot from "../../../images/menu/coderootv4.png";
 import styles from "../../../styles/file-managemnt.module.css";
+import Styles from "./styles.module.css";
+
 import {
   AdminMenuList,
   PhysicanMenuList,
@@ -1049,8 +1051,7 @@ const Header = ({
                                 id="codify"
                                 name="codify"
                                 src={CodeRoot.src}
-                                width={"35px"}
-                                height={"27px"}
+                                className={Styles.codifyColor}
                                 onClick={showDrawer}
                               />
                             </Tooltip>
@@ -1104,37 +1105,11 @@ const Header = ({
                               <SettingOutlined
                                 data-testid="settings-icon"
                                 name="settings-icon"
-                                style={{
-                                  width:
-                                    stateActive === "/tenantadmin/settings"
-                                      ? "30px"
-                                      : "23px",
-                                  height:
-                                    stateActive === "/tenantadmin/settings"
-                                      ? "30px"
-                                      : "26px",
-                                  marginTop: "8px",
-                                  fontWeight: "700",
-                                  marginRight: "10px",
-                                  fontSize: "30px",
-                                  cursor: "pointer",
-                                  color:
-                                    stateActive === "/tenantadmin/settings"
-                                      ? "#fff"
-                                      : "#04306F",
-                                  backgroundColor:
-                                    stateActive === "/tenantadmin/settings"
-                                      ? "#04306F"
-                                      : "",
-                                  padding:
-                                    stateActive === "/tenantadmin/settings"
-                                      ? "6px"
-                                      : "",
-                                  borderRadius:
-                                    stateActive === "/tenantadmin/settings"
-                                      ? "9px"
-                                      : "",
-                                }}
+                                className={`img-fluid ${Styles.settingsIcon} ${
+                                  stateActive === "/tenantadmin/settings"
+                                    ? Styles.settingsActive
+                                    : Styles.settingsDefault
+                                }`}
                               />
                             </div>
                           )}
@@ -1192,7 +1167,7 @@ const Header = ({
                               >
                                 <FontAwesomeIcon
                                   icon={faBell}
-                                  className={`fa-regular ${styles.bellIcon}`}
+                                  className={`fa-regular ${Styles.bellIcon}`}
                                   styles={{ color: "#04306F" }}
                                 />
                               </div>
@@ -1227,7 +1202,6 @@ const Header = ({
                                     items: roles,
                                     defaultSelectedKeys: userRole,
                                     onClick,
-                                 
                                   }}
                                   trigger={["click"]}
                                 >
