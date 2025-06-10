@@ -459,11 +459,11 @@ const handleSwitchToggle = ()=>{
             tabs={tabs}
             margin={"0"}
             width={"100%"}
-            padding={"50px"}
+            padding={"30px"}
           />
         </div>
         {activeTab !== "Providers" && (
-          <div className="d-flex align-items-center justify-content-end gap-3">
+          <div className="d-flex align-items-center justify-content-end gap-2">
             <div className={styles.font}>
               Total Tin : {tinCount?.totalTin ? tinCount?.totalTin : 0}
             </div>

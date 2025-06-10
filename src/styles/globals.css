@@ -16558,6 +16558,7 @@ input::-webkit-inner-spin-button {
     width: 100% !important;
     box-shadow: 0px 2px 6px 0px rgba(0, 0, 0, 0.08) !important;
     border-radius: 10px;
+    font-size: 11px !important;
   }
 }
 .newReportPicker .ant-picker {
@@ -16681,4 +16682,48 @@ input::-webkit-inner-spin-button {
   .profile_info_header{
     margin-left: -10px;
   }
+}
+@media screen and (min-width: 900px) and (max-width: 1100px) {
+  .default-filter-size{
+    width: 192px !important;
+  }
+  .reusableInput.ant-input-affix-wrapper > input.ant-input {
+    margin-top: -7px !important;
+    font-size: 11px !important;
+  }
+  .ant-picker .ant-picker-input >input {
+    font-size: 11px !important;
+  }
+  .searchPrefix{
+    font-size: 11px !important;
+  }
+  .new-search-control, .new-search--control:hover {
+    font-size: 11px !important;
+  }
+  .ant-select-single.ant-select-show-arrow .ant-select-selection-placeholder {
+    font-size: 11px !important;
+  }
+}
+@media (min-width: 1101px) and (max-width: 1400px) {
+  .default-filter-size{
+    width: 224px !important;
+  }
+
+  .reusableInput.ant-input-affix-wrapper > input.ant-input {
+    margin-top: -6px !important;
+    font-size: 11px !important;
+  }
+  .ant-picker .ant-picker-input >input {
+    font-size: 11px !important;
+  }
+  .searchPrefix{
+    font-size: 11px !important;
+  }
+  .new-search-control, .new-search--control:hover {
+    font-size: 11px !important;
+  }
+  .ant-select-single.ant-select-show-arrow .ant-select-selection-placeholder {
+    font-size: 11px !important;
+  }
+
 }

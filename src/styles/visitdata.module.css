@@ -2342,7 +2342,7 @@
   margin-top: 8%;
 }
 
-@media (min-width: 1024px) and (max-width: 1500px) {
+@media (min-width: 1024px) and (max-width: 1300px) {
   .font {
     font-size: 12px !important;
   }
@@ -2374,7 +2374,7 @@
 
 .subContainer {
   position: absolute;
-  left: 42%;
+  left: 46%;
   transform: translateX(-50%);
 }
 @media screen and (min-width: 1500px) and (max-width: 1700px) {
