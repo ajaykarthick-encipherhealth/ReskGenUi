@@ -329,7 +329,8 @@ const NonHccCards = ({
                       name={`${id}-cmx-rx-content-${i}`}
                       className="d-flex justify-content-end mt-2"
                     >
-                      {data.isCmsHcc && (
+                       {/* As of now we command this  line ask for logesh  */}
+                      {/* {data.isCmsHcc && (
                         <div
                           id={`${id}-cmx-content-${i}`}
                           name={`${id}-cmx-content-${i}`}
@@ -346,7 +347,7 @@ const NonHccCards = ({
                         >
                           RX
                         </div>
-                      )}
+                      )} */}
                     </div>
                   </div>
                 </div>

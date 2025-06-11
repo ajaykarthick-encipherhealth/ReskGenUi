@@ -1017,7 +1017,8 @@ const HccCards = ({
                                   name={`hcc-cmx-rx-container-${i}`}
                                   className="d-flex justify-content-end mt-2 me-1 gap-1 text-center flex-wrap"
                                 >
-                                  {data?.riskAdjustmentDtoList?.some((item) =>
+                                   {/* As of now we command this  line ask for logesh  */}
+                                  {/* {data?.riskAdjustmentDtoList?.some((item) =>
                                     item?.cmsHcc?.some((hcc) => hcc.value > 1)
                                   ) && (
                                     <div
@@ -1027,11 +1028,11 @@ const HccCards = ({
                                     >
                                       CMS
                                     </div>
-                                  )}
+                                  )} */}
 
-                                  {/* As of now we command this for 3gen Don't want to show RXHCC */}
+                                {/* As of now we command this  line ask for logesh  */}
 
-                                  {data?.riskAdjustmentDtoList?.some((item) =>
+                                  {/* {data?.riskAdjustmentDtoList?.some((item) =>
                                     item?.rxHcc?.some((hcc) => hcc.value > 1)
                                   ) &&
                                     userId !=
@@ -1043,7 +1044,7 @@ const HccCards = ({
                                       >
                                         RX
                                       </div>
-                                    )}
+                                    )} */}
                                 </div>
                                 {!data.isLab && !data.isRadiology && (
                                   <div
