@@ -1045,7 +1045,6 @@ const Header = ({
                             name="coderoot"
                             className={styles.codify}
                           >
-                            {/* <div>{SVGICON.codify}</div> */}
                             <Tooltip placement="bottom" title={"CodeRoot"}>
                               <img
                                 id="codify"
@@ -1055,7 +1054,6 @@ const Header = ({
                                 onClick={showDrawer}
                               />
                             </Tooltip>
-                            {/* <FontAwesomeIcon onClick={showDrawer} icon={faBook} /> */}
                           </div>
 
                           <Drawer
@@ -1070,8 +1068,8 @@ const Header = ({
                               setDrawerWidth={setDrawerWidth}
                             />
                           </Drawer>
-                          {userRole === "CODER_1" ||
-                            (userRole === "CODER_2" && (
+                          {(userRole === "CODER_1" ||
+                            userRole === "CODER_2") && (
                               <Tooltip
                                 title={` Quality : ${
                                   accuracy ? Math.round(accuracy) : 100
@@ -1094,7 +1092,7 @@ const Header = ({
                                   </div>
                                 </div>
                               </Tooltip>
-                            ))}
+                            )}
                           {userRole === "TENANT_ADMIN" && (
                             <div
                               id="settingsIcon"
