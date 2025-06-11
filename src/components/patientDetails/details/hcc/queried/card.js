@@ -56,6 +56,8 @@ const  StatusCard =({
         style={{ border: "1px solid #BBE6E3" }}
         className={` rounded p-3 w-100 `}
       >
+        <div className="row">
+        <div className="col-10">
         <div className="d-flex gap-3 mb-2">
           <span  className={` fw-semibold ${styles.fontColor} `} >
             Queried by :
@@ -79,6 +81,7 @@ const  StatusCard =({
             {queryByName ? queryByName : "---"}
           </span>
         </div>
+        
         <div className="d-flex gap-3 mb-2">
         <span  className={` fw-semibold ${styles.fontColor} `} >
             Queried to :
@@ -104,8 +107,12 @@ const  StatusCard =({
           </span>
         </div>
         <div>
-          <span className="fw-semibold mb-4">Status : </span>
-          <span className={` p-2 font-bold ${statusColors[status]}`}> {status}</span>
+
+        </div>
+        </div>
+        <div className="col-2">
+        <span className={` font-bold ${statusColors[status]}`}> {status}</span>
+        </div>
         </div>
         {reason && (
           <>

@@ -215,7 +215,7 @@ const Details = ({
       title: "RX",
       type: "RX",
       iconStyle: IMAGES.visitDataRx,
-      defaultComplete: "RX",
+      defaultComplete: "RX_HCC_DISEASE",
     },
     {
       title: "Radiology",
@@ -1112,7 +1112,7 @@ const Details = ({
                       : flagContainerActiveTitle === "Add DOS & Provider"
                       ? "1400px"
                        : flagContainerActiveTitle === "Queried"
-                      ? "500px"
+                      ? "550px"
                       
                       : null
                   }
