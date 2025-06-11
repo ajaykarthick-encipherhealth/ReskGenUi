@@ -456,39 +456,7 @@ const isLoading = !patienIdDetails || !patienIdDetails?.workflow;
           ) : userRole == "CODER_1" ||
             userRole == "CODER_2" ||
             userRole == "QA" ? (
-            patienIdDetails?.workflow?.[0]?.status == null ? (
-              <div className={visitStyles.yearactionbtnContainer}>
-                <Dropdown
-                  overlay={
-                    activeTab == 3
-                      ? actionItems2
-                      : activeTab == 4
-                      ? actionItems3
-                      : actionItems
-                  }
-                  trigger={["click"]}
-                >
-                  <button
-                    type="primary"
-                    className={` ant-badge ${visitStyles.completedBtnHcc} ${
-                      isDosStatus && `${visitStyles.statusBtn}`
-                    } completedBtnHcc`}
-                    style={{
-                      cursor:
-                        patientIdDetailsData?.data?.response?.workflow?.[0]
-                          ?.status === "COMPLETED"
-                          ? "not-allowed"
-                          : "pointer",
-                    }}
-                  >
-                    <span className="ant-badge">Loading.....</span>
-                    <span style={{ marginLeft: "10px" }}>
-                      <DownOutlined />
-                    </span>
-                  </button>
-                </Dropdown>
-              </div>
-            ) : (
+           (
               <div
                 className={`${visitStyles.yearactionbtnContainer} ant-badge`}
               >
