@@ -105,20 +105,7 @@ const Hcc = ({
   const [isApproved, setIsApproved] = useState(false);
   const [isReject, setIsReject] = useState(false);
   const [isChecked, setIsChecked] = useState(false);
-  const [isDiseaseOpen, setiIsDiseaseOpen] = useState(false);
-  const showDiseaseModal = () => {
-    setiIsDiseaseOpen(true);
-    if (selectDosValue) {
-      setActions({
-        showDisease: !actions?.showDisease,
-        reEvaluate: actions?.reEvaluate,
-        showActionsPop: actions?.showActionsPop,
-      });
-    }
-  };
-  const handleDiseaseCancel = () => {
-    setiIsDiseaseOpen(false);
-  };
+
   const handleChange = (e) => {
     setQueryText(e.target.value);
   };
@@ -435,25 +422,46 @@ const Hcc = ({
 
         <Divider className="p-0 m-0" />
         <div className="col-xl-6 my-2">Disease</div>
-        <div
-          className="col-xl-6 d-flex justify-content-end align-items-center cursor-pointer"
-          onClick={showDiseaseModal}
-        >
-          <span
-            className="px-2"
-            style={{
-              width: "50px",
-              color: actions?.showDisease ? "#04306f" : "#d9d9d9",
+        <div className="col-xl-6 d-flex justify-content-end align-items-center cursor-pointer">
+          <Popconfirm
+            title={
+              <>
+                Turning {actions?.showDisease ? "off" : "on"} this option may
+                <strong> {actions?.showDisease ? "hide" : "show"}</strong>{" "}
+                diseases, apply combination codes, and enforce the most specific
+                rules. Do you want to continue?
+              </>
+            }
+            onConfirm={() => {
+              setActions({
+                showDisease: !actions?.showDisease,
+                reEvaluate: actions?.reEvaluate,
+                showActionsPop: actions?.showActionsPop,
+              });
             }}
+            okText="Continue"
+            cancelText="Cancel"
           >
-            {actions?.showDisease ? "Hide" : "Show"}
-          </span>
-          <div style={{ width: "15px" }}>
-            <FontAwesomeIcon
-              icon={actions?.showDisease ? faEye : faEyeSlash}
-              style={{ color: actions?.showDisease ? "#04306f" : "#d9d9d9" }}
-            />
-          </div>
+            <div className="d-flex align-items-center">
+              <span
+                className="px-2"
+                style={{
+                  width: "50px",
+                  color: actions?.showDisease ? "#04306f" : "#d9d9d9",
+                }}
+              >
+                {actions?.showDisease ? "Hide" : "Show"}
+              </span>
+              <div style={{ width: "15px" }}>
+                <FontAwesomeIcon
+                  icon={actions?.showDisease ? faEye : faEyeSlash}
+                  style={{
+                    color: actions?.showDisease ? "#04306f" : "#d9d9d9",
+                  }}
+                />
+              </div>
+            </div>
+          </Popconfirm>
         </div>
       </div>
       {/* <div className="d-flex justify-content-end align-items-center cursor-pointer">
@@ -1013,24 +1021,6 @@ const Hcc = ({
             </Button>
           </div>
         </div>
-      </Modal>
-      <Modal
-        closable={{ "aria-label": "Custom Close Button" }}
-        open={isDiseaseOpen}
-        onOk={() => {
-          setiIsDiseaseOpen(false);
-          setActions({
-            showDisease: !actions?.showDisease,
-            reEvaluate: actions?.reEvaluate,
-            showActionsPop: actions?.showActionsPop,
-          });
-        }}
-        onCancel={handleDiseaseCancel}
-      >
-        <p>
-          Do you want to {actions?.showDisease ? "hide" : "show"} the hidden and
-          less specific diagnosis codes?
-        </p>
       </Modal>
     </div>
   );
