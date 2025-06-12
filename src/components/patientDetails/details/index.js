@@ -1026,7 +1026,8 @@ const Details = ({
                             // }
                             const isEditDisabled =
                               patientIdDetailsData?.data?.response
-                                ?.workflow?.[0]?.status !== "PENDING";
+                                ?.workflow?.[0]?.status !== "PENDING" || patientDetailsResult?.data?.response?.workflow?.[0]
+                                ?.status == "COMPLETED";
                             const isFlagDisabled =
                               data.name === "Flag" && !isDosSelected;
                             const isDosDisabled =
@@ -1192,6 +1193,7 @@ const Details = ({
                       setIsModalComments={setIsModalComments}
                       getpatientDetailsData={getpatientDetailsData}
                       patientIdDetailsData={patientIdDetailsData}
+                      patientDetailsResult={patientDetailsResult}
                     />
                   ) : null}
                 </Drawer>

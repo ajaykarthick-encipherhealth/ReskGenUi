@@ -41,7 +41,8 @@ const Notes = ({
   const [localPatientId, setLocalPatientId] = useState("");
   const isDisabled =
   patientIdDetailsData?.data?.response
-    ?.workflow?.[0]?.status !== "PENDING";
+    ?.workflow?.[0]?.status !== "PENDING" || patientDetailsResult?.data?.response?.workflow?.[0]
+    ?.status == "COMPLETED";
   const handleSubmitNotes = async (event) => {
     const form = event.currentTarget;
     event.preventDefault();

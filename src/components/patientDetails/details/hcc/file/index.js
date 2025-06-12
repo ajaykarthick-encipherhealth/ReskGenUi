@@ -237,7 +237,8 @@ const File = ({
   };
   const isDisabled =
   patientIdDetailsData?.data?.response
-    ?.workflow?.[0]?.status !== "PENDING";
+    ?.workflow?.[0]?.status !== "PENDING" || patientDetailsResult?.data?.response?.workflow?.[0]
+    ?.status == "COMPLETED";
   return (
     <>
       {/* {fileLoading ? <LogoLoader /> : null} */}

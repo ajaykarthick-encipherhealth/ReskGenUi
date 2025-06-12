@@ -22,6 +22,7 @@ const VersionHistory = ({
   patientIdDetailsData,
   setIsModalComments,
   getpatientDetailsData,
+  patientDetailsResult
 }) => {
   const userId = getStorage("patientId");
   const [isPopupOpen, setIsPopupOpen] = useState(false);
@@ -876,7 +877,8 @@ const VersionHistory = ({
     return <div dangerouslySetInnerHTML={{ __html: item }} />;
   };
   const isDisabled =
-  patientIdDetailsData?.data?.response?.workflow?.[0]?.status !== "PENDING";
+  patientIdDetailsData?.data?.response?.workflow?.[0]?.status !== "PENDING" || patientDetailsResult?.data?.response?.workflow?.[0]
+  ?.status == "COMPLETED";
 
   function renderTimelineItem(item, index) {
     getBadgeClassName(item, index);

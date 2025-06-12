@@ -81,7 +81,8 @@ const NonHccCards = ({
   const [isMulitpleHeaderCode, setIsMulitpleHeadeCode] = useState(null);
   const [isMulitpleProvider, setIsMulitpleProvider] = useState(false);
   const isDisabled =
-    patientIdDetailsData?.data?.response?.workflow?.[0]?.status !== "PENDING";
+    patientIdDetailsData?.data?.response?.workflow?.[0]?.status !== "PENDING" || patientDetailsResult?.data?.response?.workflow?.[0]
+    ?.status == "COMPLETED";
   return (
     <>
       {patientDetailsLoad ? (
@@ -329,7 +330,7 @@ const NonHccCards = ({
                       name={`${id}-cmx-rx-content-${i}`}
                       className="d-flex justify-content-end mt-2"
                     >
-                       {/* As of now we command this  line ask for logesh  */}
+                             {/* As of now we command this for 3gen */}
                       {/* {data.isCmsHcc && (
                         <div
                           id={`${id}-cmx-content-${i}`}
@@ -338,8 +339,8 @@ const NonHccCards = ({
                         >
                           CMS
                         </div>
-                      )}
-                      {data.isRxHcc && (
+                      )} */}
+                      {/* {data.isRxHcc && (
                         <div
                           id={`${id}-rx-content-${i}`}
                           name={`${id}-cmx-content-${i}`}

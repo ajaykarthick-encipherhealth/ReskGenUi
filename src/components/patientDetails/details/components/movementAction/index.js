@@ -91,7 +91,8 @@ const MovementAction = ({
     }
   };
   const isDisabled =
-    patientIdDetailsData?.data?.response?.workflow?.[0]?.status !== "PENDING";
+    patientIdDetailsData?.data?.response?.workflow?.[0]?.status !== "PENDING" || patientDetailsResult?.data?.response?.workflow?.[0]
+    ?.status == "COMPLETED";
 
   const handleCloseModal = () => {};
   return (

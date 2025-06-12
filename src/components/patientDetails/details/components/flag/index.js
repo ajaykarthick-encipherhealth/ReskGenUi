@@ -51,7 +51,8 @@ const Flag = ({
   const [userDetails, setUserDetails] = useState("");
   const isDisabled =
   patientIdDetailsData?.data?.response
-    ?.workflow?.[0]?.status !== "PENDING";
+    ?.workflow?.[0]?.status !== "PENDING" || patientDetailsResult?.data?.response?.workflow?.[0]
+    ?.status == "COMPLETED";
 
   const flagPostList = getFlagsData?.response?.map((item) => ({
     value: item?.id,

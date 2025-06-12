@@ -254,7 +254,8 @@ const HccCards = ({
    }
   };
   const isDisabled =
-    patientIdDetailsData?.data?.response?.workflow?.[0]?.status !== "PENDING";
+    patientIdDetailsData?.data?.response?.workflow?.[0]?.status !== "PENDING" || patientDetailsResult?.data?.response?.workflow?.[0]
+    ?.status == "COMPLETED";
   return (
     <>
       {provided && (
@@ -1017,7 +1018,7 @@ const HccCards = ({
                                   name={`hcc-cmx-rx-container-${i}`}
                                   className="d-flex justify-content-end mt-2 me-1 gap-1 text-center flex-wrap"
                                 >
-                                   {/* As of now we command this  line ask for logesh  */}
+                                  {/* As of now we command this for 3gen  */}
                                   {/* {data?.riskAdjustmentDtoList?.some((item) =>
                                     item?.cmsHcc?.some((hcc) => hcc.value > 1)
                                   ) && (
@@ -1030,7 +1031,7 @@ const HccCards = ({
                                     </div>
                                   )} */}
 
-                                {/* As of now we command this  line ask for logesh  */}
+                                  {/* As of now we command this for 3gen */}
 
                                   {/* {data?.riskAdjustmentDtoList?.some((item) =>
                                     item?.rxHcc?.some((hcc) => hcc.value > 1)
