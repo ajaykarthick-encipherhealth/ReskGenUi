@@ -903,11 +903,12 @@ const VersionHistory = ({
           onOpenChange={() => renderUserDetails(item.userName)}
         >
           <div
-            className={getBadgeClassName(item, index)}
+            className={`cursor-pointer ${getBadgeClassName(item, index)}`}
             id={`user-timeline${index}`}
             name={`user-timeline${index}`}
           >
-            {item?.revertHistory}
+            <Tooltip title={item?.revertHistory == -1 ? "Base Version" :item?.revertHistory == 0 ? "Initial Version" :""}>
+            {item?.revertHistory == -1 ? "B" :item?.revertHistory == 0 ? "I" : item?.revertHistory}</Tooltip>
           </div>
         </Popover>
         {!item?.isCurrentVersion && !isDisabled ? (
