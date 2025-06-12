@@ -61,7 +61,9 @@ const ManuallyAdd = ({
   setOpens,
   open,
   getPatientIdData,
+  activeLabels,
 }) => {
+  const userId = getStorage("patientId")  
   const [form] = Form.useForm();
   const [isMeat, setIsMeat] = useState(true);
   const [validCode, setValidCode] = useState("");
@@ -538,7 +540,6 @@ const ManuallyAdd = ({
       disableOption();
     }
   }, [listOfSection]);
-
   const disableOptionMeat = (
     capturedSections,
     listOfSection,
@@ -814,6 +815,12 @@ const ManuallyAdd = ({
         }
         if (res?.status == "SUCCESS") {
           handleCloseModal(false);
+          activeLabels(
+          {
+            patientId: userId,
+            year: year?.value,
+            dos: isDosSelected,
+          });
           getResponePopup(res);
           resetForms({ reload: true });
           setIsBtnLoading(false);
@@ -1672,6 +1679,7 @@ const enhancer = connect(
     getpatientDetailsData: patientDetailsAction.patientDetailsAction,
     suggestedToValidMove: patientDetailsAction.suggestedToValidMove,
     getPatientIdData: detailsActions.patientIdDetailsAction,
+    activeLabels: detailsActions.activeLabels,
   }
 );
 

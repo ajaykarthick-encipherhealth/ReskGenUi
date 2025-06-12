@@ -22,6 +22,7 @@ const VersionHistory = ({
   patientIdDetailsData,
   setIsModalComments,
   getpatientDetailsData,
+  activeLabels,
   patientDetailsResult
 }) => {
   const userId = getStorage("patientId");
@@ -870,6 +871,12 @@ const VersionHistory = ({
       setIsModalComments(false);
       getResponePopup(response);
       getpatientDetailsData(userId, dosYearDefalutSelect?.value, isDosSelected);
+      activeLabels(
+        {
+          patientId: userId,
+          year: dosYearDefalutSelect?.value,
+          dos: isDosSelected,
+        });
     }
   };
 

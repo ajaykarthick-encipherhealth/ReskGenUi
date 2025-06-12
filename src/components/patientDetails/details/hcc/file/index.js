@@ -433,6 +433,7 @@ const File = ({
                 setIsFileFormShow={setIsFileFormShow}
                 year={year}
                 open={isFileFormShow}
+                isDosSelected={isDosSelected}
               />
             </div>
           ) : null}

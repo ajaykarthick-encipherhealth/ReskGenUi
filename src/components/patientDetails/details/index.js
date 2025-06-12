@@ -1193,6 +1193,7 @@ const Details = ({
                       setIsModalComments={setIsModalComments}
                       getpatientDetailsData={getpatientDetailsData}
                       patientIdDetailsData={patientIdDetailsData}
+                      activeLabels={activeLabels}
                       patientDetailsResult={patientDetailsResult}
                     />
                   ) : null}
@@ -1289,6 +1290,7 @@ const enhancer = connect(
     getAllRevertDetails: detailsActions.revertDetails,
     confirmRevert: detailsActions.confirmRevertDetails,
     getQueryDetails: detailsActions.getQuery,
+    activeLabels: detailsActions.activeLabels,
   }
 );
 export default enhancer(Details);

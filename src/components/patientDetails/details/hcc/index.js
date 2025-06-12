@@ -874,6 +874,7 @@ const Hcc = ({
                   selectDosValue={selectDosValue}
                   isSpinnerLoading={isSpinnerLoading}
                   activeTab={activeTab}
+                  isDosSelected={isDosSelected}
                 />
               </Tab.Pane>
               <Tab.Pane id="my-posts" eventKey={2}>
