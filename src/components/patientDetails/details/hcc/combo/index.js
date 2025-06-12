@@ -25,7 +25,8 @@ const Combo = ({
   setActiveMeatTitle,
   year,
   manuallyAddComboCode,
-  actions
+  actions,
+  activeTab,
 }) => {
 
   const [isModalOpenCaptureSection, setIsModalOpenCaptureSection] =
@@ -125,7 +126,10 @@ const Combo = ({
       "",
       setInvalidComboDiseaseCodesList,
       setAllMeatList,
-      setCareGapComboDiseaseCodesList
+      setCareGapComboDiseaseCodesList,
+      "",
+      "",
+      activeTab,
     );
   }, [patientDetailsResult]);
 
@@ -275,11 +279,16 @@ const Combo = ({
                         <span>VALID CODES </span>
                       </div>
                       <ComboCard
+                        // list={
+                        //   userId == "reviewer@3gencogentai.onmicrosoft.com"
+                        //     ? isBlockRxHcc
+                        //     : comboDiseaseCodesList
+                        // }
                         list={
-                          userId == "reviewer@3gencogentai.onmicrosoft.com"
-                            ? isBlockRxHcc
-                            : comboDiseaseCodesList
-                        }
+                          activeTab == 5
+                          ?comboDiseaseCodesList
+                          : isBlockRxHcc
+                          }
                         captureSectionMatching={captureSectionMatching}
                         encounterDateMatching={encounterDateMatching}
                         okText="OK"
@@ -322,11 +331,16 @@ const Combo = ({
                         <span>CARE GAP COMBO CODES </span>
                       </div>
                       <ComboCard
+                        // list={
+                        //   userId == "reviewer@3gencogentai.onmicrosoft.com"
+                        //     ? isBlockRxHccCareGap
+                        //     : careGapComboDiseaseCodesList
+                        // }
                         list={
-                          userId == "reviewer@3gencogentai.onmicrosoft.com"
-                            ? isBlockRxHccCareGap
-                            : careGapComboDiseaseCodesList
-                        }
+                          activeTab == 5
+                          ?careGapComboDiseaseCodesList
+                          : isBlockRxHccCareGap
+                          }
                         captureSectionMatching={captureSectionMatching}
                         encounterDateMatching={encounterDateMatching}
                         okText="OK"
@@ -375,11 +389,16 @@ const Combo = ({
                         <span>DELETED COMBO CODES </span>
                       </div>
                       <ComboCard
+                        // list={
+                        //   userId == "reviewer@3gencogentai.onmicrosoft.com"
+                        //     ? isBlockRxHccDeleted
+                        //     : invalidComboDiseaseCodesList
+                        // }
                         list={
-                          userId == "reviewer@3gencogentai.onmicrosoft.com"
-                            ? isBlockRxHccDeleted
-                            : invalidComboDiseaseCodesList
-                        }
+                          activeTab == 5
+                          ?invalidComboDiseaseCodesList
+                          : isBlockRxHccDeleted
+                          }
                         captureSectionMatching={captureSectionMatching}
                         encounterDateMatching={encounterDateMatching}
                         okText="OK"
@@ -452,11 +471,16 @@ const Combo = ({
                         ref={provided.innerRef}
                       >
                         <ComboCard
+                          // list={
+                          //   userId == "reviewer@3gencogentai.onmicrosoft.com"
+                          //     ? isBlockRxHcc
+                          //     : comboDiseaseCodesList
+                          // }
                           list={
-                            userId == "reviewer@3gencogentai.onmicrosoft.com"
-                              ? isBlockRxHcc
-                              : comboDiseaseCodesList
-                          }
+                            activeTab == 5
+                            ?comboDiseaseCodesList
+                            : isBlockRxHcc
+                            }
                           captureSectionMatching={captureSectionMatching}
                           encounterDateMatching={encounterDateMatching}
                           okText="OK"
