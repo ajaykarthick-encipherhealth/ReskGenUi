@@ -22,10 +22,9 @@ const Profile = ({
   userEmail,
   allRolesData,
 }) => {
-  const userRole = getStorage("userRole");
   return (
     <>
-      <div id="profileTab" name="profileTab" className="header-media d-flex">
+      <div id="profileTab" name="profileTab" className="header-media ant-badge cursor-pointer d-flex">
         <Popover
           trigger="click"
           open={openContent}

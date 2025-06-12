@@ -427,10 +427,11 @@ const Hcc = ({
           <Popconfirm
             title={
               <>
-                Turning {actions?.showDisease ? "off" : "on"} this option may
+                {/* Turning {actions?.showDisease ? "off" : "on"} this option may
                 <strong> {actions?.showDisease ? "hide" : "show"}</strong>{" "}
                 diseases, apply combination codes, and enforce the most specific
-                rules. Do you want to continue?
+                rules. Do you want to continue? */}
+               Do you want to {actions?.showDisease ? "hide" : "show"} the hidden and less specific diagnosis codes?
               </>
             }
             onConfirm={() => {
