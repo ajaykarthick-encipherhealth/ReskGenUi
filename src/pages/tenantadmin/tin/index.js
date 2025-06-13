@@ -7,7 +7,7 @@ import { useRouter } from "next/router";
 import ReusableFilters from "../../../components/reusableFilters";
 import AppTable from "../../../components/tables";
 import { actions as allActions } from "../../../stores/reviewer/workqueue";
-import {  setStorage } from "../../../utils/storages";
+import { setStorage } from "../../../utils/storages";
 import { actions as supervisorActions } from "../../../stores/supervisor/auditedQueue";
 import {
   findItemWithTrueKey,
@@ -19,9 +19,8 @@ import { actions as tableAction } from "../../../stores/tableView";
 import styles from "../../../styles/visitdata.module.css";
 import { Button, Popconfirm, Spin } from "antd";
 import { LoadingOutlined, PlusCircleFilled } from "@ant-design/icons";
-import visitStyles from  '../../../styles/visitdata.module.css'
-import { actions as allPatientSyncAction } from '../../../stores/tenantAdmin/patientSync'
-
+import visitStyles from "../../../styles/visitdata.module.css";
+import { actions as allPatientSyncAction } from "../../../stores/tenantAdmin/patientSync";
 
 export const getPageId = (activeTab) => {
   switch (activeTab) {
@@ -92,6 +91,8 @@ const Tin = ({
   const [parsedData, setParsedData] = useState([]);
   const [priority, setPriority] = useState(null);
   const [isFilter, setIsFilter] = useState(true);
+  const currentPageIds =
+    data?.response?.pageResponse?.content?.map((item) => item.id) || [];
 
   const params = {
     pageNo,
@@ -120,10 +121,9 @@ const Tin = ({
     setPageNo(0);
     setSelectedRowsId([]);
     setSelectedRows([]);
-    setSearchText(null)
-    setSelectedDateRanges({})
-    setSelectedDates([])
-
+    setSearchText(null);
+    setSelectedDateRanges({});
+    setSelectedDates([]);
   };
   const onPageChange = (e) => {
     setPaginationFirst(e.first);
@@ -156,7 +156,7 @@ const Tin = ({
           pageId: pageIds,
           pageNo: 0,
           pageSize: 15,
-          searchText:searchText,
+          searchText: searchText,
           selectedOption,
           selectedDateRanges,
         });
@@ -350,7 +350,6 @@ const Tin = ({
     }
   }, [routedData]);
 
-
   const getAllTins = async (tabOverride) => {
     const currentTab = tabOverride || activeTab;
     const pageId = getPageId(currentTab);
@@ -368,9 +367,9 @@ const Tin = ({
       searchText,
     });
   };
-const handleSwitchToggle = ()=>{
-  console.log("toggle")
-}
+  const handleSwitchToggle = () => {
+    console.log("toggle");
+  };
   const handlePriorityChange = async (tinNumber, selectedValue) => {
     const data = {
       tin: tinNumber,
@@ -391,13 +390,12 @@ const handleSwitchToggle = ()=>{
     }
   };
 
-
   useEffect(() => {
     setParamsFilter("check");
     if (paramsFilter === "check") {
       getAllTins();
       getTinCountData();
-      setSelectedRows([])
+      // setSelectedRows([])
     }
   }, [
     pageNo,
@@ -444,15 +442,14 @@ const handleSwitchToggle = ()=>{
       setIsFilter(false);
     }
   }, [data?.response?.metaDataDTO]);
+
   return (
     <div className={`show`}>
       <Header />
       <div
         className={`d-flex justify-content-end position-relative ${styles.tabContanier}`}
       >
-        <div         
-          className={styles.subContainer}
-        >
+        <div className={styles.subContainer}>
           <Tab
             activeTab={activeTab}
             handleTabs={handleTabs}
@@ -551,9 +548,8 @@ const handleSwitchToggle = ()=>{
                   "checkBox"
                 )}
                 checkedHeader={
-                  selectedRows?.length ===
-                    data?.response?.pageResponse?.totalElements &&
-                  data?.response?.pageResponse?.totalElements !== 0
+                  currentPageIds.length > 0 &&
+                  currentPageIds.every((id) => selectedRows.includes(id))
                 }
                 selectedRowsId={selectedRowsId}
                 setSelectedRowsId={setSelectedRowsId}

@@ -25,6 +25,8 @@ const MoveBackTable = ({
   searchText,
   selectedOption
 }) => {
+  const currentPageIds =
+    data?.response?.pageResponse?.content?.map((item) => item.id) || [];
   const [checkedLoader, setCheckedLoader] = useState(false);
   const onPageChange = (e) => {
     setPaginationFirst(e.first);
@@ -98,9 +100,8 @@ const MoveBackTable = ({
             "checkBox"
           )}
           checkedHeader={
-            selectedRows?.length ===
-              data?.response?.pageResponse?.totalElements &&
-            data?.response?.pageResponse?.totalElements !== 0
+            currentPageIds.length > 0 &&
+            currentPageIds.every((id) => selectedRows.includes(id))
           }
           statusBodyTemplate={statusBodyTemplate}
         />

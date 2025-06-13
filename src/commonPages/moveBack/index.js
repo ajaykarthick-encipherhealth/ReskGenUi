@@ -153,7 +153,7 @@ const MoveBack = ({
     setParamsFilter("check");
     if (window !== "undefined" && paramsFilter && roleId) {
       getMoveBack();
-      setSelectedRows([])
+      // setSelectedRows([])
     }
   }, [
     selectedOption,

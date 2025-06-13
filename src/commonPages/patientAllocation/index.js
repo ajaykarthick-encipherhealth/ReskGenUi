@@ -185,7 +185,7 @@ const PatientAllocation = ({
       roleId
     ) {
       getAllAllocation();
-      setSelectedRows([])
+      // setSelectedRows([])
     }
   }, [
     selectedOption,
