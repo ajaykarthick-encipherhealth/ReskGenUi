@@ -1113,8 +1113,7 @@ const Details = ({
                       : flagContainerActiveTitle === "Add DOS & Provider"
                       ? "1400px"
                        : flagContainerActiveTitle === "Queried"
-                      ? "550px"
-                      
+                      ? "510px"
                       : null
                   }
                   title={flagContainerActiveTitle}

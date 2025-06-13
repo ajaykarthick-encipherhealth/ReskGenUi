@@ -57,7 +57,7 @@ const  StatusCard =({
         className={` rounded p-3 w-100 `}
       >
         <div className="row">
-        <div className="col-10">
+        <div className="col-9">
         <div className="d-flex gap-3 mb-2">
           <span  className={` fw-semibold ${styles.fontColor} `} >
             Queried by :

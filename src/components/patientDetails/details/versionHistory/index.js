@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import visitStyles from "../../../../styles/visitdata.module.css";
 import { Popconfirm, Popover, Tooltip } from "antd";
 import styles from "../timline/styles.module.css";
-import { CloseCircleFilled } from "@ant-design/icons";
+import { CloseCircleFilled, HomeOutlined } from "@ant-design/icons";
 import { getProviderNameTagList } from "../components/function/ProviderHyperlinks";
 import { getDateOfServiceBackground } from "../components/function/DateOfServices";
 import { getSectionHeaderBackground, getSectionHeadersBackground } from "../components/function/SectionHeader";
@@ -902,14 +902,16 @@ const VersionHistory = ({
           content={userDetails}
           onOpenChange={() => renderUserDetails(item.userName)}
         >
+             <Tooltip title={item?.revertHistory == -1 ? "Base Version" :item?.revertHistory == 0 ? "Initial Version" :""}>
           <div
             className={`cursor-pointer ${getBadgeClassName(item, index)}`}
             id={`user-timeline${index}`}
             name={`user-timeline${index}`}
           >
-            <Tooltip title={item?.revertHistory == -1 ? "Base Version" :item?.revertHistory == 0 ? "Initial Version" :""}>
-            {item?.revertHistory == -1 ? "B" :item?.revertHistory == 0 ? "I" : item?.revertHistory}</Tooltip>
+         
+            {item?.revertHistory == -1 ? "B" :item?.revertHistory == 0 ? <HomeOutlined className="font5" /> : item?.revertHistory}
           </div>
+          </Tooltip>
         </Popover>
         {!item?.isCurrentVersion && !isDisabled ? (
           <Popconfirm

@@ -142,7 +142,7 @@ const CustomizableDrawer = ({
     >
       <div className="mt-3 mx-3 d-flex flex-column gap-3">
         {activeWithImplicitOrder?.length < 2 ? (
-          <div className="text-danger"> * Minimum three fields required</div>
+          <div className="text-danger"> * Minimum two fields required</div>
         ) : (
           ""
         )}
