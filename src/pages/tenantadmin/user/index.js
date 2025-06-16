@@ -764,7 +764,7 @@ const UserList = ({
                   { required: true, message: "Please enter your email!" },
                   {
                     pattern:
-                      "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+.[a-zA-Z]{2,}(?:.[a-zA-Z]{2,})?$",
+                      "^[a-zA-Z0-9._%+-]+@gmail\.com$",
                     required: true,
                     message: "Enter the Valid Email ",
                   },
@@ -774,7 +774,7 @@ const UserList = ({
                   data-testid="userName"
                   name="userName"
                   placeholder="Enter user name"
-                  autoComplete="off"
+                  autoComplete="off"  
                   disabled={isEdit}
                   className="w-100"
                 />
