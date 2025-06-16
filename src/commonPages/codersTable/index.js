@@ -52,11 +52,10 @@ const CodersTable = ({
   backRoute,
   roleId,
 }) => {
-
   const router = useRouter();
   const proxyRole = getStorage("proxyRole");
   const tin = getStorage("tinNumber");
-  const [proxy,setProxy] = useState(null)
+  const [proxy, setProxy] = useState(null);
   const [searchText, setSearchText] = useState(null);
   const [selectedOption, setSelectedOption] = useState({});
   const [selectedDateRanges, setSelectedDateRanges] = useState({});
@@ -90,7 +89,7 @@ const CodersTable = ({
       sortField: "processedDate",
     },
   });
-  
+
   const gotoPatientDetails = (data) => {
     patientDetails(data);
     setStorage("patientId", data.patientId);
@@ -187,7 +186,6 @@ const CodersTable = ({
     }
   };
 
-
   const params = {
     pageNo,
     selectedDates,
@@ -230,14 +228,23 @@ const CodersTable = ({
   useEffect(() => {
     setParamsFilter("check");
     if (window !== "undefined" && paramsFilter) {
-         getTableStatus({
-           isReAssigned,
-           isQueried,
-           patientAllocated,
-           tin,
-         });
+      getTableStatus({
+        pageNo,
+        pageNumber,
+        pageSize: 15,
+        selectedOption,
+        sort: sort,
+        selectedDateRanges,
+        searchText: searchText,
+        activeStatus,
+        pageId,
+        isReAssigned,
+        isQueried,
+        patientAllocated,
+        tin,
+        roleId,
+      });
       getCodersApi();
-     
     }
   }, [
     selectedOption,
@@ -250,7 +257,6 @@ const CodersTable = ({
     pageNumber,
     activeStatus,
     pageLoad,
-
   ]);
   useEffect(() => {
     if (
@@ -266,9 +272,9 @@ const CodersTable = ({
     }
   }, [data?.response?.metaDataDTO]);
 
-  useEffect(()=>{
-    setProxy(proxyRole)
-  },[proxy])
+  useEffect(() => {
+    setProxy(proxyRole);
+  }, [proxy]);
   return (
     <div className={`show `}>
       <Header />
@@ -340,7 +346,8 @@ const CodersTable = ({
                         to="#my-posts"
                         eventKey="PENDING"
                       >
-                        PENDING - {tableStatus?.pendingCount || 0}{" "}
+                        PENDING -{" "}
+                        {tableStatus?.mciPatientCountDTO?.pendingCount || 0}{" "}
                       </Nav.Link>
                     </Nav.Item>
                     <Nav.Item
@@ -356,7 +363,8 @@ const CodersTable = ({
                         to="#my-posts"
                         eventKey="APPROVED"
                       >
-                        APPROVED - {tableStatus?.approvedCount || 0}{" "}
+                        APPROVED -{" "}
+                        {tableStatus?.mciPatientCountDTO?.approvedCount || 0}{" "}
                       </Nav.Link>
                     </Nav.Item>{" "}
                     <Nav.Item
@@ -372,7 +380,8 @@ const CodersTable = ({
                         to="#my-posts"
                         eventKey="REJECTED"
                       >
-                        REJECTED - {tableStatus?.rejectedCount || 0}
+                        REJECTED -{" "}
+                        {tableStatus?.mciPatientCountDTO?.rejectedCount || 0}
                       </Nav.Link>
                     </Nav.Item>
                   </Nav>
@@ -424,7 +433,8 @@ const CodersTable = ({
                         to="#my-posts"
                         eventKey="PENDING"
                       >
-                        PENDING - {tableStatus?.pendingCount || 0}{" "}
+                        PENDING -{" "}
+                        {tableStatus?.mciPatientCountDTO?.pendingCount || 0}{" "}
                       </Nav.Link>
                     </Nav.Item>
                     <Nav.Item
@@ -440,7 +450,8 @@ const CodersTable = ({
                         to="#my-posts"
                         eventKey="COMPLETED"
                       >
-                        COMPLETED - {tableStatus?.approvedCount || 0}{" "}
+                        COMPLETED -{" "}
+                        {tableStatus?.mciPatientCountDTO?.approvedCount || 0}{" "}
                       </Nav.Link>
                     </Nav.Item>{" "}
                   </Nav>
