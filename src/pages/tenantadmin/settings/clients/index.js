@@ -7,6 +7,7 @@ import { actions as settingActions } from "../../../../stores/tenantAdmin/settin
 import { findMatchesByField, formatDateForIndex, getResponePopup } from "../../../../utils/reusable";
 import { actions as tableAction } from "../../../../stores/tableView";
 import { actions as authActions } from "../../../../stores/authFlows";
+import { disablePastDate } from "../../../../components/headerFilters/functions";
 
 const Clients = ({
   createClient,
@@ -19,7 +20,7 @@ const Clients = ({
   getAllClientDetails,
 }) => {
   const [form] = Form.useForm();
-
+  const { RangePicker } = DatePicker;
   const [activeFilters, setActiveFilters] = useState([]);
   const [paramsFilter, setParamsFilter] = useState(null);
   const [searchText, setSearchText] = useState(null);
@@ -58,20 +59,15 @@ const Clients = ({
   };
 
   const handleSubmit = async (values) => {
-    const projectInitiatedDate = formatDateForIndex({
-      date: values.projectInitiatedDate,
-      index: 0,
-    });
-    const projectEndDate = formatDateForIndex({
-      date: values.projectEndDate,
-      index: 1,
-    });
     const data = {
       clientName: values?.clientName,
-      // clientId: values?.clientId,
       projectName: values?.projectName,
-      projectInitiatedDate,
-      projectEndDate,
+      projectInitiatedDate: values.projectInitiatedDate?.[0]
+        ?.startOf("day")
+        ?.toISOString(),
+      projectEndDate: values.projectInitiatedDate?.[1]
+        ?.endOf("day")
+        ?.toISOString(),
     };
     try {
       const res = await createClient(data);
@@ -286,30 +282,13 @@ const Clients = ({
                   rules={[
                     {
                       required: true,
-                      message: "Please enter Start Date",
+                      message: "Please enter Start Date and End Date",
                     },
                   ]}
-                  label="Start Date"
+                  label="Date"
                 >
-                  <DatePicker
-                    style={{ border: "1px solid #d9d9d9" }}
-                    placeholder="Start Date"
-                  />
-                </Form.Item>
-                <Form.Item
-                  name="projectEndDate"
-                  rules={[
-                    {
-                      required: true,
-                      message: "Please enter End Date",
-                    },
-                  ]}
-                  label="End Date"
-                >
-                  <DatePicker
-                    style={{ border: "1px solid #d9d9d9" }}
-                    placeholder="End Date"
-                  />
+                   <RangePicker inputReadOnly style={{ border: "1px solid #d9d9d9" }}  format="MM-DD-YYYY" disabledDate={(current) => disablePastDate(current)} />
+                               
                 </Form.Item>
                 <Form.Item>
                   <div className="d-flex align-items-center justify-content-center">
