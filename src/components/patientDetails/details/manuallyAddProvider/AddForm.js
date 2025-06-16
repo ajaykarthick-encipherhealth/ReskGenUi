@@ -227,6 +227,7 @@ const AddForm = ({
             className="manuallyAddPicker"
           >
             <DatePicker
+              format="MM-DD-YYYY"
               data-testid="providersList-dateOfService"
               disabledDate={customDisableDate}
               defaultPickerValue={dayjs(
