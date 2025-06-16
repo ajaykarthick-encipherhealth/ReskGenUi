@@ -1515,7 +1515,6 @@ export const handleSubmitValidNotes = async ({
       //   duration: 1,
       // });
       getResponePopup(response);
-
       getpatientDetailsData(
         patientId,
         patientDetailsResult?.data?.response?.processedYear,
@@ -1524,7 +1523,6 @@ export const handleSubmitValidNotes = async ({
         ""
       );
       getPatientIdData(patientId);
-
       patientDetailsLoad(false);
     } else {
       setFileLoading(false);
@@ -1533,6 +1531,7 @@ export const handleSubmitValidNotes = async ({
     }
   } catch (err) {
     setFileLoading(false);
+    patientDetailsLoad(false);
     getResponePopup(err);
   }
 };

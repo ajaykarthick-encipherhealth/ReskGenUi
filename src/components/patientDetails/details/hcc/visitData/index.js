@@ -1046,6 +1046,10 @@ const VisitData = ({
           openState={opens}
           handleCloseModal={handleCloseModal}
           combiTree={combiTree}
+          setOpens={setOpens}
+          setFileLoading={setFileLoading}
+          setCombiTree={setCombiTree}
+          year={year}
         />
       ) : (
         opens && showErrorMessage()
