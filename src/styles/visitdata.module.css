@@ -2338,17 +2338,10 @@
   filter: blur(1px);
 }
 
-.tab {
-  margin-top: 8%;
-}
 
 @media (min-width: 1024px) and (max-width: 1300px) {
   .font {
     font-size: 12px !important;
-  }
-
-  .tab {
-    margin-top: 10% !important;
   }
 }
 
@@ -2367,40 +2360,23 @@
   cursor: pointer !important;
 }
 
-.tabContanier {
-  margin-top: 6%;
-  width: 100%;
-}
 
 .subContainer {
   position: absolute;
   left: 46%;
   transform: translateX(-50%);
 }
-@media screen and (min-width: 1500px) and (max-width: 1700px) {
-  .tabContainer {
-    margin-top: 10%;
-    padding: 10px;
-  } 
-}
 
-@media screen and (min-width: 900px) and (max-width: 1100px) {
-  .tabContanier {
-    margin-top: 8%;
-    width: 100%;
-  }
+
+@media screen and (min-width: 955px) and (max-width: 1225px) {
 
   .subContainer {
     position: absolute;
-    /* left: 20%; */
+    left: 47%; 
     transform: translateX(-50%);
-    top: 10px;
-  }
+    top:90px !important
+  } 
 
-  .tabContainer {
-    margin-top: 12%;
-    padding: 10px;
-  }
   .flagTitle {
   font-size: 10px !important;
 }
@@ -2415,14 +2391,10 @@
   }
   .actionBtn{
     font-size: 12px !important;
-    /* margin-top: 10px; */
   }
 }
 
 @media screen and (min-width: 1100px) and (max-width: 1500px) {
- .subContainer {
-       top: 10px;
-  }
    .pendingBtn,
   .completedBtnHcc,
   .holdBtnHcc,
@@ -2432,6 +2404,5 @@
   }
   .actionBtn{
     font-size: 12px !important;
-    /* margin-top: 10px; */
   }
 }

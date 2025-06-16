@@ -435,7 +435,7 @@ const UserList = ({
 
   return (
     <div className={`show `}>
-      {hideHeader && <Header />}
+      {/* {hideHeader && <Header />} */}
       <div className="content-body">
         <div className="container-users">
           <div className="table-responsive active-projects task-table">

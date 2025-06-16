@@ -952,7 +952,7 @@ const handleExcelDownload = () => {
 
   return (
     <>
-      <Header />
+      {/* <Header /> */}
       {viewDetailedBatch?.status ? (
         <DetailedViewPdfTable
           params={{
@@ -981,7 +981,7 @@ const handleExcelDownload = () => {
       ) : (
         <div className={styles.maincontainer}>
           <div class="content-body">
-            <div className="container-fluid">
+            <div className="container-fluid pt-2">
               <div className="row">
                 <div className="col-12">
                   <div className="">

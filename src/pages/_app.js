@@ -29,6 +29,7 @@ import {
 } from "../utils/inactiveTracker";
 import { ssoLogout } from "../../lib/authService";
 import Script from "next/script";
+import Header from "../jsx/layouts/nav/Header";
 
 config.autoAddCss = false;
 
@@ -233,31 +234,33 @@ function MyApp({ Component, pageProps }) {
     // }
   }, []);
 
-  // useEffect(() => {
-  //   const currentPath = window.location.pathname;
-  //   fetch(currentPath)
-  //     .then((response) => {
-  //       if (!response.ok) {
-  //         setShowTerminal(false);
-  //       } else {
-  //         if (
-  //           currentPath === "/" ||
-  //           currentPath?.includes("/login") ||
-  //           currentPath?.includes("/ehrlogin") ||
-  //           currentPath?.includes("/twofactorauthentication/") ||
-  //           currentPath?.includes("search")
-  //           // currentPath?.includes("/reviewer/patients/details")
-  //         ) {
-  //           setShowTerminal(false);
-  //         } else {
-  //           setShowTerminal(true);
-  //         }
-  //       }
-  //     })
-  //     .catch((error) => {
-  //       console.error("Error fetching data:", error);
-  //     });
-  // }, [router]);
+  useEffect(() => {
+    const currentPath = window.location.pathname;
+    fetch(currentPath)
+      .then((response) => {
+        if (!response.ok) {
+          setShowTerminal(false);
+        } else {
+          if (
+            currentPath === "/" ||
+            currentPath?.includes("/login") ||
+            currentPath?.includes("/projects") ||
+            currentPath?.includes("/client") ||
+            currentPath?.includes("/ehrlogin") ||
+            currentPath?.includes("/twofactorauthentication/") ||
+            currentPath?.includes("search")
+            // currentPath?.includes("/reviewer/patients/details")
+          ) {
+            setShowTerminal(false);
+          } else {
+            setShowTerminal(true);
+          }
+        }
+      })
+      .catch((error) => {
+        console.error("Error fetching data:", error);
+      });
+  }, [router]);
 
   // comment this refresh token --- Dev  login
 
@@ -457,7 +460,10 @@ gtag('config', 'G-3LEJBB5YX0');`}
 
           {showTerminal && <AICHAT openMsg={true} />}
           <span>
-            <Component {...pageProps} />
+            {showTerminal && <Header />}
+            <div>
+              <Component {...pageProps} />
+            </div>
           </span>
           <InternetError />
           {loginCheck == true && <ConnectWebSocket />}

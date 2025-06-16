@@ -241,7 +241,7 @@ const QueryApproval = ({
   }, [data?.response?.metaDataDTO]);
   return (
     <div>
-      <Header />
+      {/* <Header /> */}
       <div className="content-body">
         <div className="container-fluid" style={{ paddingTop: "5px" }}>
           <div className="table-responsive active-projects task-table">

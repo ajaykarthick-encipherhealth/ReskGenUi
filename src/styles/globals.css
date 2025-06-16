@@ -5543,6 +5543,18 @@ label {
     width: 38px;
   }
 }
+@media (min-width: 1024px) and (max-width: 1600px) {
+  .header-media {
+    height: 38px;
+    width: 38px;
+  }
+}
+@media (min-width: 276) and (max-width: 1115px) {
+  .header-media {
+    height: 28px;
+    width: 28px;
+  }
+}
 
 .header-right .header-info h6,
 .header-right .header-info .h6 {
@@ -9484,7 +9496,7 @@ button.btn.btn-danger.btn-sm.light.ms-1.btn.btn-primary {
 }
 
 .header-profile2 {
-  margin-right: 25px !important;
+  margin-right: 20px !important;
   text-transform: capitalize;
 }
 
@@ -16131,7 +16143,13 @@ input::-webkit-inner-spin-button {
   width: 18px !important;
   height: 18px !important;
 }
-
+@media (min-width: 1024px) and (max-width: 1148) {
+   .header-menu li span {
+    font-size: 5px !important;
+    font-size: 700 !important;
+    margin-top: 5px !important;
+  }
+}
 @media (max-width: 1344px) {
   .header-menu li span {
     font-size: 11px !important;
@@ -16673,9 +16691,9 @@ input::-webkit-inner-spin-button {
  label,h6 {
     font-size: 10px !important;
   }
-  li.nav-item.nav-item{
+  /* li.nav-item.nav-item{
     margin-bottom: 10px;
-  }
+  } */
   .header-name {
     font-size: 10px !important;
   }
@@ -16725,5 +16743,4 @@ input::-webkit-inner-spin-button {
   .ant-select-single.ant-select-show-arrow .ant-select-selection-placeholder {
     font-size: 11px !important;
   }
-
 }

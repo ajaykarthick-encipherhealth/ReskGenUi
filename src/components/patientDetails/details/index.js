@@ -701,7 +701,7 @@ const Details = ({
   return (
     <>
       <div className={`show `} style={{ height: "100vh", background: "#fff" }}>
-        <NavBar />
+        {/* <NavBar /> */}
         <div className={visitStyles.headerFixed} style={{ height: "100%" }}>
           {/* {isSpinnerLoading ? (
             <LogoLoader />

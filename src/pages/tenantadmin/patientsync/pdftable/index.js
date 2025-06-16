@@ -357,7 +357,7 @@ const DetailedViewPdfTable = ({
 
   return (
     <>
-      <Header />
+      {/* <Header /> */}
       <div className={styles.maincontainer}>
         <div className="content-body">
           <div className="container-fluid">

@@ -195,7 +195,7 @@ const Index = ({ getActiveTab, reportActiveTab }) => {
 
   return (
     <>
-      <Header />
+      {/* <Header /> */}
       <div className={styles.maincontainer}>
         <div className="content-body">
           {/* {!ReportPatientDetails?.response ? (

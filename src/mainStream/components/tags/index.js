@@ -11,39 +11,30 @@ const Tab = ({ activeTab, handleTabs, tabs, width, margin, padding }) => {
   if (!isClient || !tabs || tabs.length === 0) return null;
 
   return (
-    <div
-    style={{
-      width:
-        width ||
-        (tabs?.length === 2
-          ? "35%"
-          : tabs?.length === 4
-          ? "45%"
-          : tabs?.length === 4
-          ? "60%"
-          : "60%"), 
-      margin: margin || "auto",
-    }}
-      className={styles.buttonContainer}
-    >
-      <div
-        id={`reportTab-${activeTab}`}
-        name={`reportTab-${activeTab}`}
-        className={styles.group}
-        style={{ padding: padding || "0px" }}
+    <div>
+      <label 
       >
-        {tabs?.map((tab) => (
-          <button
-            id={`tab-${tab}`}
-            name={`tab-${tab}`}
-            key={`tab-${tab}`}
-            className={activeTab === tab ? styles.active : ""}
-            onClick={() => handleTabs(tab)}
-          >
-            {tab}
-          </button>
-        ))}
-      </div>
+        <div
+          id={`reportTab-${activeTab}`}
+          name={`reportTab-${activeTab}`}
+          className={`${styles.group} ${styles.buttonContainer}`}
+          style={{ padding: padding || "3px" }}
+        >
+          {tabs?.map((tab) => (
+            <label className="mb-0 p-1">
+              <button
+                id={`tab-${tab}`}
+                name={`tab-${tab}`}
+                key={`tab-${tab}`}
+                className={activeTab === tab ? styles.active : ""}
+                onClick={() => handleTabs(tab)}
+              >
+                {tab}
+              </button>
+            </label>
+          ))}
+        </div>
+      </label>
     </div>
   );
 };

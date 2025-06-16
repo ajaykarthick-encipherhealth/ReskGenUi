@@ -36,7 +36,7 @@ const Index = ({ getAllWorkFlow, DateRanges }) => {
 
   return (
     <div style={{ backgroundColor: "#F0F6FE" }}>
-      <Header />
+      {/* <Header /> */}
 
       <div className={styles.maincontainer}>
         <div className={styles.rowCOntainer}>

@@ -363,7 +363,7 @@ const Patient = ({
 
   return (
     <div className={`show `}>
-      <Header />
+      {/* <Header /> */}
       <div class="content-body">
         <div className="container-fluid">
           <div className="row">

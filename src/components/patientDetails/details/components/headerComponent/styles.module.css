@@ -48,4 +48,41 @@
   }
 }
 
- 
+ .priorityText {
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.urgent {
+  color: red;
+}
+
+.high {
+  color: #cf940a;
+}
+
+.normal {
+  color: #4466ff;
+}
+.highFlag path {
+  fill: #cf940a;
+}
+.urgentFlag path {
+  fill: #d40b0b;
+}
+.lowFlag path {
+  fill: #87909e;
+}
+.normalFlag path {
+  fill: #4466ff;
+}
+.low,
+.yetToSet {
+  color: #87909e;
+}
+
+@media screen and (min-width: 1024px) and (max-width: 1500px) {
+   .priorityText {
+  font-size: 10px;
+}
+}

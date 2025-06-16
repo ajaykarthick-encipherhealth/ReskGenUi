@@ -29,16 +29,6 @@ const UploadFile = ({
         if (fileInputRef.current) fileInputRef.current.value = "";
         return;
       }
-      const maxFilesAllowed =
-        openUpload?.data?.totalFileCount -
-          openUpload?.data?.totalSuccessCount || Infinity;
-      if (fileArray?.length > maxFilesAllowed) {
-        alert(`This batch can allow only ${maxFilesAllowed} files.`);
-        if (fileInputRef.current) fileInputRef.current.value = "";
-        event.target.value = "";
-        return;
-      }
-
       if (uploadAction === "uploadFolder" || uploadAction === "uploadMultipleFiles") {
         // Check if all files are PDFs
         const invalidFiles = fileArray?.filter(
@@ -55,7 +45,15 @@ const UploadFile = ({
           return;
         }
       }
-
+      const maxFilesAllowed =
+        openUpload?.data?.totalFileCount -
+          openUpload?.data?.totalSuccessCount || Infinity;
+      if (fileArray?.length > maxFilesAllowed) {
+        alert(`This batch can allow only ${maxFilesAllowed} files.`);
+        if (fileInputRef.current) fileInputRef.current.value = "";
+        event.target.value = "";
+        return;
+      }
       const validFiles = [];
       fileArray.forEach((file) => {
         validFiles.push(file);

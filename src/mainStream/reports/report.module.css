@@ -1,7 +1,7 @@
 .group {
-  width: 80%;
+  /* width: 80%; */
   display: flex;
-  gap: 20px;
+  /* gap: 20px; */
   justify-content: center;
   align-items: center;
 }
@@ -21,10 +21,11 @@
   border: 1px solid #04306f;
   border-radius: 10px;
   /* width: 50%; */
-  height: 62px;
-  display: flex;
+  /* height: 62px; */
+  /* padding: 5px 10px; */
+  /* display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: center; */
 }
 
 .active {
@@ -690,12 +691,6 @@
 }
 
 @media (min-width: 1024px) and (max-width: 1400px) {
-  .buttonContainer {
-    /* width: 70% !important; */
-    height: 52px !important;
-    padding: 10px !important;
-  }
-
   .group button {
     padding: 4px !important;
     font-size: 12px !important;
@@ -709,24 +704,10 @@
 }
 
 @media (min-width: 1920px) and (max-width: 2560px) {
-  .buttonContainer {
-    /* width: 100% !important; */
-    height: 56px !important;
-    padding: 10px !important;
-  }
-
   .group button {
     padding: 5px !important;
     font-size: 14px !important;
   }
 }
 
-@media screen and (min-width: 900px) and (max-width: 1100px) {
-  .group {
-    padding: 15px !important;
-  }
 
-  .buttonContainer {
-    /* width: 85% !important; */
-  }
-}

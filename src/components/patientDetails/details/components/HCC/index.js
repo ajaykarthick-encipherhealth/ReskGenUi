@@ -19,6 +19,7 @@ import {
   getMeatFound,
   getSuspectTypes,
   moveToAnotherAction,
+  reusableEllipseNoTooltip,
 } from "../function/ReusableFunctions";
 import { connect } from "react-redux";
 import { Draggable } from "react-beautiful-dnd";
@@ -30,8 +31,9 @@ import TableRisk from "../../../../tableRisk";
 import moment from "moment";
 import { getStorage } from "../../../../../utils/storages";
 import { isLocalEdit } from "../../../../../utils/config";
-import { getResponePopup } from "../../../../../utils/reusable";
 import CardSkeleton from "../../../../skeleton/card";
+import AiLogo from "../../../../../images/logo/AI.png";
+import Image from "next/image";
 
 const HccCards = ({
   list,
@@ -214,44 +216,44 @@ const HccCards = ({
     }
   }, [selectedDos, labFile?.data?.response?.dosSummaries]);
 
- const unHideDisease = async (data, action,meatCriteriaList) => {
-   const result = meatCriteriaList?.find(
-     (res2) =>
-       res2?.diagnosisCode?.replace(".", "") ===
-       data?.diagnosisCode?.replace(".", "")
-   );
-   patientDetailsLoad(true);
-   const patientId = getStorage("patientId");
-   const role = getStorage("userRole");
-   const res = await diseaseEdit({
-     patientId: patientId,
-     ...data,
-     isShow: action === "hide" ? false : true,
-     chartProcessType: "DATE_OF_SERVICE",
-     dateOfServiceIfDosWiseCompute: data?.dateOfServices[0],
-     processedYear: year?.value,
-     newDiagnosisCode: data?.diagnosisCode,
-     oldDiagnosisCode: data?.diagnosisCode,
-     monitorAspect: result?.monitorAspect,
-     evaluateAspect: result?.evaluateAspect,
-     assessmentAspect: result?.assessmentAspect,
-     treatmentAspect: result?.treatmentAspect,
-     monitorHyperLink: result?.monitorHyperLink,
-     evaluateHyperLink: result?.evaluateHyperLink,
-     assessmentHyperLink: result?.assessmentHyperLink,
-     treatmentHyperLink: result?.treatmentHyperLink,
-   });
+  const unHideDisease = async (data, action, meatCriteriaList) => {
+    const result = meatCriteriaList?.find(
+      (res2) =>
+        res2?.diagnosisCode?.replace(".", "") ===
+        data?.diagnosisCode?.replace(".", "")
+    );
+    patientDetailsLoad(true);
+    const patientId = getStorage("patientId");
+    const role = getStorage("userRole");
+    const res = await diseaseEdit({
+      patientId: patientId,
+      ...data,
+      isShow: action === "hide" ? false : true,
+      chartProcessType: "DATE_OF_SERVICE",
+      dateOfServiceIfDosWiseCompute: data?.dateOfServices[0],
+      processedYear: year?.value,
+      newDiagnosisCode: data?.diagnosisCode,
+      oldDiagnosisCode: data?.diagnosisCode,
+      monitorAspect: result?.monitorAspect,
+      evaluateAspect: result?.evaluateAspect,
+      assessmentAspect: result?.assessmentAspect,
+      treatmentAspect: result?.treatmentAspect,
+      monitorHyperLink: result?.monitorHyperLink,
+      evaluateHyperLink: result?.evaluateHyperLink,
+      assessmentHyperLink: result?.assessmentHyperLink,
+      treatmentHyperLink: result?.treatmentHyperLink,
+    });
 
-   if (res?.status === "SUCCESS") {
-     getPatientDetailsData(patientId, null, selectDosValue, "", role);
-     getPatientIdData(patientId);
-     setOpenContent(false);
-     getResponePopup(res);
-     patientDetailsLoad(false);
-   } else {
-     getResponePopup(res);
-     patientDetailsLoad(false);
-   }
+    if (res?.status === "SUCCESS") {
+      getPatientDetailsData(patientId, null, selectDosValue, "", role);
+      getPatientIdData(patientId);
+      setOpenContent(false);
+      getResponePopup(res);
+      patientDetailsLoad(false);
+    } else {
+      getResponePopup(res);
+      patientDetailsLoad(false);
+    }
   };
   const isDisabled =
     patientIdDetailsData?.data?.response?.workflow?.[0]?.status !== "PENDING" || patientDetailsResult?.data?.response?.workflow?.[0]
@@ -323,7 +325,8 @@ const HccCards = ({
                         >
                           <Popover
                             open={
-                              !data?.isShow && isDosSelected && 
+                              !data?.isShow &&
+                              isDosSelected &&
                               hoveredItem == data?.diagnosisCode
                                 ? true
                                 : false
@@ -331,52 +334,62 @@ const HccCards = ({
                             placement="center"
                             trigger={["hover", "focus"]}
                             content={
-                              !isDisabled?(
-                              <Popconfirm
-                                title="Are you sure want to unhide the disease?"
-                                onConfirm={() => unHideDisease(data, "show",meatCriteriaList)}
-                              >
-                                <div
-                                  className="w-100 d-flex justify-content-center align-items-center cursor-pointer"
-                                  // onClick={() => unHideDisease(data)}
+                              !isDisabled ? (
+                                <Popconfirm
+                                  title="Are you sure want to unhide the disease?"
+                                  onConfirm={() =>
+                                    unHideDisease(
+                                      data,
+                                      "show",
+                                      meatCriteriaList
+                                    )
+                                  }
                                 >
-                                  <span
-                                    className="px-2"
+                                  <div
+                                    className="w-100 d-flex justify-content-center align-items-center cursor-pointer"
+                                    // onClick={() => unHideDisease(data)}
+                                  >
+                                    <span
+                                      className="px-2"
+                                      style={{
+                                        width: "50px",
+                                        color: "#d9d9d9",
+                                      }}
+                                    >
+                                      {"Show"}
+                                    </span>
+                                    <FontAwesomeIcon
+                                      icon={faEyeSlash}
+                                      style={{ color: "#d9d9d9" }}
+                                    />
+                                  </div>
+                                </Popconfirm>
+                              ) : (
+                                <>
+                                  <div
+                                    className="w-100 d-flex justify-content-center align-items-center "
                                     style={{
-                                      width: "50px",
-                                      color: "#d9d9d9",
+                                      cursor: isDisabled
+                                        ? "not-allowed"
+                                        : "pointer",
                                     }}
                                   >
-                                    {"Show"}
-                                  </span>
-                                  <FontAwesomeIcon
-                                    icon={faEyeSlash}
-                                    style={{ color: "#d9d9d9" }}
-                                  />
-                                </div>
-                              </Popconfirm>):<>
-                              <div
-                                  className="w-100 d-flex justify-content-center align-items-center "
-                                  style={{
-                                    cursor: isDisabled
-                                      ? "not-allowed"
-                                      : "pointer",
-                                  }}
-                                >
-                                  <span
-                                    className="px-2"
-                                    style={{
-                                      width: "50px",
-                                      color: "#d9d9d9",
-                                    }}
-                                  >
-                                    {"Show"}
-                                  </span>
-                                  <FontAwesomeIcon
-                                    icon={faEyeSlash}
-                                    style={{ color: "#d9d9d9" }}
-                                  />
-                                </div></>
+                                    <span
+                                      className="px-2"
+                                      style={{
+                                        width: "50px",
+                                        color: "#d9d9d9",
+                                      }}
+                                    >
+                                      {"Show"}
+                                    </span>
+                                    <FontAwesomeIcon
+                                      icon={faEyeSlash}
+                                      style={{ color: "#d9d9d9" }}
+                                    />
+                                  </div>
+                                </>
+                              )
                             }
                           >
                             <div
@@ -422,31 +435,6 @@ const HccCards = ({
                                         }}
                                       />
                                     )}
-
-                                  <Popover
-                                    content={
-                                      data?.isShow && (
-                                        <div className="patientDetailsDescPopSTyle">
-                                          {data.dbDescription
-                                            ? data.dbDescription
-                                            : data.actualDescription}
-                                        </div>
-                                      )
-                                    }
-                                    // title=""
-                                    trigger="hover"
-                                    overlayStyle={{ zIndex: 1000 }}
-                                    placement="topLeft"
-                                  >
-                                    <>
-                                      {" "}
-                                      -{" "}
-                                      <span className="cr-pointer">{data.dbDescription
-                                        ? data.dbDescription
-                                        : data.actualDescription}</span>
-                                      
-                                    </>
-                                  </Popover>
                                 </span>
                               </div>
                               {/* {data.defaultPosition} */}
@@ -455,6 +443,18 @@ const HccCards = ({
                                 id={`${id}-hcc-info-${i}`}
                                 name={`hcc-info-${i}`}
                               >
+                                {data?.reason && (
+                                  <Popover content={<>{data?.reason || ""}</>}>
+                                    <Image
+                                      src={AiLogo}
+                                      alt="ai-log"
+                                      width="20"
+                                      className="mx-1"
+                                      id="hcc-ai-icon"
+                                      name="hcc-ai-icon"
+                                    />
+                                  </Popover>
+                                )}
                                 {data.suspectType.length != 0 && (
                                   <>
                                     {" "}
@@ -843,7 +843,11 @@ const HccCards = ({
                                             <Popconfirm
                                               title="Are you sure want to hide disease?"
                                               onConfirm={() =>
-                                                unHideDisease(data, "hide",meatCriteriaList)
+                                                unHideDisease(
+                                                  data,
+                                                  "hide",
+                                                  meatCriteriaList
+                                                )
                                               }
                                             >
                                               <div className="cursor-pointer">
@@ -878,6 +882,37 @@ const HccCards = ({
                                   </div>
                                 </Popover>
                               </div>
+                            </div>
+                            <div className="m-1">
+                              <Popover
+                                content={
+                                  data?.isShow && (
+                                    <div className="patientDetailsDescPopSTyle">
+                                      {data.dbDescription
+                                        ? data.dbDescription
+                                        : data.actualDescription}
+                                    </div>
+                                  )
+                                }
+                                // title=""
+                                trigger="hover"
+                                overlayStyle={{ zIndex: 1000 }}
+                                placement="topLeft"
+                                maxHeight={100}
+                                
+                              >
+                                <>
+                                  <span className="cr-pointer font2">
+                                    {reusableEllipseNoTooltip({
+                                      str: data.dbDescription
+                                        ? data.dbDescription
+                                        : data.actualDescription ||
+                                          "--".toString(),
+                                      count: 45,
+                                    })}
+                                  </span>
+                                </>
+                              </Popover>
                             </div>
                             <div
                               id={`${id}-hcc-hoverActiveHcc-${i}`}

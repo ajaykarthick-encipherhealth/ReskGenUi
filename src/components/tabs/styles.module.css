@@ -1,0 +1,68 @@
+.tabContainer {
+  padding: 3px 10px 3px 10px;
+  background: #EEF0F2;
+  gap: 5px;
+  margin-inline: 10px;
+  border-radius: 5px;
+}
+
+.activeTab {
+  background: #DEEFFD;
+  border: 0.5px solid #A8B3BD
+}
+
+.tabMainConatiner {
+  height: 37px;
+  display: flex;
+  align-items: center;
+}
+
+.tabItem {
+  height: 25px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 5px;
+  padding: 5px 8px;
+}
+
+.inNotAvalTab {
+  background: #ff0909;
+  border: 0.5px solid #A8B3BD;
+  /* animation: blinker 1.2s linear infinite; */
+  padding: 3px 8px !important;
+  height: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 5px;
+}
+
+.inNotAvalTabBlik {
+  background: #ff0909;
+  border: 0.5px solid #A8B3BD;
+  animation: blinker 1.2s linear infinite;
+  padding: 3px 8px !important;
+  height: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 5px;
+}
+.btnDisabled {
+  background: #cdcbcb;
+  border: 0.5px solid #A8B3BD;
+  /* animation: blinker 1.2s linear infinite; */
+  padding: 3px 8px !important;
+  height: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 5px;
+}
+
+@keyframes blinker {
+  50% {
+    opacity: 0.5;
+  }
+}

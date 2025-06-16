@@ -64,7 +64,7 @@ const Query = () => {
 
   return (
     <div className={`show`}>
-      <Header />
+      {/* <Header /> */}
       <div className={visitStyles.headerFixed}>
         <div class="content-body">
           <div

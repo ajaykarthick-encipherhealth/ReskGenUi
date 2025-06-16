@@ -89,7 +89,7 @@ const NotificationList = ({
 
   return (
     <div style={{ backgroundColor: "#F0F6FE" }}>
-      <Header />
+      {/* <Header /> */}
       <div className="content-body">
         <div className="container-fluid">
           <section className="d-flex">

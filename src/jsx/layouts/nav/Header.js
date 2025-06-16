@@ -58,7 +58,6 @@ import { getHeaderLoge } from "../../../pages/twofactorauthentication/reusableFu
 import { actions as tinActions } from "../../../stores/tenantAdmin/tin";
 import { actions as tableAction } from "../../../stores/tableView";
 
-
 const Header = ({
   notificationResponse,
   getNotificationList,
@@ -96,7 +95,7 @@ const Header = ({
   getTableData,
   getNotificationSound,
   notificationSound,
-  getProjectActiveTab
+  getProjectActiveTab,
 }) => {
   const router = useRouter();
   const fileInputRef = useRef(null);
@@ -142,6 +141,7 @@ const Header = ({
   const [projectList, setProjectList] = useState([]);
   const [projectListCheck, setProjectListCheck] = useState(true);
   const [userEmail, setUserEmail] = useState(null);
+  const [isShowDropdown, setIsShowDropdown] = useState(false);
 
   const proxyRole = getStorage("proxyRole");
   const showDrawer = () => {
@@ -161,7 +161,6 @@ const Header = ({
     );
     getNotificationData(res);
   };
-
   const logoutFunction = async () => {
     setOpenContent(false);
     Swal.fire({
@@ -214,12 +213,37 @@ const Header = ({
     setPopoverVisible(false);
   };
 
-
   const onClick = ({ key }) => {
-    setProjectListCheck(true);
+    setIsShowDropdown(false);
+    setMenuList(getMenuListByRole(key));
+    setCurrentRole(key == "TENANT_ADMIN" ? "ADMIN" : key);
+    setProjectListCheck(false);
     getProjectActiveTab(null);
     const allRoles = JSON.parse(getStorage("userAllRoles"));
+    let userId = currentUserInfo?.data?.response?.id;
+    const defaultClient = getStorage("client");
+    const defaultProject = getStorage("project");
+    const defaultTinNumber = getStorage("tinNumber");
+    const userRole = getStorage("proxyRole");
+    if (tinDetails?.length > 0 && userRole === "QA") {
+      let initialTin = defaultTinNumber || tinDetails[0].tinNumber;
+      if (!selectedTin) {
+        setSelectedTin(initialTin);
+        setStorage("tinNumber", initialTin);
+        setBackupSelectedTin(initialTin);
+      }
+    }
+    if (defaultClient) {
+      setSelectedClient(defaultClient);
+      setBackupSelectedClient(defaultClient);
+    }
 
+    if (defaultProject) {
+      setSelectedProject(defaultProject);
+      setBackupSelectedProject(defaultProject);
+    }
+
+    getNotificationList(userId);
     let selectedRoleObj = allRoles?.find((res) => res.proxyRole === key);
     if (!selectedRoleObj) {
       setNotificationCount(0);
@@ -231,7 +255,6 @@ const Header = ({
 
     const accessMenuList =
       selectedRoleObj?.accessList || selectedRoleObj?.details?.accessList || [];
-
     const newAliasName =
       selectedRoleObj?.aliasName || selectedRoleObj?.details?.aliasName;
     const oldAliasName = getStorage("headerAliasName");
@@ -248,7 +271,7 @@ const Header = ({
     setStorage("headerAliasName", newAliasName);
     setStorage("aliasName", newAliasName);
     setStorage("accessMenuList", JSON.stringify(accessMenuList));
-
+    setUserRole(key);
     const firstAccess = accessMenuList[0];
     const dynamicPath =
       firstAccess?.title?.toLowerCase().replace(/\s+/g, "") || "dashboard";
@@ -262,7 +285,6 @@ const Header = ({
     } else {
       dynamicRoute = `/tenantadmin/${dynamicPath}`;
     }
-
     if (newAliasName !== oldAliasName) {
       getResponePopup({
         message: "Role changed successfully",
@@ -270,7 +292,6 @@ const Header = ({
         duration: 5,
       });
     }
-
     if (router.pathname !== dynamicRoute) {
       router.push(dynamicRoute);
     } else {
@@ -291,7 +312,6 @@ const Header = ({
     const accessMenuList = selectedRoleObj?.accessList
       ? selectedRoleObj?.accessList
       : selectedRoleObj?.details?.accessList;
-
     switch (role) {
       case "admin":
         return AdminMenuList;
@@ -466,6 +486,7 @@ const Header = ({
     const tenentId = getStorage("tenantId");
     // getCurrentUserInfo({ userId });
     setUserRole(userRoleLocal);
+    setIsShowDropdown(true);
     setCurrentRole(userRole);
     setTenentId(tenentId);
     setMenuList(getMenuListByRole(userRoleLocal));
@@ -490,13 +511,10 @@ const Header = ({
         }
       });
     }
-
     window.addEventListener("scroll", () => {
       setheaderFix(window.scrollY > 50);
     });
-
-    getAccuracy();
-  }, []);
+  }, [userRole]);
 
   const renderMenuItems = (condition) => {
     return condition?.map((data, index) => {
@@ -531,7 +549,7 @@ const Header = ({
             getActiveTab(null);
             getReportActiveTab(null);
             getRoutedData(null);
-            
+
             router.push(
               {
                 pathname: `${data?.to}`,
@@ -715,7 +733,7 @@ const Header = ({
       status: "SUCCESS",
       message: "Client Changed Successfully",
       duration: 5,
-    })
+    });
     const res = await getAllProjects();
     if (res?.response?.length === 0) {
       setSelectedClient(backupSelectedClient);
@@ -744,8 +762,8 @@ const Header = ({
     getResponePopup({
       status: "SUCCESS",
       message: "Project Changed Successfully",
-      duration: 5 ,
-    })
+      duration: 5,
+    });
     const res = await getAllRoles();
     if (res?.response?.userRoles?.length === 0) {
       setSelectedProject(backupSelectedProject);
@@ -898,7 +916,6 @@ const Header = ({
       setProjectList(projectOptions);
     }
   }, [projectDetails]);
-
 
   return (
     <div className={`header ${headerFix ? "is-fixed" : ""}`}>
@@ -1070,29 +1087,29 @@ const Header = ({
                           </Drawer>
                           {(userRole === "CODER_1" ||
                             userRole === "CODER_2") && (
-                              <Tooltip
-                                title={` Quality : ${
-                                  accuracy ? Math.round(accuracy) : 100
-                                }%`}
-                              >
-                                <div className="header-progress">
-                                  <div style={{ width: 40, height: 40 }}>
-                                    <CircularProgressbar
-                                      value={
-                                        accuracy
-                                          ? Math.round(accuracy)
-                                          : Math.round(100)
-                                      }
-                                      text={`${
-                                        accuracy
-                                          ? Math.round(accuracy)
-                                          : Math.round(100)
-                                      }%`}
-                                    />
-                                  </div>
+                            <Tooltip
+                              title={` Quality : ${
+                                accuracy ? Math.round(accuracy) : 100
+                              }%`}
+                            >
+                              <div className="header-progress">
+                                <div className={Styles.circularProgress}>
+                                  <CircularProgressbar
+                                    value={
+                                      accuracy
+                                        ? Math.round(accuracy)
+                                        : Math.round(100)
+                                    }
+                                    text={`${
+                                      accuracy
+                                        ? Math.round(accuracy)
+                                        : Math.round(100)
+                                    }%`}
+                                  />
                                 </div>
-                              </Tooltip>
-                            )}
+                              </div>
+                            </Tooltip>
+                          )}
                           {userRole === "TENANT_ADMIN" && (
                             <div
                               id="settingsIcon"
@@ -1193,7 +1210,9 @@ const Header = ({
                               {userEmail?.split("@")[0]}
                             </div>
 
-                            {roles?.length > 0 && userIdDetails != "" ? (
+                            {roles?.length > 0 &&
+                            userIdDetails != "" &&
+                            isShowDropdown ? (
                               <span className="ms-2 d-flex mt-1 d-flex">
                                 <Dropdown
                                   menu={{
@@ -1396,7 +1415,7 @@ const enhancer = connect(
     getAllTin: authActions.tinsDropdown,
     getTableData: tableAction.tableViewAction,
     getNotificationSound: dashbaordActions.notificationSound,
-    getProjectActiveTab:tinActions.getProjectActiveTab
+    getProjectActiveTab: tinActions.getProjectActiveTab,
   }
 );
 export default enhancer(Header);

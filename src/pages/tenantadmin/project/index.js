@@ -17,9 +17,11 @@ const Project = ({ getProjectActiveTab, activeTabName }) => {
   };
   return (
     <div className={`show`}>
-      <Header />
-      <div style={{ marginTop: "7%" }}>
+      {/* <Header /> */}
+      <div style={{marginTop:"70px"}}>
+      <div className="text-center">
         <Tab icon activeTab={activeTab} handleTabs={handleTabs} tabs={tabs} />
+        </div>
       </div>
       <div>
         {activeTab === "Patients" && (

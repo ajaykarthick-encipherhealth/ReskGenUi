@@ -79,65 +79,35 @@ const Flag = ({
               {patienIdDetails?.priority == "URGENT" ? (
                 <div className={visitStyles.priorityStatusIcon}>
                   <i>{SVGICON.alert}</i>
-                  <span
-                    style={{
-                      fontSize: "13px",
-                      fontWeight: 500,
-                      color: "red",
-                    }}
-                  >
+                  <span className={`${Styles.priorityText} ${Styles.urgent}`}>
                     Urgent
                   </span>
                 </div>
               ) : patienIdDetails?.priority == "HIGH" ? (
                 <div className={visitStyles.priorityStatusIcon}>
-                  <i className={TableStyle.highFlag}>{SVGICON.alert}</i>
-                  <span
-                    style={{
-                      fontSize: "13px",
-                      fontWeight: 500,
-                      color: "#cf940a",
-                    }}
-                  >
+                  <i className={Styles.highFlag}>{SVGICON.alert}</i>
+                  <span className={`${Styles.priorityText} ${Styles.high}`}>
                     High
                   </span>
                 </div>
               ) : patienIdDetails?.priority == "NORMAL" ? (
                 <div className={visitStyles.priorityStatusIcon}>
-                  <i className={TableStyle.normalFlag}>{SVGICON.alert}</i>
-                  <span
-                    style={{
-                      fontSize: "13px",
-                      fontWeight: 500,
-                      color: "#4466ff ",
-                    }}
-                  >
+                  <i className={Styles.normalFlag}>{SVGICON.alert}</i>
+                  <span className={`${Styles.priorityText} ${Styles.normal}`}>
                     Normal
                   </span>
                 </div>
               ) : patienIdDetails?.priority == "LOW" ? (
                 <div className={visitStyles.priorityStatusIcon}>
-                  <i className={TableStyle.lowFlag}>{SVGICON.alert}</i>
-                  <span
-                    style={{
-                      fontSize: "13px",
-                      fontWeight: 500,
-                      color: "#87909e",
-                    }}
-                  >
+                  <i className={Styles.lowFlag}>{SVGICON.alert}</i>
+                  <span className={`${Styles.priorityText} ${Styles.low}`}>
                     Low
                   </span>
                 </div>
               ) : (
                 <div className={visitStyles.priorityStatusIcon}>
-                  <i className={TableStyle.lowFlag}>{SVGICON.alert}</i>
-                  <span
-                    style={{
-                      fontSize: "13px",
-                      fontWeight: 500,
-                      color: "#87909e",
-                    }}
-                  >
+                  <i className={Styles.lowFlag}>{SVGICON.alert}</i>
+                  <span className={`${Styles.priorityText} ${Styles.yetToSet}`}>
                     Yet To Set
                   </span>
                 </div>

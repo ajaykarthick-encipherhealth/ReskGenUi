@@ -35,7 +35,7 @@ const Index = ({ workFlowData, DateRanges }) => {
   }, [startDate, endDate]);
   return (
     <div style={{ backgroundColor: "#F0F6FE" }}>
-      <Header />
+      {/* <Header /> */}
       <div className={styles.maincontainer}>
         <div className={styles.rowCOntainer}>
           <Row className={styles.RowCon} gutter={8}>

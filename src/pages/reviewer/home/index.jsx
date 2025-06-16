@@ -18,7 +18,7 @@ const Screen = () => {
 
   return (
     <>
-      <Header />
+      {/* <Header /> */}
       <div className="screen-container-card">
         <div style={{ paddingTop: "5pc" }}>
          <div className="row">

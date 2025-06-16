@@ -277,9 +277,9 @@ const CodersTable = ({
   }, [proxy]);
   return (
     <div className={`show `}>
-      <Header />
+      {/* <Header /> */}
       {proxy === "QA" ? (
-        <div>
+        <div>    
           <SubNavBar hideBackArrow={false} />
         </div>
       ) : (

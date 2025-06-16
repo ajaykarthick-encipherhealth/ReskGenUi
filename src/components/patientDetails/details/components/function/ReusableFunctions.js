@@ -1152,6 +1152,14 @@ export const reusableEllipses = ({ str, count }) => {
     return str;
   }
 };
+export const reusableEllipseNoTooltip = ({ str, count }) => {
+  if (str?.length > count) {
+    return `${str.substring(0, count)}...`;
+  } else {
+    return str;
+  }
+};
+
 export const getSectionNameManually = ({
   data,
   sectionDelete,

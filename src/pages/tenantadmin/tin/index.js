@@ -445,22 +445,22 @@ const Tin = ({
 
   return (
     <div className={`show`}>
-      <Header />
-      <div
-        className={`d-flex justify-content-end position-relative ${styles.tabContanier}`}
+      {/* <Header /> */}
+      <div style={{paddingTop:"80px"}}
       >
-        <div className={styles.subContainer}>
+        <div    
+          className={styles.subContainer}
+        >
           <Tab
             activeTab={activeTab}
             handleTabs={handleTabs}
             tabs={tabs}
             margin={"0"}
             width={"100%"}
-            padding={"30px"}
           />
         </div>
         {activeTab !== "Providers" && (
-          <div className="d-flex align-items-center justify-content-end gap-2">
+          <div className="d-flex align-items-center justify-content-end align-items-center gap-2">
             <div className={styles.font}>
               Total Tin : {tinCount?.totalTin ? tinCount?.totalTin : 0}
             </div>
@@ -493,7 +493,7 @@ const Tin = ({
         )}
       </div>
 
-      <div className=" mt-5 container-fluid table-responsive active-projects task-table">
+      <div className={`container-fluid table-responsive active-projects task-table ${activeTab == "Providers" && "mt-5"}`}>
         <div className="d-flex">
           <div className="mt-3" style={{ width: "100%" }}>
             <ReusableFilters

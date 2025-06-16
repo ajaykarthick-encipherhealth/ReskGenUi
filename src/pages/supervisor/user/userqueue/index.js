@@ -353,7 +353,7 @@ const Index = ({
   };
   return (
     <div className={`show `}>
-      <Header />
+      {/* <Header /> */}
       <div className="content-body">
         <div className="container-fluid">
           <div>

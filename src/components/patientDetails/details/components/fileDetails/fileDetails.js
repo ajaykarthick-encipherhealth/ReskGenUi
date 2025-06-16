@@ -64,7 +64,7 @@ const Details = ({ fileResult, fromHcc }) => {
               <Tooltip title={fileResult?.patientId}>
                 {fileResult?.patientId
                   ? getMastData(fileResult?.patientId)
-                  : "--"}
+                  : "-"}
               </Tooltip>
             </h6>
           </div>
@@ -88,7 +88,7 @@ const Details = ({ fileResult, fromHcc }) => {
               <Tooltip title={fileResult?.patientName}>
                 {fileResult?.patientName
                   ? getMastData(fileResult?.patientName)
-                  : "--"}
+                  : "-"}
               </Tooltip>
             </h6>
           </div>
@@ -110,7 +110,7 @@ const Details = ({ fileResult, fromHcc }) => {
               }
             >
               <Tooltip title={fileResult?.mbi}>
-                {fileResult?.mbi ? getMastData(fileResult?.mbi) : "--"}
+                {fileResult?.mbi ? getMastData(fileResult?.mbi) : "-"}
               </Tooltip>
             </h6>
           </div>
@@ -127,7 +127,7 @@ const Details = ({ fileResult, fromHcc }) => {
               name="patient-age-value"
               className="px-4"
             >
-              {fileResult?.dob ? calculateAge(fileResult?.dob) : "--"}
+              {fileResult?.dob ? calculateAge(fileResult?.dob) : "-"}
             </h6>
           </div>
           <div className="col-3" id="file-name" name="file-name">
@@ -155,7 +155,7 @@ const Details = ({ fileResult, fromHcc }) => {
                   {getMastData(fileResult?.fileName)}
                 </Tooltip>
               ) : (
-                "--"
+                "-"
               )}
             </h6>
           </div>
@@ -185,7 +185,7 @@ const Details = ({ fileResult, fromHcc }) => {
                       /\d{4}$/,
                       "xxxx"
                     )
-                  : "---"}
+                  : "-"}
               </Tooltip>
             </h6>
           </div>
@@ -202,7 +202,7 @@ const Details = ({ fileResult, fromHcc }) => {
                 Gender
               </label>
               <h6 id="gender-value" name="gender-value" className="px-2">
-                {fileResult?.gender || "--"}
+                {fileResult?.gender || "-"}
               </h6>
             </div>
           </div>

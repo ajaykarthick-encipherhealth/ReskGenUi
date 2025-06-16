@@ -106,18 +106,19 @@ const TinDetails = ({ activeTabName, getProjectActiveTab,getRoutedData,getRouted
 
   return (
     <div className={`show `}>
-      <Header />
-      <div className="header">
+      <div className=" mt-2" >
         <SubNavBar hideBackArrow={true} handleBack={handleBack} />
       </div>
-      <div className={visitStyles.tab} >
+      <div className={visitStyles.tab}>
         <div className={visitStyles.tabContainer}>
-          <Tab
-            icon
-            activeTab={activeTab}
-            handleTabs={handleTabs}
-            tabs={tabs}
-          />
+          <div className="text-center mt-3">
+            <Tab
+              icon
+              activeTab={activeTab}
+              handleTabs={handleTabs}
+              tabs={tabs}
+            />
+          </div>
         </div>
         {activeTab === "Patients" && (
           <Patients route={`/tenantadmin/tin/details`} />

@@ -69,7 +69,7 @@ const index = () => {
 
   return (
     <div style={{ backgroundColor: "#F0F6FE" }}>
-      <Header />
+      {/* <Header /> */}
       <div style={{ backgroundColor: "#F0F6FE" }}>
         <div className={styles.maincontainer}>
           <div className={styles.innerdiv}>

@@ -742,13 +742,13 @@ const Patient = ({
 
   return (
     <div className={`show `}>
-      <Header />
+      {/* <Header /> */}
       <div className="content-body">
         <div
           className="container-fluid table-responsive active-projects task-table"
           style={{ paddingTop: "5px" }}
         >
-          <section className="d-flex mt-5">
+          <section className="d-flex mt-1">
             <div style={{ width: "90%" }}>
               <ReusableFilters
                 showFilter={true}

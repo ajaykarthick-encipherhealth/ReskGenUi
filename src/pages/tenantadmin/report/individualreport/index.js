@@ -211,7 +211,7 @@ const IndividualReceiverReport = ({
   }, [reportPath]);
   return (
     <div style={{ backgroundColor: "#F0F6FE" }}>
-      <Header />
+      {/* <Header /> */}
       <div
         className={`${styles.container}`}
         style={{ margin: "30px 0px 50px 0px", height: "auto" }}

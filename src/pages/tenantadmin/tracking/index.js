@@ -294,7 +294,7 @@ const Patient = ({
 
   return (
     <div className={`show `}>
-      <Header />
+      {/* <Header /> */}
       <div className="content-body">
         <div className="container-fluid">
           <div className="table-responsive active-projects task-table">
