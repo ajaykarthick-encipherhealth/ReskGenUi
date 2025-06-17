@@ -61,7 +61,8 @@ const ReusableFilters = ({
   selectedRows,
   setIsModalOpen,
   //btn
-  btnName
+  btnName,
+  selectedDateRanges,
 }) => {
   const pickerRefs = useRef({});
   const router = useRouter();
@@ -414,6 +415,10 @@ const ReusableFilters = ({
             setSelectedDates={setSelectedDates}
             setSelectedOption={setSelectedOption}
             setSearch={setSearch}
+            searchText={searchText}
+            selectedDateRanges={selectedDateRanges}
+            selectedDates={selectedDates}
+            selectedOption={selectedOption}
           />
         </div>
       </div>

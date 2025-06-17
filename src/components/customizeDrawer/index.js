@@ -19,6 +19,10 @@ const CustomizableDrawer = ({
   setSelectedDates,
   setSelectedOption,
   setSearch,
+  searchText,
+  selectedDateRanges,
+  selectedDates,
+  selectedOption,
 }) => {
   const { Search } = Input;
   const [tableSearch, setTableSearch] = useState("");
@@ -34,14 +38,41 @@ const CustomizableDrawer = ({
     });
   };
 
+  // const handleClearAll = () => {
+  //   setSelectedColumns((prev) =>
+  //     prev.map((col) => ({ ...col, active: false, order: null }))
+  //   );
+  //   setSearchText(null);
+  //   setSelectedDateRanges({});
+  //   setSelectedDates({});
+  //   setSelectedOption({})
+  // };
   const handleClearAll = () => {
-    setSelectedColumns((prev) =>
-      prev.map((col) => ({ ...col, active: false, order: null }))
+    const isColumnsChanged = selectedColumns.some(
+      (col) => col.active || col.order !== null
     );
-    setSearchText(null);
-    setSelectedDateRanges({});
-    setSelectedDates({});
-    setSelectedOption({})
+
+    if (isColumnsChanged) {
+      setSelectedColumns((prev) =>
+        prev.map((col) => ({ ...col, active: false, order: null }))
+      );
+    }
+
+    if (searchText) {
+      setSearchText(null);
+    }
+
+    if (Object.keys(selectedDateRanges).length > 0) {
+      setSelectedDateRanges({});
+    }
+
+    if (Object.keys(selectedDates).length > 0) {
+      setSelectedDates({});
+    }
+
+    if (Object.keys(selectedOption).length > 0) {
+      setSelectedOption({});
+    }
   };
 
   const toggleColumn = (field) => {
@@ -147,15 +178,15 @@ const CustomizableDrawer = ({
           ""
         )}
         <div className="searchInput">
-        <Search
-          placeholder="Search"
-          allowClear
-          onSearch={handleSearch}
-          className="searchInput"
-          onChange={(e) => handleSearch(e.target.value)}
-        />
+          <Search
+            placeholder="Search"
+            allowClear
+            onSearch={handleSearch}
+            className="searchInput"
+            onChange={(e) => handleSearch(e.target.value)}
+          />
         </div>
-       
+
         {filteredColumns?.length > 0 ? (
           filteredColumns?.map((col) => {
             const isActive = col.active;
