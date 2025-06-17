@@ -62,6 +62,7 @@ const ManuallyAdd = ({
   open,
   getPatientIdData,
   activeLabels,
+  getPatientDosList
 }) => {
   const userId = getStorage("patientId")  
   const [form] = Form.useForm();
@@ -821,6 +822,7 @@ const ManuallyAdd = ({
             year: year?.value,
             dos: isDosSelected,
           });
+          getPatientDosList(userId,year?.value)
           getResponePopup(res);
           resetForms({ reload: true });
           setIsBtnLoading(false);
@@ -1680,6 +1682,7 @@ const enhancer = connect(
     suggestedToValidMove: patientDetailsAction.suggestedToValidMove,
     getPatientIdData: detailsActions.patientIdDetailsAction,
     activeLabels: detailsActions.activeLabels,
+    getPatientDosList: detailsActions.dosDeatilsAction,
   }
 );
 
