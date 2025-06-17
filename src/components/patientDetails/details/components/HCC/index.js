@@ -34,6 +34,7 @@ import { isLocalEdit } from "../../../../../utils/config";
 import CardSkeleton from "../../../../skeleton/card";
 import AiLogo from "../../../../../images/logo/AI.png";
 import Image from "next/image";
+import { getResponePopup } from "../../../../../utils/reusable";
 
 const HccCards = ({
   list,
