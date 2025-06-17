@@ -350,7 +350,7 @@ export async function suggestedToValid(obj, cardTitle) {
     apiUrl = "management/disease/move/potentialtovalid";
   }
   if (cardTitle.name == "Move to HCC" && cardTitle.title == "NON_MEAT") {
-    apiUrl = "management/disease/move/suggestedtovalid";
+    apiUrl = "management/meat/move/suggestedtovalid";
   }
   const data = await requestPortal(apiUrl, options);
   return data;
