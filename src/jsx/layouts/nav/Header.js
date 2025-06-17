@@ -1202,9 +1202,9 @@ const Header = ({
                             userEmail={userEmail}
                             allRolesData={allRolesData}
                           />
-                          <div className="mx-15 profile_info_header">
+                          <div className=" profile_info_header">
                             <div
-                              className="text-dark-50 ms-2 header-name d-flex mr-3"
+                              className="text-dark-50 header-name d-flex"
                               style={{ fontWeight: "600", fontSize: "18px" }}
                             >
                               {userEmail?.split("@")[0]}
@@ -1213,7 +1213,7 @@ const Header = ({
                             {roles?.length > 0 &&
                             userIdDetails != "" &&
                             isShowDropdown ? (
-                              <span className="ms-2 d-flex mt-1 d-flex">
+                              <span className="d-flex mt-1 d-flex">
                                 <Dropdown
                                   menu={{
                                     items: roles,

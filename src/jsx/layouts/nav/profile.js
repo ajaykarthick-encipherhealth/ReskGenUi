@@ -24,7 +24,7 @@ const Profile = ({
 }) => {
   return (
     <>
-      <div id="profileTab" name="profileTab" className="header-media ant-badge cursor-pointer d-flex">
+      <div id="profileTab" name="profileTab" className="header-media ant-badge cursor-pointer d-flex me-1">
         <Popover
           trigger="click"
           open={openContent}
@@ -129,8 +129,8 @@ const Profile = ({
           <div>
             <div className="header-info2 d-flex align-items-center">
               <div
-                className="header-media"
-                style={{ marginTop: "-1px" }}
+                className="header-media  cursor-pointer"
+                style={{ marginRight:"10px" }}
                 onClick={() => setOpenContent(true)}
               >
                 {profileUploadedTime ? (
@@ -144,7 +144,9 @@ const Profile = ({
                     allRolesData?.firstName,
                     allRolesData?.lastName,
                     allRolesData?.profileImageUrl,
-                    "header"
+                    "header",
+                    "40px",
+                    "40px"
                   )
                 )}
               </div>

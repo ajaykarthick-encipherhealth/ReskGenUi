@@ -5527,14 +5527,14 @@ label {
 }
 
 .header-right .header-media {
-  height: 45px;
-  width: 45px;
+  height: 40px;
+  width: 40px;
 }
 
 .header-right .header-media img {
   border-radius: 50%;
-  height: 45px;
-  width: 45px;
+  height: 40px;
+  width: 40px;
 }
 
 @media only screen and (max-width: 35.9375rem) {
@@ -9496,7 +9496,7 @@ button.btn.btn-danger.btn-sm.light.ms-1.btn.btn-primary {
 }
 
 .header-profile2 {
-  margin-right: 20px !important;
+  margin-right: 10px !important;
   text-transform: capitalize;
 }
 
@@ -14807,7 +14807,7 @@ overflow: scroll;
 }
 
 .header-progress {
-  margin-right: 10px;
+  margin-right: 5px;
 }
 
 .bg-gradient-sender {
@@ -16152,7 +16152,7 @@ input::-webkit-inner-spin-button {
 }
 @media (max-width: 1344px) {
   .header-menu li span {
-    font-size: 11px !important;
+    font-size: 10px !important;
     font-size: 700 !important;
     margin-top: 5px !important;
   }
