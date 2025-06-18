@@ -33,6 +33,7 @@ const SelectProject = ({
   const [confirmModal, setConfirmModal] = useState(false);
   const { accounts } = useMsal();
   const [isLoading, setIsLoading] = useState(true);
+  const [isFormValid, setIsFormValid] = useState(false);
 
   const clientOptions = clientDetails?.map((client) => ({
     label: client.clientName,
@@ -207,6 +208,13 @@ const SelectProject = ({
       getRolesApi();
     }
   };
+
+  useEffect(() => {
+    const values = form.getFieldsValue();
+    const isAllFieldsFilled = values.role;
+    setIsFormValid(isAllFieldsFilled);
+  }, [form.getFieldsValue()]);
+
   return (
     <div className="page-wraper">
       <div className="login-account">
@@ -230,11 +238,23 @@ const SelectProject = ({
               <h6 className="login-title">
                 <span>Login</span>
               </h6>
-              <Form form={form} onFinish={handleFormSubmit} layout="vertical">
-                <Form.Item name="client">
+              <Form 
+                form={form} 
+                onFinish={handleFormSubmit} 
+                layout="vertical"
+                onValuesChange={(allValues) => {
+                  const isAllFieldsFilled = allValues.role;
+                  setIsFormValid(isAllFieldsFilled);
+                }}
+              >
+                <Form.Item 
+                  name="client" 
+                  label={<>Client</>}
+                >
                   <Select
                     placeholder="Select Client"
                     loading={clientLoading}
+                    style={{ width: "100%", height: "2.75rem", cursor: "pointer" }}
                     onChange={(value) => onValuesChange(value, "client")}
                     options={clientOptions}
                     notFoundContent={
@@ -246,10 +266,14 @@ const SelectProject = ({
                     }
                   />
                 </Form.Item>
-                <Form.Item name="project">
+                <Form.Item 
+                  name="project" 
+                  label={<>Project</>}
+                >
                   <Select
                     placeholder="Select Project"
                     loading={projectLoading}
+                    style={{ width: "100%", height: "2.75rem", cursor: "pointer" }}
                     onChange={(value) => onValuesChange(value, "project")}
                     options={projectOptions}
                     disabled={!form.getFieldValue("client")}
@@ -262,11 +286,16 @@ const SelectProject = ({
                     }
                   />
                 </Form.Item>
-                <Form.Item name="role">
+                <Form.Item 
+                  name="role" 
+                  label={<>Role</>}
+                >
                   <Select
                     placeholder="Select Role"
                     loading={roleLoading}
+                    style={{ width: "100%", height: "2.75rem", cursor: "pointer" }}
                     options={roleOptions}
+                    onChange={(e) => form.setFieldValue("role", e)}
                     disabled={!form.getFieldValue("project")}
                     notFoundContent={
                       roleLoading ? (
@@ -277,16 +306,13 @@ const SelectProject = ({
                     }
                   />
                 </Form.Item>
-                <div
-                  className="d-flex justify-content-between"
-                  id="next-btn"
-                  name="next-btn"
-                >
+                <div className="d-flex justify-content-between">
                   <RegularButton
                     type="submit"
                     name="SUBMIT"
                     width="400px"
-                    loading={Object.values(roleLoading).some((state) => state)}
+                    loading={clientLoading || projectLoading || roleLoading}
+                    disabled={!(form.getFieldsValue()?.role)}
                   />
                 </div>
               </Form>
