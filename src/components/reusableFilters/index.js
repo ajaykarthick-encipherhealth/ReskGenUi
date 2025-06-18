@@ -265,7 +265,8 @@ const ReusableFilters = ({
                             item?.actualField == "coder2DueDate" ||
                             item?.actualField == "qaDueDate" ||
                             item?.actualField == "downloaderDueDate" ||
-                            item?.actualField == "ownerDueDate"
+                            item?.actualField == "ownerDueDate" ||
+                            item?.actualField == "projectEndDate"
                         )
                       }
                       inputReadOnly
