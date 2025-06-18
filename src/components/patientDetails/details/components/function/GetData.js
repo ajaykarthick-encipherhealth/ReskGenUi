@@ -67,7 +67,6 @@ export const getPatientDetails = async (
   activeTab
 ) => {
   const userId = getStorage("userId");
-  console.log(activeTab,"tabs")
   if (patientDetailsResult?.data?.response) {
     var result = patientDetailsResult?.data?.response;
     // if (NewResponse) {
@@ -206,7 +205,7 @@ export const getPatientDetails = async (
             dateOfServices: res.dateOfServices,
           });
         }
-        else if (isShows && activeTab == 5 && !res?.isCmsHcc ) {
+        else if (isShows && activeTab == 5 && res?.isRxHcc  ) {
           hccDisArray.push({
             ...res,
             actualDescription: res.actualDescription,
@@ -238,7 +237,7 @@ export const getPatientDetails = async (
             dateOfServices: res.dateOfServices,
           });
         }
-        else if (activeTab == 5 && !res?.isCmsHcc ) {
+        else if (activeTab == 5 && res?.isRxHcc  ) {
           hccDisArray.push({
             ...res,
             actualDescription: res.actualDescription,
@@ -315,7 +314,7 @@ export const getPatientDetails = async (
           res.riskAdjustmentDtoList?.some((item) =>
             item?.cmsHcc?.some((hcc) => hcc.value > 1)
           );
-        if (isShows && activeTab == 5 && !res?.isCmsHcc) {
+        if (isShows && activeTab == 5 && res?.isRxHcc  ) {
           var providerList = [];
           var dosList = [];
           res.providerNames?.map((res) => {
@@ -357,7 +356,7 @@ export const getPatientDetails = async (
             dateOfServices: res.dateOfServices,
             dbDescription: res.dbDescription,
           });
-        } else if (userId != "reviewer@3gencogentai.onmicrosoft.com"&& activeTab == 5 && !res?.isCmsHcc) {
+        } else if (userId != "reviewer@3gencogentai.onmicrosoft.com"&& activeTab == 5 &&  res?.isRxHcc  ) {
           var providerList = [];
           var dosList = [];
           res.providerNames?.map((res) => {
@@ -579,7 +578,7 @@ export const getPatientDetails = async (
           });
         }
 
-        else if (isShows && activeTab == 5 && !res?.isCmsHcc) {
+        else if (isShows && activeTab == 5 && res?.isRxHcc ) {
           var providerList = [];
           var dosList = [];
           res.providerNames?.map((res) => {
@@ -621,7 +620,7 @@ export const getPatientDetails = async (
             dateOfServices: res.dateOfServices,
             dbDescription: res.dbDescription,
           });
-        } else if (userId != "reviewer@3gencogentai.onmicrosoft.com" && activeTab == 5 && !res?.isCmsHcc) {
+        } else if (userId != "reviewer@3gencogentai.onmicrosoft.com" && activeTab == 5 && res?.isRxHcc  ) {
           var providerList = [];
           var dosList = [];
           res.providerNames?.map((res) => {
@@ -743,7 +742,7 @@ export const getPatientDetails = async (
             isLab: getStateIndicators(res.stateIndicators, "LAB"),
           });
         }
-        if (isShows && !res?.isCmsHcc && activeTab == 5) {
+        if (isShows && res?.isRxHcc  && activeTab == 5 ) {
           const encounterDatearray = res?.encounterDate?.split(",");
           var providerList = [];
           res.providerNames?.map((res) => {
@@ -778,7 +777,7 @@ export const getPatientDetails = async (
             isRadiology: getStateIndicators(res.stateIndicators, "RADIOLOGY"),
             isLab: getStateIndicators(res.stateIndicators, "LAB"),
           });
-        } else if (userId != "reviewer@3gencogentai.onmicrosoft.com" && !res?.isCmsHcc && activeTab == 5) {
+        } else if (userId != "reviewer@3gencogentai.onmicrosoft.com" && res?.isRxHcc  && activeTab == 5 ) {
           const encounterDatearray = res?.encounterDate?.split(",");
           var providerList = [];
           res.providerNames?.map((res) => {
@@ -1160,33 +1159,63 @@ export const getPatientDetails = async (
               monitorHyperLink.push(res);
             });
           }
-          meatListArr.push({
-            ...res,
-            diagnosisCode: res.diagnosisCode,
-            diseaseName: res.diseaseName,
-            monitorAspect: res.monitorAspect,
-            monitorHyperLink: monitorHyperLink,
-            assessmentAspect: res.assessmentAspect,
-            assessmentHyperLink: res.assessmentHyperLink,
-            evaluateAspect: res.evaluateAspect,
-            evaluateHyperLink: res.evaluateHyperLink,
-            treatmentAspect: res.treatmentAspect,
-            treatmentHyperLink: res.treatmentHyperLink,
-            providerName: providerList,
-            monitorColor: COLORS[index],
-            meatColor: COLORS[index],
-            assessment: res.assessment,
-            monitor: res.monitor,
-            evaluate: res.evaluate,
-            treatment: res.treatment,
-            isMeatCriteriaPresent: res.isMeatCriteriaPresent,
-            category: res.category,
-            encounterDate: res.encounterDate,
-            encounterDateSplit: res.dateOfService,
-            hyperlinks: res?.hyperlinks,
-            dateOfServices: res.dateOfService,
-          });
-          // }
+          if(res?.isShow && res?.isCmsHcc && activeTab == 1 ){
+            meatListArr.push({
+              ...res,
+              diagnosisCode: res.diagnosisCode,
+              diseaseName: res.diseaseName,
+              monitorAspect: res.monitorAspect,
+              monitorHyperLink: monitorHyperLink,
+              assessmentAspect: res.assessmentAspect,
+              assessmentHyperLink: res.assessmentHyperLink,
+              evaluateAspect: res.evaluateAspect,
+              evaluateHyperLink: res.evaluateHyperLink,
+              treatmentAspect: res.treatmentAspect,
+              treatmentHyperLink: res.treatmentHyperLink,
+              providerName: providerList,
+              monitorColor: COLORS[index],
+              meatColor: COLORS[index],
+              assessment: res.assessment,
+              monitor: res.monitor,
+              evaluate: res.evaluate,
+              treatment: res.treatment,
+              isMeatCriteriaPresent: res.isMeatCriteriaPresent,
+              category: res.category,
+              encounterDate: res.encounterDate,
+              encounterDateSplit: res.dateOfService,
+              hyperlinks: res?.hyperlinks,
+              dateOfServices: res.dateOfService,
+            });
+          }
+          else if(res?.isShow && res?.isRxHcc && activeTab == 5){
+            meatListArr.push({
+              ...res,
+              diagnosisCode: res.diagnosisCode,
+              diseaseName: res.diseaseName,
+              monitorAspect: res.monitorAspect,
+              monitorHyperLink: monitorHyperLink,
+              assessmentAspect: res.assessmentAspect,
+              assessmentHyperLink: res.assessmentHyperLink,
+              evaluateAspect: res.evaluateAspect,
+              evaluateHyperLink: res.evaluateHyperLink,
+              treatmentAspect: res.treatmentAspect,
+              treatmentHyperLink: res.treatmentHyperLink,
+              providerName: providerList,
+              monitorColor: COLORS[index],
+              meatColor: COLORS[index],
+              assessment: res.assessment,
+              monitor: res.monitor,
+              evaluate: res.evaluate,
+              treatment: res.treatment,
+              isMeatCriteriaPresent: res.isMeatCriteriaPresent,
+              category: res.category,
+              encounterDate: res.encounterDate,
+              encounterDateSplit: res.dateOfService,
+              hyperlinks: res?.hyperlinks,
+              dateOfServices: res.dateOfService,
+            });
+
+          }
         }
       });
 
@@ -1210,6 +1239,7 @@ export const getPatientDetails = async (
               monitorHyperLink.push(res);
             });
           }
+          if(res?.isShow && res?.isCmsHcc && activeTab == 1 ){
           deletedmeatListArr.push({
             ...res,
             diagnosisCode: res.diagnosisCode,
@@ -1236,6 +1266,35 @@ export const getPatientDetails = async (
             hyperlinks: res?.hyperlinks,
             dateOfServices: res.dateOfService,
           });
+        }
+        else if(res?.isShow && res?.isRxHcc && activeTab == 5){
+          deletedmeatListArr.push({
+            ...res,
+            diagnosisCode: res.diagnosisCode,
+            diseaseName: res.diseaseName,
+            monitorAspect: res.monitorAspect,
+            monitorHyperLink: monitorHyperLink,
+            assessmentAspect: res.assessmentAspect,
+            assessmentHyperLink: res.assessmentHyperLink,
+            evaluateAspect: res.evaluateAspect,
+            evaluateHyperLink: res.evaluateHyperLink,
+            treatmentAspect: res.treatmentAspect,
+            treatmentHyperLink: res.treatmentHyperLink,
+            providerName: providerList,
+            monitorColor: COLORS[index],
+            meatColor: COLORS[index],
+            assessment: res.assessment,
+            monitor: res.monitor,
+            evaluate: res.evaluate,
+            treatment: res.treatment,
+            isMeatCriteriaPresent: res.isMeatCriteriaPresent,
+            category: res.category,
+            encounterDate: res.encounterDate,
+            encounterDateSplit: res.dateOfService,
+            hyperlinks: res?.hyperlinks,
+            dateOfServices: res.dateOfService,
+          });
+        }
         }
       });
 
@@ -1271,7 +1330,6 @@ export const getPatientDetails = async (
       ];
 
       setCaptureSectionMatching(newArrayColorMatchs);
-
       setMeatCriteriaList && setMeatCriteriaList(meatListArr);
       setDeletedMeatList && setDeletedMeatList(deletedmeatListArr);
       setAllDisList &&

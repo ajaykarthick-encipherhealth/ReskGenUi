@@ -114,7 +114,6 @@ const PdfViewer = ({
   const onChangeTabs = (item) => {
     setActiveTab(item);
   };
-  console.log(patientDetailsResult, "testings");
 
   return (
     <>

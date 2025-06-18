@@ -131,7 +131,7 @@ const Combo = ({
       "",
       activeTab,
     );
-  }, [patientDetailsResult]);
+  }, [patientDetailsResult,activeTab]);
 
   useEffect(() => {
     if (hccFileDetails?.data?.response) {

@@ -17,7 +17,7 @@ const Tab = ({ activeTab, handleTabs, tabs, width, margin, padding }) => {
         <div
           id={`reportTab-${activeTab}`}
           name={`reportTab-${activeTab}`}
-          className={`${styles.group} ${styles.buttonContainer}`}
+          className={ ` d-flex gap-3 ${styles.group} ${styles.buttonContainer}`}
           style={{ padding: padding || "3px" }}
         >
           {tabs?.map((tab) => (

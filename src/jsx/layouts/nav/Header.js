@@ -1161,7 +1161,7 @@ const Header = ({
                           {/* )} */}
                           {/* </> */}
                           <div
-                            className={`notificationIcon ${
+                            className={`notificationIcon cursor-pointer ${
                               notificationCount < 9 ? "me-3" : "me-4"
                             }`}
                             onClick={() => notificationDrawer()}

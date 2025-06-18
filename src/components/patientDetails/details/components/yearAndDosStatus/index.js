@@ -390,8 +390,6 @@ const isLoading = !patienIdDetails || !patienIdDetails?.workflow;
     getPatientIdDetails(patientDetailsResult?.data?.response);
     setPatienIdDetails(patientDetailsResult?.data?.response);
   }, [patientDetailsResult?.data?.response]);
-  console.log(patientDetailsResult?.data?.response?.workflow?.[0]
-    ?.status,"response")
   return (
     <>
       {patientDetailsResult?.data?.response && (

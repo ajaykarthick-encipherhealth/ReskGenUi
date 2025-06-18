@@ -135,10 +135,9 @@ const Meat = ({
       setAllMeatList,
       "",
       "",
-     "",
       activeTab
     );
-  }, [patientDetailsResult]);
+  }, [patientDetailsResult,]);
 
   useEffect(() => {
     const result = selectHyperlink?.allHeaderResult?.filter(
@@ -305,25 +304,24 @@ const Meat = ({
     }
   }, [hccFileDetails, radiologyFile, labFile, currentDiseaseType]);
 
-  useEffect(() => {
-    const filterCms = [
-      ...newValidDiseaseList,
-      ...suggestedHccList,
-      ...deletedHccList,
-    ].map((item) => item.diagnosisCode);
-    if (meatCriteriaList) {
-      const filterMeat = meatCriteriaList.filter((item) =>
-        filterCms.includes(item.diagnosisCode)
-      );
-      const filterMeatDeleted = deletedMeatList.filter((item) =>
-        filterCms.includes(item.diagnosisCode)
-      );
-      setIsBlockRxHcc(filterMeat);
-      setIsBlockRxHccDeleted(filterMeatDeleted);
-    }
-  }, [meatCriteriaList]);
+  // useEffect(() => {
+  //   const filterCms = [
+  //     ...newValidDiseaseList,
+  //     ...suggestedHccList,
+  //     ...deletedHccList,
+  //   ].map((item) => item.diagnosisCode);
+  //   if (meatCriteriaList) {
+  //     const filterMeat = meatCriteriaList.filter((item) =>
+  //       filterCms.includes(item.diagnosisCode)
+  //     );
+  //     const filterMeatDeleted = deletedMeatList.filter((item) =>
+  //       filterCms.includes(item.diagnosisCode)
+  //     );
+  //     setIsBlockRxHcc(filterMeat);
+  //     setIsBlockRxHccDeleted(filterMeatDeleted);
+  //   }
+  // }, [meatCriteriaList]);
   const onFinishFailed = (form) => {};
-
   return (
     <div
       className={visitStyles?.meatContainer}
@@ -357,18 +355,8 @@ const Meat = ({
                     <CardSkeleton count={6} />
                   ) : (
                     <MeatCard
-                      // list={
-                      //   userId == "reviewer@3gencogentai.onmicrosoft.com"
-                      //   ? isBlockRxHcc
-                      //   : meatCriteriaList
-                      // }
-                      list={
-                        activeTab == 5
-                        // userId == "reviewer@3gencogentai.onmicrosoft.com"
-                        ?meatCriteriaList
-                        : isBlockRxHcc
-
-                        }
+                     
+                        list={meatCriteriaList}
                       captureSectionMatching={captureSectionMatching}
                       encounterDateMatching={encounterDateMatching}
                       okText="OK"
@@ -417,11 +405,7 @@ const Meat = ({
                       </div>
                       <MeatCard
                        list={
-                        activeTab == 5
-                        // userId == "reviewer@3gencogentai.onmicrosoft.com"
-                        ?deletedMeatList
-                        : isBlockRxHccDeleted
-
+                        deletedMeatList
                         }
                         captureSectionMatching={captureSectionMatching}
                         encounterDateMatching={encounterDateMatching}
