@@ -38,6 +38,7 @@ const SelectClient = ({ projectDetails, getAllProjects }) => {
     label: client.projectName,
     value: client.id,
   }));
+
   const projectGetApi = async () => {
     setLoadingProject(true);
     try {
@@ -54,7 +55,8 @@ const SelectClient = ({ projectDetails, getAllProjects }) => {
 
   useEffect(() => {
     projectGetApi();
-  }, []);
+    
+  }, [selectClient]);
 
   useEffect(() => {
     setSelectValue(getStorage("project") && getStorage("project"));

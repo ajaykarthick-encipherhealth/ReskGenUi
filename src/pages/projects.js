@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Select, notification, Modal, Spin } from "antd";
+import { Select, notification, Modal, Spin, Form } from "antd";
 import { useRouter } from "next/router";
 import LoginBack from "../images/logo/login-back.jpg";
 import styles from "../styles/auth.module.css";
@@ -12,37 +12,103 @@ import { useMsal } from "@azure/msal-react";
 import PageLoading from "../components/page-loading";
 import { getResponePopup } from "../utils/reusable";
 import { ssoLogout } from "../../lib/authService";
-
+// import Client from "./client";
 const SelectProject = ({
   getAllClientId,
   clientIdData,
   getAllClientDetails,
   clientDetails,
+  projectDetails,
+  getAllProjects,
+  getAllRoles,
+  clientLoading,
+  getProxyRoles,
+  proxyRoles,
+  allRolesData,
+  projectLoading,
+  roleLoading,
 }) => {
   const router = useRouter();
-  const [selectClient, setSelectClient] = useState(null);
-  const [clientError, setClientError] = useState(false);
+  const [form] = Form.useForm();
   const [confirmModal, setConfirmModal] = useState(false);
   const { accounts } = useMsal();
   const [isLoading, setIsLoading] = useState(true);
-  const [loading, setLoading] = useState(false);
-  const [loadingClients, setLoadingClients] = useState(true);
-  const [selectValue, setSelectValue] = useState([]);
 
   const clientOptions = clientDetails?.map((client) => ({
     label: client.clientName,
     value: client.clientId,
   }));
-  const onSubmitClient = async (e) => {
-    e.preventDefault();
-    if (!selectClient) {
-      setClientError(true);
-      return;
+
+  const projectOptions = projectDetails?.map((client) => ({
+    label: client.projectName,
+    value: client.id,
+  }));
+
+  const roleOptions = allRolesData?.userRoles?.map((client) => ({
+    label: client.aliasName.replaceAll("_", " "),
+    value: client.proxyRole,
+  }));
+
+  const loginSuccessCallBack = () => {
+    notification.success({
+      message: "Login Successfully",
+      duration: 1,
+    });
+
+    const values = form.getFieldsValue();
+
+    const selectedRoleObj = allRolesData?.userRoles?.find(
+      (role) => role.proxyRole === values.role
+    );
+
+    const accessList = selectedRoleObj?.accessList || [];
+    const firstAccess = accessList[0];
+    let dynamicRoute = "";
+
+    if (firstAccess?.title) {
+      const title = firstAccess.title.toLowerCase().replace(/\s+/g, "");
+      if (
+        selectedRoleObj?.role === "REVIEWER" ||
+        selectedRoleObj?.role === "QA"
+      ) {
+        dynamicRoute = `/reviewer/${title}`;
+      } else {
+        dynamicRoute = `/tenantadmin/${title}`;
+      }
     }
-    setClientError(false);
-    setStorage("client", selectClient);
-    setLoading(true);
-    router.push("/client");
+
+    setStorage("userRole", selectedRoleObj?.proxyRole);
+    router?.push(dynamicRoute);
+  };
+
+  const handleFormSubmit = async () => {
+    try {
+      const values = await form.validateFields();
+      const { client, project, role } = values;
+
+      if (!client || !project || !role) {
+        return;
+      }
+
+      const selectedRoleObj = allRolesData?.userRoles?.find(
+        (role) => role.proxyRole === values.role
+      );
+
+      if (selectedRoleObj) {
+        setStorage("proxyRole", selectedRoleObj?.proxyRole);
+        setStorage("userAllRoles", JSON.stringify(allRolesData?.userRoles));
+        setStorage(
+          "accessMenuList",
+          JSON.stringify(selectedRoleObj?.accessList)
+        );
+        setStorage("roleId", selectedRoleObj?.roleId);
+        setStorage("aliasName", selectedRoleObj?.aliasName);
+        setStorage("headerAliasName", selectedRoleObj?.aliasName);
+        loginSuccessCallBack();
+      }
+    } catch (error) {
+      console.error("Form validation failed:", error);
+    }
   };
 
   const handleLogout = () => {
@@ -50,13 +116,7 @@ const SelectProject = ({
     loginSuccessCallBack();
   };
 
-  useEffect(() => {
-    if (clientIdData?.userName) {
-      setStorage("userId", clientIdData.userName);
-    }
-  }, [clientIdData?.userName]);
   const clientGetApi = async () => {
-    setLoadingClients(true);
     try {
       const response = await getAllClientDetails();
       if (response?.status !== "SUCCESS") {
@@ -64,22 +124,35 @@ const SelectProject = ({
       }
     } catch (error) {
       getResponePopup(error);
-    } finally {
-      setLoadingClients(false);
     }
   };
 
-  useEffect(() => {
-    if (clientIdData) {
-      setStorage("orgId", clientIdData?.orgId);
-      clientGetApi();
+  const projectGetApi = async () => {
+    try {
+      const response = await getAllProjects();
+      if (response?.status !== "SUCCESS") {
+        getResponePopup(response);
+      }
+    } catch (error) {
+      getResponePopup(error);
     }
-  }, [clientIdData]);
+  };
+
+  const getRolesApi = async () => {
+    try {
+      const response = await getAllRoles();
+      if (response?.status !== "SUCCESS") {
+        getResponePopup(response);
+      }
+    } catch (error) {
+      getResponePopup(error);
+    }
+  };
 
   const clientIdApi = async () => {
     try {
       const response = await getAllClientId();
-      if (response?.status == "USER_DEFINED_ERROR") {
+      if (response?.status === "USER_DEFINED_ERROR") {
         ssoLogout();
       }
     } catch (error) {
@@ -87,31 +160,53 @@ const SelectProject = ({
     }
   };
 
+  // Initial load
   useEffect(() => {
     clientIdApi();
-    setSelectValue(getStorage("client") && getStorage("client"));
-    setSelectClient(getStorage("client") && getStorage("client"));
   }, []);
 
+  // Load client details when clientIdData is available
   useEffect(() => {
-    if (accounts && accounts.length > 0) {
-      setTimeout(() => {
-        setIsLoading(false);
-      }, 1000);
-    } else {
-      const timeout = setTimeout(() => {
-        if (!accounts || accounts.length === 0) {
-          router.push("/");
-        }
-      }, 4000);
-      return () => clearTimeout(timeout);
+    if (clientIdData) {
+      setStorage("orgId", clientIdData?.orgId);
+      clientGetApi();
     }
-  }, [accounts, router]);
+  }, [clientIdData]);
 
-  if (isLoading) {
-    return <div>{/* <PageLoading /> */}</div>;
-  }
-
+  useEffect(() => {
+      if (accounts && accounts.length > 0) {
+        setTimeout(() => {
+          setIsLoading(false);
+        }, 1000);
+      } else {
+        const timeout = setTimeout(() => {
+          if (!accounts || accounts.length === 0) {
+            router.push("/");
+          }
+        }, 4000);
+        return () => clearTimeout(timeout);
+      }
+    }, [accounts, router]);
+  
+  const onValuesChange = (value, name) => {
+    if (name === "client") {
+      setStorage("client", value);
+      form.setFieldsValue({
+        client: value,
+        project: null,
+        role: null,
+      });
+      removeStorage("project");
+      removeStorage("proxyRole");
+      projectGetApi();
+    } else {
+      getRolesApi();
+      setStorage("project", value);
+      form.setFieldsValue({ project: value, role: null });
+      removeStorage("proxyRole");
+      getRolesApi();
+    }
+  };
   return (
     <div className="page-wraper">
       <div className="login-account">
@@ -135,61 +230,66 @@ const SelectProject = ({
               <h6 className="login-title">
                 <span>Login</span>
               </h6>
-
-              <form onSubmit={onSubmitClient}>
-                <div className="mb-4">
-                  <label className="mb-1 text-dark">Select Client</label>
-                  <div
-                    id="role"
-                    name="role"
-                    style={{
-                      height: "100px",
-                      marginTop: "5px",
-                    }}
-                  >
-                    <Select
-                      id="select-role"
-                      name="select-role"
-                      style={{ width: "100%", height: "2.75rem" }}
-                      placeholder="Select Client"
-                      loading={loadingClients}
-                      onChange={(value) => {
-                        setSelectClient(value?.toLowerCase());
-                        setClientError(false);
-                        setSelectValue(value);
-                        removeStorage("project");
-                      }}
-                      value={selectValue}
-                      options={clientOptions}
-                      notFoundContent={
-                        loadingClients ? (
-                          <div className="d-flex justify-content-center align-items-center">
-                            <Spin size="small" />
-                          </div>
-                        ) : null
-                      }
-                    />
-                    {clientError && (
-                      <span className="text-danger fs-12">
-                        Please Select Client
-                      </span>
-                    )}
-                  </div>
-                </div>
-
+              <Form form={form} onFinish={handleFormSubmit} layout="vertical">
+                <Form.Item name="client">
+                  <Select
+                    placeholder="Select Client"
+                    loading={clientLoading}
+                    onChange={(value) => onValuesChange(value, "client")}
+                    options={clientOptions}
+                    notFoundContent={
+                      clientLoading ? (
+                        <div className="d-flex justify-content-center align-items-center">
+                          <Spin size="small" />
+                        </div>
+                      ) : null
+                    }
+                  />
+                </Form.Item>
+                <Form.Item name="project">
+                  <Select
+                    placeholder="Select Project"
+                    loading={projectLoading}
+                    onChange={(value) => onValuesChange(value, "project")}
+                    options={projectOptions}
+                    disabled={!form.getFieldValue("client")}
+                    notFoundContent={
+                      projectLoading ? (
+                        <div className="d-flex justify-content-center align-items-center">
+                          <Spin size="small" />
+                        </div>
+                      ) : null
+                    }
+                  />
+                </Form.Item>
+                <Form.Item name="role">
+                  <Select
+                    placeholder="Select Role"
+                    loading={roleLoading}
+                    options={roleOptions}
+                    disabled={!form.getFieldValue("project")}
+                    notFoundContent={
+                      roleLoading ? (
+                        <div className="d-flex justify-content-center align-items-center">
+                          <Spin size="small" />
+                        </div>
+                      ) : null
+                    }
+                  />
+                </Form.Item>
                 <div
-                  className="d-flex justify-content-between "
+                  className="d-flex justify-content-between"
                   id="next-btn"
                   name="next-btn"
                 >
                   <RegularButton
                     type="submit"
-                    name="NEXT"
+                    name="SUBMIT"
                     width="400px"
-                    loading={loading}
+                    loading={Object.values(roleLoading).some((state) => state)}
                   />
                 </div>
-              </form>
+              </Form>
             </div>
           </div>
         </div>
@@ -209,10 +309,21 @@ const connector = connect(
   (state) => ({
     clientIdData: state.authReducer?.getClientId?.data?.response,
     clientDetails: state.authReducer?.getClientDetails?.data?.response,
+    projectDetails: state.authReducer?.getProjectDetails?.data?.response,
+    loginData: state.authReducer?.loginData?.data?.response,
+    proxyRoles: state.authReducer?.getAllProxyRoles?.data?.response,
+    allRolesData: state.authReducer?.getAllRoles?.data?.response,
+    clientLoading: state.authReducer?.clientLoader,
+    projectLoading: state.authReducer?.projectLoader,
+    roleLoading: state.authReducer?.roleLoader,
   }),
   {
     getAllClientId: allActions.clientId,
     getAllClientDetails: allActions.clientDetails,
+    getAllProjects: allActions.projectDetails,
+    getLogin: allActions.getLogin,
+    getProxyRoles: allActions.proxyRoles,
+    getAllRoles: allActions.allRoles,
   }
 );
 export default connector(SelectProject);

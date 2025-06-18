@@ -92,6 +92,9 @@ const authReducer = combineReducers({
 
   // loaders
   mfaLoader: getUsersDetailsLoading(getMFAValidation),
+  clientLoader: getUsersDetailsLoading(clientDetails),
+  projectLoader: getUsersDetailsLoading(projectDetails),
+  roleLoader: getUsersDetailsLoading(allRoles),
   qrLoader: getUsersDetailsLoading(getQrCode),
   loginLoader: getUsersDetailsLoading(getLogin),
   codeValidateLoader: getUsersDetailsLoading(getValidateCode),
