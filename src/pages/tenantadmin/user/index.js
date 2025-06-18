@@ -512,12 +512,9 @@ const UserList = ({
                   loader={tableLoader}
                   switchStates={switchStates}
                   onSwitchToggle={handleSwitchToggle}
-                  // totalLength={usersListData?.data?.response?.totalElements}
                   pageNumber={pageNo}
-                  // pagination={false}
                   disableUser={true}
                   rowBackground={true}
-                  // totalPages={usersListData?.data?.response?.totalPages}
                   setRowData={setRowData}
                   setPopoverVisible={setPopoverVisible}
                   setSelectedRoles={setSelectedRoles}
@@ -763,8 +760,7 @@ const UserList = ({
                 rules={[
                   { required: true, message: "Please enter your email!" },
                   {
-                    pattern:
-                      "^[a-zA-Z0-9._%+-]+@gmail\.com$",
+                    pattern: "^[a-zA-Z0-9._%+-]+@gmail.com$",
                     required: true,
                     message: "Enter the Valid Email ",
                   },
@@ -774,7 +770,7 @@ const UserList = ({
                   data-testid="userName"
                   name="userName"
                   placeholder="Enter user name"
-                  autoComplete="off"  
+                  autoComplete="off"
                   disabled={isEdit}
                   className="w-100"
                 />

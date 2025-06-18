@@ -897,6 +897,7 @@ const TableRow = ({
                   checked={item?.userName ? switchStates[item?.userName] : true}
                   // checked={true}
                   onChange={(checked) => onSwitchToggle(item, checked)}
+                  disabled={item.currentUser === true}
                 />
               </div>
             </td>

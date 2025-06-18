@@ -195,7 +195,6 @@ const Users = ({
     setSelectedRole(selectedRoleList);
     setVisiblePopoverKey(false);
   };
-
   const content = () => (
     <>
       <Select
@@ -278,7 +277,6 @@ const Users = ({
       setSelectedRoleList(editingUser.roleNames);
     }
   }, [editingUser]);
-
   return (
     <div className={`show `}>
       {/* <Header /> */}
