@@ -63,6 +63,7 @@ const QueryApproval = ({
     var data = {
       activeTab: key,
     };
+     getTableData({ reloadTrue: true });
     getRoutedData(data);
     setActiveTab(key);
     setSearchText("");
@@ -270,6 +271,7 @@ const QueryApproval = ({
                               >
                                 <Nav.Link
                                   onClick={() => {
+                                     getTableData({ reloadTrue: true });
                                     setSelectedRole(role.aliasName);
                                     setRoleId(role.roleId);
                                     setActive("Pending");

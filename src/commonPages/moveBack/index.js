@@ -63,6 +63,7 @@ const MoveBack = ({
   const [clear, setClear] = useState(false);
 
   const handleTabChange = (key) => {
+    getTableData({ reloadTrue: true });
     setActiveTab(key);
     setSelectedSupervisor(null);
     setSelectedRows([]);
@@ -239,6 +240,7 @@ const MoveBack = ({
                                 <Nav.Link
                                   onClick={() => {
                                     setRoleId(role.roleId);
+                                      getTableData({ reloadTrue: true });
                                   }}
                                   className="mt-4"
                                   eventKey={index + 1}

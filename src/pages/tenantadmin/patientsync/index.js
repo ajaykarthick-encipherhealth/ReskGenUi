@@ -605,6 +605,7 @@ const handleExcelDownload = () => {
   };
 
   const handleTabs = (name) => {
+    getTableData({ reloadTrue: true });
     setSort("");
     getActiveTab(name);
     setSearch();

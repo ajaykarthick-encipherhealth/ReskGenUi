@@ -76,6 +76,7 @@ const PatientAllocation = ({
     setSamplingModal(true);
   };
   const handleTabChange = (key) => {
+     getTableData({ reloadTrue: true });
     setActiveTab(key);
     setSelectedRows([]);
     setSearchText("");
@@ -256,6 +257,7 @@ const PatientAllocation = ({
                                     setSelectedRows([]);
                                     setSelectedRowsId([]);
                                     setSelectedUserName([]);
+                                     getTableData({ reloadTrue: true });
                                   }}
                                   eventKey={index + 1}
                                 >

@@ -38,42 +38,16 @@ const CustomizableDrawer = ({
     });
   };
 
-  // const handleClearAll = () => {
-  //   setSelectedColumns((prev) =>
-  //     prev.map((col) => ({ ...col, active: false, order: null }))
-  //   );
-  //   setSearchText(null);
-  //   setSelectedDateRanges({});
-  //   setSelectedDates({});
-  //   setSelectedOption({})
-  // };
   const handleClearAll = () => {
-    const isColumnsChanged = selectedColumns.some(
-      (col) => col.active || col.order !== null
+    setSelectedColumns((prev) =>
+      prev.map((col) => ({ ...col, active: false, order: null }))
     );
-
-    if (isColumnsChanged) {
-      setSelectedColumns((prev) =>
-        prev.map((col) => ({ ...col, active: false, order: null }))
-      );
-    }
-
-    if (searchText) {
-      setSearchText(null);
-    }
-
-    if (Object.keys(selectedDateRanges).length > 0) {
-      setSelectedDateRanges({});
-    }
-
-    if (Object.keys(selectedDates).length > 0) {
-      setSelectedDates({});
-    }
-
-    if (Object.keys(selectedOption).length > 0) {
-      setSelectedOption({});
-    }
+    setSearchText(null);
+    setSelectedDateRanges({});
+    setSelectedDates({});
+    setSelectedOption({})
   };
+
 
   const toggleColumn = (field) => {
     setSelectedColumns((prev) => {
