@@ -306,7 +306,7 @@ const SelectProject = ({
                     }
                   />
                 </Form.Item>
-                <div className="d-flex justify-content-between">
+                <div className="d-flex justify-content-between mt-5">
                   <RegularButton
                     type="submit"
                     name="SUBMIT"

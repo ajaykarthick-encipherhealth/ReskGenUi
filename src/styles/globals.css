@@ -9252,7 +9252,7 @@ button:focus {
 .login-account .login-form .login-title {
   text-align: center;
   position: relative;
-  margin-bottom: 31px;
+  /* margin-bottom: 31px; */
   z-index: 1;
   display: flex;
   align-items: center;

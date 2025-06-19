@@ -17,10 +17,12 @@ import {
 } from "../../../utils/reusable";
 import { actions as tableAction } from "../../../stores/tableView";
 import styles from "../../../styles/visitdata.module.css";
-import { Button, Popconfirm, Spin } from "antd";
+import { Button, Form, Input, Modal, Popconfirm, Select, Spin } from "antd";
 import { LoadingOutlined, PlusCircleFilled } from "@ant-design/icons";
 import visitStyles from "../../../styles/visitdata.module.css";
 import { actions as allPatientSyncAction } from "../../../stores/tenantAdmin/patientSync";
+import RegularButton from "../../../components/button";
+import ProviderAddForm from "./addprovider";
 
 export const getPageId = (activeTab) => {
   switch (activeTab) {
@@ -50,7 +52,14 @@ const Tin = ({
   getTableDataChecked,
   tinPriority,
   getRoutedData,
+  getProviderNameLoad,
+  getAddProvider,
+  getProviderNPIList,
+  getProviderNameList,
+  getPracticeNameList,
+  praticeList
 }) => {
+  const [form] = Form.useForm();
   const tabs = getAccessTabItems({ page: "Tin", tabsMenu: "tabMenuList" });
   const activeTab = activeTabName || tabs?.[0] || "Active";
   const router = useRouter();
@@ -91,6 +100,25 @@ const Tin = ({
   const [parsedData, setParsedData] = useState([]);
   const [priority, setPriority] = useState(null);
   const [isFilter, setIsFilter] = useState(true);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [opt, setOpt] = useState([]);
+  const [ providerList , setProviderList] = useState([])
+  const showModal = () => {
+    setIsModalOpen(true);
+  };
+  const handleOk = () => {
+    setIsModalOpen(false);
+    setOpt([])
+    setProviderList([])
+    form.resetFields();
+  };
+  const handleCancel = () => {
+    setIsModalOpen(false);
+    setOpt([])
+    setProviderList([])
+    form.resetFields();
+  };
   const currentPageIds =
     data?.response?.pageResponse?.content?.map((item) => item.id) || [];
 
@@ -327,28 +355,99 @@ const Tin = ({
     }
   };
 
-  useEffect(() => {
-    if (routedData) {
-      const {
-        pageNo,
-        selectedDates,
-        selectedDateRanges,
-        selectedOption,
-        searchText,
-        activeFilters,
-        paginationFirst,
-        sort,
-      } = routedData;
-      setPageNo(pageNo ? pageNo : 0);
-      setSearchText(searchText);
-      setSelectedDateRanges(selectedDateRanges);
-      setSelectedOption(selectedOption);
-      setSelectedDates(selectedDates);
-      setActiveFilters(activeFilters);
-      setPaginationFirst(paginationFirst);
-      setSort(sort);
+  const handleChanges = async (e) => {
+    const value = e.target.value || "";
+    if(value?.length == 0){
+      setProviderList([])
     }
-  }, [routedData]);
+    if (value?.length === 10 && !value.includes(" ")) {
+      try {
+        const res = await getProviderNPIList({ obj: { number: value } });
+        if (res?.status == "SUCCESS") {
+          form.setFieldsValue({
+            firstName: res?.response?.basic?.firstName,
+            lastName: res?.response?.basic?.lastName,
+          });
+          const providerData = res?.response?.practiceDTO?.map((item) => ({
+            label: `${item.practiceName}`,
+            value: item.id,
+          }));
+          setProviderList(providerData || [])
+        } else {
+          getResponePopup(res);
+          form.setFieldsValue({
+            firstName: null,
+            lastName: null,
+          });
+          setProviderList([])
+        }
+      } catch (error) {}
+    } else {
+      form.setFieldsValue({
+        firstName: null,
+        lastName: null,
+      });
+    }
+  };
+  const handleFinish = async (values) => {
+    setLoading(true);
+    const params = {
+      firstName: values?.firstName || "",
+      lastName: values?.lastName || "",
+      providerNpi: values?.npiNumber,
+      practiceId:values?.practiceName?.value,
+      providerName: `${values?.firstName} ${values?.lastName}`
+    };
+    const res = await getAddProvider({ payload: params });
+    if (res?.status === "SUCCESS") {
+      getResponePopup(res);
+      getAllTins();
+      form.resetFields();
+      setIsModalOpen(false);
+      setOpt([])
+      setProviderList([])
+      setLoading(false);
+    } else {
+      getResponePopup(res);
+      setLoading(false);
+      setIsModalOpen(true);
+    }
+  };
+
+  const handleChange = async (value, key) => {
+    const isFirstName = key === "firstName";
+    const isLastName = key === "lastName";
+    if ((isFirstName && value.length > 2) || (isLastName && value.length > 2)) {
+      try {
+        const res = await getProviderNameList({
+          firstName: isFirstName ? value : "",
+          lastName: isLastName ? value : "",
+        });
+  
+        if (res?.status === "SUCCESS") {
+          const data = res?.response?.npiResponseDtoList?.map((item) => ({
+            label: `${item.basic.firstName} ${item.basic.lastName} - (${item.number})`,
+            value: item.number,
+            number: item.number,
+            firstName: item.basic.firstName,
+            lastName: item.basic.lastName,
+          }));
+          const providerData = res?.response?.practiceDTOList?.map((item) => ({
+            label: `${item.practiceName}`,
+            value: item.id,
+          }));
+          setProviderList(providerData || [])
+          setOpt(data || []);
+        }
+      } catch (error) {
+        console.error("Failed to fetch provider names:", error);
+      }
+    } else {
+      setOpt([]);
+      setProviderList([])
+    }
+  };
+  
 
   const getAllTins = async (tabOverride) => {
     const currentTab = tabOverride || activeTab;
@@ -443,14 +542,12 @@ const Tin = ({
     }
   }, [data?.response?.metaDataDTO]);
 
+
   return (
     <div className={`show`}>
       {/* <Header /> */}
-      <div style={{paddingTop:"80px"}}
-      >
-        <div    
-          className={styles.subContainer}
-        >
+      <div style={{ paddingTop: "80px" }}>
+        <div className={styles.subContainer}>
           <Tab
             activeTab={activeTab}
             handleTabs={handleTabs}
@@ -491,9 +588,25 @@ const Tin = ({
             </div>
           </div>
         )}
+        {activeTab == "Providers" && (
+          <div className="d-flex align-items-center justify-content-end align-items-end p-3 ">
+            <Button
+              data-testid="activeBtn"
+              name="activeBtn"
+              className="tableButton"
+              onClick={showModal}
+            >
+              Add Provider
+            </Button>
+          </div>
+        )}
       </div>
 
-      <div className={`container-fluid table-responsive active-projects task-table ${activeTab == "Providers" && "mt-5"}`}>
+      <div
+        className={`container-fluid table-responsive active-projects task-table ${
+          activeTab == "Providers" && "mt-5"
+        }`}
+      >
         <div className="d-flex">
           <div className="mt-3" style={{ width: "100%" }}>
             <ReusableFilters
@@ -566,39 +679,38 @@ const Tin = ({
               />
             )}
             {activeTab === "InActive" && (
-              <AppTable
-                data={data?.response?.pageResponse?.content}
-                column={data?.response?.metaDataDTO.filter(
-                  (item) => item.active
-                )}
-                loader={tableLoader}
-                pagination={false}
-                setSort={setSort}
-                sort={sort}
-                first={pageNo === 0 ? 0 : paginationFirst}
-                totalRecords={data?.response?.pageResponse?.totalElements}
-                row={15}
-                onPageChange={onPageChange}
-                isCheckBox={findItemWithTrueKey(
-                  data?.response?.staticDesign,
-                  "checkBox"
-                )}
-                checkedHeader={
-                  selectedRows?.length ===
-                    data?.response?.pageResponse?.totalElements &&
-                  data?.response?.pageResponse?.totalElements !== 0
-                }
-                selectedRowsId={selectedRowsId}
-                setSelectedRowsId={setSelectedRowsId}
-                setSelectedRows={setSelectedRows}
-                selectedUserName={selectedUserName}
-                handleRowCheckboxChange={handleRowCheckboxChange}
-                setCheckedHeader={setCheckedHeader}
-                selectedRows={selectedRows}
-                idKey={"id"}
-                checkBoxLoader={checkedLoader}
-                statusBodyTemplate={processstatusBodyTemplate}
-              />
+             <AppTable
+             data={data?.response?.pageResponse?.content}
+             column={data?.response?.metaDataDTO.filter(
+               (item) => item.active
+             )}
+             loader={tableLoader}
+             pagination={false}
+             setSort={setSort}
+             sort={sort}
+             first={pageNo === 0 ? 0 : paginationFirst}
+             totalRecords={data?.response?.pageResponse?.totalElements}
+             row={15}
+             onPageChange={onPageChange}
+             isCheckBox={findItemWithTrueKey(
+               data?.response?.staticDesign,
+               "checkBox"
+             )}
+             checkedHeader={
+              currentPageIds.length > 0 &&
+              currentPageIds.every((id) => selectedRows.includes(id))
+            }
+             selectedRowsId={selectedRowsId}
+             setSelectedRowsId={setSelectedRowsId}
+             setSelectedRows={setSelectedRows}
+             selectedUserName={selectedUserName}
+             handleRowCheckboxChange={handleRowCheckboxChange}
+             setCheckedHeader={setCheckedHeader}
+             selectedRows={selectedRows}
+             idKey={"id"}
+             checkBoxLoader={checkedLoader}
+             statusBodyTemplate={processstatusBodyTemplate}
+           />
             )}
             {activeTab === "Providers" && (
               <AppTable
@@ -632,6 +744,22 @@ const Tin = ({
                 statusBodyTemplate={processstatusBodyTemplate}
               />
             )}
+
+            <ProviderAddForm
+              isModalOpen={isModalOpen}
+              handleOk={handleOk}
+              handleCancel={handleCancel}
+              handleFinish={handleFinish}
+              handleChanges={handleChanges}
+              handleChange={handleChange}
+              form={form}
+              setOpt={setOpt}
+              getProviderNameLoad={getProviderNameLoad}
+              opt={opt}
+              loading={loading}
+              praticeList={praticeList}
+              providerList={providerList}
+            />
           </div>
         </div>
       </div>
@@ -647,6 +775,7 @@ const enhancer = connect(
     tableLoader: state?.tableView?.tableViewLoading,
     pageLoad: state?.tenantAdmin?.tin?.getPageRendering,
     tinCount: state?.tableView?.TinCountView?.data?.response,
+    getProviderNameLoad: state.tableView?.getProviderNameLoad,
   }),
   {
     getProjectActiveTab: tinActions.getProjectActiveTab,
@@ -659,6 +788,9 @@ const enhancer = connect(
     getTableDataChecked: tableAction.tinDynamicChecked,
     tinPriority: supervisorActions.getPriorityChange,
     getRoutedData: allPatientSyncAction.getRoutedData,
+    getAddProvider: tableAction.getAddProvider,
+    getProviderNPIList: tableAction.getProviderNPIList,
+    getProviderNameList: tableAction.getProviderNameList,
   }
 );
 

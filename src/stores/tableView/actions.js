@@ -34,3 +34,23 @@ export const setTinStatus = createActionThunk(
   "TIN_STATUS_ACTION",
   network.changeTinStatus
 );
+
+// add provider
+export const getAddProvider = createActionThunk(
+  "GET_ADD_PROVIDER",
+  network.addProvider
+);
+
+//NPI List
+export const getProviderNPIList = createActionThunk(
+  "GET_PROVIDER_NPI_LIST",
+  network.getProviderNPIList
+);
+
+//NPI Name List
+export const getProviderNameList = createActionThunk(
+  "GET_PROVIDER_NAME_LIST",
+  network.getProviderNameList
+);
+
+
