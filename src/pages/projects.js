@@ -96,7 +96,6 @@ const SelectProject = ({
       const selectedRoleObj = allRolesData?.userRoles?.find(
         (role) => role.proxyRole === values.role
       );
-
       if (selectedRoleObj) {
         setStorage("proxyRole", selectedRoleObj?.proxyRole);
         setStorage("userAllRoles", JSON.stringify(allRolesData?.userRoles));
@@ -219,6 +218,10 @@ const SelectProject = ({
     const isAllFieldsFilled = values.role;
     setIsFormValid(isAllFieldsFilled);
   }, [form.getFieldsValue()]);
+
+  useEffect(()=>{
+    setStorage("userId", allRolesData?.userName);
+  })
 
   return (
     <div className="page-wraper">
