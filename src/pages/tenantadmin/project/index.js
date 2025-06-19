@@ -1,16 +1,17 @@
 import React from "react";
-import Header from "../../../jsx/layouts/nav/Header";
 import Tab from "../../../mainStream/components/tags";
 import { connect } from "react-redux";
 import Patientsync from '../patientsync'
 import { actions as tinActions } from "../../../stores/tenantAdmin/tin";
 import Patients from "../../../commonPages/patients";
 import { getAccessTabItems } from "../../../utils/reusable";
+import {actions as tableAction} from '../../../stores/tableView'
 
-const Project = ({ getProjectActiveTab, activeTabName }) => {
+const Project = ({ getProjectActiveTab, activeTabName,getTableData }) => {
   const tabs = getAccessTabItems({page:"Project",tabsMenu:"tabMenuList"});
   const activeTab = activeTabName || tabs?.[0] || "Patients";
   const handleTabs = (name) => {
+     getTableData({ reloadTrue: true });
     getProjectActiveTab({
       projectActiveTab: name,
     });
@@ -46,6 +47,7 @@ const enhancer = connect(
   }),
   {
     getProjectActiveTab: tinActions.getProjectActiveTab,
+    getTableData: tableAction.tableViewAction,
   }
 );
 

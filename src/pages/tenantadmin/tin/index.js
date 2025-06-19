@@ -133,6 +133,7 @@ const Tin = ({
     activeFilters,
   };
   const gotoPatientDetails = (rowData) => {
+     getTableData({ reloadTrue: true });
     setStorage("patientId", rowData.patientId);
     setStorage("tinNumber", rowData.tinNumber);
     setStorage("routeBackTo", "/tenantadmin/tin");
@@ -142,6 +143,7 @@ const Tin = ({
   };
 
   const handleTabs = (name) => {
+    getTableData({ reloadTrue: true });
     setSort("");
     setIsFilter(true);
     setSelectedOption({});
@@ -151,7 +153,7 @@ const Tin = ({
     setSelectedRows([]);
     setSearchText(null);
     setSelectedDateRanges({});
-    setSelectedDates([]);
+    setSelectedDates([])
   };
   const onPageChange = (e) => {
     setPaginationFirst(e.first);
@@ -791,6 +793,7 @@ const enhancer = connect(
     getAddProvider: tableAction.getAddProvider,
     getProviderNPIList: tableAction.getProviderNPIList,
     getProviderNameList: tableAction.getProviderNameList,
+    getTableData: tableAction.tableViewAction,
   }
 );
 

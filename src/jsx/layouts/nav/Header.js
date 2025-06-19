@@ -549,6 +549,7 @@ const Header = ({
             getActiveTab(null);
             getReportActiveTab(null);
             getRoutedData(null);
+            getTableData({ reloadTrue: true });
 
             router.push(
               {

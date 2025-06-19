@@ -5,11 +5,13 @@ import { connect } from "react-redux";
 import { actions as tinActions } from "../../stores/tenantAdmin/tin";
 import GenerateView from "./generateView";
 import GeneratedReports from "./generatedReports";
+import {actions as tableAction} from  '../../stores/tableView'
 
-const Project = ({ getProjectActiveTab, activeTabName }) => {
+const Project = ({ getProjectActiveTab, activeTabName,getTableData }) => {
   const tabs = ["Report Generate View","Generated Reports"]
   const activeTab = activeTabName || tabs?.[0] || "Report Generate View";
   const handleTabs = (name) => {
+    getTableData({ reloadTrue: true });
     getProjectActiveTab({
       reportTab: name,
     });
@@ -38,6 +40,7 @@ const enhancer = connect(
   }),
   {
     getProjectActiveTab: tinActions.getProjectActiveTab,
+       getTableData: tableAction.tableViewAction,
   }
 );
 

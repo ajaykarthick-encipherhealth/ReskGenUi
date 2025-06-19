@@ -15,8 +15,9 @@ import visitStyles from "../../../../styles/visitdata.module.css";
 import { Spin } from "antd";
 import { LoadingOutlined } from "@ant-design/icons";
 import { actions as allPatientSyncAction } from "../../../../stores/tenantAdmin/patientSync";
+import {actions as tableAction} from '../../../../stores/tableView'
 
-const TinDetails = ({ activeTabName, getProjectActiveTab,getRoutedData,getRoutedDatAllocation }) => {
+const TinDetails = ({ activeTabName,getTableData, getProjectActiveTab,getRoutedData,getRoutedDatAllocation }) => {
   const router = useRouter();
 
   const tabs = getAccessTabItems({ page: "Tin", tabsMenu: "tabMenuList2" });
@@ -28,6 +29,7 @@ const TinDetails = ({ activeTabName, getProjectActiveTab,getRoutedData,getRouted
     getRoutedData(null)
     getRoutedDatAllocation(null);
     getProjectActiveTab({ tinDetailsTab: name });
+     getTableData({ reloadTrue: true });
     router.replace({
       pathname: router.pathname,
       query: { ...router.query, tab: name },
@@ -95,6 +97,7 @@ const TinDetails = ({ activeTabName, getProjectActiveTab,getRoutedData,getRouted
     );
   };
   const handleBack = () => {
+    getTableData({ reloadTrue: true });
     getProjectActiveTab(activeTabName);
     router.push("/tenantadmin/tin");
   };
@@ -152,6 +155,7 @@ const enhancer = connect(
     getProjectActiveTab: tinActions.getProjectActiveTab,
     getRoutedData: allPatientSyncAction.getRoutedData,   
     getRoutedDatAllocation: tinActions.getAllocationRoutedData, 
+    getTableData: tableAction.tableViewAction,
   }
 );
 
