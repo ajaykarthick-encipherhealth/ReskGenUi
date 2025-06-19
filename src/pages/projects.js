@@ -32,7 +32,8 @@ const SelectProject = ({
   const [form] = Form.useForm();
   const [confirmModal, setConfirmModal] = useState(false);
   const { accounts } = useMsal();
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(true); 
+  const [submitLoading, setSubmitLoading] = useState(true);
   const [isFormValid, setIsFormValid] = useState(false);
 
   const clientOptions = clientDetails?.map((client) => ({
@@ -83,6 +84,7 @@ const SelectProject = ({
   };
 
   const handleFormSubmit = async () => {
+    setSubmitLoading(true)
     try {
       const values = await form.validateFields();
       const { client, project, role } = values;
@@ -109,6 +111,9 @@ const SelectProject = ({
       }
     } catch (error) {
       console.error("Form validation failed:", error);
+    }
+    finally{
+      setSubmitLoading(false)
     }
   };
 
@@ -311,7 +316,7 @@ const SelectProject = ({
                     type="submit"
                     name="SUBMIT"
                     width="400px"
-                    loading={clientLoading || projectLoading || roleLoading}
+                    loading={!submitLoading}
                     disabled={!(form.getFieldsValue()?.role)}
                   />
                 </div>
