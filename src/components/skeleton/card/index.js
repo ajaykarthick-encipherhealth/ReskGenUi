@@ -5,7 +5,7 @@ const CardSkeleton = ({
   count = 1,
   height = 100,
   display,
-  gap
+  gap,
 }) => {
   return (
     <>

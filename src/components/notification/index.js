@@ -137,12 +137,14 @@ const handleIdRead = async (notification) => {
             </div>
           </div>
           {notificationLoading ? (
+            <div className="px-3">
             <CardSkeleton
               count={10}
               display={"flex"}
               gap={"10px"}
               height={150}
             />
+            </div>
           ) : (
             <div className={`d-grid align-items-center ${style.cardGrid}`}>
               {webSocketNotificationData?.map((notification, index) => (
