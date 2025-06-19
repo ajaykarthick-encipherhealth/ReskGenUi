@@ -367,11 +367,11 @@ const UserList = ({
       });
       if (res?.status === "SUCCESS") {
         getAllUsers();
-        getResponePopup(res)
+        getResponePopup(res);
       }
     } catch (error) {
       console.error("Error toggling switch:", error);
-      getResponePopup(res)
+      getResponePopup(res);
     }
     setIsLoading(false);
   };
@@ -757,14 +757,14 @@ const UserList = ({
                   </span>
                 }
                 name="userName"
-                rules={[
-                  { required: true, message: "Please enter your email!" },
-                  {
-                    pattern: "^[a-zA-Z0-9._%+-]+@gmail.com$",
-                    required: true,
-                    message: "Enter the Valid Email ",
-                  },
-                ]}
+               rules={[
+                {
+                  pattern:
+                    "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+.[a-zA-Z]{2,}(?:.[a-zA-Z]{2,})?$",
+                  required: true,
+                  message: "Enter the Valid Email ",
+                },
+              ]}
               >
                 <Input
                   data-testid="userName"
