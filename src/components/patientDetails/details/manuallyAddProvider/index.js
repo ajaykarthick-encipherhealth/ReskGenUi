@@ -40,6 +40,17 @@ const ManuallyAddProvider = ({
       dosSubstring: data?.dosSubstring || "",
       dosStartPageNumber: data?.dosStartPageNumber || "",
       dosEndPageNumber: data?.dosEndPageNumber || "",
+      faceToFace:
+        data?.faceToFace === true
+          ? "Yes"
+          : data?.faceToFace === false
+          ? "No"
+          : "",
+      visitType: data?.visitType || "",
+      reviewerComments: data?.reviewerComments || "",
+      physicianInquiry: data?.physicianInquiry || "",
+      physicianSignaturePresent: data?.physicianSignaturePresent || "",
+      physicianNotPresent: data?.physicianNotPresent || "",
       providerName: data?.providerName || "",
       providerPageNumber: data?.hyperlinks[0]?.pageNumber || "",
       providerCredentials: data?.providerCredentials || "",

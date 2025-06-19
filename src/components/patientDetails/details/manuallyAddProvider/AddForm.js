@@ -1,5 +1,6 @@
 import {
   Button,
+  Checkbox,
   DatePicker,
   Form,
   Input,
@@ -108,98 +109,6 @@ const AddForm = ({
   };
   return (
     <div>
-      {/* {showAddForm ? (
-        <>
-          <div className="d-flex justify-content-between">
-            <label
-              className={`${style.dateField} d-flex justify-content-center align-items-center`}
-            >
-              DOS
-            </label>
-            <Button
-              className={style.cancelBtn}
-              onClick={() => {
-                setShowAddForm(false);
-              }}
-            >
-              cancel
-            </Button>
-          </div>
-          <div className="providerAddPicker">
-            <DatePicker
-              defaultValue={dayjs("05-20-2017", dateFormat)}
-              format={dateFormat}
-              suffixIcon={false}
-              value={selectedDate ? dayjs(selectedDate, dateFormat) : ""}
-              style={{ border: "1px solid #8888" }}
-              onChange={handleDatePicker}
-              className="providerAddPicker"
-            />
-          </div>
-          <div className={style.formContainer}>
-            <Form
-              form={form}
-              onFinish={AddProvider}
-              layout="vertical"
-              autoComplete="off"
-            >
-              <Form.Item
-                label={<label className={style.dateField}>Provider Name</label>}
-                name="providerName"
-                rules={[
-                  { required: true, message: " Please Enter Provider name" },
-                ]}
-              >
-                <Input placeholder="Enter Provider name" />
-              </Form.Item>
-              <Form.Item
-                label={<label className={style.dateField}>Page Number</label>}
-                name="pageNumber"
-                rules={[
-                  { required: true, message: "Please enter page number" },
-                  { validator: validateThreeDigitNumber },
-                ]}
-              >
-                <Input maxLength={3} placeholder="Enter Page Number" />
-              </Form.Item>
-              <Form.Item className="d-flex justify-content-center">
-                <Button htmlType="submit" type="primary">
-                  ADD
-                </Button>
-              </Form.Item>
-            </Form>
-            <div className={`row`} style={{ padding: "0px 10px" }}>
-              {viewProvidersList({
-                list: providersList,
-                isDeletable: true,
-                handleDelete: handleDelete,
-              })}
-            </div>
-            {providersList?.length > 0 && (
-              <div className="d-flex justify-content-center mt-4">
-                <Tooltip title={selectedDate ? "" : "Please Select Date"}>
-                  <Button
-                    type="primary"
-                    onClick={submitProviderForm}
-                    disabled={selectedDate ? false : true}
-                  >
-                    Submit
-                  </Button>
-                </Tooltip>
-              </div>
-            )}
-          </div>
-        </>
-      ) : (
-        <Button
-          type="primary"
-          onClick={() => {
-            setShowAddForm(!showAddForm);
-          }}
-        >
-          Add
-        </Button>
-      )} */}
       <div
         className={style.formContainer}
         id="manuallyAdd-container"
@@ -290,6 +199,99 @@ const AddForm = ({
               disabled={providersList?.dosEndPageNumber ? true : false}
             />
           </Form.Item>
+          {/* Extra Fields*/}
+          <Form.Item
+            id="face-to-face-manually-add"
+            label={<label className={style.dateField}>Face To Face</label>}
+            name="faceToFace"
+            rules={[
+              { required: true, message: "Please select Face To Face option" },
+            ]}
+          >
+            <Select
+              placeholder="Select Face To Face"
+              data-testid="faceToFace-select"
+            >
+              <Select.Option value={true}>Yes</Select.Option>
+              <Select.Option value={false}>No</Select.Option>
+            </Select>
+          </Form.Item>
+
+          <Form.Item
+            id="visit-type-manually-add"
+            label={<label className={style.dateField}>Visit Type</label>}
+            name="visitType"
+            rules={[{ required: true, message: "Please select Visit Type" }]}
+          >
+            <Select
+              placeholder="Select Visit Type"
+              data-testid="visitType-select"
+            >
+              <Select.Option value="LAB">LAB</Select.Option>
+              <Select.Option value="EEG">EEG</Select.Option>
+              <Select.Option value="EKG">EKG</Select.Option>
+              <Select.Option value="INPATIENT">INPATIENT</Select.Option>
+              <Select.Option value="CONSULT">CONSULT</Select.Option>
+              <Select.Option value="SURGERY">SURGERY</Select.Option>
+              <Select.Option value="NURSE">NURSE</Select.Option>
+              <Select.Option value="OFFICE">OFFICE</Select.Option>
+            </Select>
+          </Form.Item>
+
+          <Form.Item
+            id="reviewer-comments-manually-add"
+            label={<label className={style.dateField}>Reviewer Comments</label>}
+            name="reviewerComments"
+            rules={[
+              { required: true, message: "Please enter Reviewer Comments" },
+            ]}
+          >
+            <Input.TextArea
+              data-testid="reviewerComments-textarea"
+              placeholder="Enter Reviewer Comments"
+              rows={3}
+            />
+          </Form.Item>
+
+          <Form.Item
+            id="physician-enquiry-manually-add"
+            label={<label className={style.dateField}>Physician Inquiry</label>}
+            name="physicianInquiry"
+            rules={[
+              { required: true, message: "Please enter Physician Enquiry" },
+            ]}
+          >
+            <Input.TextArea
+              data-testid="physicianInquiry-textarea"
+              placeholder="Enter Physician Inquiry"
+              rows={3}
+            />
+          </Form.Item>
+
+          <Form.Item
+            id="physician-signature-present"
+            name="physicianSignaturePresent"
+            valuePropName="checked"
+          >
+            <Checkbox data-testid="physicianSignaturePresent-checkbox">
+              <span className={style.dateField}>
+                Physician Signature Present
+              </span>
+            </Checkbox>
+          </Form.Item>
+
+          <Form.Item
+            id="physician-not-present"
+            name="physicianNotPresent"
+            valuePropName="checked"
+          >
+              <Checkbox data-testid="physicianNotPresent-checkbox">
+              <span className={style.dateField}>Physician Not Present</span>
+            </Checkbox>
+       
+            
+          </Form.Item>
+
           {/* provider */}
           <Form.Item
             id="manuallyAddProviderName"
