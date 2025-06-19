@@ -16134,7 +16134,7 @@ input::-webkit-inner-spin-button {
 .header-menu li span {
   font-size: 14px !important;
   font-size: 700 !important;
-  margin-top: 3px;
+  /* margin-top: 3px; */
 }
 .hospitalIcon {
   font-size: 13px !important;
@@ -16147,14 +16147,14 @@ input::-webkit-inner-spin-button {
    .header-menu li span {
     font-size: 5px !important;
     font-size: 700 !important;
-    margin-top: 5px !important;
+    /* margin-top: 5px !important; */
   }
 }
 @media (max-width: 1344px) {
   .header-menu li span {
     font-size: 10px !important;
     font-size: 700 !important;
-    margin-top: 5px !important;
+    /* margin-top: 5px !important; */
   }
 }
 .hospitalIcon {
