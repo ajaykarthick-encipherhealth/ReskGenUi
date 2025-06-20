@@ -14,7 +14,6 @@ const ProviderAddForm = ({
   getProviderNameLoad,
   opt,
   loading,
-  praticeList,
   providerList
 }) => {
   return (

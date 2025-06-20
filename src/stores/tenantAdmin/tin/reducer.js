@@ -1,6 +1,8 @@
 import { combineReducers } from "redux";
 import { handleActions } from "redux-actions";
-import { getAllocationRoutedData ,getProjectActiveTab,pageRendering} from "./actions";
+import { getAllocationRoutedData ,getProjectActiveTab,pageRendering,  getAddProvider,
+  getProviderNPIList,
+  getProviderNameList,} from "./actions";
 
 const initialState = {
   loading: true,
@@ -67,6 +69,10 @@ const tinPatientReducer = combineReducers({
   allocationRoutedData:getAllocationDetails,
   activeTabRoutedData:getProjectActiveTabDetails,
   getPageRendering: getPageRendering,
+  getAddProvider:createReducer(getAddProvider),
+  getProviderNameList:createReducer(getProviderNameList),
+  getProviderNPIList:createReducer(getProviderNPIList),
+  getProviderNameLoad:getReportLoading(getProviderNameList),
 
 });
 

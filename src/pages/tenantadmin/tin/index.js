@@ -56,8 +56,6 @@ const Tin = ({
   getAddProvider,
   getProviderNPIList,
   getProviderNameList,
-  getPracticeNameList,
-  praticeList
 }) => {
   const [form] = Form.useForm();
   const tabs = getAccessTabItems({ page: "Tin", tabsMenu: "tabMenuList" });
@@ -361,6 +359,9 @@ const Tin = ({
     const value = e.target.value || "";
     if(value?.length == 0){
       setProviderList([])
+        form.setFieldsValue({
+      practiceName: null, 
+    });
     }
     if (value?.length === 10 && !value.includes(" ")) {
       try {
@@ -496,7 +497,6 @@ const Tin = ({
     if (paramsFilter === "check") {
       getAllTins();
       getTinCountData();
-      // setSelectedRows([])
     }
   }, [
     pageNo,
@@ -759,7 +759,6 @@ const Tin = ({
               getProviderNameLoad={getProviderNameLoad}
               opt={opt}
               loading={loading}
-              praticeList={praticeList}
               providerList={providerList}
             />
           </div>
@@ -777,7 +776,7 @@ const enhancer = connect(
     tableLoader: state?.tableView?.tableViewLoading,
     pageLoad: state?.tenantAdmin?.tin?.getPageRendering,
     tinCount: state?.tableView?.TinCountView?.data?.response,
-    getProviderNameLoad: state.tableView?.getProviderNameLoad,
+    getProviderNameLoad: state?.tenantAdmin?.tin?.getProviderNameLoad,
   }),
   {
     getProjectActiveTab: tinActions.getProjectActiveTab,
@@ -790,10 +789,9 @@ const enhancer = connect(
     getTableDataChecked: tableAction.tinDynamicChecked,
     tinPriority: supervisorActions.getPriorityChange,
     getRoutedData: allPatientSyncAction.getRoutedData,
-    getAddProvider: tableAction.getAddProvider,
-    getProviderNPIList: tableAction.getProviderNPIList,
-    getProviderNameList: tableAction.getProviderNameList,
-    getTableData: tableAction.tableViewAction,
+    getAddProvider: tinActions.getAddProvider,
+    getProviderNPIList: tinActions.getProviderNPIList,
+    getProviderNameList: tinActions.getProviderNameList,
   }
 );
 
