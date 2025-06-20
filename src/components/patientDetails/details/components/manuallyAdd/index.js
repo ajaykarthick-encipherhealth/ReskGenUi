@@ -79,8 +79,6 @@ const ManuallyAdd = ({
   const [listOfSection, setListOfSection] = useState([]);
   const [showSection, setShowSection] = useState(false);
   const [description, setDescription] = useState("");
-  const [oldHcc, setOldhcc] = useState("");
-  const [newHcc, setNewhcc] = useState("");
 
   const [selectMeat, setSelectMeat] = useState("M");
   const [isFilled, setIsFilled] = useState([]);
@@ -120,6 +118,7 @@ const ManuallyAdd = ({
         value: item?.dateOfService,
       } || [])
   );
+  // console.log(patientDosResult, "getSelectedDos");
 
   const getPageNumbers = () => {
     const getFilter = patientDosResult?.data?.response
@@ -253,30 +252,22 @@ const ManuallyAdd = ({
     const value = e?.toUpperCase();
     setCode(value);
     setDescription("");
-    setOldhcc("");
-    setNewhcc("");
     form.setFieldsValue({ description: "" });
     if (value?.length > 2) {
       try {
-        let res = await getValidate(value, isDosSelected);
-     
+        let res = await getValidate(value);
         if (res?.status === "SUCCESS") {
-          const displayCodeOptions = res?.response?.autoCompleteDTOList?.map(
-            (item) => ({
-              value: item?.icdDiseaseDTO?.code,
-              description: item?.icdDiseaseDTO?.description,
-              oldHcc: item?.oldValue,
-              newHcc: item?.newValue,
-              label: (
-                <div className="d-flex gap-1">
-                  <span>
-                    {item?.icdDiseaseDTO?.code} -{" "}
-                    {item?.icdDiseaseDTO?.description}
-                  </span>
-                </div>
-              ),
-            })
-          );
+          const displayCodeOptions = res?.response?.map((item) => ({
+            value: item?.code,
+            description: item?.description,
+            label: (
+              <div className="d-flex gap-1">
+                <span>
+                  {item?.code} - {item?.description}
+                </span>
+              </div>
+            ),
+          }));
           setOptions(displayCodeOptions);
           getVerify(value, res);
         } else {
@@ -286,24 +277,14 @@ const ManuallyAdd = ({
     } else {
       setValidCode("");
       setDescription("");
-      setOldhcc("");
-      setNewhcc("");
       form.setFieldsValue({ description: "" });
     }
   };
 
   const onSelect = (value) => {
     let des = options?.find((s) => s.value == value)?.description;
-    let oldHcc = options?.find((s) => s.value == value)?.oldHcc;
-    let newHcc = options?.find((s) => s.value == value)?.newHcc;
     setDescription(des);
-    setOldhcc(oldHcc);
-    setNewhcc(newHcc);
-    form.setFieldsValue({
-      description: des,
-      oldHcc: oldHcc,
-      newHcc: newHcc,
-    });
+    form.setFieldsValue({ description: des });
   };
 
   const getVerify = async (value, res) => {
@@ -717,8 +698,6 @@ const ManuallyAdd = ({
         diagnosisCode: selectDisDetails?.diagnosisCode,
         newDiagnosisCode: code,
         description: forms?.description ? forms?.description : description,
-        oldHcc: forms?.oldHcc ? forms?.oldHcc : 34,
-        newHcc: forms?.oldHcc ? forms?.oldHcc : 24,
         dateOfServices: forms.dos,
         providerNames: providerDetails?.map((item) => item.providerName),
         hyperlinks: listOfSection
@@ -759,7 +738,7 @@ const ManuallyAdd = ({
         chartProcessType: getSelectedDos ? "DATE_OF_SERVICE" : "YEAR",
         dateOfServiceIfDosWiseCompute: getSelectedDos ? getSelectedDos : null,
         processedYear: year?.value,
-        activeHeader: !isMeat,
+        activeHeader:!isMeat,
       };
     } else if (isEditMeat) {
       data = {
@@ -798,8 +777,6 @@ const ManuallyAdd = ({
         patientId: getStorage("patientId"),
         diagnosisCode: code.trim(),
         description: diagnosisForm.description,
-        oldHcc: diagnosisForm.oldHcc,
-        newHcc: diagnosisForm.newHcc,
         dbDescription: diagnosisForm.description,
         dateOfServices: diagnosisForm.dos,
         hyperlinks: listOfSection
@@ -819,7 +796,7 @@ const ManuallyAdd = ({
           .flat(capturedSections.length + 1),
         chartProcessType: getSelectedDos ? "DATE_OF_SERVICE" : "YEAR",
         processedYear: year?.value,
-        activeHeader: !isMeat,
+        activeHeader:!isMeat,
       };
     }
     if (validCode.toLowerCase() == "valid code") {
@@ -1185,8 +1162,6 @@ const ManuallyAdd = ({
         description: isEditValue.dbDescription
           ? isEditValue.dbDescription
           : isEditValue.actualDescription,
-        newHcc: isEditValue?.newValue ? isEditValue?.newValue : "",
-        oldHcc: isEditValue?.oldValue ? isEditValue?.oldValue :"",
         dos: dos,
       });
       const sectionListM = filterData?.monitorHyperLink?.map((item) => ({
@@ -1392,52 +1367,6 @@ const ManuallyAdd = ({
                   onChange={(e) => setDescription(e.target.value)}
                   value={description}
                   // disabled
-                />
-              </Form.Item>
-            </div>
-            <div className="col-12">
-              <Form.Item
-                label={
-                  <label>
-                    Old Hcc <span style={{ color: "red" }}>*</span>
-                  </label>
-                }
-                name="oldHcc"
-                rules={[
-                  {
-                    required: true,
-                    message: "Please enter description",
-                  },
-                ]}
-              >
-                <Input
-                  name="oldHcc"
-                  onChange={(e) => setOldhcc(e.target.value)}
-                  value={oldHcc}
-                  disabled
-                />
-              </Form.Item>
-            </div>
-            <div className="col-12">
-              <Form.Item
-                label={
-                  <label>
-                    New Hcc <span style={{ color: "red" }}>*</span>
-                  </label>
-                }
-                name="newHcc"
-                rules={[
-                  {
-                    required: true,
-                    message: "Please enter description",
-                  },
-                ]}
-              >
-                <Input
-                  name="newHcc"
-                  onChange={(e) => setNewhcc(e.target.value)}
-                  value={newHcc}
-                  disabled
                 />
               </Form.Item>
             </div>

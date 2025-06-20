@@ -563,7 +563,7 @@ const Header = ({
           <div
             id={data.title}
             name={data.title}
-            className="d-flex cursor-pointer align-items-center"
+            className="d-flex cursor-pointer"
           >
             <div
               className="menu-icon"
@@ -998,7 +998,7 @@ const Header = ({
               {stateActive != "/reviewer/home" ? (
                 <div header-transition>
                   <ul
-                    className={`metismenu header-menu d-flex `}
+                    className={`metismenu header-menu d-flex`}
                     id="menuList"
                     name="menuList"
                   >

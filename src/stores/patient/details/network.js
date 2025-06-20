@@ -235,13 +235,13 @@ export async function addComments(obj) {
   return data;
 }
 
-export async function isValideCode(code, isDosSelected) {
+export async function isValideCode(code) {
   const options = {
     method: "GET",
   };
   const data = await requestPortal(
     // `dbservice/icddisease/finddiseasebycode?diseasecode=${code}`,
-    `dbservice/icddisease/disease-autocomplete?diseasecode=${code}&dateOfService=${isDosSelected}`,
+    `dbservice/icddisease/disease-autocomplete?diseasecode=${code}`,
 
     options
   );
