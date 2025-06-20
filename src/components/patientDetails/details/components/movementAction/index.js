@@ -7,7 +7,7 @@ import {
   RightCircleOutlined,
   IssuesCloseOutlined,
 } from "@ant-design/icons";
-import { Tooltip, Popconfirm, message, Checkbox } from "antd";
+import { Tooltip, Popconfirm, message } from "antd";
 import {
   getMeatAnyOneFindCheck,
   handleSubmitValidNotes,
@@ -17,7 +17,6 @@ import { actions as detailsActions } from "../../../../../stores/patient/details
 import { suggestedMeatCheck } from "../../../../../stores/patient/details/network";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHandHoldingMedical } from "@fortawesome/free-solid-svg-icons";
-import { getStorage } from '../../../../../utils/storages'
 
 const MovementAction = ({
   validAction,
@@ -41,57 +40,14 @@ const MovementAction = ({
   getPatientIdData,
   patientIdDetailsData,
 }) => {
-  const userRole = getStorage("userRole")
   const [selectDisDetails, setSelectDisDetails] = useState(false);
-  const [educationalError, setEducationalError] = useState(false);
-  const [popVisible, setPopVisible] = useState({
-    valid: false,
-    suggested: false,
-    potential: false,
-    delete: false,
-  });
-  const handlePopVisibleChange = (key, visible) => {
-    setPopVisible((prev) => ({
-      ...prev,
-      [key]: visible,
-    }));
-    if (!visible) {
-      setEducationalError(false);
-    }
-  };
-
-  const [isValidAction, setIsValidAction] = useState("");
-
-  const educationalErrorCheckBox = ({ message, checked, onChange }) => (
-    <div>
-      <div>{message}</div>
-      <div className="d-flex mt-2 flex-column gap-2 w-100">
-        <Checkbox
-          className="ant-badge"
-          checked={checked}
-          onChange={(e) => onChange(e.target.checked)}
-        >
-          Educational Error
-        </Checkbox>
-      </div>
-    </div>
-  );
-  const handleCancel = () => {
-    setEducationalError(false);
-    setPopVisible({
-      valid: false,
-      suggested: false,
-      potential: false,
-      delete: false,
-    });
-  };
-
   const onChangeValues = (data) => {
     data.processedYear = patientDetailsResult?.data?.response?.processedYear;
     data.dateOfService = patientDetailsResult?.data?.response?.dateOfService;
     (data.fileId = patientDetailsResult?.data?.response?.fileId),
       setSelectDisDetails(data);
   };
+  const [isValidAction, setIsValidAction] = useState("");
 
   const onConfirmValidMove = async () => {
     setSelectCardTitle && setSelectCardTitle(isValidAction);
@@ -117,9 +73,7 @@ const MovementAction = ({
           handleCloseModal,
           patientDetailsLoad,
           getPatientIdData,
-          educationalError,
         });
-        handleCancel();
       }
     } else {
       handleSubmitValidNotes({
@@ -133,14 +87,12 @@ const MovementAction = ({
         handleCloseModal,
         patientDetailsLoad,
         getPatientIdData,
-        educationalError,
       });
-      handleCancel();
     }
   };
   const isDisabled =
-    patientIdDetailsData?.data?.response?.workflow?.[0]?.status !== "PENDING" ||
-    patientDetailsResult?.data?.response?.workflow?.[0]?.status == "COMPLETED";
+    patientIdDetailsData?.data?.response?.workflow?.[0]?.status !== "PENDING" || patientDetailsResult?.data?.response?.workflow?.[0]
+    ?.status == "COMPLETED";
 
   const handleCloseModal = () => {};
   return (
@@ -154,23 +106,10 @@ const MovementAction = ({
                   onConfirm={() => {
                     onConfirmValidMove();
                   }}
-                  title={
-                    (userRole === "CODER_2" || userRole === "QA")
-                      ? educationalErrorCheckBox({
-                          message: "You want move to valid?",
-                          checked: educationalError,
-                          onChange: setEducationalError,
-                        })
-                      : "You want move to valid?"
-                  }
+                  title="You want move to valid?"
                   placement="bottom"
                   okText="Yes"
                   cancelText="No"
-                  onCancel={handleCancel}
-                  visible={popVisible.valid}
-                  onVisibleChange={(visible) =>
-                    handlePopVisibleChange("valid", visible)
-                  }
                 >
                   <CheckCircleFilled
                     className={styles.validIcon}
@@ -211,24 +150,9 @@ const MovementAction = ({
                       handleCloseModal,
                       patientDetailsLoad,
                       getPatientIdData,
-                      educationalError,
                     });
-                    setEducationalError(false);
                   }}
-                  onCancel={handleCancel}
-                  visible={popVisible.suggested}
-                  onVisibleChange={(visible) =>
-                    handlePopVisibleChange("suggested", visible)
-                  }
-                  title={
-                    (userRole === "CODER_2" || userRole === "QA")
-                      ? educationalErrorCheckBox({
-                          message: "You want to move to Care Gap?",
-                          checked: educationalError,
-                          onChange: setEducationalError,
-                        })
-                      : "You want to move to Care Gap?"
-                  }
+                  title="You want move to Care Gap?"
                   placement="bottom"
                   okText="Yes"
                   cancelText="No"
@@ -274,27 +198,12 @@ const MovementAction = ({
                       handleCloseModal,
                       patientDetailsLoad,
                       getPatientIdData,
-                      educationalError,
                     });
-                    setEducationalError(false);
                   }}
-                  title={
-                    (userRole === "CODER_2" || userRole === "QA")
-                      ? educationalErrorCheckBox({
-                          message: "You want move to potential?",
-                          checked: educationalError,
-                          onChange: setEducationalError,
-                        })
-                      : "You want move to potential?"
-                  }
+                  title="You want move to potential?"
                   placement="bottom"
                   okText="Yes"
                   cancelText="No"
-                  onCancel={handleCancel}
-                  visible={popVisible.potential}
-                  onVisibleChange={(visible) =>
-                    handlePopVisibleChange("potential", visible)
-                  }
                 >
                   <span
                     className={`d-flex align-items-center justify-content-center ${styles.potentialIcon}`}
@@ -347,23 +256,9 @@ const MovementAction = ({
                       handleCloseModal,
                       patientDetailsLoad,
                       getPatientIdData,
-                      educationalError,
                     });
                   }}
-                  title={
-                  (userRole === "CODER_2" || userRole === "QA")
-                      ? educationalErrorCheckBox({
-                          message: "You want move to delete?",
-                          checked: educationalError,
-                          onChange: setEducationalError,
-                        })
-                      : "You want move to delete?"
-                  }
-                  onCancel={handleCancel}
-                  visible={popVisible.delete}
-                  onVisibleChange={(visible) =>
-                    handlePopVisibleChange("delete", visible)
-                  }
+                  title="Do you want to move to delete?"
                   placement="bottom"
                   okText="Yes"
                   cancelText="No"

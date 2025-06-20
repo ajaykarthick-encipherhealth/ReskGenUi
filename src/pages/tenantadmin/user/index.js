@@ -686,7 +686,7 @@ const UserList = ({
                 rules={[
                   {
                     required: true,
-                    message: "Enter your first name!",
+                    message: "Please enter your first name!",
                   },
                 ]}
               >
@@ -710,7 +710,7 @@ const UserList = ({
                 rules={[
                   {
                     required: true,
-                    message: "Enter your last name!",
+                    message: "Please enter your last name!",
                   },
                 ]}
               >

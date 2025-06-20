@@ -225,13 +225,14 @@ const Header = ({
     const defaultProject = getStorage("project");
     const defaultTinNumber = getStorage("tinNumber");
     const userRole = getStorage("proxyRole");
-    if (tinDetails?.length > 0 && 
-      key === "QA") {
+    if (tinDetails?.length > 0 && userRole === "QA") {
       let initialTin = defaultTinNumber || tinDetails[0].tinNumber;
+      if (!selectedTin) {
         setSelectedTin(initialTin);
         setStorage("tinNumber", initialTin);
         setBackupSelectedTin(initialTin);
       }
+    }
     if (defaultClient) {
       setSelectedClient(defaultClient);
       setBackupSelectedClient(defaultClient);

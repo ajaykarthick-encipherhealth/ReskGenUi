@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Modal, Form, Input, Space, Checkbox } from "antd";
+import { Modal, Form, Input, Space } from "antd";
 import { Button } from "react-bootstrap";
 import CamboTree from "../../hcc/org";
 import PdfViewer from "../../PdfViewerComponent";
@@ -7,11 +7,10 @@ import {
   getMeatAnyOneFindCheck,
   handleSubmitValidNotes,
 } from "../function/ReusableFunctions";
-import { connect } from "react-redux";
+import {  connect } from "react-redux";
 import EditForm from "./EditForm";
 import { actions as detailsActions } from "../../../../../stores/patient/details";
 import { suggestedMeatCheck } from "../../../../../stores/patient/details/network";
-import { getStorage } from '../../../../../utils/storages'
 
 const ModelIndex = ({
   validated,
@@ -47,16 +46,10 @@ const ModelIndex = ({
   dragItem,
   year,
   patientDetailsLoad,
-  getPatientIdData,
+  getPatientIdData
 }) => {
-  const userRole = getStorage("userRole");
   const [form] = Form.useForm();
   const { TextArea } = Input;
-  const [educationalError, setEducationalError] = useState(false);
-
-  const handleCheckboxChange = (e) => {
-    setEducationalError(e.target.checked);
-  };
   const onConfirmValidMove = async (openState) => {
     handleCloseModal();
     const customValidAction =
@@ -73,6 +66,7 @@ const ModelIndex = ({
       selectDisDetails?.diagnosisCode,
       meatCriteriaList
     );
+
 
     if (!meatFoundResult && customValidAction?.name == "Move to HCC") {
       setFileLoading(true);
@@ -94,8 +88,6 @@ const ModelIndex = ({
           handleCloseModal,
           patientDetailsLoad,
           getPatientIdData,
-          educationalError,
-          setEducationalError,
         });
       }
     } else {
@@ -112,8 +104,6 @@ const ModelIndex = ({
         handleCloseModal,
         patientDetailsLoad,
         getPatientIdData,
-        educationalError,
-        setEducationalError,
       });
     }
   };
@@ -128,25 +118,15 @@ const ModelIndex = ({
     <>
       {dragItem?.source?.droppableId !== "HCC" &&
         (dragMovemntAction ? (
-          <Modal
-            title="Are you sure to want move?"
-            open={openState}
-            centered
-            onOk={() => onConfirmValidMove(openState)}
-            onCancel={() => handleCloseModal()}
-          >
-            {(userRole === "CODER_2" || userRole === "QA") && (
-              <div className="d-flex flex-column gap-2 w-100">
-                <Checkbox
-                  checked={educationalError}
-                  onChange={handleCheckboxChange}
-                  className="ant-badge mt-2"
-                >
-                  Educational Error
-                </Checkbox>
-              </div>
-            )}
-          </Modal>
+          
+            <Modal
+              title="Are you sure to want move?"
+              open={openState}
+              centered
+              onOk={() => onConfirmValidMove(openState)}
+              onCancel={() => handleCloseModal()}
+            ></Modal>
+          
         ) : (
           <Modal
             title={title}
@@ -280,8 +260,9 @@ const enhancer = connect(
     getpatientDetailsData: detailsActions.patientDetailsAction,
     getRadiologyDetails: detailsActions.radiologyDetailsAction,
     getLabDetails: detailsActions.labDetailsAction,
-    patientDetailsLoad: detailsActions.patientDetailsLoad,
+    patientDetailsLoad:detailsActions.patientDetailsLoad,
     getPatientIdData: detailsActions.patientIdDetailsAction,
+
   }
 );
 export default enhancer(ModelIndex);
