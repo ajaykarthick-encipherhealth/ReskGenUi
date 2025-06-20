@@ -258,7 +258,7 @@ const AddForm = ({
             label={<label className={style.dateField}>Physician Inquiry</label>}
             name="physicianInquiry"
             rules={[
-              { required: true, message: "Please enter Physician Enquiry" },
+              { required: true, message: "Please enter Physician Inquiry" },
             ]}
           >
             <Input.TextArea
@@ -285,11 +285,9 @@ const AddForm = ({
             name="physicianNotPresent"
             valuePropName="checked"
           >
-              <Checkbox data-testid="physicianNotPresent-checkbox">
+            <Checkbox data-testid="physicianNotPresent-checkbox">
               <span className={style.dateField}>Physician Not Present</span>
             </Checkbox>
-       
-            
           </Form.Item>
 
           {/* provider */}
