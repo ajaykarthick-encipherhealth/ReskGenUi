@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { CloseOutlined } from "@ant-design/icons";
-import { AutoComplete, Form, Input, Select, Switch } from "antd";
+import { AutoComplete, Checkbox, Form, Input, Select, Switch } from "antd";
 import AddSection from "./AddSection";
 import SelectButton from "../../../../btnSelect";
 import style from "../../../../../components/button/style.module.css";
@@ -62,9 +62,10 @@ const ManuallyAdd = ({
   open,
   getPatientIdData,
   activeLabels,
-  getPatientDosList
+  getPatientDosList,
 }) => {
-  const userId = getStorage("patientId")  
+  const userId = getStorage("patientId");
+  const userRole = getStorage("userRole");
   const [form] = Form.useForm();
   const [isMeat, setIsMeat] = useState(true);
   const [validCode, setValidCode] = useState("");
@@ -259,7 +260,7 @@ const ManuallyAdd = ({
     if (value?.length > 2) {
       try {
         let res = await getValidate(value, isDosSelected);
-     
+
         if (res?.status === "SUCCESS") {
           const displayCodeOptions = res?.response?.autoCompleteDTOList?.map(
             (item) => ({
@@ -335,6 +336,7 @@ const ManuallyAdd = ({
       dateOfService: getSelectedDos ? getSelectedDos : "",
       substring: form[`referance_${section?.replaceAll(" ", "-")}_${item}`],
       pageNumber: form[`pageNumber_${section?.replaceAll(" ", "-")}_${item}`],
+      educationalError: form.educationalError || false,
     }));
     setDiagnosisForm(form);
     setListOfSection((prev) => {
@@ -359,6 +361,7 @@ const ManuallyAdd = ({
       dateOfService: getSelectedDos ? getSelectedDos : "",
       substring: forms[`referance_${section?.replaceAll(" ", "-")}_${item}`],
       pageNumber: forms[`pageNumber_${section?.replaceAll(" ", "-")}_${item}`],
+      educationalError: form.educationalError || false,
     }));
     setListOfSection((prev) => {
       const re = prev?.map((check, ind) => {
@@ -760,6 +763,7 @@ const ManuallyAdd = ({
         dateOfServiceIfDosWiseCompute: getSelectedDos ? getSelectedDos : null,
         processedYear: year?.value,
         activeHeader: !isMeat,
+        educationalError: forms?.educationalError,
       };
     } else if (isEditMeat) {
       data = {
@@ -792,6 +796,7 @@ const ManuallyAdd = ({
         chartProcessType: getSelectedDos ? "DATE_OF_SERVICE" : "YEAR",
         dateOfServiceIfDosWiseCompute: getSelectedDos ? getSelectedDos : null,
         processedYear: year?.value,
+        educationalError: forms?.educationalError,
       };
     } else {
       data = {
@@ -820,6 +825,7 @@ const ManuallyAdd = ({
         chartProcessType: getSelectedDos ? "DATE_OF_SERVICE" : "YEAR",
         processedYear: year?.value,
         activeHeader: !isMeat,
+        educationalError: diagnosisForm?.educationalError,
       };
     }
     if (validCode.toLowerCase() == "valid code") {
@@ -839,13 +845,12 @@ const ManuallyAdd = ({
         }
         if (res?.status == "SUCCESS") {
           handleCloseModal(false);
-          activeLabels(
-          {
+          activeLabels({
             patientId: userId,
             year: year?.value,
             dos: isDosSelected,
           });
-          getPatientDosList(userId,year?.value)
+          getPatientDosList(userId, year?.value);
           getResponePopup(res);
           resetForms({ reload: true });
           setIsBtnLoading(false);
@@ -1186,7 +1191,7 @@ const ManuallyAdd = ({
           ? isEditValue.dbDescription
           : isEditValue.actualDescription,
         newHcc: isEditValue?.newValue ? isEditValue?.newValue : "",
-        oldHcc: isEditValue?.oldValue ? isEditValue?.oldValue :"",
+        oldHcc: isEditValue?.oldValue ? isEditValue?.oldValue : "",
         dos: dos,
       });
       const sectionListM = filterData?.monitorHyperLink?.map((item) => ({
@@ -1314,6 +1319,9 @@ const ManuallyAdd = ({
           name="basic"
           layout="vertical"
           autoComplete="off"
+          initialValues={{
+            educationalError: false,
+          }}
           // initialValues={formInitialValues}
           onFinish={(form) => {
             handledSave(form);
@@ -1395,6 +1403,14 @@ const ManuallyAdd = ({
                 />
               </Form.Item>
             </div>
+            {(userRole === "CODER_2" || userRole === "QA") && (
+              <div className="col-12">
+                <Form.Item name="educationalError" valuePropName="checked">
+                  <Checkbox className="ant-badge"> Educational Error</Checkbox>
+                </Form.Item>
+              </div>
+            )}
+
             <div className="col-12">
               <Form.Item
                 label={

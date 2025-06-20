@@ -1299,6 +1299,8 @@ export const handleSubmitValidNotes = async ({
   handleCloseModal,
   patientDetailsLoad,
   getPatientIdData,
+  educationalError,
+  setEducationalError
 }) => {
   setFileLoading(true);
   setConfirmNotesModalValid(false);
@@ -1491,7 +1493,6 @@ export const handleSubmitValidNotes = async ({
       apiURL = ""; // Default case to handle unexpected input
       break;
   }
-
   try {
     var patientId = getStorage("patientId");
     var dataFormatSuggested = {
@@ -1504,6 +1505,7 @@ export const handleSubmitValidNotes = async ({
       chartProcessType: selectDisDetails.dateOfService
         ? "DATE_OF_SERVICE"
         : "YEAR",
+        educationalError:educationalError
     };
     patientDetailsLoad(true);
     const response = await movementApiCall(dataFormatSuggested, apiURL);
@@ -1524,6 +1526,7 @@ export const handleSubmitValidNotes = async ({
       );
       getPatientIdData(patientId);
       patientDetailsLoad(false);
+      setEducationalError(false)
     } else {
       setFileLoading(false);
       getResponePopup(response);
