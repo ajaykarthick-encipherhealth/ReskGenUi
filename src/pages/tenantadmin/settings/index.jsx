@@ -237,10 +237,10 @@ const Settings = () => {
   const handleMenuClick = (e) => {
     setActivePage(e.key);
   };
-  console.log(activePage);
+
   return (
     <div>
-      <HeaderFile />
+      {/* <HeaderFile /> */}
       <div className="row patient-file-container">
         <div className="container-fluid">
           <div>
