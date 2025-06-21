@@ -102,8 +102,6 @@ export const getBadgeClassName = (item, index) => {
   }
 };
 
-
-
 export const underScoreRemove = (value) => {
   if (value) {
     let str = value;
@@ -286,7 +284,7 @@ const Timeline = ({
         </div>
       </>
     );
-  
+
     return sectionMapArr;
   };
   const getTimelineHeading = (item, index) => {
@@ -830,7 +828,6 @@ const Timeline = ({
     }
   };
 
-
   const getEditDeatils = (viewValue) => {
     let sectionMapArr = (
       <>
@@ -987,7 +984,7 @@ const Timeline = ({
             </div>
           </Popover>
         </Tooltip>
-        <div className="timeline-panel text-muted">
+        <div className="timeline-panel ">
           <span className={`${visitStyles.timelineheading} d-flex`}>
             {item?.htmlContent
               ? getHtmlContent(item?.htmlContent)
@@ -995,12 +992,21 @@ const Timeline = ({
           </span>
           {item?.dos && (
             <span
-              className={`${visitStyles.timelineDate} mt-1`}
+              className={` text-muted ${visitStyles.timelineDate} mt-1`}
             >{`DOS: ${item?.dos}`}</span>
           )}
-          <span className={visitStyles.timelineDate}>
+          <span className={`text-muted ${visitStyles.timelineDate}`}>
             {formatDateTime({ date: item.createdDate })}
           </span>
+          {item?.educationalError && (
+            <div className="d-flex  align-items-end justify-content-end">
+              <span
+                className={` rounded-1 d-flex  align-items-center justify-content-center p-3 ${visitStyles.error}`}
+              >
+                EDU Error
+              </span>
+            </div>
+          )}
         </div>
       </li>
     );
@@ -1016,7 +1022,9 @@ const Timeline = ({
               )
             ) : (
               <div className="no-data-container">
-                <h6 className="text-center"><Empty/></h6>
+                <h6 className="text-center">
+                  <Empty />
+                </h6>
               </div>
             )}
           </ul>
