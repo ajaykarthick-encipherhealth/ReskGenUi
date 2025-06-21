@@ -47,7 +47,9 @@ const VisitData = ({
   actions,
   selectDosValue,
   patientIdDetailsData,
-  activeTab
+  activeTab,
+  educationalError,
+  setEducationalError,
 }) => {
   const [isFileFormShow, setIsFileFormShow] = useState(false);
   const [isModalOpenValid, setIsModalOpenValid] = useState(false);
@@ -89,7 +91,6 @@ const VisitData = ({
   const [showList, setShowList] = useState(["care"]);
   const [selectCardTitle, setSelectCardTitle] = useState("");
   const [potentialList, setPotentialList] = useState([]);
-
   useEffect(() => {
     var orgId = getStorage("orgId");
     var tenId = getStorage("tenantId");
@@ -124,7 +125,7 @@ const VisitData = ({
       </div>
     );
     setUserDetails(dotLoading);
-  }, [patientDetailsResult, actions?.showDisease,activeTab]);
+  }, [patientDetailsResult, actions?.showDisease, activeTab]);
 
   // useEffect(() => {
   //   if (hccFileDetails?.data?.response) {
@@ -210,7 +211,6 @@ const VisitData = ({
       setZIndex(false);
     }
   }, [isModalOpenValidCodes]);
-
   const modalOpenValidContent = (
     <div className="section-container">
       <DragDropContext
@@ -287,6 +287,8 @@ const VisitData = ({
                             popup={zIndex}
                             actions={actions}
                             id="visit-data-hcc"
+                            educationalError={educationalError}
+                            setEducationalError={setEducationalError}
                           />
                         </div>
                       </div>
@@ -409,6 +411,8 @@ const VisitData = ({
                                 setSelectCardTitle={setSelectCardTitle}
                                 actions={actions}
                                 id="visit-data-care-gap"
+                                educationalError={educationalError}
+                                setEducationalError={setEducationalError}
                               />
                             </div>
                           </div>
@@ -505,6 +509,8 @@ const VisitData = ({
                               remove
                               actions={actions}
                               id="visit-data-potential"
+                              educationalError={educationalError}
+                              setEducationalError={setEducationalError}
                             />
                           </div>
                         </div>
@@ -602,6 +608,8 @@ const VisitData = ({
                                 setSelectCardTitle={setSelectCardTitle}
                                 actions={actions}
                                 id="visit-data-delete"
+                                educationalError={educationalError}
+                                setEducationalError={setEducationalError}
                               />
                             </div>
                           </div>
@@ -662,9 +670,8 @@ const VisitData = ({
     }
   };
   const isDisabled =
-  patientIdDetailsData?.data?.response
-    ?.workflow?.[0]?.status !== "PENDING" || patientDetailsResult?.data?.response?.workflow?.[0]
-    ?.status == "COMPLETED";
+    patientIdDetailsData?.data?.response?.workflow?.[0]?.status !== "PENDING" ||
+    patientDetailsResult?.data?.response?.workflow?.[0]?.status == "COMPLETED";
   return (
     <>
       {/* {fileLoading ? <LogoLoader /> : null} */}
@@ -705,7 +712,9 @@ const VisitData = ({
                                   addValidDiseases();
                                 }}
                                 style={{
-                                  cursor: isDisabled ? "not-allowed" : "pointer",
+                                  cursor: isDisabled
+                                    ? "not-allowed"
+                                    : "pointer",
                                 }}
                                 icon={faPlus}
                               />
@@ -757,6 +766,8 @@ const VisitData = ({
                               actions={actions}
                               selectDosValue={selectDosValue}
                               id="visit-data-valid"
+                              educationalError={educationalError}
+                              setEducationalError={setEducationalError}
                             />
                           </div>
                         </div>
@@ -833,6 +844,8 @@ const VisitData = ({
                               actions={actions}
                               selectDosValue={selectDosValue}
                               id="visit-data-care-gap"
+                              educationalError={educationalError}
+                              setEducationalError={setEducationalError}
                             />
                           </div>
                         </div>
@@ -910,6 +923,8 @@ const VisitData = ({
                               actions={actions}
                               selectDosValue={selectDosValue}
                               id="visit-data-potential"
+                              educationalError={educationalError}
+                              setEducationalError={setEducationalError}
                             />
                           </div>
                         </div>
@@ -983,6 +998,8 @@ const VisitData = ({
                               actions={actions}
                               selectDosValue={selectDosValue}
                               id="visit-data-deleted"
+                              educationalError={educationalError}
+                              setEducationalError={setEducationalError}
                             />
                           </div>
                         </div>
@@ -1089,6 +1106,8 @@ const VisitData = ({
               year={year}
               open={isModalOpenValid}
               reset={isModalOpenValid}
+              educationalError={educationalError}
+              setEducationalError={setEducationalError}
             />
           </div>
         </div>
@@ -1194,6 +1213,8 @@ const VisitData = ({
                 selectDisDetails={selectDisDetails}
                 selectCardTitle={selectCardTitle}
                 open={suggestedMeatForm}
+                educationalError={educationalError}
+                setEducationalError={setEducationalError}
               />
             </div>
           </div>

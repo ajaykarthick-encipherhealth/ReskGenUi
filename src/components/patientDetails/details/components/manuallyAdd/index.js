@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { CloseOutlined } from "@ant-design/icons";
-import { AutoComplete, Form, Input, Select, Switch } from "antd";
+import { AutoComplete, Checkbox, Form, Input, Select, Switch } from "antd";
 import AddSection from "./AddSection";
 import SelectButton from "../../../../btnSelect";
 import style from "../../../../../components/button/style.module.css";
@@ -62,9 +62,12 @@ const ManuallyAdd = ({
   open,
   getPatientIdData,
   activeLabels,
-  getPatientDosList
+  getPatientDosList,
+  educationalError,
+  setEducationalError,
 }) => {
-  const userId = getStorage("patientId")  
+  const userId = getStorage("patientId");
+  const userRole = getStorage("userRole");
   const [form] = Form.useForm();
   const [isMeat, setIsMeat] = useState(true);
   const [validCode, setValidCode] = useState("");
@@ -99,7 +102,6 @@ const ManuallyAdd = ({
   const [listOfSectionA, setListOfSectionA] = useState([]);
   const [showSectionA, setShowSectionA] = useState(false);
   const [capturedSectionsA, setCapturedSectionsA] = useState([]);
-
   const [sectionCountT, setSectionCountT] = useState([1]);
   const [sectionT, setSectionT] = useState("");
   const [listOfSectionT, setListOfSectionT] = useState([]);
@@ -316,6 +318,7 @@ const ManuallyAdd = ({
       dateOfService: getSelectedDos ? getSelectedDos : "",
       substring: form[`referance_${section?.replaceAll(" ", "-")}_${item}`],
       pageNumber: form[`pageNumber_${section?.replaceAll(" ", "-")}_${item}`],
+      educationalError: form.educationalError || false,
     }));
     setDiagnosisForm(form);
     setListOfSection((prev) => {
@@ -340,6 +343,7 @@ const ManuallyAdd = ({
       dateOfService: getSelectedDos ? getSelectedDos : "",
       substring: forms[`referance_${section?.replaceAll(" ", "-")}_${item}`],
       pageNumber: forms[`pageNumber_${section?.replaceAll(" ", "-")}_${item}`],
+      educationalError: form.educationalError || false,
     }));
     setListOfSection((prev) => {
       const re = prev?.map((check, ind) => {
@@ -404,6 +408,7 @@ const ManuallyAdd = ({
             "-"
           )}_${selectMeat}_${item}`
         ],
+      educationalError: forms.educationalError || false,
     }));
 
     const setListOfSection = {
@@ -499,6 +504,7 @@ const ManuallyAdd = ({
             "-"
           )}_${selectMeat}_${item}`
         ],
+      educationalError: form.educationalError || false,
     }));
 
     const setListOfSection = {
@@ -738,7 +744,8 @@ const ManuallyAdd = ({
         chartProcessType: getSelectedDos ? "DATE_OF_SERVICE" : "YEAR",
         dateOfServiceIfDosWiseCompute: getSelectedDos ? getSelectedDos : null,
         processedYear: year?.value,
-        activeHeader:!isMeat,
+        activeHeader: !isMeat,
+        educationalError: forms?.educationalError,
       };
     } else if (isEditMeat) {
       data = {
@@ -771,6 +778,7 @@ const ManuallyAdd = ({
         chartProcessType: getSelectedDos ? "DATE_OF_SERVICE" : "YEAR",
         dateOfServiceIfDosWiseCompute: getSelectedDos ? getSelectedDos : null,
         processedYear: year?.value,
+        educationalError: forms?.educationalError,
       };
     } else {
       data = {
@@ -796,7 +804,8 @@ const ManuallyAdd = ({
           .flat(capturedSections.length + 1),
         chartProcessType: getSelectedDos ? "DATE_OF_SERVICE" : "YEAR",
         processedYear: year?.value,
-        activeHeader:!isMeat,
+        activeHeader: !isMeat,
+        educationalError: diagnosisForm?.educationalError,
       };
     }
     if (validCode.toLowerCase() == "valid code") {
@@ -816,13 +825,12 @@ const ManuallyAdd = ({
         }
         if (res?.status == "SUCCESS") {
           handleCloseModal(false);
-          activeLabels(
-          {
+          activeLabels({
             patientId: userId,
             year: year?.value,
             dos: isDosSelected,
           });
-          getPatientDosList(userId,year?.value)
+          getPatientDosList(userId, year?.value);
           getResponePopup(res);
           resetForms({ reload: true });
           setIsBtnLoading(false);
@@ -861,13 +869,16 @@ const ManuallyAdd = ({
           (movemetData.assessmentHyperLink = data.assessmentHyperLink),
           (movemetData.treatmentAspect = data.treatmentAspect),
           (movemetData.treatmentHyperLink = data.treatmentHyperLink);
+        movemetData.educationalError = educationalError;
         try {
           const res = await suggestedToValidMove(movemetData, selectCardTitle);
+
           if (res?.status == "SUCCESS") {
             handleCloseModal(false);
             getResponePopup(res);
             resetForms({ reload: true });
             setIsBtnLoading(false);
+            setEducationalError && setEducationalError(false);
           } else if (
             res?.status == "CUSTOM_EXCEPTION" ||
             res?.status === "FAILED" ||
@@ -1162,6 +1173,9 @@ const ManuallyAdd = ({
         description: isEditValue.dbDescription
           ? isEditValue.dbDescription
           : isEditValue.actualDescription,
+        educationalError: isEditValue?.educationalError
+          ? isEditValue?.educationalError
+          : "",
         dos: dos,
       });
       const sectionListM = filterData?.monitorHyperLink?.map((item) => ({
@@ -1289,6 +1303,9 @@ const ManuallyAdd = ({
           name="basic"
           layout="vertical"
           autoComplete="off"
+          initialValues={{
+            educationalError: false,
+          }}
           // initialValues={formInitialValues}
           onFinish={(form) => {
             handledSave(form);
@@ -1370,6 +1387,13 @@ const ManuallyAdd = ({
                 />
               </Form.Item>
             </div>
+            {(userRole === "CODER_2" || userRole === "QA") && (
+              <div className="col-12">
+                <Form.Item name="educationalError" valuePropName="checked">
+                  <Checkbox className="ant-badge"> Educational Error</Checkbox>
+                </Form.Item>
+              </div>
+            )}
             <div className="col-12">
               <Form.Item
                 label={
@@ -1656,6 +1680,8 @@ const ManuallyAdd = ({
               meatFormDisplay={meatFormDisplay}
               isBtnLoading={isBtnLoading}
               pageNumbers={getPageNumbers()}
+              educationalError={educationalError}
+              setEducationalError={setEducationalError}
             />
           </Form>
         </>

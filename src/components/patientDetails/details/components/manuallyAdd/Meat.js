@@ -1,4 +1,4 @@
-import { Form, Input, Select } from "antd";
+import { Checkbox, Form, Input, Select } from "antd";
 import React from "react";
 import {
   getProviderNameManually,
@@ -10,6 +10,7 @@ import RegularButton from "../../../../button";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus, faTrashCan } from "@fortawesome/free-solid-svg-icons";
 import CustomSelect from "../../../../customSelect";
+import { getStorage } from '../../../../../utils/storages'
 
 export const checkMeatType = (e) => {
   switch (e) {
@@ -57,6 +58,7 @@ const Meat = ({
   isBtnLoading,
   pageNumbers,
 }) => {
+  const userRole = getStorage("userRole")
   return (
     <div>
       {isMeat && 
@@ -133,6 +135,13 @@ const Meat = ({
               </Form.Item>
             </div>
           )}
+          {(userRole === "CODER_2" || userRole === "QA") && (
+              <div className="col-12">
+                <Form.Item name="educationalError" valuePropName="checked">
+                  <Checkbox className="ant-badge"> Educational Error</Checkbox>
+                </Form.Item>
+              </div>  
+            )}
           {!meatFormDisplay && (
             <>
               <div className="col-12">

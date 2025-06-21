@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import visitStyles from "../../../../../styles/visitdata.module.css";
-import {connect } from "react-redux";
+import { connect } from "react-redux";
 import { notification, Tag, Modal } from "antd";
 import { Button, Offcanvas } from "react-bootstrap";
 import Form from "react-bootstrap/Form";
@@ -27,8 +27,9 @@ const Combo = ({
   manuallyAddComboCode,
   actions,
   activeTab,
+  educationalError,
+  setEducationalError,
 }) => {
-
   const [isModalOpenCaptureSection, setIsModalOpenCaptureSection] =
     useState(false);
   const [comboDiseaseCodesList, setComboDiseaseCodesList] = useState([]);
@@ -129,9 +130,9 @@ const Combo = ({
       setCareGapComboDiseaseCodesList,
       "",
       "",
-      activeTab,
+      activeTab
     );
-  }, [patientDetailsResult,activeTab]);
+  }, [patientDetailsResult, activeTab]);
 
   useEffect(() => {
     if (hccFileDetails?.data?.response) {
@@ -268,14 +269,31 @@ const Combo = ({
           )
         }
       >
-        <div id="combo-container" name="combo-container" className={`${visitStyles.comboContainer}`}>
-          <div id="combo-container2" name="combo-container2" className={`row ${visitStyles.comboContainer2}`}>
+        <div
+          id="combo-container"
+          name="combo-container"
+          className={`${visitStyles.comboContainer}`}
+        >
+          <div
+            id="combo-container2"
+            name="combo-container2"
+            className={`row ${visitStyles.comboContainer2}`}
+          >
             <div className="col-4" id="combo-drag" name="combo-drag">
               <Droppable droppableId={"HCC"} key={"HCC"}>
                 {(provided) => {
                   return (
-                    <div id="combo-drag-container" name="combo-drag-container" {...provided.droppableProps} ref={provided.innerRef}>
-                      <div id="combo-valid-code" name="combo-valid-code" className={`${visitStyles.comboTitle}`}>
+                    <div
+                      id="combo-drag-container"
+                      name="combo-drag-container"
+                      {...provided.droppableProps}
+                      ref={provided.innerRef}
+                    >
+                      <div
+                        id="combo-valid-code"
+                        name="combo-valid-code"
+                        className={`${visitStyles.comboTitle}`}
+                      >
                         <span>VALID CODES </span>
                       </div>
                       <ComboCard
@@ -285,10 +303,8 @@ const Combo = ({
                         //     : comboDiseaseCodesList
                         // }
                         list={
-                          activeTab == 5
-                          ?comboDiseaseCodesList
-                          : isBlockRxHcc
-                          }
+                          activeTab == 5 ? comboDiseaseCodesList : isBlockRxHcc
+                        }
                         captureSectionMatching={captureSectionMatching}
                         encounterDateMatching={encounterDateMatching}
                         okText="OK"
@@ -314,7 +330,9 @@ const Combo = ({
                         cardTitle="HCC"
                         provided={provided}
                         actions={actions}
-                        id = "combo-drag-container"
+                        id="combo-drag-container"
+                        educationalError={educationalError}
+                        setEducationalError={setEducationalError}
                       />
                     </div>
                   );
@@ -338,9 +356,9 @@ const Combo = ({
                         // }
                         list={
                           activeTab == 5
-                          ?careGapComboDiseaseCodesList
-                          : isBlockRxHccCareGap
-                          }
+                            ? careGapComboDiseaseCodesList
+                            : isBlockRxHccCareGap
+                        }
                         captureSectionMatching={captureSectionMatching}
                         encounterDateMatching={encounterDateMatching}
                         okText="OK"
@@ -368,6 +386,8 @@ const Combo = ({
                         provided={provided}
                         actions={actions}
                         id="CARE-GAP-drag-container"
+                        educationalError={educationalError}
+                        setEducationalError={setEducationalError}
                       />
                     </div>
                   );
@@ -396,9 +416,9 @@ const Combo = ({
                         // }
                         list={
                           activeTab == 5
-                          ?invalidComboDiseaseCodesList
-                          : isBlockRxHccDeleted
-                          }
+                            ? invalidComboDiseaseCodesList
+                            : isBlockRxHccDeleted
+                        }
                         captureSectionMatching={captureSectionMatching}
                         encounterDateMatching={encounterDateMatching}
                         okText="OK"
@@ -426,6 +446,8 @@ const Combo = ({
                         provided={provided}
                         actions={actions}
                         id="DELETED-COMBO-drag-container"
+                        educationalError={educationalError}
+                        setEducationalError={setEducationalError}
                       />
                     </div>
                   );
@@ -478,9 +500,9 @@ const Combo = ({
                           // }
                           list={
                             activeTab == 5
-                            ?comboDiseaseCodesList
-                            : isBlockRxHcc
-                            }
+                              ? comboDiseaseCodesList
+                              : isBlockRxHcc
+                          }
                           captureSectionMatching={captureSectionMatching}
                           encounterDateMatching={encounterDateMatching}
                           okText="OK"
@@ -507,6 +529,8 @@ const Combo = ({
                           cardTitle="VALID_COMBO"
                           provided={provided}
                           actions={actions}
+                          educationalError={educationalError}
+                          setEducationalError={setEducationalError}
                         />
                       </div>
                     );
@@ -684,6 +708,8 @@ const Combo = ({
                 selectDisDetails={selectDisDetails}
                 selectCardTitle={selectCardTitle}
                 open={suggestedMeatForm}
+                educationalError={educationalError}
+                setEducationalError={setEducationalError}
               />
             </div>
           </div>
@@ -700,7 +726,7 @@ const enhancer = connect(
   }),
   {
     getpatientDetailsData: detailsActions.patientDetailsAction,
-    manuallyAddComboCode:detailsActions.getManuallyAddComboCode
+    manuallyAddComboCode: detailsActions.getManuallyAddComboCode,
   }
 );
 export default enhancer(Combo);

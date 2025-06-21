@@ -61,7 +61,9 @@ const ComboCard = ({
   provided,
   patientDetailsLoad,
   id,
-  patientIdDetailsData
+  patientIdDetailsData,
+  educationalError,
+  setEducationalError,
 }) => {
   const [fileInitialPage, setFileInitialPage] = useState(null);
   const [isMulitpleHeader, setIsMulitpleHeader] = useState(false);
@@ -69,7 +71,7 @@ const ComboCard = ({
   const [isMulitpleProvider, setIsMulitpleProvider] = useState(false);
 
   const isDragDisabled =
-  patientIdDetailsData?.data?.response?.workflow?.[0]?.status !== "PENDING";
+    patientIdDetailsData?.data?.response?.workflow?.[0]?.status !== "PENDING";
 
   const addOnCodeColor = [
     "magenta",
@@ -83,7 +85,7 @@ const ComboCard = ({
     "purple",
   ];
   const isComboDisabled =
-  patientIdDetailsData?.data?.response?.workflow?.[0]?.status !== "PENDING";
+    patientIdDetailsData?.data?.response?.workflow?.[0]?.status !== "PENDING";
   return (
     <>
       {provided && (
@@ -157,9 +159,7 @@ const ComboCard = ({
                           draggableData={item?.list}
                           // isDragDisabled={isDosSelected ? false : true}
                           isDragDisabled={
-                            isDosSelected  && !isDragDisabled
-                              ? false
-                              : true
+                            isDosSelected && !isDragDisabled ? false : true
                           }
                         >
                           {(provided, snapshot) => {
@@ -336,6 +336,10 @@ const ComboCard = ({
                                             setSelectCardTitle
                                           }
                                           fromMeat={true}
+                                          educationalError={educationalError}
+                                          setEducationalError={
+                                            setEducationalError
+                                          }
                                         />
                                       ) : null}
                                     </div>
@@ -343,7 +347,12 @@ const ComboCard = ({
                                     {item?.children?.length > 0 && (
                                       <div
                                         className={visitStyles.close_icon}
-                                        style={{ cursor: isComboDisabled ? "not-allowed" : "pointer"  ,background: "#c7f3c6" }}
+                                        style={{
+                                          cursor: isComboDisabled
+                                            ? "not-allowed"
+                                            : "pointer",
+                                          background: "#c7f3c6",
+                                        }}
                                         onClick={() => {
                                           if (isComboDisabled) return;
                                           setOpens(true);

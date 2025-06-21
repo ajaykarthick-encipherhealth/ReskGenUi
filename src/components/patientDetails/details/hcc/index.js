@@ -105,6 +105,7 @@ const Hcc = ({
   const [isApproved, setIsApproved] = useState(false);
   const [isReject, setIsReject] = useState(false);
   const [isChecked, setIsChecked] = useState(false);
+  const [educationalError, setEducationalError] = useState(false);
 
   const handleChange = (e) => {
     setQueryText(e.target.value);
@@ -387,8 +388,8 @@ const Hcc = ({
     }
   };
   const isDisabled =
-    patientIdDetailsData?.data?.response?.workflow?.[0]?.status !== "PENDING" || patientDetailsResult?.data?.response?.workflow?.[0]
-    ?.status == "COMPLETED";;
+    patientIdDetailsData?.data?.response?.workflow?.[0]?.status !== "PENDING" ||
+    patientDetailsResult?.data?.response?.workflow?.[0]?.status == "COMPLETED";
 
   const hideDiseasePopContent = (
     <>
@@ -431,7 +432,8 @@ const Hcc = ({
                 <strong> {actions?.showDisease ? "hide" : "show"}</strong>{" "}
                 diseases, apply combination codes, and enforce the most specific
                 rules. Do you want to continue? */}
-               Do you want to {actions?.showDisease ? "hide" : "show"} the hidden and less specific diagnosis codes?
+                Do you want to {actions?.showDisease ? "hide" : "show"} the
+                hidden and less specific diagnosis codes?
               </>
             }
             onConfirm={() => {
@@ -875,6 +877,8 @@ const Hcc = ({
                   isSpinnerLoading={isSpinnerLoading}
                   activeTab={activeTab}
                   isDosSelected={isDosSelected}
+                  educationalError={educationalError}
+                  setEducationalError={setEducationalError}
                 />
               </Tab.Pane>
               <Tab.Pane id="my-posts" eventKey={2}>
@@ -886,6 +890,8 @@ const Hcc = ({
                   actions={actions}
                   selectDosValue={selectDosValue}
                   activeTab={activeTab}
+                   educationalError={educationalError}
+                  setEducationalError={setEducationalError}
                 />
               </Tab.Pane>
               <Tab.Pane id="my-posts" eventKey={3}>
@@ -896,6 +902,8 @@ const Hcc = ({
                   year={year}
                   actions={actions}
                   activeTab={activeTab}
+                   educationalError={educationalError}
+                  setEducationalError={setEducationalError}
                 />
               </Tab.Pane>
               <Tab.Pane id="my-posts" eventKey={4}>
@@ -904,6 +912,8 @@ const Hcc = ({
                   year={year}
                   actions={actions}
                   activeTab={activeTab}
+                   educationalError={educationalError}
+                  setEducationalError={setEducationalError}
                 />
               </Tab.Pane>
               <Tab.Pane id="my-posts" eventKey={5}>

@@ -51,7 +51,9 @@ const File = ({
   selectDosValue,
   isSpinnerLoading,
   patientIdDetailsData,
-  activeTab
+  activeTab,
+ educationalError,
+ setEducationalError,
 }) => {
   const [isFileFormShow, setIsFileFormShow] = useState(false);
   const [confirmNotesModalValid, setConfirmNotesModalValid] = useState(false);
@@ -117,7 +119,7 @@ const File = ({
       actions?.showDisease,
       activeTab
     );
-  }, [patientDetailsResult, actions?.showDisease,activeTab]);
+  }, [patientDetailsResult, actions?.showDisease, activeTab]);
 
   const onchangeValid = (code, data) => {
     var title = code + " - " + data.actualDescription;
@@ -236,9 +238,8 @@ const File = ({
     }
   };
   const isDisabled =
-  patientIdDetailsData?.data?.response
-    ?.workflow?.[0]?.status !== "PENDING" || patientDetailsResult?.data?.response?.workflow?.[0]
-    ?.status == "COMPLETED";
+    patientIdDetailsData?.data?.response?.workflow?.[0]?.status !== "PENDING" ||
+    patientDetailsResult?.data?.response?.workflow?.[0]?.status == "COMPLETED";
   return (
     <>
       {/* {fileLoading ? <LogoLoader /> : null} */}
@@ -347,6 +348,8 @@ const File = ({
                               actions={actions}
                               selectDosValue={selectDosValue}
                               id="hcc-card"
+                              educationalError={educationalError}
+                              setEducationalError={setEducationalError}
                             />
                           )}
                         </div>
@@ -526,6 +529,8 @@ const File = ({
                                 actions={actions}
                                 selectDosValue={selectDosValue}
                                 id="care-gap-card"
+                                educationalError={educationalError}
+                                setEducationalError={setEducationalError}
                               />
                             )}
                           </div>
@@ -629,6 +634,8 @@ const File = ({
                               actions={actions}
                               selectDosValue={selectDosValue}
                               id="potential-card"
+                              educationalError={educationalError}
+                              setEducationalError={setEducationalError}
                             />
                           </div>
                         </div>
@@ -722,6 +729,8 @@ const File = ({
                               actions={actions}
                               selectDosValue={selectDosValue}
                               id="Deleted-card"
+                              educationalError={educationalError}
+                              setEducationalError={setEducationalError}
                             />
                           </div>
                         </div>
@@ -823,6 +832,8 @@ const File = ({
                 isEditPage={true}
                 isEditValue={formValues}
                 open={isEditHccForm}
+                educationalError={educationalError}
+                setEducationalError={setEducationalError}
               />
             </div>
           </div>
@@ -871,6 +882,8 @@ const File = ({
                 selectDisDetails={selectDisDetails}
                 selectCardTitle={selectCardTitle}
                 open={suggestedMeatForm}
+                educationalError={educationalError}
+                setEducationalError={setEducationalError}
               />
             </div>
           </div>

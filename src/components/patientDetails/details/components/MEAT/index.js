@@ -62,12 +62,13 @@ const MeatCard = ({
   loading,
   patientDetailsLoad,
   id,
-  patientIdDetailsData
+  patientIdDetailsData,
+  educationalError,
+  setEducationalError,
 }) => {
   const [fileInitialPage, setFileInitialPage] = useState(null);
   const [isMulitpleHeaderCode, setIsMulitpleHeadeCode] = useState(null);
   const [isMulitpleProvider, setIsMulitpleProvider] = useState(false);
-
   const highlight = (code) => {
     if (code == activeMeatTitle?.diagnosisCode) {
       return true;
@@ -79,16 +80,23 @@ const MeatCard = ({
       ? getPdfEmptyFunction
       : getLabPDFFile;
 
-      const isDisabled =
-      patientIdDetailsData?.data?.response?.workflow?.[0]?.status !== "PENDING" || patientDetailsResult?.data?.response?.workflow?.[0]
-      ?.status == "COMPLETED";
+  const isDisabled =
+    patientIdDetailsData?.data?.response?.workflow?.[0]?.status !== "PENDING" ||
+    patientDetailsResult?.data?.response?.workflow?.[0]?.status == "COMPLETED";
 
   return (
-
     <>
       {provided && (
-        <div id={`${id}-provided-content`} ref={provided?.innerRef} {...provided?.droppableProps}>
-          <div id={`my-provider-meat`} className={`my-post-content pt-3  `} style={{paddingRight:"12px"}}>
+        <div
+          id={`${id}-provided-content`}
+          ref={provided?.innerRef}
+          {...provided?.droppableProps}
+        >
+          <div
+            id={`my-provider-meat`}
+            className={`my-post-content pt-3  `}
+            style={{ paddingRight: "12px" }}
+          >
             <div className={visitStyles.meat_head_card}>
               <div className="row">
                 <div className="col-3 text-center text-uppercase">
@@ -126,13 +134,9 @@ const MeatCard = ({
                     index={i}
                     draggableData={item?.list}
                     // isDragDisabled={isDosSelected ? false : true}
-                    isDragDisabled={
-                      isDosSelected  && !isDisabled
-                        ? false
-                        : true
-                    }
+                    isDragDisabled={isDosSelected && !isDisabled ? false : true}
                   >
-                    {(provided,snapshot) => {
+                    {(provided, snapshot) => {
                       return (
                         <div
                           id={`${id}-meat-drag-${i}`}
@@ -608,6 +612,10 @@ const MeatCard = ({
                                         }
                                         setSelectCardTitle={setSelectCardTitle}
                                         fromMeat={true}
+                                        educationalError={educationalError}
+                                        setEducationalError={
+                                          setEducationalError
+                                        }
                                       />
                                     </div>
 
@@ -616,7 +624,11 @@ const MeatCard = ({
                                         id={`${id}-meat-edit-${i}`}
                                         name={`${id}-meat-edit-${i}`}
                                         className={visitStyles.edit_icon}
-                                        style={{ cursor: isDisabled ? "not-allowed" : "pointer" }}
+                                        style={{
+                                          cursor: isDisabled
+                                            ? "not-allowed"
+                                            : "pointer",
+                                        }}
                                         onClick={() => {
                                           if (isDisabled) return;
                                           setMeatEdit(true);
@@ -640,7 +652,12 @@ const MeatCard = ({
                                           id={`${id}-meat-Q-${i}`}
                                           name={`${id}-meat-Q-${i}`}
                                           className={visitStyles.add_meat_query}
-                                          style={{  background: "#edbe4e" , cursor: isDisabled ? "not-allowed" : "pointer" }}
+                                          style={{
+                                            background: "#edbe4e",
+                                            cursor: isDisabled
+                                              ? "not-allowed"
+                                              : "pointer",
+                                          }}
                                         >
                                           <span
                                             style={{
@@ -657,13 +674,16 @@ const MeatCard = ({
                                       <div
                                         id={`${id}-addMeatQuery-${i}`}
                                         name={`${id}-addMeatQuery-${i}`}
-                                        onClick={() =>{
+                                        onClick={() => {
                                           if (isDisabled) return;
-                                          addMeatQuery(item, "Add")
-                                        }
-                                        }
+                                          addMeatQuery(item, "Add");
+                                        }}
                                         className={visitStyles.add_meat_query}
-                                        style={{ cursor: isDisabled ? "not-allowed" : "pointer" }}
+                                        style={{
+                                          cursor: isDisabled
+                                            ? "not-allowed"
+                                            : "pointer",
+                                        }}
                                       >
                                         <span
                                           style={{

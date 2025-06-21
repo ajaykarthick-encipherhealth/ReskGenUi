@@ -60,8 +60,9 @@ const Meat = ({
   storeFileDetails,
   isSpinnerLoading,
   patientDetailsLoad,
-  activeTab
-
+  activeTab,
+  educationalError,
+  setEducationalError,
 }) => {
   const [meatEdit, setMeatEdit] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -137,7 +138,7 @@ const Meat = ({
       "",
       activeTab
     );
-  }, [patientDetailsResult,]);
+  }, [patientDetailsResult]);
 
   useEffect(() => {
     const result = selectHyperlink?.allHeaderResult?.filter(
@@ -182,7 +183,6 @@ const Meat = ({
     notification.destroy();
     notification.info({ message: "Tree Not Available", duration: 1 });
   };
-
   const getPdfEmptyFunction = () => {};
   const getLabPDF =
     labFile?.data?.response && labData == labFile?.data?.response?.fileId
@@ -355,8 +355,7 @@ const Meat = ({
                     <CardSkeleton count={6} />
                   ) : (
                     <MeatCard
-                     
-                        list={meatCriteriaList}
+                      list={meatCriteriaList}
                       captureSectionMatching={captureSectionMatching}
                       encounterDateMatching={encounterDateMatching}
                       okText="OK"
@@ -387,6 +386,8 @@ const Meat = ({
                       setSelectCardTitle={setSelectCardTitle}
                       provided={provided}
                       id="MeatCriteria-content"
+                      educationalError={educationalError}
+                      setEducationalError={setEducationalError}
                     />
                   )}
                 </div>
@@ -404,9 +405,7 @@ const Meat = ({
                         <span>Deleted MeatCriteria</span>
                       </div>
                       <MeatCard
-                       list={
-                        deletedMeatList
-                        }
+                        list={deletedMeatList}
                         captureSectionMatching={captureSectionMatching}
                         encounterDateMatching={encounterDateMatching}
                         okText="OK"
@@ -437,6 +436,8 @@ const Meat = ({
                         setSelectCardTitle={setSelectCardTitle}
                         provided={provided}
                         id="Deleted-MeatCriteria-content"
+                        educationalError={educationalError}
+                        setEducationalError={setEducationalError}
                       />
                     </>
                   )}
@@ -934,6 +935,8 @@ const Meat = ({
                 isEditMeat={true}
                 isEditMeatValue={editData}
                 open={meatEdit}
+                educationalError={educationalError}
+                setEducationalError={setEducationalError}
               />
             </div>
           </div>
@@ -1001,6 +1004,8 @@ const Meat = ({
                 selectDisDetails={selectDisDetails}
                 open={suggestedMeatForm}
                 selectCardTitle={selectCardTitle}
+                educationalError={educationalError}
+                setEducationalError={setEducationalError}
               />
             </div>
           </div>

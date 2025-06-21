@@ -91,6 +91,8 @@ const HccCards = ({
   id,
   getPatientIdData,
   patientIdDetailsData,
+  educationalError,
+  setEducationalError,
 }) => {
   const [fileInitialPage, setFileInitialPage] = useState(null);
   const [openEdit, setOpenEdit] = useState(false);
@@ -257,8 +259,8 @@ const HccCards = ({
     }
   };
   const isDisabled =
-    patientIdDetailsData?.data?.response?.workflow?.[0]?.status !== "PENDING" || patientDetailsResult?.data?.response?.workflow?.[0]
-    ?.status == "COMPLETED";
+    patientIdDetailsData?.data?.response?.workflow?.[0]?.status !== "PENDING" ||
+    patientDetailsResult?.data?.response?.workflow?.[0]?.status == "COMPLETED";
   return (
     <>
       {provided && (
@@ -565,6 +567,8 @@ const HccCards = ({
                                     meatCriteriaList={meatCriteriaList}
                                     setSelectCardTitle={setSelectCardTitle}
                                     isShow={data?.isShow}
+                                    educationalError={educationalError}
+                                    setEducationalError={setEducationalError}
                                   />
                                 )}
                                 <Popover
@@ -900,7 +904,6 @@ const HccCards = ({
                                 overlayStyle={{ zIndex: 1000 }}
                                 placement="topLeft"
                                 maxHeight={100}
-                                
                               >
                                 <>
                                   <span className="cr-pointer font2">
