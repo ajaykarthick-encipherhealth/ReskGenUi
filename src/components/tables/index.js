@@ -357,8 +357,14 @@ const TableHeadItem = ({
       </th>
     );
   }
-  if (item.statusButton || item.edit) {
-    return <th className="">Action</th>;
+  if (item.statusButton) {
+    return <th className="">Upload</th>;
+  }
+  if (item.edit) {
+    const isUsersPage = window.location.pathname.includes(
+      "tenantadmin/settings"
+    );
+    return <th className="">{isUsersPage ? "Edit" : "Action"}</th>;
   }
   if (item.triggerButton) {
     return <th className=""></th>;
