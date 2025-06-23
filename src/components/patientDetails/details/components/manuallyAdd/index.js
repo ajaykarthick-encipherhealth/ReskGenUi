@@ -318,7 +318,6 @@ const ManuallyAdd = ({
       dateOfService: getSelectedDos ? getSelectedDos : "",
       substring: form[`referance_${section?.replaceAll(" ", "-")}_${item}`],
       pageNumber: form[`pageNumber_${section?.replaceAll(" ", "-")}_${item}`],
-      educationalError: form.educationalError || false,
     }));
     setDiagnosisForm(form);
     setListOfSection((prev) => {
@@ -343,7 +342,6 @@ const ManuallyAdd = ({
       dateOfService: getSelectedDos ? getSelectedDos : "",
       substring: forms[`referance_${section?.replaceAll(" ", "-")}_${item}`],
       pageNumber: forms[`pageNumber_${section?.replaceAll(" ", "-")}_${item}`],
-      educationalError: form.educationalError || false,
     }));
     setListOfSection((prev) => {
       const re = prev?.map((check, ind) => {
@@ -408,7 +406,6 @@ const ManuallyAdd = ({
             "-"
           )}_${selectMeat}_${item}`
         ],
-      educationalError: forms.educationalError || false,
     }));
 
     const setListOfSection = {
@@ -504,7 +501,6 @@ const ManuallyAdd = ({
             "-"
           )}_${selectMeat}_${item}`
         ],
-      educationalError: form.educationalError || false,
     }));
 
     const setListOfSection = {
