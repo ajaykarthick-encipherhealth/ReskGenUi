@@ -23,7 +23,8 @@ const VersionHistory = ({
   setIsModalComments,
   getpatientDetailsData,
   activeLabels,
-  patientDetailsResult
+  patientDetailsResult,
+  getPatientDosList
 }) => {
   const userId = getStorage("patientId");
   const [isPopupOpen, setIsPopupOpen] = useState(false);
@@ -871,12 +872,14 @@ const VersionHistory = ({
       setIsModalComments(false);
       getResponePopup(response);
       getpatientDetailsData(userId, dosYearDefalutSelect?.value, isDosSelected);
+      getPatientDosList(userId, dosYearDefalutSelect?.value);
       activeLabels(
         {
           patientId: userId,
           year: dosYearDefalutSelect?.value,
           dos: isDosSelected,
         });
+        
     }
   };
 

@@ -1194,6 +1194,7 @@ const Details = ({
                       patientIdDetailsData={patientIdDetailsData}
                       activeLabels={activeLabels}
                       patientDetailsResult={patientDetailsResult}
+                      getPatientDosList={getPatientDosList}
                     />
                   ) : null}
                 </Drawer>
@@ -1290,6 +1291,7 @@ const enhancer = connect(
     confirmRevert: detailsActions.confirmRevertDetails,
     getQueryDetails: detailsActions.getQuery,
     activeLabels: detailsActions.activeLabels,
+    getPatientDosList: detailsActions.dosDeatilsAction,
   }
 );
 export default enhancer(Details);
