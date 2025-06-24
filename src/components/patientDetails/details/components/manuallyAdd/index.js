@@ -82,6 +82,8 @@ const ManuallyAdd = ({
   const [listOfSection, setListOfSection] = useState([]);
   const [showSection, setShowSection] = useState(false);
   const [description, setDescription] = useState("");
+  const [oldHcc, setOldhcc] = useState("");
+  const [newHcc, setNewhcc] = useState("");
 
   const [selectMeat, setSelectMeat] = useState("M");
   const [isFilled, setIsFilled] = useState([]);
@@ -120,7 +122,6 @@ const ManuallyAdd = ({
         value: item?.dateOfService,
       } || [])
   );
-  // console.log(patientDosResult, "getSelectedDos");
 
   const getPageNumbers = () => {
     const getFilter = patientDosResult?.data?.response
@@ -254,22 +255,49 @@ const ManuallyAdd = ({
     const value = e?.toUpperCase();
     setCode(value);
     setDescription("");
+    setOldhcc("");
+    setNewhcc("");
     form.setFieldsValue({ description: "" });
     if (value?.length > 2) {
       try {
-        let res = await getValidate(value);
+        let res = await getValidate(value, isDosSelected);
+        const { autoCompleteDTOList, icdDiseaseDTOList } = res?.response || {};
+
+        let displayCodeOptions = [];
         if (res?.status === "SUCCESS") {
-          const displayCodeOptions = res?.response?.map((item) => ({
-            value: item?.code,
-            description: item?.description,
-            label: (
-              <div className="d-flex gap-1">
-                <span>
-                  {item?.code} - {item?.description}
-                </span>
-              </div>
-            ),
-          }));
+          if (
+            Array.isArray(autoCompleteDTOList) &&
+            autoCompleteDTOList.length > 0
+          ) {
+            displayCodeOptions = autoCompleteDTOList.map((item) => ({
+              value: item?.icdDiseaseDTO?.code,
+              description: item?.icdDiseaseDTO?.description,
+              oldHcc: item?.oldValue,
+              newHcc: item?.newValue,
+              label: (
+                <div className="d-flex gap-1">
+                  <span>
+                    {item?.icdDiseaseDTO?.code} -{" "}
+                    {item?.icdDiseaseDTO?.description}
+                  </span>
+                </div>
+              ),
+            }));
+          } else if (Array.isArray(icdDiseaseDTOList)) {
+            displayCodeOptions = icdDiseaseDTOList.map((item) => ({
+              value: item?.code,
+              description: item?.description,
+              oldHcc: null,
+              newHcc: null,
+              label: (
+                <div className="d-flex gap-1">
+                  <span>
+                    {item?.code} - {item?.description}
+                  </span>
+                </div>
+              ),
+            }));
+          }
           setOptions(displayCodeOptions);
           getVerify(value, res);
         } else {
@@ -279,14 +307,24 @@ const ManuallyAdd = ({
     } else {
       setValidCode("");
       setDescription("");
+      setOldhcc("");
+      setNewhcc("");
       form.setFieldsValue({ description: "" });
     }
   };
 
   const onSelect = (value) => {
     let des = options?.find((s) => s.value == value)?.description;
+    let oldHcc = options?.find((s) => s.value == value)?.oldHcc;
+    let newHcc = options?.find((s) => s.value == value)?.newHcc;
     setDescription(des);
-    form.setFieldsValue({ description: des });
+    setOldhcc(oldHcc);
+    setNewhcc(newHcc);
+    form.setFieldsValue({
+      description: des,
+      oldHcc: oldHcc,
+      newHcc: newHcc,
+    });
   };
 
   const getVerify = async (value, res) => {
@@ -318,6 +356,7 @@ const ManuallyAdd = ({
       dateOfService: getSelectedDos ? getSelectedDos : "",
       substring: form[`referance_${section?.replaceAll(" ", "-")}_${item}`],
       pageNumber: form[`pageNumber_${section?.replaceAll(" ", "-")}_${item}`],
+      educationalError: form.educationalError || false,
     }));
     setDiagnosisForm(form);
     setListOfSection((prev) => {
@@ -342,6 +381,7 @@ const ManuallyAdd = ({
       dateOfService: getSelectedDos ? getSelectedDos : "",
       substring: forms[`referance_${section?.replaceAll(" ", "-")}_${item}`],
       pageNumber: forms[`pageNumber_${section?.replaceAll(" ", "-")}_${item}`],
+      educationalError: form.educationalError || false,
     }));
     setListOfSection((prev) => {
       const re = prev?.map((check, ind) => {
@@ -700,6 +740,8 @@ const ManuallyAdd = ({
         diagnosisCode: selectDisDetails?.diagnosisCode,
         newDiagnosisCode: code,
         description: forms?.description ? forms?.description : description,
+        oldHcc: forms?.oldHcc ? forms?.oldHcc : 34,
+        newHcc: forms?.oldHcc ? forms?.oldHcc : 24,
         dateOfServices: forms.dos,
         providerNames: providerDetails?.map((item) => item.providerName),
         hyperlinks: listOfSection
@@ -781,6 +823,8 @@ const ManuallyAdd = ({
         patientId: getStorage("patientId"),
         diagnosisCode: code.trim(),
         description: diagnosisForm.description,
+        oldHcc: diagnosisForm.oldHcc,
+        newHcc: diagnosisForm.newHcc,
         dbDescription: diagnosisForm.description,
         dateOfServices: diagnosisForm.dos,
         hyperlinks: listOfSection
@@ -1169,6 +1213,8 @@ const ManuallyAdd = ({
         description: isEditValue.dbDescription
           ? isEditValue.dbDescription
           : isEditValue.actualDescription,
+        newHcc: isEditValue?.newValue ? isEditValue?.newValue : "",
+        oldHcc: isEditValue?.oldValue ? isEditValue?.oldValue : "",
         educationalError: isEditValue?.educationalError
           ? isEditValue?.educationalError
           : "",
@@ -1383,6 +1429,66 @@ const ManuallyAdd = ({
                 />
               </Form.Item>
             </div>
+
+            {(userRole === "CODER_2" || userRole === "QA") && (
+              <div className="col-12">
+                <Form.Item name="educationalError" valuePropName="checked">
+                  <Checkbox className="ant-badge"> Educational Error</Checkbox>
+                </Form.Item>
+              </div>
+            )}
+            {(oldHcc && newHcc) ||
+            (isEditValue?.newValue && isEditValue?.oldValue) ? (
+              <>
+                <div className="col-12">
+                  <Form.Item
+                    label={
+                      <label>
+                        Old Hcc <span style={{ color: "red" }}>*</span>
+                      </label>
+                    }
+                    name="oldHcc"
+                    rules={[
+                      {
+                        required: true,
+                        message: "Please enter description",
+                      },
+                    ]}
+                  >
+                    <Input
+                      name="oldHcc"
+                      onChange={(e) => setOldhcc(e.target.value)}
+                      value={oldHcc}
+                      disabled
+                    />
+                  </Form.Item>
+                </div>
+                <div className="col-12">
+                  <Form.Item
+                    label={
+                      <label>
+                        New Hcc <span style={{ color: "red" }}>*</span>
+                      </label>
+                    }
+                    name="newHcc"
+                    rules={[
+                      {
+                        required: true,
+                        message: "Please enter description",
+                      },
+                    ]}
+                  >
+                    <Input
+                      name="newHcc"
+                      onChange={(e) => setNewhcc(e.target.value)}
+                      value={newHcc}
+                      disabled
+                    />
+                  </Form.Item>
+                </div>
+              </>
+            ) : null}
+
             <div className="col-12">
               <Form.Item
                 label={
