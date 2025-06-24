@@ -1089,3 +1089,6 @@ export const findMatchesByField = (arr1, arr2) => {
     )
   );
 }
+export const timeLineDateAndTime = (inputDate) => {
+  return moment(inputDate).format('MMMM D YYYY hh:mm A');
+};

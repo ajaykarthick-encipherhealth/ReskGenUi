@@ -10,7 +10,10 @@ import {
   getSectionHeadersBackground,
 } from "../components/function/SectionHeader";
 import CardSkeleton from "../../../skeleton/card";
-import { formatDateTime } from "../../../../utils/reusable";
+import {
+  formatDateTime,
+  timeLineDateAndTime,
+} from "../../../../utils/reusable";
 
 export const getStatusColors = (state) => {
   let previousStateColor = "";
@@ -985,6 +988,10 @@ const Timeline = ({
           </Popover>
         </Tooltip>
         <div className="timeline-panel ">
+          <div> {item?.fullName}{" "}
+            {item?.aliasName ? `(${item.aliasName})` : ""}
+          </div>
+
           <span className={`${visitStyles.timelineheading} d-flex`}>
             {item?.htmlContent
               ? getHtmlContent(item?.htmlContent)
@@ -1007,6 +1014,12 @@ const Timeline = ({
               </span>
             </div>
           )}
+          <div
+            style={{ fontSize: "11px" }}
+            className="d-flex text-muted align-items-end justify-content-end mt-1"
+          >
+            {timeLineDateAndTime(item?.createdDate)}
+          </div>
         </div>
       </li>
     );
