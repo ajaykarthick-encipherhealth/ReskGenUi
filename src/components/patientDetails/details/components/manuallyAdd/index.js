@@ -1429,14 +1429,6 @@ const ManuallyAdd = ({
                 />
               </Form.Item>
             </div>
-
-            {(userRole === "CODER_2" || userRole === "QA") && (
-              <div className="col-12">
-                <Form.Item name="educationalError" valuePropName="checked">
-                  <Checkbox className="ant-badge"> Educational Error</Checkbox>
-                </Form.Item>
-              </div>
-            )}
             {(oldHcc && newHcc) ||
             (isEditValue?.newValue && isEditValue?.oldValue) ? (
               <>
