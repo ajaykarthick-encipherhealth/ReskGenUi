@@ -73,7 +73,7 @@ const MovementAction = ({
           checked={checked}
           onChange={(e) => onChange(e.target.checked)}
         >
-          Educational Error
+         Mark as Educational Error
         </Checkbox>
       </div>
     </div>

@@ -1383,13 +1383,6 @@ const ManuallyAdd = ({
                 />
               </Form.Item>
             </div>
-            {(userRole === "CODER_2" || userRole === "QA") && (
-              <div className="col-12">
-                <Form.Item name="educationalError" valuePropName="checked">
-                  <Checkbox className="ant-badge"> Educational Error</Checkbox>
-                </Form.Item>
-              </div>
-            )}
             <div className="col-12">
               <Form.Item
                 label={
@@ -1422,6 +1415,13 @@ const ManuallyAdd = ({
                 />
               </Form.Item>
             </div>
+             {(userRole === "CODER_2" || userRole === "QA") && (
+              <div className="col-12">
+                <Form.Item name="educationalError" valuePropName="checked">
+                  <Checkbox className="ant-badge">Mark as Educational Error</Checkbox>
+                </Form.Item>
+              </div>
+            )}
 
             <div className="col-12 mb-3">
               {providerDetails.length > 0 && (

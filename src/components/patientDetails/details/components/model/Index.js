@@ -142,7 +142,7 @@ const ModelIndex = ({
                   onChange={handleCheckboxChange}
                   className="ant-badge mt-2"
                 >
-                  Educational Error
+               Mark as Educational Error
                 </Checkbox>
               </div>
             )}
