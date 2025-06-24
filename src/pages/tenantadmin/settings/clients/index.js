@@ -4,10 +4,15 @@ import AppTable from "../../../../components/tables";
 import { Button, DatePicker, Drawer, Form, Input } from "antd";
 import { connect } from "react-redux";
 import { actions as settingActions } from "../../../../stores/tenantAdmin/settings";
-import { findMatchesByField, formatDateForIndex, getResponePopup } from "../../../../utils/reusable";
+import {
+  findMatchesByField,
+  formatDateForIndex,
+  getResponePopup,
+} from "../../../../utils/reusable";
 import { actions as tableAction } from "../../../../stores/tableView";
 import { actions as authActions } from "../../../../stores/authFlows";
 import { disablePastDate } from "../../../../components/headerFilters/functions";
+import RegularButton from '../../../../components/button'
 
 const Clients = ({
   createClient,
@@ -18,6 +23,7 @@ const Clients = ({
   tableDynamicColumnReset,
   pageLoad,
   getAllClientDetails,
+  clientLoader
 }) => {
   const [form] = Form.useForm();
   const { RangePicker } = DatePicker;
@@ -136,12 +142,8 @@ const Clients = ({
   };
   useEffect(() => {
     setParamsFilter("check");
-    if (
-      window !== "undefined" &&
-      paramsFilter 
-    ){
+    if (window !== "undefined" && paramsFilter) {
       getClientsDetails();
-
     }
   }, [
     selectedOption,
@@ -153,19 +155,19 @@ const Clients = ({
     pageLoad,
   ]);
 
-   useEffect(() => {
-     if (
-       (isFilter && data?.response?.metaDataDTO) ||
-       !findMatchesByField(activeFilters, data?.response?.metaDataDTO)
-     ) {
-       setActiveFilters(
-         data?.response?.metaDataDTO.filter(
-           (item) => item.active && item?.filter?.style
-         )
-       );
-       setIsFilter(false);
-     }
-   }, [data?.response?.metaDataDTO]);
+  useEffect(() => {
+    if (
+      (isFilter && data?.response?.metaDataDTO) ||
+      !findMatchesByField(activeFilters, data?.response?.metaDataDTO)
+    ) {
+      setActiveFilters(
+        data?.response?.metaDataDTO.filter(
+          (item) => item.active && item?.filter?.style
+        )
+      );
+      setIsFilter(false);
+    }
+  }, [data?.response?.metaDataDTO]);
 
   return (
     <div>
@@ -287,21 +289,21 @@ const Clients = ({
                   ]}
                   label="Date"
                 >
-                   <RangePicker inputReadOnly style={{ border: "1px solid #d9d9d9" }}  format="MM-DD-YYYY" disabledDate={(current) => disablePastDate(current)} />
-                               
+                  <RangePicker
+                    inputReadOnly
+                    style={{ border: "1px solid #d9d9d9" }}
+                    format="MM-DD-YYYY"
+                    disabledDate={(current) => disablePastDate(current)}
+                  />
                 </Form.Item>
                 <Form.Item>
                   <div className="d-flex align-items-center justify-content-center">
-                    <Button
-                      htmlType="submit"
-                      style={{
-                        width: 100,
-                        background: "rgb(4, 48, 111)",
-                        color: "#fff",
-                      }}
-                    >
-                      Create
-                    </Button>
+                    <RegularButton
+                      disabled={clientLoader}
+                      type="submit"
+                      name={"Create"}
+                      loading={clientLoader}
+                    />
                   </div>
                 </Form.Item>
               </Form>
@@ -318,6 +320,7 @@ const enhancer = connect(
     data: state?.tableView?.tableView?.data,
     tableLoader: state?.tableView?.tableViewLoading,
     pageLoad: state?.tenantAdmin?.tin?.getPageRendering,
+    clientLoader:state?.tenantAdmin?.settings?.clientCreationLoading
   }),
   {
     createProject: settingActions.createProjectAction,

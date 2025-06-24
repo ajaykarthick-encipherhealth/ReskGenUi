@@ -67,7 +67,9 @@ const tenantAminSettingsReducer = combineReducers({
   createProject:createReducer(createProjectAction),
   getProject:createReducer(getProjectAction),
   getProjectLoader:getReportLoading(getProjectAction),
-  createClient:createReducer(createClientAction)
+  createClient:createReducer(createClientAction),
+  clientCreationLoading:getReportLoading(createClientAction),
+  projectCreationLoading:getReportLoading(createProjectAction)
 });
 
 

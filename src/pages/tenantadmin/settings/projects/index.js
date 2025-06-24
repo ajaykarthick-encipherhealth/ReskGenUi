@@ -12,6 +12,7 @@ import {
 import { actions as tableAction } from "../../../../stores/tableView";
 import { actions as authActions } from "../../../../stores/authFlows";
 import { disablePastDate } from "../../../../components/headerFilters/functions";
+import RegularButton from '../../../../components/button'
 
 const Projects = ({
   createProject,
@@ -22,6 +23,7 @@ const Projects = ({
   tableDynamicColumnReset,
   pageLoad,
   getAllProjects,
+  projectLoader,
 }) => {
   const [form] = Form.useForm();
   const { RangePicker } = DatePicker;
@@ -261,20 +263,21 @@ const Projects = ({
                 ]}
                 label=" Date"
               >
-                 <RangePicker inputReadOnly style={{ border: "1px solid #d9d9d9" }}  format="MM-DD-YYYY" disabledDate={(current) => disablePastDate(current)} />
+                <RangePicker
+                  inputReadOnly
+                  style={{ border: "1px solid #d9d9d9" }}
+                  format="MM-DD-YYYY"
+                  disabledDate={(current) => disablePastDate(current)}
+                />
               </Form.Item>
               <Form.Item>
                 <div className="d-flex align-items-center justify-content-center">
-                  <Button
-                    htmlType="submit"
-                    style={{
-                      width: 100,
-                      background: "rgb(4, 48, 111)",
-                      color: "#fff",
-                    }}
-                  >
-                    Create
-                  </Button>
+                   <RegularButton
+                      disabled={projectLoader}
+                      type="submit"
+                      name={"Create"}
+                      loading={projectLoader}
+                    />
                 </div>
               </Form.Item>
             </Form>
@@ -291,6 +294,7 @@ const enhancer = connect(
     tableLoader: state?.tableView?.tableViewLoading,
     pageLoad: state?.tenantAdmin?.tin?.getPageRendering,
     allRoles: state?.tenantAdmin?.patientsAllocation?.getRoles?.data?.response,
+    projectLoader:state.tenantAdmin?.settings?.projectCreationLoading
   }),
   {
     createProject: settingActions.createProjectAction,
