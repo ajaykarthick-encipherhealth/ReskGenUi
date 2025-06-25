@@ -117,13 +117,13 @@ const PdfViewer = ({
 
   return (
     <>
-      <div className="">
+      {/* <div className="">
         <Tabs
           tabsList={items}
           activeTab={activeTab}
           onChangeTabs={onChangeTabs}
         />
-      </div>
+      </div> */}
       {activeTab.fileSource == "Summary" ? (
         <div>
           {patientDetailsResult?.summary ? (
