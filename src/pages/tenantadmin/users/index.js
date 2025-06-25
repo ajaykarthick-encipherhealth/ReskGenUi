@@ -311,6 +311,7 @@ const Users = ({
                 isSubmitting={isSubmitting}
                 isResetting={isResetting}
                 setClear={setClear}
+                tableLoader={tableLoader}
               />
             </div>
             <div

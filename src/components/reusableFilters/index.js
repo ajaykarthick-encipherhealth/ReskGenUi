@@ -63,6 +63,7 @@ const ReusableFilters = ({
   //btn
   btnName,
   selectedDateRanges,
+  tableLoader,
 }) => {
   const pickerRefs = useRef({});
   const router = useRouter();
@@ -362,8 +363,13 @@ const ReusableFilters = ({
                   width: "100%",
                   fontSize: "12px",
                   marginLeft: "10px",
+                  cursor: {
+                    cursor: tableLoader ? "not-allowed" : "pointer",
+                  },
                 }}
-                className="btn btn-sm w-full text-ellipsis"
+                className="btn-sm w-full text-ellipsis"
+                disabled={tableLoader ? true : false}
+                
               >
                 Table Customization
               </Button>

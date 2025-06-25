@@ -257,7 +257,7 @@ const PatientAllocation = ({
                                     setSelectedRows([]);
                                     setSelectedRowsId([]);
                                     setSelectedUserName([]);
-                                     getTableData({ reloadTrue: true });
+                                    getTableData({ reloadTrue: true });
                                   }}
                                   eventKey={index + 1}
                                 >
@@ -304,7 +304,15 @@ const PatientAllocation = ({
                                 data-testid="table-custom"
                                 name="table-custom"
                                 onClick={showDrawer}
-                                className="btn btn-sm w-full text-ellipsis tableButton"
+                                style={{
+                                  cursor: {
+                                    cursor: tableLoader
+                                      ? "not-allowed"
+                                      : "pointer",
+                                  },
+                                }}
+                                className="btn-sm w-full text-ellipsis tableButton"
+                                disabled={tableLoader ? true : false}
                               >
                                 Table Customization
                               </Button>
@@ -330,7 +338,10 @@ const PatientAllocation = ({
                                     name="random-sampling"
                                     onClick={showModal}
                                     className="tableButton"
-                                    disabled={!selectedRows?.length == 0 || allRoles?.randomSamplingCompleted}
+                                    disabled={
+                                      !selectedRows?.length == 0 ||
+                                      allRoles?.randomSamplingCompleted
+                                    }
                                   >
                                     Random Sampling
                                   </Button>
@@ -376,6 +387,7 @@ const PatientAllocation = ({
                           isSubmitting={isSubmitting}
                           isResetting={isResetting}
                           setClear={setClear}
+                          tableLoader={tableLoader}
                         />
                       </div>
 

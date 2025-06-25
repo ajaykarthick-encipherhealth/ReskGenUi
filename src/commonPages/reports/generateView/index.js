@@ -229,11 +229,13 @@ const GenerateView = ({
                 selectedRows={selectedRows}
                 setIsModalOpen={setIsModalOpen}
                 btnName={"Generate Report"}
+                tableLoader={tableLoader}
               />
             </div>
           </section>
           <div className=" font2 d-flex align-items-end justify-content-end gap-2">
-          <span className="text-danger "> *</span> You can choose only one TIN at a time to generate the report
+            <span className="text-danger "> *</span> You can choose only one TIN
+            at a time to generate the report
           </div>
           <div id="task-tbl_wrapper" className="dataTables_wrapper no-footer">
             <div className="mt-4">
@@ -261,7 +263,14 @@ const GenerateView = ({
               />
             </div>
           </div>
-          <GenateReportModal getGenerateReport={getGenerateReport} setSelectedRows={setSelectedRows} setIsModalOpen={setIsModalOpen} selectedRows={selectedRows}  open={isModalOpen} handleCancel={handleCancel} />
+          <GenateReportModal
+            getGenerateReport={getGenerateReport}
+            setSelectedRows={setSelectedRows}
+            setIsModalOpen={setIsModalOpen}
+            selectedRows={selectedRows}
+            open={isModalOpen}
+            handleCancel={handleCancel}
+          />
         </div>
       </div>
     </div>

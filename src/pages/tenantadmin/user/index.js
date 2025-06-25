@@ -472,6 +472,7 @@ const UserList = ({
                   handleReset={handleReset}
                   isSubmitting={isSubmitting}
                   isResetting={isResetting}
+                  tableLoader={tableLoader}
                 />
               </div>
 
@@ -757,14 +758,14 @@ const UserList = ({
                   </span>
                 }
                 name="userName"
-               rules={[
-                {
-                  pattern:
-                    "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+.[a-zA-Z]{2,}(?:.[a-zA-Z]{2,})?$",
-                  required: true,
-                  message: "Enter the Valid Email ",
-                },
-              ]}
+                rules={[
+                  {
+                    pattern:
+                      "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+.[a-zA-Z]{2,}(?:.[a-zA-Z]{2,})?$",
+                    required: true,
+                    message: "Enter the Valid Email ",
+                  },
+                ]}
               >
                 <Input
                   data-testid="userName"

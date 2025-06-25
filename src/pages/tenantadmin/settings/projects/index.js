@@ -198,6 +198,7 @@ const Projects = ({
             isSubmitting={isSubmitting}
             isResetting={isResetting}
             setClear={setClear}
+            tableLoader={tableLoader}
           />
         </div>
 
@@ -272,12 +273,12 @@ const Projects = ({
               </Form.Item>
               <Form.Item>
                 <div className="d-flex align-items-center justify-content-center">
-                   <RegularButton
-                      disabled={projectLoader}
-                      type="submit"
-                      name={"Create"}
-                      loading={projectLoader}
-                    />
+                  <RegularButton
+                    disabled={projectLoader}
+                    type="submit"
+                    name={"Create"}
+                    loading={projectLoader}
+                  />
                 </div>
               </Form.Item>
             </Form>

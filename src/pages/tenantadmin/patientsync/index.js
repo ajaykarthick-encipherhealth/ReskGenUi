@@ -1172,17 +1172,20 @@ const handleExcelDownload = () => {
                                   handleReset={handleReset}
                                   isSubmitting={isSubmitting}
                                   isResetting={isResetting}
-                                  showCustomizeTable={reportActiveTab === "Tin Roaster" ||
+                                  showCustomizeTable={
+                                    reportActiveTab === "Tin Roaster" ||
                                     reportActiveTab === "Patient Roaster" ||
                                     reportActiveTab === "Practice Roaster" ||
-                                    reportActiveTab === "Provider Roaster" ?true:false}
+                                    reportActiveTab === "Provider Roaster"
+                                      ? true
+                                      : false
+                                  }
+                                  tableLoader={tableLoader}
                                 />
                               ) : null}
                             </div>
                           )}
-                          <div
-                            className="d-flex justify-content-center align-items-center"
-                          >
+                          <div className="d-flex justify-content-center align-items-center">
                             <div className=" d-flex  mt-4">
                               {renderButton()}
                             </div>

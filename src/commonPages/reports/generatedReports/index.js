@@ -231,6 +231,7 @@ const GeneratedReports = ({
                 //btn
                 btnName={"Export"}
                 selectedRows={selectedRows}
+                tableLoader={tableLoader}
               />
             </div>
           </section>

@@ -638,6 +638,7 @@ const Tin = ({
               handleReset={handleReset}
               isSubmitting={isSubmitting}
               isResetting={isResetting}
+              tableLoader={tableLoader}
             />
           </div>
         </div>
@@ -681,38 +682,38 @@ const Tin = ({
               />
             )}
             {activeTab === "InActive" && (
-             <AppTable
-             data={data?.response?.pageResponse?.content}
-             column={data?.response?.metaDataDTO.filter(
-               (item) => item.active
-             )}
-             loader={tableLoader}
-             pagination={false}
-             setSort={setSort}
-             sort={sort}
-             first={pageNo === 0 ? 0 : paginationFirst}
-             totalRecords={data?.response?.pageResponse?.totalElements}
-             row={15}
-             onPageChange={onPageChange}
-             isCheckBox={findItemWithTrueKey(
-               data?.response?.staticDesign,
-               "checkBox"
-             )}
-             checkedHeader={
-              currentPageIds.length > 0 &&
-              currentPageIds.every((id) => selectedRows.includes(id))
-            }
-             selectedRowsId={selectedRowsId}
-             setSelectedRowsId={setSelectedRowsId}
-             setSelectedRows={setSelectedRows}
-             selectedUserName={selectedUserName}
-             handleRowCheckboxChange={handleRowCheckboxChange}
-             setCheckedHeader={setCheckedHeader}
-             selectedRows={selectedRows}
-             idKey={"id"}
-             checkBoxLoader={checkedLoader}
-             statusBodyTemplate={processstatusBodyTemplate}
-           />
+              <AppTable
+                data={data?.response?.pageResponse?.content}
+                column={data?.response?.metaDataDTO.filter(
+                  (item) => item.active
+                )}
+                loader={tableLoader}
+                pagination={false}
+                setSort={setSort}
+                sort={sort}
+                first={pageNo === 0 ? 0 : paginationFirst}
+                totalRecords={data?.response?.pageResponse?.totalElements}
+                row={15}
+                onPageChange={onPageChange}
+                isCheckBox={findItemWithTrueKey(
+                  data?.response?.staticDesign,
+                  "checkBox"
+                )}
+                checkedHeader={
+                  currentPageIds.length > 0 &&
+                  currentPageIds.every((id) => selectedRows.includes(id))
+                }
+                selectedRowsId={selectedRowsId}
+                setSelectedRowsId={setSelectedRowsId}
+                setSelectedRows={setSelectedRows}
+                selectedUserName={selectedUserName}
+                handleRowCheckboxChange={handleRowCheckboxChange}
+                setCheckedHeader={setCheckedHeader}
+                selectedRows={selectedRows}
+                idKey={"id"}
+                checkBoxLoader={checkedLoader}
+                statusBodyTemplate={processstatusBodyTemplate}
+              />
             )}
             {activeTab === "Providers" && (
               <AppTable

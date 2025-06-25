@@ -279,7 +279,7 @@ const CodersTable = ({
     <div className={`show `}>
       {/* <Header /> */}
       {proxy === "QA" ? (
-        <div>    
+        <div>
           <SubNavBar hideBackArrow={false} />
         </div>
       ) : (
@@ -318,6 +318,7 @@ const CodersTable = ({
                 handleReset={handleReset}
                 isSubmitting={isSubmitting}
                 isResetting={isResetting}
+                tableLoader={tableLoader}
               />
             </div>
           </div>

@@ -240,7 +240,7 @@ const MoveBack = ({
                                 <Nav.Link
                                   onClick={() => {
                                     setRoleId(role.roleId);
-                                      getTableData({ reloadTrue: true });
+                                    getTableData({ reloadTrue: true });
                                   }}
                                   className="mt-4"
                                   eventKey={index + 1}
@@ -288,7 +288,15 @@ const MoveBack = ({
                                 data-testid="table-custom"
                                 name="table-custom"
                                 onClick={showDrawer}
-                                className="btn btn-sm w-full text-ellipsis tableButton"
+                                style={{
+                                  cursor: {
+                                    cursor: tableLoader
+                                      ? "not-allowed"
+                                      : "pointer",
+                                  },
+                                }}
+                                className="btn-sm w-full text-ellipsis tableButton"
+                                disabled={tableLoader ? true : false}
                               >
                                 Table Customization
                               </Button>
@@ -336,6 +344,7 @@ const MoveBack = ({
                             isSubmitting={isSubmitting}
                             isResetting={isResetting}
                             setClear={setClear}
+                            tableLoader={tableLoader}
                           />
                         </div>
                       </div>

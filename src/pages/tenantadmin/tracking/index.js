@@ -328,6 +328,7 @@ const Patient = ({
                   handleReset={handleReset}
                   isSubmitting={isSubmitting}
                   isResetting={isResetting}
+                  tableLoader={tableLoader}
                 />
               </div>
             </div>

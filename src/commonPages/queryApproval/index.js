@@ -271,7 +271,7 @@ const QueryApproval = ({
                               >
                                 <Nav.Link
                                   onClick={() => {
-                                     getTableData({ reloadTrue: true });
+                                    getTableData({ reloadTrue: true });
                                     setSelectedRole(role.aliasName);
                                     setRoleId(role.roleId);
                                     setActive("Pending");
@@ -298,7 +298,15 @@ const QueryApproval = ({
                                 data-testid="table-custom"
                                 name="table-custom"
                                 onClick={showDrawer}
-                                className="btn btn-sm w-full text-ellipsis tableButton"
+                                style={{
+                                  cursor: {
+                                    cursor: tableLoader
+                                      ? "not-allowed"
+                                      : "pointer",
+                                  },
+                                }}
+                                className="btn-sm w-full text-ellipsis tableButton"
+                                disabled={tableLoader ? true : false}
                               >
                                 Table Customization
                               </Button>
@@ -337,6 +345,7 @@ const QueryApproval = ({
                             isSubmitting={isSubmitting}
                             isResetting={isResetting}
                             setClear={setClear}
+                            tableLoader={tableLoader}
                           />
                         </div>
                       </div>
