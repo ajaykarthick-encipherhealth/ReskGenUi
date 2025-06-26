@@ -138,7 +138,7 @@ const Meat = ({
       "",
       activeTab
     );
-  }, [patientDetailsResult]);
+  }, [patientDetailsResult,activeTab]);
 
   useEffect(() => {
     const result = selectHyperlink?.allHeaderResult?.filter(
