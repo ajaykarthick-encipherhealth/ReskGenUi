@@ -1056,9 +1056,9 @@ const Timeline = ({
               className={` text-muted ${visitStyles.timelineDate} mt-1`}
             >{`DOS: ${item?.dos}`}</span>
           )}
-          <span className={`text-muted ${visitStyles.timelineDate}`}>
+          {/* <span className={`text-muted ${visitStyles.timelineDate}`}>
             {formatDateTime({ date: item.createdDate })}
-          </span>
+          </span> */}
           {item?.educationalError && (
             <div className="d-flex  align-items-end justify-content-end">
               <span
@@ -1087,7 +1087,7 @@ const Timeline = ({
   }, []);
   return (
     <div className={visitStyles.timeLines}>
-      {showFilter ? (
+      {!showFilter ? (
         <div className="p-3">
         <div
           style={{
@@ -1130,15 +1130,6 @@ const Timeline = ({
                 </div>
               </div>
             </div>
-          </div>
-          <div className="px-3 pb-3">
-            <Checkbox
-              className="ant-badge"
-              checked={isViewAll}
-              onChange={(e) => setIsViewAll(e.target.checked)}
-            >
-              View All
-            </Checkbox>
           </div>
         </div>
         </div>

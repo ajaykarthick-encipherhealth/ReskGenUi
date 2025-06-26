@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useRef } from "react";
-import NavBar from "../../../jsx/layouts/nav/Header";
 import visitStyles from "../../../styles/visitdata.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   FilterOutlined,
+  MenuOutlined,
   MonitorOutlined,
   UndoOutlined,
 } from "@ant-design/icons";
@@ -15,9 +15,6 @@ import {
 import {
   faArrowLeft,
   faUserCircle,
-  faVenusMars,
-  faCalendarAlt,
-  faIdCardClip,
   faClock,
   faAngleDoubleRight,
   faAngleDoubleLeft,
@@ -35,6 +32,7 @@ import {
   notification,
   Drawer,
   Popover,
+  Checkbox,
 } from "antd";
 import { IMAGES, SVGICON } from "../../../jsx/constant/theme";
 import { Button, Offcanvas } from "react-bootstrap";
@@ -490,6 +488,7 @@ const Details = ({
     setIsModalComments(false);
     setFlagContainerActive("");
     setShowFilter(false);
+    setIsViewAll(false)
   };
 
   const dosOnChange = async (e) => {
@@ -531,15 +530,6 @@ const Details = ({
     }
     if (value == "Timeline") {
       setFlagContainerActiveTitle("Timeline");
-      // const response = await getTimelineList({
-      //   patientId: localPatientId,
-      //   dos: isDosSelected,
-      //   role:role,
-      // });
-      // var result = response?.response?.content;
-      // setTimeLineData(result);
-      // setFilterDataLoading(false);
-      // getAllRoles()
     }
     if (value == "Add DOS & Provider") {
       setFlagContainerActiveTitle("Add DOS & Provider");
@@ -1184,13 +1174,18 @@ const Details = ({
                       {flagContainerActiveTitle === "Timeline" ? (
                         <>
                           <span>{flagContainerActiveTitle}</span>
-                          <div>
+                          <div className="d-flex align-items-center justify-content-center">
+                            <div>
+                               <Checkbox
+                              className="ant-badge"
+                              checked={isViewAll}
+                              onChange={(e) => setIsViewAll(e.target.checked)}
+                            >
+                              All
+                            </Checkbox>
+                            </div>
                             <Tooltip title="Filters" placement="top">
-                              <FontAwesomeIcon
-                                onClick={handleIconClick}
-                                className="mt-1 font5 cursor-pointer"
-                                icon={faBars}
-                              />{" "}
+                              <MenuOutlined  onClick={handleIconClick} />
                             </Tooltip>
                           </div>
                         </>
