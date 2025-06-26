@@ -331,7 +331,7 @@ export const ProviderMenuList = (data) => {
     if (res?.title == "Tin" && res?.active) {
       menus.push({
         title: "Tin",
-        iconStyle:<ContainerOutlined />,
+        iconStyle: <ContainerOutlined />,
         activeIcon: <ContainerFilled />,
         to: "/tenantadmin/tin",
         childRoute2: "/tenantadmin/tin/tindetails",
@@ -375,6 +375,15 @@ export const ProviderMenuList = (data) => {
         iconStyle: <BellOutlined />,
         activeIcon: <BellFilled />,
         to: "/tenantadmin/notification",
+      });
+    }
+    if (res?.title == "Workqueue" && res?.active) {
+      menus.push({
+        title: "My Work Queue",
+        iconStyle: <ProfileOutlined />,
+        activeIcon: <ProfileFilled />,
+        to: "/tenantadmin/workqueue",
+        childRoute: "/tenantadmin/workqueue/details",
       });
     }
   });
