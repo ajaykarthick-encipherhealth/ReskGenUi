@@ -1,13 +1,7 @@
 import React, { useState, useEffect } from "react";
-import Header from "../../../jsx/layouts/nav/Header";
 import { connect } from "react-redux";
 import "react-facebook-loading/dist/react-facebook-loading.css";
 import { notification, Spin } from "antd";
-import {
-  generateOptionsForNewStore,
-  priorityOptions,
-} from "../../../components/headerFilters/functions";
-import DailyTask from "./dailytask";
 import { actions as tenantAdminAction } from "../../../stores/tenantAdmin/tracking";
 import { actions as tenantUserAdminAction } from "../../../stores/tenantAdmin/users";
 import { actions as allActions } from "../../../stores/admin/patientAllocation";
@@ -18,19 +12,18 @@ import AppTable from "../../../components/tables";
 import { getStorage, setStorage } from "../../../utils/storages";
 import { useRouter } from "next/router";
 import { actions as tableAction } from "../../../stores/tableView";
-import { findMatchesByField, getResponePopup } from "../../../utils/reusable";
+import {
+  convertToCustomParams,
+  convertToCustomParamsDatePicker,
+  findMatchesByField,
+  getResponePopup,
+} from "../../../utils/reusable";
 import visitStyles from "../../../styles/visitdata.module.css";
 import { LoadingOutlined } from "@ant-design/icons";
-
-
+import { portalUrl, tokenKey } from "../../../utils/config";
 
 const Patient = ({
-  organizationList,
-  filteredList,
   patientDetails,
-  patientAllocatedFilters,
-  auditAssignedFilters,
-  allocatedByFilters,
   getRoutedData,
   routedData,
   getTableData,
@@ -40,7 +33,6 @@ const Patient = ({
   tableLoader,
   pageLoad,
 }) => {
-
   const [pageNo, setPageNo] = useState(0);
   const [paginationFirst, setPaginationFirst] = useState(0);
   const [sort, setSort] = useState({
@@ -77,6 +69,7 @@ const Patient = ({
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isResetting, setIsResetting] = useState(false);
   const [isFilter, setIsFilter] = useState(true);
+  const [loading, setLoading] = useState(false);
 
   const onPageChange = (e) => {
     setPaginationFirst(e.first);
@@ -190,10 +183,6 @@ const Patient = ({
       getResponePopup(error?.response);
     }
   };
-
- 
-
-
   const page = {
     pageNo,
     paginationFirst,
@@ -213,7 +202,6 @@ const Patient = ({
       controller.abort();
       setStorage("patientId", data?.patientId);
       var role = getStorage("userRole");
-
       setStorage("patientId", data.patientId);
       setStorage("routeBackTo", "/tenantadmin/tracking");
       getRoutedData(page);
@@ -248,6 +236,7 @@ const Patient = ({
       setSort(sort);
     }
   }, [routedData]);
+
   const getAllTracking = async () => {
     const userId = getStorage("userId");
     const response = await getTableData({
@@ -263,6 +252,94 @@ const Patient = ({
       sort,
     });
   };
+
+  const logsDownload = async ({
+    selectedOption,
+    selectedDateRanges,
+    searchText,
+    roleId,
+    reloadTrue,
+  }) => {
+    if (reloadTrue) return null;
+    const token = getStorage(tokenKey);
+    const clientId = getStorage("client");
+    const projectId = getStorage("project");
+    const orgId = getStorage("orgId");
+    const userRoleId = getStorage("roleId");
+
+    let searchTextParams = "";
+    let selectParams = "";
+    let dateRangeParams = "";
+
+    if (searchText) {
+      searchTextParams = convertToCustomParams(searchText);
+    }
+    if (selectedOption) {
+      selectParams = convertToCustomParams(selectedOption);
+    }
+    if (selectedDateRanges) {
+      dateRangeParams = convertToCustomParamsDatePicker(selectedDateRanges);
+    }
+    const baseUrl = `${portalUrl}dbservice/get-excel?roleId=${roleId || ""}`;
+    const finalUrl = `${baseUrl}${searchTextParams}${selectParams}${dateRangeParams}`;
+    setLoading(true);
+    try {
+      const result = await fetch(finalUrl, {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+          "X-Role-Id": userRoleId,
+          "X-Client": clientId,
+          "X-Org": orgId,
+          "X-Project": projectId,
+          "X-Org-based": "true",
+        },
+      });
+
+      if (result?.status === 200) {
+        setLoading(false);
+        const blob = await result.blob();
+        const url = window.URL.createObjectURL(blob);
+        const today = new Date();
+        const formattedDate = today.toISOString().split("T")[0];
+        const filename = `logs-report_${formattedDate}.xlsx`;
+        const link = document.createElement("a");
+        link.href = url;
+        link.setAttribute("download", filename);
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+        getResponePopup({
+          status: "SUCCESS",
+          message: "Records downloaded successfully!",
+        });
+      } else {
+        setLoading(false);
+        getResponePopup({
+          status: "FAILED",
+          message: "Something went wrong while downloading the file.",
+        });
+      }
+    } catch (error) {
+      setLoading(false);
+      getResponePopup({
+        status: "FAILED",
+        message: "Something went wrong while downloading the file.",
+      });
+    }
+  };
+
+  const generateBtnClick = async () => {
+   const response = await  logsDownload({
+      selectedDateRanges,
+      searchText,
+      roleId: getStorage("roleId"),
+      reloadTrue: false,
+      selectedOption,
+    });
+  };
+
   useEffect(() => {
     setParamsFilter("check");
     if (paramsFilter === "check") {
@@ -329,6 +406,11 @@ const Patient = ({
                   isSubmitting={isSubmitting}
                   isResetting={isResetting}
                   tableLoader={tableLoader}
+                  btnName={"Generate"}
+                  showGenerateReport={true}
+                  generateBtnClick={generateBtnClick}
+                  btnDisabled={loading}
+                  btnLoading={loading}
                 />
               </div>
             </div>
@@ -374,6 +456,7 @@ const enhancer = connect(
     data: state?.tableView?.tableView?.data,
     tableLoader: state?.tableView?.tableViewLoading,
     pageLoad: state?.tenantAdmin?.tin?.getPageRendering,
+    logsDownloadExcel: state?.tableView?.logsDownload,
   }),
   {
     getAllOrganizationList: tenantUserAdminAction.getAllOrganizationAction,
@@ -387,6 +470,7 @@ const enhancer = connect(
     getTableData: tableAction.tableViewAction,
     tableDynamicColumn: tableAction.tableDynamicColumn,
     tableDynamicColumnReset: tableAction.tableDynamicColumnReset,
+    getLogsReportDownload: tableAction.logsDownload,
   }
 );
 export default enhancer(Patient);

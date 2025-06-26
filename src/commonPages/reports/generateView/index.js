@@ -230,6 +230,9 @@ const GenerateView = ({
                 setIsModalOpen={setIsModalOpen}
                 btnName={"Generate Report"}
                 tableLoader={tableLoader}
+                generateBtnClick={() => {
+                setIsModalOpen(true)}}
+                btnDisabled={selectedRows?.length === 0}
               />
             </div>
           </section>

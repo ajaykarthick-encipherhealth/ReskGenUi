@@ -64,6 +64,9 @@ const ReusableFilters = ({
   btnName,
   selectedDateRanges,
   tableLoader,
+  generateBtnClick,
+  btnDisabled,
+  btnLoading
 }) => {
   const pickerRefs = useRef({});
   const router = useRouter();
@@ -248,7 +251,7 @@ const ReusableFilters = ({
                       // onCalendarChange={(val) => {
                       //   setSelectedDates((prev) => ({
                       //     ...prev,
-                      //     [item?.actualField]: val,
+                      //     [item?.actualField]: val,  
                       //   }));
                       // }}
                       onChange={(date, dateString) => {
@@ -386,9 +389,7 @@ const ReusableFilters = ({
               <Button
                 data-testid="table-custom"
                 name="table-custom"
-                onClick={() => {
-                  setIsModalOpen(true);
-                }}
+                onClick={generateBtnClick}
                 style={{
                   background: "#04306f",
                   color: "#fff",
@@ -396,11 +397,10 @@ const ReusableFilters = ({
                   fontSize: "12px",
                   marginLeft: "10px",
                 }}
-                className="btn btn-sm w-full text-ellipsis"
-                disabled={selectedRows?.length == 0 ? true : false}
+                className="btn btn-sm w-full text-ellipsis cursor-pointer"
+                disabled={btnDisabled}
               >
-                {btnName}
-                {/* Generate Report */}
+                 {btnLoading ? "Loading..." : btnName}
               </Button>
             </div>
           </>

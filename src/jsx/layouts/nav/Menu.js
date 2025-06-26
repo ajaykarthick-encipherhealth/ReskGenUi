@@ -360,9 +360,9 @@ export const ProviderMenuList = (data) => {
         childRoute2: "/tenantadmin/report/reportdetails",
       });
     }
-    if (res?.title == "Tracking" && res?.active) {
+    if (res?.title == "Logs" && res?.active) {
       menus.push({
-        title: "Tracking",
+        title: "Logs",
         iconStyle: <EnvironmentOutlined />,
         activeIcon: <EnvironmentFilled />,
         to: "/tenantadmin/tracking",

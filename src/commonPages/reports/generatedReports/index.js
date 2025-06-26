@@ -266,6 +266,9 @@ const GeneratedReports = ({
                 )}
                 idKey={"id"}
                 disabled={true}
+                generateBtnClick={() => {
+                setIsModalOpen(true)}}
+                btnDisabled={selectedRows?.length === 0}
               />
             </div>
           </div>

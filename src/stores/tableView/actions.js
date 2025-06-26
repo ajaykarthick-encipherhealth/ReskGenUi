@@ -34,7 +34,3 @@ export const setTinStatus = createActionThunk(
   "TIN_STATUS_ACTION",
   network.changeTinStatus
 );
-
-
-
-
