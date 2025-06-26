@@ -2316,12 +2316,6 @@
   justify-content: center;
   align-items: center;
 }
-
-.timeLineScroll {
-  height: 99vh;
-  overflow: scroll;
-}
-
 .drag_and_drop_movement_bg {
   background-color: #f6f6ff;
   box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
@@ -2412,4 +2406,8 @@
   width: 40px;
   height:42px;
   line-height: 16px;
+}
+.inputs{
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  border: none !important;
 }

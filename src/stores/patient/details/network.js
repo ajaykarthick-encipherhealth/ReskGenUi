@@ -402,14 +402,14 @@ export async function getValidHccDetailsApi(year, code) {
   return res;
 }
 
-export async function getTimelineList({ patientId, dos }) {
+export async function getTimelineList({ patientId, dos ,role ,action}) {
   const options = {
     method: "GET",
   };
   const res = await requestPortal(
-    `dbservice/actioneventaudit?patientid=${patientId}&dateOfService=${
+    `dbservice/actioneventaudit?patientId=${patientId}&dateOfService=${
       dos ? dos : ""
-    }&pageno=${0}&pagesize=${100}`,
+    }&role=${role?role:""}&action=${action?action:""}&pageno=${0}&pagesize=${100}`,
     options
   );
   return res;
@@ -756,6 +756,16 @@ export async function reEvaluate() {
   };
   const data = await requestPortal(
     `dbservice/patient/re-evaluate/update?patientId=${patientId}`,
+    options
+  );
+  return data;
+}
+export async function getAction() {
+  const options = {
+    method: "GET",
+  };
+  const data = await requestPortal(
+    `dbservice/actioneventaudit/getaction`,
     options
   );
   return data;

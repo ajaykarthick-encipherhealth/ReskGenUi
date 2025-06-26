@@ -46,6 +46,8 @@ import {
   raiseQueryAction,
   getAllRolesAction,
   updateReEvaluate,
+  timeLineList,
+  actionList
 } from "./actions";
 
 
@@ -174,6 +176,9 @@ const patientDetailsReducer = combineReducers({
   allRoles: createReducer(getAllRolesAction),
   getQueryLoader: getPatientsLoading(getQuery),
   reEvaluate: createReducer(updateReEvaluate),
+  timeLineList:getPatientsLoading(timeLineList),
+  timeLineData:createReducer(timeLineList),
+  actionList:createReducer(actionList),
 });
 
 export default patientDetailsReducer;

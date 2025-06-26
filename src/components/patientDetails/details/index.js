@@ -24,6 +24,7 @@ import {
   faFile,
   faTimeline,
   faClockRotateLeft,
+  faBars,
 } from "@fortawesome/free-solid-svg-icons";
 
 import {
@@ -70,11 +71,11 @@ import { actions as allReportActions } from "../../../stores/admin/report";
 import { connect } from "react-redux";
 import HeaderComponent from "./components/headerComponent";
 import { actions as reviewerWorkQueueAction } from "../../../stores/reviewer/workqueue";
-import { allFilters } from "../../../pages/reviewer/patients/headerFilters";
 import { actions as allActions } from "../../../stores/tenantAdmin/patientSync";
 import CardSkeleton from "../../skeleton/card";
 import VersionHistory from "./versionHistory";
 import Queried from "./hcc/queried";
+
 export const navigetPageDetails = async (
   pageTitle,
   setSideNavLabelActiveKey,
@@ -158,6 +159,7 @@ const Details = ({
   getQueryDetails,
   queriedData,
   queriedLoader,
+  allRoles,
 }) => {
   const navigate = useRouter();
   const [count, setCount] = useState(0);
@@ -198,6 +200,20 @@ const Details = ({
   const [selectDosValue, setSelectDosValue] = useState("");
   const [search, setSearch] = useState();
   const [selectedDate, setSelectedDate] = useState(null);
+  const [showFilter, setShowFilter] = useState(false);
+  const [role, setRole] = useState([]);
+  const [action, setAction] = useState([]);
+  const [isViewAll, setIsViewAll] = useState(false);
+
+  const handleIconClick = () => {
+    setShowFilter((prev) => !prev);
+    if (role?.length || action?.length || isViewAll.length) {
+      setRole([]);
+      setAction([]);
+      setIsViewAll(false);
+    }
+  };
+
   const tabList = [
     {
       title: "HCC",
@@ -451,6 +467,7 @@ const Details = ({
     setValidated(false);
     setIsModalComments(false);
     setFlagContainerActive("");
+    setShowFilter(false);
   };
 
   const dosOnChange = async (e) => {
@@ -485,13 +502,15 @@ const Details = ({
     }
     if (value == "Timeline") {
       setFlagContainerActiveTitle("Timeline");
-      const response = await getTimelineList({
-        patientId: localPatientId,
-        dos: isDosSelected,
-      });
-      var result = response?.response?.content;
-      setTimeLineData(result);
-      setFilterDataLoading(false);
+      // const response = await getTimelineList({
+      //   patientId: localPatientId,
+      //   dos: isDosSelected,
+      //   role:role,
+      // });
+      // var result = response?.response?.content;
+      // setTimeLineData(result);
+      // setFilterDataLoading(false);
+      // getAllRoles()
     }
     if (value == "Add DOS & Provider") {
       setFlagContainerActiveTitle("Add DOS & Provider");
@@ -711,7 +730,7 @@ const Details = ({
             <div className={`${visitStyles.container_fluid_patient}`}>
               <div className="row patient-file-container">
                 <div className="row p-0">
-                  {activeTab == "2" || activeTab == "1" || activeTab == "5"? (
+                  {activeTab == "2" || activeTab == "1" || activeTab == "5" ? (
                     <div className="row">
                       <div
                         id="backArrowBtn"
@@ -731,7 +750,9 @@ const Details = ({
                           />
                         </Button>
                       </div>
-                      <div  style={{position:"relative",left:"-2%"}}className="col-11">
+                      <div style={{ position: "relative", left: "-2%" }}
+                        className="col-11"
+                      >
                         {loading || isSpinnerLoading ? (
                           <div className="my-3">
                             <CardSkeleton height={100} />
@@ -1006,7 +1027,9 @@ const Details = ({
                             setSelectedDate={setSelectedDate}
                             activeTab={activeTab}
                           />
-                        ) : ""}
+                        ) : (
+                          ""
+                        )}
                       </>
                     </div>
 
@@ -1018,16 +1041,11 @@ const Details = ({
                       >
                         <ul className="" id="flagList" name="flagList">
                           {flagList?.map((data, index) => {
-                            // if (
-                            //   data.name === "Version History" &&
-                            //   userRole !== "CODER_1" || userRole !== "CODER_2"
-                            // ) {
-                            //   return null;
-                            // }
                             const isEditDisabled =
                               patientIdDetailsData?.data?.response
-                                ?.workflow?.[0]?.status !== "PENDING" || patientDetailsResult?.data?.response?.workflow?.[0]
-                                ?.status == "COMPLETED";
+                                ?.workflow?.[0]?.status !== "PENDING" ||
+                              patientDetailsResult?.data?.response
+                                ?.workflow?.[0]?.status == "COMPLETED";
                             const isFlagDisabled =
                               data.name === "Flag" && !isDosSelected;
                             const isDosDisabled =
@@ -1035,11 +1053,11 @@ const Details = ({
                               isDosSelected;
                             const isVersionDisabled =
                               data.name === "Version History" && !isDosSelected;
-                              const isEditDisabledList = [
-                                "Add DOS & Provider",
-                              ].includes(data.name);
+                            const isEditDisabledList = [
+                              "Add DOS & Provider",
+                            ].includes(data.name);
 
-                              const isDisabled =
+                            const isDisabled =
                               (isEditDisabled && isEditDisabledList) ||
                               isFlagDisabled ||
                               isDosDisabled ||
@@ -1106,28 +1124,50 @@ const Details = ({
                   id="myworkqueueDrawer"
                   name="myworkqueueDrawer"
                   onClose={handleCloseModal}
-                  open={isModalComments}
+                  open={showFilter ? showFilter : isModalComments}
                   width={
-                    flagContainerActiveTitle === "Timeline" || flagContainerActiveTitle === "Version History"
+                    flagContainerActiveTitle === "Timeline" ||
+                    flagContainerActiveTitle === "Version History"
                       ? "460px"
                       : flagContainerActiveTitle === "Add DOS & Provider"
                       ? "1400px"
-                       : flagContainerActiveTitle === "Queried"
+                      : flagContainerActiveTitle === "Queried"
                       ? "510px"
                       : null
                   }
-                  title={flagContainerActiveTitle}
+                  title={
+                    <div className="d-flex justify-content-between">
+                      {flagContainerActiveTitle === "Timeline" ? (
+                        <>
+                          <span>{flagContainerActiveTitle}</span>
+                          <div>
+                            <Tooltip title="Filters" placement="top">
+                              <FontAwesomeIcon
+                                onClick={handleIconClick}
+                                className="mt-1 font5 cursor-pointer"
+                                icon={faBars}
+                              />{" "}
+                            </Tooltip>
+                          </div>
+                        </>
+                      ) : (
+                        flagContainerActiveTitle
+                      )}
+                    </div>
+                  }
                   placement="right"
                   className="myworkqueueDrawer"
                   closable={false}
                   extra={
-                    <button
-                      type="button"
-                      className="btn-close"
-                      onClick={() => handleCloseModal()}
-                    >
-                      <i className="fa-solid fa-xmark"></i>
-                    </button>
+                    <div className="ms-3">
+                      <button
+                        type="button"
+                        className="btn-close"
+                        onClick={() => handleCloseModal()}
+                      >
+                        <i className="fa-solid fa-xmark"></i>
+                      </button>
+                    </div>
                   }
                 >
                   {flagContainerActive == "Timeline" ? (
@@ -1137,6 +1177,18 @@ const Details = ({
                       splitUserName={splitUserName}
                       userDetails={userDetails}
                       renderUserDetails={renderUserDetails}
+                      showFilter={showFilter}
+                      role={role}
+                      setRole={setRole}
+                      localPatientId={localPatientId}
+                      isDosSelected={isDosSelected}
+                      getTimelineList={getTimelineList}
+                      setFilterDataLoading={setFilterDataLoading}
+                      setTimeLineData={setTimeLineData}
+                      action={action}
+                      setAction={setAction}
+                      isViewAll={isViewAll}
+                      setIsViewAll={setIsViewAll}
                     />
                   ) : flagContainerActive == "Filter" ? (
                     <>
@@ -1194,7 +1246,6 @@ const Details = ({
                       patientIdDetailsData={patientIdDetailsData}
                       activeLabels={activeLabels}
                       patientDetailsResult={patientDetailsResult}
-                      getPatientDosList={getPatientDosList}
                     />
                   ) : null}
                 </Drawer>
@@ -1291,7 +1342,6 @@ const enhancer = connect(
     confirmRevert: detailsActions.confirmRevertDetails,
     getQueryDetails: detailsActions.getQuery,
     activeLabels: detailsActions.activeLabels,
-    getPatientDosList: detailsActions.dosDeatilsAction,
   }
 );
 export default enhancer(Details);

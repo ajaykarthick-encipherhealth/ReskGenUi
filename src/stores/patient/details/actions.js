@@ -232,5 +232,17 @@ export const updateReEvaluate = createActionThunk(
   network.reEvaluate
 );
 
+//timeLine
+export const timeLineList = createActionThunk(
+  "GET_ALL_TIMELINE_DATA",
+  network.getTimelineList
+);
+export const actionList = createActionThunk(
+  "GET_ALL_ACTION_LIST",
+  network.getAction
+);
+
+
+
 
 

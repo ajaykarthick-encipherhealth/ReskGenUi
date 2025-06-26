@@ -16744,3 +16744,6 @@ input::-webkit-inner-spin-button {
     font-size: 11px !important;
   }
 }
+.no-timeline-line .timeline:before {
+  background: #fff !important;
+}

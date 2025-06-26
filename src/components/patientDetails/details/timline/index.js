@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import visitStyles from "../../../../styles/visitdata.module.css";
-import { Empty, Popover, Tooltip } from "antd";
+import { Checkbox, Empty, Input, Popover, Select, Tooltip } from "antd";
 import styles from "./styles.module.css";
 import { CloseCircleFilled } from "@ant-design/icons";
 import { getProviderNameTagList } from "../components/function/ProviderHyperlinks";
@@ -14,6 +14,9 @@ import {
   formatDateTime,
   timeLineDateAndTime,
 } from "../../../../utils/reusable";
+import { connect } from "react-redux";
+import { actions as userActions } from "../../../../stores/tenantAdmin/users";
+import { actions as detailsActions } from "../../../../stores/patient/details";
 
 export const getStatusColors = (state) => {
   let previousStateColor = "";
@@ -119,9 +122,56 @@ const Timeline = ({
   splitUserName,
   userDetails,
   renderUserDetails,
+  showFilter,
+  allRoles,
+  role,
+  setRole,
+  localPatientId,
+  isDosSelected,
+  getTimelineList,
+  setFilterDataLoading,
+  setTimeLineData,
+  getAllRoles,
+  getActionList,
+  actionList,
+  action,
+  setAction,
+  isViewAll,
+  setIsViewAll
 }) => {
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [popClickDisCode, setPopClickDisCode] = useState(null);
+
+  const options = allRoles?.content?.map((org, index) => ({
+    value: org?.aliasName,
+    label: org?.roleName?.split("_")?.join(" "),
+  }));
+  const actionOptions = actionList?.map((item) => ({
+    label: item?.replace(/_/g, " "),
+    value: item,
+  }));
+  const getTimeLineDetails = async () => {
+    setFilterDataLoading(true);
+    const response = await getTimelineList({
+      patientId: localPatientId,
+      dos: isViewAll ? "" : isDosSelected,
+      role: role,
+      action: action,
+    });
+    var result = response?.response?.content;
+    setTimeLineData(result);
+    if (response?.status === "SUCCESS") {
+      setFilterDataLoading(false);
+    } else {
+      setFilterDataLoading(false);
+    }
+  };
+  const handleRoleChange = (value) => {
+    setRole(value);
+  };
+  const handleActionChange = (value) => {
+    setAction(value);
+  };
 
   const getMeatEditDeatils = (viewValue) => {
     let sectionMapArr = (
@@ -988,8 +1038,12 @@ const Timeline = ({
           </Popover>
         </Tooltip>
         <div className="timeline-panel ">
-          <div> {item?.fullName}{" "}
-            {item?.aliasName ? `(${item.aliasName})` : ""}
+          <div>
+            {" "}
+            {item?.fullName}{" "}
+            {item?.aliasName
+              ? `(${item.aliasName?.split("_")?.join(" ")})`
+              : ""}
           </div>
 
           <span className={`${visitStyles.timelineheading} d-flex`}>
@@ -1024,10 +1078,75 @@ const Timeline = ({
       </li>
     );
   }
+  useEffect(() => {
+    getTimeLineDetails();
+  }, [role, action, isViewAll]);
+  useEffect(() => {
+    getAllRoles();
+    getActionList();
+  }, []);
   return (
     <div className={visitStyles.timeLines}>
+      {showFilter ? (
+        <div className="p-3">
+        <div
+          style={{
+            boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)",
+            height: "150px",
+          }}
+        >
+          <div className="p-3">
+            <div className="row px-1 pb-1">
+              <div className="col-6 mb-3">
+                <label>Role</label>
+                <div className="form-group has-search custom-react-select-audit customClear">
+                  <Select
+                    className={` w-100 ${visitStyles.inputs}`}
+                    placeholder="Select Role"
+                    options={options}
+                    value={role}
+                    onChange={handleRoleChange}
+                    allowClear
+                  ></Select>
+                </div>
+              </div>
+              <div className="col-6 mb-3">
+                <label>Event Type</label>
+                <div className="form-group has-search custom-react-select-audit customClear">
+                  <Select
+                    className={` w-100 ${visitStyles.inputs}`}
+                    placeholder="Select Event type"
+                    allowClear
+                    options={actionOptions}
+                    value={action}
+                    onChange={handleActionChange}
+                    filterOption={(input, option) =>
+                      (option?.label ?? "")
+                        .toLowerCase()
+                        .includes(input.toLowerCase())
+                    }
+                    showSearch={true}
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="px-3 pb-3">
+            <Checkbox
+              className="ant-badge"
+              checked={isViewAll}
+              onChange={(e) => setIsViewAll(e.target.checked)}
+            >
+              View All
+            </Checkbox>
+          </div>
+        </div>
+        </div>
+      ) : (
+        ""
+      )}
       {!filterDataLoading ? (
-        <div className={`widget-timeline ${visitStyles.timeLineScroll}`}>
+       <div className={`widget-timeline ${timelineData?.length === 0 ? 'no-timeline-line' : ''}`}>
           <ul className="timeline">
             {timelineData?.length > 0 ? (
               timelineData?.map((item, index) =>
@@ -1053,4 +1172,14 @@ const Timeline = ({
   );
 };
 
-export default Timeline;
+const enhancer = connect(
+  (state) => ({
+    allRoles: state?.tenantAdmin?.users?.getUsersRoles?.data?.response,
+    actionList: state?.patientDetails?.details?.actionList?.data?.response,
+  }),
+  {
+    getAllRoles: userActions.usersAllRoles,
+    getActionList: detailsActions.actionList,
+  }
+);
+export default enhancer(Timeline);
