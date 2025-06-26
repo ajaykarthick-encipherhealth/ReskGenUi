@@ -109,7 +109,7 @@ export async function labPDFData({ fileId }) {
     method: "GET",
   };
   const data = await requestPortal(
-    `dbservice/fileDetail/findbyid?fileId=${fileId}`,
+    `dbservice/fileDetail/findbyid?fileId=${fileId ? fileId : ""}`,
     options
   );
   return data;
@@ -120,7 +120,7 @@ export async function patientHccFile(fileId) {
     method: "GET",
   };
   const result = await requestPortal(
-    `dbservice/fileDetail/findbyid?fileId=${fileId}`,
+    `dbservice/fileDetail/findbyid?fileId=${fileId ? fileId : ""}`,
     options
   );
   setStorage("fileId", result?.response?.azureBlobPath || null);
@@ -144,16 +144,16 @@ export async function dosWiseList(patientId, year) {
   );
   return data;
 }
-export async function dosPageNumerList(patientId, year) {
-  const options = {
-    method: "GET",
-  };
-  const data = await requestPortal(
-    `dbservice/patient/compute/get/alldossummaries?patientId=${patientId}&processedYear=${year}`,
-    options
-  );
-  return data;
-}
+// export async function dosPageNumerList(patientId, year) {
+//   const options = {
+//     method: "GET",
+//   };
+//   const data = await requestPortal(
+//     `dbservice/patient/compute/get/alldossummaries?patientId=${patientId}&processedYear=${year}`,
+//     options
+//   );
+//   return data;
+// }
 
 export async function meatQuery(patientId, year, dos) {
   const options = {
@@ -748,14 +748,16 @@ export async function getAllRoles() {
   return data;
 }
 
-export async function reEvaluate() {
-  const patientId = getStorage("patientId")
+export async function reEvaluate({ isDosSelected, year }) {
+  const patientId = getStorage("patientId");
 
   const options = {
     method: "POST",
   };
   const data = await requestPortal(
-    `dbservice/patient/re-evaluate/update?patientId=${patientId}`,
+    `dbservice/patient/re-evaluate/update?patientId=${patientId}&dateOfService=${isDosSelected}&year=${
+      year.value ? year.value : year
+    }`,
     options
   );
   return data;

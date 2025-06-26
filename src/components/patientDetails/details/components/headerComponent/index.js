@@ -25,6 +25,7 @@ const HeaderComponent = ({
   setCopied,
   getFlagCounts,
   setSelectedDate,
+  activeTab,
 }) => {
   return (
     <div className={`row mt-3 ${styles.HccContainer}`}>
@@ -40,8 +41,10 @@ const HeaderComponent = ({
           patienIdDetails={patienIdDetails}
           patientDetails={patientDetails}
           flagsDetailsResult={flagsDetailsResult}
+          activeTab={activeTab}
           getFlagCounts={getFlagCounts}
         />
+
         {/* <PieChart /> */}
       </div>
       <div className="col-2" style={{ padding: "0px" }}>
@@ -51,7 +54,7 @@ const HeaderComponent = ({
           fromHcc={true}
         />
       </div>
-      
+
       <div className="col-1 d-grid " style={{ padding: "0px" }}>
         <div>
           <StatusAction />
@@ -66,7 +69,7 @@ const HeaderComponent = ({
                   dosOnChange(e);
                   setSelectDosValue("");
                   getSelectedDos("");
-                  setSelectedDate(null)
+                  setSelectedDate(null);
                 }}
                 className={`w-100 custom_select_type ${visitStyles.custom_select_type}`}
                 options={dosYear}

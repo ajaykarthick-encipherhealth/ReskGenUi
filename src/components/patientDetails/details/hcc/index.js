@@ -104,7 +104,7 @@ const Hcc = ({
   const [isClient, setIsClient] = useState(false);
   const [isApproved, setIsApproved] = useState(false);
   const [isReject, setIsReject] = useState(false);
-  const [isChecked, setIsChecked] = useState(false);
+ const [isReEvaluateChecked, setIsReEvaluateChecked] = useState(false);
   const [educationalError, setEducationalError] = useState(false);
 
   const handleChange = (e) => {
@@ -371,19 +371,19 @@ const Hcc = ({
     </div>
   );
   useEffect(() => {
-    if (patientIdDetailsData?.data?.response) {
-      setIsChecked(patientIdDetailsData.data.response);
+    if (patientDetailsResult?.data?.response) {
+     setIsReEvaluateChecked(patientDetailsResult.data.response);
     }
-  }, [patientIdDetailsData]);
+  }, [patientDetailsResult]);
 
   const onChange = async (checked) => {
-    setIsChecked((prev) => ({
+    setIsReEvaluateChecked((prev) => ({
       ...prev,
-      isReEvaluateNeed: checked,
+      reEvaluateNeed: checked,
     }));
-    const response = await updateReEvaluate();
+     const response = await updateReEvaluate({ isDosSelected, year });
     if (response?.status === "SUCCESS") {
-      getPatientIdData(patientId);
+   getpatientDetailsData(patientId, "", isDosSelected);
       getResponePopup(response);
     }
   };
@@ -402,11 +402,11 @@ const Hcc = ({
               onConfirm={onChange}
               okText="Yes"
               cancelText="No"
-              disabled={isChecked?.movedAfterReEvaluateIsOff}
+              disabled={isReEvaluateChecked?.movedAfterReEvaluateIsOff}
             >
               <Switch
-                checked={isChecked?.isReEvaluateNeed}
-                disabled={isChecked?.movedAfterReEvaluateIsOff}
+                checked={isReEvaluateChecked?.reEvaluateNeed}
+                disabled={isReEvaluateChecked?.movedAfterReEvaluateIsOff}
                 style={{
                   cursor: isDisabled ? "not-allowed" : "pointer",
                 }}
@@ -415,8 +415,10 @@ const Hcc = ({
           ) : (
             <>
               <Switch
-                checked={isChecked?.isReEvaluateNeed}
-                disabled={isChecked?.movedAfterReEvaluateIsOff || isDisabled}
+                checked={isReEvaluateChecked?.reEvaluateNeed}
+                disabled={
+                  isReEvaluateChecked?.movedAfterReEvaluateIsOff || isDisabled
+                }
               />
             </>
           )}
@@ -613,25 +615,27 @@ const Hcc = ({
                         MEAT Criteria
                       </Nav.Link>
                     </Nav.Item>
-                    <Nav.Item as="li" className="nav-item">
-                      <Nav.Link
-                        to="#my-posts"
-                        eventKey={5}
-                        className={` text-truncate ${visitStyles.navColor}`}
-                        onClick={() =>
-                          selectTab(
-                            5,
-                            setFlagTagActive,
-                            setActiveTabHead,
-                            setActiveComboTree,
-                            setPopoverVisible,
-                            setActiveMeatTitle
-                          )
-                        }
-                      >
-                        RAF Score
-                      </Nav.Link>
-                    </Nav.Item>
+                    {activeTab !== 5 && (
+                      <Nav.Item as="li" className="nav-item">
+                        <Nav.Link
+                          to="#my-posts"
+                          eventKey={5}
+                          className={` text-truncate ${visitStyles.navColor}`}
+                          onClick={() =>
+                            selectTab(
+                              5,
+                              setFlagTagActive,
+                              setActiveTabHead,
+                              setActiveComboTree,
+                              setPopoverVisible,
+                              setActiveMeatTitle
+                            )
+                          }
+                        >
+                          RAF Score
+                        </Nav.Link>
+                      </Nav.Item>
+                    )}
                     <Nav.Item as="li" className="nav-item">
                       <Nav.Link
                         to="#my-posts"
@@ -676,6 +680,7 @@ const Hcc = ({
                           setSearch={setSearch}
                           setFlagContainerActive={setFlagContainerActive}
                           selectedDate={selectedDate}
+                          getSelectedDos={getSelectedDos}
                           setSelectedDate={setSelectedDate}
                         />
                         {getStorage("userRole") != "admin" &&
@@ -810,7 +815,7 @@ const Hcc = ({
                             });
                           }}
                         >
-                          Action
+                          More
                         </button>
                       </Popover>
                     </Nav.Item>
@@ -890,7 +895,7 @@ const Hcc = ({
                   actions={actions}
                   selectDosValue={selectDosValue}
                   activeTab={activeTab}
-                   educationalError={educationalError}
+                  educationalError={educationalError}
                   setEducationalError={setEducationalError}
                 />
               </Tab.Pane>
@@ -902,7 +907,7 @@ const Hcc = ({
                   year={year}
                   actions={actions}
                   activeTab={activeTab}
-                   educationalError={educationalError}
+                  educationalError={educationalError}
                   setEducationalError={setEducationalError}
                 />
               </Tab.Pane>
@@ -912,7 +917,7 @@ const Hcc = ({
                   year={year}
                   actions={actions}
                   activeTab={activeTab}
-                   educationalError={educationalError}
+                  educationalError={educationalError}
                   setEducationalError={setEducationalError}
                 />
               </Tab.Pane>

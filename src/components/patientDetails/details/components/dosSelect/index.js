@@ -1,10 +1,9 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Empty, message, Popover, Select, Tooltip } from "antd";
 import { FlagFilled } from "@ant-design/icons";
 import { formatDateTime, getResponePopup } from "../../../../../utils/reusable";
 import { getStatusIcon } from "../../../../reuseableFunctions";
 import moment from "moment";
-
 
 const { Option } = Select;
 
@@ -28,6 +27,33 @@ const DosSelect = ({
   const selectedRow = dosData?.find(
     (row) => row?.dateOfService === selectedDate
   );
+
+  // useEffect(() => {
+  //   const selectedDateExists = dosData?.some(
+  //     (item) => item?.dateOfService === selectedDate
+  //   );
+
+  //   if ((!selectedDate || !selectedDateExists) && dosData?.length > 0) {
+  //     setSelectedDate(dosData[0]?.dateOfService);
+  //     // handleOptions(dosData[0]?.dateOfService);
+  //     // setSearch({
+  //     //   value: dosData[0]?.page?.substring || "",
+  //     //   page: dosData[0]?.page?.startPageNumber || 1,
+  //     // });
+  //   }
+  // }, [dosData]);
+  useEffect(() => {
+    const selectedDateExists = dosData?.some(
+      (item) => item?.dateOfService === selectedDate
+    );
+
+    if (dosData?.length === 0) {
+      setSelectedDate(null);
+    } else if ((!selectedDate || !selectedDateExists) && dosData?.length > 0) {
+      setSelectedDate(dosData[0]?.dateOfService);
+    }
+  }, [dosData]);
+
   const getDos = (item) => (
     <div className="d-flex ant-badge gap-1 align-items-center ">
       <div
@@ -123,8 +149,7 @@ const DosSelect = ({
     <Select
       style={{ width: 380 }}
       placeholder="--- Select DOS ---"
-      allowClear
-      value={selectedDate}
+      value={selectedDate ? selectedDate : undefined}
       onClear={() => {
         setSelectedDate(null);
         handleOptions("");

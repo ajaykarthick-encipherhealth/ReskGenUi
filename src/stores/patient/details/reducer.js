@@ -94,7 +94,7 @@ const getStoreFileIdDetailsPre = handleActions(
 
 const getSelectedDosDetails = handleActions(
   {
-    [getSelectedDos.toString()]: (state, { payload }) => payload,
+    [getSelectedDos.toString()]: (state, { payload }) => payload ?? state,
   },
   ""
 );

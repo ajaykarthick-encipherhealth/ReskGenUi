@@ -14,6 +14,7 @@ const Flag = ({
   patientDetails,
   flagsDetailsResult,
   getFlagCounts,
+  activeTab,
 }) => {
   const sortedFlags =
     flagsDetailsResult?.response?.length > 0
@@ -115,27 +116,29 @@ const Flag = ({
             </div>
           </div>
         </div>
-        <div
-          className={`${styles.flagHccCard3} ${styles.rafscoreheader} p-2 mx-2`}
-        >
-          <h5 className={visitStyles.flagTitle}>RAF</h5>
-          <div>
-            {patientDetails?.rafScore?.rafVersionDTO?.overAllScore != null ? (
-              <h5 className={`pt-3 ${visitStyles.flagTitle}`}>
-                {patientDetails?.rafScore?.rafVersionDTO?.overAllScore?.toFixed(
-                  3
-                )}
-              </h5>
-            ) : (
-              <h5
-                className={`pt-3 ${visitStyles.flagTitle}`}
-                style={{ fontWeight: 400 }}
-              >
-                0.00
-              </h5>
-            )}
+        {activeTab !== 5 && (
+          <div
+            className={`${styles.flagHccCard3} ${styles.rafscoreheader} p-2 mx-2`}
+          >
+            <h5 className={visitStyles.flagTitle}>RAF</h5>
+            <div>
+              {patientDetails?.rafScore?.rafVersionDTO?.overAllScore != null ? (
+                <h5 className={`pt-3 ${visitStyles.flagTitle}`}>
+                  {patientDetails?.rafScore?.rafVersionDTO?.overAllScore?.toFixed(
+                    3
+                  )}
+                </h5>
+              ) : (
+                <h5
+                  className={`pt-3 ${visitStyles.flagTitle}`}
+                  style={{ fontWeight: 400 }}
+                >
+                  0.00
+                </h5>
+              )}
+            </div>
           </div>
-        </div>
+        )}
       </div>
     </>
   );

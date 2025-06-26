@@ -222,17 +222,18 @@ const Details = ({
       defaultComplete: "HCC_DISEASES",
     },
     {
-      title: "NON HCC",
-      type: "NON HCC",
-      iconStyle: IMAGES.visitDataNonHcc,
-      defaultComplete: "NON_HCC_DISEASE",
-    },
-    {
       title: "RX",
       type: "RX",
       iconStyle: IMAGES.visitDataRx,
       defaultComplete: "RX_HCC_DISEASE",
     },
+    {
+      title: "NON HCC",
+      type: "NON HCC",
+      iconStyle: IMAGES.visitDataNonHcc,
+      defaultComplete: "NON_HCC_DISEASE",
+    },
+
     {
       title: "Radiology",
       type: "Radiology",
@@ -268,26 +269,30 @@ const Details = ({
       patientDetailsLoad(false);
     }
   };
+  useEffect(() => {
+    const patientId = getStorage("patientId");
+    getYear(patientId);
+  }, []);
 
   useEffect(() => {
     const patientId = getStorage("patientId");
     const fileId = getStorage("fileId");
     if (activeTab == 1 && lastActiveTab > 2) {
-      getYear(patientId);
-      dosYearDefalutSelect && getPatientListToDetails(patientId);
-      if (patientDetailsResult?.data?.response?.fileId != fileId) {
-        getPatientHccFile(patientDetailsResult?.data?.response?.fileId);
-      }
+      // getYear(patientId);
+      // dosYearDefalutSelect && getPatientListToDetails(patientId);
+      // if (patientDetailsResult?.data?.response?.fileId != fileId) {
+      //   getPatientHccFile(patientDetailsResult?.data?.response?.fileId);
+      // }
     }
     var dosYearArr = processedYearResult?.data?.response?.map((res) => {
       return { value: res, label: res };
     });
-    if (activeTab == 3) {
-      getPatientRadiologyDosList(
-        selectPatientId?.patirntId ? selectPatientId?.patirntId : patientId,
-        dosYearArr?.[0]?.value || ""
-      );
-    }
+    // if (activeTab == 3) {
+    //   getPatientRadiologyDosList(
+    //     selectPatientId?.patirntId ? selectPatientId?.patirntId : patientId,
+    //     dosYearArr?.[0]?.value || ""
+    //   );
+    // }
     if (activeTab == 4) {
       getPatientLabDosList(
         selectPatientId?.patirntId ? selectPatientId?.patirntId : patientId,
@@ -389,24 +394,41 @@ const Details = ({
     setSelectedDosValue(dosYearArr[0]?.value);
     setDosYear(dosYearArr);
     setIsLoadingDos(false);
+
     if (result?.data?.response?.length > 0) {
       if (activeTab == 1) {
         getFlagCharts({ dos: dosYearArr[0]?.value });
-        getpatientDetailsData(
-          selectPatientId?.patirntId ? selectPatientId?.patirntId : patientId,
-          dosYearArr[0]?.value,
-          null,
-          "",
-          userRole
-        );
-        patientDetailsLoad(false);
-        getPatientIdData(
-          selectPatientId?.patirntId ? selectPatientId?.patirntId : patientId
-        );
-        getPatientDosList(
+        const res = await getPatientDosList(
           selectPatientId?.patirntId ? selectPatientId?.patirntId : patientId,
           dosYearArr[0]?.value
         );
+        if (res?.response?.length > 0) {
+          getpatientDetailsData(
+            selectPatientId?.patirntId ? selectPatientId?.patirntId : patientId,
+            null,
+            res?.response[0]?.dateOfService,
+            "",
+            userRole
+          );
+          getSelectedDos(res?.response[0]?.dateOfService);
+          patientDetailsLoad(false);
+        } else {
+          getpatientDetailsData(
+            selectPatientId?.patirntId ? selectPatientId?.patirntId : patientId,
+            dosYearArr[0]?.value,
+            "",
+            "",
+            userRole
+          );
+          patientDetailsLoad(false);
+        }
+        getPatientIdData(
+          selectPatientId?.patirntId ? selectPatientId?.patirntId : patientId
+        );
+        // getPatientDosList(
+        //   selectPatientId?.patirntId ? selectPatientId?.patirntId : patientId,
+        //   dosYearArr[0]?.value
+        // );
         getDosPageNumber(
           selectPatientId?.patirntId ? selectPatientId?.patirntId : patientId,
           dosYearArr[0]?.value
@@ -453,7 +475,7 @@ const Details = ({
           result.processedYear,
           result.dateOfService
         );
-        getFlagCharts({ dos: result.processedYear });
+        // getFlagCharts({ dos: result.processedYear });
         setIsLoading(false);
         setPatientResultReload(true);
       } else {
@@ -475,16 +497,23 @@ const Details = ({
     setPatientResultReload(false);
     setIsLoading(true);
     patientDetailsLoad(true);
-    getPatientDosList(localPatientId, e);
     getSelectedDos("");
-    await getpatientDetailsData(
-      localPatientId,
-      e,
-      null,
-      setIsLoading,
-      userRole
-    );
-    patientDetailsLoad(false);
+
+    const res = await getPatientDosList(localPatientId, e);
+    if (res?.response?.length > 0) {
+      getpatientDetailsData(
+        localPatientId,
+        null,
+        res?.response[0]?.dateOfService,
+        "",
+        userRole
+      );
+      getSelectedDos(res?.response[0]?.dateOfService);
+      patientDetailsLoad(false);
+    } else {
+      getpatientDetailsData(localPatientId, e, "", "", userRole);
+      patientDetailsLoad(false);
+    }
     getFlagCharts({ dos: e });
     // getAllRevertDetails({ dos: e });
   };
@@ -568,19 +597,31 @@ const Details = ({
       getYear?.response.length > 0 ? getYear?.response[0] : selectedDosValue;
     try {
       getFlagCharts({ dos: year });
+      const resData = await getPatientDosList(userId, year);
+      let res = null;
+      if (resData?.response?.length > 0) {
+        res = await getpatientDetailsData(
+          userId,
+          year,
+          resData?.response[0]?.dateOfService,
+          setIsLoading,
+          userRole
+        );
+        getSelectedDos(resData?.response[0]?.dateOfService);
+      } else {
+        res = await getpatientDetailsData(
+          userId,
+          year,
+          "",
+          setIsLoading,
+          userRole
+        );
+      }
 
-      const res = await getpatientDetailsData(
-        userId,
-        year,
-        isClear ? "" : selectDosValue,
-        setIsLoading,
-        userRole
-      );
       if (res.status == "SUCCESS") {
-        getPatientIdData(userId);
+        getPatientIdData(userId, isDosSelected);
         getPatientHccFile(res.response?.fileDetailDTO?.fileId);
         setLocalPatientId(userId);
-        getPatientDosList(userId, year);
         activeLabels({
           patientId: userId,
           year: year,
@@ -750,7 +791,8 @@ const Details = ({
                           />
                         </Button>
                       </div>
-                      <div style={{ position: "relative", left: "-2%" }}
+                      <div
+                        style={{ position: "relative", left: "-2%" }}
                         className="col-11"
                       >
                         {loading || isSpinnerLoading ? (
@@ -776,6 +818,7 @@ const Details = ({
                             setCopied={setCopied}
                             selectedDate={selectedDate}
                             setSelectedDate={setSelectedDate}
+                            activeTab={activeTab}
                           />
                         )}
                       </div>
@@ -1046,6 +1089,7 @@ const Details = ({
                                 ?.workflow?.[0]?.status !== "PENDING" ||
                               patientDetailsResult?.data?.response
                                 ?.workflow?.[0]?.status == "COMPLETED";
+
                             const isFlagDisabled =
                               data.name === "Flag" && !isDosSelected;
                             const isDosDisabled =
@@ -1060,7 +1104,7 @@ const Details = ({
                             const isDisabled =
                               (isEditDisabled && isEditDisabledList) ||
                               isFlagDisabled ||
-                              isDosDisabled ||
+                              // isDosDisabled
                               isVersionDisabled;
 
                             return (
@@ -1224,6 +1268,7 @@ const Details = ({
                       dosYear={dosYear}
                       selectedDosValue={selectedDosValue}
                       dosYearDefalutSelect={dosYearDefalutSelect}
+                      isDosSelected={isDosSelected}
                     />
                   ) : flagContainerActive === "Queried" ? (
                     <Queried
@@ -1246,6 +1291,7 @@ const Details = ({
                       patientIdDetailsData={patientIdDetailsData}
                       activeLabels={activeLabels}
                       patientDetailsResult={patientDetailsResult}
+                      getPatientDosList={getPatientDosList}
                     />
                   ) : null}
                 </Drawer>
@@ -1277,6 +1323,7 @@ const Details = ({
           search={search}
           setSearch={setSearch}
           selectedDosValue={selectedDosValue}
+          activeTab={activeTab}
         />
       )}
     </>
