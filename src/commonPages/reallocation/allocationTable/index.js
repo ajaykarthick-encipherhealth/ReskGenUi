@@ -59,7 +59,7 @@ const ReAllocationTable = ({
           }));
           setSelectedRows(result.map((patient) => patient.patientId));
           setSelectedRowsId(result);
-          setSelectedUserName(result.map((patient) => patient.userName));
+          setSelectedUserName(result);
         }
         setCheckedLoader(false);
       } else {

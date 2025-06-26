@@ -202,7 +202,6 @@ const ReAllocation = ({
       setIsFilter(false);
     }
   }, [data?.response?.metaDataDTO]);
-  console.log(selectedUserName,"selectedUserName")
   return (
     <div>
       <div className="content-body">
