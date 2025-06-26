@@ -13,7 +13,9 @@ import {
   randomSamplingAction,
   getMoveBackLevel,
   postMoveBack,
-  getAllRoles
+  getAllRoles,
+  getReAllocateUserList,
+  reAllocateUser
 } from "./actions";
 
 const initialState = {
@@ -73,9 +75,12 @@ const patientsAllocationReducer = combineReducers({
   moveBackLevel:createReducer(getMoveBackLevel),
   postMoveBack:createReducer(postMoveBack),
   getRoles:createReducer(getAllRoles),
+  getReAllocateUserList:createReducer(getReAllocateUserList),
+  reAllocateUser:createReducer(reAllocateUser),
 
   //loaders
   rolesLoader:getReportLoading(getAllRoles),
+  reAllocateLoader:getReportLoading(getReAllocateUserList)
 
 });
 

@@ -19,7 +19,7 @@
 }
 
 .listContentLarge {
-  height: 450px !important;
+  height: 320px !important;
 }
 
 .listName {
@@ -69,8 +69,8 @@
   padding: 10px;
 }
 .selectChart {
-  width: 350px;
-  height: 200px;
+  /* width: 350px; */
+  height: 100px;
   overflow: scroll;
 }
 .backArrowBtn {

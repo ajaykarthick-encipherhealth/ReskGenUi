@@ -1,25 +1,12 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Avatar, DatePicker, Empty, Modal, Select } from "antd";
+import { Avatar, Checkbox, DatePicker, Empty, Modal, Select } from "antd";
 import modalStyle from "../../../pages/tenantadmin/allocateduser/allocate/style.module.css";
 import { InputText } from "primereact/inputtext";
 import { useEffect, useState } from "react";
-import Router, { useRouter } from "next/router";
 import dayjs from "dayjs";
-
-import {
-  faSearch,
-  faXmark,
-  faUser,
-  faCircle,
-} from "@fortawesome/free-solid-svg-icons";
-
-import { actions as allActions } from "../../../stores/admin/patientAllocation";
+import { faSearch, faUser, faCircle } from "@fortawesome/free-solid-svg-icons";
 import { connect } from "react-redux";
-import {
-  createIdGen,
-  formatDateForIndex,
-  getResponePopup,
-} from "../../../utils/reusable";
+import { formatDateForIndex, getResponePopup } from "../../../utils/reusable";
 import styles from "../../../components/tables/table.module.css";
 import { getStorage } from "../../../utils/storages";
 import TableSkeleton from "../../../components/skeleton/table";
@@ -28,8 +15,9 @@ import {
   disablePastDate,
   priorityOptions,
 } from "../../../components/headerFilters/functions";
+import { actions as allAction } from "../../../stores/tenantAdmin/patientAllocations";
 
-const AllocateModal = ({
+const ReAllocationModal = ({
   open,
   setOpen,
   selectedRowsId,
@@ -37,18 +25,18 @@ const AllocateModal = ({
   selectedChart,
   setSelectedChart,
   getL1UsersList,
-  getAllocateUsers,
+  reAllocateUser,
   setSelectedRows,
   selectedUserName,
   setSelectedUserName,
-  usersLoader,
-  id,
-  getAllAllocation,
+  reAllocateUserLoader,
+  getAllReAllocation,
   setIsAllocate,
   roleId,
   isAllocate,
+  getReAllocateUserList,
+  allocateModal,
 }) => {
-  const router = useRouter();
   const userId = getStorage("userId");
   const [activeCard, setActiveCard] = useState("");
   const [search, setSearch] = useState("");
@@ -65,24 +53,34 @@ const AllocateModal = ({
   });
   const [statusCount, setStatusCount] = useState([]);
   const [priority, setPriority] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [selectedUserIds, setSelectedUserIds] = useState([]);
+  const [isSecondModalOpen, setIsSecondModalOpen] = useState(false);
+  const [isChecked, setIsChecked] = useState(false);
+
   const getInitials = (firstName, lastName) => {
     const firstNameInitial = firstName?.charAt(0) || "";
     const secondNameInitial = lastName?.charAt(0) || "";
     return firstNameInitial?.toUpperCase() + secondNameInitial?.toUpperCase();
   };
-  const [selectedUserIds, setSelectedUserIds] = useState([]);
-  const [isSecondModalOpen, setIsSecondModalOpen] = useState(false);
-
   const handleChange = (value) => {
     setPriority(value);
   };
+  const handleCheckboxChange = (e) => {
+    setIsChecked(e.target.checked);
+  };
 
-  const getUserList = async ({ roleId, search }) => {
-    const response = await getL1UsersList({
-      roleId: roleId || "",
-      search: search || "",
+  const getUserList = async () => {
+    setIsLoading(true);
+    const response = await getReAllocateUserList({
+      data: {
+        roleId: roleId || "",
+        search: search || "",
+        userName: selectedUserName.map((item) => item.userName),
+      },
     });
     if (response?.status === "SUCCESS") {
+      setIsLoading(false);
       let result = response?.response;
       const user = result?.map((item) => {
         return {
@@ -95,24 +93,26 @@ const AllocateModal = ({
       });
       setStatusCount(response?.response);
       setUserDetails(user);
+    } else {
+      setIsLoading(false);
     }
   };
   const setAllocate = async () => {
     setIsAllocate(true);
-    const response = await getAllocateUsers({
+    const response = await reAllocateUser({
       data: {
         roleId: roleId,
-        userIdList: activeEmail,
         dueDate: formatDateForIndex({ date: allocateDate, index: 1 }),
-        allocatedBy: userId,
-        patientIdList: selectedRowsId,
+        reallocateUserName: activeEmail.toString(),
+        patientId: selectedRowsId,
         priority: priority,
+        changesNeeded: isChecked,
       },
     });
     if (response?.status == "SUCCESS") {
       setIsAllocate(false);
       getResponePopup(response);
-      getAllAllocation();
+      getAllReAllocation();
       setOpen(false);
       setAllocateDate("");
       setActiveCard("");
@@ -123,46 +123,34 @@ const AllocateModal = ({
       setSelectedRows([]);
       setSelectedUserName([]);
       setSelectedUserIds([]);
+      setActiveCard("");
       setIsSecondModalOpen(false);
+      setIsChecked(false);
     } else {
       getResponePopup(response);
       setIsAllocate(false);
     }
   };
-  const handleUserSelect = (id, email) => {
-    if (selectedUserIds.includes(id)) {
-      setSelectedUserIds(selectedUserIds.filter((userId) => userId !== id));
-      setActiveEmail(activeEmail.filter((e) => e !== email));
-       setActiveCard("");
-    } else {
-      setSelectedUserIds([...selectedUserIds, id]);
-      setActiveEmail([...activeEmail, email]);
-       setActiveCard("");
-    }
-  };
 
-  const handleSelectAll = () => {
-    if (selectedUserIds.length === userDetails.length) {
+  const handleRowCheckboxChange = ({ e, row }) => {
+    if (e.target?.checked) {
+      setSelectedUserIds([row.id]);
+      setActiveEmail([row.email]);
+    } else {
       setSelectedUserIds([]);
       setActiveEmail([]);
-    } else {
-      const allIds = userDetails.map((user) => user.id);
-      setSelectedUserIds(allIds);
-      setActiveEmail(userDetails.map((user) => user.email));
     }
+    setActiveCard("");
   };
-
+  console.log(!(allocateDate && priority), allocateDate, priority,"set");
   useEffect(() => {
-    if (roleId ) {
-      getUserList({ roleId: roleId });
+    if (allocateModal) {
+      getUserList({ roleId: roleId, userName: selectedUserName });
     }
-  }, [roleId]);
+  }, [roleId, selectedUserName, allocateModal]);
   useEffect(() => {
     setSelectedChart(selectedRowsId);
   }, [selectedRowsId]);
-
-
-
   return (
     <div>
       <Modal
@@ -204,33 +192,8 @@ const AllocateModal = ({
               }
             }}
           />
-          {userDetails.length > 0 ? (
-            <div className="d-flex align-items-center ">
-              <div className="fontWeight3 font3">Select All</div>
-              <input
-                style={{
-                  width: "20px",
-                  height: "20px",
-                  flexShrink: "0",
-                  borderRadius: "4px",
-                  cursor: "pointer",
-                }}
-                className={`mx-4  ${styles.checkbox}${
-                  selectedUserIds.length === userDetails.length
-                    ? styles.customChecked2
-                    : ""
-                } `}
-                type="checkbox"
-                id="selectAll"
-                checked={selectedUserIds.length === userDetails.length}
-                onChange={handleSelectAll}
-              />
-            </div>
-          ) : (
-            ""
-          )}
         </div>
-        {usersLoader ? (
+        {isLoading ? (
           <TableSkeleton />
         ) : userDetails.length > 0 ? (
           <div className={modalStyle.scroll}>
@@ -293,7 +256,9 @@ const AllocateModal = ({
                       }}
                       type="checkbox"
                       checked={selectedUserIds.includes(item.id)}
-                      onChange={() => handleUserSelect(item.id, item.email)}
+                      onChange={(e) =>
+                        handleRowCheckboxChange({ e, row: item })
+                      }
                       className="me-2 ms-3 align-self-center"
                     />
                   </div>
@@ -327,7 +292,6 @@ const AllocateModal = ({
                                       : 0}
                                   </span>
                                 </div>
-
                                 <div className="d-flex my-3">
                                   <div>
                                     <FontAwesomeIcon
@@ -396,55 +360,19 @@ const AllocateModal = ({
                         </div>
                         <div className={`col-7 ${modalStyle.activeRow1}`}>
                           <span className={`${modalStyle.title} text-danger`}>
-                            {selectedUserName?.length +
+                            {selectedRowsId?.length +
                               chart?.hold +
                               chart?.pending >
                               100 && "Maximum upto 100 charts to pending"}
                           </span>
                           <div className="mt-3">Selected Charts</div>
                           <ul className={`${modalStyle.selectChart}`}>
-                            {selectedUserName?.map((item, index) => (
+                            {selectedRowsId?.map((item, index) => (
                               <li
                                 className={` mt-2 ${modalStyle.listing} ${modalStyle.listings}`}
                                 key={item.id}
-                                // onClick={() => {
-                                //   let remove = selectedUserName.filter(
-                                //     (chart) => chart.patientId != item.patientId
-                                //   );
-                                //   setSelectedUserName(remove);
-                                // }}
                               >
-                                <span>{item.patientId}</span>
-                                {/* <button
-                                  id={
-                                    id
-                                      ? createIdGen("delete " + tableId + index)
-                                      : createIdGen(
-                                          "delete " +
-                                            router.pathname.replaceAll(
-                                              "/",
-                                              " "
-                                            ) +
-                                            index
-                                        )
-                                  }
-                                  className="btn p-1"
-                                >
-                                  <Avatar
-                                    size={21}
-                                    shape="square"
-                                    style={{
-                                      backgroundColor: "#F99F9F",
-                                      color: "#F01010",
-                                    }}
-                                    icon={
-                                      <FontAwesomeIcon
-                                        className="fa fa-search"
-                                        icon={faXmark}
-                                      />
-                                    }
-                                  ></Avatar>
-                                </button> */}
+                                <span>{item}</span>
                               </li>
                             ))}
                           </ul>
@@ -493,7 +421,7 @@ const AllocateModal = ({
           setAllocateDate(null);
           setActiveCard("");
           setActiveEmail([]);
-          setPriority([])
+          setPriority([]);
         }}
         footer={null}
         width="35%"
@@ -505,7 +433,6 @@ const AllocateModal = ({
                 Charts Selected:
                 {selectedChart?.length > 0 ? selectedChart.length : 0}
               </span>
-
               <div className="d-flex gap-3 py-2 align-items-center ">
                 <span className={`${modalStyle.title} py-3`}>Due Date</span>
                 <DatePicker
@@ -520,7 +447,6 @@ const AllocateModal = ({
                   disabledDate={(current) => disablePastDate(current)}
                 />
               </div>
-
               <div className="d-flex py-1 gap-1 align-items-center">
                 <span>Set Priority</span>
                 <div className="antdCustomSelect">
@@ -539,50 +465,41 @@ const AllocateModal = ({
             </div>
             <div className={`col-6 ${modalStyle.activeRow1}`}>
               <span className={`${modalStyle.title} text-danger`}>
-                {selectedUserName?.length + chart?.hold + chart?.pending >
-                  100 && "Maximum upto 100 charts to pending"}
+                {selectedRowsId?.length + chart?.hold + chart?.pending > 100 &&
+                  "Maximum upto 100 charts to pending"}
               </span>
 
               <div className="mb-3">Selected Charts</div>
-
               <ul className={`${modalStyle.selectChart}`}>
-                {selectedUserName?.map((item, index) => (
+                {selectedRowsId?.map((item, index) => (
                   <li
                     className={`${modalStyle.listing} ${modalStyle.listings}`}
                     key={item.id}
-                    // onClick={() =>
-                    //   setSelectedUserName((prev) =>
-                    //     prev.filter(
-                    //       (chart) => chart.patientId !== item.patientId
-                    //     )
-                    //   )
-                    // }
                   >
-                    <span>{item.patientId}</span>
-                    {/* <button
-                      id={createIdGen(`delete ${index}`)}
-                      className="btn p-1"
-                    >
-                      <Avatar
-                        size={21}
-                        shape="square"
-                        style={{ backgroundColor: "#F99F9F", color: "#F01010" }}
-                        icon={<FontAwesomeIcon icon={faXmark} />}
-                      />
-                    </button> */}
+                    <span>{item}</span>
                   </li>
                 ))}
               </ul>
             </div>
+            <div className="mt-4">
+              <span className="fontWeight2">Note:</span> If you choose 'Delete
+              Codes and Reallocate', the codes will be permanently deleted.
+              Otherwise, the codes will be retained and reallocated.
+              <div className="mt-1">
+                <Checkbox
+                  className="ant-badge"
+                  checked={isChecked}
+                  onChange={handleCheckboxChange}
+                >
+                  Delete Codes and Reallocate
+                </Checkbox>
+              </div>
+            </div>
           </div>
-          <div className="d-flex justify-content-center mt-5">
+          <div className="d-flex justify-content-center mt-4">
             <RegularButton
               disabled={
-                !selectedChart?.length ||
-                !allocateDate ||
-                !priority?.length ||
-                selectedChart?.length + chart?.hold + chart?.pending > 100 ||
-                isAllocate
+              isAllocate || !(allocateDate && priority?.length)
               }
               name="Allocate"
               onClick={setAllocate}
@@ -597,11 +514,12 @@ const AllocateModal = ({
 
 const connector = connect(
   (state) => ({
-    usersLoader: state?.admin?.patientAllocate?.getUsersLoading,
+    reAllocateUserLoader:
+      state?.tenantAdmin?.patientAllocation?.reAllocateLoader,
   }),
   {
-    getL1UsersList: allActions.getL1UsersList,
-    getAllocateUsers: allActions.getAllocateUsers,
+    getReAllocateUserList: allAction.getReAllocateUserList,
+    reAllocateUser: allAction.reAllocateUser,
   }
 );
-export default connector(AllocateModal);
+export default connector(ReAllocationModal);

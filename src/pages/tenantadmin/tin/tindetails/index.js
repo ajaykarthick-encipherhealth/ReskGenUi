@@ -16,11 +16,13 @@ import { Spin } from "antd";
 import { LoadingOutlined } from "@ant-design/icons";
 import { actions as allPatientSyncAction } from "../../../../stores/tenantAdmin/patientSync";
 import {actions as tableAction} from '../../../../stores/tableView'
+import Reallocation from '../../../../commonPages/reallocation'
 
 const TinDetails = ({ activeTabName,getTableData, getProjectActiveTab,getRoutedData,getRoutedDatAllocation }) => {
   const router = useRouter();
 
   const tabs = getAccessTabItems({ page: "Tin", tabsMenu: "tabMenuList2" });
+  console.log(tabs,"tabs")
   const { tab } = router.query;
   const activeTab = tab || activeTabName?.tinDetailsTab;
   const [parsedData, setParsedData] = useState([]);
@@ -139,6 +141,9 @@ const TinDetails = ({ activeTabName,getTableData, getProjectActiveTab,getRoutedD
         )}
         {activeTab === "Query Approval" && (
           <QueryApproval statusBodyTemplate={processstatusBodyTemplate} />
+        )}
+         {activeTab === "ReAllocation" && (
+          <Reallocation statusBodyTemplate={processstatusBodyTemplate} />
         )}
       </div>
     </div>

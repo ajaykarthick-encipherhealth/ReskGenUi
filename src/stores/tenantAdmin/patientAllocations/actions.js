@@ -81,4 +81,13 @@ export const getAllRoles = createActionThunk(
   "GET_ROLES_ADMIN",
   network.getRoles
 );
+export const getReAllocateUserList = createActionThunk(
+  "GET_REALLOCATE_USER_LIST",
+  network.reAllocateUsersList
+);
+export const reAllocateUser = createActionThunk(
+  "REALLOCATE_USER",
+  network.reAllocateUser
+);
+
 

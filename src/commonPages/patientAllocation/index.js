@@ -261,7 +261,7 @@ const PatientAllocation = ({
                                   }}
                                   eventKey={index + 1}
                                 >
-                                  {role?.roleName
+                                  {role?.aliasName
                                     ?.replace(/_/g, " ")
                                     ?.replace(/\b\w/g, (c) => c.toUpperCase())}
                                 </Nav.Link>

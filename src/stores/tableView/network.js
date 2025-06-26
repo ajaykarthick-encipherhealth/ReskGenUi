@@ -89,6 +89,7 @@ export async function getTableView({
       "937b0477-f0cd-46e7-b8ab-fefb38f91859",
       "8c1eebaf-eb20-4758-b968-6ae15e6fc031",
       "2d7cb7f7-6dad-41fb-970b-d805fb3f195f",
+      "21235203-2ce0-4ebc-b6d3-05a9d8e8fc75"
     ];
 
     if (tinPageIds.includes(pageId)) {

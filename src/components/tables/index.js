@@ -1247,6 +1247,7 @@ const TableRow = ({
                     checked={selectedRows?.some(
                       (row) => row === item[columnItem.value]
                     )}
+                    
                     id={
                       tableId
                         ? createIdGen("checkBox" + tableId + colIndex)

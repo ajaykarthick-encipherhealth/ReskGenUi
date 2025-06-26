@@ -77,8 +77,8 @@
   display: inline-block;
 }
 .selectChart {
-  width: 350px;
-  height: 200px;
+  /* width: 350px; */
+  height: 100px;
   overflow: scroll;
 }
 .prioritySelect{
