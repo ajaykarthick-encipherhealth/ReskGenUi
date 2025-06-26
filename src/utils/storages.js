@@ -66,3 +66,14 @@ export const removeStorage = (key) => {
     return null;
   }
 };
+
+export const getLocalStored = () => {
+  const allSessionStorage = {};
+  if (typeof window !== "undefined" && typeof sessionStorage !== "undefined") {
+    for (let i = 0; i < sessionStorage.length; i++) {
+      const key = sessionStorage.key(i);
+      allSessionStorage[key] = sessionStorage.getItem(key);
+    }
+  }
+  return allSessionStorage;
+};

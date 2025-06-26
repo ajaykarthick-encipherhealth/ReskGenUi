@@ -1,24 +1,20 @@
 import { checkStatus } from "./helper";
-import { getStorage } from "../storages";
+import { getLocalStored, getStorage } from "../storages";
 import { portalMockoon, portalUrl, tokenKey } from "../config";
 
 export async function requestPortal(url, options) {
+  const { client = null, project = null, roleId = null, orgId = null } = getLocalStored();
   const token = getStorage(tokenKey);
-  const clientId = getStorage("client");
-  const projectId = getStorage("project");
-  const orgId = getStorage("orgId");
-  const userRoleId = getStorage("roleId");
-
   const actualUrl = `${portalUrl}${url}`;
   const actualOptions = {
     ...options,
     headers: {
       Authorization: `${"Bearer" + " " + token}`,
       "Content-Type": "application/json",
-      "X-Role-Id": userRoleId,
-      "X-Client":clientId,
+      "X-Role-Id": roleId,
+      "X-Client": client,
       "X-Org": orgId,
-      "X-Project":projectId,
+      "X-Project": project,
       "X-Org-based": "true",
     },
   };
@@ -39,21 +35,18 @@ export async function requestPortalMockoon(url, options) {
 }
 
 export async function requestPortalFiles(url, options) {
+  const { client = null, project = null, roleId = null, orgId = null } = getLocalStored();
   const token = getStorage(tokenKey);
-  const clientId = getStorage("client");
-  const projectId = getStorage("project");
-  const orgId = getStorage("orgId");
-  const userRoleId = getStorage("roleId");
   const actualUrl = `${portalUrl}${url}`;
   const actualOptions = {
     ...options,
     headers: {
       Authorization: `${"Bearer" + " " + token}`,
       // "Content-Type": "application/json",
-      "X-Role-Id": userRoleId,
-      "X-Client":clientId,
+      "X-Role-Id": roleId,
+      "X-Client": client,
       "X-Org": orgId,
-      "X-Project":projectId,
+      "X-Project": project,
       "X-Org-based": "true",
     },
   };
