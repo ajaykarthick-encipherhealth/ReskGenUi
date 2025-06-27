@@ -37,6 +37,7 @@ const AddForm = ({
   existingDos,
   getExistingDos,
   getSelectedDos,
+  year,
 }) => {
   const [btnName, setBtnName] = useState(null);
   const [providerOptions, setProviderOptions] = useState([]);
@@ -96,16 +97,15 @@ const AddForm = ({
         setBtnName(null);
         patientDetailsLoad(true);
         getResponePopup(res);
-        const year = dosYear?.[0]?.value || "";
         getAddProviderAndDOSList({ year });
-        dosDeatilsAction(patientId, dosYear?.[0]?.value || "");
-        // getpatientDetailsData(
-        //   patientId,
-        //   patientDetailsResult?.processedYear,
-        //   data?.newDateOfService ? data.newDateOfService :  data?.dateOfService,
-        //   "",
-        //   ""
-        // );
+        dosDeatilsAction(patientId, year);
+        getpatientDetailsData(
+          patientId,
+          patientDetailsResult?.processedYear,
+          data?.newDateOfService ? data.newDateOfService : data?.dateOfService,
+          "",
+          ""
+        );
         getSelectedDos(
           data?.newDateOfService ? data.newDateOfService : data?.dateOfService
         );

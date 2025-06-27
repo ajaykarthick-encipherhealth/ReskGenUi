@@ -493,6 +493,7 @@ const Details = ({
   };
 
   const dosOnChange = async (e) => {
+    setIsFileCheck(false);
     setDosYearDefalutSelect(e);
     setPatientResultReload(false);
     setIsLoading(true);
@@ -585,8 +586,13 @@ const Details = ({
     setIsLoading(true);
     patientDetailsLoad(true);
     const getYear = await getAllProcessYear(userId, "HCC");
-    const year =
+    let year =
       getYear?.response.length > 0 ? getYear?.response[0] : selectedDosValue;
+    if (dosYearDefalutSelect) {
+      year = dosYearDefalutSelect?.value
+        ? dosYearDefalutSelect?.value
+        : dosYearDefalutSelect;
+    }
     try {
       getFlagCharts({ dos: year });
       const resData = await getPatientDosList(userId, year);
@@ -1272,6 +1278,7 @@ const Details = ({
                           ? dosYearDefalutSelect?.value
                           : dosYearDefalutSelect
                       }
+                      getPatientListToDetails={getPatientListToDetails}
                     />
                   ) : flagContainerActive === "Queried" ? (
                     <Queried

@@ -18,6 +18,7 @@ import {
 import RegularButton from "../../../button";
 import { getResponePopup } from "../../../../utils/reusable";
 import RegularButtonWithIcon from "../../../buttonWithIcon";
+import { getStorage } from "../../../../utils/storages";
 
 export const viewProvidersList = ({ list }) => (
   <div
@@ -44,6 +45,7 @@ const ManuallyAddProvider = ({
   setRestoreProviderAndCaptured,
   getExistingDos,
   year,
+  getPatientListToDetails,
 }) => {
   const [form] = Form.useForm();
   const [selectFileURL, setSelectFileURL] = useState([]);
@@ -93,13 +95,15 @@ const ManuallyAddProvider = ({
   };
 
   const handleDelete = async (item) => {
+    form.resetFields();
     const isDosSelected = item?.dateOfService;
+    var patientId = getStorage("patientId");
     try {
       const res = await setTrashProviderAndCaptured({ isDosSelected });
       if (res?.status === "SUCCESS") {
         getResponePopup(res);
-    
         getAddProviderAndDOSList({ year });
+        getPatientListToDetails(patientId);
       } else {
         console.warn("Trash failed:", res);
       }
@@ -117,7 +121,6 @@ const ManuallyAddProvider = ({
       if (res?.status === "SUCCESS") {
         getResponePopup(res);
 
-    
         getAddProviderAndDOSList({ trash: true, year });
       } else {
         console.warn("Restore failed:", res);
@@ -141,12 +144,12 @@ const ManuallyAddProvider = ({
       setSelectFileURL(hccFileDetails?.data?.response?.azureBlobPath);
     }
     if (dosYearDefalutSelect) {
-  
       getAddProviderAndDOSList({
         dosYear: dosYearDefalutSelect?.value ?? dosYearDefalutSelect,
         year,
       });
     }
+    form.resetFields();
   }, [hccFileDetails, dosYearDefalutSelect]);
 
   useEffect(() => {
@@ -177,6 +180,7 @@ const ManuallyAddProvider = ({
           dosYear={dosYear}
           selectedDosValue={selectedDosValue}
           dosYearDefalutSelect={dosYearDefalutSelect}
+          year={year}
         />
       </div>
 
