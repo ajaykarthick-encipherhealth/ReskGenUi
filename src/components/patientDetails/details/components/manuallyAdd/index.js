@@ -817,6 +817,7 @@ const ManuallyAdd = ({
         dateOfServiceIfDosWiseCompute: getSelectedDos ? getSelectedDos : null,
         processedYear: year?.value,
         educationalError: forms?.educationalError,
+        activeHeader: !isMeat,
       };
     } else {
       data = {
@@ -909,7 +910,8 @@ const ManuallyAdd = ({
           (movemetData.assessmentHyperLink = data.assessmentHyperLink),
           (movemetData.treatmentAspect = data.treatmentAspect),
           (movemetData.treatmentHyperLink = data.treatmentHyperLink);
-        movemetData.educationalError = educationalError;
+          movemetData.educationalError = educationalError;
+          (movemetData.activeHeader) = (data.activeHeader);
         try {
           const res = await suggestedToValidMove(movemetData, selectCardTitle);
 
