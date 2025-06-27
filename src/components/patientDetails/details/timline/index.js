@@ -1040,36 +1040,49 @@ const Timeline = ({
                <div className={styles.detailRow}>
                  <span className={styles.disCode}>Date of Service:</span>
                  <span className={styles.discription}>
-                   {viewValue?.previousDosProviderInfo?.dateOfService}
+                   {viewValue?.previousDosProviderInfo?.dateOfService
+                     ? viewValue?.previousDosProviderInfo?.dateOfService
+                     : "---"}
                  </span>
                </div>
 
                <div className={styles.detailRow}>
                  <span className={styles.disCode}>Page:</span>
                  <span className={styles.discription}>
-                   {viewValue?.previousDosProviderInfo?.startPageNumber} -{" "}
-                   {viewValue?.previousDosProviderInfo?.endPagNumber}
+                   {viewValue?.previousDosProviderInfo?.startPageNumber
+                     ? viewValue?.previousDosProviderInfo?.startPageNumber
+                     : "---"}{" "}
+                   -{" "}
+                   {viewValue?.previousDosProviderInfo?.endPagNumber
+                     ? viewValue?.previousDosProviderInfo?.endPagNumber
+                     : "---"}
                  </span>
                </div>
 
                <div className={styles.detailRow}>
                  <span className={styles.disCode}>Reference:</span>
                  <span className={styles.discription}>
-                   {viewValue?.previousDosProviderInfo?.substring}
+                   {viewValue?.previousDosProviderInfo?.substring
+                     ? viewValue?.previousDosProviderInfo?.substring
+                     : "---"}
                  </span>
                </div>
 
                <div className={styles.detailRow}>
                  <span className={styles.disCode}>Provider Name:</span>
                  <span className={styles.discription}>
-                   {viewValue?.previousDosProviderInfo?.providerName}
+                   {viewValue?.previousDosProviderInfo?.providerName
+                     ? viewValue?.previousDosProviderInfo?.providerName
+                     : "---"}
                  </span>
                </div>
 
                <div className={styles.detailRow}>
                  <span className={styles.disCode}>Credential:</span>
                  <span className={styles.discription}>
-                   {viewValue?.previousDosProviderInfo?.providerCredentials}
+                   {viewValue?.previousDosProviderInfo?.providerCredentials
+                     ? viewValue?.previousDosProviderInfo?.providerCredentials
+                     : "---"}
                  </span>
                </div>
 
@@ -1077,8 +1090,15 @@ const Timeline = ({
                  <span className={styles.disCode}>Page Number:</span>
                  <span className={styles.discription}>
                    {
-                     viewValue?.previousDosProviderInfo?.hyperlinks[0]
-                       ?.pageNumber
+                     <span className={styles.discription}>
+                       {Array.isArray(
+                         viewValue?.previousDosProviderInfo?.hyperlinks
+                       ) &&
+                       viewValue.previousDosProviderInfo.hyperlinks.length > 0
+                         ? viewValue.previousDosProviderInfo.hyperlinks[0]
+                             .pageNumber
+                         : ""}
+                     </span>
                    }
                  </span>
                </div>
@@ -1086,10 +1106,11 @@ const Timeline = ({
                <div className={styles.detailRow}>
                  <span className={styles.disCode}>Reference:</span>
                  <span className={styles.discription}>
-                   {
-                     viewValue?.previousDosProviderInfo?.hyperlinks[0]
-                       ?.substring
-                   }
+                   {Array.isArray(
+                     viewValue?.previousDosProviderInfo?.hyperlinks
+                   ) && viewValue.previousDosProviderInfo.hyperlinks.length > 0
+                     ? viewValue.previousDosProviderInfo.hyperlinks[0].substring
+                     : ""}
                  </span>
                </div>
 
@@ -1113,19 +1134,25 @@ const Timeline = ({
                <div className={styles.detailRow}>
                  <span className={styles.disCode}>Visit Type:</span>
                  <span className={styles.discription}>
-                   {viewValue?.previousDosProviderInfo?.visitType}
+                   {viewValue?.previousDosProviderInfo?.visitType
+                     ? viewValue?.previousDosProviderInfo?.visitType
+                     : "---"}
                  </span>
                </div>
                <div className={styles.detailRow}>
                  <span className={styles.disCode}>Reviewer Comments:</span>
                  <span className={styles.discription}>
-                   {viewValue?.previousDosProviderInfo?.reviewerComments}
+                   {viewValue?.previousDosProviderInfo?.reviewerComments
+                     ? viewValue?.previousDosProviderInfo?.reviewerComments
+                     : "---"}
                  </span>
                </div>
                <div className={styles.detailRow}>
                  <span className={styles.disCode}>Physician Inquiry:</span>
                  <span className={styles.discription}>
-                   {viewValue?.previousDosProviderInfo?.physicianInquiry}
+                   {viewValue?.previousDosProviderInfo?.physicianInquiry
+                     ? viewValue?.previousDosProviderInfo?.physicianInquiry
+                     : "---"}
                  </span>
                </div>
              </div>
@@ -1138,36 +1165,49 @@ const Timeline = ({
                <div className={styles.detailRow}>
                  <span className={styles.disCode}>Date of Service:</span>
                  <span className={styles.discription}>
-                   {viewValue?.changedDosProviderInfo?.dateOfService}
+                   {viewValue?.changedDosProviderInfo?.dateOfService
+                     ? viewValue?.changedDosProviderInfo?.dateOfService
+                     : "---"}
                  </span>
                </div>
 
                <div className={styles.detailRow}>
                  <span className={styles.disCode}>Page:</span>
                  <span className={styles.discription}>
-                   {viewValue?.changedDosProviderInfo?.startPageNumber} -{" "}
-                   {viewValue?.changedDosProviderInfo?.endPagNumber}
+                   {viewValue?.changedDosProviderInfo?.startPageNumber
+                     ? viewValue?.changedDosProviderInfo?.startPageNumber
+                     : "---"}{" "}
+                   -{" "}
+                   {viewValue?.changedDosProviderInfo?.endPagNumber
+                     ? viewValue?.changedDosProviderInfo?.endPagNumber
+                     : "---"}
                  </span>
                </div>
 
                <div className={styles.detailRow}>
                  <span className={styles.disCode}>Reference:</span>
                  <span className={styles.discription}>
-                   {viewValue?.changedDosProviderInfo?.substring}
+                   {viewValue?.changedDosProviderInfo?.substring
+                     ? viewValue?.changedDosProviderInfo?.substring
+                     : "---"}
                  </span>
                </div>
 
                <div className={styles.detailRow}>
                  <span className={styles.disCode}>Provider Name:</span>
                  <span className={styles.discription}>
-                   {viewValue?.changedDosProviderInfo?.providerName}
+                   {viewValue?.changedDosProviderInfo?.providerName
+                     ? viewValue?.changedDosProviderInfo?.providerName
+                     : "---"}
                  </span>
                </div>
 
                <div className={styles.detailRow}>
                  <span className={styles.disCode}>Credential:</span>
                  <span className={styles.discription}>
-                   {viewValue?.changedDosProviderInfo?.providerCredentials}
+                   {viewValue?.changedDosProviderInfo?.providerCredentials
+                     ? viewValue?.changedDosProviderInfo?.providerCredentials
+                     : "---"}
                  </span>
                </div>
 
@@ -1175,8 +1215,15 @@ const Timeline = ({
                  <span className={styles.disCode}>Page Number:</span>
                  <span className={styles.discription}>
                    {
-                     viewValue?.changedDosProviderInfo?.hyperlinks[0]
-                       ?.pageNumber
+                     <span className={styles.discription}>
+                       {Array.isArray(
+                         viewValue?.changedDosProviderInfo?.hyperlinks
+                       ) &&
+                       viewValue.changedDosProviderInfo.hyperlinks.length > 0
+                         ? viewValue.changedDosProviderInfo.hyperlinks[0]
+                             .pageNumber
+                         : ""}
+                     </span>
                    }
                  </span>
                </div>
@@ -1184,7 +1231,17 @@ const Timeline = ({
                <div className={styles.detailRow}>
                  <span className={styles.disCode}>Reference:</span>
                  <span className={styles.discription}>
-                   {viewValue?.changedDosProviderInfo?.hyperlinks[0]?.substring}
+                   {
+                     <span className={styles.discription}>
+                       {Array.isArray(
+                         viewValue?.changedDosProviderInfo?.hyperlinks
+                       ) &&
+                       viewValue.changedDosProviderInfo.hyperlinks.length > 0
+                         ? viewValue.changedDosProviderInfo.hyperlinks[0]
+                             .substring
+                         : ""}
+                     </span>
+                   }
                  </span>
                </div>
 
@@ -1208,19 +1265,19 @@ const Timeline = ({
                <div className={styles.detailRow}>
                  <span className={styles.disCode}>Visit Type:</span>
                  <span className={styles.discription}>
-                   {viewValue?.changedDosProviderInfo?.visitType}
+                   {viewValue?.changedDosProviderInfo?.visitType ? viewValue?.changedDosProviderInfo?.visitType : "---"}
                  </span>
                </div>
                <div className={styles.detailRow}>
                  <span className={styles.disCode}>Reviewer Comments:</span>
                  <span className={styles.discription}>
-                   {viewValue?.changedDosProviderInfo?.reviewerComments}
+                   {viewValue?.changedDosProviderInfo?.reviewerComments ? viewValue?.changedDosProviderInfo?.reviewerComments : "---"}
                  </span>
                </div>
                <div className={styles.detailRow}>
                  <span className={styles.disCode}>Physician Inquiry:</span>
                  <span className={styles.discription}>
-                   {viewValue?.changedDosProviderInfo?.physicianInquiry}
+                   {viewValue?.changedDosProviderInfo?.physicianInquiry ? viewValue?.changedDosProviderInfo?.physicianInquiry : "---"}
                  </span>
                </div>
              </div>
