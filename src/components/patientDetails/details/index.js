@@ -409,6 +409,7 @@ const Details = ({
             userRole
           );
           getSelectedDos(res?.response[0]?.dateOfService);
+          setSelectDosValue(res?.response[0]?.dateOfService);
           patientDetailsLoad(false);
         } else {
           getpatientDetailsData(
@@ -508,6 +509,7 @@ const Details = ({
         userRole
       );
       getSelectedDos(res?.response[0]?.dateOfService);
+      setSelectDosValue(res?.response[0]?.dateOfService);
       patientDetailsLoad(false);
     } else {
       getpatientDetailsData(localPatientId, e, "", "", userRole);
@@ -598,6 +600,7 @@ const Details = ({
           userRole
         );
         getSelectedDos(resData?.response[0]?.dateOfService);
+        setSelectDosValue(resData?.response[0]?.dateOfService);
       } else {
         res = await getpatientDetailsData(
           userId,
