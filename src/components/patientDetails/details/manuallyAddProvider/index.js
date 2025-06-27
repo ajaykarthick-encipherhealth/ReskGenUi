@@ -17,6 +17,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import RegularButton from "../../../button";
 import { getResponePopup } from "../../../../utils/reusable";
+import RegularButtonWithIcon from "../../../buttonWithIcon";
 
 export const viewProvidersList = ({ list }) => (
   <div
@@ -184,7 +185,7 @@ const ManuallyAddProvider = ({
       <div style={{ width: "20%", display: "flex", flexDirection: "column" }}>
         <div className="d-flex justify-content-end align-items-center mb-2">
           {isTrashView ? (
-            <RegularButton
+            <RegularButtonWithIcon
               padding="3px 10px"
               name="Back"
               onClick={handleBackFromTrash}
@@ -193,7 +194,7 @@ const ManuallyAddProvider = ({
             />
           ) : (
             <>
-              <RegularButton
+              <RegularButtonWithIcon
                 padding="3px 10px"
                 className={style.addBtn}
                 name="Add Dos"
@@ -204,7 +205,7 @@ const ManuallyAddProvider = ({
                 icon={<FontAwesomeIcon icon={faPlus} />}
                 iconPosition="left"
               />
-              <RegularButton
+              <RegularButtonWithIcon
                 padding="3px 10px"
                 name="Trash"
                 onClick={handleTrash}
