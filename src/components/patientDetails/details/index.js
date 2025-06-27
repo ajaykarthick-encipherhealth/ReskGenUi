@@ -488,7 +488,7 @@ const Details = ({
     setIsModalComments(false);
     setFlagContainerActive("");
     setShowFilter(false);
-    setIsViewAll(false)
+    setIsViewAll(false);
   };
 
   const dosOnChange = async (e) => {
@@ -1176,16 +1176,16 @@ const Details = ({
                           <span>{flagContainerActiveTitle}</span>
                           <div className="d-flex align-items-center justify-content-center">
                             <div>
-                               <Checkbox
-                              className="ant-badge"
-                              checked={isViewAll}
-                              onChange={(e) => setIsViewAll(e.target.checked)}
-                            >
-                              All
-                            </Checkbox>
+                              <Checkbox
+                                className="ant-badge"
+                                checked={isViewAll}
+                                onChange={(e) => setIsViewAll(e.target.checked)}
+                              >
+                                All
+                              </Checkbox>
                             </div>
                             <Tooltip title="Filters" placement="top">
-                              <MenuOutlined  onClick={handleIconClick} />
+                              <MenuOutlined onClick={handleIconClick} />
                             </Tooltip>
                           </div>
                         </>

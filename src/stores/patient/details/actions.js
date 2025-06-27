@@ -58,6 +58,14 @@ export const getProviderSection = createActionThunk(
   "GET_PROVIDER",
   network.getProviderAndCaptured
 );
+export const setTrashProviderAndCaptured = createActionThunk(
+  "SET_PROVIDER_TRASH",
+  network.setTrashProviderAndCaptured
+);
+export const setRestoreProviderAndCaptured = createActionThunk(
+  "SET_PROVIDER_RESTORE",
+  network.setRestoreProviderAndCaptured
+);
 export const isDeleteFlag = createActionThunk(
   "DELETE_FLAG",
   network.deleteflag
@@ -166,6 +174,14 @@ export const getAddProviderAndDOS = createActionThunk(
 export const getAddProviderAndDOSList = createActionThunk(
   "PROVIDER_AND_DOS_LIST_IN_MANUALLY_ADD",
   network.manuallyAddDosAndProviderList
+);
+export const getDosExist = createActionThunk(
+  "GET_DOS_EXIST",
+  network.getDosExist
+);
+export const getProviderList = createActionThunk(
+  "GET_PROVIDER",
+  network.getProvider
 );
 export const storeFileIdAction = createAction("STORE_FILE_ID");
 export const getPatientID = createAction("PATIENT_ID");

@@ -1,7 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { Empty, message, Popover, Select, Tooltip } from "antd";
 import { FlagFilled } from "@ant-design/icons";
-import { formatDateTime, getResponePopup } from "../../../../../utils/reusable";
+import {
+  formatDateTime,
+  getResponePopup,
+  reusableEllipses,
+} from "../../../../../utils/reusable";
 import { getStatusIcon } from "../../../../reuseableFunctions";
 import moment from "moment";
 
@@ -140,6 +144,10 @@ const DosSelect = ({
                   }}
                 />
               ))}
+        </div>{" "}
+        | {""}
+        <div className="flag-elipse">
+          <Tooltip title={row?.providerName}> {row?.providerName}</Tooltip>
         </div>
       </span>
     );
@@ -147,7 +155,7 @@ const DosSelect = ({
 
   return (
     <Select
-      style={{ width: 380 }}
+      style={{ width: 490 }}
       placeholder="--- Select DOS ---"
       value={selectedDate ? selectedDate : undefined}
       onClear={() => {
@@ -161,160 +169,137 @@ const DosSelect = ({
       open={open}
       onDropdownVisibleChange={(visible) => setOpen(visible)}
       dropdownRender={() => (
-        <div style={{ padding: 0, maxHeight: "250px", overflowY: "scroll" }}>
-          {/* Header row */}
-          <div
-            style={{
-              display: "flex",
-              fontWeight: "bold",
-              padding: "8px 12px",
-              backgroundColor: "#002b5b",
-              color: "white",
-            }}
-          >
-            <div style={{ width: "40%" }}>DOS</div>
-            <div style={{ width: "20%" }}>Page No</div>
-            <div style={{ width: "40%" }}>Flags</div>
-          </div>
-
-          {/* Data rows */}
-          {dosData?.length <= 0 && (
+        <div style={{ maxHeight: "250px", overflowY: "auto" }}>
+          {dosData?.length === 0 ? (
             <div className="text-center">
               <Empty />
             </div>
-          )}
-          {dosData?.map((item) => (
-            <div
-              key={item?.dateOfService}
-              style={{
-                display: "flex",
-                padding: "8px 12px",
-                cursor: "pointer",
-                borderBottom: "1px solid #f0f0f0",
-                alignItems: "center",
-                backgroundColor:
-                  selectedDate === item?.dateOfService ? "#e6f7ff" : "white",
-              }}
-            >
-              <div
-                style={{ width: "40%" }}
-                onClick={() => {
-                  setSelectedDate(item?.dateOfService);
-                  handleOptions(item?.dateOfService);
-                  setOpen(false);
+          ) : (
+            <table style={{ width: "100%", borderCollapse: "collapse" }}>
+              <thead
+                style={{
+                  position: "sticky",
+                  top: 0,
+                  backgroundColor: "#002b5b",
+                  color: "white",
                 }}
               >
-                {getDos(item)}
-              </div>
-              <div style={{ width: "20%" }}>
-                <span
-                  onClick={() => {
-                    setSearch({
-                      value: "",
-                      page: item?.page?.startPageNumber,
-                    });
-                  }}
-                >
-                  {item?.page?.startPageNumber}
-                </span>
-                <span className="mx-1">-</span>
-                <span
-                  onClick={() => {
-                    setSearch({
-                      value: "",
-                      page: item?.page?.endPagNumber,
-                    });
-                  }}
-                >
-                  {item?.page?.endPagNumber}
-                </span>
-              </div>
-              <div style={{ width: "40%" }}>
-                {item?.flags?.length <= 0 ? (
-                  "---"
-                ) : item?.flags?.length <= 3 ? (
-                  item?.flags.map((flag, i) => (
-                    <Tooltip title={flag?.flagDetails?.flagName || ""}>
-                      <FlagFilled
-                        key={i}
-                        style={{
-                          color: flag?.flagDetails?.flagColour,
-                          marginRight: 6,
-                        }}
-                        onClick={() => {
-                          setFlagContainerActive("Flag");
-                          setOpen(false);
-                          // if (
-                          //   flag?.patientFlag?.hyperlinks &&
-                          //   flag?.patientFlag?.hyperlinks[0]
-                          // ) {
-                          //   const link = flag?.patientFlag?.hyperlinks[0];
-                          //   setSearch({
-                          //     value: link.substring,
-                          //     page: link.pageNumber,
-                          //   });
-                          // } else {
-                          //   getResponePopup({status: "USER_DEFINED_ERROR", message: "Hyperlink Not Found!"})
-                          // }
-                        }}
-                      />
-                    </Tooltip>
-                  ))
-                ) : (
-                  <>
-                    {" "}
-                    <span>
-                      {item?.flags?.map(
-                        (flag, i) =>
-                          i <= 3 && (
-                            <FlagFilled
+                <tr>
+                  <th style={{ textAlign: "left", padding: "8px 12px" }}>
+                    DOS
+                  </th>
+                  <th style={{ textAlign: "left", padding: "8px 12px" }}>
+                    Page No
+                  </th>
+                  <th style={{ textAlign: "left", padding: "8px 12px" }}>
+                    Flags
+                  </th>
+                  <th style={{ textAlign: "left", padding: "8px 12px" }}>
+                    Provider Name
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {dosData?.map((item) => (
+                  <tr
+                    key={item?.dateOfService}
+                    style={{
+                      backgroundColor:
+                        selectedDate === item?.dateOfService
+                          ? "#e6f7ff"
+                          : "white",
+                      cursor: "pointer",
+                      borderBottom: "1px solid #f0f0f0",
+                    }}
+                  >
+                    {/* DOS */}
+                    <td
+                      style={{
+                        padding: "8px 12px",
+                        width: "35%",
+                        textAlign: "left",
+                      }}
+                      onClick={() => {
+                        setSelectedDate(item?.dateOfService);
+                        handleOptions(item?.dateOfService);
+                        setOpen(false);
+                      }}
+                    >
+                      {getDos(item)}
+                    </td>
+
+                    {/* Page No */}
+                    <td style={{ padding: "8px 12px", textAlign: "left" }}>
+                      <span
+                        onClick={() =>
+                          setSearch({
+                            value: "",
+                            page: item?.page?.startPageNumber,
+                          })
+                        }
+                      >
+                        {item?.page?.startPageNumber}
+                      </span>
+                      <span className="mx-1"> - </span>
+                      <span
+                        onClick={() =>
+                          setSearch({
+                            value: "",
+                            page: item?.page?.endPagNumber,
+                          })
+                        }
+                      >
+                        {item?.page?.endPagNumber}
+                      </span>
+                    </td>
+
+                    {/* Flags */}
+                    <td style={{ padding: "8px 12px", textAlign: "left" }}>
+                      {item?.flags?.length === 0 ? (
+                        "---"
+                      ) : (
+                        <>
+                          {item?.flags?.slice(0, 1).map((flag, i) => (
+                            <Tooltip
+                              title={flag?.flagDetails?.flagName || ""}
                               key={i}
-                              style={{
-                                color: flag?.flagDetails?.flagColour,
-                                marginRight: 6,
-                              }}
-                            />
-                          )
+                            >
+                              <FlagFilled
+                                style={{
+                                  color: flag?.flagDetails?.flagColour,
+                                  marginRight: 6,
+                                }}
+                                onClick={() => {
+                                  setFlagContainerActive("Flag");
+                                  setOpen(false);
+                                }}
+                              />
+                            </Tooltip>
+                          ))}
+                          {item?.flags?.length > 1 && (
+                            <span
+                              className="px-2 py-1 border rounded"
+                              style={{ background: "#002b5b", color: "#fff" }}
+                            >
+                              +{item?.flags?.length - 1}
+                            </span>
+                          )}
+                        </>
                       )}
-                    </span>
-                    <span>
-                      {item?.flags?.length > 4 &&
-                      item?.flags &&
-                      item?.flags?.length > 0 ? (
-                        <span
-                          className="px-2 py-1 border rounded"
-                          style={{ background: "#002b5b", color: "#fff" }}
-                        >
-                          {/* <Popover
-                            placement="right"
-                            content={
-                              <>
-                                {item.flags.map(
-                                  (flag, i) =>
-                                    i > 3 && (
-                                      <FlagFilled
-                                        key={i}
-                                        style={{
-                                          color: flag.color,
-                                          marginRight: 6,
-                                        }}
-                                      />
-                                    )
-                                )}
-                              </>
-                            }
-                            zIndex={9999}
-                          > */}
-                          +{item?.flags?.length - 4}
-                          {/* </Popover> */}
-                        </span>
-                      ) : null}
-                    </span>
-                  </>
-                )}
-              </div>
-            </div>
-          ))}
+                    </td>
+
+                    {/* Provider Name */}
+                    <td style={{ padding: "8px 12px", textAlign: "left" }}>
+                      {reusableEllipses({
+                        str: item.providerName?.toString() || "--",
+                        count: 13,
+                      })}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          )}
         </div>
       )}
     >

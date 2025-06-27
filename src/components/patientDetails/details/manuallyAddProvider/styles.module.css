@@ -2,7 +2,7 @@
   background-color: #cee1fd;
   border-radius: 5px;
   align-items: center;
-  padding: 5px;
+  padding: 10px;
   margin: 0px 0px;
   border: none;
   display: flex;
@@ -10,8 +10,8 @@
   width: 100%;
 }
 .count {
-  width: 30px;
-  height: 30px;
+  width: 25px;
+  height: 25px;
   background-color: #0a69f5;
   border-radius: 50%;
   color: #fff;
@@ -24,8 +24,8 @@
   color: #0a69f5;
 }
 .dateField {
-  font-weight: 500;
-  font-size: 14px;
+  font-weight: 600;
+  font-size: 12px;
 }
 .listShow {
   width: 100%;
@@ -41,6 +41,7 @@
   padding: 10px;
   border-radius: 7px;
   margin: 0px 0px 0px;
+  margin-top: 45px;
 }
 .cancelBtn,
 .cancelBtn:hover .cancelBtn:active,

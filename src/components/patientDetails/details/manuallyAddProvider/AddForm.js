@@ -9,7 +9,7 @@ import {
   Select,
   Switch,
 } from "antd";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import style from "./styles.module.css";
 import { getStorage } from "../../../../utils/storages";
 import { connect } from "react-redux";
@@ -17,6 +17,7 @@ import { actions as allActions } from "../../../../stores/patient/details";
 import { disableFutureDate } from "../../../headerFilters/functions";
 import dayjs from "dayjs";
 import { getResponePopup } from "../../../../utils/reusable";
+
 const AddForm = ({
   form,
   selectDosValue,
@@ -31,8 +32,15 @@ const AddForm = ({
   dosYearDefalutSelect,
   getpatientDetailsData,
   patientDetailsLoad,
+  getProvider,
+  allProviderList,
+  existingDos,
+  getExistingDos,
 }) => {
   const [btnName, setBtnName] = useState(null);
+  const [providerOptions, setProviderOptions] = useState([]);
+const [dosExistsError, setDosExistsError] = useState(null);
+
   const validateThreeDigitNumber = (_, value) => {
     if (!value || /^\d{1,3}$/.test(value)) {
       return Promise.resolve();
@@ -42,129 +50,190 @@ const AddForm = ({
 
   const AddProvider = async (values, providersLists) => {
     setBtnName("LOADING...");
+
     const customFileId =
       values?.fileType === "CHART"
         ? patientDetailsResult?.fileId
         : patientDetailsResult?.fileInfos?.find(
             (data) => data?.stateIndicator === values?.fileType
           )?.fileId;
-    // const customFileId =
-    //   patientDetailsResult?.fileInfos?.length > 0
-    //     ? patientDetailsResult?.fileInfos?.find(
-    //         (data) => data?.stateIndicator === values?.fileType
-    //       )?.fileId
-    //     : patientDetailsResult?.fileId;
+
     const patientId = getStorage("patientId");
+
+    const formDos = dayjs(values.dateOfService).format("YYYY-MM-DD");
+    const originalDos = providersLists?.dateOfService
+      ? dayjs(providersLists.dateOfService).format("YYYY-MM-DD")
+      : null;
+
     const data = {
-      patientId: patientId,
+      patientId,
       ...values,
-      dos: dayjs(values.dos).format("YYYY-MM-DD"),
-      fileId: providersLists ? providersLists?.fileId : customFileId || "",
+      dateOfService: originalDos || formDos,
+      fileId: providersLists?.fileId || customFileId || "",
+      faceToFace:
+        values.faceToFace === true || values.faceToFace === "Yes"
+          ? true
+          : values.faceToFace === false || values.faceToFace === "No"
+          ? false
+          : undefined,
     };
 
-    if (data?.dos) {
-      const result = providersList
+    if (originalDos && originalDos !== formDos) {
+      data.newDateOfService = formDos;
+    }
+
+    const isSameDate = originalDos && originalDos === formDos;
+
+    const dosExists =
+      providersList && isSameDate
         ? false
-        : dosAndProvidersList?.some(
-            (item) => item?.dateOfService === data?.dos
-          );
-      if (!result) {
-        const res = await getAddProviderAndDOS(data);
-        if (res.status == "SUCCESS") {
-          setBtnName(null);
-          patientDetailsLoad(true);
-          getResponePopup(res);
-          getAddProviderAndDOSList(
-            dosYear?.length > 0 ? dosYear[0]?.value : ""
-          );
-          dosDeatilsAction(
-            patientId,
-            dosYear?.length > 0 ? dosYear[0]?.value : ""
-          );
-          getpatientDetailsData(
-            patientId,
-            patientDetailsResult?.processedYear,
-            patientDetailsResult?.dateOfService,
-            "",
-            ""
-          );
-          patientDetailsLoad(false);
-          form.resetFields();
-        } else {
-          setBtnName(null);
-          getResponePopup(res);
-        }
+        : dosAndProvidersList?.some((item) => item?.dateOfService === formDos);
+
+    if (!dosExists) {
+      const res = await getAddProviderAndDOS(data);
+      if (res.status === "SUCCESS") {
+        setBtnName(null);
+        patientDetailsLoad(true);
+        getResponePopup(res);
+        const year = dosYear?.[0]?.value || "";
+        getAddProviderAndDOSList({ year });
+        dosDeatilsAction(patientId, dosYear?.[0]?.value || "");
+        getpatientDetailsData(
+          patientId,
+          patientDetailsResult?.processedYear,
+          patientDetailsResult?.dateOfService,
+          "",
+          ""
+        );
+        patientDetailsLoad(false);
+        form.resetFields();
       } else {
         setBtnName(null);
-        return notification.warning({
-          description: "DOS already exists",
-          duration: 2,
-        });
+        getResponePopup(res);
       }
+    } else {
+      setBtnName(null);
+      return notification.warning({
+        description: "DOS already exists",
+        duration: 2,
+      });
+    }
+  };
+  const handleCheckboxChange = (changedField, checked) => {
+    if (checked) {
+      const newValues = {
+        physicianSignaturePresent: false,
+        physicianNotPresent: false,
+        [changedField]: true,
+      };
+      form.setFieldsValue(newValues);
     }
   };
   const customDisableDate = (current) => {
     const year = dosYearDefalutSelect?.value || dosYearDefalutSelect;
     return current.year() !== year;
   };
+  useEffect(() => {
+    getProvider();
+  }, []);
+
+  // useEffect(() => {
+  //   getExistingDos({dos});
+  // }, []);
+
+  useEffect(() => {
+    if (Array.isArray(allProviderList)) {
+      const names = allProviderList
+        .map((item) => item?.providerName)
+        .filter((name) => !!name);
+      setProviderOptions(names);
+    }
+  }, [allProviderList]);
+
+  console.log(existingDos, "existingDos");
   return (
     <div>
-      <div
-        className={style.formContainer}
-        id="manuallyAdd-container"
-        name="manuallyAdd-container"
-      >
+      <div className={style.formContainer} id="manuallyAdd-container">
         <Form
           id="manuallyAddForm"
           name="manuallyAddForm"
           form={form}
-          onFinish={AddProvider}
+          onFinish={(values) => AddProvider(values, providersList)}
           layout="vertical"
           autoComplete="off"
         >
-          {/* dos */}
           <Form.Item
-            id="manuallyAddDos"
             label={<label className={style.dateField}>Date Of Service</label>}
-            name="dos"
-            rules={[
-              {
-                required: true,
-                message: "Please Enter DOS",
-              },
-            ]}
+            name="dateOfService"
+            rules={[{ required: true, message: "Please Enter DOS" }]}
             className="manuallyAddPicker"
           >
+           
             <DatePicker
               format="MM-DD-YYYY"
-              data-testid="providersList-dateOfService"
               disabledDate={customDisableDate}
               defaultPickerValue={dayjs(
                 `${dosYearDefalutSelect?.value || dosYearDefalutSelect}-01-01`
               )}
               getPopupContainer={(triggerNode) => triggerNode.parentNode}
-              disabled={providersList?.dateOfService ? true : false}
+              onChange={async (date) => {
+                setDosExistsError(null);
+
+                const selectedDos = dayjs(date).format("YYYY-MM-DD");
+                const originalDos = providersList?.dateOfService
+                  ? dayjs(providersList.dateOfService).format("YYYY-MM-DD")
+                  : null;
+
+                try {
+                  // If same DOS selected again (while editing), skip the API
+                  if (originalDos && selectedDos === originalDos) {
+                    form.setFields([
+                      {
+                        name: "dateOfService",
+                        errors: [],
+                      },
+                    ]);
+                    return;
+                  }
+
+                  const res = await getExistingDos({
+                    dos: originalDos || selectedDos, // for edit, send original
+                    newDos: originalDos ? selectedDos : undefined, // send new only if edit mode
+                  });
+
+                  if (res?.response === true) {
+                    setDosExistsError("Date of Service already exists");
+                    form.setFields([
+                      {
+                        name: "dateOfService",
+                        errors: ["Date of Service already exists"],
+                      },
+                    ]);
+                  } else {
+                    setDosExistsError(null);
+                    form.setFields([
+                      {
+                        name: "dateOfService",
+                        errors: [],
+                      },
+                    ]);
+                  }
+                } catch (err) {
+                  console.error("Error checking DOS existence", err);
+                }
+              }}
             />
           </Form.Item>
+
           <Form.Item
-            id="dosSubstring-manually-add"
             label={<label className={style.dateField}>DOS Substring</label>}
             name="dosSubstring"
-            rules={[
-              {
-                required: true,
-                message: "Please Enter DOS Substring",
-              },
-            ]}
+            rules={[{ required: true, message: "Please Enter DOS Substring" }]}
           >
-            <Input
-              data-testid="providersList-dosSubstring"
-              placeholder="DOS Substring"
-              disabled={providersList?.dosSubstring ? true : false}
-            />
+            <Input placeholder="DOS Substring" />
           </Form.Item>
+
           <Form.Item
-            id="dosStartPageNumber-manually-add"
             label={
               <label className={style.dateField}>DOS Start Page Number</label>
             }
@@ -174,15 +243,10 @@ const AddForm = ({
               { validator: validateThreeDigitNumber },
             ]}
           >
-            <Input
-              data-testid="providersList-dosStartPageNumber"
-              maxLength={3}
-              placeholder="DOS Start Page Number"
-              disabled={providersList?.dosStartPageNumber ? true : false}
-            />
+            <Input maxLength={3} placeholder="DOS Start Page Number" />
           </Form.Item>
+
           <Form.Item
-            id="dosEndPageNumber-manually-add"
             label={
               <label className={style.dateField}>DOS End Page Number</label>
             }
@@ -192,16 +256,10 @@ const AddForm = ({
               { validator: validateThreeDigitNumber },
             ]}
           >
-            <Input
-              data-testid="providersList-dosEndPageNumber"
-              maxLength={3}
-              placeholder="DOS End Page Number"
-              disabled={providersList?.dosEndPageNumber ? true : false}
-            />
+            <Input maxLength={3} placeholder="DOS End Page Number" />
           </Form.Item>
-          {/* Extra Fields*/}
+
           <Form.Item
-            id="face-to-face-manually-add"
             label={<label className={style.dateField}>Face To Face</label>}
             name="faceToFace"
             rules={[
@@ -210,7 +268,7 @@ const AddForm = ({
           >
             <Select
               placeholder="Select Face To Face"
-              data-testid="faceToFace-select"
+              style={{ height: "42px" }}
             >
               <Select.Option value={true}>Yes</Select.Option>
               <Select.Option value={false}>No</Select.Option>
@@ -218,15 +276,11 @@ const AddForm = ({
           </Form.Item>
 
           <Form.Item
-            id="visit-type-manually-add"
             label={<label className={style.dateField}>Visit Type</label>}
             name="visitType"
             rules={[{ required: true, message: "Please select Visit Type" }]}
           >
-            <Select
-              placeholder="Select Visit Type"
-              data-testid="visitType-select"
-            >
+            <Select placeholder="Select Visit Type" style={{ height: "42px" }}>
               <Select.Option value="LAB">LAB</Select.Option>
               <Select.Option value="EEG">EEG</Select.Option>
               <Select.Option value="EKG">EKG</Select.Option>
@@ -239,71 +293,78 @@ const AddForm = ({
           </Form.Item>
 
           <Form.Item
-            id="reviewer-comments-manually-add"
             label={<label className={style.dateField}>Reviewer Comments</label>}
             name="reviewerComments"
             rules={[
               { required: true, message: "Please enter Reviewer Comments" },
             ]}
           >
-            <Input.TextArea
-              data-testid="reviewerComments-textarea"
-              placeholder="Enter Reviewer Comments"
-              rows={3}
-            />
+            <Input.TextArea rows={3} placeholder="Enter Reviewer Comments" />
           </Form.Item>
 
           <Form.Item
-            id="physician-enquiry-manually-add"
             label={<label className={style.dateField}>Physician Inquiry</label>}
             name="physicianInquiry"
             rules={[
               { required: true, message: "Please enter Physician Inquiry" },
             ]}
           >
-            <Input.TextArea
-              data-testid="physicianInquiry-textarea"
-              placeholder="Enter Physician Inquiry"
-              rows={3}
-            />
+            <Input.TextArea rows={3} placeholder="Enter Physician Inquiry" />
           </Form.Item>
 
-          <Form.Item
-            id="physician-signature-present"
-            name="physicianSignaturePresent"
-            valuePropName="checked"
-          >
-            <Checkbox data-testid="physicianSignaturePresent-checkbox">
+          <Form.Item name="physicianSignaturePresent" valuePropName="checked">
+            <Checkbox
+              onChange={(e) =>
+                handleCheckboxChange(
+                  "physicianSignaturePresent",
+                  e.target.checked
+                )
+              }
+            >
               <span className={style.dateField}>
                 Physician Signature Present
               </span>
             </Checkbox>
           </Form.Item>
 
-          <Form.Item
-            id="physician-not-present"
-            name="physicianNotPresent"
-            valuePropName="checked"
-          >
-            <Checkbox data-testid="physicianNotPresent-checkbox">
+          <Form.Item name="physicianNotPresent" valuePropName="checked">
+            <Checkbox
+              onChange={(e) =>
+                handleCheckboxChange("physicianNotPresent", e.target.checked)
+              }
+            >
               <span className={style.dateField}>Physician Not Present</span>
             </Checkbox>
           </Form.Item>
 
-          {/* provider */}
-          <Form.Item
-            id="manuallyAddProviderName"
+          {/* <Form.Item
             label={<label className={style.dateField}>Provider Name</label>}
             name="providerName"
             rules={[{ required: true, message: "Please Enter Provider" }]}
           >
-            <Input
-              data-testid="providersList-providerName"
-              placeholder="Provider Name"
-            />
-          </Form.Item>
+            <Input placeholder="Provider Name" />
+          </Form.Item> */}
+
           <Form.Item
-            id="manuallyAddProviderPageNumber"
+            label={<label className={style.dateField}>Provider Name</label>}
+            name="providerName"
+            rules={[{ required: true, message: "Please Select Provider" }]}
+          >
+            <Select
+              placeholder="Select Provider Name"
+              showSearch
+              optionFilterProp="children"
+              style={{ height: "42px" }}
+            >
+              {providerOptions.map((provider, index) => (
+                <Select.Option key={index} value={provider}>
+                  {provider}
+                </Select.Option>
+              ))}
+            </Select>
+          </Form.Item>
+
+          <Form.Item
             label={
               <label className={style.dateField}>Provider Page Number</label>
             }
@@ -313,14 +374,10 @@ const AddForm = ({
               { validator: validateThreeDigitNumber },
             ]}
           >
-            <Input
-              data-testid="providersList-providerName-page-number"
-              maxLength={3}
-              placeholder="Provider Page Number"
-            />
+            <Input maxLength={3} placeholder="Provider Page Number" />
           </Form.Item>
+
           <Form.Item
-            id="mauallyAddProviderCredentials"
             label={
               <label className={style.dateField}>Provider Credentials</label>
             }
@@ -329,13 +386,10 @@ const AddForm = ({
               { required: true, message: "Please Enter Provider Credentials" },
             ]}
           >
-            <Input
-              data-testid="providerList-providerCredentials"
-              placeholder="Provider Credentials"
-            />
+            <Input placeholder="Provider Credentials" />
           </Form.Item>
+
           <Form.Item
-            id="manuallyAddProviderReference"
             label={
               <label className={style.dateField}>Provider Reference</label>
             }
@@ -344,69 +398,52 @@ const AddForm = ({
               { required: true, message: "Please enter Provider Reference" },
             ]}
           >
-            <Input
-              data-testid="providerList-providerReference"
-              placeholder="Provider Reference"
-            />
+            <Input placeholder="Provider Reference" />
           </Form.Item>
-          <Form.Item
-            id="manuallyAddProviderSignStatus"
+
+          {/* <Form.Item
             label={
               <label className={style.dateField}>Provider Sign Status</label>
             }
             name="isProviderSigned"
-            // rules={[
-            //   { required: true, message: "Please Switch Provider Sign Status" },
-            // ]}
           >
-            <Switch data-testid="providerList-isProviderSigned" />
-          </Form.Item>
+            <Switch />
+          </Form.Item> */}
+
           <Form.Item
-            id="manuallyAddFiletype"
             label={<label className={style.dateField}>File Type</label>}
             name="fileType"
             rules={[{ required: true, message: "Please Select File Type" }]}
           >
             <Radio.Group>
               <Radio
-                data-testid="providerList-Lab"
                 value={"LAB"}
                 disabled={
-                  patientDetailsResult?.fileInfos?.length > 0 &&
-                  providersList?.fileType
-                    ? false
-                    : true
+                  !patientDetailsResult?.fileInfos?.length &&
+                  !providersList?.fileType
                 }
               >
                 Lab
               </Radio>
               <Radio
-                data-testid="providerList-Radiology"
                 value={"RADIOLOGY"}
                 disabled={
-                  patientDetailsResult?.fileInfos?.length > 0 &&
-                  providersList?.fileType
-                    ? false
-                    : true
+                  !patientDetailsResult?.fileInfos?.length &&
+                  !providersList?.fileType
                 }
               >
                 Radiology
               </Radio>
-              <Radio data-testid="providerList-Chart" value={"CHART"}>
-                Chart
-              </Radio>
+              <Radio value={"CHART"}>Chart</Radio>
             </Radio.Group>
           </Form.Item>
-          <Form.Item
-            className="d-flex justify-content-center"
-            id="manuallyAddProvider-submit"
-          >
+
+          <Form.Item className="d-flex justify-content-center">
             <Button
-              data-testid="providerList-submit"
               htmlType="submit"
               type="primary"
               className="btn btn-sm ms-2 flr width-max-content custom-btn-style"
-              disabled={btnName ? true : false}
+              disabled={!!btnName}
             >
               {btnName ? btnName : providersList ? "UPDATE" : "ADD"}
             </Button>
@@ -423,6 +460,9 @@ const connector = connect(
       state?.patientDetails?.details?.patientResult?.data?.response,
     dosAndProvidersList:
       state.patientDetails?.details?.dosAndProvidersList?.data?.response,
+    allProviderList:
+      state?.patientDetails?.details?.providerList?.data?.response,
+    existingDos: state?.patientDetails?.details?.existingDos,
   }),
   {
     getAddProviderAndDOS: allActions.getAddProviderAndDOS,
@@ -430,6 +470,9 @@ const connector = connect(
     dosDeatilsAction: allActions.dosDeatilsAction,
     getpatientDetailsData: allActions.patientDetailsAction,
     patientDetailsLoad: allActions.patientDetailsLoad,
+    getProvider: allActions.getProviderList,
+    getExistingDos: allActions.getDosExist,
   }
 );
+
 export default connector(AddForm);

@@ -137,7 +137,7 @@ const Timeline = ({
   action,
   setAction,
   isViewAll,
-  setIsViewAll
+  setIsViewAll,
 }) => {
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [popClickDisCode, setPopClickDisCode] = useState(null);
@@ -638,6 +638,27 @@ const Timeline = ({
         return `${item.diagnosisCode} - Encounter file added`;
       case "MEAT_ADDED":
         return `${item.diagnosisCode} - Meat added`;
+      case "DOS_AND_PROVIDER_EDIT":
+        return (
+          <div className="d-flex w-100 justify-content-between">
+            {item?.changedDosProviderInfo?.dateOfService} - DOS AND PROVIDER
+            EDIT
+            <Popover
+              open={popClickDisCode === index ? true : false}
+              trigger={["hover"]}
+              placement="bottom"
+              overlayStyle={{ zIndex: 9999 }}
+              content={<>{getEditDosDeatils(item)}</>}
+            >
+              <span
+                className={styles.viewTag}
+                onClick={() => onClickPopup(index)}
+              >
+                View
+              </span>{" "}
+            </Popover>
+          </div>
+        );
       case "DISEASE_EDITED":
         return (
           <div className="d-flex w-100 justify-content-between">
@@ -999,6 +1020,217 @@ const Timeline = ({
 
     return sectionMapArr;
   };
+   const getEditDosDeatils = (viewValue) => {
+     let sectionMapArr = (
+       <>
+         <div className="d-flex justify-content-end">
+           <CloseCircleFilled
+             className={styles.deleteIcon}
+             onClick={() => {
+               setIsPopupOpen(false);
+               setPopClickDisCode(null);
+             }}
+           />
+         </div>
+         <div className={styles.detailsContainer}>
+           {/* OLD Section */}
+           <div className={styles.oldCodeContiner}>
+             <span className={styles.codeTitle}>OLD</span>
+             <div className={styles.details}>
+               <div className={styles.detailRow}>
+                 <span className={styles.disCode}>Date of Service:</span>
+                 <span className={styles.discription}>
+                   {viewValue?.previousDosProviderInfo?.dateOfService}
+                 </span>
+               </div>
+
+               <div className={styles.detailRow}>
+                 <span className={styles.disCode}>Page:</span>
+                 <span className={styles.discription}>
+                   {viewValue?.previousDosProviderInfo?.startPageNumber} -{" "}
+                   {viewValue?.previousDosProviderInfo?.endPagNumber}
+                 </span>
+               </div>
+
+               <div className={styles.detailRow}>
+                 <span className={styles.disCode}>Reference:</span>
+                 <span className={styles.discription}>
+                   {viewValue?.previousDosProviderInfo?.substring}
+                 </span>
+               </div>
+
+               <div className={styles.detailRow}>
+                 <span className={styles.disCode}>Provider Name:</span>
+                 <span className={styles.discription}>
+                   {viewValue?.previousDosProviderInfo?.providerName}
+                 </span>
+               </div>
+
+               <div className={styles.detailRow}>
+                 <span className={styles.disCode}>Credential:</span>
+                 <span className={styles.discription}>
+                   {viewValue?.previousDosProviderInfo?.providerCredentials}
+                 </span>
+               </div>
+
+               <div className={styles.detailRow}>
+                 <span className={styles.disCode}>Page Number:</span>
+                 <span className={styles.discription}>
+                   {
+                     viewValue?.previousDosProviderInfo?.hyperlinks[0]
+                       ?.pageNumber
+                   }
+                 </span>
+               </div>
+
+               <div className={styles.detailRow}>
+                 <span className={styles.disCode}>Reference:</span>
+                 <span className={styles.discription}>
+                   {
+                     viewValue?.previousDosProviderInfo?.hyperlinks[0]
+                       ?.substring
+                   }
+                 </span>
+               </div>
+
+               <div className={styles.detailRow}>
+                 <span className={styles.disCode}>Signature:</span>
+                 <span className={styles.discription}>
+                   {viewValue?.previousDosProviderInfo?.unSigned
+                     ? "Not Signed"
+                     : "Signed"}
+                 </span>
+               </div>
+
+               <div className={styles.detailRow}>
+                 <span className={styles.disCode}>Face To Face:</span>
+                 <span className={styles.discription}>
+                   {viewValue?.previousDosProviderInfo?.faceToFace === true
+                     ? "Yes"
+                     : "No"}
+                 </span>
+               </div>
+               <div className={styles.detailRow}>
+                 <span className={styles.disCode}>Visit Type:</span>
+                 <span className={styles.discription}>
+                   {viewValue?.previousDosProviderInfo?.visitType}
+                 </span>
+               </div>
+               <div className={styles.detailRow}>
+                 <span className={styles.disCode}>Reviewer Comments:</span>
+                 <span className={styles.discription}>
+                   {viewValue?.previousDosProviderInfo?.reviewerComments}
+                 </span>
+               </div>
+               <div className={styles.detailRow}>
+                 <span className={styles.disCode}>Physician Inquiry:</span>
+                 <span className={styles.discription}>
+                   {viewValue?.previousDosProviderInfo?.physicianInquiry}
+                 </span>
+               </div>
+             </div>
+           </div>
+
+           {/* NEW Section */}
+           <div className={styles.editCodeContainer}>
+             <span className={styles.editTitle}>NEW</span>
+             <div className={styles.details}>
+               <div className={styles.detailRow}>
+                 <span className={styles.disCode}>Date of Service:</span>
+                 <span className={styles.discription}>
+                   {viewValue?.changedDosProviderInfo?.dateOfService}
+                 </span>
+               </div>
+
+               <div className={styles.detailRow}>
+                 <span className={styles.disCode}>Page:</span>
+                 <span className={styles.discription}>
+                   {viewValue?.changedDosProviderInfo?.startPageNumber} -{" "}
+                   {viewValue?.changedDosProviderInfo?.endPagNumber}
+                 </span>
+               </div>
+
+               <div className={styles.detailRow}>
+                 <span className={styles.disCode}>Reference:</span>
+                 <span className={styles.discription}>
+                   {viewValue?.changedDosProviderInfo?.substring}
+                 </span>
+               </div>
+
+               <div className={styles.detailRow}>
+                 <span className={styles.disCode}>Provider Name:</span>
+                 <span className={styles.discription}>
+                   {viewValue?.changedDosProviderInfo?.providerName}
+                 </span>
+               </div>
+
+               <div className={styles.detailRow}>
+                 <span className={styles.disCode}>Credential:</span>
+                 <span className={styles.discription}>
+                   {viewValue?.changedDosProviderInfo?.providerCredentials}
+                 </span>
+               </div>
+
+               <div className={styles.detailRow}>
+                 <span className={styles.disCode}>Page Number:</span>
+                 <span className={styles.discription}>
+                   {
+                     viewValue?.changedDosProviderInfo?.hyperlinks[0]
+                       ?.pageNumber
+                   }
+                 </span>
+               </div>
+
+               <div className={styles.detailRow}>
+                 <span className={styles.disCode}>Reference:</span>
+                 <span className={styles.discription}>
+                   {viewValue?.changedDosProviderInfo?.hyperlinks[0]?.substring}
+                 </span>
+               </div>
+
+               <div className={styles.detailRow}>
+                 <span className={styles.disCode}>Signature:</span>
+                 <span className={styles.discription}>
+                   {viewValue?.changedDosProviderInfo?.unSigned
+                     ? "Not Signed"
+                     : "Signed"}
+                 </span>
+               </div>
+
+               <div className={styles.detailRow}>
+                 <span className={styles.disCode}>Face To Face:</span>
+                 <span className={styles.discription}>
+                   {viewValue?.changedDosProviderInfo?.faceToFace === true
+                     ? "Yes"
+                     : "No"}
+                 </span>
+               </div>
+               <div className={styles.detailRow}>
+                 <span className={styles.disCode}>Visit Type:</span>
+                 <span className={styles.discription}>
+                   {viewValue?.changedDosProviderInfo?.visitType}
+                 </span>
+               </div>
+               <div className={styles.detailRow}>
+                 <span className={styles.disCode}>Reviewer Comments:</span>
+                 <span className={styles.discription}>
+                   {viewValue?.changedDosProviderInfo?.reviewerComments}
+                 </span>
+               </div>
+               <div className={styles.detailRow}>
+                 <span className={styles.disCode}>Physician Inquiry:</span>
+                 <span className={styles.discription}>
+                   {viewValue?.changedDosProviderInfo?.physicianInquiry}
+                 </span>
+               </div>
+             </div>
+           </div>
+         </div>
+       </>
+     );
+
+     return sectionMapArr;
+   };
   const onClickPopup = (disCode) => {
     setPopClickDisCode(disCode);
     setIsPopupOpen(isPopupOpen ? false : true);
@@ -1089,55 +1321,59 @@ const Timeline = ({
     <div className={visitStyles.timeLines}>
       {!showFilter ? (
         <div className="p-3">
-        <div
-          style={{
-            boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)",
-            height: "150px",
-          }}
-        >
-          <div className="p-3">
-            <div className="row px-1 pb-1">
-              <div className="col-6 mb-3">
-                <label>Role</label>
-                <div className="form-group has-search custom-react-select-audit customClear">
-                  <Select
-                    className={` w-100 ${visitStyles.inputs}`}
-                    placeholder="Select Role"
-                    options={options}
-                    value={role}
-                    onChange={handleRoleChange}
-                    allowClear
-                  ></Select>
+          <div
+            style={{
+              boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)",
+              height: "150px",
+            }}
+          >
+            <div className="p-3">
+              <div className="row px-1 pb-1">
+                <div className="col-6 mb-3">
+                  <label>Role</label>
+                  <div className="form-group has-search custom-react-select-audit customClear">
+                    <Select
+                      className={` w-100 ${visitStyles.inputs}`}
+                      placeholder="Select Role"
+                      options={options}
+                      value={role}
+                      onChange={handleRoleChange}
+                      allowClear
+                    ></Select>
+                  </div>
                 </div>
-              </div>
-              <div className="col-6 mb-3">
-                <label>Event Type</label>
-                <div className="form-group has-search custom-react-select-audit customClear">
-                  <Select
-                    className={` w-100 ${visitStyles.inputs}`}
-                    placeholder="Select Event type"
-                    allowClear
-                    options={actionOptions}
-                    value={action}
-                    onChange={handleActionChange}
-                    filterOption={(input, option) =>
-                      (option?.label ?? "")
-                        .toLowerCase()
-                        .includes(input.toLowerCase())
-                    }
-                    showSearch={true}
-                  />
+                <div className="col-6 mb-3">
+                  <label>Event Type</label>
+                  <div className="form-group has-search custom-react-select-audit customClear">
+                    <Select
+                      className={` w-100 ${visitStyles.inputs}`}
+                      placeholder="Select Event type"
+                      allowClear
+                      options={actionOptions}
+                      value={action}
+                      onChange={handleActionChange}
+                      filterOption={(input, option) =>
+                        (option?.label ?? "")
+                          .toLowerCase()
+                          .includes(input.toLowerCase())
+                      }
+                      showSearch={true}
+                    />
+                  </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
-        </div>
       ) : (
         ""
       )}
       {!filterDataLoading ? (
-       <div className={`widget-timeline ${timelineData?.length === 0 ? 'no-timeline-line' : ''}`}>
+        <div
+          className={`widget-timeline ${
+            timelineData?.length === 0 ? "no-timeline-line" : ""
+          }`}
+        >
           <ul className="timeline">
             {timelineData?.length > 0 ? (
               timelineData?.map((item, index) =>

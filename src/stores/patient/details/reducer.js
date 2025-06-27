@@ -46,6 +46,8 @@ import {
   raiseQueryAction,
   getAllRolesAction,
   updateReEvaluate,
+  getProviderList,
+  getDosExist,
   timeLineList,
   actionList
 } from "./actions";
@@ -157,6 +159,7 @@ const patientDetailsReducer = combineReducers({
   activeLabel: createReducer(activeLabels),
   labPDFDetails: createReducer(labPDFDetails),
   dosAndProvidersList: createReducer(getAddProviderAndDOSList),
+  existingDos: createReducer(getDosExist),
   dosAndProvidersListLoader: getPatientsLoading(getAddProviderAndDOSList),
   getStoreFileIdDetails: getStoreFileIdDetails,
   getStoreFileIdDetailsPre: getStoreFileIdDetailsPre,
@@ -176,6 +179,7 @@ const patientDetailsReducer = combineReducers({
   allRoles: createReducer(getAllRolesAction),
   getQueryLoader: getPatientsLoading(getQuery),
   reEvaluate: createReducer(updateReEvaluate),
+  providerList: createReducer(getProviderList),
   timeLineList:getPatientsLoading(timeLineList),
   timeLineData:createReducer(timeLineList),
   actionList:createReducer(actionList),

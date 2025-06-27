@@ -1,14 +1,23 @@
-import React, { use, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import PdfViewer from "../PdfViewerComponent";
 import { connect } from "react-redux";
 import style from "./styles.module.css";
-import { EditOutlined, DeleteOutlined, CloseOutlined } from "@ant-design/icons";
-import { Button, Empty, Form, Popover } from "antd";
+import { DeleteOutlined } from "@ant-design/icons";
+import { Empty, Form, Popconfirm, Popover, Spin } from "antd";
 import { stringToColour } from "../components/function/ReusableFunctions";
 import AddForm from "./AddForm";
 import { actions as allActions } from "../../../../stores/patient/details";
 import dayjs from "dayjs";
 import TableSkeleton from "../../../skeleton/table";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faPlus,
+  faRotate,
+  faArrowLeft,
+} from "@fortawesome/free-solid-svg-icons";
+import RegularButton from "../../../button";
+import { getResponePopup } from "../../../../utils/reusable";
+
 export const viewProvidersList = ({ list }) => (
   <div
     className={`${style.listShow}`}
@@ -20,6 +29,7 @@ export const viewProvidersList = ({ list }) => (
     <div className="text-center w-100">{list?.providerName}</div>
   </div>
 );
+
 const ManuallyAddProvider = ({
   hccFileDetails,
   selectDosValue,
@@ -28,49 +38,126 @@ const ManuallyAddProvider = ({
   dosAndProvidersList,
   selectedDosValue,
   loader,
-  dosYearDefalutSelect
+  dosYearDefalutSelect,
+  setTrashProviderAndCaptured,
+  setRestoreProviderAndCaptured,
+  getExistingDos,
 }) => {
   const [form] = Form.useForm();
   const [selectFileURL, setSelectFileURL] = useState([]);
   const [providersList, setProvidersList] = useState(null);
+  const [showRestore, setShowRestore] = useState(false);
+  const [isTrashView, setIsTrashView] = useState(false);
+  const [restoringId, setRestoringId] = useState(null);
+
   const handleEdit = (e, data) => {
-    e.stopPropagation();
+    e?.stopPropagation?.();
+    if (!data) {
+      form.resetFields();
+      setProvidersList(null);
+      return;
+    }
     form.setFieldsValue({
-      dos: data?.dateOfService ? dayjs(data?.dateOfService) : null,
+      dateOfService: data?.dateOfService ? dayjs(data?.dateOfService) : null,
       dosSubstring: data?.dosSubstring || "",
       dosStartPageNumber: data?.dosStartPageNumber || "",
       dosEndPageNumber: data?.dosEndPageNumber || "",
       faceToFace:
         data?.faceToFace === true
-          ? "Yes"
+          ? true
           : data?.faceToFace === false
-          ? "No"
-          : "",
+          ? false
+          : undefined,
+
       visitType: data?.visitType || "",
       reviewerComments: data?.reviewerComments || "",
       physicianInquiry: data?.physicianInquiry || "",
       physicianSignaturePresent: data?.physicianSignaturePresent || "",
       physicianNotPresent: data?.physicianNotPresent || "",
       providerName: data?.providerName || "",
-      providerPageNumber: data?.hyperlinks[0]?.pageNumber || "",
+      providerPageNumber: data?.hyperlinks?.[0]?.pageNumber || "",
       providerCredentials: data?.providerCredentials || "",
-      providerReference: data?.hyperlinks[0]?.substring || "",
+      providerReference: data?.hyperlinks?.[0]?.substring || "",
       isProviderSigned: !data?.noCredential ? true : false || false,
       fileType: data?.fileType || "",
     });
     setProvidersList(data);
   };
+
+  const handleTrash = () => {
+    setIsTrashView(true);
+    setShowRestore(true);
+    const year = dosYear?.[0]?.value || "";
+    getAddProviderAndDOSList({ trash: true, year });
+  };
+
+  const handleDelete = async (item) => {
+    const isDosSelected = item?.dateOfService;
+    try {
+      const res = await setTrashProviderAndCaptured({ isDosSelected });
+      if (res?.status === "SUCCESS") {
+        getResponePopup(res);
+        const year = dosYear?.[0]?.value || "";
+        getAddProviderAndDOSList({ year });
+      } else {
+        console.warn("Trash failed:", res);
+      }
+    } catch (error) {
+      console.error("Error in trashing provider:", error);
+    }
+  };
+
+  const handleRestore = async (item) => {
+
+    const isDosSelected = item?.dateOfService;
+    setRestoringId(item?.id);
+
+    try {
+      const res = await setRestoreProviderAndCaptured({ isDosSelected });
+      if (res?.status === "SUCCESS") {
+        getResponePopup(res);
+       
+        const year = dosYear?.[0]?.value || "";
+        getAddProviderAndDOSList({ trash: true, year });
+      } else {
+        console.warn("Restore failed:", res);
+      }
+    } catch (error) {
+      console.error("Error restoring provider:", error);
+    } finally {
+      setRestoringId(null);
+    }
+  };
+
+  const handleBackFromTrash = () => {
+    setIsTrashView(false);
+    setShowRestore(false);
+    const year = dosYear?.[0]?.value || "";
+    getAddProviderAndDOSList({ year });
+  };
+
   useEffect(() => {
     if (hccFileDetails?.data?.response) {
       setSelectFileURL(hccFileDetails?.data?.response?.azureBlobPath);
     }
     if (dosYearDefalutSelect) {
-      getAddProviderAndDOSList(dosYearDefalutSelect?.value?dosYearDefalutSelect?.value : dosYearDefalutSelect);
+      const year = dosYear?.[0]?.value || "";
+      getAddProviderAndDOSList({
+        dosYear: dosYearDefalutSelect?.value ?? dosYearDefalutSelect,
+        year,
+      });
     }
   }, [hccFileDetails, dosYearDefalutSelect]);
 
+  useEffect(() => {
+    if (Array.isArray(dosAndProvidersList) && dosAndProvidersList.length > 0) {
+      handleEdit({ stopPropagation: () => {} }, dosAndProvidersList[0]);
+    }
+  }, [dosAndProvidersList]);
+
+
   return (
-    <div className="d-flex p-2 h-100">
+    <div className="d-flex p-2 h-100" style={{ height: "100vh" }}>
       <div style={{ width: "50%" }}>
         <PdfViewer
           src={selectFileURL}
@@ -80,7 +167,10 @@ const ManuallyAddProvider = ({
         />
       </div>
 
-      <div style={{ width: "30%" }} className="mx-2 h-100 overflow-scroll">
+      <div
+        style={{ width: "30%", overflowY: "auto", maxHeight: "100vh" }}
+        className="mx-2"
+      >
         <AddForm
           form={form}
           selectDosValue={selectDosValue}
@@ -90,77 +180,124 @@ const ManuallyAddProvider = ({
           dosYearDefalutSelect={dosYearDefalutSelect}
         />
       </div>
-      <div style={{ width: "20%" }}>
-        {providersList && (
-          <div className="d-flex justify-content-end align-items-center">
-            <Button
-              className={style.cancelBtn}
-              onClick={(e) => {
-                handleEdit(e, null);
-                setProvidersList(null);
-              }}
-            >
-              cancel
-            </Button>
-          </div>
-        )}
+
+      <div style={{ width: "20%", display: "flex", flexDirection: "column" }}>
+        <div className="d-flex justify-content-end align-items-center mb-2">
+          {isTrashView ? (
+            <RegularButton
+              padding="3px 10px"
+              name="Back"
+              onClick={handleBackFromTrash}
+              icon={<FontAwesomeIcon icon={faArrowLeft} />}
+              iconPosition="left"
+            />
+          ) : (
+            <>
+              <RegularButton
+                padding="3px 10px"
+                className={style.addBtn}
+                name="Add Dos"
+                onClick={() => {
+                  form.resetFields();
+                  setProvidersList(null);
+                }}
+                icon={<FontAwesomeIcon icon={faPlus} />}
+                iconPosition="left"
+              />
+              <RegularButton
+                padding="3px 10px"
+                name="Trash"
+                onClick={handleTrash}
+                icon={<DeleteOutlined />}
+                iconPosition="left"
+              />
+            </>
+          )}
+        </div>
+
         <div
-          className="w-100 h-100 overflow-scroll"
+          className="flex-grow-1"
+          style={{ overflowY: "auto", maxHeight: "calc(100vh - 60px)" }}
           id="dosAndProvidersList"
           name="dosAndProvidersList"
         >
           {loader ? (
             <TableSkeleton />
-          ) : Array.isArray(dosAndProvidersList) ? (
-            dosAndProvidersList?.map((item, index) => (
-              <button
-                id={`dosAndProvidersList${index}`}
-                name={`dosAndProvidersList${index}`}
-                className={`ant-badge ${style.providerButton} my-2`}
-                key={item?.id}
-              >
-                <span className={style.dateField}>{item?.dateOfService}</span>
-                <span
-                  id="dosAndProvider-name"
-                  name="dosAndProvider-name"
-                  className={style.providerText}
+          ) : Array.isArray(dosAndProvidersList) &&
+            dosAndProvidersList.length > 0 ? (
+            dosAndProvidersList.map((item, index) => (
+              <div onClick={(e) => handleEdit(e, item)} key={item?.id}>
+                <button
+                  id={`dosAndProvidersList${index}`}
+                  name={`dosAndProvidersList${index}`}
+                  className={`ant-badge ${style.providerButton} my-2`}
                 >
-                  Provider
-                </span>
-                <Popover
-                  id={`dosAndProvider-name-pop-${index}`}
-                  name={`dosAndProvider-name-pop-${index}`}
-                  content={viewProvidersList({ list: item })}
-                >
-                  <span
-                    id={`dosAndProvider-name-pop-content-${index}`}
-                    name={`dosAndProvider-name-pop-content-${index}`}
-                    className={style.count}
+                  <span className={style.dateField}>{item?.dateOfService}</span>
+                  <span className={style.providerText}>Provider</span>
+                  <Popover
+                    content={viewProvidersList({ list: item })}
+                    id={`popover-${index}`}
                   >
-                    {item?.hyperlinks?.length < 10
-                      ? `0${item?.hyperlinks?.length}`
-                      : item?.hyperlinks?.length}
+                    <span className={style.count}>
+                      {item?.hyperlinks?.length < 10
+                        ? `0${item?.hyperlinks?.length}`
+                        : item?.hyperlinks?.length}
+                    </span>
+                  </Popover>
+                  <span>
+                    <div className="d-flex align-items-center gap-3">
+                      {!isTrashView && (
+                        <Popconfirm
+                          title="Are you sure you want to delete this provider?"
+                          onConfirm={(e) => {
+                            e?.stopPropagation?.();
+                            handleDelete(item);
+                          }}
+                          onCancel={(e) => e.stopPropagation()}
+                          okText="Yes"
+                          cancelText="No"
+                        >
+                          <DeleteOutlined
+                            onClick={(e) => e.stopPropagation()}
+                            style={{
+                              color: "red",
+                              fontSize: "16px",
+                              cursor: "pointer",
+                            }}
+                          />
+                        </Popconfirm>
+                      )}
+
+                      {showRestore && (
+                        <div>
+                          {restoringId === item?.id ? (
+                            <Spin size="small" />
+                          ) : (
+                            <FontAwesomeIcon
+                              icon={faRotate}
+                              style={{ cursor: "pointer", color: "black" }}
+                              onClick={(e) => {
+                                e?.stopPropagation?.();
+                                handleRestore(item);
+                              }}
+                            />
+                          )}
+                        </div>
+                      )}
+                    </div>
                   </span>
-                </Popover>
-                <span
-                  onClick={(e) => handleEdit(e, item)}
-                  id={`dosAndProvidersEdit-${index}`}
-                  name={`dosAndProvidersEdit-${index}`}
-                >
-                  <EditOutlined
-                    style={{ color: "#06439D", fontSize: "16px" }}
-                  />
-                </span>
-              </button>
+                </button>
+              </div>
             ))
           ) : (
-            <Empty />
+            <Empty description="No Data" />
           )}
         </div>
       </div>
     </div>
   );
 };
+
 const enhancer = connect(
   (state) => ({
     hccFileDetails: state.patientDetails?.details?.hccFileResult,
@@ -170,7 +307,10 @@ const enhancer = connect(
   }),
   {
     getAddProviderAndDOSList: allActions.getAddProviderAndDOSList,
+    setTrashProviderAndCaptured: allActions.setTrashProviderAndCaptured,
+    setRestoreProviderAndCaptured: allActions.setRestoreProviderAndCaptured,
+    getExistingDos: allActions.getDosExist,
   }
 );
 
-  export default enhancer(ManuallyAddProvider);
+export default enhancer(ManuallyAddProvider);

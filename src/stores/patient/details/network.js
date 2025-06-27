@@ -119,6 +119,7 @@ export async function patientHccFile(fileId) {
   const options = {
     method: "GET",
   };
+  setStorage("fileIds", fileId);
   const result = await requestPortal(
     `dbservice/fileDetail/findbyid?fileId=${fileId ? fileId : ""}`,
     options
@@ -131,7 +132,6 @@ export async function patientHccFile(fileId) {
   // );
   return result;
 }
-
 export async function dosWiseList(patientId, year) {
   const options = {
     method: "GET",
@@ -189,6 +189,32 @@ export async function getProviderAndCaptured(obj) {
   );
   return data;
 }
+
+export async function setTrashProviderAndCaptured({ isDosSelected }) {
+  const options = {
+    method: "DELETE",
+  };
+  const patientId = getStorage("patientId");
+  const fileId = getStorage("fileIds");
+    const data = await requestPortal(
+      `management/dos-provider/soft-delete?patientId=${patientId}&fileId=${fileId}&dos=${isDosSelected}`,
+      options
+    );
+  return data;
+}
+export async function setRestoreProviderAndCaptured({ isDosSelected }) {
+  const options = {
+    method: "PUT",
+  };
+  const patientId = getStorage("patientId");
+  const fileId = getStorage("fileIds");
+  const data = await requestPortal(
+    `management/dos-provider/restore?patientId=${patientId}&fileId=${fileId}&dos=${isDosSelected}`,
+    options
+  );
+  return data;
+}
+
 
 export async function deleteflag(obj) {
   const options = {
@@ -369,7 +395,7 @@ export async function suggestedMeatCheck(diagnosisCode) {
 // manuallyAddDosAndProvider
 export async function manuallyAddDosAndProvider(data) {
   const options = {
-    method: "PUT",
+    method: "POST",
     body: JSON.stringify(data),
   };
   const res = await requestPortal(
@@ -379,17 +405,34 @@ export async function manuallyAddDosAndProvider(data) {
   return res;
 }
 
-export async function manuallyAddDosAndProviderList(year) {
+export async function manuallyAddDosAndProviderList({ trash, year }) {
   const patientId = getStorage("patientId");
   const options = {
     method: "GET",
   };
+  const fileId = getStorage("fileIds");
   const res = await requestPortal(
-    `management/dos-provider/get-dos-and-provider-information?patientId=${patientId}&processedYear=${year}`,
+    `management/dos-provider/get?patientId=${patientId}&fileId=${fileId}&trash=${
+      trash ? trash : false
+    }&year=${year ? year : ""} `,
     options
   );
   return res;
 }
+export async function getDosExist({ dos, newDos}) {
+  const patientId = getStorage("patientId");
+  const fileId = getStorage("fileIds");
+
+  const options = {
+    method: "GET",
+  };
+  const res = await requestPortal(
+    `management/dos-provider/existing-dos?patientId=${patientId}&fileId=${fileId}&dateOfService=${dos}&newDateOfService=${newDos ? newDos : ""}`,
+    options
+  );
+  return res;
+}
+
 
 export async function getValidHccDetailsApi(year, code) {
   const options = {
@@ -423,6 +466,13 @@ export async function getUserDetails(userId) {
     `dbservice/user/get?userName=${userId}`,
     options
   );
+  return res;
+}
+export async function getProvider() {
+  const options = {
+    method: "GET",
+  };
+  const res = await requestPortal(`dbservice/v1/provider/get`, options);
   return res;
 }
 

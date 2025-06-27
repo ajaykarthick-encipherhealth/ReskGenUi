@@ -42,8 +42,10 @@
 .disCode {
   font-size: 14px;
   color: #04306f;
-  font-weight: 500;
+
   margin-top: 5px;
+    width: 140px; /* Fixed width for left labels */
+  font-weight: 600;
 }
 .discription {
   font-size: 14px;
@@ -76,3 +78,6 @@
   word-wrap: break-word; 
   white-space: normal;
 }
+
+
+

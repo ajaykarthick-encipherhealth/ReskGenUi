@@ -1179,7 +1179,9 @@ const PatientSync = ({
                                       ? true
                                       : false
                                   }
-                                  tableLoader={tableLoader}
+                                  tableLoader={
+                                    tableLoader ? tableLoader : false
+                                  }
                                 />
                               ) : null}
                             </div>
