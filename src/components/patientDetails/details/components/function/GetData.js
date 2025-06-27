@@ -664,7 +664,6 @@ export const getPatientDetails = async (
           });
         }
       });
-
       deletedSortedArr?.map((res, index) => {
         const isShows =
           userId == "reviewer@3gencogentai.onmicrosoft.com" &&
@@ -742,7 +741,7 @@ export const getPatientDetails = async (
             isLab: getStateIndicators(res.stateIndicators, "LAB"),
           });
         }
-        if (isShows && res?.isRxHcc  && activeTab == 5 ) {
+       else if (isShows && res?.isRxHcc  && activeTab == 5 ) {
           const encounterDatearray = res?.encounterDate?.split(",");
           var providerList = [];
           res.providerNames?.map((res) => {
