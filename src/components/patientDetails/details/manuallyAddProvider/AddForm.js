@@ -36,10 +36,11 @@ const AddForm = ({
   allProviderList,
   existingDos,
   getExistingDos,
+  getSelectedDos,
 }) => {
   const [btnName, setBtnName] = useState(null);
   const [providerOptions, setProviderOptions] = useState([]);
-const [dosExistsError, setDosExistsError] = useState(null);
+  const [dosExistsError, setDosExistsError] = useState(null);
 
   const validateThreeDigitNumber = (_, value) => {
     if (!value || /^\d{1,3}$/.test(value)) {
@@ -98,12 +99,15 @@ const [dosExistsError, setDosExistsError] = useState(null);
         const year = dosYear?.[0]?.value || "";
         getAddProviderAndDOSList({ year });
         dosDeatilsAction(patientId, dosYear?.[0]?.value || "");
-        getpatientDetailsData(
-          patientId,
-          patientDetailsResult?.processedYear,
-          patientDetailsResult?.dateOfService,
-          "",
-          ""
+        // getpatientDetailsData(
+        //   patientId,
+        //   patientDetailsResult?.processedYear,
+        //   data?.newDateOfService ? data.newDateOfService :  data?.dateOfService,
+        //   "",
+        //   ""
+        // );
+        getSelectedDos(
+          data?.newDateOfService ? data.newDateOfService : data?.dateOfService
         );
         patientDetailsLoad(false);
         form.resetFields();
@@ -150,7 +154,6 @@ const [dosExistsError, setDosExistsError] = useState(null);
     }
   }, [allProviderList]);
 
-  console.log(existingDos, "existingDos");
   return (
     <div>
       <div className={style.formContainer} id="manuallyAdd-container">
@@ -168,7 +171,6 @@ const [dosExistsError, setDosExistsError] = useState(null);
             rules={[{ required: true, message: "Please Enter DOS" }]}
             className="manuallyAddPicker"
           >
-           
             <DatePicker
               format="MM-DD-YYYY"
               disabledDate={customDisableDate}
@@ -469,6 +471,7 @@ const connector = connect(
     getAddProviderAndDOSList: allActions.getAddProviderAndDOSList,
     dosDeatilsAction: allActions.dosDeatilsAction,
     getpatientDetailsData: allActions.patientDetailsAction,
+    getSelectedDos: allActions.getSelectedDos,
     patientDetailsLoad: allActions.patientDetailsLoad,
     getProvider: allActions.getProviderList,
     getExistingDos: allActions.getDosExist,
