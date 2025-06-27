@@ -234,7 +234,7 @@ const HccCards = ({
       isShow: action === "hide" ? false : true,
       chartProcessType: "DATE_OF_SERVICE",
       dateOfServiceIfDosWiseCompute: data?.dateOfServices[0],
-      processedYear: year?.value,
+      processedYear: year?.value , 
       newDiagnosisCode: data?.diagnosisCode,
       oldDiagnosisCode: data?.diagnosisCode,
       monitorAspect: result?.monitorAspect,
@@ -246,9 +246,8 @@ const HccCards = ({
       assessmentHyperLink: result?.assessmentHyperLink,
       treatmentHyperLink: result?.treatmentHyperLink,
     });
-
     if (res?.status === "SUCCESS") {
-      getPatientDetailsData(patientId, null, selectDosValue, "", role);
+      getPatientDetailsData(patientId, null, isDosSelected, "", role);
       getPatientIdData(patientId);
       setOpenContent(false);
       getResponePopup(res);
