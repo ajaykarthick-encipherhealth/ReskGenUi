@@ -345,6 +345,7 @@ const PatientSync = ({
   tableDynamicColumn,
   tableDynamicColumnReset,
   pageLoad,
+  tableLoader,
 }) => {
   const columns = [
     {
@@ -452,7 +453,7 @@ const PatientSync = ({
   const [clear, setClear] = useState(false);
   const [sort, setSort] = useState(null);
   const [isFilter, setIsFilter] = useState(true);
-  
+
   const handleUploadButtonClick = (e) => {
     setIsDrawerOpen(!isDrawerOpen);
     setUploadType(e.target.name);
@@ -476,37 +477,37 @@ const PatientSync = ({
     setPaginationFirst(e.first);
     setPageNo(e.page);
   };
-const handleExcelDownload = () => {
-  let fileName = "";
-  switch (reportActiveTab) {
-    case "Patient Roaster":
-      fileName =
-        "https://mcibeforeocrdev.blob.core.windows.net/test/Patient%20Roaster.xlsx?sp=r&st=2025-05-12T05:29:09Z&se=2026-05-12T13:29:09Z&spr=https&sv=2024-11-04&sr=b&sig=ianNxwle85tYi3TGVPz5RLD26zBJkRYGU%2FgfrrHFAZM%3D";
-      break;
-    case "Practice Roaster":
-      fileName =
-        "https://mcibeforeocrdev.blob.core.windows.net/test/Practice%20Roaster%20(1).xlsx?sp=r&st=2025-05-12T05:29:36Z&se=2026-05-12T13:29:36Z&spr=https&sv=2024-11-04&sr=b&sig=itQgK10ZdNqaODfB8XGr12VnEjGc%2BLksH4B9b0B5goQ%3D";
-      break;
-    case "Provider Roaster":
-      fileName =
-        "https://mcibeforeocrdev.blob.core.windows.net/test/Provider%20Roaster%20(1).xlsx?sp=r&st=2025-05-12T05:29:48Z&se=2026-05-12T13:29:48Z&spr=https&sv=2024-11-04&sr=b&sig=oz84wT%2B22fIhEicPp4Dn4iWFfxXlfbvObcfNDAewMyE%3D";
-      break;
-    case "Tin Roaster":
-      fileName =
-      "https://mcibeforeocrdev.blob.core.windows.net/test/Tin%20Roaster%20(1).xlsx?sp=r&st=2025-05-12T05:30:03Z&se=2026-05-12T13:30:03Z&spr=https&sv=2024-11-04&sr=b&sig=UJ74lIQjISoPamqtw7Nh%2FBLVVUWQbcnX2pOz0ADW980%3D"
-      break;
-    default:
-      console.error("no tabs ");
-      return;
-  }
+  const handleExcelDownload = () => {
+    let fileName = "";
+    switch (reportActiveTab) {
+      case "Patient Roaster":
+        fileName =
+          "https://mcibeforeocrdev.blob.core.windows.net/test/Patient%20Roaster.xlsx?sp=r&st=2025-05-12T05:29:09Z&se=2026-05-12T13:29:09Z&spr=https&sv=2024-11-04&sr=b&sig=ianNxwle85tYi3TGVPz5RLD26zBJkRYGU%2FgfrrHFAZM%3D";
+        break;
+      case "Practice Roaster":
+        fileName =
+          "https://mcibeforeocrdev.blob.core.windows.net/test/Practice%20Roaster%20(1).xlsx?sp=r&st=2025-05-12T05:29:36Z&se=2026-05-12T13:29:36Z&spr=https&sv=2024-11-04&sr=b&sig=itQgK10ZdNqaODfB8XGr12VnEjGc%2BLksH4B9b0B5goQ%3D";
+        break;
+      case "Provider Roaster":
+        fileName =
+          "https://mcibeforeocrdev.blob.core.windows.net/test/Provider%20Roaster%20(1).xlsx?sp=r&st=2025-05-12T05:29:48Z&se=2026-05-12T13:29:48Z&spr=https&sv=2024-11-04&sr=b&sig=oz84wT%2B22fIhEicPp4Dn4iWFfxXlfbvObcfNDAewMyE%3D";
+        break;
+      case "Tin Roaster":
+        fileName =
+          "https://mcibeforeocrdev.blob.core.windows.net/test/Tin%20Roaster%20(1).xlsx?sp=r&st=2025-05-12T05:30:03Z&se=2026-05-12T13:30:03Z&spr=https&sv=2024-11-04&sr=b&sig=UJ74lIQjISoPamqtw7Nh%2FBLVVUWQbcnX2pOz0ADW980%3D";
+        break;
+      default:
+        console.error("no tabs ");
+        return;
+    }
 
-  const link = document.createElement("a");
-  link.href = `${fileName}`; 
-  link.download = fileName;
-  document.body.appendChild(link);
-  link.click();
-  document.body.removeChild(link);
-};
+    const link = document.createElement("a");
+    link.href = `${fileName}`;
+    link.download = fileName;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
 
   const renderButton = () => {
     switch (reportActiveTab) {
@@ -612,7 +613,7 @@ const handleExcelDownload = () => {
     setSearchVal(null);
     setSelectedDates(null);
     setSelectedDateRanges([]);
-    setSelectedOption([])
+    setSelectedOption([]);
   };
   const debouncedSearch = useCallback(
     debounce((text, setSearchVal, field) => {
@@ -738,10 +739,9 @@ const handleExcelDownload = () => {
   useEffect(() => {
     setFilteredCoder(null);
     // if (reportActiveTab) {
-      getActiveTab("FHIR");
+    getActiveTab("FHIR");
     // }
   }, []);
-
 
   useEffect(() => {
     if (reportActiveTab === "PDF") {
@@ -949,7 +949,6 @@ const handleExcelDownload = () => {
       setIsFilter(false);
     }
   }, [data?.response?.metaDataDTO]);
-
 
   return (
     <>
