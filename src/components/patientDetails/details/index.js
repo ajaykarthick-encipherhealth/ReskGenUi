@@ -1264,6 +1264,11 @@ const Details = ({
                       selectedDosValue={selectedDosValue}
                       dosYearDefalutSelect={dosYearDefalutSelect}
                       isDosSelected={isDosSelected}
+                      year={
+                        dosYearDefalutSelect?.value
+                          ? dosYearDefalutSelect?.value
+                          : dosYearDefalutSelect
+                      }
                     />
                   ) : flagContainerActive === "Queried" ? (
                     <Queried

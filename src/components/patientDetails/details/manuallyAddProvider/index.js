@@ -43,6 +43,7 @@ const ManuallyAddProvider = ({
   setTrashProviderAndCaptured,
   setRestoreProviderAndCaptured,
   getExistingDos,
+  year,
 }) => {
   const [form] = Form.useForm();
   const [selectFileURL, setSelectFileURL] = useState([]);
@@ -50,7 +51,6 @@ const ManuallyAddProvider = ({
   const [showRestore, setShowRestore] = useState(false);
   const [isTrashView, setIsTrashView] = useState(false);
   const [restoringId, setRestoringId] = useState(null);
-
   const handleEdit = (e, data) => {
     e?.stopPropagation?.();
     if (!data) {
@@ -88,7 +88,7 @@ const ManuallyAddProvider = ({
   const handleTrash = () => {
     setIsTrashView(true);
     setShowRestore(true);
-    const year = dosYear?.[0]?.value || "";
+
     getAddProviderAndDOSList({ trash: true, year });
   };
 
@@ -98,7 +98,7 @@ const ManuallyAddProvider = ({
       const res = await setTrashProviderAndCaptured({ isDosSelected });
       if (res?.status === "SUCCESS") {
         getResponePopup(res);
-        const year = dosYear?.[0]?.value || "";
+    
         getAddProviderAndDOSList({ year });
       } else {
         console.warn("Trash failed:", res);
@@ -109,7 +109,6 @@ const ManuallyAddProvider = ({
   };
 
   const handleRestore = async (item) => {
-
     const isDosSelected = item?.dateOfService;
     setRestoringId(item?.id);
 
@@ -117,8 +116,8 @@ const ManuallyAddProvider = ({
       const res = await setRestoreProviderAndCaptured({ isDosSelected });
       if (res?.status === "SUCCESS") {
         getResponePopup(res);
-       
-        const year = dosYear?.[0]?.value || "";
+
+    
         getAddProviderAndDOSList({ trash: true, year });
       } else {
         console.warn("Restore failed:", res);
@@ -133,7 +132,7 @@ const ManuallyAddProvider = ({
   const handleBackFromTrash = () => {
     setIsTrashView(false);
     setShowRestore(false);
-    const year = dosYear?.[0]?.value || "";
+
     getAddProviderAndDOSList({ year });
   };
 
@@ -142,7 +141,7 @@ const ManuallyAddProvider = ({
       setSelectFileURL(hccFileDetails?.data?.response?.azureBlobPath);
     }
     if (dosYearDefalutSelect) {
-      const year = dosYear?.[0]?.value || "";
+  
       getAddProviderAndDOSList({
         dosYear: dosYearDefalutSelect?.value ?? dosYearDefalutSelect,
         year,
@@ -155,7 +154,6 @@ const ManuallyAddProvider = ({
       handleEdit({ stopPropagation: () => {} }, dosAndProvidersList[0]);
     }
   }, [dosAndProvidersList]);
-
 
   return (
     <div className="d-flex p-2 h-100" style={{ height: "100vh" }}>
