@@ -377,7 +377,7 @@ export const ProviderMenuList = (data) => {
         to: "/tenantadmin/notification",
       });
     }
-    if (res?.title == "Workqueue" && res?.active) {
+    if (res?.title == "My Work Queue" && res?.active) {
       menus.push({
         title: "My Work Queue",
         iconStyle: <ProfileOutlined />,
