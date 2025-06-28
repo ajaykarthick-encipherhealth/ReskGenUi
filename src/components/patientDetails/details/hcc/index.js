@@ -104,8 +104,9 @@ const Hcc = ({
   const [isClient, setIsClient] = useState(false);
   const [isApproved, setIsApproved] = useState(false);
   const [isReject, setIsReject] = useState(false);
- const [isReEvaluateChecked, setIsReEvaluateChecked] = useState(false);
+  const [isReEvaluateChecked, setIsReEvaluateChecked] = useState(false);
   const [educationalError, setEducationalError] = useState(false);
+  const [activeTabNameQuery, setActiveTabNameQuery] = useState(null);
 
   const handleChange = (e) => {
     setQueryText(e.target.value);
@@ -122,6 +123,8 @@ const Hcc = ({
   };
 
   useEffect(() => {
+    const queryTab = getStorage("routeBackTo");
+    setActiveTabNameQuery(queryTab);
     setIsClient(true);
   }, []);
   useEffect(() => {
@@ -372,7 +375,7 @@ const Hcc = ({
   );
   useEffect(() => {
     if (patientDetailsResult?.data?.response) {
-     setIsReEvaluateChecked(patientDetailsResult.data.response);
+      setIsReEvaluateChecked(patientDetailsResult.data.response);
     }
   }, [patientDetailsResult]);
 
@@ -381,9 +384,9 @@ const Hcc = ({
       ...prev,
       reEvaluateNeed: checked,
     }));
-     const response = await updateReEvaluate({ isDosSelected, year });
+    const response = await updateReEvaluate({ isDosSelected, year });
     if (response?.status === "SUCCESS") {
-   getpatientDetailsData(patientId, "", isDosSelected);
+      getpatientDetailsData(patientId, "", isDosSelected);
       getResponePopup(response);
     }
   };
@@ -819,7 +822,9 @@ const Hcc = ({
                         </button>
                       </Popover>
                     </Nav.Item>
-                    {activeTabName?.tinDetailsTab == "Query Approval" && (
+                    {activeTabName?.tinDetailsTab == "Query Approval" ||
+                    activeTabNameQuery ==
+                      "/tenantadmin/tin/tindetails?tab=Query+Approval" ? (
                       <div className="d-flex gap-2">
                         <Nav.Item as="li" className="nav-item">
                           <Popconfirm
@@ -847,7 +852,7 @@ const Hcc = ({
                           </Button>
                         </Nav.Item>
                       </div>
-                    )}
+                    ) : null}
                     <Nav.Item as="li" className="nav-item">
                       {/* {isClient &&
                           ["CODER_1", "CODER_2", "QA"].includes(proxyRole) && (
