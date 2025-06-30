@@ -8,6 +8,8 @@ import { DownOutlined } from "@ant-design/icons";
 import { actions as detailsActions } from "../../../../../stores/patient/details";
 import { getStorage } from "../../../../../utils/storages";
 import { overallYearStatus } from "../../../../../stores/patient/details/network";
+import { useRouter } from "next/router";
+import { isStatusDisabled } from '../../../../../utils/reusable'
 const YearAndDosStatus = ({
   patientDetailsResult,
   patientIdDetailsData,
@@ -38,6 +40,7 @@ const YearAndDosStatus = ({
   });
   const [statusName, setStatusName] = useState('');
   const [statusLoading, setStatusLoading] = useState(false);
+    const router = useRouter()
 
   const renderAuditMenu = (value) => {
     var value = (
@@ -122,8 +125,7 @@ const YearAndDosStatus = ({
         null;
     }
   };
-
-  const getPatientIdDetails = async (result) => {
+  const getPatientIdDetails = async (result) => {    
     const menu = (
       <Menu className="ant-badge" id="menu-container" name="menu-container">
         {result?.workflow?.[0]?.status != "PENDING" &&
@@ -390,6 +392,7 @@ const isLoading = !patienIdDetails || !patienIdDetails?.workflow;
     getPatientIdDetails(patientDetailsResult?.data?.response);
     setPatienIdDetails(patientDetailsResult?.data?.response);
   }, [patientDetailsResult?.data?.response]);
+
   return (
     <>
       {patientDetailsResult?.data?.response && (
@@ -453,9 +456,10 @@ const isLoading = !patienIdDetails || !patienIdDetails?.workflow;
                 </Button>
               </Dropdown>
             </div>
-          ) : userRole == "CODER_1" ||
+          )
+           : userRole == "CODER_1" ||
             userRole == "CODER_2" ||
-            userRole == "QA" ? (
+            userRole == "QA"  || userRole == "OWNER"    ? (
            (
               <div
                 className={`${visitStyles.yearactionbtnContainer} ant-badge`}
@@ -475,7 +479,7 @@ const isLoading = !patienIdDetails || !patienIdDetails?.workflow;
                     className={` ant-badge completedBtnHcc ant-badge ${visitStyles.completedBtnHcc}`}
                     disabled={
                       patientIdDetailsData?.data?.response?.workflow?.[0]
-                        ?.status === "COMPLETED"
+                        ?.status === "COMPLETED" 
                     }
                   >
                     <button
@@ -563,7 +567,7 @@ const isLoading = !patienIdDetails || !patienIdDetails?.workflow;
                     visible={menuIsOpen}
                     className={`ant-badge queryBtnHcc ${visitStyles.queryBtnHcc}`}
                     disabled={
-                      patienIdDetails?.workflow?.[0]?.status === "QUERIED"
+                      patienIdDetails?.workflow?.[0]?.status === "QUERIED" 
                     }
                   >
                     <button
@@ -573,7 +577,7 @@ const isLoading = !patienIdDetails || !patienIdDetails?.workflow;
                       } queryBtnHcc`}
                       style={{
                         cursor:
-                          patienIdDetails?.workflow?.[0]?.status === "QUERIED"
+                          patienIdDetails?.workflow?.[0]?.status === "QUERIED" 
                             ? "not-allowed"
                             : "pointer",
                       }}
@@ -599,17 +603,17 @@ const isLoading = !patienIdDetails || !patienIdDetails?.workflow;
                     visible={menuIsOpen}
                     className={`ant-badge pendingBtn${visitStyles.pendingBtn}`}
                   >
-                    <Button
+                    <button
                       type="primary"
                       className={`ant-badge ${visitStyles.pendingBtn} ${
-                        isDosStatus && `${visitStyles.statusBtn}`
+                        isDosStatus && `${visitStyles.statusBtn} `
                       } pendingBtn`}
                     >
                       <span>PENDING</span>
                       <span style={{ marginLeft: "10px" }}>
                         <DownOutlined />
                       </span>
-                    </Button>
+                    </button>
                   </Dropdown>
                 ) : null}
               </div>

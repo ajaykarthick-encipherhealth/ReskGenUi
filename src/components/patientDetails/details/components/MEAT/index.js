@@ -19,6 +19,8 @@ import { Draggable } from "react-beautiful-dnd";
 import { Spinner } from "react-bootstrap";
 import hccstyles from "../HCC/styles.module.css";
 import CardSkeleton from "../../../../skeleton/card";
+import { isStatusDisabled } from '../../../../../utils/reusable'
+import { useRouter } from "next/router";
 
 const MeatCard = ({
   list,
@@ -66,6 +68,7 @@ const MeatCard = ({
   educationalError,
   setEducationalError,
 }) => {
+    const router = useRouter()
   const [fileInitialPage, setFileInitialPage] = useState(null);
   const [isMulitpleHeaderCode, setIsMulitpleHeadeCode] = useState(null);
   const [isMulitpleProvider, setIsMulitpleProvider] = useState(false);
@@ -80,9 +83,7 @@ const MeatCard = ({
       ? getPdfEmptyFunction
       : getLabPDFFile;
 
-  const isDisabled =
-    patientIdDetailsData?.data?.response?.workflow?.[0]?.status !== "PENDING" ||
-    patientDetailsResult?.data?.response?.workflow?.[0]?.status == "COMPLETED";
+ const isDisabled = isStatusDisabled(patientIdDetailsData, patientDetailsResult, router.pathname);
 
   return (
     <>

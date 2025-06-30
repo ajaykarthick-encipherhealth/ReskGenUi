@@ -34,7 +34,8 @@ import { isLocalEdit } from "../../../../../utils/config";
 import CardSkeleton from "../../../../skeleton/card";
 import AiLogo from "../../../../../images/logo/AI.png";
 import Image from "next/image";
-import { getResponePopup } from "../../../../../utils/reusable";
+import { getResponePopup, isStatusDisabled } from "../../../../../utils/reusable";
+import { useRouter } from "next/router";
 
 const HccCards = ({
   list,
@@ -94,6 +95,7 @@ const HccCards = ({
   educationalError,
   setEducationalError,
 }) => {
+  const router = useRouter()
   const [fileInitialPage, setFileInitialPage] = useState(null);
   const [openEdit, setOpenEdit] = useState(false);
   const [openContent, setOpenContent] = useState(null);
@@ -257,9 +259,7 @@ const HccCards = ({
       patientDetailsLoad(false);
     }
   };
-  const isDisabled =
-    patientIdDetailsData?.data?.response?.workflow?.[0]?.status !== "PENDING" ||
-    patientDetailsResult?.data?.response?.workflow?.[0]?.status == "COMPLETED";
+ const isDisabled = isStatusDisabled(patientIdDetailsData, patientDetailsResult, router.pathname);
   return (
     <>
       {provided && (

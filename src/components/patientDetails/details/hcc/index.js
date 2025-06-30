@@ -45,7 +45,8 @@ import { SwapOutlined } from "@ant-design/icons";
 import { faEye, faEyeSlash } from "@fortawesome/free-regular-svg-icons";
 import DosSelect from "../components/dosSelect";
 import RegularButton from "../../../button";
-import { getResponePopup } from "../../../../utils/reusable";
+import { getResponePopup, isStatusDisabled } from "../../../../utils/reusable";
+import { useRouter } from "next/router";
 
 const { Option } = Select;
 
@@ -81,6 +82,7 @@ const Hcc = ({
   getPatientIdData,
   activeTab,
 }) => {
+    const router = useRouter()
   const { TextArea } = Input;
   const [form] = Form.useForm();
   const patientId = getStorage("patientId");
@@ -390,10 +392,13 @@ const Hcc = ({
       getResponePopup(response);
     }
   };
-  const isDisabled =
-    patientIdDetailsData?.data?.response?.workflow?.[0]?.status !== "PENDING" ||
-    patientDetailsResult?.data?.response?.workflow?.[0]?.status == "COMPLETED";
+   const isDisabled = isStatusDisabled(patientIdDetailsData, patientDetailsResult, router.pathname);
 
+  const isBlock =
+    router.pathname.includes("/tenantadmin/tin/details") ||
+    router.pathname.includes("/tenantadmin/project/details") ||
+    router.pathname.includes("/tenantadmin/patientsync/batchfilesview");
+    
   const hideDiseasePopContent = (
     <>
       <div className="row">
@@ -677,6 +682,7 @@ const Hcc = ({
                             </Option>
                           ))}
                         </Select> */}
+                        {console.log(isDisabled,"isDisabled")}
                         <DosSelect
                           options={patientDosResult?.data?.response}
                           handleOptions={handleOptions}
@@ -686,7 +692,7 @@ const Hcc = ({
                           getSelectedDos={getSelectedDos}
                           setSelectedDate={setSelectedDate}
                         />
-                        {getStorage("userRole") != "admin" &&
+                        { isBlock ||getStorage("userRole") != "admin" &&
                           selectDosValue && (
                             <YearAndDosStatus
                               setIsLoading={setIsLoading}

@@ -142,7 +142,6 @@ const ReAllocationModal = ({
     }
     setActiveCard("");
   };
-  console.log(!(allocateDate && priority), allocateDate, priority,"set");
   useEffect(() => {
     if (allocateModal) {
       getUserList({ roleId: roleId, userName: selectedUserName });

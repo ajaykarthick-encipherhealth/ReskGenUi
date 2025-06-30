@@ -24,7 +24,8 @@ import {
   getUserDetails,
 } from "../../../../../stores/patient/details/network";
 import SvgFlag from "../svg/svg";
-import { getResponePopup } from "../../../../../utils/reusable";
+import { getResponePopup, isStatusDisabled } from "../../../../../utils/reusable";
+import { useRouter } from "next/router";
 
 const Flag = ({
   setOpen,
@@ -39,6 +40,7 @@ const Flag = ({
   patientIdDetailsData,
   selectedDosValue,
 }) => {
+    const router = useRouter()
   const [inputValue, setInputValue] = useState({
     flagId: "",
     comments: "",
@@ -49,10 +51,7 @@ const Flag = ({
   const [validated, setValidated] = useState(false);
   const [localPatientId, setLocalPatientId] = useState("");
   const [userDetails, setUserDetails] = useState("");
-  const isDisabled =
-  patientIdDetailsData?.data?.response
-    ?.workflow?.[0]?.status !== "PENDING" || patientDetailsResult?.data?.response?.workflow?.[0]
-    ?.status == "COMPLETED";
+ const isDisabled = isStatusDisabled(patientIdDetailsData, patientDetailsResult, router.pathname);
 
   const flagPostList = getFlagsData?.response?.map((item) => ({
     value: item?.id,

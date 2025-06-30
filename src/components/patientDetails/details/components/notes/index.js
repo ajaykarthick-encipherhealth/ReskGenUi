@@ -15,11 +15,12 @@ import { connect } from "react-redux";
 import { getStorage } from "../../../../../utils/storages";
 import { actions as detailsActions } from "../../../../../stores/patient/details";
 import { isDeleteNotes } from "../../../../../stores/patient/details/actions";
-import { formatDateTime, getResponePopup } from "../../../../../utils/reusable";
+import { formatDateTime, getResponePopup, isStatusDisabled } from "../../../../../utils/reusable";
 import {
   getNotesLists,
   getUserDetails,
 } from "../../../../../stores/patient/details/network";
+import { useRouter } from "next/router";
 
 const Notes = ({
   setOpen,
@@ -29,6 +30,7 @@ const Notes = ({
   isAddNotes,
   patientIdDetailsData
 }) => {
+    const router = useRouter()
   const [inputValue, setInputValue] = useState({
     patientId: "",
     comments: "",
@@ -39,10 +41,7 @@ const Notes = ({
   const [validated, setValidated] = useState(false);
   const [userDetails, setUserDetails] = useState();
   const [localPatientId, setLocalPatientId] = useState("");
-  const isDisabled =
-  patientIdDetailsData?.data?.response
-    ?.workflow?.[0]?.status !== "PENDING" || patientDetailsResult?.data?.response?.workflow?.[0]
-    ?.status == "COMPLETED";
+  const isDisabled = isStatusDisabled(patientIdDetailsData, patientDetailsResult, router.pathname);
   const handleSubmitNotes = async (event) => {
     const form = event.currentTarget;
     event.preventDefault();

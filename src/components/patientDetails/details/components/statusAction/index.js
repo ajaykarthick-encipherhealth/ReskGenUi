@@ -19,11 +19,11 @@ const StatusAction = ({
   patientDetailsResult,
   patientIdDetailsData,
   getPatientIdData,
-  getPatientDosList
+  getPatientDosList,
 }) => {
-const router = useRouter();
-const isOnReviewerPatients = router.pathname === "/reviewer/patients/details";
-const shouldDisable = isOnReviewerPatients ;
+  const router = useRouter();
+  const isOnReviewerPatients = router.pathname === "/reviewer/patients/details";
+  const shouldDisable = isOnReviewerPatients;
   const [localOrgId, setLocalOrgId] = useState("");
   const [localUserId, setLocalUserId] = useState("");
   const [localPatientId, setLocalPatientId] = useState("");
@@ -53,11 +53,14 @@ const shouldDisable = isOnReviewerPatients ;
   const [inputValue, setInputValue] = useState({
     notes: "",
   });
-    const [isQueried, setIsQueried] = useState(false);
-
+  const [isQueried, setIsQueried] = useState(false);
   const [isQueryModalOpen, setIsQueryModalOpen] = useState(false);
   const proxyRole = getStorage("proxyRole");
-
+  const path = router.pathname;
+  const isTinPage = path.includes("/tenantadmin/tin/details");
+  const isProjectPage = path.includes("/tenantadmin/project/details");
+  const isBatchPage = path.includes("/tenantadmin/patientsync/batchfilesview");
+  const isStatusHidden = isTinPage || isProjectPage || isBatchPage;
 
   const showQueryModal = () => {
     setIsQueryModalOpen(true);
@@ -67,9 +70,9 @@ const shouldDisable = isOnReviewerPatients ;
     setIsQueryModalOpen(false);
   };
 
-    useEffect(() => {
-      setIsClient(true);
-    }, []);
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
   const renderAuditMenu = (value) => {
     var value = (
       <Menu id="auditbtn">
@@ -140,7 +143,7 @@ const shouldDisable = isOnReviewerPatients ;
 
     return value;
   };
- 
+
   const auditPatient = (number) => {
     switch (number) {
       case 1:
@@ -170,7 +173,7 @@ const shouldDisable = isOnReviewerPatients ;
         setInputValue({ notes: "" });
         setValidated(false);
         break;
-        
+
       default:
         null;
     }
@@ -186,9 +189,7 @@ const shouldDisable = isOnReviewerPatients ;
     ];
     setSelectedRowsId(data);
     const menu = (
-    
       <Menu id="auditbtn">
-
         {result?.workflow?.[0]?.status != "PENDING" &&
         result?.workflow?.[0]?.status != "COMPUTED" ? (
           <Menu.Item
@@ -251,7 +252,7 @@ const shouldDisable = isOnReviewerPatients ;
             </Menu.Item>
           </>
         )}
-          {result?.workflow?.[0]?.status != "QUERIED" ? (
+        {result?.workflow?.[0]?.status != "QUERIED" ? (
           <Menu.Item key="7">
             {["CODER_1", "CODER_2", "QA"].includes(proxyRole) && (
               <Button
@@ -264,9 +265,9 @@ const shouldDisable = isOnReviewerPatients ;
               >
                 Query
               </Button>
-             )}
-          </Menu.Item>) : null }
-
+            )}
+          </Menu.Item>
+        ) : null}
       </Menu>
     );
 
@@ -403,15 +404,15 @@ const shouldDisable = isOnReviewerPatients ;
     setAdminActionItems(menu4);
   };
   const handleActionClick = (value) => {
-      // if (value == "QUERY") {
-      //   setConfirmNotesModal(true);
-      //   setIsValidAction("queryFunction");
-      //   setInputValue({ notes: "" });
-      //   setValidated(false);
-      // }
-      if (value === "QUERY") {
-        setIsQueryModalOpen(true);
-      }
+    // if (value == "QUERY") {
+    //   setConfirmNotesModal(true);
+    //   setIsValidAction("queryFunction");
+    //   setInputValue({ notes: "" });
+    //   setValidated(false);
+    // }
+    if (value === "QUERY") {
+      setIsQueryModalOpen(true);
+    }
     if (value == "PENDING") {
       setConfirmNotesModal(true);
       setIsValidAction("pendingFunction");
@@ -434,7 +435,6 @@ const shouldDisable = isOnReviewerPatients ;
   const addLabReport = (data) => {
     setLapReportSlider(true);
   };
-
 
   const allocatePatient = () => {
     setAllocateModal(true);
@@ -480,37 +480,35 @@ const shouldDisable = isOnReviewerPatients ;
     }
   };
   const updateStatus = async (action) => {
-      
     var postData = {
       // orgId: localOrgId,
       patientId: localPatientId,
       notes: inputValue.notes,
-      roleId:getStorage("roleId"),
+      roleId: getStorage("roleId"),
       processedStatus: statusCheck(action),
       // dos: patientDetailsResult?.data?.response?.processedYear,
     };
     try {
-          setStatusLoading(true);
-      const response = await overallStatusUpdate(postData)
+      setStatusLoading(true);
+      const response = await overallStatusUpdate(postData);
 
       if (response?.status == "SUCCESS") {
-          setStatusLoading(false);
+        setStatusLoading(false);
         notification.success({
           message: response?.message,
           duration: 1,
         });
-      }
-      else{
-        getResponePopup(response)
+      } else {
+        getResponePopup(response);
       }
       setConfirmNotesModal(false);
       setConfirmCompleteModal(false);
       setConfirmAuditModal(false);
       getPatientIdData(localPatientId);
-       getPatientDosList(
-         localPatientId,
-         patientDetailsResult?.data?.response?.processedYear
-       );
+      getPatientDosList(
+        localPatientId,
+        patientDetailsResult?.data?.response?.processedYear
+      );
       setInputValue({
         notes: "",
       });
@@ -520,8 +518,8 @@ const shouldDisable = isOnReviewerPatients ;
           message: e?.message,
           duration: 4,
         });
-         setStatusLoading(false);
-         setConfirmCompleteModal(false);
+        setStatusLoading(false);
+        setConfirmCompleteModal(false);
       }
     }
   };
@@ -543,14 +541,17 @@ const shouldDisable = isOnReviewerPatients ;
     getPatientIdDetails(patientIdDetailsData?.data?.response);
     setPatienIdDetails(patientIdDetailsData?.data?.response);
   }, [patientIdDetailsData?.data?.response]);
+
+
+
   return (
     <>
       {patientIdDetailsData?.data?.response && (
         <>
           {(userRole && userRole?.toLowerCase() == "admin") ||
           (userRole && userRole === "TENANT_ADMIN") ||
-          userRole === "DOWNLOADER" ||
-          userRole === "OWNER" ? (
+          isStatusHidden ||
+          userRole === "DOWNLOADER" ? (
             <div
               id="allocate-action"
               name="allocate-action"

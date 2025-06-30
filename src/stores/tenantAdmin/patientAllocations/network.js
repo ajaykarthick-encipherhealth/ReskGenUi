@@ -328,12 +328,12 @@ export async function moveBack(data) {
   return response;
 }
 
-export async function getRoles() {
+export async function getRoles({pageId}) {
   const tin = getStorage("tinNumber")
   const options = {
     method: "GET",
   };
-  const res = await requestPortal(`dbservice/allocation/roles?tin=${tin}`, options);
+  const res = await requestPortal(`dbservice/allocation/roles?tin=${tin}&pageId=${pageId || ""}`, options);
   return res;
 }
 export async function reAllocateUsersList({ data}) {

@@ -142,7 +142,7 @@ const ReAllocation = ({
   };
 
   const getRolesList = async () => {
-    const res = await getAllTabRoles();
+    const res = await getAllTabRoles({pageId:"21235203-2ce0-4ebc-b6d3-05a9d8e8fc75"});
     if (res?.status === "SUCCESS") {
       setRoleId(res?.response?.allocationRoles[0]?.roleId);
     }
@@ -202,6 +202,7 @@ const ReAllocation = ({
       setIsFilter(false);
     }
   }, [data?.response?.metaDataDTO]);
+  
   return (
     <div>
       <div className="content-body">

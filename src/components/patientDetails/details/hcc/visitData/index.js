@@ -28,6 +28,8 @@ import LogoLoader from "../../../../logoLoader";
 import { actions as detailsActions } from "../../../../../stores/patient/details";
 import { getStorage } from "../../../../../utils/storages";
 import { getValidHccDetailsApi } from "../../../../../stores/patient/details/network";
+import { isStatusDisabled } from '../../../../../utils/reusable'
+import { useRouter } from "next/router";
 
 const VisitData = ({
   setActiveTabHead,
@@ -51,6 +53,7 @@ const VisitData = ({
   educationalError,
   setEducationalError,
 }) => {
+    const router = useRouter()
   const [isFileFormShow, setIsFileFormShow] = useState(false);
   const [isModalOpenValid, setIsModalOpenValid] = useState(false);
   const [isModalOpenValidCodes, setIsModalOpenValidCodes] = useState(false);
@@ -669,9 +672,7 @@ const VisitData = ({
       setShowList((prev) => [...prev, value]);
     }
   };
-  const isDisabled =
-    patientIdDetailsData?.data?.response?.workflow?.[0]?.status !== "PENDING" ||
-    patientDetailsResult?.data?.response?.workflow?.[0]?.status == "COMPLETED";
+ const isDisabled = isStatusDisabled(patientIdDetailsData, patientDetailsResult, router.pathname);
   return (
     <>
       {/* {fileLoading ? <LogoLoader /> : null} */}

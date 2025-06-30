@@ -7,9 +7,10 @@ import { getProviderNameTagList } from "../components/function/ProviderHyperlink
 import { getDateOfServiceBackground } from "../components/function/DateOfServices";
 import { getSectionHeaderBackground, getSectionHeadersBackground } from "../components/function/SectionHeader";
 import CardSkeleton from "../../../skeleton/card";
-import { formatDateTime, getResponePopup } from "../../../../utils/reusable";
+import { formatDateTime, getResponePopup, isStatusDisabled } from "../../../../utils/reusable";
 import { getBadgeClassName, getStatusColors, underScoreRemove } from "../timline";
 import { getStorage } from "../../../../utils/storages";
+import { useRouter } from "next/router";
 
 const VersionHistory = ({
   getRevertDetails,
@@ -26,6 +27,7 @@ const VersionHistory = ({
   patientDetailsResult,
   getPatientDosList
 }) => {
+    const router = useRouter()
   const userId = getStorage("patientId");
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [popClickDisCode, setPopClickDisCode] = useState(null);
@@ -886,9 +888,7 @@ const VersionHistory = ({
   const getHtmlContent = (item) => {
     return <div dangerouslySetInnerHTML={{ __html: item }} />;
   };
-  const isDisabled =
-  patientIdDetailsData?.data?.response?.workflow?.[0]?.status !== "PENDING" || patientDetailsResult?.data?.response?.workflow?.[0]
-  ?.status == "COMPLETED";
+ const isDisabled = isStatusDisabled(patientIdDetailsData, patientDetailsResult, router.pathname);
 
   function renderTimelineItem(item, index) {
     getBadgeClassName(item, index);

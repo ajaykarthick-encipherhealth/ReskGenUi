@@ -13,13 +13,14 @@ import moment from "moment";
 import { SVGICON } from "../../../../../jsx/constant/theme";
 import { connect } from "react-redux";
 import { getStorage } from "../../../../../utils/storages";
-import { formatDateTime, getResponePopup } from "../../../../../utils/reusable";
+import { formatDateTime, getResponePopup, isStatusDisabled } from "../../../../../utils/reusable";
 import { actions as detailsActions } from "../../../../../stores/patient/details";
 import {
   getCommentList,
   getUserDetails,
 } from "../../../../../stores/patient/details/network";
 import CardSkeleton from "../../../../skeleton/card";
+import { useRouter } from "next/router";
 
 const Comments = ({
   setOpen,
@@ -30,6 +31,7 @@ const Comments = ({
   commentListLoader,
   patientIdDetailsData,
 }) => {
+  const router = useRouter()
   const [inputValue, setInputValue] = useState({
     patientId: "",
     comments: "",
@@ -40,10 +42,7 @@ const Comments = ({
   const [validated, setValidated] = useState(false);
   const [localPatientId, setLocalPatientId] = useState("");
   const [userDetails, setUserDetails] = useState("");
-  const isDisabled =
-  patientIdDetailsData?.data?.response
-    ?.workflow?.[0]?.status !== "PENDING" || patientDetailsResult?.data?.response?.workflow?.[0]
-    ?.status == "COMPLETED";
+  const isDisabled = isStatusDisabled(patientIdDetailsData, patientDetailsResult, router.pathname);
 
   const getCommentsList = async () => {
     const yearData = patientDetailsResult?.data?.response;

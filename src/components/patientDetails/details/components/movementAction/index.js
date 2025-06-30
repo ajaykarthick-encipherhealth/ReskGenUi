@@ -18,6 +18,8 @@ import { suggestedMeatCheck } from "../../../../../stores/patient/details/networ
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHandHoldingMedical } from "@fortawesome/free-solid-svg-icons";
 import { getStorage } from "../../../../../utils/storages";
+import { isStatusDisabled } from '../../../../../utils/reusable'
+import { useRouter } from "next/router";
 
 const MovementAction = ({
   validAction,
@@ -43,6 +45,7 @@ const MovementAction = ({
   educationalError,
   setEducationalError,
 }) => {
+    const router = useRouter()
   const userRole = getStorage("userRole");
   const [selectDisDetails, setSelectDisDetails] = useState(false);
   // const [educationalError, setEducationalError] = useState(false);
@@ -138,9 +141,7 @@ const MovementAction = ({
       });
     }
   };
-  const isDisabled =
-    patientIdDetailsData?.data?.response?.workflow?.[0]?.status !== "PENDING" ||
-    patientDetailsResult?.data?.response?.workflow?.[0]?.status == "COMPLETED";
+ const isDisabled = isStatusDisabled(patientIdDetailsData, patientDetailsResult, router.pathname);
 
   const handleCloseModal = () => {};
   return (

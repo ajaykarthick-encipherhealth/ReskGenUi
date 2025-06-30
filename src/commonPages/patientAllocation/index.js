@@ -6,10 +6,8 @@ import ReviewerAllocationModal from "./reviewerAllocation/reviewerAllocationModa
 import { connect } from "react-redux";
 import { actions as allActions } from "../../stores/tenantAdmin/patientAllocations";
 import ReusableFilters from "../../components/reusableFilters";
-import { priorityOptions } from "../../components/headerFilters/functions";
 import { actions as tenantAdminUsersAction } from "../../stores/tenantAdmin/users";
 import { actions as tinActions } from "../../stores/tenantAdmin/tin";
-import Header from "../../jsx/layouts/nav/Header";
 import RandomSamplingModal from "./reviewerAllocation/randomSamplingModal";
 import { actions as tableAction } from "../../stores/tableView";
 import CardSkeleton from "../../components/skeleton/card";
@@ -18,7 +16,6 @@ import { getStorage } from "../../utils/storages";
 
 const PatientAllocation = ({
   getAllReviewerList,
-  organizationList,
   getAllTabRoles,
   routedData,
   getTableData,
@@ -157,7 +154,7 @@ const PatientAllocation = ({
   };
 
   const getRolesList = async () => {
-    const res = await getAllTabRoles();
+    const res = await getAllTabRoles({pageId:"6cd166eb-79ac-4c12-ab0f-07be2983ca70"});
     if (res?.status === "SUCCESS") {
       setRoleId(res?.response?.allocationRoles[0]?.roleId);
     }

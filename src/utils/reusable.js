@@ -1092,3 +1092,21 @@ export const findMatchesByField = (arr1, arr2) => {
 export const timeLineDateAndTime = (inputDate) => {
   return moment(inputDate).format('MMMM D YYYY hh:mm A');
 };
+
+export const isStatusDisabled= (patientIdDetailsData, patientDetailsResult, pathname) => {
+  const dosWiseStatus = patientIdDetailsData?.data?.response?.workflow?.[0]?.status;
+  const overAllStatus = patientDetailsResult?.data?.response?.workflow?.[0]?.status;
+  const disabled =
+    dosWiseStatus !== "PENDING" || overAllStatus === "COMPLETED";
+  const pathDisbaled =
+    pathname.includes("/tenantadmin/tin/details") ||
+    pathname.includes("/tenantadmin/project/details") ||
+    pathname.includes("/tenantadmin/patientsync/batchfilesview");
+
+  if (pathDisbaled) {
+    return true; 
+  }
+  return disabled; 
+};
+
+

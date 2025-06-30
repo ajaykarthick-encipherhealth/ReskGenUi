@@ -26,6 +26,8 @@ import ModelIndex from "../model/Index";
 import { getProviderNameTag } from "../function/ProviderHyperlinks";
 import { actions as detailsActions } from "../../../../../stores/patient/details";
 import CardSkeleton from "../../../../skeleton/card";
+import { isStatusDisabled } from '../../../../../utils/reusable'
+import { useRouter } from "next/router";
 
 const NonHccCards = ({
   list,
@@ -68,6 +70,7 @@ const NonHccCards = ({
   isDosSelected,
   patientIdDetailsData,
 }) => {
+    const router = useRouter()
   const [fileInitialPage, setFileInitialPage] = useState(null);
   const [openEdit, setOpenEdit] = useState(false);
   const [openContent, setOpenContent] = useState(null);
@@ -80,9 +83,7 @@ const NonHccCards = ({
   const [isMulitpleHeader, setIsMulitpleHeader] = useState(false);
   const [isMulitpleHeaderCode, setIsMulitpleHeadeCode] = useState(null);
   const [isMulitpleProvider, setIsMulitpleProvider] = useState(false);
-  const isDisabled =
-    patientIdDetailsData?.data?.response?.workflow?.[0]?.status !== "PENDING" || patientDetailsResult?.data?.response?.workflow?.[0]
-    ?.status == "COMPLETED";
+  const isDisabled = isStatusDisabled(patientIdDetailsData, patientDetailsResult, router.pathname);
   return (
     <>
       {patientDetailsLoad ? (

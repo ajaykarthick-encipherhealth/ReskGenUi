@@ -21,6 +21,8 @@ import ManuallyAdd from "../../components/manuallyAdd";
 import { getStorage } from "../../../../../utils/storages";
 import { getValidHccDetailsApi } from "../../../../../stores/patient/details/network";
 import CardSkeleton from "../../../../skeleton/card";
+import { isStatusDisabled } from '../../../../../utils/reusable'
+import { useRouter } from "next/router";
 
 const File = ({
   patientDetailsResult,
@@ -55,6 +57,7 @@ const File = ({
  educationalError,
  setEducationalError,
 }) => {
+  
   const [isFileFormShow, setIsFileFormShow] = useState(false);
   const [confirmNotesModalValid, setConfirmNotesModalValid] = useState(false);
   const [selectDiseasesName, setSelectDiseasesName] = useState("");
@@ -91,6 +94,7 @@ const File = ({
   const [suggestedMeatForm, setSuggestedMeatForm] = useState(false);
   const [selectCardTitle, setSelectCardTitle] = useState("");
   const [potentialList, setPotentialList] = useState([]);
+  const router = useRouter()
 
   useEffect(() => {
     var orgId = getStorage("orgId");
@@ -237,9 +241,7 @@ const File = ({
       setShowList((prev) => [...prev, value]);
     }
   };
-  const isDisabled =
-    patientIdDetailsData?.data?.response?.workflow?.[0]?.status !== "PENDING" ||
-    patientDetailsResult?.data?.response?.workflow?.[0]?.status == "COMPLETED";
+   const isDisabled = isStatusDisabled(patientIdDetailsData, patientDetailsResult, router.pathname);
   return (
     <>
       {/* {fileLoading ? <LogoLoader /> : null} */}
