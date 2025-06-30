@@ -332,6 +332,10 @@ const Header = ({
         return ProviderMenuList(accessMenuList);
       case "OWNER":
         return ProviderMenuList(accessMenuList);
+      case "QA_LEAD":
+        return ProviderMenuList(accessMenuList);
+      case "PROJECT_LEAD":
+        return ProviderMenuList(accessMenuList);
       case "supervisor":
         return L2AuditorMenuList;
       case "TENANT_ADMIN":
