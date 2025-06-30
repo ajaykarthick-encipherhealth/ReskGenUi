@@ -813,7 +813,7 @@ const Header = ({
     const res = await getAllRoles();
     if (res.status == "SUCCESS") {
       const data = res?.response?.userRoles?.map((data) => ({
-        label: data.proxyRole,
+        label: data.aliasName,
         key: data.proxyRole,
         details: data,
       }));
@@ -825,11 +825,11 @@ const Header = ({
         );
         setStorage("userAllRoles", JSON?.stringify(data));
         setStorage("roleId", data[0].details?.roleId);
-        setStorage("proxyRole", data[0].label);
+        setStorage("proxyRole", data[0].key);
         // setCurrentRole(data[0].label);
-        setMenuList(getMenuListByRole(data[0].label));
-        getMenuListByRole(data[0].label);
-        onClick({ key: data[0].label });
+        setMenuList(getMenuListByRole(data[0].key));
+        getMenuListByRole(data[0].key);
+        onClick({ key: data[0].key });
       }
     }
   };
