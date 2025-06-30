@@ -280,10 +280,10 @@ const Patient = ({
     if (selectedDateRanges) {
       dateRangeParams = convertToCustomParamsDatePicker(selectedDateRanges);
     }
-    const baseUrl = `${portalUrl}dbservice/get-excel?roleId=${roleId || ""}`;
+    const baseUrl = `${portalUrl}dbservice/get-excel?roleId=${roleId || ""}&isAdmin=true`;
     const finalUrl = `${baseUrl}${searchTextParams}${selectParams}${dateRangeParams}`;
     setLoading(true);
-    try {
+    try {     
       const result = await fetch(finalUrl, {
         method: "GET",
         headers: {
