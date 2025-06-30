@@ -1300,7 +1300,7 @@ export const handleSubmitValidNotes = async ({
   patientDetailsLoad,
   getPatientIdData,
   educationalError,
-  setEducationalError
+  setEducationalError,
 }) => {
   setFileLoading(true);
   setConfirmNotesModalValid(false);
@@ -1455,7 +1455,7 @@ export const handleSubmitValidNotes = async ({
       apiURL = "management/disease/move/suggestedtodeleted";
       break;
     case "Move to HCC_MEAT":
-      apiURL = "management/meat/move/suggestedtovalid";
+      apiURL = "management/meat/move/deletedtovalid";
       break;
     case "Move to Deleted_NON_HCC_DISEASES":
       apiURL = "management/disease/move/invalidtodeleted";
@@ -1464,7 +1464,7 @@ export const handleSubmitValidNotes = async ({
       apiURL = "management/meat/move/suggestedtovalid";
       break;
     case "Move to Deleted_MEAT":
-      apiURL = "management/disease/move/validtosuggested";
+      apiURL = "management/meat/move/validtodeleted";
       break;
     case "Move to HCC_POTENTIAL":
       apiURL = "management/disease/move/potentialtovalid";
@@ -1493,6 +1493,7 @@ export const handleSubmitValidNotes = async ({
       apiURL = ""; // Default case to handle unexpected input
       break;
   }
+
   try {
     var patientId = getStorage("patientId");
     var dataFormatSuggested = {
@@ -1505,7 +1506,7 @@ export const handleSubmitValidNotes = async ({
       chartProcessType: selectDisDetails.dateOfService
         ? "DATE_OF_SERVICE"
         : "YEAR",
-        educationalError:educationalError
+      educationalError: educationalError,
     };
     patientDetailsLoad(true);
     const response = await movementApiCall(dataFormatSuggested, apiURL);
@@ -1526,7 +1527,7 @@ export const handleSubmitValidNotes = async ({
       );
       getPatientIdData(patientId);
       patientDetailsLoad(false);
-      setEducationalError(false)
+      setEducationalError(false);
     } else {
       setFileLoading(false);
       getResponePopup(response);
