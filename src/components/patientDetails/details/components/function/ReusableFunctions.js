@@ -1452,7 +1452,7 @@ export const handleSubmitValidNotes = async ({
       apiURL = "management/disease/move/combodeletedtovalid";
       break;
     case "Move to Deleted_NON_MEAT":
-      apiURL = "management/disease/move/suggestedtodeleted";
+      apiURL = "management/meat/move/validtodeleted";
       break;
     case "Move to HCC_MEAT":
       apiURL = "management/meat/move/deletedtovalid";
