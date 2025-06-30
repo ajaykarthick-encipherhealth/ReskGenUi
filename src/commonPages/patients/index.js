@@ -17,13 +17,15 @@ import visitStyles from "../../styles/visitdata.module.css";
 import FileUploading from "../fileprocessing/FileUploading";
 import Addpatients from "../fileprocessing/Addpatiens";
 import { LoadingOutlined, PlusCircleFilled } from "@ant-design/icons";
-import {
-  validateYear,
-} from "../../components/headerFilters/functions";
+import { validateYear } from "../../components/headerFilters/functions";
 import { actions as tenantAdminAction } from "../../stores/tenantAdmin/patients";
 import { connect } from "react-redux";
 import { getStorage, setStorage } from "../../utils/storages";
-import { findItemWithTrueKey, findMatchesByField, getResponePopup } from "../../utils/reusable";
+import {
+  findItemWithTrueKey,
+  findMatchesByField,
+  getResponePopup,
+} from "../../utils/reusable";
 import { actions as allocationAction } from "../../stores/admin/patientAllocation";
 import { actions as allActions } from "../../stores/admin/workqueue";
 import ReusableFilters from "../../components/reusableFilters";
@@ -51,7 +53,6 @@ export const batchBullets = [
     name: "Not Computed",
   },
 ];
-
 
 export const flagOptions = [
   { header: "DOS Count", label: "INVALID DOC", value: "UNAPPROVED_DOC", id: 1 },
@@ -143,7 +144,6 @@ const Patient = ({
   pageLoad,
   backRoute,
 }) => {
-
   const [sort, setSort] = useState({
     computedDate: {
       sortDir: "DESC",
@@ -196,8 +196,8 @@ const Patient = ({
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isResetting, setIsResetting] = useState(false);
   const [isFilter, setIsFilter] = useState(true);
-  const[loader, setLoader] = useState(false);
-  
+  const [loader, setLoader] = useState(false);
+
   const addPatientFormId = () => {
     setValidated(false);
     setAddPatientId(true);
@@ -300,7 +300,7 @@ const Patient = ({
         form.resetFields();
         setValidated(true);
       } else {
-         setLoader(false);
+        setLoader(false);
         setValidated(false);
         getResponePopup(response);
       }
@@ -418,6 +418,7 @@ const Patient = ({
           }}
           className="btn hegiht10  sharp me-1 action-btn"
           style={{ background: "#04306f" }}
+          disabled={rowData?.computing == 1}
         >
           <FontAwesomeIcon
             icon={faUpload}
@@ -595,7 +596,6 @@ const Patient = ({
     }
   }, [routedData]);
 
-
   const getPatients = async () => {
     const tin = getStorage("tinNumber");
     const userId = getStorage("userId");
@@ -640,8 +640,6 @@ const Patient = ({
     paramsFilter,
     pageLoad,
   ]);
-
-
 
   const handleSubmitInsert = async (data) => {
     setIsSubmitting(true);
@@ -726,19 +724,19 @@ const Patient = ({
     setTest(data?.response?.metaDataDTO);
   }, []);
 
-   useEffect(() => {
-     if (
-       (isFilter && data?.response?.metaDataDTO) ||
-       !findMatchesByField(activeFilters, data?.response?.metaDataDTO)
-     ) {
-       setActiveFilters(
-         data?.response?.metaDataDTO.filter(
-           (item) => item.active && item?.filter?.style
-         )
-       );
-       setIsFilter(false);
-     }
-   }, [data?.response?.metaDataDTO]);
+  useEffect(() => {
+    if (
+      (isFilter && data?.response?.metaDataDTO) ||
+      !findMatchesByField(activeFilters, data?.response?.metaDataDTO)
+    ) {
+      setActiveFilters(
+        data?.response?.metaDataDTO.filter(
+          (item) => item.active && item?.filter?.style
+        )
+      );
+      setIsFilter(false);
+    }
+  }, [data?.response?.metaDataDTO]);
 
   return (
     <div className={`show `}>
