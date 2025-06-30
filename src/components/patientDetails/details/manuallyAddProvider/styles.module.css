@@ -22,6 +22,7 @@
 }
 .providerText {
   color: #0a69f5;
+  width: 120px;
 }
 .dateField {
   font-weight: 600;

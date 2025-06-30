@@ -277,12 +277,42 @@ const DosSelect = ({
                             </Tooltip>
                           ))}
                           {item?.flags?.length > 1 && (
-                            <span
-                              className="px-2 py-1 border rounded"
-                              style={{ background: "#002b5b", color: "#fff" }}
+                            <Popover
+                              title="Additional Flags"
+                              overlayStyle={{ zIndex: 9999 }}
+                              content={
+                                <div>
+                                  {item?.flags?.slice(1).map((flag, index) => (
+                                    <div key={index}>
+                                      <FlagFilled
+                                        style={{
+                                          color: flag?.flagDetails?.flagColour,
+                                          marginRight: 6,
+                                        }}
+                                        onClick={() => {
+                                          setFlagContainerActive("Flag");
+                                          setOpen(false);
+                                        }}
+                                      />
+                                      {flag?.flagDetails?.flagName ||
+                                        "Unnamed Flag"}
+                                    </div>
+                                  ))}
+                                </div>
+                              }
+                              placement="top"
                             >
-                              +{item?.flags?.length - 1}
-                            </span>
+                              <span
+                                className="px-2 py-1 border rounded"
+                                style={{
+                                  background: "#002b5b",
+                                  color: "#fff",
+                                  cursor: "pointer",
+                                }}
+                              >
+                                +{item?.flags?.length - 1}
+                              </span>
+                            </Popover>
                           )}
                         </>
                       )}

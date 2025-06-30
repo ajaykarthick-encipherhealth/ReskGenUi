@@ -141,9 +141,6 @@ const AddForm = ({
     getProvider();
   }, []);
 
-  // useEffect(() => {
-  //   getExistingDos({dos});
-  // }, []);
 
   useEffect(() => {
     if (Array.isArray(allProviderList)) {
@@ -187,7 +184,6 @@ const AddForm = ({
                   : null;
 
                 try {
-                  // If same DOS selected again (while editing), skip the API
                   if (originalDos && selectedDos === originalDos) {
                     form.setFields([
                       {
@@ -199,8 +195,8 @@ const AddForm = ({
                   }
 
                   const res = await getExistingDos({
-                    dos: originalDos || selectedDos, // for edit, send original
-                    newDos: originalDos ? selectedDos : undefined, // send new only if edit mode
+                    dos: originalDos || selectedDos, 
+                    newDos: originalDos ? selectedDos : undefined, 
                   });
 
                   if (res?.response === true) {

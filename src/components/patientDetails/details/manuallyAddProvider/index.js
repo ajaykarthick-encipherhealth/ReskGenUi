@@ -3,7 +3,7 @@ import PdfViewer from "../PdfViewerComponent";
 import { connect } from "react-redux";
 import style from "./styles.module.css";
 import { DeleteOutlined } from "@ant-design/icons";
-import { Empty, Form, Popconfirm, Popover, Spin } from "antd";
+import { Empty, Form, Popconfirm, Popover, Spin, Tooltip } from "antd";
 import { stringToColour } from "../components/function/ReusableFunctions";
 import AddForm from "./AddForm";
 import { actions as allActions } from "../../../../stores/patient/details";
@@ -16,7 +16,7 @@ import {
   faArrowLeft,
 } from "@fortawesome/free-solid-svg-icons";
 import RegularButton from "../../../button";
-import { getResponePopup } from "../../../../utils/reusable";
+import { getResponePopup, reusableEllipses } from "../../../../utils/reusable";
 import RegularButtonWithIcon from "../../../buttonWithIcon";
 import { getStorage } from "../../../../utils/storages";
 
@@ -236,7 +236,15 @@ const ManuallyAddProvider = ({
                   className={`ant-badge ${style.providerButton} my-2`}
                 >
                   <span className={style.dateField}>{item?.dateOfService}</span>
-                  <span className={style.providerText}>Provider</span>
+                  <span className={style.providerText}>
+                    <Tooltip title={item?.providerName}>
+                      {reusableEllipses({
+                        str: item?.providerName ? item?.providerName : "---",
+                        count: 10,
+                      })}
+                    </Tooltip>
+                  </span>
+
                   <Popover
                     content={viewProvidersList({ list: item })}
                     id={`popover-${index}`}
