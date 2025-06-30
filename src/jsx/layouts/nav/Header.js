@@ -648,8 +648,9 @@ const Header = ({
       !allowedTypes.includes(fileType)
     ) {
       getResponePopup({
-        message: "Only PNG, JPG, and JPEG image files are allowed",
+        message: "Only PNG, JPG, and JPEG image  are allowed",
         status: "FAILED",
+        duration: 3,
       });
       return;
     }
@@ -944,6 +945,8 @@ const Header = ({
       setProjectList(projectOptions);
     }
   }, [projectDetails]);
+  const pathDisbaled =
+    stateActive.endsWith("/details") 
 
   return (
     <div className={`header ${headerFix ? "is-fixed" : ""}`}>
@@ -1009,6 +1012,7 @@ const Header = ({
                               .includes(input.toLowerCase())
                           }
                           showSearch={true}
+                          disabled={pathDisbaled}
                         />
                       </div>
                     )}
