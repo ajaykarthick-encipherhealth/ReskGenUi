@@ -5,7 +5,16 @@ import Swal from "sweetalert2";
 import "react-chat-widget/lib/styles.css";
 import { CircularProgressbar } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
-import { Badge, Dropdown, Tooltip, Drawer, Modal, Button, Select } from "antd";
+import {
+  Badge,
+  Dropdown,
+  Tooltip,
+  Drawer,
+  Modal,
+  Button,
+  Select,
+  message,
+} from "antd";
 import {
   DownOutlined,
   SettingOutlined,
@@ -225,13 +234,12 @@ const Header = ({
     const defaultProject = getStorage("project");
     const defaultTinNumber = getStorage("tinNumber");
     const userRole = getStorage("proxyRole");
-    if (tinDetails?.length > 0 && 
-      key === "QA") {
+    if (tinDetails?.length > 0 && key === "QA") {
       let initialTin = defaultTinNumber || tinDetails[0].tinNumber;
-        setSelectedTin(initialTin);
-        setStorage("tinNumber", initialTin);
-        setBackupSelectedTin(initialTin);
-      }
+      setSelectedTin(initialTin);
+      setStorage("tinNumber", initialTin);
+      setBackupSelectedTin(initialTin);
+    }
     if (defaultClient) {
       setSelectedClient(defaultClient);
       setBackupSelectedClient(defaultClient);
@@ -623,31 +631,47 @@ const Header = ({
       setSelectedFile(file);
     }
   };
-
   const handleSubmit = async () => {
-    if (selectedFile) {
-      const type = selectedFile?.name?.split(".").pop();
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        const img = document.createElement("img");
-        img.onload = async () => {
-          const canvas = document.createElement("canvas");
-          const ctx = canvas.getContext("2d");
-          canvas.width = 600;
-          canvas.height = 600;
-          ctx.drawImage(img, 0, 0, 600, 600);
-          canvas.toBlob(async (blob) => {
-            const croppedFile = new File([blob], `cropped.${type}`, {
-              type: selectedFile.type,
-            });
-            await preSendCall(type, croppedFile);
-          }, selectedFile.type);
-        };
-        img.src = e.target.result;
-      };
-      reader.readAsDataURL(selectedFile);
+    if (!selectedFile) return;
+
+    const allowedTypes = ["image/png", "image/jpeg", "image/jpg"];
+    const validExtensions = ["png", "jpg", "jpeg"];
+    const fileType = selectedFile.type;
+    const fileExtension = selectedFile.name.split(".").pop().toLowerCase();
+
+    if (
+      !validExtensions.includes(fileExtension) ||
+      !allowedTypes.includes(fileType)
+    ) {
+      getResponePopup({
+        message: "Only PNG, JPG, and JPEG image files are allowed",
+        status: "FAILED",
+      });
+      return;
     }
+
+    const reader = new FileReader();
+
+    reader.onload = (e) => {
+      const img = document.createElement("img");
+      img.onload = async () => {
+        const canvas = document.createElement("canvas");
+        const ctx = canvas.getContext("2d");
+        canvas.width = 600;
+        canvas.height = 600;
+        ctx.drawImage(img, 0, 0, 600, 600);
+        canvas.toBlob(async (blob) => {
+          const croppedFile = new File([blob], `cropped.${fileExtension}`, {
+            type: selectedFile.type,
+          });
+          await preSendCall(fileExtension, croppedFile);
+        }, selectedFile.type);
+      };
+      img.src = e.target.result;
+    };
+    reader.readAsDataURL(selectedFile);
   };
+
   const preSendCall = async (type, croppedFile) => {
     try {
       setLoading(true);
