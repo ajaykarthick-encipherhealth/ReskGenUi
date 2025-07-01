@@ -33,6 +33,7 @@ const Patient = ({
   tableLoader,
   pageLoad,
 }) => {
+  const userRole = getStorage("userRole")
   const [pageNo, setPageNo] = useState(0);
   const [paginationFirst, setPaginationFirst] = useState(0);
   const [sort, setSort] = useState({
@@ -407,7 +408,7 @@ const Patient = ({
                   isResetting={isResetting}
                   tableLoader={tableLoader}
                   btnName={"Export"}
-                  showGenerateReport={true}
+                  showGenerateReport={ userRole === "TENANT_ADMIN" ?true :false}
                   generateBtnClick={generateBtnClick}
                   btnDisabled={loading}
                   btnLoading={loading}

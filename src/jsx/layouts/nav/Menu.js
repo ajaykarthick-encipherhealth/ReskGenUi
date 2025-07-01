@@ -105,6 +105,15 @@ export const PhysicanMenuList = (data) => {
         childRoute2: "/reviewer/report/reportdetails",
       });
     }
+    if (res?.title == "Tracking" && res?.active) {
+      menus.push({
+        title: "Tracking",
+        iconStyle: <EnvironmentOutlined />,
+        activeIcon: <EnvironmentFilled />,
+        to: "/tenantadmin/tracking",
+        childRoute2: "/tenantadmin/tracking/details",
+      });
+    }
   });
   return menus;
 };
@@ -384,6 +393,15 @@ export const ProviderMenuList = (data) => {
         activeIcon: <ProfileFilled />,
         to: "/tenantadmin/workqueue",
         childRoute: "/tenantadmin/workqueue/details",
+      });
+    }
+    if (res?.title == "Tracking" && res?.active) {
+      menus.push({
+        title: "Tracking",
+        iconStyle: <EnvironmentOutlined />,
+        activeIcon: <EnvironmentFilled />,
+        to: "/tenantadmin/tracking",
+        childRoute2: "/tenantadmin/tracking/details",
       });
     }
   });

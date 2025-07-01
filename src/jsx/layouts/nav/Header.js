@@ -62,10 +62,14 @@ import { actions as reportActions } from "../../../stores/admin/report";
 import { actions as uploadImagesAction } from "../../../stores/authflow/imageUpload";
 import { actions as tenantAction } from "../../../stores/tenantAdmin/patientSync";
 import Profile from "./profile";
-import { getResponePopup } from "../../../utils/reusable";
+import {
+  getResponePopup,
+  getRolePanelPermission,
+} from "../../../utils/reusable";
 import { getHeaderLoge } from "../../../pages/twofactorauthentication/reusableFun";
 import { actions as tinActions } from "../../../stores/tenantAdmin/tin";
 import { actions as tableAction } from "../../../stores/tableView";
+import PanelMenu from "./panelMenu";
 
 const Header = ({
   notificationResponse,
@@ -151,6 +155,7 @@ const Header = ({
   const [projectListCheck, setProjectListCheck] = useState(true);
   const [userEmail, setUserEmail] = useState(null);
   const [isShowDropdown, setIsShowDropdown] = useState(false);
+  const [panelName, setPanelName] = useState("Owner Panel");
 
   const proxyRole = getStorage("proxyRole");
   const showDrawer = () => {
@@ -228,6 +233,8 @@ const Header = ({
     setCurrentRole(key == "TENANT_ADMIN" ? "ADMIN" : key);
     setProjectListCheck(false);
     getProjectActiveTab(null);
+    setStorage("panelName", "Owner Panel");
+    setPanelName("Owner Panel");
     const allRoles = JSON.parse(getStorage("userAllRoles"));
     let userId = currentUserInfo?.data?.response?.id;
     const defaultClient = getStorage("client");
@@ -261,7 +268,7 @@ const Header = ({
     }
 
     const accessMenuList =
-      selectedRoleObj?.accessList || selectedRoleObj?.details?.accessList || [];
+      selectedRoleObj?.details?.panelList?.accessListForPanel1;
     const newAliasName =
       selectedRoleObj?.aliasName || selectedRoleObj?.details?.aliasName;
     const oldAliasName = getStorage("headerAliasName");
@@ -316,9 +323,12 @@ const Header = ({
         (res) => res?.details?.proxyRole === role
       );
     }
-    const accessMenuList = selectedRoleObj?.accessList
-      ? selectedRoleObj?.accessList
+    let accessMenuList = selectedRoleObj?.details?.panelList
+      ?.accessListForPanel1
+      ? selectedRoleObj?.details?.panelList?.accessListForPanel1
       : selectedRoleObj?.details?.accessList;
+    const localPanelName = getStorage("panelName");
+
     switch (role) {
       case "admin":
         return AdminMenuList;
@@ -331,6 +341,13 @@ const Header = ({
       case "DOWNLOADER":
         return ProviderMenuList(accessMenuList);
       case "OWNER":
+        if (role == "OWNER" && localPanelName == "Workqueue Panel") {
+          accessMenuList = selectedRoleObj?.details?.panelList
+            ?.accessListForPanel2
+            ? selectedRoleObj?.details?.panelList?.accessListForPanel2
+            : selectedRoleObj?.details?.accessList;
+          return PhysicanMenuList(accessMenuList);
+        }
         return ProviderMenuList(accessMenuList);
       case "QA_LEAD":
         return ProviderMenuList(accessMenuList);
@@ -495,6 +512,7 @@ const Header = ({
     const userId = getStorage("userId");
     const userRole = getStorage("headerAliasName");
     const tenentId = getStorage("tenantId");
+    const localPanelName = getStorage("panelName");
     // getCurrentUserInfo({ userId });
     setUserRole(userRoleLocal);
     setIsShowDropdown(true);
@@ -502,6 +520,7 @@ const Header = ({
     setTenentId(tenentId);
     setMenuList(getMenuListByRole(userRoleLocal));
     setUser(userId);
+    setPanelName(localPanelName);
 
     if (!loginCheck) {
       Swal.fire({
@@ -945,8 +964,7 @@ const Header = ({
       setProjectList(projectOptions);
     }
   }, [projectDetails]);
-  const pathDisbaled =
-    stateActive.endsWith("/details") 
+  const pathDisbaled = stateActive.endsWith("/details");
 
   return (
     <div className={`header ${headerFix ? "is-fixed" : ""}`}>
@@ -1089,6 +1107,15 @@ const Header = ({
                     <div className="header-profile2">
                       <div className="nav-link i-false " as="div">
                         <div className="header-info2 d-flex align-items-center">
+                          {currentRole === "OWNER" &&
+                          getRolePanelPermission(roles, currentRole) ? (
+                            <PanelMenu
+                              currentRole={currentRole}
+                              setMenuList={setMenuList}
+                              panelName={panelName}
+                              setPanelName={setPanelName}
+                            />
+                          ) : null}
                           <div
                             id="coderoot"
                             name="coderoot"

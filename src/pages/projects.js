@@ -32,7 +32,7 @@ const SelectProject = ({
   const [form] = Form.useForm();
   const [confirmModal, setConfirmModal] = useState(false);
   const { accounts } = useMsal();
-  const [isLoading, setIsLoading] = useState(true); 
+  const [isLoading, setIsLoading] = useState(true);
   const [submitLoading, setSubmitLoading] = useState(true);
   const [isFormValid, setIsFormValid] = useState(false);
 
@@ -63,7 +63,7 @@ const SelectProject = ({
       (role) => role.proxyRole === values.role
     );
 
-    const accessList = selectedRoleObj?.accessList || [];
+    const accessList = selectedRoleObj?.panelList?.accessListForPanel1 || [];
     const firstAccess = accessList[0];
     let dynamicRoute = "";
 
@@ -84,7 +84,7 @@ const SelectProject = ({
   };
 
   const handleFormSubmit = async () => {
-    setSubmitLoading(true)
+    setSubmitLoading(true);
     try {
       const values = await form.validateFields();
       const { client, project, role } = values;
@@ -101,7 +101,7 @@ const SelectProject = ({
         setStorage("userAllRoles", JSON.stringify(allRolesData?.userRoles));
         setStorage(
           "accessMenuList",
-          JSON.stringify(selectedRoleObj?.accessList)
+          JSON.stringify(selectedRoleObj?.panelList?.accessListForPanel1)
         );
         setStorage("roleId", selectedRoleObj?.roleId);
         setStorage("aliasName", selectedRoleObj?.aliasName);
@@ -110,9 +110,8 @@ const SelectProject = ({
       }
     } catch (error) {
       console.error("Form validation failed:", error);
-    }
-    finally{
-      setSubmitLoading(false)
+    } finally {
+      setSubmitLoading(false);
     }
   };
 
@@ -179,20 +178,20 @@ const SelectProject = ({
   }, [clientIdData]);
 
   useEffect(() => {
-      if (accounts && accounts.length > 0) {
-        setTimeout(() => {
-          setIsLoading(false);
-        }, 1000);
-      } else {
-        const timeout = setTimeout(() => {
-          if (!accounts || accounts.length === 0) {
-            router.push("/");
-          }
-        }, 4000);
-        return () => clearTimeout(timeout);
-      }
-    }, [accounts, router]);
-  
+    if (accounts && accounts.length > 0) {
+      setTimeout(() => {
+        setIsLoading(false);
+      }, 1000);
+    } else {
+      const timeout = setTimeout(() => {
+        if (!accounts || accounts.length === 0) {
+          router.push("/");
+        }
+      }, 4000);
+      return () => clearTimeout(timeout);
+    }
+  }, [accounts, router]);
+
   const onValuesChange = (value, name) => {
     if (name === "client") {
       setStorage("client", value);
@@ -219,9 +218,9 @@ const SelectProject = ({
     setIsFormValid(isAllFieldsFilled);
   }, [form.getFieldsValue()]);
 
-  useEffect(()=>{
+  useEffect(() => {
     setStorage("userId", allRolesData?.userName);
-  })
+  });
 
   return (
     <div className="page-wraper">
@@ -246,23 +245,24 @@ const SelectProject = ({
               <h6 className="login-title">
                 <span>Login</span>
               </h6>
-              <Form 
-                form={form} 
-                onFinish={handleFormSubmit} 
+              <Form
+                form={form}
+                onFinish={handleFormSubmit}
                 layout="vertical"
                 onValuesChange={(allValues) => {
                   const isAllFieldsFilled = allValues.role;
                   setIsFormValid(isAllFieldsFilled);
                 }}
               >
-                <Form.Item 
-                  name="client" 
-                  label={<>Client</>}
-                >
+                <Form.Item name="client" label={<>Client</>}>
                   <Select
                     placeholder="Select Client"
                     loading={clientLoading}
-                    style={{ width: "100%", height: "2.75rem", cursor: "pointer" }}
+                    style={{
+                      width: "100%",
+                      height: "2.75rem",
+                      cursor: "pointer",
+                    }}
                     onChange={(value) => onValuesChange(value, "client")}
                     options={clientOptions}
                     notFoundContent={
@@ -274,14 +274,15 @@ const SelectProject = ({
                     }
                   />
                 </Form.Item>
-                <Form.Item 
-                  name="project" 
-                  label={<>Project</>}
-                >
+                <Form.Item name="project" label={<>Project</>}>
                   <Select
                     placeholder="Select Project"
                     loading={projectLoading}
-                    style={{ width: "100%", height: "2.75rem", cursor: "pointer" }}
+                    style={{
+                      width: "100%",
+                      height: "2.75rem",
+                      cursor: "pointer",
+                    }}
                     onChange={(value) => onValuesChange(value, "project")}
                     options={projectOptions}
                     disabled={!form.getFieldValue("client")}
@@ -294,14 +295,15 @@ const SelectProject = ({
                     }
                   />
                 </Form.Item>
-                <Form.Item 
-                  name="role" 
-                  label={<>Role</>}
-                >
+                <Form.Item name="role" label={<>Role</>}>
                   <Select
                     placeholder="Select Role"
                     loading={roleLoading}
-                    style={{ width: "100%", height: "2.75rem", cursor: "pointer" }}
+                    style={{
+                      width: "100%",
+                      height: "2.75rem",
+                      cursor: "pointer",
+                    }}
                     options={roleOptions}
                     onChange={(e) => form.setFieldValue("role", e)}
                     disabled={!form.getFieldValue("project")}
@@ -320,7 +322,7 @@ const SelectProject = ({
                     name="SUBMIT"
                     width="400px"
                     loading={!submitLoading}
-                    disabled={!(form.getFieldsValue()?.role)}
+                    disabled={!form.getFieldsValue()?.role}
                   />
                 </div>
               </Form>

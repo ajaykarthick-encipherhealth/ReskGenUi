@@ -1110,3 +1110,11 @@ export const isStatusDisabled= (patientIdDetailsData, patientDetailsResult, path
 };
 
 
+export const getRolePanelPermission =(roles,currentRole)=>{
+  let findRoles=  roles?.find((res) => res.details?.proxyRole === currentRole);
+  if(findRoles?.details?.panelList?.panel2Name){
+    return true;
+  }else{
+    return false;
+  }
+}

@@ -1,10 +1,10 @@
-.outlinedColor{
-    color:rgb(4, 48, 111);
-    opacity: 0.7;
+.outlinedColor {
+  color: rgb(4, 48, 111);
+  opacity: 0.7;
 }
-.codifyColor{
-width: 35px !important;
-height: 27px !important;
+.codifyColor {
+  width: 35px !important;
+  height: 27px !important;
 }
 @media (min-width: 1024px) and (max-width: 1600px) {
   .codifyColor {
@@ -47,10 +47,10 @@ height: 27px !important;
 }
 .bellIcon {
   color: #04306f;
-  font-size: 24px; 
+  font-size: 24px;
 }
 
-@media (min-width: 1024px) and (max-width: 1600px)  {
+@media (min-width: 1024px) and (max-width: 1600px) {
   .bellIcon {
     font-size: 18px;
   }
@@ -62,17 +62,33 @@ height: 27px !important;
   }
 }
 
-.circularProgress{
+.circularProgress {
   width: 40px !important;
   height: 40px !important;
 }
-@media (min-width: 1024px) and (max-width: 1600px)  {
+@media (min-width: 1024px) and (max-width: 1600px) {
   .circularProgress {
-   width: 25px !important;
-  height: 25px !important;
+    width: 25px !important;
+    height: 25px !important;
   }
 }
 
+.panelDiv {
+  width: 180px;
+  height: 40px;
+  background-color: white;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-radius: 4px;
+  margin-right: 30px;
+  padding: 5px;
+}
+.panleLable {
+  font-size: 15px;
+}
 
-
-
+.disabled {
+  pointer-events: none;
+  opacity: 0.4;
+}
