@@ -1,20 +1,26 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { LeftOutlined, RightOutlined } from "@ant-design/icons";
 import Styles from "./styles.module.css";
 import { getStorage, setStorage } from "../../../utils/storages";
 import { useRouter } from "next/router";
 import { PhysicanMenuList, ProviderMenuList } from "./Menu";
 
-const PanelMenu = ({ currentRole, setMenuList, panelName, setPanelName }) => {
+const PanelMenu = ({
+  currentRole,
+  setMenuList,
+  panelName,
+  setPanelName,
+  roles,
+}) => {
   const router = useRouter();
-  const panelList = ["Owner Panel", "Workqueue Panel"];
-  const [index, setIndex] = useState(panelName == "Workqueue Panel" ? 1 : 0);
+  const [index, setIndex] = useState(panelName == "WorkQueue Panel" ? 1 : 0);
+  const [panelMenuList, setPanelMenuList] = useState([]);
 
   const handleLeftClick = (name) => {
-    setStorage("panelName", name);
-    setPanelName(name);
     const allRoles = JSON.parse(getStorage("userAllRoles"));
     let selectedRoleObj = allRoles?.find((res) => res.label === currentRole);
+    setStorage("panelName", selectedRoleObj?.details?.panelList?.panel1Name);
+    setPanelName(selectedRoleObj?.details?.panelList?.panel1Name);
     if (index > 0) setIndex(index - 1);
     setStorage(
       "accessMenuList",
@@ -39,11 +45,11 @@ const PanelMenu = ({ currentRole, setMenuList, panelName, setPanelName }) => {
   };
 
   const handleRightClick = (name) => {
-    setStorage("panelName", name);
-    setPanelName(name);
     const allRoles = JSON.parse(getStorage("userAllRoles"));
     let selectedRoleObj = allRoles?.find((res) => res.label === currentRole);
-    if (index < panelList.length - 1) setIndex(index + 1);
+    setStorage("panelName", selectedRoleObj?.details?.panelList?.panel2Name);
+    setPanelName(selectedRoleObj?.details?.panelList?.panel2Name);
+    if (index < panelMenuList.length - 1) setIndex(index + 1);
     setStorage(
       "accessMenuList",
       JSON.stringify(selectedRoleObj?.details?.panelList?.accessListForPanel2)
@@ -66,6 +72,17 @@ const PanelMenu = ({ currentRole, setMenuList, panelName, setPanelName }) => {
     }
   };
 
+  useEffect(() => {
+    let findRoles = roles?.find(
+      (res) => res.details?.proxyRole === currentRole
+    );
+    var key = [
+      findRoles?.details?.panelList?.panel1Name,
+      findRoles?.details?.panelList?.panel2Name,
+    ];
+    setPanelMenuList(key);
+  }, []);
+
   return (
     <div className={Styles.panelDiv}>
       <LeftOutlined
@@ -79,7 +96,7 @@ const PanelMenu = ({ currentRole, setMenuList, panelName, setPanelName }) => {
       <RightOutlined
         style={{ fontSize: "14px" }}
         className={`cr-pointer ${
-          index === panelList.length - 1 ? Styles.disabled : ""
+          index === panelMenuList.length - 1 ? Styles.disabled : ""
         }`}
         onClick={() => handleRightClick("Workqueue Panel")}
       />

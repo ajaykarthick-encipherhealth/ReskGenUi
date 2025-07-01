@@ -155,7 +155,7 @@ const Header = ({
   const [projectListCheck, setProjectListCheck] = useState(true);
   const [userEmail, setUserEmail] = useState(null);
   const [isShowDropdown, setIsShowDropdown] = useState(false);
-  const [panelName, setPanelName] = useState("Owner Panel");
+  const [panelName, setPanelName] = useState("");
 
   const proxyRole = getStorage("proxyRole");
   const showDrawer = () => {
@@ -233,8 +233,7 @@ const Header = ({
     setCurrentRole(key == "TENANT_ADMIN" ? "ADMIN" : key);
     setProjectListCheck(false);
     getProjectActiveTab(null);
-    setStorage("panelName", "Owner Panel");
-    setPanelName("Owner Panel");
+
     const allRoles = JSON.parse(getStorage("userAllRoles"));
     let userId = currentUserInfo?.data?.response?.id;
     const defaultClient = getStorage("client");
@@ -282,6 +281,7 @@ const Header = ({
       "roleId",
       selectedRoleObj?.roleId || selectedRoleObj?.details?.roleId
     );
+    setStorage("panelName", selectedRoleObj?.details?.panelList?.panel1Name);
     setStorage("headerAliasName", newAliasName);
     setStorage("aliasName", newAliasName);
     setStorage("accessMenuList", JSON.stringify(accessMenuList));
@@ -328,6 +328,7 @@ const Header = ({
       ? selectedRoleObj?.details?.panelList?.accessListForPanel1
       : selectedRoleObj?.details?.accessList;
     const localPanelName = getStorage("panelName");
+    setPanelName(selectedRoleObj?.details?.panelList?.panel1Name);
 
     switch (role) {
       case "admin":
@@ -341,7 +342,8 @@ const Header = ({
       case "DOWNLOADER":
         return ProviderMenuList(accessMenuList);
       case "OWNER":
-        if (role == "OWNER" && localPanelName == "Workqueue Panel") {
+        if (role == "OWNER" && localPanelName == "WorkQueue Panel") {
+          setPanelName(selectedRoleObj?.details?.panelList?.panel2Name);
           accessMenuList = selectedRoleObj?.details?.panelList
             ?.accessListForPanel2
             ? selectedRoleObj?.details?.panelList?.accessListForPanel2
@@ -350,6 +352,14 @@ const Header = ({
         }
         return ProviderMenuList(accessMenuList);
       case "QA_LEAD":
+        if (role == "QA_LEAD" && localPanelName == "WorkQueue Panel") {
+          setPanelName(selectedRoleObj?.details?.panelList?.panel2Name);
+          accessMenuList = selectedRoleObj?.details?.panelList
+            ?.accessListForPanel2
+            ? selectedRoleObj?.details?.panelList?.accessListForPanel2
+            : selectedRoleObj?.details?.accessList;
+          return PhysicanMenuList(accessMenuList);
+        }
         return ProviderMenuList(accessMenuList);
       case "PROJECT_LEAD":
         return ProviderMenuList(accessMenuList);
@@ -520,8 +530,6 @@ const Header = ({
     setTenentId(tenentId);
     setMenuList(getMenuListByRole(userRoleLocal));
     setUser(userId);
-    setPanelName(localPanelName);
-
     if (!loginCheck) {
       Swal.fire({
         title: "Error!",
@@ -1107,15 +1115,15 @@ const Header = ({
                     <div className="header-profile2">
                       <div className="nav-link i-false " as="div">
                         <div className="header-info2 d-flex align-items-center">
-                          {currentRole === "OWNER" &&
-                          getRolePanelPermission(roles, currentRole) ? (
+                          {getRolePanelPermission(roles, currentRole) && (
                             <PanelMenu
                               currentRole={currentRole}
                               setMenuList={setMenuList}
                               panelName={panelName}
                               setPanelName={setPanelName}
+                              roles={roles}
                             />
-                          ) : null}
+                          )}
                           <div
                             id="coderoot"
                             name="coderoot"
