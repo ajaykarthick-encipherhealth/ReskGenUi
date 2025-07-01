@@ -114,6 +114,15 @@ export const PhysicanMenuList = (data) => {
         childRoute2: "/tenantadmin/tracking/details",
       });
     }
+      if (res?.title == "Logs" && res?.active) {
+      menus.push({
+        title: "Logs",
+        iconStyle: <EnvironmentOutlined />,
+        activeIcon: <EnvironmentFilled />,
+        to: "/tenantadmin/tracking",
+        childRoute2: "/tenantadmin/tracking/details",
+      });
+    }
   });
   return menus;
 };
