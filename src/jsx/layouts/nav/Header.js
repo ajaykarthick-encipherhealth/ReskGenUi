@@ -218,7 +218,7 @@ const Header = ({
     }
     let userId = currentUserInfo?.data?.response?.id;
 
-    getNotificationList(userId);
+    // getNotificationList(userId);
   };
   const notificationDrawer = async () => {
     setOpen(true);
@@ -256,7 +256,7 @@ const Header = ({
       setBackupSelectedProject(defaultProject);
     }
 
-    getNotificationList(userId);
+    // getNotificationList(userId);
     let selectedRoleObj = allRoles?.find((res) => res.proxyRole === key);
     if (!selectedRoleObj) {
       setNotificationCount(0);
@@ -529,6 +529,7 @@ const Header = ({
     setCurrentRole(userRole);
     setTenentId(tenentId);
     setMenuList(getMenuListByRole(userRoleLocal));
+    getNotificationList(userId);
     setUser(userId);
     if (!loginCheck) {
       Swal.fire({
