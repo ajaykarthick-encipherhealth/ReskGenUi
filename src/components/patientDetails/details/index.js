@@ -57,7 +57,12 @@ import LogoLoader from "../../logoLoader";
 import FileDetails from "./components/fileDetails";
 import { PlusCircleOutlined } from "@ant-design/icons";
 import ManuallyAddProvider from "./manuallyAddProvider";
-import { getAge, getResponePopup, isStatusDisabled } from "../../../utils/reusable";
+import {
+  getAge,
+  getResponePopup,
+  isStatusDisabled,
+  isYearWiseDisabled,
+} from "../../../utils/reusable";
 import { getStorage, setStorage } from "../../../utils/storages";
 import { truncateString } from "./components/function/ReusableFunctions";
 import SvgFlag from "./components/svg/svg";
@@ -72,7 +77,7 @@ import { actions as reviewerWorkQueueAction } from "../../../stores/reviewer/wor
 import { actions as allActions } from "../../../stores/tenantAdmin/patientSync";
 import CardSkeleton from "../../skeleton/card";
 import VersionHistory from "./versionHistory";
-import Queried from "./hcc/queried"
+import Queried from "./hcc/queried";
 
 export const navigetPageDetails = async (
   pageTitle,
@@ -1083,24 +1088,33 @@ const Details = ({
                       >
                         <ul className="" id="flagList" name="flagList">
                           {flagList?.map((data, index) => {
-                              const isEditDisabled = isStatusDisabled(patientIdDetailsData, patientDetailsResult, navigate.pathname);
+                            const isEditDisabled = isStatusDisabled(
+                              patientIdDetailsData,
+                              patientDetailsResult,
+                              navigate.pathname
+                            );
 
                             const isFlagDisabled =
                               data.name === "Flag" && !isDosSelected;
-                            const isDosDisabled =
-                              data.name === "Add DOS & Provider" &&
-                              isDosSelected;
+                            isDosSelected;
                             const isVersionDisabled =
                               data.name === "Version History" && !isDosSelected;
                             const isEditDisabledList = [
-                              "Add DOS & Provider",
+                              // "Add DOS & Provider",
                             ].includes(data.name);
-
+                            const isAddDosSpecialCondition =
+                              data.name === "Add DOS & Provider" &&
+                              isYearWiseDisabled(patientIdDetailsData);
+                            // const isDisabled =
+                            //   (isEditDisabled && isEditDisabledList) ||
+                            //   isFlagDisabled ||
+                            //   // isDosDisabled
+                            //   isVersionDisabled;
                             const isDisabled =
                               (isEditDisabled && isEditDisabledList) ||
                               isFlagDisabled ||
-                              // isDosDisabled
-                              isVersionDisabled;
+                              isVersionDisabled ||
+                              isAddDosSpecialCondition;
 
                             return (
                               <Tooltip

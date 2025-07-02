@@ -622,7 +622,7 @@ export const renderUserProfile = (data, columnItem) => {
     );
   }
   return <div style={{ textAlign: "center" }}>---</div>;
-}; 	
+};
 
 export const renderUserProfileDisable = (data, columnItem) => {
   const compareObj = columnItem?.fromObject
@@ -1040,12 +1040,12 @@ export const convertToCustomParamsDatePicker = (obj) => {
   let params = "";
 
   Object.entries(obj).forEach(([key, value]) => {
-    // let keyValue = key;    
+    // let keyValue = key;
     if (typeof value === "object" && value !== null) {
       const { startDate, endDate } = value;
       // if(keyValue == "computedDate"){
       //   const userRole = getStorage("userRole");
-      //   keyValue = userRole.replace("_", "").toLowerCase()+"CompletedDate";        
+      //   keyValue = userRole.replace("_", "").toLowerCase()+"CompletedDate";
       // }
       if (startDate) {
         params += `&${key}Start=${startDate}`;
@@ -1060,9 +1060,9 @@ export const convertToCustomParamsDatePicker = (obj) => {
   return params;
 };
 
-export const checkWithIncludesKey=(list,key) =>{
+export const checkWithIncludesKey = (list, key) => {
   return list?.includes(key);
-}
+};
 
 export const convertUsFormat = (indiaDate) => {
   if (!indiaDate) {
@@ -1083,38 +1083,51 @@ export const convertUsFormat = (indiaDate) => {
 };
 
 export const findMatchesByField = (arr1, arr2) => {
-   return arr1?.some(obj1 =>
-    arr2?.some(obj2 =>
-      JSON.stringify(obj1) === JSON.stringify(obj2)
-    )
+  return arr1?.some((obj1) =>
+    arr2?.some((obj2) => JSON.stringify(obj1) === JSON.stringify(obj2))
   );
-}
+};
 export const timeLineDateAndTime = (inputDate) => {
-  return moment(inputDate).format('MMMM D YYYY hh:mm A');
+  return moment(inputDate).format("MMMM D YYYY hh:mm A");
 };
 
-export const isStatusDisabled= (patientIdDetailsData, patientDetailsResult, pathname) => {
-  const dosWiseStatus = patientIdDetailsData?.data?.response?.workflow?.[0]?.status;
-  const overAllStatus = patientDetailsResult?.data?.response?.workflow?.[0]?.status;
-  const disabled =
-    dosWiseStatus !== "PENDING" || overAllStatus === "COMPLETED";
+export const isStatusDisabled = (
+  patientIdDetailsData,
+  patientDetailsResult,
+  pathname
+) => {
+  const dosWiseStatus =
+   patientDetailsResult?.data?.response?.workflow?.[0]?.status;
+  const overAllStatus =
+    patientIdDetailsData?.data?.response?.workflow?.[0]?.status;
+
+  const disabled = dosWiseStatus !== "PENDING" || overAllStatus === "COMPLETED";
   const pathDisbaled =
     pathname.includes("/tenantadmin/tin/details") ||
     pathname.includes("/tenantadmin/project/details") ||
     pathname.includes("/tenantadmin/patientsync/batchfilesview");
 
   if (pathDisbaled) {
-    return true; 
-  }
-  return disabled; 
-};
-
-
-export const getRolePanelPermission =(roles,currentRole)=>{
-  let findRoles=  roles?.find((res) => res.details?.proxyRole === currentRole);
-  if(findRoles?.details?.panelList?.panel2Name){
     return true;
-  }else{
+  }
+  return disabled;
+};
+export const isYearWiseDisabled = (patientDetailsResult) => {
+  const overAllStatus =
+    patientDetailsResult?.data?.response?.workflow?.[0]?.status;
+
+  if (overAllStatus === "COMPLETED") {
+    return true;
+  } else {
     return false;
   }
-}
+};
+
+export const getRolePanelPermission = (roles, currentRole) => {
+  let findRoles = roles?.find((res) => res.details?.proxyRole === currentRole);
+  if (findRoles?.details?.panelList?.panel2Name) {
+    return true;
+  } else {
+    return false;
+  }
+};
