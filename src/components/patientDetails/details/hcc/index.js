@@ -538,7 +538,6 @@ const Hcc = ({
   useEffect(() => {
     getAllRoles();
   }, []);
-
   return (
     <div className={visitStyles.visitdata_tab_body}>
       <div className={`profile-tab ${visitStyles.visitdata_header_card2}`}>
@@ -682,7 +681,6 @@ const Hcc = ({
                             </Option>
                           ))}
                         </Select> */}
-                        {console.log(isDisabled,"isDisabled")}
                         <DosSelect
                           options={patientDosResult?.data?.response}
                           handleOptions={handleOptions}

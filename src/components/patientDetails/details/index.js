@@ -587,67 +587,134 @@ const Details = ({
     },
   ];
 
+  // const getPatientListToDetails = async (userId, isClear) => {
+  //   setIsLoading(true);
+  //   patientDetailsLoad(true);
+  //   const getYear = await getAllProcessYear(userId, "HCC");
+  //   let year =
+  //     getYear?.response.length > 0 ? getYear?.response[0] : selectedDosValue;
+  //   if (dosYearDefalutSelect) {
+  //     year = dosYearDefalutSelect?.value
+  //       ? dosYearDefalutSelect?.value
+  //       : dosYearDefalutSelect;
+  //   }
+  //   try {
+  //     getFlagCharts({ dos: year });
+  //     const resData = await getPatientDosList(userId, year);
+  //     let res = null;
+  //     if (resData?.response?.length > 0) {
+  //       res = await getpatientDetailsData(
+  //         userId,
+  //         year,
+  //         resData?.response[0]?.dateOfService,
+  //         setIsLoading,
+  //         userRole
+  //       );
+  //       getSelectedDos(resData?.response[0]?.dateOfService);
+  //       setSelectDosValue(resData?.response[0]?.dateOfService);
+  //     } else {
+  //       res = await getpatientDetailsData(
+  //         userId,
+  //         year,
+  //         "",
+  //         setIsLoading,
+  //         userRole
+  //       );
+  //     }
+
+  //     if (res.status == "SUCCESS") {
+  //       getPatientIdData(userId, isDosSelected);
+  //       getPatientHccFile(res.response?.fileDetailDTO?.fileId);
+  //       setLocalPatientId(userId);
+  //       activeLabels({
+  //         patientId: userId,
+  //         year: year,
+  //         dos: "",
+  //       });
+  //       isClear && getSelectedDos("");
+  //       isClear && setSelectDosValue("");
+  //       isClear && getSelectedDosPageNumber(1);
+  //       patientDetailsLoad(false);
+  //       setIsModalComments(false);
+  //       setFilterModalOpen(false);
+  //       setWorkListPatientId(null);
+  //     } else {
+  //       getResponePopup(res);
+  //       setIsSpinnerLoading(false);
+  //       patientDetailsLoad(false);
+  //     }
+  //   } catch (error) {
+  //     setIsSpinnerLoading(false);
+  //     patientDetailsLoad(false);
+  //   }
+  // };
+
   const getPatientListToDetails = async (userId, isClear) => {
     setIsLoading(true);
     patientDetailsLoad(true);
+
     const getYear = await getAllProcessYear(userId, "HCC");
     let year =
       getYear?.response.length > 0 ? getYear?.response[0] : selectedDosValue;
+
     if (dosYearDefalutSelect) {
-      year = dosYearDefalutSelect?.value
-        ? dosYearDefalutSelect?.value
-        : dosYearDefalutSelect;
+      year = dosYearDefalutSelect?.value || dosYearDefalutSelect;
     }
+
     try {
       getFlagCharts({ dos: year });
       const resData = await getPatientDosList(userId, year);
-      let res = null;
-      if (resData?.response?.length > 0) {
-        res = await getpatientDetailsData(
+
+      if (
+        resData?.response?.length > 0 &&
+        resData?.response[0]?.dateOfService
+      ) {
+        const dateOfService = resData.response[0].dateOfService;
+
+        const res = await getpatientDetailsData(
           userId,
           year,
-          resData?.response[0]?.dateOfService,
+          dateOfService,
           setIsLoading,
           userRole
         );
-        getSelectedDos(resData?.response[0]?.dateOfService);
-        setSelectDosValue(resData?.response[0]?.dateOfService);
+
+        getSelectedDos(dateOfService);
+        setSelectDosValue(dateOfService);
+
+        if (res.status === "SUCCESS") {
+          getPatientIdData(userId, isDosSelected);
+          getPatientHccFile(res.response?.fileDetailDTO?.fileId);
+          setLocalPatientId(userId);
+          activeLabels({
+            patientId: userId,
+            year: year,
+            dos: dateOfService,
+          });
+          if (isClear) {
+            getSelectedDos("");
+            setSelectDosValue("");
+            getSelectedDosPageNumber(1);
+          }
+          setIsModalComments(false);
+          setFilterModalOpen(false);
+          setWorkListPatientId(null);
+        } else {
+          getResponePopup(res);
+          setIsSpinnerLoading(false);
+        }
       } else {
-        res = await getpatientDetailsData(
-          userId,
-          year,
-          "",
-          setIsLoading,
-          userRole
-        );
+        // No dateOfService available — skip calling getpatientDetailsData
+        setIsSpinnerLoading(false);
       }
 
-      if (res.status == "SUCCESS") {
-        getPatientIdData(userId, isDosSelected);
-        getPatientHccFile(res.response?.fileDetailDTO?.fileId);
-        setLocalPatientId(userId);
-        activeLabels({
-          patientId: userId,
-          year: year,
-          dos: "",
-        });
-        isClear && getSelectedDos("");
-        isClear && setSelectDosValue("");
-        isClear && getSelectedDosPageNumber(1);
-        patientDetailsLoad(false);
-        setIsModalComments(false);
-        setFilterModalOpen(false);
-        setWorkListPatientId(null);
-      } else {
-        getResponePopup(res);
-        setIsSpinnerLoading(false);
-        patientDetailsLoad(false);
-      }
+      patientDetailsLoad(false);
     } catch (error) {
       setIsSpinnerLoading(false);
       patientDetailsLoad(false);
     }
   };
+
 
   const handleToogleCloseNav = () => {
     if (isSideNavShow == true) {
@@ -667,6 +734,8 @@ const Details = ({
     // navigate.back(
 
     // )
+    getpatientDetailsData("", "", "", "", "", true);
+    getPatientDosList("", "", true);
     setSelectDosValue("");
     getSelectedDosPageNumber(1);
     getPatientID(null);

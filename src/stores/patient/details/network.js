@@ -12,26 +12,62 @@ export async function patientDetailsBasedOnACtionType() {
   );
   return data;
 }
+// export async function patientDetails(
+//   patientId,
+//   processedYear,
+//   dos,
+//   setIsSpinnerLoading,
+//   role
+// ) {
+//   const roles = getStorage("userRole");
+//   const options = {
+//     method: "GET",
+//   };
+//      const userRoleId = getStorage("roleId");
+//   var url = `patientId=${patientId}&processedYear=${processedYear}&roleId=${userRoleId}`;
+//   if (dos) {
+//     url = `patientId=${patientId}&dateOfService=${dos}`;
+//   }
+//   try {
+//     const data = await requestPortal(
+//       `dbservice/status/patient/compute/get?${url}&roleId=${userRoleId}
+//     `,
+//       options
+//     );
+//     return data;
+//   } catch (error) {
+//     setIsSpinnerLoading(false);
+//     return error;
+//   }
+// }
+
 export async function patientDetails(
   patientId,
   processedYear,
   dos,
   setIsSpinnerLoading,
-  role
+  role,
+  dataNull = false
 ) {
+  if (!dos) {
+    return null;
+  }
+  if(dataNull === true){
+    return null
+  }
+  
   const roles = getStorage("userRole");
+  const userRoleId = getStorage("roleId");
+
   const options = {
     method: "GET",
   };
-     const userRoleId = getStorage("roleId");
-  var url = `patientId=${patientId}&processedYear=${processedYear}&roleId=${userRoleId}`;
-  if (dos) {
-    url = `patientId=${patientId}&dateOfService=${dos}`;
-  }
+
+  const url = `patientId=${patientId}&dateOfService=${dos}`;
+
   try {
     const data = await requestPortal(
-      `dbservice/status/patient/compute/get?${url}&roleId=${userRoleId}
-    `,
+      `dbservice/status/patient/compute/get?${url}&roleId=${userRoleId}`,
       options
     );
     return data;
@@ -40,6 +76,7 @@ export async function patientDetails(
     return error;
   }
 }
+
 
 export async function patientIdDetails(patientId) {
   const orgId = getStorage("orgId");
@@ -132,12 +169,14 @@ export async function patientHccFile(fileId) {
   // );
   return result;
 }
-export async function dosWiseList(patientId, year) {
+export async function dosWiseList(patientId, year, dataNull = false) {
   const options = {
     method: "GET",
   };
-    const userRoleId = getStorage("roleId");
-  
+  const userRoleId = getStorage("roleId");
+  if (dataNull === true) {
+    return null;
+  }
   const data = await requestPortal(
     `dbservice/status/patient/get/alldos?patientId=${patientId}&processedYear=${year}&roleId=${userRoleId}`,
     options
