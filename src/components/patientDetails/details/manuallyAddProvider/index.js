@@ -102,6 +102,7 @@ const ManuallyAddProvider = ({
       const res = await setTrashProviderAndCaptured({ isDosSelected });
       if (res?.status === "SUCCESS") {
         getResponePopup(res);
+         setProvidersList(null);
         getAddProviderAndDOSList({ year });
         getPatientListToDetails(patientId);
       } else {
