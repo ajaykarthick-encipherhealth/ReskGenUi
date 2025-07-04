@@ -1,6 +1,6 @@
 import React from "react";
 import { Modal, Form, Input, Select, Spin } from "antd";
-import RegularButton from '../../../components/button'
+import RegularButton from "../../../components/button";
 
 const ProviderAddForm = ({
   isModalOpen,
@@ -14,7 +14,7 @@ const ProviderAddForm = ({
   getProviderNameLoad,
   opt,
   loading,
-  providerList
+  providerList,
 }) => {
   return (
     <Modal
@@ -49,6 +49,11 @@ const ProviderAddForm = ({
                 const selected = form.getFieldValue("npiNumber");
                 if (!selected) {
                   setOpt([]);
+                }
+              }}
+              onKeyDown={(e) => {
+                if (e.key === " ") {
+                  e.preventDefault();
                 }
               }}
             />
@@ -129,7 +134,7 @@ const ProviderAddForm = ({
               showSearch
               placeholder="Select Practice Name"
               labelInValue
-              options={opt?providerList :[]}
+              options={opt ? providerList : []}
               filterOption={(input, option) =>
                 (option?.label ?? "")
                   .toLowerCase()
