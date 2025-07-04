@@ -537,7 +537,7 @@ const Hcc = ({
 
   useEffect(() => {
     getAllRoles();
-  }, []);
+  }, []);  
   return (
     <div className={visitStyles.visitdata_tab_body}>
       <div className={`profile-tab ${visitStyles.visitdata_header_card2}`}>
@@ -826,7 +826,7 @@ const Hcc = ({
                         </button>
                       </Popover>
                     </Nav.Item>
-                    {activeTabName?.tinDetailsTab == "Query Approval" ||
+                    {activeTabName?.tinDetailsTab == "Query Approval" &&
                     activeTabNameQuery ==
                       "/tenantadmin/tin/tindetails?tab=Query+Approval" ? (
                       <div className="d-flex gap-2">
