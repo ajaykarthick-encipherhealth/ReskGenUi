@@ -9,7 +9,7 @@ import AddLabForm from "../addLabForm";
 import AddRadiologyForm from "../addRadiologyForm";
 // import AllocateModal from "../../../../../pages/admin/allocateduser/allocate";
 import { actions as detailsActions } from "../../../../../stores/patient/details";
-import { getStorage } from "../../../../../utils/storages";
+import { getLocalStored, getStorage } from "../../../../../utils/storages";
 import { getResponePopup } from "../../../../../utils/reusable";
 import { overallStatusUpdate } from "../../../../../stores/patient/details/network";
 import QueryModal from "./queryModal";
@@ -188,10 +188,14 @@ const StatusAction = ({
       },
     ];
     setSelectedRowsId(data);
+    const workflowData = path.endsWith("/tindetails/masteraudit")
+      ? result?.masterAudit
+      : result?.workflow?.[0];
+
     const menu = (
       <Menu id="auditbtn">
-        {result?.workflow?.[0]?.status != "PENDING" &&
-        result?.workflow?.[0]?.status != "COMPUTED" ? (
+        {workflowData?.status != "PENDING" &&
+        workflowData?.status != "COMPUTED" ? (
           <Menu.Item
             key="2"
             onClick={() => {
@@ -207,7 +211,7 @@ const StatusAction = ({
           </Menu.Item>
         ) : null}
 
-        {result?.workflow?.[0]?.status != "COMPLETED" ? (
+        {workflowData?.status != "COMPLETED" ? (
           <Menu.Item
             key="4"
             onClick={() => {
@@ -252,7 +256,7 @@ const StatusAction = ({
             </Menu.Item>
           </>
         )}
-        {result?.workflow?.[0]?.status != "QUERIED" ? (
+        {workflowData?.status != "QUERIED" ? (
           <Menu.Item key="7">
             {["CODER_1", "CODER_2", "QA" , "OWNER", "QA_LEAD"].includes(proxyRole) && (
               <Button
@@ -273,7 +277,7 @@ const StatusAction = ({
 
     const menu2 = (
       <Menu>
-        {result?.workflow?.[0]?.status != "PENDING" ? (
+        {workflowData?.status != "PENDING" ? (
           <Menu.Item
             key="2"
             onClick={() => {
@@ -287,7 +291,7 @@ const StatusAction = ({
           </Menu.Item>
         ) : null}
 
-        {result?.workflow?.[0]?.status != "COMPLETE" ? (
+        {workflowData?.status != "COMPLETE" ? (
           <Menu.Item
             key="4"
             onClick={() => {
@@ -317,7 +321,7 @@ const StatusAction = ({
     );
     const menu3 = (
       <Menu>
-        {result?.workflow?.[0]?.status != "PENDING" ? (
+        {workflowData?.status != "PENDING" ? (
           <Menu.Item
             key="2"
             onClick={() => {
@@ -331,7 +335,7 @@ const StatusAction = ({
           </Menu.Item>
         ) : null}
 
-        {result?.workflow?.[0]?.status != "COMPLETE" ? (
+        {workflowData?.status != "COMPLETE" ? (
           <Menu.Item
             key="4"
             onClick={() => {
@@ -480,12 +484,16 @@ const StatusAction = ({
     }
   };
   const updateStatus = async (action) => {
+
+  const isTinDetailsPage = path.endsWith("/tindetails/masteraudit");
+  const masterAudit = isTinDetailsPage ? true : false;
     var postData = {
       // orgId: localOrgId,
       patientId: localPatientId,
       notes: inputValue.notes,
       roleId: getStorage("roleId"),
       processedStatus: statusCheck(action),
+      masterAudit,
       // dos: patientDetailsResult?.data?.response?.processedYear,
     };
     try {
@@ -504,10 +512,15 @@ const StatusAction = ({
       setConfirmNotesModal(false);
       setConfirmCompleteModal(false);
       setConfirmAuditModal(false);
-      getPatientIdData(localPatientId);
+      getPatientIdData(localPatientId, path);
       getPatientDosList(
         localPatientId,
-        patientDetailsResult?.data?.response?.processedYear
+        patientDetailsResult?.data?.response?.processedYear,
+        "",
+        "",
+        "",
+        "",
+        path
       );
       setInputValue({
         notes: "",
@@ -542,7 +555,9 @@ const StatusAction = ({
     setPatienIdDetails(patientIdDetailsData?.data?.response);
   }, [patientIdDetailsData?.data?.response]);
 
-
+    const workflowDatas = path.endsWith("/tindetails/masteraudit")
+      ? patienIdDetails?.masterAudit
+      : patienIdDetails?.workflow?.[0];
 
   return (
     <>
@@ -624,7 +639,7 @@ const StatusAction = ({
               id="auditbtnContainer"
               name="auditbtnContainer"
             >
-              {patienIdDetails?.workflow?.[0]?.status == "COMPLETED" ? (
+              {workflowDatas?.status == "COMPLETED" ? (
                 <Dropdown
                   id="auditbtn"
                   overlay={
@@ -639,7 +654,7 @@ const StatusAction = ({
                   visible={menuIsOpen}
                   className={`completedBtnHcc ant-badge ${visitStyles.completedBtnHcc}`}
                   disabled={
-                    patienIdDetails?.workflow?.[0]?.status === "COMPLETED"
+                    workflowDatas?.status === "COMPLETED"
                   }
                 >
                   <button
@@ -648,7 +663,7 @@ const StatusAction = ({
                     className={`completedBtnHcc ant-badge ${visitStyles.completedBtnHcc}`}
                     style={{
                       cursor:
-                        patienIdDetails?.workflow?.[0]?.status === "COMPLETED"
+                        workflowDatas?.status === "COMPLETED"
                           ? "not-allowed"
                           : "pointer",
                     }}
@@ -659,7 +674,7 @@ const StatusAction = ({
                     </span>
                   </button>
                 </Dropdown>
-              ) : patienIdDetails?.workflow?.[0]?.status == "QUERIED" ? (
+              ) : workflowDatas?.status == "QUERIED" ? (
                 <Dropdown
                   overlay={
                     activeTab == 3
@@ -673,14 +688,14 @@ const StatusAction = ({
                   visible={menuIsOpen}
                   className={`queryBtnHcc ${visitStyles.queryBtnHcc}`}
                   disabled={
-                    patienIdDetails?.workflow?.[0]?.status === "QUERIED"
+                    workflowDatas?.status === "QUERIED"
                   }
                 >
                   <button
                     disabled={shouldDisable}
                     style={{
                       cursor:
-                        patienIdDetails?.workflow?.[0]?.status === "QUERIED"
+                        workflowDatas?.status === "QUERIED"
                           ? "not-allowed"
                           : "pointer",
                     }}
@@ -688,8 +703,8 @@ const StatusAction = ({
                     Queried
                   </button>
                 </Dropdown>
-              ) : patienIdDetails?.workflow?.[0]?.status == "PENDING" ||
-                patienIdDetails?.workflow?.[0]?.status == "COMPUTED" ? (
+              ) : workflowDatas?.status == "PENDING" ||
+                workflowDatas?.status == "COMPUTED" ? (
                 <Dropdown
                   overlay={
                     activeTab == 3

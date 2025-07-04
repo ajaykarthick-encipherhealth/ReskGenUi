@@ -142,6 +142,7 @@ allTinIds=${allTinIds || false}`;
       router?.pathname?.endsWith("/tindetails") &&
       masterPageIds.includes(pageId)
     ) {
+
       baseUrl += `&tin=${tin || ""}&allTinIds=${allTinIds || false
         }&isMasterAudit=true`;
     }
@@ -227,6 +228,7 @@ export async function getStatusTableView({
     if (clientBasesPageIds.includes(pageId)) {
       baseUrl += `&cilentBased=${cilentBased || false}`;
     }
+
     // if (role !== "TENANT_ADMIN" && role !== "DOWNLOADER") {
     //   baseUrl += `&patientAllocated=${patientAllocated || ""}`;
     // }

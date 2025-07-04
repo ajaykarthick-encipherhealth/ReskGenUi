@@ -192,6 +192,7 @@ const PatientAllocation = ({
     pageLoad,
     roleAliasName,
     selectedRoleId,
+
   ]);
 
   useEffect(() => {
@@ -242,6 +243,7 @@ const PatientAllocation = ({
                                 className="nav-item profile-tab mt-4"
                                 key={role}
                               >
+                                
                                 <Nav.Link
                                   className="mt-4"
                                   onClick={() => {
@@ -326,9 +328,11 @@ const PatientAllocation = ({
                                   className="tableButton"
                                   disabled={
                                     !selectedRows?.length == 0 ||
+
                                     allRoles?.randomSamplingCompleted ||
                                     data?.response?.pageResponse?.content
                                       ?.length === 0
+
                                   }
                                 >
                                   Random Sampling

@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useRouter } from "next/router";
 import { Empty, message, Popover, Select, Tooltip } from "antd";
 import { FlagFilled } from "@ant-design/icons";
 import {
@@ -19,6 +20,7 @@ const DosSelect = ({
   setSelectedDate,
   isDosSelected,
 }) => {
+      const router = useRouter();
   const [open, setOpen] = useState(false);
   const dosData = options?.map((item, i) => ({
     ...item,
@@ -56,8 +58,15 @@ const DosSelect = ({
       setSelectedDate(dosData);
     }
   }, [dosData]);
-  const getDos = (item) => (
-    <div className="d-flex ant-badge gap-1 align-items-center ">
+
+
+const getDos = (item) => {
+  const workflowDatas = router.pathname.endsWith("/tindetails/masteraudit")
+    ? item?.masterAudit
+    : item?.workflow?.[0];
+
+  return (
+    <div className="d-flex ant-badge gap-1 align-items-center">
       <div
         className="ant-badge d-flex gap-1"
         onClick={() => {
@@ -111,10 +120,13 @@ const DosSelect = ({
             ? moment(item?.dateOfService).format("MM-DD-YYYY")
             : "---"}
         </span>
-        <span>{getStatusIcon(item?.workflow?.[0]?.status)}</span>
+
+        <span>{getStatusIcon(workflowDatas?.status)}</span>
       </div>
     </div>
   );
+};
+
 
   const renderSelectedRow = (row) => {
     if (!row) return null;

@@ -1,6 +1,7 @@
 import { requestPortal, requestPortalFiles } from "../../../utils/network";
 import { getLocalStored, getStorage, setStorage } from "../../../utils/storages";
 
+
 export async function patientDetailsBasedOnACtionType() {
   const patientId = getStorage("patientId");
   const options = {
@@ -47,48 +48,64 @@ export async function patientDetails(
   dos,
   setIsSpinnerLoading,
   role,
-  dataNull = false
+  dataNull = false,
+  navigate
 ) {
-  if (!dos) {
+  if (!dos || dataNull === true) {
     return null;
   }
-  if(dataNull === true){
-    return null
-  }
-  
-  const roles = getStorage("userRole");
+
   const userRoleId = getStorage("roleId");
+  const isTinDetailsPage = navigate
+    ? navigate.endsWith("/tindetails/masteraudit")
+    : "";
+  const masterAudit = isTinDetailsPage ? "true" : "";
 
   const options = {
     method: "GET",
   };
 
-  const url = `patientId=${patientId}&dateOfService=${dos}`;
+  let url = `dbservice/status/patient/compute/get?patientId=${patientId}&dateOfService=${dos}&roleId=${userRoleId}`;
+  if (masterAudit) {
+    url += `&masterAudit=${masterAudit}`;
+  }
+
+  console.log(masterAudit, "masterAudit");
 
   try {
-    const data = await requestPortal(
-      `dbservice/status/patient/compute/get?${url}&roleId=${userRoleId}`,
-      options
-    );
+    const data = await requestPortal(url, options);
     return data;
   } catch (error) {
+    console.error("Error fetching patient details:", error);
     setIsSpinnerLoading(false);
     return error;
   }
 }
 
-
-export async function patientIdDetails(patientId) {
+export async function patientIdDetails(patientId, navigate) {
   const orgId = getStorage("orgId");
+  const userRoleId = getStorage("roleId");
+
+  const isTinDetailsPage = navigate
+    ? navigate.endsWith("/tindetails/masteraudit")
+    : "";
+
   const options = {
     method: "GET",
   };
-   const userRoleId = getStorage("roleId");
-  const data = await requestPortal(
-    `dbservice/status/patient/get?patientId=${patientId}&roleId=${userRoleId}`,
-    options
-  );
-  return data;
+
+  let url = `dbservice/status/patient/get?patientId=${patientId}&roleId=${userRoleId}`;
+  if (isTinDetailsPage) {
+    url += `&masterAudit=true`;
+  }
+
+  try {
+    const data = await requestPortal(url, options);
+    return data;
+  } catch (error) {
+    console.error("Error fetching patient details:", error);
+    return null;
+  }
 }
 
 export async function radiologyDetails(
@@ -169,19 +186,33 @@ export async function patientHccFile(fileId) {
   // );
   return result;
 }
-export async function dosWiseList(patientId, year, dataNull = false) {
-  const options = {
-    method: "GET",
-  };
-  const userRoleId = getStorage("roleId");
+export async function dosWiseList(patientId, year, dataNull = false, navigate) {
   if (dataNull === true) {
     return null;
   }
-  const data = await requestPortal(
-    `dbservice/status/patient/get/alldos?patientId=${patientId}&processedYear=${year}&roleId=${userRoleId}`,
-    options
-  );
-  return data;
+
+  const userRoleId = getStorage("roleId");
+  const isTinDetailsPage = navigate
+    ? navigate.endsWith("/tindetails/masteraudit")
+    : "";
+  const masterAudit = isTinDetailsPage ? "true" : "";
+
+  const options = {
+    method: "GET",
+  };
+
+  let url = `dbservice/status/patient/get/alldos?patientId=${patientId}&processedYear=${year}&roleId=${userRoleId}`;
+  if (masterAudit) {
+    url += `&masterAudit=${masterAudit}`;
+  }
+
+  try {
+    const data = await requestPortal(url, options);
+    return data;
+  } catch (error) {
+    console.error("Error fetching DOS list:", error);
+    return null;
+  }
 }
 // export async function dosPageNumerList(patientId, year) {
 //   const options = {
@@ -235,10 +266,10 @@ export async function setTrashProviderAndCaptured({ isDosSelected }) {
   };
   const patientId = getStorage("patientId");
   const fileId = getStorage("fileIds");
-    const data = await requestPortal(
-      `management/dos-provider/soft-delete?patientId=${patientId}&fileId=${fileId}&dos=${isDosSelected}`,
-      options
-    );
+  const data = await requestPortal(
+    `management/dos-provider/soft-delete?patientId=${patientId}&fileId=${fileId}&dos=${isDosSelected}`,
+    options
+  );
   return data;
 }
 export async function setRestoreProviderAndCaptured({ isDosSelected }) {
@@ -253,7 +284,6 @@ export async function setRestoreProviderAndCaptured({ isDosSelected }) {
   );
   return data;
 }
-
 
 export async function deleteflag(obj) {
   const options = {
@@ -357,6 +387,7 @@ export async function getAllProcessYear(patientId, type) {
   const options = {
     method: "GET",
   };
+
   var URL = `dbservice/patient/compute/get/allyear?patientId=${patientId}`;
   // if (type == "RADIOLOGY") {
   //   URL = `dbservice/radiology/compute/get/allyear?patientId=${patientId}`;
@@ -461,7 +492,7 @@ export async function manuallyAddDosAndProviderList({ trash, year ,dataEmpty = f
   );
   return res;
 }
-export async function getDosExist({ dos, newDos}) {
+export async function getDosExist({ dos, newDos }) {
   const patientId = getStorage("patientId");
   const fileId = getStorage("fileIds");
 
@@ -469,12 +500,13 @@ export async function getDosExist({ dos, newDos}) {
     method: "GET",
   };
   const res = await requestPortal(
-    `management/dos-provider/existing-dos?patientId=${patientId}&fileId=${fileId}&dateOfService=${dos}&newDateOfService=${newDos ? newDos : ""}`,
+    `management/dos-provider/existing-dos?patientId=${patientId}&fileId=${fileId}&dateOfService=${dos}&newDateOfService=${
+      newDos ? newDos : ""
+    }`,
     options
   );
   return res;
 }
-
 
 export async function getValidHccDetailsApi(year, code) {
   const options = {
@@ -487,14 +519,16 @@ export async function getValidHccDetailsApi(year, code) {
   return res;
 }
 
-export async function getTimelineList({ patientId, dos ,role ,action}) {
+export async function getTimelineList({ patientId, dos, role, action }) {
   const options = {
     method: "GET",
   };
   const res = await requestPortal(
     `dbservice/actioneventaudit?patientId=${patientId}&dateOfService=${
       dos ? dos : ""
-    }&role=${role?role:""}&action=${action?action:""}&pageno=${0}&pagesize=${100}`,
+    }&role=${role ? role : ""}&action=${
+      action ? action : ""
+    }&pageno=${0}&pagesize=${100}`,
     options
   );
   return res;
@@ -634,6 +668,7 @@ export async function overallStatusUpdate(obj) {
     method: "POST",
     body: JSON.stringify(obj),
   };
+
   const data = await requestPortal(`dbservice/status/overallstatus`, options);
   return data;
 }
@@ -643,6 +678,7 @@ export async function overallYearStatus(obj, url) {
     method: "POST",
     body: JSON.stringify(obj),
   };
+
   const data = await requestPortal(`dbservice/status/update-status`, options);
   return data;
 }
@@ -691,7 +727,6 @@ export const updateMeatQuery = async (data) => {
   );
   return response;
 };
-
 
 export const patientListFilter = async (
   userId,

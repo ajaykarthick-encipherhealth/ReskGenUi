@@ -404,7 +404,9 @@ const Details = ({
         getFlagCharts({ dos: dosYearArr[0]?.value });
         const res = await getPatientDosList(
           selectPatientId?.patirntId ? selectPatientId?.patirntId : patientId,
-          dosYearArr[0]?.value
+          dosYearArr[0]?.value,
+          "",
+          navigate.pathname
         );
         if (res?.response?.length > 0) {
           getpatientDetailsData(
@@ -412,7 +414,9 @@ const Details = ({
             null,
             res?.response[0]?.dateOfService,
             "",
-            userRole
+            userRole,
+            "",
+            navigate.pathname
           );
           getSelectedDos(res?.response[0]?.dateOfService);
           setSelectDosValue(res?.response[0]?.dateOfService);
@@ -423,12 +427,15 @@ const Details = ({
             dosYearArr[0]?.value,
             "",
             "",
-            userRole
+            userRole,
+            "",
+            navigate.pathname
           );
           patientDetailsLoad(false);
         }
         getPatientIdData(
-          selectPatientId?.patirntId ? selectPatientId?.patirntId : patientId
+          selectPatientId?.patirntId ? selectPatientId?.patirntId : patientId,
+          navigate.pathname
         );
         // getPatientDosList(
         //   selectPatientId?.patirntId ? selectPatientId?.patirntId : patientId,
@@ -513,13 +520,23 @@ const Details = ({
         null,
         res?.response[0]?.dateOfService,
         "",
-        userRole
+        userRole,
+        "",
+        navigate.pathname
       );
       getSelectedDos(res?.response[0]?.dateOfService);
       setSelectDosValue(res?.response[0]?.dateOfService);
       patientDetailsLoad(false);
     } else {
-      getpatientDetailsData(localPatientId, e, "", "", userRole);
+      getpatientDetailsData(
+        localPatientId,
+        e,
+        "",
+        "",
+        userRole,
+        "",
+        navigate.pathname
+      );
       patientDetailsLoad(false);
     }
     getFlagCharts({ dos: e });
@@ -677,7 +694,9 @@ const Details = ({
           year,
           dateOfService,
           setIsLoading,
-          userRole
+          userRole,
+          "",
+          navigate.pathname
         );
 
         getSelectedDos(dateOfService);
@@ -734,9 +753,10 @@ const Details = ({
     // navigate.back(
 
     // )
+    getpatientDetailsData("", "", "", "", "", true, navigate.pathname);
+    getPatientDosList("", "", true, navigate.pathname);
     getpatientDetailsData("", "", "", "", "", true);
     getAddProviderAndDOSList({ dataEmpty: true });
-    getPatientDosList("", "", true);
     setSelectDosValue("");
     getSelectedDosPageNumber(1);
     getPatientID(null);

@@ -6,7 +6,7 @@ import { Modal, Tooltip, notification, Dropdown, Menu } from "antd";
 import { connect } from "react-redux";
 import { DownOutlined } from "@ant-design/icons";
 import { actions as detailsActions } from "../../../../../stores/patient/details";
-import { getStorage } from "../../../../../utils/storages";
+import { getLocalStored, getStorage } from "../../../../../utils/storages";
 import { overallYearStatus } from "../../../../../stores/patient/details/network";
 import { useRouter } from "next/router";
 import { isStatusDisabled } from '../../../../../utils/reusable'
@@ -125,11 +125,14 @@ const YearAndDosStatus = ({
         null;
     }
   };
-  const getPatientIdDetails = async (result) => {    
+  const getPatientIdDetails = async (result) => {  
+        const workflowData = router.pathname.endsWith("/tindetails/masteraudit")
+          ? result?.masterAudit
+          : result?.workflow?.[0];  
     const menu = (
       <Menu className="ant-badge" id="menu-container" name="menu-container">
-        {result?.workflow?.[0]?.status != "PENDING" &&
-        result?.workflow?.[0]?.status != "COMPUTED" ? (
+        {workflowData?.status != "PENDING" &&
+        workflowData?.status != "COMPUTED" ? (
           <Menu.Item
             id="pending-menu-item"
             name="pending-menu-item"
@@ -146,7 +149,7 @@ const YearAndDosStatus = ({
           </Menu.Item>
         ) : null}
 
-        {result?.workflow?.[0]?.status != "COMPLETED" ? (
+        {workflowData?.status != "COMPLETED" ? (
           <Menu.Item
             id="complete-menu-item"
             name="complete-menu-item"
@@ -168,7 +171,7 @@ const YearAndDosStatus = ({
     );
     const menu2 = (
       <Menu id="menu-container2" name="menu-container2">
-        {result?.workflow?.[0]?.status != "PENDING" ? (
+        {workflowData?.status != "PENDING" ? (
           <Menu.Item
             id="pending-menu-item2"
             name="pending-menu-item2"
@@ -183,7 +186,7 @@ const YearAndDosStatus = ({
             </div>
           </Menu.Item>
         ) : null}
-        {result?.workflow?.[0]?.status != "COMPLETE" ? (
+        {workflowData?.status != "COMPLETE" ? (
           <Menu.Item
           id="complete-menu-item2"
             name="complete-menu-item2"
@@ -218,7 +221,7 @@ const YearAndDosStatus = ({
     const menu3 = (
       <Menu id="menu-container3" name="menu-container3">
      
-        {result?.workflow?.[0]?.status != "PENDING" ? (
+        {workflowData?.status != "PENDING" ? (
           <Menu.Item
           id="pending-menu-item3"
             name="pending-menu-item3"
@@ -234,7 +237,7 @@ const YearAndDosStatus = ({
           </Menu.Item>
         ) : null}
 
-        {result?.workflow?.[0]?.status != "COMPLETE" ? (
+        {workflowData?.status != "COMPLETE" ? (
           <Menu.Item
           id="complete-menu-item3"
             name="complete-menu-item3"
@@ -310,7 +313,8 @@ const handleSubmitHccComplete = async () => {
 
     setIsLoading(true);
     setStatusLoading(true);
-
+  const isTinDetailsPage = router.pathname.endsWith("/tindetails/masteraudit");
+  const masterAudit = isTinDetailsPage ? true : false;
     var postData = {
       patientId,
       notes: inputValue.notes,
@@ -318,6 +322,7 @@ const handleSubmitHccComplete = async () => {
       dateOfService: patientDetailsResult?.data?.response?.dateOfService,
       roleId,
       processedStatus: statusName,
+      masterAudit,
     };
 
     let apiURL = "";
@@ -359,11 +364,17 @@ const handleSubmitHccComplete = async () => {
         getpatientDetailsData(
           localPatientId,
           patientDetailsResult?.data?.response?.processedYear,
-          patientDetailsResult?.data?.response?.dateOfService
+          patientDetailsResult?.data?.response?.dateOfService,
+          "",
+          "",
+          "",
+          router.pathname
         );
         getPatientDosList(
           localPatientId,
-          patientDetailsResult?.data?.response?.processedYear
+          patientDetailsResult?.data?.response?.processedYear,
+          "",
+          router.pathname
         );
         setConfirmCompleteModal(false);
       }
@@ -392,7 +403,12 @@ const isLoading = !patienIdDetails || !patienIdDetails?.workflow;
     getPatientIdDetails(patientDetailsResult?.data?.response);
     setPatienIdDetails(patientDetailsResult?.data?.response);
   }, [patientDetailsResult?.data?.response]);
-
+    const workflowDatas = router.pathname.endsWith("/tindetails/masteraudit")
+      ? patienIdDetails?.masterAudit
+      : patienIdDetails?.workflow?.[0];
+       const currentStatus = router.pathname.endsWith("/tindetails/masteraudit")
+         ? patientIdDetailsData?.data?.response?.masterAudit
+         : patientIdDetailsData?.data?.response?.workflow?.[0];
   return (
     <>
       {patientDetailsResult?.data?.response && (
@@ -462,7 +478,7 @@ const isLoading = !patienIdDetails || !patienIdDetails?.workflow;
             userRole == "OWNER" ||
             userRole == "QA_LEAD" ? (
             <div className={`${visitStyles.yearactionbtnContainer} ant-badge`}>
-              {patienIdDetails?.workflow?.[0]?.status == "COMPLETED" ? (
+              {workflowDatas?.status == "COMPLETED" ? (
                 <Dropdown
                   overlay={
                     activeTab == 3
@@ -476,7 +492,7 @@ const isLoading = !patienIdDetails || !patienIdDetails?.workflow;
                   visible={menuIsOpen}
                   className={` ant-badge completedBtnHcc ant-badge ${visitStyles.completedBtnHcc}`}
                   disabled={
-                    patientIdDetailsData?.data?.response?.workflow?.[0]
+                    currentStatus
                       ?.status === "COMPLETED"
                   }
                 >
@@ -487,7 +503,7 @@ const isLoading = !patienIdDetails || !patienIdDetails?.workflow;
                     } completedBtnHcc`}
                     style={{
                       cursor:
-                        patientIdDetailsData?.data?.response?.workflow?.[0]
+                        currentStatus
                           ?.status === "COMPLETED"
                           ? "not-allowed"
                           : "pointer",
@@ -499,7 +515,7 @@ const isLoading = !patienIdDetails || !patienIdDetails?.workflow;
                     </span>
                   </button>
                 </Dropdown>
-              ) : patienIdDetails?.workflow?.[0]?.status == "DECLINED" ? (
+              ) : workflowDatas?.status == "DECLINED" ? (
                 <Dropdown
                   overlay={
                     activeTab == 3
@@ -525,7 +541,7 @@ const isLoading = !patienIdDetails || !patienIdDetails?.workflow;
                     </span>
                   </Button>
                 </Dropdown>
-              ) : patienIdDetails?.workflow?.[0]?.status == "HOLD" ? (
+              ) : workflowDatas?.status == "HOLD" ? (
                 <Dropdown
                   overlay={
                     activeTab == 3
@@ -551,7 +567,7 @@ const isLoading = !patienIdDetails || !patienIdDetails?.workflow;
                     </span>
                   </Button>
                 </Dropdown>
-              ) : patienIdDetails?.workflow?.[0]?.status == "QUERIED" ? (
+              ) : workflowDatas?.status == "QUERIED" ? (
                 <Dropdown
                   overlay={
                     activeTab == 3
@@ -565,7 +581,7 @@ const isLoading = !patienIdDetails || !patienIdDetails?.workflow;
                   visible={menuIsOpen}
                   className={`ant-badge queryBtnHcc ${visitStyles.queryBtnHcc}`}
                   disabled={
-                    patienIdDetails?.workflow?.[0]?.status === "QUERIED"
+                    workflowDatas?.status === "QUERIED"
                   }
                 >
                   <button
@@ -575,7 +591,7 @@ const isLoading = !patienIdDetails || !patienIdDetails?.workflow;
                     } queryBtnHcc`}
                     style={{
                       cursor:
-                        patienIdDetails?.workflow?.[0]?.status === "QUERIED"
+                        workflowDatas?.status === "QUERIED"
                           ? "not-allowed"
                           : "pointer",
                     }}
@@ -586,8 +602,8 @@ const isLoading = !patienIdDetails || !patienIdDetails?.workflow;
                     </span>
                   </button>
                 </Dropdown>
-              ) : patienIdDetails?.workflow?.[0]?.status == "PENDING" ||
-                patienIdDetails?.workflow?.[0]?.status == "COMPUTED" ? (
+              ) : workflowDatas?.status == "PENDING" ||
+                workflowDatas?.status == "COMPUTED" ? (
                 <Dropdown
                   overlay={
                     activeTab == 3
