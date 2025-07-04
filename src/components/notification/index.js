@@ -236,7 +236,8 @@ const handleIdRead = async (notification) => {
                               <Button
                                 className="text-white"
                                 style={{ backgroundColor: "#3A88F8" }}
-                                onClick={() => gotoPatientDetails(notification)}
+                                // onClick={() => gotoPatientDetails(notification)}
+                                disabled
                               >
                                 Go to File
                               </Button>

@@ -355,6 +355,7 @@ export const ProviderMenuList = (data) => {
         childRoute2: "/tenantadmin/tin/tindetails",
         childRoute: "/tenantadmin/tin/details",
         childRoute3: "/tenantadmin/patients/details",
+        childRoute4:"/tenantadmin/tin/tindetails/masteraudit"
       });
     }
     if (res?.title == "Project" && res?.active) {

@@ -16,7 +16,7 @@ const MoveBackModal = ({
   getMoveBack,
   setIsMoveBackLoader,
   moveBackLoader,
-}) => {  
+}) => {
   const [selectLevel, setSelectLevel] = useState([]);
   const [isSwitchOn, setIsSwitchOn] = useState(false);
   const [revertDescription, setRevertDescription] = useState(null);
@@ -82,7 +82,7 @@ const MoveBackModal = ({
         width={500}
         className={"custom-modal"}
       >
-        <div style={{ height: "250px" }}>
+        <div style={{ height: "300px" }}>
           <div className="mt-4 d-flex justify-content-between ">
             <Select
               allowClear
@@ -100,9 +100,13 @@ const MoveBackModal = ({
             </div>
           </div>
           <div>
-            {revertDescription && (
+            {/* {revertDescription && (
               <div className="font1 text-muted mt-2">{revertDescription}</div>
-            )}
+            )} */}
+            <div className="font1 text-muted mt-2">
+              Enabling this option will revert the changes done by previous
+              coders{" "}
+            </div>
           </div>
 
           <div className=" h-100 d-flex align-items-center justify-content-center">

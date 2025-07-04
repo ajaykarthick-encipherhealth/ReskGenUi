@@ -183,6 +183,10 @@ export const getProviderList = createActionThunk(
   "GET_PROVIDER",
   network.getProvider
 );
+export const getCredentialList = createActionThunk(
+  "GET_CREDENTIAL",
+  network.getCredential
+);
 export const storeFileIdAction = createAction("STORE_FILE_ID");
 export const getPatientID = createAction("PATIENT_ID");
 export const stroeFileIdPreAction = createAction("STORE_FILE_ID_PRE");

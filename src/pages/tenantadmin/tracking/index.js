@@ -376,8 +376,7 @@ const Patient = ({
       <div className="content-body">
         <div className="container-fluid">
           <div className="table-responsive active-projects task-table">
-            <div className="row p-3 ">
-              <div className="col-12 ">
+              <div className="mt-4">
                 <ReusableFilters
                   showFilter={true}
                   setActiveFilters={setActiveFilters}
@@ -414,8 +413,6 @@ const Patient = ({
                   btnLoading={loading}
                 />
               </div>
-            </div>
-
             <div id="task-tbl_wrapper" className="dataTables_wrapper no-footer">
               <div className="mt-3">
                 <AppTable

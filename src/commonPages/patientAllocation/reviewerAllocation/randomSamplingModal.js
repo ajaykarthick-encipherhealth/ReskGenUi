@@ -1,33 +1,24 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Avatar, DatePicker, Form, Input, Modal, Select } from "antd";
 import modalStyle from "../../../pages/tenantadmin/allocateduser/allocate/style.module.css";
-import { InputText } from "primereact/inputtext";
 import { useEffect, useState } from "react";
-import Router, { useRouter } from "next/router";
-import {
-  faSearch,
-  faXmark,
-  faUser,
-  faCircle,
-} from "@fortawesome/free-solid-svg-icons";
+import { faSearch, faUser, faCircle } from "@fortawesome/free-solid-svg-icons";
 import { actions as allActions } from "../../../stores/admin/patientAllocation";
 import { connect } from "react-redux";
-import {
-  createIdGen,
-  formatDateForIndex,
-  getResponePopup,
-} from "../../../utils/reusable";
+import { formatDateForIndex, getResponePopup } from "../../../utils/reusable";
 import styles from "../../../components/tables/table.module.css";
 import { getStorage } from "../../../utils/storages";
 import TableSkeleton from "../../../components/skeleton/table";
 import RegularButton from "../../../components/button";
 import { actions as allAction } from "../../../stores/tenantAdmin/patientAllocations";
-import { disablePastDate, priorityOptions } from "../../../components/headerFilters/functions";
+import {
+  disablePastDate,
+  priorityOptions,
+} from "../../../components/headerFilters/functions";
 
 const RandomSamplingModal = ({
   open,
   setOpen,
-  selectedRowsId,
   setSelectedRowsId,
   getL1UsersList,
   setSelectedRows,
@@ -40,23 +31,15 @@ const RandomSamplingModal = ({
   roleId,
   setIsAllocate,
   getAllTabRoles,
+  roleAliasName,
 }) => {
-  const router = useRouter();
   const tinNumber = getStorage("tinNumber");
   const userId = getStorage("userId");
   const [activeCard, setActiveCard] = useState("");
   const [search, setSearch] = useState("");
   const [userDetails, setUserDetails] = useState([]);
-  const [allocateDate, setAllocateDate] = useState("");
   const [activeEmail, setActiveEmail] = useState([]);
-  const [chart, setChart] = useState({
-    date: null,
-    completed: null,
-    pending: null,
-    declined: null,
-    hold: null,
-    allocated: null,
-  });
+  const [formValues, setFormValues] = useState(null);
   const [statusCount, setStatusCount] = useState([]);
   const getInitials = (firstName, lastName) => {
     const firstNameInitial = firstName?.charAt(0) || "";
@@ -73,12 +56,15 @@ const RandomSamplingModal = ({
     setSelectedUserIds([]);
     setActiveCard("");
     setActiveEmail([]);
+    setFormValues([]);
     form.resetFields();
   };
 
-  const getUserList = async ({ roleId }) => {
+  const getUserList = async ({ roleId, search }) => {
     const response = await getL1UsersList({
       roleId: roleId || "",
+      search: search,
+      masterAudit: roleAliasName === "MASTER_AUDIT" ? true : false,
     });
     if (response?.status === "SUCCESS") {
       let result = response?.response;
@@ -87,8 +73,10 @@ const RandomSamplingModal = ({
           firstName: item.firstName,
           lastName: item.lastName,
           id: item.id,
-          role: item.role,
+          role: item.roleId,
           email: item.userName,
+          aliasName: item.aliasName,
+          proxyId: item.proxyId,
         };
       });
       setStatusCount(response?.response);
@@ -96,26 +84,51 @@ const RandomSamplingModal = ({
     }
   };
   const onFinish = async (values) => {
+    setFormValues(values);
+    setOpen(true);
+    setIsModalOpen(false);
+  };
+  const handleSaveUsers = async () => {
+    if (!formValues) return;
     setIsAllocate(true);
-    const response = await randomSampling({
-      roleId: roleId,
-      userIdList: activeEmail,
-      dueDate: formatDateForIndex({ date: values.duedate, index: 1 }),
-      allocatedBy: userId,
-      randomSamplingPercentage: Number(values?.totalPercentage),
-      hccFoundFilesPercentage: Number(values?.hccpercentage),
-      noHccFoundFilesPercentage: Number(values?.nohccpercentage),
-      tin: tinNumber,
-      priority: values?.priority,
-    });
-    if (response?.status == "SUCCESS") {
-      setIsAllocate(false);
+    let payload;
+    if (roleAliasName === "MASTER_AUDIT") {
+      payload = {
+        roleId: roleId,
+        usersWithRole: activeEmail,
+        dueDate: formatDateForIndex({ date: formValues.duedate, index: 1 }),
+        allocatedBy: userId,
+        randomSamplingPercentage: Number(formValues?.totalPercentage),
+        hccFoundFilesPercentage: Number(formValues?.hccpercentage),
+        noHccFoundFilesPercentage: Number(formValues?.nohccpercentage),
+        tin: tinNumber,
+        priority: formValues?.priority,
+        masterAudit: true,
+      };
+    } else {
+      payload = {
+        roleId: roleId,
+        userIdList: activeEmail.map((user) => user.username),
+        dueDate: formatDateForIndex({ date: formValues.duedate, index: 1 }),
+        allocatedBy: userId,
+        randomSamplingPercentage: Number(formValues?.totalPercentage),
+        hccFoundFilesPercentage: Number(formValues?.hccpercentage),
+        noHccFoundFilesPercentage: Number(formValues?.nohccpercentage),
+        tin: tinNumber,
+        priority: formValues?.priority,
+      };
+    }
+    const response = await randomSampling(payload);
+    setIsAllocate(false);
+    if (response?.status === "SUCCESS") {
       getResponePopup(response);
-      getAllTabRoles()
+      getAllTabRoles({
+      pageId: "6cd166eb-79ac-4c12-ab0f-07be2983ca70",
+      });
       getAllAllocation();
+      setFormValues(null);
       setOpen(false);
       setIsModalOpen(false);
-      setAllocateDate(null);
       setActiveCard("");
       setActiveEmail([]);
       setSearch("");
@@ -123,77 +136,50 @@ const RandomSamplingModal = ({
       setSelectedRows([]);
       setSelectedUserIds([]);
     } else {
-      setIsAllocate(false);
       getResponePopup(response);
+      setFormValues([]);
     }
   };
-
-  const handleUserSelect = (id, email) => {
-    if (selectedUserIds.includes(id)) {
-      setSelectedUserIds(selectedUserIds.filter((userId) => userId !== id));
-      setActiveEmail(activeEmail.filter((e) => e !== email));
+  const handleUserSelect = (proxyId, email) => {
+    const user = userDetails.find((u) => u.proxyId === proxyId);
+    const isSelected = selectedUserIds.includes(proxyId);
+    if (isSelected) {
+      setSelectedUserIds((prev) => prev.filter((userId) => userId !== proxyId));  
+      setActiveEmail((prev) =>
+        prev.filter((u) => !(u.username === email && u.roleId === user?.role))
+      );
     } else {
-      setSelectedUserIds([...selectedUserIds, id]);
-      setActiveEmail([...activeEmail, email]);
+      if (user) {
+        setSelectedUserIds((prev) => [...prev, proxyId]);
+        setActiveEmail((prev) => [
+          ...prev,
+          { username: email, roleId: user.role },
+        ]);
+      }
     }
+    setActiveCard("");
   };
 
   const handleSelectAll = () => {
-    if (selectedUserIds.length === userDetails.length) {
+    const isAllSelected = selectedUserIds.length === userDetails.length;
+    if (isAllSelected) {
       setSelectedUserIds([]);
       setActiveEmail([]);
     } else {
-      const allIds = userDetails.map((user) => user.id);
+      const allIds = userDetails.map((user) => user.proxyId);
+      const allUsers = userDetails.map((user) => ({
+        username: user.email,
+        roleId: roleId,
+      }));
       setSelectedUserIds(allIds);
-      setActiveEmail(userDetails.map((user) => user.email));
+      setActiveEmail(allUsers);
     }
   };
-
-  useEffect(() => {
-    if (roleId ) {
-      getUserList({ roleId: roleId });
-    }
-  }, [roleId]);
-
-  return (
-    <div>
-      <Modal
-        open={open}
-        onCancel={() => {
-          setOpen(false);
-          setActiveCard("");
-          setActiveEmail([]);
-          setSearch("");
-          setAllocateDate(null);
-          setSelectedUserIds([]);
-        }}
-        title="Select User"
-        footer={false}
-        width={700}
-        height={100}
-        className={"custom-modal"}
-      >
-        <div class="form-group d-flex align-items-center justify-content-between has-search">
-          <FontAwesomeIcon
-            className="fa fa-search form-control-feedback"
-            icon={faSearch}
-          />
-          <InputText
-            autoComplete="off"
-            id="search-input"
-            name="search-input"
-            type="text"
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            className=" w-50 form-control new-form-control"
-            placeholder="Search"
-            maxLength={25}
-            onKeyDown={(e) => {
-              if (e.key === "\\") {
-                e.preventDefault();
-              }
-            }}
-          />
+  const userTitle = () => {
+    return (
+      <div className="d-flex justify-content-between">
+        <div>Select User</div>
+        <div>
           {userDetails.length > 0 ? (
             <div className="d-flex align-items-center ">
               <div className="fontWeight3 font3">Select All</div>
@@ -205,23 +191,74 @@ const RandomSamplingModal = ({
                   borderRadius: "4px",
                   cursor: "pointer",
                 }}
-                className={`mx-4  ${styles.checkbox}${
+                className={`mx-4  ${styles.checkbox} ${
                   selectedUserIds.length === userDetails.length
                     ? styles.customChecked2
                     : ""
-                } `}
+                }`}
                 type="checkbox"
                 id="selectAll"
-                checked={
-                  userDetails.length > 0 &&
-                  selectedUserIds.length === userDetails.length
-                }
+                checked={selectedUserIds.length === userDetails.length}
                 onChange={handleSelectAll}
               />
             </div>
-          ) : (
-            ""
-          )}
+          ) : null}
+        </div>
+      </div>
+    );
+  };
+
+  useEffect(() => {
+    if (roleId) {
+      getUserList({
+        roleId: roleId,
+        search: search,
+        masterAudit: roleAliasName === "MASTER_AUDIT" ? true : false,
+      });
+    }
+  }, [roleId, search, roleAliasName]);
+
+  return (
+    <div>
+      <Modal
+        open={open}
+        onCancel={() => {
+          setOpen(false);
+          setActiveCard("");
+          setActiveEmail([]);
+          setSearch("");
+          setSelectedUserIds([]);
+          setFormValues(null);
+          form.resetFields();
+        }}
+        title={roleAliasName === "MASTER_AUDIT" ? "Select User" : userTitle()}
+        footer={false}
+        width={700}
+        height={100}
+        className={"custom-modal"}
+      >
+        <div className="d-flex align-items-center justify-content-evenly mt-2">
+          <Input
+            onKeyDown={(e) => {
+              if (e.key === "\\") {
+                e.preventDefault();
+              }
+            }}
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            className={modalStyle.allocationInput}
+            placeholder="Search"
+            suffix={
+              <FontAwesomeIcon
+                className="fa fa-search form-control-feedback"
+                icon={faSearch}
+              />
+            }
+          />
+          <Select
+            className={modalStyle.allocationInput}
+            placeholder="Select Role"
+          />
         </div>
 
         {usersLoader ? (
@@ -237,17 +274,7 @@ const RandomSamplingModal = ({
                       : modalStyle.listContent
                   }`}
                 >
-                  <div
-                    className="d-flex justify-content-between"
-                    onClick={() => {
-                      if (activeCard === item.id) {
-                        setActiveCard("");
-                      } else {
-                        setActiveCard(item.id);
-                        setAllocateDate("");
-                      }
-                    }}
-                  >
+                  <div className="d-flex justify-content-between">
                     <div className="d-flex">
                       <Avatar
                         size={65}
@@ -268,12 +295,8 @@ const RandomSamplingModal = ({
                         <p className={`${modalStyle.listName} mb-1`}>
                           {item.firstName + " " + item.lastName}
                         </p>
-                        <p className={`${modalStyle.listRole}`}>
-                          {item.role
-                            ? item.role.map((item) => (
-                                <span className="px-1">{item}</span>
-                              ))
-                            : null}
+                        <p className={`mt-2 ${modalStyle.listRole}`}>
+                          {item?.aliasName?.split("_")?.join(" ")}
                         </p>
                       </div>
                     </div>
@@ -286,9 +309,16 @@ const RandomSamplingModal = ({
                         cursor: "pointer",
                       }}
                       type="checkbox"
-                      checked={selectedUserIds.includes(item.id)}
-                      onChange={() => handleUserSelect(item.id, item.email)}
+                      checked={selectedUserIds.includes(item.proxyId)}
+                      onChange={() =>
+                        handleUserSelect(item.proxyId, item.email)
+                      }
                       className="me-2 ms-3 align-self-center"
+                      disabled={
+                        activeEmail.some(
+                          (user) => user.username === item.email
+                        ) && !selectedUserIds.includes(item.proxyId)
+                      }
                     />
                   </div>
                   {activeCard == item.id ? (
@@ -401,24 +431,21 @@ const RandomSamplingModal = ({
         {userDetails.length > 0 ? (
           <div className="d-flex justify-content-center mt-3">
             <RegularButton
-              name={"Next"}
+              name={"Save"}
               type="submit"
-              onClick={() => {
-                setIsModalOpen(true);
-                setOpen(false);
-                form.resetFields();
-              }}
-              disabled={activeEmail.length === 0}
-            >
-              Next
-            </RegularButton>
+              onClick={handleSaveUsers}
+              disabled={activeEmail.length === 0 || isAllocate}
+              loading={isAllocate}
+            ></RegularButton>
           </div>
-        ) : (
-          ""
-        )}
+        ) : null}
       </Modal>
       <Modal
-        title="Random Sampling"
+        title={
+          roleAliasName === "MASTER_AUDIT"
+            ? " Master Audit Sampling"
+            : "Random Sampling"
+        }
         open={isModalOpen}
         onOk={handleOk}
         onCancel={handleCancel}
@@ -431,15 +458,7 @@ const RandomSamplingModal = ({
           autoComplete="off"
           onFinish={onFinish}
         >
-          <div className="mt-3 samplingSelect">
-            {/* <Form.Item
-              label="Select Tin"
-              name="tin"
-              rules={[{ required: true, message: "Select the Tin!" }]}
-            >
-              <Input className="w-75" placeholder=" Tin" />
-            </Form.Item> */}
-          </div>
+          <div className="mt-3 samplingSelect"></div>
           <Form.Item
             rules={[
               {
@@ -457,40 +476,6 @@ const RandomSamplingModal = ({
           >
             <Input className="w-75" placeholder="Percentage" />
           </Form.Item>
-          {/* <Form.Item
-            rules={[
-              {
-                required: true,
-                message: "Enter Percentage !",
-              },
-              {
-                pattern: /^(100|[1-9][0-9]?|0)$/,
-                message:
-                  "Percentage must be a number between 0 and 100 with no decimals or letters",
-              },
-            ]}
-            label="Enter Percentage of File Related to HCC Condition"
-            name="hccpercentage"
-          >
-            <Input className="w-75" placeholder=" Percentage" />
-          </Form.Item>
-          <Form.Item
-            rules={[
-              {
-                required: true,
-                message: "Enter Percentage !",
-              },
-              {
-                pattern: /^(100|[1-9][0-9]?|0)$/,
-                message:
-                  "Percentage must be a number between 0 and 100 with no decimals or letters",
-              },
-            ]}
-            label="Enter Percentage of File Related to No HCC Condition"
-            name="nohccpercentage"
-          >
-            <Input className="w-75" placeholder=" Percentage" />
-          </Form.Item> */}
           <Form.Item
             label="Enter Percentage of File Related to HCC Condition"
             name="hccpercentage"
@@ -595,13 +580,7 @@ const RandomSamplingModal = ({
 
           <Form.Item>
             <div className="d-flex align-items-center justify-content-center">
-              <RegularButton
-                loading={isAllocate}
-                type="submit"
-                name="Save"
-                width={150}
-                disabled={isAllocate}
-              />
+              <RegularButton type="submit" name="Next" width={150} />
             </div>
           </Form.Item>
         </Form>

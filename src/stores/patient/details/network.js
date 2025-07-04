@@ -1,5 +1,5 @@
 import { requestPortal, requestPortalFiles } from "../../../utils/network";
-import { getStorage, setStorage } from "../../../utils/storages";
+import { getLocalStored, getStorage, setStorage } from "../../../utils/storages";
 
 export async function patientDetailsBasedOnACtionType() {
   const patientId = getStorage("patientId");
@@ -514,6 +514,13 @@ export async function getProvider() {
   const res = await requestPortal(`dbservice/v1/provider/get`, options);
   return res;
 }
+export async function getCredential() {
+  const options = {
+    method: "GET",
+  };
+  const res = await requestPortal(`dbservice/credentials`, options);
+  return res;
+}
 
 export async function addValidDisease(obj) {
   const options = {
@@ -823,15 +830,13 @@ export async function raiseQuery(obj) {
   );
   return data;
 }
-
 export async function getAllRoles() {
-  const aliasName = getStorage("aliasName")
-
+  const { aliasName = null, patientId = null } = getLocalStored();
   const options = {
     method: "GET",
   };
   const data = await requestPortal(
-    `dbservice/v1/reassign/get-roles?aliasName=${aliasName}`,
+    `dbservice/v1/reassign/get-roles?aliasName=${aliasName}&patientId=${patientId}`,
     options
   );
   return data;

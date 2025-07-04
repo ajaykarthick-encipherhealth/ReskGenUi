@@ -105,6 +105,7 @@ const ManuallyAddProvider = ({
          setProvidersList(null);
         getAddProviderAndDOSList({ year });
         getPatientListToDetails(patientId);
+         setProvidersList(null);
       } else {
         console.warn("Trash failed:", res);
       }
@@ -121,7 +122,7 @@ const ManuallyAddProvider = ({
       const res = await setRestoreProviderAndCaptured({ isDosSelected });
       if (res?.status === "SUCCESS") {
         getResponePopup(res);
-
+       
         getAddProviderAndDOSList({ trash: true, year });
       } else {
         console.warn("Restore failed:", res);
@@ -238,12 +239,7 @@ const ManuallyAddProvider = ({
                 >
                   <span className={style.dateField}>{item?.dateOfService}</span>
                   <span className={style.providerText}>
-                    <Tooltip title={item?.providerName}>
-                      {reusableEllipses({
-                        str: item?.providerName ? item?.providerName : "---",
-                        count: 10,
-                      })}
-                    </Tooltip>
+                  Provider
                   </span>
 
                   <Popover

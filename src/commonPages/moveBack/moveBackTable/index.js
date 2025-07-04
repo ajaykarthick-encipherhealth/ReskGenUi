@@ -47,6 +47,7 @@ const MoveBackTable = ({
           searchText,
           selectedOption,
           selectedDateRanges,
+          isMasterAudit:false,
         });
 
         if (response?.status === "SUCCESS") {

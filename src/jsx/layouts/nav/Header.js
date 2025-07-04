@@ -576,7 +576,7 @@ const Header = ({
             encodedParams
               ? stateActive === data.childRoute3
               : stateActive === data.childRoute) ||
-            stateActive === data.childRoute2
+            stateActive === data.childRoute2 ||  stateActive === data.childRoute4
               ? "header-active"
               : `${styles.menuListItems}`
           }

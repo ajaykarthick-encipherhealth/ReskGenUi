@@ -1,5 +1,5 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Avatar, Checkbox, DatePicker, Empty, Modal, Select } from "antd";
+import { Avatar, Checkbox, DatePicker, Empty, Input, Modal, Select } from "antd";
 import modalStyle from "../../../pages/tenantadmin/allocateduser/allocate/style.module.css";
 import { InputText } from "primereact/inputtext";
 import { useEffect, useState } from "react";
@@ -36,8 +36,8 @@ const ReAllocationModal = ({
   isAllocate,
   getReAllocateUserList,
   allocateModal,
+  roleAliasName,
 }) => {
-  const userId = getStorage("userId");
   const [activeCard, setActiveCard] = useState("");
   const [search, setSearch] = useState("");
   const [userDetails, setUserDetails] = useState([]);
@@ -76,7 +76,11 @@ const ReAllocationModal = ({
       data: {
         roleId: roleId || "",
         search: search || "",
-        userName: selectedUserName.map((item) => item.userName),
+        userRoleDTOList: selectedUserName.map(({ username, roleId }) => ({
+          username,
+          roleId,
+        })),
+        isMasterAudit: roleAliasName === "MASTER_AUDIT" ? true : false,
       },
     });
     if (response?.status === "SUCCESS") {
@@ -87,8 +91,10 @@ const ReAllocationModal = ({
           firstName: item.firstName,
           lastName: item.lastName,
           id: item.id,
-          role: item.role,
+          roleId: item.roleId,
           email: item.userName,
+          aliasName: item.aliasName,
+          proxyId: item.proxyId,
         };
       });
       setStatusCount(response?.response);
@@ -96,20 +102,35 @@ const ReAllocationModal = ({
     } else {
       setIsLoading(false);
     }
-  };
+  }
   const setAllocate = async () => {
     setIsAllocate(true);
-    const response = await reAllocateUser({
-      data: {
-        roleId: roleId,
+
+    let payload;
+
+    if (roleAliasName === "MASTER_AUDIT") {
+      payload = {
+       roleId: Number(activeEmail.map((role)=>role.roleId)),
+        reallocateUserName: activeEmail.map((item)=>item.email).toString(),
         dueDate: formatDateForIndex({ date: allocateDate, index: 1 }),
-        reallocateUserName: activeEmail.toString(),
+        patientId: selectedRowsId,
+        priority :priority,
+        changesNeeded: isChecked,
+        isMasterAudit:true
+      };
+    } else {
+       payload = {
+        roleId: Number(activeEmail.map((role)=>role.roleId)),
+        dueDate: formatDateForIndex({ date: allocateDate, index: 1 }),
+        reallocateUserName: activeEmail.map((item)=>item.email).toString(),
         patientId: selectedRowsId,
         priority: priority,
         changesNeeded: isChecked,
-      },
-    });
-    if (response?.status == "SUCCESS") {
+       };
+      }
+    const response = await reAllocateUser({ data: payload });
+
+    if (response?.status === "SUCCESS") {
       setIsAllocate(false);
       getResponePopup(response);
       getAllReAllocation();
@@ -123,7 +144,6 @@ const ReAllocationModal = ({
       setSelectedRows([]);
       setSelectedUserName([]);
       setSelectedUserIds([]);
-      setActiveCard("");
       setIsSecondModalOpen(false);
       setIsChecked(false);
     } else {
@@ -133,20 +153,22 @@ const ReAllocationModal = ({
   };
 
   const handleRowCheckboxChange = ({ e, row }) => {
-    if (e.target?.checked) {
-      setSelectedUserIds([row.id]);
-      setActiveEmail([row.email]);
-    } else {
-      setSelectedUserIds([]);
-      setActiveEmail([]);
-    }
-    setActiveCard("");
-  };
+  if (e.target?.checked) {
+    setSelectedUserIds([row.proxyId]);
+
+    setActiveEmail([{ email: row.email, roleId: row.roleId }]);
+  } else {
+    setSelectedUserIds([]);
+    setActiveEmail([]); 
+  }
+
+  setActiveCard("");
+};
   useEffect(() => {
     if (allocateModal) {
-      getUserList({ roleId: roleId, userName: selectedUserName });
+      getUserList({ roleId: roleId,  search: search, userName: selectedUserName });
     }
-  }, [roleId, selectedUserName, allocateModal]);
+  }, [roleId, selectedUserName, allocateModal, search]);
   useEffect(() => {
     setSelectedChart(selectedRowsId);
   }, [selectedRowsId]);
@@ -170,26 +192,27 @@ const ReAllocationModal = ({
         height={100}
         className={"custom-modal"}
       >
-        <div class="form-group d-flex align-items-center justify-content-between has-search">
-          <FontAwesomeIcon
-            className="fa fa-search form-control-feedback"
-            icon={faSearch}
-          />
-          <InputText
-            autoComplete="off"
-            id="search-input"
-            name="search-input"
-            type="text"
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            className=" w-50 form-control new-form-control"
-            placeholder="Search"
-            maxLength={25}
+         <div className="d-flex align-items-center justify-content-evenly mt-2">
+          <Input
             onKeyDown={(e) => {
               if (e.key === "\\") {
                 e.preventDefault();
               }
             }}
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            className={modalStyle.allocationInput}
+            placeholder="Search"
+            suffix={
+              <FontAwesomeIcon
+                className="fa fa-search form-control-feedback"
+                icon={faSearch}
+              />
+            }
+          />
+          <Select
+            className={modalStyle.allocationInput}
+            placeholder="Select Role"
           />
         </div>
         {isLoading ? (
@@ -207,15 +230,15 @@ const ReAllocationModal = ({
                 >
                   <div
                     className="d-flex justify-content-between"
-                    onClick={() => {
-                      if (activeCard === item.id) {
-                        setActiveCard("");
-                      } else {
-                        setActiveCard(item.id);
-                        setAllocateDate("");
-                        setPriority([]);
-                      }
-                    }}
+                    // onClick={() => {
+                    //   if (activeCard === item.id) {
+                    //     setActiveCard("");
+                    //   } else {
+                    //     setActiveCard(item.id);
+                    //     setAllocateDate("");
+                    //     setPriority([]);
+                    //   }
+                    // }}
                   >
                     <div className="d-flex">
                       <Avatar
@@ -236,12 +259,8 @@ const ReAllocationModal = ({
                         <p className={`${modalStyle.listName} mb-1`}>
                           {item.firstName + " " + item.lastName}
                         </p>
-                        <p className={`${modalStyle.listRole}`}>
-                          {item.role
-                            ? item.role.map((item) => (
-                                <span className="px-1">{item}</span>
-                              ))
-                            : null}
+                        <p className={` mt-2 ${modalStyle.listRole}`}>
+                          {item?.aliasName?.split("_")?.join(" ")}
                         </p>
                       </div>
                     </div>
@@ -254,7 +273,7 @@ const ReAllocationModal = ({
                         cursor: "pointer",
                       }}
                       type="checkbox"
-                      checked={selectedUserIds.includes(item.id)}
+                      checked={selectedUserIds.includes(item.proxyId)}
                       onChange={(e) =>
                         handleRowCheckboxChange({ e, row: item })
                       }
@@ -497,10 +516,8 @@ const ReAllocationModal = ({
           </div>
           <div className="d-flex justify-content-center mt-4">
             <RegularButton
-              disabled={
-              isAllocate || !(allocateDate && priority?.length)
-              }
-              name="Allocate"
+              disabled={isAllocate || !(allocateDate && priority?.length)}
+              name="ReAllocate"
               onClick={setAllocate}
               loading={isAllocate}
             />

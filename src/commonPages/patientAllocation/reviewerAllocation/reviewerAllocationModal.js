@@ -1,9 +1,8 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Avatar, DatePicker, Empty, Modal, Select } from "antd";
+import { Avatar, DatePicker, Empty, Input, Modal, Select } from "antd";
 import modalStyle from "../../../pages/tenantadmin/allocateduser/allocate/style.module.css";
-import { InputText } from "primereact/inputtext";
 import { useEffect, useState } from "react";
-import Router, { useRouter } from "next/router";
+import { useRouter } from "next/router";
 import dayjs from "dayjs";
 
 import {
@@ -15,11 +14,7 @@ import {
 
 import { actions as allActions } from "../../../stores/admin/patientAllocation";
 import { connect } from "react-redux";
-import {
-  createIdGen,
-  formatDateForIndex,
-  getResponePopup,
-} from "../../../utils/reusable";
+import { formatDateForIndex, getResponePopup } from "../../../utils/reusable";
 import styles from "../../../components/tables/table.module.css";
 import { getStorage } from "../../../utils/storages";
 import TableSkeleton from "../../../components/skeleton/table";
@@ -47,6 +42,7 @@ const AllocateModal = ({
   setIsAllocate,
   roleId,
   isAllocate,
+  roleAliasName,
 }) => {
   const router = useRouter();
   const userId = getStorage("userId");
@@ -81,6 +77,7 @@ const AllocateModal = ({
     const response = await getL1UsersList({
       roleId: roleId || "",
       search: search || "",
+       masterAudit: roleAliasName === "MASTER_AUDIT" ? true : false,
     });
     if (response?.status === "SUCCESS") {
       let result = response?.response;
@@ -89,8 +86,10 @@ const AllocateModal = ({
           firstName: item.firstName,
           lastName: item.lastName,
           id: item.id,
-          role: item.role,
+          role: item.roleId,
           email: item.userName,
+          aliasName:item.aliasName,
+          proxyId: item.proxyId,
         };
       });
       setStatusCount(response?.response);
@@ -99,23 +98,36 @@ const AllocateModal = ({
   };
   const setAllocate = async () => {
     setIsAllocate(true);
-    const response = await getAllocateUsers({
-      data: {
+    let data;
+    if (roleAliasName === "MASTER_AUDIT") {
+      data = {
         roleId: roleId,
-        userIdList: activeEmail,
+        usersWithRole: activeEmail,
         dueDate: formatDateForIndex({ date: allocateDate, index: 1 }),
         allocatedBy: userId,
         patientIdList: selectedRowsId,
         priority: priority,
-      },
-    });
-    if (response?.status == "SUCCESS") {
+        masterAudit:true
+      };
+    } else {
+      data = {
+        roleId: roleId,
+        userIdList: activeEmail.map((user) => user.username),
+        dueDate: formatDateForIndex({ date: allocateDate, index: 1 }),
+        allocatedBy: userId,
+        patientIdList: selectedRowsId,
+        priority: priority,
+      };
+    }
+
+    const response = await getAllocateUsers({ data });
+
+    if (response?.status === "SUCCESS") {
       setIsAllocate(false);
       getResponePopup(response);
       getAllAllocation();
       setOpen(false);
       setAllocateDate("");
-      setActiveCard("");
       setActiveEmail([]);
       setSearch("");
       setPriority([]);
@@ -129,81 +141,60 @@ const AllocateModal = ({
       setIsAllocate(false);
     }
   };
-  const handleUserSelect = (id, email) => {
-    if (selectedUserIds.includes(id)) {
-      setSelectedUserIds(selectedUserIds.filter((userId) => userId !== id));
-      setActiveEmail(activeEmail.filter((e) => e !== email));
-       setActiveCard("");
+
+  const handleUserSelect = (proxyId, email) => {
+    const user = userDetails.find((u) => u.proxyId === proxyId);
+    const isSelected = selectedUserIds.includes(proxyId);
+    if (isSelected) {
+      setSelectedUserIds((prev) => prev.filter((userId) => userId !== proxyId));  
+      setActiveEmail((prev) =>
+        prev.filter((u) => !(u.username === email && u.roleId === user?.role))
+      );
     } else {
-      setSelectedUserIds([...selectedUserIds, id]);
-      setActiveEmail([...activeEmail, email]);
-       setActiveCard("");
+      if (user) {
+        setSelectedUserIds((prev) => [...prev, proxyId]);
+        setActiveEmail((prev) => [
+          ...prev,
+          { username: email, roleId: user.role },
+        ]);
+      }
     }
+    setActiveCard("");
   };
 
   const handleSelectAll = () => {
-    if (selectedUserIds.length === userDetails.length) {
+    const isAllSelected = selectedUserIds.length === userDetails.length;
+    if (isAllSelected) {
       setSelectedUserIds([]);
       setActiveEmail([]);
     } else {
-      const allIds = userDetails.map((user) => user.id);
+      const allIds = userDetails.map((user) => user.proxyId);
+      const allUsers = userDetails.map((user) => ({
+        username: user.email,
+        roleId: roleId,
+      }));
       setSelectedUserIds(allIds);
-      setActiveEmail(userDetails.map((user) => user.email));
+      setActiveEmail(allUsers);
     }
   };
-
   useEffect(() => {
-    if (roleId ) {
-      getUserList({ roleId: roleId });
+    if (roleId) {
+      getUserList({
+        roleId: roleId,
+        search: search,
+        masterAudit: roleAliasName === "MASTER_AUDIT" ? true : false,
+      });
     }
-  }, [roleId]);
+  }, [roleId, search, roleAliasName]);
+
   useEffect(() => {
     setSelectedChart(selectedRowsId);
   }, [selectedRowsId]);
-
-
-
-  return (
-    <div>
-      <Modal
-        open={open}
-        onCancel={() => {
-          setOpen(false);
-          setSelectedRowsId(selectedChart);
-          setActiveCard("");
-          setActiveEmail([]);
-          setSearch("");
-          setAllocateDate(null);
-          setPriority([]);
-          setSelectedUserIds([]);
-        }}
-        title="Select User"
-        footer={false}
-        width={700}
-        height={100}
-        className={"custom-modal"}
-      >
-        <div class="form-group d-flex align-items-center justify-content-between has-search">
-          <FontAwesomeIcon
-            className="fa fa-search form-control-feedback"
-            icon={faSearch}
-          />
-          <InputText
-            autoComplete="off"
-            id="search-input"
-            name="search-input"
-            type="text"
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            className=" w-50 form-control new-form-control"
-            placeholder="Search"
-            maxLength={25}
-            onKeyDown={(e) => {
-              if (e.key === "\\") {
-                e.preventDefault();
-              }
-            }}
-          />
+  const userTitle = () => {
+    return (
+      <div className="d-flex justify-content-between">
+        <div>Select User</div>
+        <div>
           {userDetails.length > 0 ? (
             <div className="d-flex align-items-center ">
               <div className="fontWeight3 font3">Select All</div>
@@ -215,20 +206,64 @@ const AllocateModal = ({
                   borderRadius: "4px",
                   cursor: "pointer",
                 }}
-                className={`mx-4  ${styles.checkbox}${
+                className={`mx-4  ${styles.checkbox} ${
                   selectedUserIds.length === userDetails.length
                     ? styles.customChecked2
                     : ""
-                } `}
+                }`}
                 type="checkbox"
                 id="selectAll"
                 checked={selectedUserIds.length === userDetails.length}
                 onChange={handleSelectAll}
               />
             </div>
-          ) : (
-            ""
-          )}
+          ) : null}
+        </div>
+      </div>
+    );
+  };
+  console.log(userDetails,"userDetails")
+  return (
+    <div>
+      <Modal
+        open={open}
+        onCancel={() => {
+          setOpen(false);
+          setSelectedRowsId(selectedChart);
+          setActiveEmail([]);
+          setSearch("");
+          setAllocateDate(null);
+          setPriority([]);
+          setSelectedUserIds([]);
+        }}
+        title={roleAliasName === "MASTER_AUDIT" ? "Select User" : userTitle()}
+        footer={false}
+        width={700}
+        height={100}
+        className={"custom-modal"}
+      >
+        <div className="d-flex align-items-center justify-content-evenly mt-2">
+          <Input
+            onKeyDown={(e) => {
+              if (e.key === "\\") {
+                e.preventDefault();
+              }
+            }}
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            className={modalStyle.allocationInput}
+            placeholder="Search"
+            suffix={
+              <FontAwesomeIcon
+                className="fa fa-search form-control-feedback"
+                icon={faSearch}
+              />
+            }
+          />
+          <Select
+            className={modalStyle.allocationInput}
+            placeholder="Select Role"
+          />
         </div>
         {usersLoader ? (
           <TableSkeleton />
@@ -245,15 +280,15 @@ const AllocateModal = ({
                 >
                   <div
                     className="d-flex justify-content-between"
-                    onClick={() => {
-                      if (activeCard === item.id) {
-                        setActiveCard("");
-                      } else {
-                        setActiveCard(item.id);
-                        setAllocateDate("");
-                        setPriority([]);
-                      }
-                    }}
+                    // onClick={() => {
+                    //   if (activeCard === item.id) {
+                    //     setActiveCard("");
+                    //   } else {
+                    //     setActiveCard(item.id);
+                    //     setAllocateDate("");
+                    //     setPriority([]);
+                    //   }
+                    // }}
                   >
                     <div className="d-flex">
                       <Avatar
@@ -274,16 +309,12 @@ const AllocateModal = ({
                         <p className={`${modalStyle.listName} mb-1`}>
                           {item.firstName + " " + item.lastName}
                         </p>
-                        <p className={`${modalStyle.listRole}`}>
-                          {item.role
-                            ? item.role.map((item) => (
-                                <span className="px-1">{item}</span>
-                              ))
-                            : null}
+                        <p className={`mt-2 ${modalStyle.listRole}`}>
+                            {item?.aliasName?.split("_")?.join(" ")}
                         </p>
                       </div>
                     </div>
-                    <input
+                     <input
                       style={{
                         width: "20px",
                         height: "20px",
@@ -292,168 +323,18 @@ const AllocateModal = ({
                         cursor: "pointer",
                       }}
                       type="checkbox"
-                      checked={selectedUserIds.includes(item.id)}
-                      onChange={() => handleUserSelect(item.id, item.email)}
+                      checked={selectedUserIds.includes(item.proxyId)}
+                      onChange={() =>
+                        handleUserSelect(item.proxyId, item.email)
+                      }
                       className="me-2 ms-3 align-self-center"
+                      disabled={
+                        activeEmail.some(
+                          (user) => user.username === item.email
+                        ) && !selectedUserIds.includes(item.proxyId)
+                      }
                     />
                   </div>
-                  {activeCard == item.id ? (
-                    <>
-                      <div className="row px-3">
-                        <div className={`col-5 mt-3 ${modalStyle.activeRow1}`}>
-                          <span>
-                            Charts Selected:{" "}
-                            {selectedChart?.length > 0
-                              ? selectedChart?.length
-                              : 0}
-                          </span>
-                          {statusCount
-                            ?.filter((status) => status.id === item.id)
-                            ?.map((status) => (
-                              <div className="mt-3" key={status.id}>
-                                <div className="d-flex my-3">
-                                  <div>
-                                    <FontAwesomeIcon
-                                      icon={faCircle}
-                                      color="#3276CD"
-                                      style={{ fontSize: "8px" }}
-                                    />
-
-                                    <span className="p-2">Allocated</span>
-                                  </div>
-                                  <span>
-                                    {status.totalFileAllocated
-                                      ? status.totalFileAllocated
-                                      : 0}
-                                  </span>
-                                </div>
-
-                                <div className="d-flex my-3">
-                                  <div>
-                                    <FontAwesomeIcon
-                                      icon={faCircle}
-                                      color="#00BC13"
-                                      style={{ fontSize: "8px" }}
-                                    />
-                                    <span className="p-2">Completed</span>
-                                  </div>
-                                  <span>
-                                    {status.totalFileProcessed
-                                      ? status.totalFileProcessed
-                                      : 0}
-                                  </span>
-                                </div>
-
-                                <div className="d-flex my-3">
-                                  <div>
-                                    <FontAwesomeIcon
-                                      icon={faCircle}
-                                      color="#EA8715"
-                                      style={{ fontSize: "8px" }}
-                                    />
-                                    <span className="p-2">Pending</span>
-                                  </div>
-                                  <span>
-                                    {status.totalFilePending
-                                      ? status.totalFilePending
-                                      : 0}
-                                  </span>
-                                </div>
-
-                                <div className="d-flex my-3">
-                                  <div>
-                                    <FontAwesomeIcon
-                                      icon={faCircle}
-                                      color="#BCA7FB"
-                                      style={{ fontSize: "8px" }}
-                                    />
-                                    <span className="p-2">Hold</span>
-                                  </div>
-                                  <span>
-                                    {status.totalFileHold
-                                      ? status.totalFileHold
-                                      : 0}
-                                  </span>
-                                </div>
-
-                                <div className="d-flex my-3">
-                                  <div>
-                                    <FontAwesomeIcon
-                                      icon={faCircle}
-                                      color="#EB5252"
-                                      style={{ fontSize: "8px" }}
-                                    />
-                                    <span className="p-2">Declined</span>
-                                  </div>
-                                  <span>
-                                    {status.totalFileDeclined
-                                      ? status.totalFileDeclined
-                                      : 0}
-                                  </span>
-                                </div>
-                              </div>
-                            ))}
-                        </div>
-                        <div className={`col-7 ${modalStyle.activeRow1}`}>
-                          <span className={`${modalStyle.title} text-danger`}>
-                            {selectedUserName?.length +
-                              chart?.hold +
-                              chart?.pending >
-                              100 && "Maximum upto 100 charts to pending"}
-                          </span>
-                          <div className="mt-3">Selected Charts</div>
-                          <ul className={`${modalStyle.selectChart}`}>
-                            {selectedUserName?.map((item, index) => (
-                              <li
-                                className={` mt-2 ${modalStyle.listing} ${modalStyle.listings}`}
-                                key={item.id}
-                                // onClick={() => {
-                                //   let remove = selectedUserName.filter(
-                                //     (chart) => chart.patientId != item.patientId
-                                //   );
-                                //   setSelectedUserName(remove);
-                                // }}
-                              >
-                                <span>{item.patientId}</span>
-                                {/* <button
-                                  id={
-                                    id
-                                      ? createIdGen("delete " + tableId + index)
-                                      : createIdGen(
-                                          "delete " +
-                                            router.pathname.replaceAll(
-                                              "/",
-                                              " "
-                                            ) +
-                                            index
-                                        )
-                                  }
-                                  className="btn p-1"
-                                >
-                                  <Avatar
-                                    size={21}
-                                    shape="square"
-                                    style={{
-                                      backgroundColor: "#F99F9F",
-                                      color: "#F01010",
-                                    }}
-                                    icon={
-                                      <FontAwesomeIcon
-                                        className="fa fa-search"
-                                        icon={faXmark}
-                                      />
-                                    }
-                                  ></Avatar>
-                                </button> */}
-                              </li>
-                            ))}
-                          </ul>
-                        </div>
-                      </div>
-                    </>
-                  ) : (
-                    ""
-                  )}
                 </div>
               </div>
             ))}
@@ -493,7 +374,7 @@ const AllocateModal = ({
           setAllocateDate(null);
           setActiveCard("");
           setActiveEmail([]);
-          setPriority([])
+          setPriority([]);
         }}
         footer={null}
         width="35%"
@@ -550,26 +431,8 @@ const AllocateModal = ({
                   <li
                     className={`${modalStyle.listing} ${modalStyle.listings}`}
                     key={item.id}
-                    // onClick={() =>
-                    //   setSelectedUserName((prev) =>
-                    //     prev.filter(
-                    //       (chart) => chart.patientId !== item.patientId
-                    //     )
-                    //   )
-                    // }
                   >
                     <span>{item.patientId}</span>
-                    {/* <button
-                      id={createIdGen(`delete ${index}`)}
-                      className="btn p-1"
-                    >
-                      <Avatar
-                        size={21}
-                        shape="square"
-                        style={{ backgroundColor: "#F99F9F", color: "#F01010" }}
-                        icon={<FontAwesomeIcon icon={faXmark} />}
-                      />
-                    </button> */}
                   </li>
                 ))}
               </ul>

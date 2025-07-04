@@ -6,7 +6,6 @@ import ReviewerAllocationModal from "./reviewerAllocation/reviewerAllocationModa
 import { connect } from "react-redux";
 import { actions as allActions } from "../../stores/tenantAdmin/patientAllocations";
 import ReusableFilters from "../../components/reusableFilters";
-import { actions as tenantAdminUsersAction } from "../../stores/tenantAdmin/users";
 import { actions as tinActions } from "../../stores/tenantAdmin/tin";
 import RandomSamplingModal from "./reviewerAllocation/randomSamplingModal";
 import { actions as tableAction } from "../../stores/tableView";
@@ -15,7 +14,6 @@ import { findMatchesByField, getResponePopup } from "../../utils/reusable";
 import { getStorage } from "../../utils/storages";
 
 const PatientAllocation = ({
-  getAllReviewerList,
   getAllTabRoles,
   routedData,
   getTableData,
@@ -28,7 +26,6 @@ const PatientAllocation = ({
   pageLoad,
   statusBodyTemplate,
 }) => {
-
   const [activeFilters, setActiveFilters] = useState([]);
   const [sort, setSort] = useState({
     computedDate: {
@@ -64,7 +61,8 @@ const PatientAllocation = ({
   const [isAllocate, setIsAllocate] = useState(false);
   const [isFilter, setIsFilter] = useState(true);
   const [clear, setClear] = useState(false);
-  
+  const [roleAliasName, setRoleAliasName] = useState("");
+
   const disbaleAllocate = allRoles?.allocationRoles?.map(
     (item) => item.disableAllocation
   );
@@ -73,7 +71,7 @@ const PatientAllocation = ({
     setSamplingModal(true);
   };
   const handleTabChange = (key) => {
-     getTableData({ reloadTrue: true });
+    getTableData({ reloadTrue: true });
     setActiveTab(key);
     setSelectedRows([]);
     setSearchText("");
@@ -96,7 +94,6 @@ const PatientAllocation = ({
     setOpen(true);
   };
 
- 
   const getAllAllocation = async () => {
     const tin = getStorage("tinNumber");
     const response = await getTableData({
@@ -110,6 +107,7 @@ const PatientAllocation = ({
       sort,
       tin,
       search,
+      isMasterAudit: roleAliasName === "MASTER_AUDIT" ? true : false,
     });
   };
   const handleSubmit = async (data) => {
@@ -154,7 +152,9 @@ const PatientAllocation = ({
   };
 
   const getRolesList = async () => {
-    const res = await getAllTabRoles({pageId:"6cd166eb-79ac-4c12-ab0f-07be2983ca70"});
+    const res = await getAllTabRoles({
+      pageId: "6cd166eb-79ac-4c12-ab0f-07be2983ca70",
+    });
     if (res?.status === "SUCCESS") {
       setRoleId(res?.response?.allocationRoles[0]?.roleId);
     }
@@ -174,16 +174,10 @@ const PatientAllocation = ({
     setSelectedRowsId(selectedRows);
   }, [selectedRows, setSelectedRowsId]);
 
-
   useEffect(() => {
     setParamsFilter("check");
-    if (
-      window !== "undefined" &&
-      paramsFilter &&
-      roleId
-    ) {
+    if (window !== "undefined" && paramsFilter && roleId) {
       getAllAllocation();
-      // setSelectedRows([])
     }
   }, [
     selectedOption,
@@ -196,6 +190,8 @@ const PatientAllocation = ({
     search,
     roleId,
     pageLoad,
+    roleAliasName,
+    selectedRoleId,
   ]);
 
   useEffect(() => {
@@ -216,9 +212,9 @@ const PatientAllocation = ({
       setIsFilter(false);
     }
   }, [data?.response?.metaDataDTO]);
+
   return (
     <div>
-      {/* <Header /> */}
       <div className="content-body">
         <div className="container-fluid" style={{ paddingTop: "5px" }}>
           <div className="table-responsive active-projects task-table">
@@ -255,6 +251,7 @@ const PatientAllocation = ({
                                     setSelectedRowsId([]);
                                     setSelectedUserName([]);
                                     getTableData({ reloadTrue: true });
+                                    setRoleAliasName(role.aliasName);
                                   }}
                                   eventKey={index + 1}
                                 >
@@ -314,43 +311,55 @@ const PatientAllocation = ({
                                 Table Customization
                               </Button>
                             </div>
-
                             {allRoles?.allocationRoles?.find(
                               (role) => role.roleId === selectedRoleId
-                            )?.roleName === "QA" && (
+                            )?.aliasName === "QA" && (
                               <div
                                 id="random-btn"
                                 name="random-btn"
                                 className="d-flex justify-content-center align-items-center   mt-4"
                               >
-                                <Tooltip
-                                  title={
-                                    selectedRowsId?.length === 0
-                                      ? "Select patients to Random Sampling"
-                                      : ""
+                                <Button
+                                  data-testid="random-sampling"
+                                  name="random-sampling"
+                                  onClick={() => setIsModalOpen(true)}
+                                  className="tableButton"
+                                  disabled={
+                                    !selectedRows?.length == 0 ||
+                                    allRoles?.randomSamplingCompleted ||
+                                    data?.response?.pageResponse?.content
+                                      ?.length === 0
                                   }
                                 >
-                                  <Button
-                                    data-testid="random-sampling"
-                                    name="random-sampling"
-                                    onClick={showModal}
-                                    className="tableButton"
-                                    disabled={
-                                      !selectedRows?.length == 0 ||
-                                      allRoles?.randomSamplingCompleted
-                                    }
-                                  >
-                                    Random Sampling
-                                  </Button>
-                                </Tooltip>
+                                  Random Sampling
+                                </Button>
+                              </div>
+                            )}
+                            {roleAliasName === "MASTER_AUDIT" && (
+                              <div
+                                id="random-btn"
+                                name="random-btn"
+                                className="d-flex justify-content-center align-items-center   mt-4"
+                              >
+                                <Button
+                                  data-testid="random-sampling"
+                                  name="random-sampling"
+                                  onClick={() => setIsModalOpen(true)}
+                                  className="tableButton"
+                                  disabled={
+                                    selectedRows?.length != 0 ||
+                                    data?.response?.pageResponse?.content
+                                      ?.length === 0 ||
+                                    allRoles?.masterAuditSamplingCompleted
+                                  }
+                                >
+                                  Master Audit Sampling
+                                </Button>
                               </div>
                             )}
                           </div>
                         </div>
                       )}
-                      {/* {tableLoader ? (
-                        <CardSkeleton />
-                      ) : ( */}
                       <div className={` d-flex gap-3 mt-4`}>
                         <ReusableFilters
                           showFilter={true}
@@ -413,6 +422,7 @@ const PatientAllocation = ({
                             searchText={searchText}
                             selectedOption={selectedOption}
                             selectedDateRanges={selectedDateRanges}
+                            roleAliasName={roleAliasName}
                           />
                         </Tab.Pane>
                       </Tab.Content>
@@ -426,7 +436,6 @@ const PatientAllocation = ({
       </div>
 
       <ReviewerAllocationModal
-        getAllReviewerList={getAllReviewerList}
         open={allocateModal}
         setOpen={setAllocateModal}
         setSelectedChart={setSelectedChart}
@@ -443,6 +452,7 @@ const PatientAllocation = ({
         roleId={roleId}
         isAllocate={isAllocate}
         setIsAllocate={setIsAllocate}
+        roleAliasName={roleAliasName}
       />
       <RandomSamplingModal
         activeTab={activeTab}
@@ -459,6 +469,8 @@ const PatientAllocation = ({
         roleId={roleId}
         isAllocate={isAllocate}
         setIsAllocate={setIsAllocate}
+        showModal={showModal}
+        roleAliasName={roleAliasName}
       />
     </div>
   );
@@ -466,13 +478,7 @@ const PatientAllocation = ({
 
 const connector = connect(
   (state) => ({
-    organizationList: state?.tenantAdmin?.users?.allOrganization?.data,
-    reviewersData:
-      state.tenantAdmin?.patientsAllocation?.reviewersList?.data?.response
-        ?.patientDtoList,
     loader: state.tenantAdmin?.patientsAllocation?.loader,
-    reviewerList:
-      state.tenantAdmin?.patientsAllocation?.filterOptions?.data?.response,
     routedData: state.tenantAdmin?.tin?.allocationRoutedData,
     data: state?.tableView?.tableView?.data,
     allRoles: state?.tenantAdmin?.patientsAllocation?.getRoles?.data?.response,
@@ -481,11 +487,6 @@ const connector = connect(
     pageLoad: state?.tenantAdmin?.tin?.getPageRendering,
   }),
   {
-    getAllOrganizationList: tenantAdminUsersAction?.getAllOrganizationAction,
-    getAllReviewerList: allActions.getAllReviewerList,
-    getAllCheckedReviewers: allActions.getAllCheckedListForReviewer,
-    allocationList: allActions.getAllAllocationList,
-    getReviewerList: allActions.getFilterOptions,
     getRoutedData: tinActions.getAllocationRoutedData,
     getTableData: tableAction.tableViewAction,
     getAllTabRoles: allActions.getAllRoles,

@@ -25,7 +25,7 @@ const ReAllocationTable = ({
   selectedDateRanges,
   searchText,
   selectedOption,
-  selectedRowsId,
+  roleAliasName,
 }) => {
   const currentPageIds =
     data?.response?.pageResponse?.content?.map((item) => item.id) || [];
@@ -50,12 +50,14 @@ const ReAllocationTable = ({
           searchText,
           selectedOption,
           selectedDateRanges,
+          isMasterAudit:roleAliasName === "MASTER_AUDIT" ? true : false,
         });
 
         if (response?.status === "SUCCESS") {
           const result = response?.response?.patientIds?.map((patient) => ({
             patientId: patient.patientId,
-            userName: patient.userName,
+            username: patient.userName,
+            roleId :patient.roleId
           }));
           setSelectedRows(result.map((patient) => patient.patientId));
           setSelectedRowsId(result);
@@ -72,13 +74,14 @@ const ReAllocationTable = ({
     } else {
       setSelectedUserName((prev) => {
         const patientId = row?.patientId;
-        const userName = row?.currentStatus?.allocatedTo;
+        const username = row?.currentStatus?.allocatedTo;
+        const roleId = row?.currentStatus?.roleId
 
         if (e.target.checked) {
           const updatedSelection = prev.some(
             (item) => item.patientId === patientId
           );
-          return updatedSelection ? prev : [...prev, { patientId, userName }];
+          return updatedSelection ? prev : [...prev, { patientId, username , roleId }];
         } else {
           return prev.filter((item) => item.patientId !== patientId);
         }

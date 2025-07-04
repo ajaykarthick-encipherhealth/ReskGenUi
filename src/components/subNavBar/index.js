@@ -57,7 +57,8 @@ const SubNavBar = ({ handleBack, hideBackArrow, pageLoad ,tableLoader}) => {
           data-testid={createIdGen(`${role} tin backicon`)}
           id={createIdGen(`${role} tin backicon`)}
         >
-          <FontAwesomeIcon icon={faArrowLeft} />
+          <div className={styles.filterBtn}>
+          <FontAwesomeIcon icon={faArrowLeft} /></div>
         </div>
       )}
 
@@ -96,9 +97,6 @@ const SubNavBar = ({ handleBack, hideBackArrow, pageLoad ,tableLoader}) => {
                       </div>
                      
                     </Tooltip>
-                    {/* <span className={styles.count}>
-                      {row[field.actualField] || "--"}
-                    </span> */}
                     {field.headerName === "Tin Name" &&
                       row[field.actualField] && (
                         <FontAwesomeIcon

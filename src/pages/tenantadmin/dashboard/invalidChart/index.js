@@ -117,7 +117,7 @@ const InvalidChart = ({
             selectedOption: {
               flag: selectedFlag ? selectedFlag.value : "",
             },
-            activeFilters: commonFilterItems.map((item) =>
+            activeFilters: commonFilterItems?.map((item) =>
               item.title === "computedDate" ||
               item?.title === "flag" ||
               item?.title === "Search"

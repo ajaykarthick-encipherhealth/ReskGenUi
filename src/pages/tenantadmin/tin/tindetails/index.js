@@ -15,23 +15,31 @@ import visitStyles from "../../../../styles/visitdata.module.css";
 import { Spin } from "antd";
 import { LoadingOutlined } from "@ant-design/icons";
 import { actions as allPatientSyncAction } from "../../../../stores/tenantAdmin/patientSync";
-import {actions as tableAction} from '../../../../stores/tableView'
-import Reallocation from '../../../../commonPages/reallocation'
+import { actions as tableAction } from "../../../../stores/tableView";
+import Reallocation from "../../../../commonPages/reallocation";
+import CodersTable from "../../../../commonPages/codersTable";
+import { getStorage } from  '../../../../utils/storages'
 
-const TinDetails = ({ activeTabName,getTableData, getProjectActiveTab,getRoutedData,getRoutedDatAllocation }) => {
+const TinDetails = ({
+  activeTabName,
+  getTableData,
+  getProjectActiveTab,
+  getRoutedData,
+  getRoutedDatAllocation,
+}) => {
   const router = useRouter();
 
   const tabs = getAccessTabItems({ page: "Tin", tabsMenu: "tabMenuList2" });
-  console.log(tabs,"tabs")
+   const userId = getStorage("userId")
   const { tab } = router.query;
   const activeTab = tab || activeTabName?.tinDetailsTab;
   const [parsedData, setParsedData] = useState([]);
 
   const handleTabs = (name) => {
-    getRoutedData(null)
+    getRoutedData(null);
     getRoutedDatAllocation(null);
     getProjectActiveTab({ tinDetailsTab: name });
-     getTableData({ reloadTrue: true });
+    getTableData({ reloadTrue: true });
     router.replace({
       pathname: router.pathname,
       query: { ...router.query, tab: name },
@@ -111,7 +119,7 @@ const TinDetails = ({ activeTabName,getTableData, getProjectActiveTab,getRoutedD
 
   return (
     <div className={`show `}>
-      <div className=" mt-2" >
+      <div className=" mt-2">
         <SubNavBar hideBackArrow={true} handleBack={handleBack} />
       </div>
       <div className={visitStyles.tab}>
@@ -142,8 +150,21 @@ const TinDetails = ({ activeTabName,getTableData, getProjectActiveTab,getRoutedD
         {activeTab === "Query Approval" && (
           <QueryApproval statusBodyTemplate={processstatusBodyTemplate} />
         )}
-         {activeTab === "ReAllocation" && (
+        {activeTab === "ReAllocation" && (
           <Reallocation statusBodyTemplate={processstatusBodyTemplate} />
+        )}
+        {activeTab === "Master Audit" && (
+          <div>
+            <CodersTable
+              patientAllocated={userId}
+              pageId={"da4958c3-7795-4bcc-8ab0-24d93cd52c25"}
+              isReAssigned={false}
+              isQueried={false}
+              route="/tenantadmin/tin/tindetails/masteraudit"
+              tin
+              backRoute="/tenantadmin/tin/tindetails?tab=Master+Audit"
+            />
+          </div>
         )}
       </div>
     </div>
@@ -158,8 +179,8 @@ const enhancer = connect(
   },
   {
     getProjectActiveTab: tinActions.getProjectActiveTab,
-    getRoutedData: allPatientSyncAction.getRoutedData,   
-    getRoutedDatAllocation: tinActions.getAllocationRoutedData, 
+    getRoutedData: allPatientSyncAction.getRoutedData,
+    getRoutedDatAllocation: tinActions.getAllocationRoutedData,
     getTableData: tableAction.tableViewAction,
   }
 );

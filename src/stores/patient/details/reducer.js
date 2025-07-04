@@ -49,7 +49,8 @@ import {
   getProviderList,
   getDosExist,
   timeLineList,
-  actionList
+  actionList,
+  getCredentialList
 } from "./actions";
 
 
@@ -180,9 +181,10 @@ const patientDetailsReducer = combineReducers({
   getQueryLoader: getPatientsLoading(getQuery),
   reEvaluate: createReducer(updateReEvaluate),
   providerList: createReducer(getProviderList),
-  timeLineList:getPatientsLoading(timeLineList),
-  timeLineData:createReducer(timeLineList),
-  actionList:createReducer(actionList),
+  credentialList: createReducer(getCredentialList),
+  timeLineList: getPatientsLoading(timeLineList),
+  timeLineData: createReducer(timeLineList),
+  actionList: createReducer(actionList),
 });
 
 export default patientDetailsReducer;

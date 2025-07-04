@@ -25,6 +25,7 @@ const ReviewerAllocation = ({
   selectedDateRanges,
   searchText,
   selectedOption,
+  roleAliasName
 }) => {
   const currentPageIds =
     data?.response?.pageResponse?.content?.map((item) => item.id) || [];
@@ -49,6 +50,7 @@ const ReviewerAllocation = ({
           searchText,
           selectedOption,
           selectedDateRanges,
+          isMasterAudit:roleAliasName === "MASTER_AUDIT" ? true :false
         });
 
         if (response?.status === "SUCCESS") {

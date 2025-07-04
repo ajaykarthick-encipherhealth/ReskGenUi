@@ -254,7 +254,7 @@ const StatusAction = ({
         )}
         {result?.workflow?.[0]?.status != "QUERIED" ? (
           <Menu.Item key="7">
-            {["CODER_1", "CODER_2", "QA"].includes(proxyRole) && (
+            {["CODER_1", "CODER_2", "QA" , "OWNER", "QA_LEAD"].includes(proxyRole) && (
               <Button
                 disabled={isQueried}
                 onClick={() => {

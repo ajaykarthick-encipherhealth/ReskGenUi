@@ -59,6 +59,7 @@ const ReAllocation = ({
   const [isAllocate, setIsAllocate] = useState(false);
   const [isFilter, setIsFilter] = useState(true);
   const [clear, setClear] = useState(false);
+  const [roleAliasName, setRoleAliasName] = useState("");
 
   const handleTabChange = (key) => {
     getTableData({ reloadTrue: true });
@@ -98,6 +99,7 @@ const ReAllocation = ({
       tin,
       search,
       isAdmin:true,
+      isMasterAudit: roleAliasName === "MASTER_AUDIT" ? true : false,
     });
   };
   const handleSubmit = async (data) => {
@@ -183,6 +185,7 @@ const ReAllocation = ({
     search,
     roleId,
     pageLoad,
+    roleAliasName
   ]);
 
   useEffect(() => {
@@ -240,7 +243,8 @@ const ReAllocation = ({
                                     setSelectedRows([]);
                                     setSelectedRowsId([]);
                                     setSelectedUserName([]);
-                                     getTableData({ reloadTrue: true });
+                                    getTableData({ reloadTrue: true });
+                                    setRoleAliasName(role.aliasName);
                                   }}
                                   eventKey={index + 1}
                                 >
@@ -354,6 +358,7 @@ const ReAllocation = ({
                             searchText={searchText}
                             selectedOption={selectedOption}
                             selectedDateRanges={selectedDateRanges}
+                            roleAliasName={roleAliasName}
                           />
                         </Tab.Pane>
                       </Tab.Content>
@@ -384,6 +389,7 @@ const ReAllocation = ({
         isAllocate={isAllocate}
         setIsAllocate={setIsAllocate}
         allocateModal={allocateModal}
+        roleAliasName={roleAliasName}
       />
     </div>
   );

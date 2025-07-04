@@ -28,6 +28,10 @@ export async function getTableView({
   reloadTrue,
   search,
   tincompleted,
+  qaLead,
+  projectLead,
+  isMasterAudit,
+  router,
 }) {
   if (!reloadTrue) {
     const options = { method: "GET" };
@@ -53,13 +57,10 @@ export async function getTableView({
 
     const role = getStorage("proxyRole");
 
-    let baseUrl = `dbservice/table/view?pageId=${pageId}&page=${pageNo}&size=${
-      pageSize || 15
-    }&${statusKey}=${activeStatus || ""}&roleId=${roleId || ""}&aliasName=${
-      selectedRole || ""
-    }&queryStatus=${queryStatus || ""}&isAdmin=${isAdmin || ""}&sortDirection=${
-      sort?.sortDir ? sort?.sortDir : ""
-    }&sortField=${sort?.sortField ? sort?.sortField : ""}`;
+    let baseUrl = `dbservice/table/view?pageId=${pageId}&page=${pageNo}&size=${pageSize || 15
+      }&${statusKey}=${activeStatus || ""}&roleId=${roleId || ""}&aliasName=${selectedRole || ""
+      }&queryStatus=${queryStatus || ""}&isAdmin=${isAdmin || ""}&sortDirection=${sort?.sortDir ? sort?.sortDir : ""
+      }&sortField=${sort?.sortField ? sort?.sortField : ""}`;
 
     const allowedPageIds = [
       "e76aaa6c-319e-44d3-b7ae-aadb17dfb664",
@@ -70,17 +71,34 @@ export async function getTableView({
       "8e4f1d2a-7b3c-45e6-9f1d-2a7b3c45e6f1",
       "1406dafa-46fa-4f69-ac1b-e354ebc03dad",
     ];
+    const masterAuditpageIds = [
+      "6cd166eb-79ac-4c12-ab0f-07be2983ca70",
+      "21235203-2ce0-4ebc-b6d3-05a9d8e8fc75",]
+    if (masterAuditpageIds.includes(pageId)) {
+      baseUrl += `&isMasterAudit=${isMasterAudit || false}`;
+    }
 
     if (allowedPageIds.includes(pageId)) {
-      baseUrl += `&isReAssigned=${isReAssigned || false}&isQueried=${
-        isQueried || false
-      }`;
+      baseUrl += `&isReAssigned=${isReAssigned || false}&isQueried=${isQueried || false
+        }`;
     }
 
     if (clientBasesPageIds.includes(pageId)) {
       baseUrl += `&cilentBased=${cilentBased || false}`;
     }
-    if (role !== "TENANT_ADMIN" && role !== "OWNER" && role !== "DOWNLOADER") {
+    //     if (role !== "TENANT_ADMIN" && role !== "OWNER" && role !== "DOWNLOADER") {
+    //    baseUrl += `&patientAllocated=${patientAllocated || ""}`;
+    //  }
+    const allowedPageIdsForOwner = [
+      "da4958c3-7795-4bcc-8ab0-24d93cd52c25",
+      "a9d5c555-7954-4382-a2ef-3f66b292cf8f",
+      "e76aaa6c-319e-44d3-b7ae-aadb17dfb664",
+    ];
+
+    if (
+      (role !== "TENANT_ADMIN" && role !== "OWNER" && role !== "DOWNLOADER") ||
+      (role === "OWNER" && allowedPageIdsForOwner.includes(pageId))
+    ) {
       baseUrl += `&patientAllocated=${patientAllocated || ""}`;
     }
     const tinPageIds = [
@@ -89,30 +107,46 @@ export async function getTableView({
       "937b0477-f0cd-46e7-b8ab-fefb38f91859",
       "8c1eebaf-eb20-4758-b968-6ae15e6fc031",
       "2d7cb7f7-6dad-41fb-970b-d805fb3f195f",
-      "21235203-2ce0-4ebc-b6d3-05a9d8e8fc75"
+      "21235203-2ce0-4ebc-b6d3-05a9d8e8fc75",
     ];
 
     if (tinPageIds.includes(pageId)) {
       baseUrl += `&tin=${tin || ""}&
 allTinIds=${allTinIds || false}`;
     }
-    const reportIds = [
-"51ccafdf-f18e-4100-8811-63236a79a441"
-    ];
+
+    const reportIds = ["51ccafdf-f18e-4100-8811-63236a79a441"];
     if (reportIds.includes(pageId)) {
       baseUrl += `&tincompleted=${tincompleted || ""}`;
     }
+
     const qaCodersPageIds = [
       "da4958c3-7795-4bcc-8ab0-24d93cd52c25",
       "a9d5c555-7954-4382-a2ef-3f66b292cf8f",
       "e76aaa6c-319e-44d3-b7ae-aadb17dfb664",
     ];
+    const usersPageIds = ["8e4f1d2a-7b3c-45e6-9f1d-2a7b3c45e6f1"];
     if (role === "QA" && qaCodersPageIds.includes(pageId)) {
       baseUrl += `&tin=${tin || ""}&allTinIds=${allTinIds || false}`;
     }
-    const finalUrl = `${baseUrl}${searchTextParams || ""}${selectParams || ""}${
-      dateRagngesParams || ""
-    }${searchIntParams || ""}`;
+    if (role === "QA_LEAD" && usersPageIds.includes(pageId)) {
+      baseUrl += `&qaLead=${qaLead || false}`;
+    }
+    if (role === "PROJECT_LEAD" && usersPageIds.includes(pageId)) {
+      baseUrl += `&projectLead=${projectLead || false}`;
+    }
+
+    const masterPageIds = ["da4958c3-7795-4bcc-8ab0-24d93cd52c25"];
+
+    if (
+      router?.pathname?.endsWith("/tindetails") &&
+      masterPageIds.includes(pageId)
+    ) {
+      baseUrl += `&tin=${tin || ""}&allTinIds=${allTinIds || false
+        }&isMasterAudit=true`;
+    }
+    const finalUrl = `${baseUrl}${searchTextParams || ""}${selectParams || ""}${dateRagngesParams || ""
+      }${searchIntParams || ""}`;
 
     const data = await requestPortal(finalUrl, options);
     return data;
@@ -144,94 +178,113 @@ export async function getStatusTableView({
   reloadTrue,
   search,
   tincompleted,
+  router,
 }) {
- if (!reloadTrue) {
-   const options = { method: "GET" };
-   let searchTextParams = null;
-   let selectParams = null;
-   let dateRagngesParams = null;
-   let searchIntParams = null;
-   if (searchText) {
-     searchTextParams = convertToCustomParams(searchText);
-   }
-   if (search) {
-     searchIntParams = convertToCustomParams(search);
-   }
-   if (selectedOption) {
-     selectParams = convertToCustomParams(selectedOption);
-   }
-   if (selectedDateRanges) {
-     dateRagngesParams = convertToCustomParamsDatePicker(selectedDateRanges);
-   }
+  if (!reloadTrue) {
+    const options = { method: "GET" };
+    let searchTextParams = null;
+    let selectParams = null;
+    let dateRagngesParams = null;
+    let searchIntParams = null;
+    if (searchText) {
+      searchTextParams = convertToCustomParams(searchText);
+    }
+    if (search) {
+      searchIntParams = convertToCustomParams(search);
+    }
+    if (selectedOption) {
+      selectParams = convertToCustomParams(selectedOption);
+    }
+    if (selectedDateRanges) {
+      dateRagngesParams = convertToCustomParamsDatePicker(selectedDateRanges);
+    }
 
-   const statusKey = isQueried ? "approvalStatus" : "processedStatus";
-   const uId = getStorage("userId");
+    const statusKey = isQueried ? "approvalStatus" : "processedStatus";
+    const uId = getStorage("userId");
 
-   const role = getStorage("proxyRole");
+    const role = getStorage("proxyRole");
 
-   let baseUrl = `dbservice/table/view?pageId=${pageId}&page=${pageNo}&size=${
-     pageSize || 15
-   }&${statusKey}=${activeStatus || ""}&roleId=${roleId || ""}&aliasName=${
-     selectedRole || ""
-   }&queryStatus=${queryStatus || ""}&isAdmin=${isAdmin || ""}&sortDirection=${
-     sort?.sortDir ? sort?.sortDir : ""
-   }&sortField=${sort?.sortField ? sort?.sortField : ""}`;
+    let baseUrl = `dbservice/table/view?pageId=${pageId}&page=${pageNo}&size=${pageSize || 15
+      }&${statusKey}=${activeStatus || ""}&roleId=${roleId || ""}&aliasName=${selectedRole || ""
+      }&queryStatus=${queryStatus || ""}&isAdmin=${isAdmin || ""}&sortDirection=${sort?.sortDir ? sort?.sortDir : ""
+      }&sortField=${sort?.sortField ? sort?.sortField : ""}`;
 
-   const allowedPageIds = [
-     "e76aaa6c-319e-44d3-b7ae-aadb17dfb664",
-     "a9d5c555-7954-4382-a2ef-3f66b292cf8f",
-     "da4958c3-7795-4bcc-8ab0-24d93cd52c25",
-   ];
-   const clientBasesPageIds = [
-     "8e4f1d2a-7b3c-45e6-9f1d-2a7b3c45e6f1",
-     "1406dafa-46fa-4f69-ac1b-e354ebc03dad",
-   ];
+    const allowedPageIds = [
+      "e76aaa6c-319e-44d3-b7ae-aadb17dfb664",
+      "a9d5c555-7954-4382-a2ef-3f66b292cf8f",
+      "da4958c3-7795-4bcc-8ab0-24d93cd52c25",
+    ];
+    const clientBasesPageIds = [
+      "8e4f1d2a-7b3c-45e6-9f1d-2a7b3c45e6f1",
+      "1406dafa-46fa-4f69-ac1b-e354ebc03dad",
+    ];
 
-   if (allowedPageIds.includes(pageId)) {
-     baseUrl += `&isReAssigned=${isReAssigned || false}&isQueried=${
-       isQueried || false
-     }`;
-   }
+    if (allowedPageIds.includes(pageId)) {
+      baseUrl += `&isReAssigned=${isReAssigned || false}&isQueried=${isQueried || false
+        }`;
+    }
 
-   if (clientBasesPageIds.includes(pageId)) {
-     baseUrl += `&cilentBased=${cilentBased || false}`;
-   }
-   if (role !== "TENANT_ADMIN" && role !== "OWNER" && role !== "DOWNLOADER") {
-     baseUrl += `&patientAllocated=${patientAllocated || ""}`;
-   }
-   const tinPageIds = [
-     "d80f80fd-aab8-496e-a9fc-89677d5ac174",
-     "6cd166eb-79ac-4c12-ab0f-07be2983ca70",
-     "937b0477-f0cd-46e7-b8ab-fefb38f91859",
-     "8c1eebaf-eb20-4758-b968-6ae15e6fc031",
-     "2d7cb7f7-6dad-41fb-970b-d805fb3f195f",
-   ];
+    if (clientBasesPageIds.includes(pageId)) {
+      baseUrl += `&cilentBased=${cilentBased || false}`;
+    }
+    // if (role !== "TENANT_ADMIN" && role !== "DOWNLOADER") {
+    //   baseUrl += `&patientAllocated=${patientAllocated || ""}`;
+    // }
+    const allowedPageIdsForOwner = [
+      "da4958c3-7795-4bcc-8ab0-24d93cd52c25",
+      "a9d5c555-7954-4382-a2ef-3f66b292cf8f",
+      "e76aaa6c-319e-44d3-b7ae-aadb17dfb664",
+    ];
 
-   if (tinPageIds.includes(pageId)) {
-     baseUrl += `&tin=${tin || ""}&
+    if (
+      (role !== "TENANT_ADMIN" && role !== "OWNER" && role !== "DOWNLOADER") ||
+      (role === "OWNER" && allowedPageIdsForOwner.includes(pageId))
+    ) {
+      baseUrl += `&patientAllocated=${patientAllocated || ""}`;
+    }
+
+    const tinPageIds = [
+      "d80f80fd-aab8-496e-a9fc-89677d5ac174",
+      "6cd166eb-79ac-4c12-ab0f-07be2983ca70",
+      "937b0477-f0cd-46e7-b8ab-fefb38f91859",
+      "8c1eebaf-eb20-4758-b968-6ae15e6fc031",
+      "2d7cb7f7-6dad-41fb-970b-d805fb3f195f",
+    ];
+
+    if (tinPageIds.includes(pageId)) {
+      baseUrl += `&tin=${tin || ""}&
 allTinIds=${allTinIds || false}`;
-   }
-   const reportIds = ["51ccafdf-f18e-4100-8811-63236a79a441"];
-   if (reportIds.includes(pageId)) {
-     baseUrl += `&tincompleted=${tincompleted || ""}`;
-   }
-   const qaCodersPageIds = [
-     "da4958c3-7795-4bcc-8ab0-24d93cd52c25",
-     "a9d5c555-7954-4382-a2ef-3f66b292cf8f",
-     "e76aaa6c-319e-44d3-b7ae-aadb17dfb664",
-   ];
-   if (role === "QA" && qaCodersPageIds.includes(pageId)) {
-     baseUrl += `&tin=${tin || ""}&allTinIds=${allTinIds || false}`;
-   }
-   const finalUrl = `${baseUrl}${searchTextParams || ""}${selectParams || ""}${
-     dateRagngesParams || ""
-   }${searchIntParams || ""}`;
+    }
+    const reportIds = ["51ccafdf-f18e-4100-8811-63236a79a441"];
+    if (reportIds.includes(pageId)) {
+      baseUrl += `&tincompleted=${tincompleted || ""}`;
+    }
+    const qaCodersPageIds = [
+      "da4958c3-7795-4bcc-8ab0-24d93cd52c25",
+      "a9d5c555-7954-4382-a2ef-3f66b292cf8f",
+      "e76aaa6c-319e-44d3-b7ae-aadb17dfb664",
+    ];
+    if (role === "QA" && qaCodersPageIds.includes(pageId)) {
+      baseUrl += `&tin=${tin || ""}&allTinIds=${allTinIds || false}`;
+    }
+    const masterPageIds = ["da4958c3-7795-4bcc-8ab0-24d93cd52c25"];
 
-   const data = await requestPortal(finalUrl, options);
-   return data;
- } else {
-   return null;
- }
+    if (
+      router?.pathname?.endsWith("/tindetails") &&
+      masterPageIds.includes(pageId)
+    ) {
+      baseUrl += `&tin=${tin || ""}&allTinIds=${allTinIds || false
+        }&isMasterAudit=true`;
+    }
+
+    const finalUrl = `${baseUrl}${searchTextParams || ""}${selectParams || ""}${dateRagngesParams || ""
+      }${searchIntParams || ""}`;
+
+    const data = await requestPortal(finalUrl, options);
+    return data;
+  } else {
+    return null;
+  }
 }
 
 export async function dynamicColumn({ payload }) {
@@ -286,6 +339,7 @@ export async function getTableViewChecked({
   selectedOption,
   selectedDateRanges,
   reloadTrue,
+  isMasterAudit,
 }) {
   if (!reloadTrue) {
     const options = {
@@ -308,14 +362,13 @@ export async function getTableViewChecked({
     if (selectedDateRanges) {
       dateRagngesParams = convertToCustomParamsDatePicker(selectedDateRanges);
     }
-    let baseUrl = `dbservice/table/view?pageId=${pageId}&page=${pageNo}&size=${pageSize}&status=${
-      activeStatus ? activeStatus : ""
-    }&roleId=${roleId ? roleId : ""}&aliasName=${
-      selectedRole ? selectedRole : ""
-    }&allPatientIds=${allPatientIds ? allPatientIds : ""}&tin=${tin || ""}`;
-    const finalUrl = `${baseUrl}${searchTextParams || ""}${selectParams || ""}${
-      dateRagngesParams || ""
-    }${searchIntParams || ""}`;
+
+    let baseUrl = `dbservice/table/view?pageId=${pageId}&page=${pageNo}&size=${pageSize}&status=${activeStatus ? activeStatus : ""
+      }&roleId=${roleId ? roleId : ""}&aliasName=${selectedRole ? selectedRole : ""
+      }&allPatientIds=${allPatientIds ? allPatientIds : ""}&tin=${tin || ""
+      }&isMasterAudit=${isMasterAudit || false}`;
+    const finalUrl = `${baseUrl}${searchTextParams || ""}${selectParams || ""}${dateRagngesParams || ""
+      }${searchIntParams || ""}`;
     const data = await requestPortal(finalUrl, options);
     return data;
   } else {
@@ -351,14 +404,11 @@ export async function getTinViewChecked({
       dateRagngesParams = convertToCustomParamsDatePicker(selectedDateRanges);
     }
 
-    let baseUrl = `dbservice/table/view?pageId=${pageId}&page=${pageNo}&size=${pageSize}&status=${
-      activeStatus ? activeStatus : ""
-    }&roleId=${roleId ? roleId : ""}&aliasName=${
-      selectedRole ? selectedRole : ""
-    }&allTinIds=${allTinIds ? allTinIds : ""}`;
-    const finalUrl = `${baseUrl}${searchTextParams || ""}${selectParams || ""}${
-      dateRagngesParams || ""
-    }`;
+    let baseUrl = `dbservice/table/view?pageId=${pageId}&page=${pageNo}&size=${pageSize}&status=${activeStatus ? activeStatus : ""
+      }&roleId=${roleId ? roleId : ""}&aliasName=${selectedRole ? selectedRole : ""
+      }&allTinIds=${allTinIds ? allTinIds : ""}`;
+    const finalUrl = `${baseUrl}${searchTextParams || ""}${selectParams || ""}${dateRagngesParams || ""
+      }`;
     const data = await requestPortal(finalUrl, options);
     return data;
   } else {
@@ -366,7 +416,7 @@ export async function getTinViewChecked({
   }
 }
 
-export async function getTinCount({}) {
+export async function getTinCount({ }) {
   const options = {
     method: "GET",
   };
@@ -374,6 +424,3 @@ export async function getTinCount({}) {
   const data = await requestPortal(`dbservice/tin/get-tin-counts`, options);
   return data;
 }
-
-
-

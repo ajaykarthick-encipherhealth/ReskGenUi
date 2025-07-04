@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
 import { useRouter } from "next/router";
 import "react-facebook-loading/dist/react-facebook-loading.css";
-import { notification } from "antd";
+import { Button, notification, Tooltip } from "antd";
 import { actions as tenantAdminAction } from "../../stores/tenantAdmin/patients";
 import { actions as tableAction } from "../../stores/tableView";
 import { getStorage, setStorage } from "../../utils/storages";
@@ -53,6 +53,7 @@ const CodersTable = ({
   roleId,
 }) => {
   const router = useRouter();
+  const masterAuditRouter = router.pathname === "/tenantadmin/tin/tindetails";
   const proxyRole = getStorage("proxyRole");
   const tin = getStorage("tinNumber");
   const [proxy, setProxy] = useState(null);
@@ -139,6 +140,7 @@ const CodersTable = ({
       patientAllocated,
       tin,
       roleId,
+      router,
     });
   };
 
@@ -243,6 +245,7 @@ const CodersTable = ({
         patientAllocated,
         tin,
         roleId,
+        router,
       });
       getCodersApi();
     }
@@ -275,151 +278,154 @@ const CodersTable = ({
   useEffect(() => {
     setProxy(proxyRole);
   }, [proxy]);
+
+
   return (
     <div className={`show `}>
-      {/* <Header /> */}
       {proxy === "QA" ? (
         <div>
           <SubNavBar hideBackArrow={false} />
         </div>
       ) : (
         ""
-      )}
-
-      <div className="content-body">
-        <div className="container-fluid table-responsive active-projects task-table">
-          <div className="d-flex p-3">
-            <div style={{ width: "100%" }}>
-              <ReusableFilters
-                showFilter={true}
-                setActiveFilters={setActiveFilters}
-                setSearchText={setSearchText}
-                searchText={searchText}
-                setSelectedOption={setSelectedOption}
-                selectedOption={selectedOption}
-                setSelectedDateRanges={setSelectedDateRanges}
-                selectedDateRanges={selectedDateRanges}
-                setPageNumber={setPageNumber}
-                FilterItems={activeFilters}
-                selectedDates={selectedDates}
-                setSelectedDates={setSelectedDates}
-                activeFilters={activeFilters}
-                setClear={setClear}
-                clear={clear}
-                setPageNo={setPageNo}
-                //customize table
-                open={open}
-                onClose={onClose}
-                selectedColumns={test}
-                setSelectedColumns={setTest}
-                showCustomizeTable={true}
-                showDrawer={showDrawer}
-                handleSubmit={handleSubmit}
-                handleReset={handleReset}
-                isSubmitting={isSubmitting}
-                isResetting={isResetting}
-                tableLoader={tableLoader}
-              />
-            </div>
-          </div>
-          {/* )} */}
-          <div className="profile-tab  mt-3">
-            {pageId === "a9d5c555-7954-4382-a2ef-3f66b292cf8f" ? (
-              <div className="custom-tab-1">
-                <Tab.Container
-                  defaultActiveKey={
-                    routedData?.activeStatus
-                      ? routedData?.activeStatus
-                      : "PENDING"
-                  }
-                >
-                  <Nav as="ul" className="nav nav-tabs">
-                    <Nav.Item
-                      as="li"
-                      className="nav-item"
-                      onClick={() => {
-                        handleTabs("PENDING");
-                      }}
-                    >
-                      <Nav.Link
-                        id="pending"
-                        name="pending"
-                        to="#my-posts"
-                        eventKey="PENDING"
-                      >
-                        PENDING -{" "}
-                        {tableStatus?.mciPatientCountDTO?.pendingCount || 0}{" "}
-                      </Nav.Link>
-                    </Nav.Item>
-                    <Nav.Item
-                      as="li"
-                      className="nav-item"
-                      onClick={() => {
-                        handleTabs("APPROVED");
-                      }}
-                    >
-                      <Nav.Link
-                        id="completed"
-                        name="completed"
-                        to="#my-posts"
-                        eventKey="APPROVED"
-                      >
-                        APPROVED -{" "}
-                        {tableStatus?.mciPatientCountDTO?.approvedCount || 0}{" "}
-                      </Nav.Link>
-                    </Nav.Item>{" "}
-                    <Nav.Item
-                      as="li"
-                      className="nav-item"
-                      onClick={() => {
-                        handleTabs("REJECTED");
-                      }}
-                    >
-                      <Nav.Link
-                        id="declined"
-                        name="declined"
-                        to="#my-posts"
-                        eventKey="REJECTED"
-                      >
-                        REJECTED -{" "}
-                        {tableStatus?.mciPatientCountDTO?.rejectedCount || 0}
-                      </Nav.Link>
-                    </Nav.Item>
-                  </Nav>
-                  <Tab.Content>
-                    <Tab.Pane eventKey={activeStatus}>
-                      <div className="mt-3">
-                        <AppTable
-                          data={data?.response?.pageResponse?.content}
-                          column={data?.response?.metaDataDTO.filter(
-                            (item) => item.active
-                          )}
-                          loader={tableLoader}
-                          onRowClick={gotoPatientDetails}
-                          pagination={false}
-                          setSort={setSort}
-                          sort={sort}
-                          first={pageNo === 0 ? 0 : paginationFirst}
-                          totalRecords={
-                            data?.response?.pageResponse?.totalElements
-                          }
-                          row={15}
-                          onPageChange={onPageChange}
-                        />
-                      </div>
-                    </Tab.Pane>
-                  </Tab.Content>
-                </Tab.Container>
+      )}{" "}
+      <div className="container-fluid">
+        <div className="d-flex">
+          <div className="mt-4 p-2" style={{ width: "100%" }}>
+            {!masterAuditRouter && (
+              <div className="mt-5">
+                <ReusableFilters
+                  showFilter={true}
+                  setActiveFilters={setActiveFilters}
+                  setSearchText={setSearchText}
+                  searchText={searchText}
+                  setSelectedOption={setSelectedOption}
+                  selectedOption={selectedOption}
+                  setSelectedDateRanges={setSelectedDateRanges}
+                  selectedDateRanges={selectedDateRanges}
+                  setPageNumber={setPageNumber}
+                  FilterItems={activeFilters}
+                  selectedDates={selectedDates}
+                  setSelectedDates={setSelectedDates}
+                  activeFilters={activeFilters}
+                  setClear={setClear}
+                  clear={clear}
+                  setPageNo={setPageNo}
+                  //customize table
+                  open={open}
+                  onClose={onClose}
+                  selectedColumns={test}
+                  setSelectedColumns={setTest}
+                  showCustomizeTable={false}
+                  showDrawer={showDrawer}
+                  handleSubmit={handleSubmit}
+                  handleReset={handleReset}
+                  isSubmitting={isSubmitting}
+                  isResetting={isResetting}
+                  tableLoader={tableLoader}
+                />
               </div>
-            ) : (
-              <div className="custom-tab-1">
-                <Tab.Container
-                  defaultActiveKey={
-                    routedData?.activeStatus
-                      ? routedData?.activeStatus
-                      : "PENDING"
-                  }
-                >
+            )}
+          </div>
+        </div>
+        <div className="profile-tab p-2 ">
+          {pageId === "a9d5c555-7954-4382-a2ef-3f66b292cf8f" ? (
+            <div className="custom-tab-1">
+              <Tab.Container
+                defaultActiveKey={
+                  routedData?.activeStatus
+                    ? routedData?.activeStatus
+                    : "PENDING"
+                }
+              >
+                <Nav as="ul" className="nav nav-tabs">
+                  <Nav.Item
+                    as="li"
+                    className="nav-item"
+                    onClick={() => {
+                      handleTabs("PENDING");
+                    }}
+                  >
+                    <Nav.Link
+                      id="pending"
+                      name="pending"
+                      to="#my-posts"
+                      eventKey="PENDING"
+                    >
+                      PENDING -{" "}
+                      {tableStatus?.mciPatientCountDTO?.pendingCount || 0}{" "}
+                    </Nav.Link>
+                  </Nav.Item>
+                  <Nav.Item
+                    as="li"
+                    className="nav-item"
+                    onClick={() => {
+                      handleTabs("APPROVED");
+                    }}
+                  >
+                    <Nav.Link
+                      id="completed"
+                      name="completed"
+                      to="#my-posts"
+                      eventKey="APPROVED"
+                    >
+                      APPROVED -{" "}
+                      {tableStatus?.mciPatientCountDTO?.approvedCount || 0}{" "}
+                    </Nav.Link>
+                  </Nav.Item>{" "}
+                  <Nav.Item
+                    as="li"
+                    className="nav-item"
+                    onClick={() => {
+                      handleTabs("REJECTED");
+                    }}
+                  >
+                    <Nav.Link
+                      id="declined"
+                      name="declined"
+                      to="#my-posts"
+                      eventKey="REJECTED"
+                    >
+                      REJECTED -{" "}
+                      {tableStatus?.mciPatientCountDTO?.rejectedCount || 0}
+                    </Nav.Link>
+                  </Nav.Item>
+                </Nav>
+                <Tab.Content>
+                  <Tab.Pane eventKey={activeStatus}>
+                    <div className="mt-3">
+                      <AppTable
+                        data={data?.response?.pageResponse?.content}
+                        column={data?.response?.metaDataDTO.filter(
+                          (item) => item.active
+                        )}
+                        loader={tableLoader}
+                        onRowClick={gotoPatientDetails}
+                        pagination={false}
+                        setSort={setSort}
+                        sort={sort}
+                        first={pageNo === 0 ? 0 : paginationFirst}
+                        totalRecords={
+                          data?.response?.pageResponse?.totalElements
+                        }
+                        row={15}
+                        onPageChange={onPageChange}
+                      />
+                    </div>
+                  </Tab.Pane>
+                </Tab.Content>
+              </Tab.Container>
+            </div>
+          ) : (
+            <div className="custom-tab-1">
+              <Tab.Container
+                defaultActiveKey={
+                  routedData?.activeStatus
+                    ? routedData?.activeStatus
+                    : "PENDING"
+                }
+              >
+                <div className="d-flex justify-content-between align-items-end w-100   custom-tab-header">
                   <Nav as="ul" className="nav nav-tabs">
                     <Nav.Item
                       as="li"
@@ -454,35 +460,91 @@ const CodersTable = ({
                         COMPLETED -{" "}
                         {tableStatus?.mciPatientCountDTO?.approvedCount || 0}{" "}
                       </Nav.Link>
-                    </Nav.Item>{" "}
+                    </Nav.Item>
                   </Nav>
-                  <Tab.Content>
-                    <Tab.Pane eventKey={activeStatus}>
-                      <div className="mt-3">
-                        <AppTable
-                          data={data?.response?.pageResponse?.content}
-                          column={data?.response?.metaDataDTO.filter(
-                            (item) => item.active
-                          )}
-                          loader={tableLoader}
-                          onRowClick={gotoPatientDetails}
-                          pagination={false}
-                          setSort={setSort}
-                          sort={sort}
-                          first={pageNo === 0 ? 0 : paginationFirst}
-                          totalRecords={
-                            data?.response?.pageResponse?.totalElements
-                          }
-                          row={15}
-                          onPageChange={onPageChange}
-                        />
-                      </div>
-                    </Tab.Pane>
-                  </Tab.Content>
-                </Tab.Container>
-              </div>
-            )}
-          </div>
+                  <div className="d-flex gap-2 ms-auto  mb-2">
+                    <div
+                      id="table-btn"
+                      name="table-btn"
+                      className="d-flex justify-content-center align-items-center   mt-4"
+                    >
+                      <Button
+                        data-testid="table-custom"
+                        name="table-custom"
+                        onClick={showDrawer}
+                        style={{
+                          cursor: {
+                            cursor: tableLoader ? "not-allowed" : "pointer",
+                          },
+                        }}
+                        className="btn-sm w-full text-ellipsis tableButton"
+                        disabled={tableLoader ? true : false}
+                      >
+                        Table Customization
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+                {masterAuditRouter && (
+                  <div className="p-2 mt-1">
+                    <ReusableFilters
+                      showFilter={true}
+                      setActiveFilters={setActiveFilters}
+                      setSearchText={setSearchText}
+                      searchText={searchText}
+                      setSelectedOption={setSelectedOption}
+                      selectedOption={selectedOption}
+                      setSelectedDateRanges={setSelectedDateRanges}
+                      selectedDateRanges={selectedDateRanges}
+                      setPageNumber={setPageNumber}
+                      FilterItems={activeFilters}
+                      selectedDates={selectedDates}
+                      setSelectedDates={setSelectedDates}
+                      activeFilters={activeFilters}
+                      setClear={setClear}
+                      clear={clear}
+                      setPageNo={setPageNo}
+                      //customize table
+                      open={open}
+                      onClose={onClose}
+                      selectedColumns={test}
+                      setSelectedColumns={setTest}
+                      showCustomizeTable={false}
+                      showDrawer={showDrawer}
+                      handleSubmit={handleSubmit}
+                      handleReset={handleReset}
+                      isSubmitting={isSubmitting}
+                      isResetting={isResetting}
+                      tableLoader={tableLoader}
+                    />
+                  </div>
+                )}
+                <Tab.Content>
+                  <Tab.Pane eventKey={activeStatus}>
+                    <div className="mt-3">
+                      <AppTable
+                        data={data?.response?.pageResponse?.content}
+                        column={data?.response?.metaDataDTO.filter(
+                          (item) => item.active
+                        )}
+                        loader={tableLoader}
+                        onRowClick={gotoPatientDetails}
+                        pagination={false}
+                        setSort={setSort}
+                        sort={sort}
+                        first={pageNo === 0 ? 0 : paginationFirst}
+                        totalRecords={
+                          data?.response?.pageResponse?.totalElements
+                        }
+                        row={15}
+                        onPageChange={onPageChange}
+                      />
+                    </div>
+                  </Tab.Pane>
+                </Tab.Content>
+              </Tab.Container>
+            </div>
+          )}
         </div>
       </div>
     </div>

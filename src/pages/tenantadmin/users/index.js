@@ -100,6 +100,9 @@ const Users = ({
       searchText: searchText,
       pageId: "8e4f1d2a-7b3c-45e6-9f1d-2a7b3c45e6f1",
       cilentBased: true,
+      qaLead: true,
+      projectLead: true
+
     });
   };
 

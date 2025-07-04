@@ -47,7 +47,7 @@ const UsersModal = ({
           firstName: item?.firstName,
           lastName: item?.lastName,
           id: item?.id,
-          role: item?.role,
+          role: item?.roleNames,
           email: item?.userName,
         };
       });
@@ -152,7 +152,7 @@ const UsersModal = ({
           setSearch("");
           setSelectedUserIds([]);
           setRoleIds([]);
-          setRoleSearch(null)
+          setRoleSearch(null);
         }}
         title="Select User"
         footer={false}
@@ -161,7 +161,7 @@ const UsersModal = ({
         className={"custom-modal"}
       >
         <div class="form-group d-flex align-items-center justify-content-between has-search">
-        <div style={{ border: "1px solid gray", borderRadius: "10px" }}>
+          <div style={{ border: "1px solid gray", borderRadius: "10px" }}>
             <ReusableInput
               placeholder={"Search"}
               value={search}
@@ -174,10 +174,11 @@ const UsersModal = ({
             <div className="d-flex align-items-center ">
               <div className="fontWeight3 font3">Select All</div>
               <input
-                className={`mx-4  ${styles.checkbox} ${styles.bodyCheckbox}${selectedUserIds?.length === userDetails?.length
+                className={`mx-4  ${styles.checkbox} ${styles.bodyCheckbox}${
+                  selectedUserIds?.length === userDetails?.length
                     ? styles.customChecked2
                     : ""
-                  } `}
+                } `}
                 type="checkbox"
                 id="selectAll"
                 checked={selectedUserIds?.length === userDetails?.length}
@@ -195,10 +196,11 @@ const UsersModal = ({
             {userDetails?.map((item) => (
               <div className="mt-4 ">
                 <div
-                  className={`form-control new-item-control my-2 p-0 ${item?.id == activeCard
+                  className={`form-control new-item-control my-2 p-0 ${
+                    item?.id == activeCard
                       ? modalStyle.listContentLarge
                       : modalStyle.listContent
-                    }`}
+                  }`}
                 >
                   <div className="d-flex justify-content-between">
                     <div className="d-flex">
@@ -222,9 +224,12 @@ const UsersModal = ({
                         </p>
                         <p className={`${modalStyle.listRole}`}>
                           {item?.role
-                            ? item?.role?.map((item) => (
-                              <span className="px-1">{item}</span>
-                            ))
+                            ? item.role.map((role, index) => (
+                                <span key={index} className="px-1">
+                                  {role.replace(/_/g, " ")}
+                                  {index < item.role.length - 1 ? "," : ""}
+                                </span>
+                              ))
                             : null}
                         </p>
                       </div>
@@ -255,8 +260,8 @@ const UsersModal = ({
               onClick={() => {
                 setIsSecondModalOpen(true);
                 setOpen(false);
-                setRoleSearch(null)
-                setSearch("")
+                setRoleSearch(null);
+                setSearch("");
               }}
               disabled={userName?.length === 0}
             />
@@ -273,8 +278,8 @@ const UsersModal = ({
           setSelectedUserIds([]);
           setIsLoading(false);
           setUserName([]);
-          setRoleSearch(null)
-          setSearch(null)
+          setRoleSearch(null);
+          setSearch(null);
         }}
         footer={null}
         width="35%"
@@ -293,10 +298,11 @@ const UsersModal = ({
           <div className="d-flex align-items-center ">
             <div className="fontWeight3 font3">Select All</div>
             <input
-              className={`mx-4 ${styles.bodyCheckbox}  ${styles.checkbox}${roleIds?.length === allRoles?.userRoles?.length
+              className={`mx-4 ${styles.bodyCheckbox}  ${styles.checkbox}${
+                roleIds?.length === allRoles?.userRoles?.length
                   ? styles.customChecked2
                   : ""
-                } `}
+              } `}
               type="checkbox"
               id="selectAll"
               checked={roleIds?.length === allRoles?.content?.length}
@@ -311,10 +317,11 @@ const UsersModal = ({
             {allRoles?.content?.map((item) => (
               <div className="mt-4 ">
                 <div
-                  className={`form-control new-item-control my-2 p-0 ${item?.id == activeCard
+                  className={`form-control new-item-control my-2 p-0 ${
+                    item?.id == activeCard
                       ? modalStyle.listContentLarge
                       : modalStyle.listContent
-                    }`}
+                  }`}
                 >
                   <div className="d-flex justify-content-between">
                     <div className="p-3 mt-3">
