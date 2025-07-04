@@ -772,7 +772,7 @@ export const confirmRevert = async ({ dos, year, versionHistory }) => {
     method: "PUT",
   };
   const response = await requestPortal(
-    `/management/disease/revert?patientId=${patientId}&dateOfService=${dos}&processedYear=${year}&versionHistory=${versionHistory}`,
+    `management/disease/revert?patientId=${patientId}&dateOfService=${dos}&processedYear=${year}&versionHistory=${versionHistory}`,
     options
   );
 
