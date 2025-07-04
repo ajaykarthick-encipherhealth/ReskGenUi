@@ -163,6 +163,7 @@ const Details = ({
   queriedData,
   queriedLoader,
   allRoles,
+  getAddProviderAndDOSList,
 }) => {
   const navigate = useRouter();
   const [count, setCount] = useState(0);
@@ -715,7 +716,6 @@ const Details = ({
     }
   };
 
-
   const handleToogleCloseNav = () => {
     if (isSideNavShow == true) {
       setIsSideNavShow(false);
@@ -735,6 +735,7 @@ const Details = ({
 
     // )
     getpatientDetailsData("", "", "", "", "", true);
+    getAddProviderAndDOSList({ dataEmpty: true });
     getPatientDosList("", "", true);
     setSelectDosValue("");
     getSelectedDosPageNumber(1);
@@ -1478,6 +1479,7 @@ const enhancer = connect(
     confirmRevert: detailsActions.confirmRevertDetails,
     getQueryDetails: detailsActions.getQuery,
     activeLabels: detailsActions.activeLabels,
+    getAddProviderAndDOSList: detailsActions.getAddProviderAndDOSList,
   }
 );
 export default enhancer(Details);

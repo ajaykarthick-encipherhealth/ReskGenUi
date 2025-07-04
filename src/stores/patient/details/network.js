@@ -444,7 +444,10 @@ export async function manuallyAddDosAndProvider(data) {
   return res;
 }
 
-export async function manuallyAddDosAndProviderList({ trash, year }) {
+export async function manuallyAddDosAndProviderList({ trash, year ,dataEmpty = false}) {
+  if(dataEmpty == true){
+    return null;
+  }
   const patientId = getStorage("patientId");
   const options = {
     method: "GET",
