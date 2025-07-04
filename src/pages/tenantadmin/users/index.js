@@ -16,6 +16,7 @@ import { Button, Popover, Select } from "antd";
 import Usersmodal from "./usersmodal";
 import { actions as allActions } from "../../../stores/tenantAdmin/users";
 import { actions as authActions } from "../../../stores/authFlows";
+import { getLocalStored } from "../../../utils/storages";
 
 const Users = ({
   pageLoad,
@@ -70,7 +71,7 @@ const Users = ({
   const [isFilter, setIsFilter] = useState(true);
   const [clear, setClear] = useState(false);
   const [role, setRole] = useState([]);
-
+  const { aliasName = null } = getLocalStored();
   const onPageChange = (e) => {
     setPaginationFirst(e.first);
     setPageNo(e.page);
@@ -317,19 +318,22 @@ const Users = ({
                 tableLoader={tableLoader}
               />
             </div>
-            <div
-              id="assign-btn"
-              name="assign-btn"
-              className="d-flex justify-content-center align-items-center  mt-4"
-            >
-              <Button
-                data-testid="assign-user"
-                className="btn btn-sm w-full text-ellipsis tableButton"
-                onClick={handleOpenModal}
+
+            {aliasName !== "PROJECT_LEAD" && aliasName !== "QA_LEAD" && (
+              <div
+                id="assign-btn"
+                name="assign-btn"
+                className="d-flex justify-content-center align-items-center mt-4"
               >
-                Assign User
-              </Button>
-            </div>
+                <Button
+                  data-testid="assign-user"
+                  className="btn btn-sm w-full text-ellipsis tableButton"
+                  onClick={handleOpenModal}
+                >
+                  Assign User
+                </Button>
+              </div>
+            )}
           </div>
           <div className="mt-4">
             <AppTable

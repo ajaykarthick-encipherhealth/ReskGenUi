@@ -94,23 +94,59 @@ const ManuallyAddProvider = ({
     getAddProviderAndDOSList({ trash: true, year });
   };
 
+  // const handleDelete = async (item) => {
+  //   form.resetFields();
+  //   const isDosSelected = item?.dateOfService;
+  //   var patientId = getStorage("patientId");
+  //   try {
+  //     const res = await setTrashProviderAndCaptured({ isDosSelected });
+  //     if (res?.status === "SUCCESS") {
+  //       getResponePopup(res);
+  //        setProvidersList(null);
+  //       getAddProviderAndDOSList({ year });
+  //       getPatientListToDetails(patientId);
+  //        setProvidersList(null);
+  //     } else {
+  //       console.log("Trash failed:", res);
+  //        const response = {
+  //          status: "FAILED",
+  //          message: error?.message || "Something went wrong",
+  //        };
+  //        getResponePopup(response);
+  //     }
+  //   } catch (error) {
+  //     console.log(error, "error");
+  // };
+
   const handleDelete = async (item) => {
     form.resetFields();
     const isDosSelected = item?.dateOfService;
-    var patientId = getStorage("patientId");
+    const patientId = getStorage("patientId");
+
     try {
       const res = await setTrashProviderAndCaptured({ isDosSelected });
       if (res?.status === "SUCCESS") {
         getResponePopup(res);
-         setProvidersList(null);
         getAddProviderAndDOSList({ year });
         getPatientListToDetails(patientId);
-         setProvidersList(null);
+        setProvidersList(null);
       } else {
-        console.warn("Trash failed:", res);
+        console.log("Trash failed:", res);
+        const response = {
+          status: "FAILED",
+          message: res?.data?.message || res?.message || "Something went wrong",
+        };
+        getResponePopup(response);
       }
     } catch (error) {
-      console.error("Error in trashing provider:", error);
+      console.log(error, "error");
+      getResponePopup({
+        status: "EXCEPTION",
+        message:
+          error?.response?.data?.message ||
+          error?.message ||
+          "Something went wrong",
+      });
     }
   };
 
@@ -122,13 +158,18 @@ const ManuallyAddProvider = ({
       const res = await setRestoreProviderAndCaptured({ isDosSelected });
       if (res?.status === "SUCCESS") {
         getResponePopup(res);
-       
+
         getAddProviderAndDOSList({ trash: true, year });
       } else {
         console.warn("Restore failed:", res);
+        const response = {
+          status: "FAILED",
+          message: res?.data?.message || res?.message || "Something went wrong",
+        };
+        getResponePopup(response);
       }
     } catch (error) {
-      console.error("Error restoring provider:", error);
+      getResponePopup(error);
     } finally {
       setRestoringId(null);
     }
@@ -238,9 +279,7 @@ const ManuallyAddProvider = ({
                   className={`ant-badge ${style.providerButton} my-2`}
                 >
                   <span className={style.dateField}>{item?.dateOfService}</span>
-                  <span className={style.providerText}>
-                  Provider
-                  </span>
+                  <span className={style.providerText}>Provider</span>
 
                   <Popover
                     content={viewProvidersList({ list: item })}
