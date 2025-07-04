@@ -689,14 +689,16 @@ const Hcc = ({
                           selectedDate={selectedDate}
                           getSelectedDos={getSelectedDos}
                           setSelectedDate={setSelectedDate}
+                          isDosSelected={isDosSelected}
                         />
-                        { isBlock ||getStorage("userRole") != "admin" &&
-                          selectDosValue && (
-                            <YearAndDosStatus
-                              setIsLoading={setIsLoading}
-                              isDosStatus={true}
-                            />
-                          )}
+                        {isBlock ||
+                          (getStorage("userRole") != "admin" &&
+                            selectDosValue && (
+                              <YearAndDosStatus
+                                setIsLoading={setIsLoading}
+                                isDosStatus={true}
+                              />
+                            ))}
                         {/* {activeTabHead == 1 && (
                           <Popover
                             open={popoverVisible}

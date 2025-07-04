@@ -2,8 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Empty, message, Popover, Select, Tooltip } from "antd";
 import { FlagFilled } from "@ant-design/icons";
 import {
-  formatDateTime,
-  getResponePopup,
+
   reusableEllipses,
 } from "../../../../../utils/reusable";
 import { getStatusIcon } from "../../../../reuseableFunctions";
@@ -18,6 +17,7 @@ const DosSelect = ({
   setFlagContainerActive,
   selectedDate,
   setSelectedDate,
+  isDosSelected,
 }) => {
   const [open, setOpen] = useState(false);
   const dosData = options?.map((item, i) => ({
@@ -47,17 +47,15 @@ const DosSelect = ({
   //   }
   // }, [dosData]);
   useEffect(() => {
-    const selectedDateExists = dosData?.some(
-      (item) => item?.dateOfService === selectedDate
+    const selectedDateExists = dosData?.find(
+      (item) => item?.dateOfService === isDosSelected
     );
-
-    if (dosData?.length === 0) {
-      setSelectedDate(null);
-    } else if ((!selectedDate || !selectedDateExists) && dosData?.length > 0) {
-      setSelectedDate(dosData[0]?.dateOfService);
+    if (isDosSelected) {
+      setSelectedDate(selectedDateExists?.dateOfService);
+    } else {
+      setSelectedDate(dosData);
     }
   }, [dosData]);
-
   const getDos = (item) => (
     <div className="d-flex ant-badge gap-1 align-items-center ">
       <div

@@ -126,7 +126,7 @@ const AddForm = ({
       });
     }
   };
-const physicianSignaturePresent = Form.useWatch("physicianNotPresent", form);
+  const physicianSignaturePresent = Form.useWatch("physicianNotPresent", form);
   const handleCheckboxChange = (changedField, checked) => {
     if (checked) {
       const newValues = {
@@ -157,14 +157,14 @@ const physicianSignaturePresent = Form.useWatch("physicianNotPresent", form);
     }
   }, [allProviderList]);
 
-    useEffect(() => {
-      if (Array.isArray(allCredentialList)) {
-        const names = allCredentialList
-          .map((item) => item?.credentials)
-          .filter((name) => !!name);
-        setCredentialOptions(names);
-      }
-    }, [allCredentialList]);
+  useEffect(() => {
+    if (Array.isArray(allCredentialList)) {
+      const names = allCredentialList
+        .map((item) => item?.credentials)
+        .filter((name) => !!name);
+      setCredentialOptions(names);
+    }
+  }, [allCredentialList]);
   return (
     <div>
       <div className={style.formContainer} id="manuallyAdd-container">
@@ -364,36 +364,48 @@ const physicianSignaturePresent = Form.useWatch("physicianNotPresent", form);
           </Form.Item> */}
 
           {!physicianSignaturePresent && (
-            <><Form.Item
-              label={<label className={style.dateField}>Provider Name</label>}
-              name="providerName"
-              rules={[{ required: true, message: "Please Select Provider" }]}
-            >
-              <Select
-                placeholder="Select Provider Name"
-                showSearch
-                optionFilterProp="children"
-                style={{ height: "42px" }}
+            <>
+              <Form.Item
+                label={<label className={style.dateField}>Provider Name</label>}
+                name="providerName"
+                rules={[{ required: true, message: "Please Select Provider" }]}
               >
-                {providerOptions.map((provider, index) => (
-                  <Select.Option key={index} value={provider}>
-                    {provider}
-                  </Select.Option>
-                ))}
-              </Select>
-            </Form.Item><Form.Item
-              label={<label className={style.dateField}>Provider Page Number</label>}
-              name="providerPageNumber"
-              rules={[
-                { required: true, message: "Please enter Provider Page Number" },
-                { validator: validateThreeDigitNumber },
-              ]}
-            >
+                <Select
+                  placeholder="Select Provider Name"
+                  showSearch
+                  optionFilterProp="children"
+                  style={{ height: "42px" }}
+                >
+                  {providerOptions.map((provider, index) => (
+                    <Select.Option key={index} value={provider}>
+                      {provider}
+                    </Select.Option>
+                  ))}
+                </Select>
+              </Form.Item>
+              <Form.Item
+                label={
+                  <label className={style.dateField}>
+                    Provider Page Number
+                  </label>
+                }
+                name="providerPageNumber"
+                rules={[
+                  {
+                    required: true,
+                    message: "Please enter Provider Page Number",
+                  },
+                  { validator: validateThreeDigitNumber },
+                ]}
+              >
                 <Input maxLength={3} placeholder="Provider Page Number" />
-              </Form.Item><Form.Item
-                label={<label className={style.dateField}>
-                  Please Select Provider Credentials
-                </label>}
+              </Form.Item>
+              <Form.Item
+                label={
+                  <label className={style.dateField}>
+                    Please Select Provider Credentials
+                  </label>
+                }
                 name="providerCredentials"
                 rules={[
                   {
@@ -414,18 +426,23 @@ const physicianSignaturePresent = Form.useWatch("physicianNotPresent", form);
                     </Select.Option>
                   ))}
                 </Select>
-              </Form.Item><Form.Item
-                label={<label className={style.dateField}>Provider Reference</label>}
+              </Form.Item>
+              <Form.Item
+                label={
+                  <label className={style.dateField}>Provider Reference</label>
+                }
                 name="providerReference"
                 rules={[
-                  { required: true, message: "Please enter Provider Reference" },
+                  {
+                    required: true,
+                    message: "Please enter Provider Reference",
+                  },
                 ]}
               >
                 <Input placeholder="Provider Reference" />
-              </Form.Item></>
+              </Form.Item>
+            </>
           )}
-
-    
 
           <Form.Item
             label={<label className={style.dateField}>File Type</label>}
@@ -435,18 +452,22 @@ const physicianSignaturePresent = Form.useWatch("physicianNotPresent", form);
             <Radio.Group>
               <Radio
                 value={"LAB"}
+                //said by uvais
                 disabled={
-                  !patientDetailsResult?.fileInfos?.length &&
-                  !providersList?.fileType
+                  // !patientDetailsResult?.fileInfos?.length &&
+                  // !providersList?.fileType
+                  true
                 }
               >
                 Lab
               </Radio>
               <Radio
                 value={"RADIOLOGY"}
+                //said by uvais
                 disabled={
-                  !patientDetailsResult?.fileInfos?.length &&
-                  !providersList?.fileType
+                  // !patientDetailsResult?.fileInfos?.length &&
+                  // !providersList?.fileType
+                  true
                 }
               >
                 Radiology
