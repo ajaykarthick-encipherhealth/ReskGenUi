@@ -1114,20 +1114,29 @@ export const isStatusDisabled = (
   }
   return disabled;
 };
-export const isYearWiseDisabled = (patientDetailsResult) => {
+export const isYearWiseDisabled = (patientDetailsResult, pathname) => {
+  let retrunValue = false;
   const overAllStatus =
     patientDetailsResult?.data?.response?.workflow?.[0]?.status ||
     patientDetailsResult?.data?.response?.masterAudit?.status;
 
   if (patientDetailsResult?.data?.response?.masterAudit?.status == "PENDING") {
-    return false;
+    retrunValue = false;
   } else {
     if (overAllStatus === "COMPLETED") {
-      return true;
-    } else {
-      return false;
+      retrunValue = true;
     }
   }
+  const pathDisbaled =
+    pathname.endsWith("/tenantadmin/tin/details") ||
+    pathname.endsWith("/tenantadmin/project/details") ||
+    pathname.endsWith("/tenantadmin/patientsync/batchfilesview");
+
+  if (pathDisbaled) {
+    retrunValue = true;
+  }
+
+  return retrunValue;
 };
 
 export const getRolePanelPermission = (roles, currentRole) => {

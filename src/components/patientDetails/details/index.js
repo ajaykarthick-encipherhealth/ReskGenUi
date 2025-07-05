@@ -1194,7 +1194,7 @@ const Details = ({
                             ].includes(data.name);
                             const isAddDosSpecialCondition =
                               data.name === "Add DOS & Provider" &&
-                              isYearWiseDisabled(patientIdDetailsData);
+                              isYearWiseDisabled(patientIdDetailsData,navigate.pathname);
                             // const isDisabled =
                             //   (isEditDisabled && isEditDisabledList) ||
                             //   isFlagDisabled ||
