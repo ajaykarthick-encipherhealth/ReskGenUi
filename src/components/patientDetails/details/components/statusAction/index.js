@@ -258,18 +258,24 @@ const StatusAction = ({
         )}
         {workflowData?.status != "QUERIED" ? (
           <Menu.Item key="7">
-            {["CODER_1", "CODER_2", "QA" , "OWNER", "QA_LEAD"].includes(proxyRole) && (
-              <Button
-                disabled={isQueried}
-                onClick={() => {
-                  showQueryModal();
-                  setMenuIsOpen(false);
-                }}
-                className={`px-3 py-1 rounded-md ${styles.queryBtn}`}
-              >
-                Query
-              </Button>
-            )}
+            {["CODER_1", "CODER_2", "QA", "OWNER", "QA_LEAD"].includes(
+              proxyRole
+            ) &&
+              !(
+                ["OWNER", "QA_LEAD"].includes(proxyRole) &&
+                router.pathname.endsWith("/tindetails/masteraudit")
+              ) && (
+                <Button
+                  disabled={isQueried}
+                  onClick={() => {
+                    showQueryModal();
+                    setMenuIsOpen(false);
+                  }}
+                  className={`px-3 py-1 rounded-md ${styles.queryBtn}`}
+                >
+                  Query
+                </Button>
+              )}
           </Menu.Item>
         ) : null}
       </Menu>
