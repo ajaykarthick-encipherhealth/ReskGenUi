@@ -611,7 +611,7 @@ const Patient = ({
       pageSize: 15,
       roleId: "",
       tin,
-      patientAllocated: userId,
+      // patientAllocated: userId,
       isAdmin: true,
       selectedOption,
       selectedDateRanges,
