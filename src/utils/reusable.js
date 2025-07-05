@@ -1097,15 +1097,17 @@ export const isStatusDisabled = (
   pathname
 ) => {
   const dosWiseStatus =
-   patientDetailsResult?.data?.response?.workflow?.[0]?.status;
+    patientDetailsResult?.data?.response?.workflow?.[0]?.status ||
+    patientDetailsResult?.data?.response?.masterAudit?.status;
   const overAllStatus =
-    patientIdDetailsData?.data?.response?.workflow?.[0]?.status;
+    patientIdDetailsData?.data?.response?.workflow?.[0]?.status ||
+    patientIdDetailsData?.data?.response?.masterAudit?.status;
 
   const disabled = dosWiseStatus !== "PENDING" || overAllStatus === "COMPLETED";
   const pathDisbaled =
-    pathname.includes("/tenantadmin/tin/details") ||
-    pathname.includes("/tenantadmin/project/details") ||
-    pathname.includes("/tenantadmin/patientsync/batchfilesview");
+    pathname.endsWith("/tenantadmin/tin/details") ||
+    pathname.endsWith("/tenantadmin/project/details") ||
+    pathname.endsWith("/tenantadmin/patientsync/batchfilesview");
 
   if (pathDisbaled) {
     return true;
@@ -1114,12 +1116,17 @@ export const isStatusDisabled = (
 };
 export const isYearWiseDisabled = (patientDetailsResult) => {
   const overAllStatus =
-    patientDetailsResult?.data?.response?.workflow?.[0]?.status;
+    patientDetailsResult?.data?.response?.workflow?.[0]?.status ||
+    patientDetailsResult?.data?.response?.masterAudit?.status;
 
-  if (overAllStatus === "COMPLETED") {
-    return true;
-  } else {
+  if (patientDetailsResult?.data?.response?.masterAudit?.status == "PENDING") {
     return false;
+  } else {
+    if (overAllStatus === "COMPLETED") {
+      return true;
+    } else {
+      return false;
+    }
   }
 };
 
