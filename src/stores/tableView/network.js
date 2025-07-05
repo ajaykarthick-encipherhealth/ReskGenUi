@@ -95,12 +95,18 @@ export async function getTableView({
       "e76aaa6c-319e-44d3-b7ae-aadb17dfb664",
     ];
 
-    if (
-      (role !== "TENANT_ADMIN" && role !== "OWNER" && role !== "DOWNLOADER") ||
-      (role === "OWNER" && allowedPageIdsForOwner.includes(pageId))
-    ) {
-      baseUrl += `&patientAllocated=${patientAllocated || ""}`;
-    }
+     if (
+       (role !== "TENANT_ADMIN" &&
+         role !== "QA_LEAD" &&
+         role !== "OWNER" &&
+         role !== "PROJECT_LEAD" &&
+         role !== "DOWNLOADER") ||
+       (role === "OWNER" && allowedPageIdsForOwner.includes(pageId)) ||
+       (role !== "QA_LEAD" && allowedPageIdsForOwner.includes(pageId)) ||
+       (role !== "PROJECT_LEAD" && allowedPageIdsForOwner.includes(pageId))
+     ) {
+       baseUrl += `&patientAllocated=${patientAllocated || ""}`;
+     }
     const tinPageIds = [
       "d80f80fd-aab8-496e-a9fc-89677d5ac174",
       "6cd166eb-79ac-4c12-ab0f-07be2983ca70",
@@ -238,12 +244,18 @@ export async function getStatusTableView({
       "e76aaa6c-319e-44d3-b7ae-aadb17dfb664",
     ];
 
-    if (
-      (role !== "TENANT_ADMIN" && role !== "OWNER" && role !== "DOWNLOADER") ||
-      (role === "OWNER" && allowedPageIdsForOwner.includes(pageId))
-    ) {
-      baseUrl += `&patientAllocated=${patientAllocated || ""}`;
-    }
+      if (
+        (role !== "TENANT_ADMIN" &&
+          role !== "QA_LEAD" &&
+          role !== "OWNER" &&
+          role !== "PROJECT_LEAD" &&
+          role !== "DOWNLOADER") ||
+        (role === "OWNER" && allowedPageIdsForOwner.includes(pageId)) ||
+        (role !== "QA_LEAD" && allowedPageIdsForOwner.includes(pageId)) ||
+        (role !== "PROJECT_LEAD" && allowedPageIdsForOwner.includes(pageId))
+      ) {
+        baseUrl += `&patientAllocated=${patientAllocated || ""}`;
+      }
 
     const tinPageIds = [
       "d80f80fd-aab8-496e-a9fc-89677d5ac174",
