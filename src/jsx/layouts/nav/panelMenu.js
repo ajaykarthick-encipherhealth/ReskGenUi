@@ -13,7 +13,9 @@ const PanelMenu = ({
   roles,
 }) => {
   const router = useRouter();
-  const [index, setIndex] = useState(panelName == "WorkQueue Panel" ? 1 : 0);
+  const [index, setIndex] = useState(
+    panelName.toLowerCase() === "workqueue panel" ? 1 : 0
+  );
   const [panelMenuList, setPanelMenuList] = useState([]);
 
   const handleLeftClick = (name) => {
@@ -82,6 +84,10 @@ const PanelMenu = ({
     ];
     setPanelMenuList(key);
   }, []);
+
+  useEffect(() => {
+    setIndex(panelName.toLowerCase() !== "workqueue panel" ? 0 : 1);
+  }, [panelName]);
 
   return (
     <div className={Styles.panelDiv}>

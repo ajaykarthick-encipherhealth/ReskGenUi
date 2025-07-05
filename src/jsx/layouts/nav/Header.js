@@ -342,7 +342,7 @@ const Header = ({
       case "DOWNLOADER":
         return ProviderMenuList(accessMenuList);
       case "OWNER":
-        if (role == "OWNER" && localPanelName == "WorkQueue Panel") {
+        if (role == "OWNER" && localPanelName?.toLowerCase() === "workqueue panel") {
           setPanelName(selectedRoleObj?.details?.panelList?.panel2Name);
           accessMenuList = selectedRoleObj?.details?.panelList
             ?.accessListForPanel2
@@ -352,7 +352,7 @@ const Header = ({
         }
         return ProviderMenuList(accessMenuList);
       case "QA_LEAD":
-        if (role == "QA_LEAD" && localPanelName == "WorkQueue Panel") {
+        if (role == "QA_LEAD" && localPanelName?.toLowerCase() === "workqueue panel") {
           setPanelName(selectedRoleObj?.details?.panelList?.panel2Name);
           accessMenuList = selectedRoleObj?.details?.panelList
             ?.accessListForPanel2
