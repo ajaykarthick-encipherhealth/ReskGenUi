@@ -152,7 +152,7 @@ const ManuallyAddProvider = ({
 
   const handleRestore = async (item) => {
     const isDosSelected = item?.dateOfService;
-    setRestoringId(item?.id);
+    setRestoringId(item?.dateOfService);
 
     try {
       const res = await setRestoreProviderAndCaptured({ isDosSelected });
@@ -317,7 +317,7 @@ const ManuallyAddProvider = ({
 
                       {showRestore && (
                         <div>
-                          {restoringId === item?.id ? (
+                          {restoringId === item?.dateOfService ? (
                             <Spin size="small" />
                           ) : (
                             <FontAwesomeIcon
