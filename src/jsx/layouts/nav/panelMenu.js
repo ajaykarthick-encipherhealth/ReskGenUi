@@ -14,7 +14,7 @@ const PanelMenu = ({
 }) => {
   const router = useRouter();
   const [index, setIndex] = useState(
-    panelName.toLowerCase() === "workqueue panel" ? 1 : 0
+    panelName?.toLowerCase() === "workqueue panel" ? 1 : 0
   );
   const [panelMenuList, setPanelMenuList] = useState([]);
 
@@ -86,7 +86,7 @@ const PanelMenu = ({
   }, []);
 
   useEffect(() => {
-    setIndex(panelName.toLowerCase() !== "workqueue panel" ? 0 : 1);
+    setIndex(panelName?.toLowerCase() !== "workqueue panel" ? 0 : 1);
   }, [panelName]);
 
   return (
