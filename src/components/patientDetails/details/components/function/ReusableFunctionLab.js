@@ -158,31 +158,31 @@ export const getMeatFound = (code, data, value) => {
   const result = data?.filter(
     (res2) => res2?.diagnosisCode?.replace(".", "") == code?.replace(".", "")
   );
-  var backColor = "#f93d3d";
+  var backColor = "#B22222";
   var meatTitle = "MEAT";
   if (result?.length != 0) {
     switch (value) {
       case "M":
         if (result[0]?.monitor) {
-          backColor = "#15b315";
+          backColor = "#191970";
         }
         meatTitle = "Monitor";
         break;
       case "E":
         if (result[0]?.evaluate) {
-          backColor = "#15b315";
+          backColor = "#191970";
         }
         meatTitle = "Evaluate";
         break;
       case "A":
         if (result[0]?.assessment) {
-          backColor = "#15b315";
+          backColor = "#191970";
         }
         meatTitle = "Assessment";
         break;
       case "T":
         if (result[0]?.treatment) {
-          backColor = "#15b315";
+          backColor = "#191970";
         }
         meatTitle = "Treatment";
         break;
