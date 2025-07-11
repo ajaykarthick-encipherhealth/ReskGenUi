@@ -19,6 +19,7 @@ import RegularButton from "../../../button";
 import { getResponePopup, reusableEllipses } from "../../../../utils/reusable";
 import RegularButtonWithIcon from "../../../buttonWithIcon";
 import { getStorage } from "../../../../utils/storages";
+import { manuallyAddDosAndProviderList } from "../../../../stores/patient/details/network";
 
 export const viewProvidersList = ({ list }) => (
   <div
@@ -46,6 +47,11 @@ const ManuallyAddProvider = ({
   getExistingDos,
   year,
   getPatientListToDetails,
+  getpatientDetailsData,
+  patientDetailsLoad,
+  getSelectedDos,
+  getPatientDosList,
+  setSelectDosValue
 }) => {
   const [form] = Form.useForm();
   const [selectFileURL, setSelectFileURL] = useState([]);
@@ -127,8 +133,12 @@ const ManuallyAddProvider = ({
       const res = await setTrashProviderAndCaptured({ isDosSelected });
       if (res?.status === "SUCCESS") {
         getResponePopup(res);
-        getAddProviderAndDOSList({ year });
-        getPatientListToDetails(patientId);
+        const doslist = await getAddProviderAndDOSList({ year });
+        if (doslist?.response.length == 0) {
+          getPatientListToDetails(patientId, true);
+        } else {
+          getPatientListToDetails(patientId);
+        }
         setProvidersList(null);
       } else {
         console.log("Trash failed:", res);
@@ -158,8 +168,25 @@ const ManuallyAddProvider = ({
       const res = await setRestoreProviderAndCaptured({ isDosSelected });
       if (res?.status === "SUCCESS") {
         getResponePopup(res);
-
         getAddProviderAndDOSList({ trash: true, year });
+        const res = await manuallyAddDosAndProviderList({ year });
+        if (res?.response?.length == 1) {
+          setSelectDosValue(item?.dateOfService);
+          patientDetailsLoad(true);
+          var patientId = getStorage("patientId");
+          getPatientDosList(patientId, year);
+          getSelectedDos(item?.dateOfService);
+          getpatientDetailsData(
+            patientId,
+            null,
+            item?.dateOfService,
+            "",
+            "",
+            "",
+            ""
+          );
+          patientDetailsLoad(false);
+        }
       } else {
         console.warn("Restore failed:", res);
         const response = {
@@ -186,7 +213,7 @@ const ManuallyAddProvider = ({
     if (hccFileDetails?.data?.response) {
       setSelectFileURL(hccFileDetails?.data?.response?.azureBlobPath);
     }
-    if (dosYearDefalutSelect) {
+    if (dosYearDefalutSelect && !isTrashView) {
       getAddProviderAndDOSList({
         dosYear: dosYearDefalutSelect?.value ?? dosYearDefalutSelect,
         year,
@@ -357,6 +384,10 @@ const enhancer = connect(
     setTrashProviderAndCaptured: allActions.setTrashProviderAndCaptured,
     setRestoreProviderAndCaptured: allActions.setRestoreProviderAndCaptured,
     getExistingDos: allActions.getDosExist,
+    getpatientDetailsData: allActions.patientDetailsAction,
+    patientDetailsLoad: allActions.patientDetailsLoad,
+    getSelectedDos: allActions.getSelectedDos,
+    getPatientDosList: allActions.dosDeatilsAction,
   }
 );
 

@@ -1031,6 +1031,21 @@ export const getPatientDetails = async (
       setAllMeatList && setAllMeatList([...meatListArr, ...deletedmeatListArr]);
       setPotentialList && setPotentialList(potentialListAll);
     }
+  } else {
+    setNewValidDiseaseList && setNewValidDiseaseList([]);
+    setSuggestedHccList && setSuggestedHccList([]);
+    setNonHccDiseasesList && setNonHccDiseasesList([]);
+    setDeletedHccList && setDeletedHccList([]);
+    setComboDiseaseCodesList && setComboDiseaseCodesList([]);
+    setInvalidComboDiseaseCodesList && setInvalidComboDiseaseCodesList([]);
+    setCareGapComboDiseaseCodesList && setCareGapComboDiseaseCodesList([]);
+    setDosSummariesList && setDosSummariesList([]);
+    setCaptureSectionMatching([]);
+    setMeatCriteriaList && setMeatCriteriaList([]);
+    setDeletedMeatList && setDeletedMeatList([]);
+    setAllDisList && setAllDisList([]);
+    setAllMeatList && setAllMeatList([]);
+    setPotentialList && setPotentialList([]);
   }
 };
 

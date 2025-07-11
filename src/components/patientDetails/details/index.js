@@ -717,19 +717,21 @@ const Details = ({
             getSelectedDosPageNumber(1);
           }
           setIsModalComments(false);
-          setFilterModalOpen(false);
+          // setFilterModalOpen(false);
           setWorkListPatientId(null);
         } else {
+          getpatientDetailsData("", "", "", "", "", true,"");
           getResponePopup(res);
           setIsSpinnerLoading(false);
         }
       } else {
+        getpatientDetailsData("", "", null, "", "", true,"");
         // No dateOfService available — skip calling getpatientDetailsData
         setIsSpinnerLoading(false);
       }
 
       patientDetailsLoad(false);
-    } catch (error) {
+    } catch (error) {      
       setIsSpinnerLoading(false);
       patientDetailsLoad(false);
     }
@@ -1379,6 +1381,7 @@ const Details = ({
                           : dosYearDefalutSelect
                       }
                       getPatientListToDetails={getPatientListToDetails}
+                      setSelectDosValue = {setSelectDosValue}
                     />
                   ) : flagContainerActive === "Queried" ? (
                     <Queried
