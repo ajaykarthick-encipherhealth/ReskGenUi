@@ -18,7 +18,7 @@ import {
 import RegularButton from "../../../button";
 import { getResponePopup, reusableEllipses } from "../../../../utils/reusable";
 import RegularButtonWithIcon from "../../../buttonWithIcon";
-import { getStorage } from "../../../../utils/storages";
+import { getLocalStored } from "../../../../utils/storages";
 import { manuallyAddDosAndProviderList } from "../../../../stores/patient/details/network";
 
 export const viewProvidersList = ({ list }) => (
@@ -51,7 +51,7 @@ const ManuallyAddProvider = ({
   patientDetailsLoad,
   getSelectedDos,
   getPatientDosList,
-  setSelectDosValue
+  setSelectDosValue,
 }) => {
   const [form] = Form.useForm();
   const [selectFileURL, setSelectFileURL] = useState([]);
@@ -59,6 +59,7 @@ const ManuallyAddProvider = ({
   const [showRestore, setShowRestore] = useState(false);
   const [isTrashView, setIsTrashView] = useState(false);
   const [restoringId, setRestoringId] = useState(null);
+  const { patientId = null } = getLocalStored();
   const handleEdit = (e, data) => {
     e?.stopPropagation?.();
     if (!data) {
@@ -100,34 +101,9 @@ const ManuallyAddProvider = ({
     getAddProviderAndDOSList({ trash: true, year });
   };
 
-  // const handleDelete = async (item) => {
-  //   form.resetFields();
-  //   const isDosSelected = item?.dateOfService;
-  //   var patientId = getStorage("patientId");
-  //   try {
-  //     const res = await setTrashProviderAndCaptured({ isDosSelected });
-  //     if (res?.status === "SUCCESS") {
-  //       getResponePopup(res);
-  //        setProvidersList(null);
-  //       getAddProviderAndDOSList({ year });
-  //       getPatientListToDetails(patientId);
-  //        setProvidersList(null);
-  //     } else {
-  //       console.log("Trash failed:", res);
-  //        const response = {
-  //          status: "FAILED",
-  //          message: error?.message || "Something went wrong",
-  //        };
-  //        getResponePopup(response);
-  //     }
-  //   } catch (error) {
-  //     console.log(error, "error");
-  // };
-
   const handleDelete = async (item) => {
     form.resetFields();
     const isDosSelected = item?.dateOfService;
-    const patientId = getStorage("patientId");
 
     try {
       const res = await setTrashProviderAndCaptured({ isDosSelected });
@@ -163,18 +139,16 @@ const ManuallyAddProvider = ({
   const handleRestore = async (item) => {
     const isDosSelected = item?.dateOfService;
     setRestoringId(item?.dateOfService);
-
     try {
       const res = await setRestoreProviderAndCaptured({ isDosSelected });
       if (res?.status === "SUCCESS") {
+        getPatientDosList(patientId, year);
         getResponePopup(res);
         getAddProviderAndDOSList({ trash: true, year });
         const res = await manuallyAddDosAndProviderList({ year });
         if (res?.response?.length == 1) {
           setSelectDosValue(item?.dateOfService);
           patientDetailsLoad(true);
-          var patientId = getStorage("patientId");
-          getPatientDosList(patientId, year);
           getSelectedDos(item?.dateOfService);
           getpatientDetailsData(
             patientId,
@@ -251,6 +225,7 @@ const ManuallyAddProvider = ({
           selectedDosValue={selectedDosValue}
           dosYearDefalutSelect={dosYearDefalutSelect}
           year={year}
+          setSelectDosValue={setSelectDosValue}
         />
       </div>
 

@@ -11,7 +11,7 @@ import {
 } from "antd";
 import React, { useEffect, useState } from "react";
 import style from "./styles.module.css";
-import { getStorage } from "../../../../utils/storages";
+import { getLocalStored } from "../../../../utils/storages";
 import { connect } from "react-redux";
 import { actions as allActions } from "../../../../stores/patient/details";
 import { disableFutureDate } from "../../../headerFilters/functions";
@@ -40,12 +40,13 @@ const AddForm = ({
   getExistingDos,
   getSelectedDos,
   year,
+  setSelectDosValue,
 }) => {
   const [btnName, setBtnName] = useState(null);
   const [providerOptions, setProviderOptions] = useState([]);
   const [credentialOptions, setCredentialOptions] = useState([]);
   const [dosExistsError, setDosExistsError] = useState(null);
-
+  const { patientId = null } = getLocalStored();
   const validateThreeDigitNumber = (_, value) => {
     if (!value || /^\d{1,3}$/.test(value)) {
       return Promise.resolve();
@@ -62,8 +63,6 @@ const AddForm = ({
         : patientDetailsResult?.fileInfos?.find(
             (data) => data?.stateIndicator === values?.fileType
           )?.fileId;
-
-    const patientId = getStorage("patientId");
 
     const formDos = dayjs(values.dateOfService).format("YYYY-MM-DD");
     const originalDos = providersLists?.dateOfService
@@ -102,6 +101,9 @@ const AddForm = ({
         getResponePopup(res);
         getAddProviderAndDOSList({ year });
         dosDeatilsAction(patientId, year);
+        setSelectDosValue(
+          data?.newDateOfService ? data.newDateOfService : data?.dateOfService
+        );
         getpatientDetailsData(
           patientId,
           patientDetailsResult?.processedYear,
@@ -407,18 +409,19 @@ const AddForm = ({
                   </label>
                 }
                 name="providerCredentials"
-                rules={[
-                  {
-                    required: true,
-                    message: " Please Select Provider Credentials",
-                  },
-                ]}
+                // rules={[
+                //   {
+                //     required: true,
+                //     message: " Please Select Provider Credentials",
+                //   },
+                // ]}
               >
                 <Select
                   placeholder="Select Provider Credentials"
                   showSearch
                   optionFilterProp="children"
                   style={{ height: "42px" }}
+                  allowClear
                 >
                   {credentialOptions.map((credentials, index) => (
                     <Select.Option key={index} value={credentials}>
