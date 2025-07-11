@@ -128,6 +128,7 @@ const AppTable = ({
   isTrigger,
   showCancelIcon = false,
   progressCancel,
+  totalCountHead,
 }) => {
   if (isCheckBox) {
     column.push({
@@ -345,13 +346,13 @@ const TableHeadItem = ({
             height: "20px",
             flexShrink: "0",
             borderRadius: "4px",
-            cursor:disabled?"not-allowed": "pointer",
+            cursor: disabled ? "not-allowed" : "pointer",
           }}
           type="checkbox"
           id="checkall-header"
           name="checkall-header"
           checked={checkedHeader}
-          disabled ={disabled}
+          disabled={disabled}
         />
         {item.name}
       </th>
@@ -467,14 +468,14 @@ const TableHeadItem = ({
   }
   return (
     <>
-    {item?.columnActive && (
-  <th className="text-start text-truncate font2">
-    {typeof item?.headerName === "string"
-      ? item.headerName.toUpperCase()
-      : item.headerName}
-  </th>
-)}
-</>
+      {item?.columnActive && (
+        <th className="text-start text-truncate font2">
+          {typeof item?.headerName === "string"
+            ? item?.headerName?.toUpperCase()
+            : item?.headerName ? item?.headerName : ""}
+        </th>
+      )}
+    </>
   );
 };
 const TableRow = ({
@@ -527,18 +528,14 @@ const TableRow = ({
   handleReportDownload,
   showCancelIcon,
   progressCancel,
-  
 }) => {
   const router = useRouter();
-
   return (
     <tr
       id={
         tableId
           ? createIdGen("row" + tableId + colIndex)
-          : createIdGen(
-              "row" + router.pathname.replaceAll("/", " ") + colIndex
-            )
+          : createIdGen("row" + router.pathname.replaceAll("/", " ") + colIndex)
       }
       onClick={(e) => {
         e.stopPropagation();
@@ -546,10 +543,39 @@ const TableRow = ({
       }}
       className={`${disableUser && !item?.accountStatus && Style.disableUser} ${
         Style.tbodyRow
-      } ${activeItem?.id === item?.id ? Style.activeRow : ""} text-start`}
+      } ${activeItem?.id === item?.id ? Style.activeRow : ""} 
+      ${item?.allocatedTo === "TOTAL" ? Style.totalRow : ""} 
+      text-start`}
       style={{ backgroundColor: rowBackground, height: "35px" }}
     >
       {column?.map((columnItem, index) => {
+        if (item?.allocatedTo === "TOTAL") {
+          return (
+            <td
+              className={`font2 ${
+                item?.allocatedTo === "TOTAL" && index == 0
+                  ? Style.totalFirstTdBorder
+                  : column.length - 1 === index
+                  ? Style.lastBorder
+                  : Style.childBorder
+              }`}
+            >
+              <span
+                id={
+                  tableId
+                    ? createIdGen("total" + tableId + colIndex)
+                    : createIdGen(
+                        "total" +
+                          router.pathname.replaceAll("/", " ") +
+                          colIndex
+                      )
+                }
+              >
+                <div className="">{item[`${columnItem.actualField}`]}</div>
+              </span>
+            </td>
+          );
+        }
         if (columnItem?.design?.includes("PRIORITY")) {
           return (
             <td
@@ -594,7 +620,7 @@ const TableRow = ({
             </td>
           );
         }
- 
+
         if (findItemWithTrueOrFalse(columnItem.design, "PROFILE")) {
           return (
             <td
@@ -788,9 +814,7 @@ const TableRow = ({
                   tableId
                     ? createIdGen("edit" + tableId + colIndex)
                     : createIdGen(
-                        "edit" +
-                          router.pathname.replaceAll("/", " ") +
-                          colIndex
+                        "edit" + router.pathname.replaceAll("/", " ") + colIndex
                       )
                 }
                 onClick={(e) => {
@@ -1004,7 +1028,8 @@ const TableRow = ({
                   : Style.childBorder
               } `}
             >
-             <div  id={
+              <div
+                id={
                   tableId
                     ? createIdGen("computationStatus" + tableId + colIndex)
                     : createIdGen(
@@ -1012,7 +1037,10 @@ const TableRow = ({
                           router.pathname.replaceAll("/", " ") +
                           colIndex
                       )
-                }>{statusBodyTemplate && statusBodyTemplate(item)}</div> 
+                }
+              >
+                {statusBodyTemplate && statusBodyTemplate(item)}
+              </div>
             </td>
           );
         }
@@ -1181,13 +1209,18 @@ const TableRow = ({
               <div className="d-flex  justify-content-start gap-3">
                 <Progress
                   percent={item[`${columnItem.actualField}`]}
-                  format={(percent) => `${percent}%`} 
+                  format={(percent) => `${percent}%`}
                   className={` ${Style.progreddBr}`}
                 />
-               {showCancelIcon && <div>
-                <CloseCircleOutlined  style={{fontSize:"20px"}}  className = "text-danger" onClick={progressCancel}/>
-               </div>
-                }
+                {showCancelIcon && (
+                  <div>
+                    <CloseCircleOutlined
+                      style={{ fontSize: "20px" }}
+                      className="text-danger"
+                      onClick={progressCancel}
+                    />
+                  </div>
+                )}
               </div>
             </td>
           );
@@ -1268,7 +1301,6 @@ const TableRow = ({
                     checked={selectedRows?.some(
                       (row) => row === item[columnItem.value]
                     )}
-                    
                     id={
                       tableId
                         ? createIdGen("checkBox" + tableId + colIndex)
@@ -1444,7 +1476,7 @@ const TableRow = ({
 
         if (columnItem.reportDownload) {
           return (
-            <td  className={`${Style.lastBorder}`} >
+            <td className={`${Style.lastBorder}`}>
               <div
                 onClick={(e) => {
                   e.stopPropagation();
@@ -1460,7 +1492,10 @@ const TableRow = ({
                 }
                 className="d-flex align-items-center justify-content-center"
               >
-                <DownloadOutlined  onClick = {handleReportDownload}style={{ fontSize: "16px" }} />
+                <DownloadOutlined
+                  onClick={handleReportDownload}
+                  style={{ fontSize: "16px" }}
+                />
               </div>
             </td>
           );
@@ -1478,7 +1513,8 @@ const TableRow = ({
                     : Style.childBorder
                 }
                 style={{
-                  backgroundColor: item.accountStatus === false ? "#0000001a" : "",
+                  backgroundColor:
+                    item.accountStatus === false ? "#0000001a" : "",
                 }}
               >
                 <span
@@ -1490,13 +1526,14 @@ const TableRow = ({
                     <div className="d-flex px-4">
                       {item[columnItem.value] ? "True" : "False"}
                     </div>
-                  ) : item[columnItem.actualField] || item[columnItem.actualField] === 0 ? (
+                  ) : item[columnItem.actualField] ||
+                    item[columnItem.actualField] === 0 ? (
                     <Tooltip title={item[columnItem.value]}>
                       {reusableEllipses({
                         str: item[columnItem.actualField],
-                          // .toString()
-                          // .replace(/_/g, " ")
-                          // .replace(/,\s*/g, ", "),
+                        // .toString()
+                        // .replace(/_/g, " ")
+                        // .replace(/,\s*/g, ", "),
                         count: count || 20,
                       })}
                     </Tooltip>
@@ -1508,7 +1545,6 @@ const TableRow = ({
             )}
           </>
         );
-        
       })}
     </tr>
   );

@@ -32,7 +32,12 @@ export async function getTableView({
   projectLead,
   isMasterAudit,
   router,
-}) {
+  allClient,
+  allProject,
+  allTin,
+  clientId,
+  projectId,
+}) {  
   if (!reloadTrue) {
     const options = { method: "GET" };
     let searchTextParams = null;
@@ -46,6 +51,9 @@ export async function getTableView({
       searchIntParams = convertToCustomParams(search);
     }
     if (selectedOption) {
+      if(selectedOption?.tinIds){
+        allTin = false;
+      }
       selectParams = convertToCustomParams(selectedOption);
     }
     if (selectedDateRanges) {
@@ -57,10 +65,17 @@ export async function getTableView({
 
     const role = getStorage("proxyRole");
 
-    let baseUrl = `dbservice/table/view?pageId=${pageId}&page=${pageNo}&size=${pageSize || 15
-      }&${statusKey}=${activeStatus || ""}&roleId=${roleId || ""}&aliasName=${selectedRole || ""
-      }&queryStatus=${queryStatus || ""}&isAdmin=${isAdmin || ""}&sortDirection=${sort?.sortDir ? sort?.sortDir : ""
-      }&sortField=${sort?.sortField ? sort?.sortField : ""}`;
+    let baseUrl = `dbservice/table/view?pageId=${pageId}&page=${pageNo}&size=${
+      pageSize || 15
+    }&${statusKey}=${activeStatus || ""}&roleId=${roleId || ""}&aliasName=${
+      selectedRole || ""
+    }&queryStatus=${queryStatus || ""}&isAdmin=${isAdmin || ""}&sortDirection=${
+      sort?.sortDir ? sort?.sortDir : "ASC"
+    }&sortField=${sort?.sortField ? sort?.sortField : ""}&allClient=${
+      allClient || false
+    }&allProject=${allProject || false}&allTin=${allTin || false}&clientId=${
+      clientId || ""
+    }&projectId=${projectId || ""}`;
 
     const allowedPageIds = [
       "e76aaa6c-319e-44d3-b7ae-aadb17dfb664",
@@ -73,14 +88,16 @@ export async function getTableView({
     ];
     const masterAuditpageIds = [
       "6cd166eb-79ac-4c12-ab0f-07be2983ca70",
-      "21235203-2ce0-4ebc-b6d3-05a9d8e8fc75",]
+      "21235203-2ce0-4ebc-b6d3-05a9d8e8fc75",
+    ];
     if (masterAuditpageIds.includes(pageId)) {
       baseUrl += `&isMasterAudit=${isMasterAudit || false}`;
     }
 
     if (allowedPageIds.includes(pageId)) {
-      baseUrl += `&isReAssigned=${isReAssigned || false}&isQueried=${isQueried || false
-        }`;
+      baseUrl += `&isReAssigned=${isReAssigned || false}&isQueried=${
+        isQueried || false
+      }`;
     }
 
     if (clientBasesPageIds.includes(pageId)) {
@@ -95,18 +112,18 @@ export async function getTableView({
       "e76aaa6c-319e-44d3-b7ae-aadb17dfb664",
     ];
 
-     if (
-       (role !== "TENANT_ADMIN" &&
-         role !== "QA_LEAD" &&
-         role !== "OWNER" &&
-         role !== "PROJECT_LEAD" &&
-         role !== "DOWNLOADER") ||
-       (role === "OWNER" && allowedPageIdsForOwner.includes(pageId)) ||
-       (role !== "QA_LEAD" && allowedPageIdsForOwner.includes(pageId)) ||
-       (role !== "PROJECT_LEAD" && allowedPageIdsForOwner.includes(pageId))
-     ) {
-       baseUrl += `&patientAllocated=${patientAllocated || ""}`;
-     }
+    if (
+      (role !== "TENANT_ADMIN" &&
+        role !== "QA_LEAD" &&
+        role !== "OWNER" &&
+        role !== "PROJECT_LEAD" &&
+        role !== "DOWNLOADER") ||
+      (role === "OWNER" && allowedPageIdsForOwner.includes(pageId)) ||
+      (role !== "QA_LEAD" && allowedPageIdsForOwner.includes(pageId)) ||
+      (role !== "PROJECT_LEAD" && allowedPageIdsForOwner.includes(pageId))
+    ) {
+      baseUrl += `&patientAllocated=${patientAllocated || ""}`;
+    }
     const tinPageIds = [
       "d80f80fd-aab8-496e-a9fc-89677d5ac174",
       "6cd166eb-79ac-4c12-ab0f-07be2983ca70",
@@ -148,12 +165,13 @@ allTinIds=${allTinIds || false}`;
       router?.pathname?.endsWith("/tindetails") &&
       masterPageIds.includes(pageId)
     ) {
-
-      baseUrl += `&tin=${tin || ""}&allTinIds=${allTinIds || false
-        }&isMasterAudit=true`;
+      baseUrl += `&tin=${tin || ""}&allTinIds=${
+        allTinIds || false
+      }&isMasterAudit=true`;
     }
-    const finalUrl = `${baseUrl}${searchTextParams || ""}${selectParams || ""}${dateRagngesParams || ""
-      }${searchIntParams || ""}`;
+    const finalUrl = `${baseUrl}${searchTextParams || ""}${selectParams || ""}${
+      dateRagngesParams || ""
+    }${searchIntParams || ""}`;
 
     const data = await requestPortal(finalUrl, options);
     return data;
@@ -211,10 +229,13 @@ export async function getStatusTableView({
 
     const role = getStorage("proxyRole");
 
-    let baseUrl = `dbservice/table/view?pageId=${pageId}&page=${pageNo}&size=${pageSize || 15
-      }&${statusKey}=${activeStatus || ""}&roleId=${roleId || ""}&aliasName=${selectedRole || ""
-      }&queryStatus=${queryStatus || ""}&isAdmin=${isAdmin || ""}&sortDirection=${sort?.sortDir ? sort?.sortDir : ""
-      }&sortField=${sort?.sortField ? sort?.sortField : ""}`;
+    let baseUrl = `dbservice/table/view?pageId=${pageId}&page=${pageNo}&size=${
+      pageSize || 15
+    }&${statusKey}=${activeStatus || ""}&roleId=${roleId || ""}&aliasName=${
+      selectedRole || ""
+    }&queryStatus=${queryStatus || ""}&isAdmin=${isAdmin || ""}&sortDirection=${
+      sort?.sortDir ? sort?.sortDir : ""
+    }&sortField=${sort?.sortField ? sort?.sortField : ""}`;
 
     const allowedPageIds = [
       "e76aaa6c-319e-44d3-b7ae-aadb17dfb664",
@@ -227,8 +248,9 @@ export async function getStatusTableView({
     ];
 
     if (allowedPageIds.includes(pageId)) {
-      baseUrl += `&isReAssigned=${isReAssigned || false}&isQueried=${isQueried || false
-        }`;
+      baseUrl += `&isReAssigned=${isReAssigned || false}&isQueried=${
+        isQueried || false
+      }`;
     }
 
     if (clientBasesPageIds.includes(pageId)) {
@@ -244,18 +266,18 @@ export async function getStatusTableView({
       "e76aaa6c-319e-44d3-b7ae-aadb17dfb664",
     ];
 
-      if (
-        (role !== "TENANT_ADMIN" &&
-          role !== "QA_LEAD" &&
-          role !== "OWNER" &&
-          role !== "PROJECT_LEAD" &&
-          role !== "DOWNLOADER") ||
-        (role === "OWNER" && allowedPageIdsForOwner.includes(pageId)) ||
-        (role !== "QA_LEAD" && allowedPageIdsForOwner.includes(pageId)) ||
-        (role !== "PROJECT_LEAD" && allowedPageIdsForOwner.includes(pageId))
-      ) {
-        baseUrl += `&patientAllocated=${patientAllocated || ""}`;
-      }
+    if (
+      (role !== "TENANT_ADMIN" &&
+        role !== "QA_LEAD" &&
+        role !== "OWNER" &&
+        role !== "PROJECT_LEAD" &&
+        role !== "DOWNLOADER") ||
+      (role === "OWNER" && allowedPageIdsForOwner.includes(pageId)) ||
+      (role !== "QA_LEAD" && allowedPageIdsForOwner.includes(pageId)) ||
+      (role !== "PROJECT_LEAD" && allowedPageIdsForOwner.includes(pageId))
+    ) {
+      baseUrl += `&patientAllocated=${patientAllocated || ""}`;
+    }
 
     const tinPageIds = [
       "d80f80fd-aab8-496e-a9fc-89677d5ac174",
@@ -287,12 +309,14 @@ allTinIds=${allTinIds || false}`;
       router?.pathname?.endsWith("/tindetails") &&
       masterPageIds.includes(pageId)
     ) {
-      baseUrl += `&tin=${tin || ""}&allTinIds=${allTinIds || false
-        }&isMasterAudit=true`;
+      baseUrl += `&tin=${tin || ""}&allTinIds=${
+        allTinIds || false
+      }&isMasterAudit=true`;
     }
 
-    const finalUrl = `${baseUrl}${searchTextParams || ""}${selectParams || ""}${dateRagngesParams || ""
-      }${searchIntParams || ""}`;
+    const finalUrl = `${baseUrl}${searchTextParams || ""}${selectParams || ""}${
+      dateRagngesParams || ""
+    }${searchIntParams || ""}`;
 
     const data = await requestPortal(finalUrl, options);
     return data;
@@ -377,12 +401,16 @@ export async function getTableViewChecked({
       dateRagngesParams = convertToCustomParamsDatePicker(selectedDateRanges);
     }
 
-    let baseUrl = `dbservice/table/view?pageId=${pageId}&page=${pageNo}&size=${pageSize}&status=${activeStatus ? activeStatus : ""
-      }&roleId=${roleId ? roleId : ""}&aliasName=${selectedRole ? selectedRole : ""
-      }&allPatientIds=${allPatientIds ? allPatientIds : ""}&tin=${tin || ""
-      }&isMasterAudit=${isMasterAudit || false}`;
-    const finalUrl = `${baseUrl}${searchTextParams || ""}${selectParams || ""}${dateRagngesParams || ""
-      }${searchIntParams || ""}`;
+    let baseUrl = `dbservice/table/view?pageId=${pageId}&page=${pageNo}&size=${pageSize}&status=${
+      activeStatus ? activeStatus : ""
+    }&roleId=${roleId ? roleId : ""}&aliasName=${
+      selectedRole ? selectedRole : ""
+    }&allPatientIds=${allPatientIds ? allPatientIds : ""}&tin=${
+      tin || ""
+    }&isMasterAudit=${isMasterAudit || false}`;
+    const finalUrl = `${baseUrl}${searchTextParams || ""}${selectParams || ""}${
+      dateRagngesParams || ""
+    }${searchIntParams || ""}`;
     const data = await requestPortal(finalUrl, options);
     return data;
   } else {
@@ -418,11 +446,14 @@ export async function getTinViewChecked({
       dateRagngesParams = convertToCustomParamsDatePicker(selectedDateRanges);
     }
 
-    let baseUrl = `dbservice/table/view?pageId=${pageId}&page=${pageNo}&size=${pageSize}&status=${activeStatus ? activeStatus : ""
-      }&roleId=${roleId ? roleId : ""}&aliasName=${selectedRole ? selectedRole : ""
-      }&allTinIds=${allTinIds ? allTinIds : ""}`;
-    const finalUrl = `${baseUrl}${searchTextParams || ""}${selectParams || ""}${dateRagngesParams || ""
-      }`;
+    let baseUrl = `dbservice/table/view?pageId=${pageId}&page=${pageNo}&size=${pageSize}&status=${
+      activeStatus ? activeStatus : ""
+    }&roleId=${roleId ? roleId : ""}&aliasName=${
+      selectedRole ? selectedRole : ""
+    }&allTinIds=${allTinIds ? allTinIds : ""}`;
+    const finalUrl = `${baseUrl}${searchTextParams || ""}${selectParams || ""}${
+      dateRagngesParams || ""
+    }`;
     const data = await requestPortal(finalUrl, options);
     return data;
   } else {
@@ -430,7 +461,7 @@ export async function getTinViewChecked({
   }
 }
 
-export async function getTinCount({ }) {
+export async function getTinCount({}) {
   const options = {
     method: "GET",
   };

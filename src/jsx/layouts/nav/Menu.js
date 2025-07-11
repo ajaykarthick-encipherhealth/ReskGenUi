@@ -122,7 +122,17 @@ export const PhysicanMenuList = (data) => {
         to: "/tenantadmin/tracking",
         childRoute2: "/tenantadmin/tracking/details",
       });
+      
     }
+       if (res?.title == "Productivity" && res?.active) {
+         menus.push({
+           title: "Productivity",
+           iconStyle: <EnvironmentOutlined />,
+           activeIcon: <EnvironmentFilled />,
+           to: "/tenantadmin/productivity",
+           childRoute2: "/tenantadmin/tracking/details",
+         });
+       }
   });
   return menus;
 };
@@ -388,6 +398,15 @@ export const ProviderMenuList = (data) => {
         childRoute2: "/tenantadmin/tracking/details",
       });
     }
+     if (res?.title == "Productivity" && res?.active) {
+       menus.push({
+         title: "Productivity",
+         iconStyle: <EnvironmentOutlined />,
+         activeIcon: <EnvironmentFilled />,
+         to: "/tenantadmin/productivity",
+         //  childRoute2: "/tenantadmin/tracking/details",
+       });
+     }
     if (res?.title == "Notification" && res?.active) {
       menus.push({
         title: "Notification",
@@ -410,8 +429,8 @@ export const ProviderMenuList = (data) => {
         title: "Tracking",
         iconStyle: <EnvironmentOutlined />,
         activeIcon: <EnvironmentFilled />,
-        to: "/tenantadmin/tracking",
-        childRoute2: "/tenantadmin/tracking/details",
+        to: "/tenantadmin/tin/tindetails",
+        // childRoute2: "/tenantadmin/tracking/details",
       });
     }
   });

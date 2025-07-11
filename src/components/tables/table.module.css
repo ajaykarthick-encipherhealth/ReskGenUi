@@ -157,7 +157,7 @@
   font-size: 13px;
   font-weight: 400;
   padding: 2px 15px;
-  color: #000 !important;
+  color: #000 ;
 }
 .classTable tbody tr {
   text-align: left;
@@ -410,3 +410,12 @@ height: 20px;
 
 
 
+.totalRow{
+  background: #cee1fd !important;
+
+}
+.totalFirstTdBorder {
+  background: #04306f !important;
+  color: #fff !important;
+  text-align: center;
+}
