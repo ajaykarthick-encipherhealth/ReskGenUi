@@ -679,6 +679,27 @@ const TableRow = ({
           );
         }
 
+         if (columnItem?.design?.includes("REBUTTAL_CHANGES")) {
+           return (
+             <td
+               style={{
+                 backgroundColor:
+                   item.accountStatus === false ? "#0000001a" : "",
+               }}
+               className={
+                 index === 0
+                   ? Style.firstTdBorder
+                   : column.length - 1 === index
+                   ? Style.lastBorder
+                   : Style.childBorder
+               }
+               key={index}
+             >
+               {item?.rebuttedOn ? "YES": "NO"}
+             </td>
+           );
+         }
+
         if (columnItem.countInfo) {
           return (
             <td className={Style.childBorder}>

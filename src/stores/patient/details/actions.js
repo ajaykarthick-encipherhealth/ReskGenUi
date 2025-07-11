@@ -243,6 +243,7 @@ export const raiseQueryAction = createActionThunk(
   "RAISE_QUERY",
   network.raiseQuery
 );
+
 export const getAllRolesAction = createActionThunk(
   "GET_ALL_ROLES_QUERIED",
   network.getAllRoles
@@ -260,6 +261,14 @@ export const timeLineList = createActionThunk(
 export const actionList = createActionThunk(
   "GET_ALL_ACTION_LIST",
   network.getAction
+);
+export const rebuttalStatusAction = createActionThunk(
+  "REBUTTAL_STATUS",
+  network.setRebuttalStatus
+);
+export const markAsCompletedAction = createActionThunk(
+  "MARK_AS_COMPLETED",
+  network.setMarkAsCompleted
 );
 
 

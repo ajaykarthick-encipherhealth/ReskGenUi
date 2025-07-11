@@ -78,6 +78,26 @@
   word-wrap: break-word; 
   white-space: normal;
 }
-
+.rebuttalButton{
+  border:0.5px solid #690308;
+  border-radius: 5px;
+  color: #fff;
+  background-color: #690308            
+}
+.markAsCompleted{
+  border: 0.5px solid #04306F;
+  color: #fff;
+  background-color: #04306F
+}
+.agree{
+  border: 0.5px solid #038500;
+  color: #038500;
+  background-color: #fff
+}
+.disagree{
+  border: 0.5px solid #690308;
+  color: #690308;
+  background-color: #fff
+}
 
 

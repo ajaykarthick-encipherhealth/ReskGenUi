@@ -9,7 +9,7 @@ import { actions as detailsActions } from "../../../../../stores/patient/details
 import { getLocalStored, getStorage } from "../../../../../utils/storages";
 import { overallYearStatus } from "../../../../../stores/patient/details/network";
 import { useRouter } from "next/router";
-import { isStatusDisabled } from '../../../../../utils/reusable'
+import { getResponePopup, isStatusDisabled } from '../../../../../utils/reusable'
 const YearAndDosStatus = ({
   patientDetailsResult,
   patientIdDetailsData,
@@ -353,13 +353,7 @@ const handleSubmitHccComplete = async () => {
     try {
       const response = await overallYearStatus(postData, apiURL);
       if (response?.status === "SUCCESS") {
-
-        notification.success({
-          message: response?.message,
-          placement: "top",
-          duration: 1,
-        });
-
+        getResponePopup(response);
         setInputValue({ notes: "" });
         getpatientDetailsData(
           localPatientId,
@@ -377,8 +371,11 @@ const handleSubmitHccComplete = async () => {
           router.pathname
         );
         setConfirmCompleteModal(false);
+      }else{
+        getResponePopup(response);
       }
     } catch (error) {
+      getResponePopup(error);
       console.error("Update status failed", error);
     } finally {
       setStatusLoading(false);

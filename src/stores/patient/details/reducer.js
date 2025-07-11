@@ -50,7 +50,9 @@ import {
   getDosExist,
   timeLineList,
   actionList,
-  getCredentialList
+  getCredentialList,
+  rebuttalStatusAction,
+  markAsCompletedAction
 } from "./actions";
 
 
@@ -177,6 +179,9 @@ const patientDetailsReducer = combineReducers({
   getQueriedDetails: createReducer(getQuery),
   getQueryApproval: createReducer(getQueryApproval),
   raiseQuery: createReducer(raiseQueryAction),
+  rebuttalStatus: createReducer(rebuttalStatusAction),
+  rebuttalStatusLoader: getPatientsLoading(rebuttalStatusAction),
+  markAsComplete: createReducer(markAsCompletedAction),
   allRoles: createReducer(getAllRolesAction),
   getQueryLoader: getPatientsLoading(getQuery),
   reEvaluate: createReducer(updateReEvaluate),

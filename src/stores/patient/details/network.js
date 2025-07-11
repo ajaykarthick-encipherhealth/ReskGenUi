@@ -70,7 +70,7 @@ export async function patientDetails(
     url += `&masterAudit=${masterAudit}`;
   }
 
-  console.log(masterAudit, "masterAudit");
+
 
   try {
     const data = await requestPortal(url, options);
@@ -519,16 +519,25 @@ export async function getValidHccDetailsApi(year, code) {
   return res;
 }
 
-export async function getTimelineList({ patientId, dos, role, action }) {
+export async function getTimelineList({
+  patientId,
+  dos,
+  role,
+  action,
+  currentFileView,
+}) {
   const options = {
     method: "GET",
   };
+
   const res = await requestPortal(
     `dbservice/actioneventaudit?patientId=${patientId}&dateOfService=${
       dos ? dos : ""
     }&role=${role ? role : ""}&action=${
       action ? action : ""
-    }&pageno=${0}&pagesize=${100}`,
+    }&pageno=${0}&pagesize=${100}&currentFileViewRoute=${
+      currentFileView || ""
+    }`,
     options
   );
   return res;
@@ -857,6 +866,8 @@ export async function queryApproval(obj) {
   return data;
 }
 
+
+
 export async function raiseQuery(obj) {
   const options = {
     method: "POST",
@@ -868,6 +879,31 @@ export async function raiseQuery(obj) {
   );
   return data;
 }
+
+export async function setRebuttalStatus(obj) {
+  const options = {
+    method: "POST",
+    body: JSON.stringify(obj),
+  };
+  const data = await requestPortal(
+    `dbservice/rebuttal/update-rebuttal-status`,
+    options
+  );
+  return data;
+}
+export async function setMarkAsCompleted(obj) {
+  const options = {
+    method: "POST",
+    body: JSON.stringify(obj),
+  };
+  const data = await requestPortal(
+    `dbservice/rebuttal/mark-as-completed`,
+    options
+  );
+  return data;
+}
+
+
 export async function getAllRoles() {
   const { aliasName = null, patientId = null } = getLocalStored();
   const options = {

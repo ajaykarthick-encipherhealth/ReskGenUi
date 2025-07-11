@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import visitStyles from "../../../../styles/visitdata.module.css";
-import { Checkbox, Empty, Input, Popover, Select, Tooltip } from "antd";
+import { Checkbox, Empty, Input, Modal, Popover, Select, Tooltip } from "antd";
 import styles from "./styles.module.css";
 import { CloseCircleFilled } from "@ant-design/icons";
 import { getProviderNameTagList } from "../components/function/ProviderHyperlinks";
@@ -17,6 +17,8 @@ import {
 import { connect } from "react-redux";
 import { actions as userActions } from "../../../../stores/tenantAdmin/users";
 import { actions as detailsActions } from "../../../../stores/patient/details";
+import RebuttalModal from "./rebuttalModal";
+import { useRouter } from "next/router";
 
 export const getStatusColors = (state) => {
   let previousStateColor = "";
@@ -138,10 +140,14 @@ const Timeline = ({
   setAction,
   isViewAll,
   setIsViewAll,
+  activeTabName
 }) => {
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [popClickDisCode, setPopClickDisCode] = useState(null);
-
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [justification, setJustification] = useState("");
+  const [selectedItem, setSelectedItem] = useState(null);
+  const router = useRouter()
   const options = allRoles?.content?.map((org, index) => ({
     value: org?.aliasName,
     label: org?.roleName?.split("_")?.join(" "),
@@ -150,6 +156,18 @@ const Timeline = ({
     label: item?.replace(/_/g, " "),
     value: item,
   }));
+
+
+const currentFileView = router.pathname.endsWith("/tenantadmin/patientdetails")
+  ? "NORMAL_PATIENTS_VIEW"
+  : router.pathname.endsWith("/patients/details")
+  ? "WORK_QUEUE_VIEW"
+  : router.pathname.endsWith("/queried/details")
+  ? "QUERIED_VIEW"
+  : router.pathname.endsWith("/reassign/details")
+  ? "RE_ASSIGN_VIEW"
+  :   activeTabName?.tinDetailsTab == "Query Approval" ? "QUERY_APPROVAL_VIEW" : "NORMAL_PATIENTS_VIEW";
+
   const getTimeLineDetails = async () => {
     setFilterDataLoading(true);
     const response = await getTimelineList({
@@ -157,6 +175,7 @@ const Timeline = ({
       dos: isViewAll ? "" : isDosSelected,
       role: role,
       action: action,
+      currentFileView: currentFileView,
     });
     var result = response?.response?.content;
     setTimeLineData(result);
@@ -172,7 +191,6 @@ const Timeline = ({
   const handleActionChange = (value) => {
     setAction(value);
   };
-
   const getMeatEditDeatils = (viewValue) => {
     let sectionMapArr = (
       <>
@@ -1340,11 +1358,12 @@ const Timeline = ({
               ? getHtmlContent(item?.htmlContent)
               : getTimelineHeading(item, index)}
           </span>
-          {item?.dos && (
-            <span
-              className={` text-muted ${visitStyles.timelineDate} mt-1`}
-            >{`DOS: ${item?.dos}`}</span>
-          )}
+          <div>
+            {item?.dos && (
+              <span className="text-muted mt-1">{`DOS: ${item?.dos}`}</span>
+            )}
+          </div>
+
           {/* <span className={`text-muted ${visitStyles.timelineDate}`}>
             {formatDateTime({ date: item.createdDate })}
           </span> */}
@@ -1357,11 +1376,17 @@ const Timeline = ({
               </span>
             </div>
           )}
-          <div
-            style={{ fontSize: "11px" }}
-            className="d-flex text-muted align-items-end justify-content-end mt-1"
-          >
-            {timeLineDateAndTime(item?.createdDate)}
+          <div className="d-flex align-items-end justify-content-between mt-2">
+            <div>
+              <RebuttalModal item={item} getActionList={getTimeLineDetails} />
+            </div>
+            <div
+              style={{ fontSize: "11px" }}
+              className="d-flex text-muted align-items-end justify-content-end mt-1"
+            >
+              {" "}
+              {timeLineDateAndTime(item?.createdDate)}
+            </div>
           </div>
         </div>
       </li>
@@ -1375,7 +1400,7 @@ const Timeline = ({
     getActionList();
   }, []);
   return (
-    <div className={visitStyles.timeLines}>
+    <><div className={visitStyles.timeLines}>
       {!showFilter ? (
         <div className="p-3">
           <div
@@ -1409,13 +1434,10 @@ const Timeline = ({
                       options={actionOptions}
                       value={action}
                       onChange={handleActionChange}
-                      filterOption={(input, option) =>
-                        (option?.label ?? "")
-                          .toLowerCase()
-                          .includes(input.toLowerCase())
-                      }
-                      showSearch={true}
-                    />
+                      filterOption={(input, option) => (option?.label ?? "")
+                        .toLowerCase()
+                        .includes(input.toLowerCase())}
+                      showSearch={true} />
                   </div>
                 </div>
               </div>
@@ -1427,14 +1449,11 @@ const Timeline = ({
       )}
       {!filterDataLoading ? (
         <div
-          className={`widget-timeline ${
-            timelineData?.length === 0 ? "no-timeline-line" : ""
-          }`}
+          className={`widget-timeline ${timelineData?.length === 0 ? "no-timeline-line" : ""}`}
         >
           <ul className="timeline">
             {timelineData?.length > 0 ? (
-              timelineData?.map((item, index) =>
-                renderTimelineItem(item, index)
+              timelineData?.map((item, index) => renderTimelineItem(item, index)
               )
             ) : (
               <div className="no-data-container">
@@ -1452,14 +1471,16 @@ const Timeline = ({
           </div>
         </div>
       )}
-    </div>
+    </div></>
   );
 };
+
 
 const enhancer = connect(
   (state) => ({
     allRoles: state?.tenantAdmin?.users?.getUsersRoles?.data?.response,
     actionList: state?.patientDetails?.details?.actionList?.data?.response,
+        activeTabName: state.tenantAdmin.tin?.activeTabRoutedData,
   }),
   {
     getAllRoles: userActions.usersAllRoles,
