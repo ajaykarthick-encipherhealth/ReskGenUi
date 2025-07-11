@@ -31,6 +31,7 @@ import { faSpinner } from "@fortawesome/free-solid-svg-icons";
 import { getStorage } from "./storages";
 import SvgFlag from "../components/patientDetails/details/components/svg/svg";
 import { ssoLogout } from "../../lib/authService";
+import { useRouter } from "next/router";
 
 export const getResponePopup = (res) => {
   switch (res?.data?.status ? res?.data?.status : res?.status) {
@@ -1145,5 +1146,19 @@ export const getRolePanelPermission = (roles, currentRole) => {
     return true;
   } else {
     return false;
+  }
+};
+
+export const createIdGens = (key) => {
+  const router = useRouter();
+  if (key && router?.pathname) {
+    return (
+      key.trim().toLowerCase().replaceAll(" ", "-") +
+      router.pathname.replaceAll("/", " ")
+    );
+  } else if (key) {
+    return key.trim().toLowerCase().replaceAll(" ", "-");
+  } else {
+    return key;
   }
 };
