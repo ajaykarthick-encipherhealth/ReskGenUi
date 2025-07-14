@@ -5528,7 +5528,7 @@ label {
 
 .header-right .header-media {
   height: 40px;
-  width: 40px;
+  width: 50px;
 }
 
 .header-right .header-media img {
@@ -10717,6 +10717,7 @@ p,
 
 .profile-tab .nav-item .nav-link {
   font-size: 14px !important;
+  margin-top: 10px;
 }
 
 /* .dataTables_wrapper {
@@ -16682,7 +16683,7 @@ input::-webkit-inner-spin-button {
     font-size: 10px !important;
   }
   .profile_info_header{
-    margin-left: -10px;
+    margin-left: -11px;
   }
 }
 
@@ -16747,3 +16748,23 @@ input::-webkit-inner-spin-button {
 .no-timeline-line .timeline:before {
   background: #fff !important;
 }
+
+@media screen and (min-width: 1100px) and (max-width: 1500px) {
+.profile-tab .nav-item .nav-link {
+  font-size: 11px !important;
+}
+}
+@media screen and (min-width: 900px) and (max-width: 1100px) {
+  .profile-tab .nav-item .nav-link {
+  font-size: 10px !important;
+}
+}
+@media screen and (min-width: 900px) and (max-width: 1100px) {
+    .alias-name {
+    font-size: 6px !important;
+    align-items: center;
+    justify-content: center;
+    font-weight: 500;
+    }
+}
+

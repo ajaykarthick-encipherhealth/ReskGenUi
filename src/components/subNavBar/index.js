@@ -73,7 +73,7 @@ const SubNavBar = ({ handleBack, hideBackArrow, pageLoad ,tableLoader}) => {
           tableData.map((row, rowIndex) => (
             <section
               key={rowIndex}
-              className="d-flex mx-3 gap-4 pb-2 flex-wrap border-bottom py-2"
+              className="d-flex mx-3 gap-4 pb-2 flex-wrap  py-2"
             >
               {activeFields.map((field, colIndex) => (
                 <div

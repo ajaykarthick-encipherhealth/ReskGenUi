@@ -2366,7 +2366,7 @@
 
   .subContainer {
     position: absolute;
-    left: 47%; 
+    left: 45%; 
     transform: translateX(-50%);
     top:90px !important
   } 
@@ -2397,7 +2397,7 @@
     font-size: 10px !important;
   }
   .actionBtn{
-    font-size: 12px !important;
+    font-size: 11px !important;
   }
 }
 .error{

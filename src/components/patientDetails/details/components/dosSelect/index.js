@@ -8,6 +8,7 @@ import {
 } from "../../../../../utils/reusable";
 import { getStatusIcon } from "../../../../reuseableFunctions";
 import moment from "moment";
+import styles from '../../hcc/styles.module.css'
 
 const { Option } = Select;
 
@@ -132,8 +133,8 @@ const getDos = (item) => {
     if (!row) return null;
     return (
       <span className="d-flex w-100 justify-content-between">
-        <span>{getDos(row)}</span> |
-        <span>
+        <span className={styles.dosFont}>{getDos(row)}</span> |
+        <span className={styles.dosFont}>
           {" "}
           Pages:{" "}
           {row?.page?.startPageNumber && row?.page?.endPagNumber
@@ -142,7 +143,7 @@ const getDos = (item) => {
         </span>{" "}
         |{" "}
         <div className="flag-elipse">
-          Flags:{" "}
+        <span className={styles.dosFont}>  Flags:{" "} </span>  
           {row?.flags?.length <= 0
             ? "---"
             : row?.flags?.map((flag, index) => (
@@ -165,7 +166,8 @@ const getDos = (item) => {
 
   return (
     <Select
-      style={{ width: 490 }}
+    className={styles.dosWidth}
+      // style={{ width: 490 }}
       placeholder="--- Select DOS ---"
       value={selectedDate ? selectedDate : undefined}
       onClear={() => {

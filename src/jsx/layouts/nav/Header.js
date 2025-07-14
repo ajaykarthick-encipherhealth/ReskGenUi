@@ -112,7 +112,7 @@ const Header = ({
 }) => {
   const router = useRouter();
   const fileInputRef = useRef(null);
-  const menuItemsPerPage = 5;
+  const menuItemsPerPage = 4;
   const stateActive = router.pathname;
   const [headerFix, setheaderFix] = useState(false);
   const [userName, setUserName] = useState("");
@@ -230,7 +230,7 @@ const Header = ({
   const onClick = ({ key }) => {
     setIsShowDropdown(false);
     setMenuList(getMenuListByRole(key));
-    setCurrentRole(key == "TENANT_ADMIN" ? "ADMIN" : key);
+    setCurrentRole(key == "TENANT_ADMIN" ? "ADMIN" : key); 
     setProjectListCheck(false);
     getProjectActiveTab(null);
 
@@ -560,12 +560,11 @@ const Header = ({
       const queryString = window.location.search;
       const urlParams = new URLSearchParams(queryString);
       let encodedParams = null;
-      if (currentRole == "Tenant Admin") {
+      if (currentRole == "Tenant Admin" ) {
         encodedParams = urlParams.get("isTenantAdminTracking");
       } else {
         encodedParams = urlParams.get("isAdminTracking");
       }
-
       return (
         <li
           id={data.title}
@@ -646,7 +645,7 @@ const Header = ({
       if (
         currentPath &&
         currentPath &&
-        menuList?.slice(5).some((item) => item.title === currentPath?.title)
+        menuList?.slice(4).some((item) => item.title === currentPath?.title)
       ) {
         setNextMenuList(true);
       } else {
@@ -974,7 +973,7 @@ const Header = ({
     }
   }, [projectDetails]);
   const pathDisbaled = stateActive.endsWith("/details");
-
+console.log(menuList,"menuList")
   return (
     <div className={`header ${headerFix ? "is-fixed" : ""}`}>
       <div className="header-content">
@@ -1081,12 +1080,12 @@ const Header = ({
                         screenSize?.width != null &&
                         screenSize?.height != null
                         ? nextMenuList
-                          ? menuList?.slice(5)
-                          : menuList?.slice(0, 5)
+                          ? menuList?.slice(4)
+                          : menuList?.slice(0, 4)
                         : menuList
                     )}
 
-                    {menuList?.length > 5 &&
+                    {menuList?.length > 4 &&
                       !nextMenuList &&
                       screenSize?.width <= 1527 &&
                       screenSize?.width != null &&
@@ -1291,8 +1290,8 @@ const Header = ({
                                   trigger={["click"]}
                                 >
                                   <span
-                                    className="header-name d-flex font1 cursor-pointer"
-                                    style={{ margin: "-5px 0px 0 10px" }}
+                                    className="alias-name d-flex font1 cursor-pointer"
+                                    style={{ margin: "-5px 0px 0 4px" }}
                                   >
                                     {currentRole?.split("_")?.join(" ")}
 

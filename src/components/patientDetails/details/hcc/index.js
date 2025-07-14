@@ -546,7 +546,7 @@ const Hcc = ({
             <div className="row">
               <div className="col-12">
                 <Nav as="ul" className="nav nav-tabs">
-                  <div className={`d-flex flex-wrap `}>
+                  <div className={`d-flex  flex-wrap `}>
                     {/* <div className="d-flex"> */}
                     <Nav.Item as="li" className="nav-item ">
                       <Nav.Link
@@ -661,8 +661,8 @@ const Hcc = ({
                         Query
                       </Nav.Link>
                     </Nav.Item>
-                    <Nav.Item as="li" className="nav-item">
-                      <div id="dosSelect" className="d-flex gap-3 mx-2 ">
+                    <Nav.Item as="li" className="nav-item mt-1">
+                      <div id="dosSelect" className="d-flex gap-2 mx-2 ">
                         {/* <Select
                           id="dosSelect"
                           placeholder="Select DOS"
@@ -802,7 +802,7 @@ const Hcc = ({
                         ) : null}
                       </div>
                     </Nav.Item>
-                    <Nav.Item as="li" className="nav-item">
+                    <Nav.Item as="li" className="nav-item mt-1">
                       <Popover
                         open={actions.showActionsPop}
                         trigger={["click"]}
@@ -816,7 +816,7 @@ const Hcc = ({
                         }
                       >
                         <button
-                          className={`${visitStyles.actionBtn} px-3 py-1 mx-2 rounded-md`}
+                          className={`${visitStyles.actionBtn} px-2 py-1 rounded-md`}
                           onClick={() => {
                             setActions({
                               ...actions,

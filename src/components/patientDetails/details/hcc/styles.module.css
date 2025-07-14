@@ -524,5 +524,17 @@ cursor: pointer;
   border : 1px solid #4C4C9D;
   border-radius: 5px;
   width: 100%;
+ }
+ .dosWidth{
+  width:490px
+ }
+ @media screen and (min-width: 1100px) and (max-width: 1500px) {
+  .dosWidth{
+  width:450px !important;
+  height: 27px !important
+ }
+ .dosFont{
+  font-size: 12px;
+ }
 
  }
