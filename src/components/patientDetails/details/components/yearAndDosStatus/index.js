@@ -18,6 +18,7 @@ const YearAndDosStatus = ({
   setIsLoading,
   getPatientDosList,
   isDosStatus,
+  setIsFileFormShow,
 }) => {
   const [localOrgId, setLocalOrgId] = useState("");
   const [localUserId, setLocalUserId] = useState("");
@@ -355,6 +356,7 @@ const handleSubmitHccComplete = async () => {
       if (response?.status === "SUCCESS") {
         getResponePopup(response);
         setInputValue({ notes: "" });
+        setIsFileFormShow(false)
         getpatientDetailsData(
           localPatientId,
           patientDetailsResult?.data?.response?.processedYear,

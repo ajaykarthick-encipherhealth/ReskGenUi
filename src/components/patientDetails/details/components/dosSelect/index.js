@@ -20,6 +20,7 @@ const DosSelect = ({
   selectedDate,
   setSelectedDate,
   isDosSelected,
+  setIsFileFormShow
 }) => {
       const router = useRouter();
   const [open, setOpen] = useState(false);
@@ -235,6 +236,7 @@ const getDos = (item) => {
                         setSelectedDate(item?.dateOfService);
                         handleOptions(item?.dateOfService);
                         setOpen(false);
+                        setIsFileFormShow(false)
                       }}
                     >
                       {getDos(item)}

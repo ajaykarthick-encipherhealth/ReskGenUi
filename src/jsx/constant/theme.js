@@ -1,3 +1,4 @@
+
 export const IMAGES = {
   User: require("../../images/avatar/1.png"),
   Avatar: require("../../images/avatar/1.png"),
@@ -23,7 +24,9 @@ export const IMAGES = {
   aiCloseChat: require("../../images/chat/icons-close.png"),
   queried:require("../../images/menu/query.svg"),
   tin:require("../../images/menu/tin.svg"),
-  project:require("../../images/menu/project.svg")
+  project:require("../../images/menu/project.svg"),
+  productivityFilled:require("../../images/menu/productivityfilled.svg"),
+  productivityOutlined:require("../../images/menu/productivityoutlined.svg")
 };
 export const SVGICON = {
   MainLogo: (

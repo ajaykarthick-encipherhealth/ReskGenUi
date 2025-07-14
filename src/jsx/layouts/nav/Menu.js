@@ -403,8 +403,9 @@ export const ProviderMenuList = (data) => {
          title: "Productivity",
          iconStyle: <EnvironmentOutlined />,
          activeIcon: <EnvironmentFilled />,
+         iconStyle: <Image src={IMAGES.productivityOutlined} />,
+         activeIcon: <Image src={IMAGES.productivityFilled} />,
          to: "/tenantadmin/productivity",
-         //  childRoute2: "/tenantadmin/tracking/details",
        });
      }
     if (res?.title == "Notification" && res?.active) {

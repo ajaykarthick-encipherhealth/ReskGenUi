@@ -109,6 +109,7 @@ const Hcc = ({
   const [isReEvaluateChecked, setIsReEvaluateChecked] = useState(false);
   const [educationalError, setEducationalError] = useState(false);
   const [activeTabNameQuery, setActiveTabNameQuery] = useState(null);
+  const [isFileFormShow, setIsFileFormShow] = useState(false);
 
   const handleChange = (e) => {
     setQueryText(e.target.value);
@@ -690,6 +691,7 @@ const Hcc = ({
                           getSelectedDos={getSelectedDos}
                           setSelectedDate={setSelectedDate}
                           isDosSelected={isDosSelected}
+                          setIsFileFormShow={setIsFileFormShow}
                         />
                         {isBlock ||
                           (getStorage("userRole") != "admin" &&
@@ -697,6 +699,8 @@ const Hcc = ({
                               <YearAndDosStatus
                                 setIsLoading={setIsLoading}
                                 isDosStatus={true}
+                                isFileFormShow={isFileFormShow}
+                                setIsFileFormShow={setIsFileFormShow}
                               />
                             ))}
                         {/* {activeTabHead == 1 && (
@@ -831,8 +835,8 @@ const Hcc = ({
                     {activeTabName?.tinDetailsTab == "Query Approval" &&
                     activeTabNameQuery ==
                       "/tenantadmin/tin/tindetails?tab=Query+Approval" ? (
-                      <div className="d-flex gap-2">
-                        <Nav.Item as="li" className="nav-item">
+                      <div className="d-flex gap-1">
+                        <Nav.Item as="li" className="nav-item mx-1 mt-1">
                           <Popconfirm
                             placement="bottom"
                             description="Are you sure you want to approve?"
@@ -848,7 +852,7 @@ const Hcc = ({
                             </Button>
                           </Popconfirm>
                         </Nav.Item>
-                        <Nav.Item as="li" className="nav-item">
+                        <Nav.Item as="li" className="nav-item mt-1">
                           <Button
                             disabled={isApproved || isReject ? true : false}
                             className={`px-3 py-1 rounded-md ${styles.rejectBtn}`}
@@ -895,6 +899,8 @@ const Hcc = ({
                   isDosSelected={isDosSelected}
                   educationalError={educationalError}
                   setEducationalError={setEducationalError}
+                  isFileFormShow={isFileFormShow}
+                  setIsFileFormShow={setIsFileFormShow}
                 />
               </Tab.Pane>
               <Tab.Pane id="my-posts" eventKey={2}>

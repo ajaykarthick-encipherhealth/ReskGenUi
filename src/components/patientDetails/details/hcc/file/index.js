@@ -56,9 +56,11 @@ const File = ({
   activeTab,
  educationalError,
  setEducationalError,
+ isFileFormShow,
+ setIsFileFormShow
 }) => {
   
-  const [isFileFormShow, setIsFileFormShow] = useState(false);
+  // const [isFileFormShow, setIsFileFormShow] = useState(false);
   const [confirmNotesModalValid, setConfirmNotesModalValid] = useState(false);
   const [selectDiseasesName, setSelectDiseasesName] = useState("");
   const [meatCriteriaList, setMeatCriteriaList] = useState([]);
@@ -144,7 +146,6 @@ const File = ({
     setIsEditHccForm(false);
     setOpens(false);
   };
-
   const getValidHccDetails = async (value, code) => {
     var result = "";
     var data = "";
