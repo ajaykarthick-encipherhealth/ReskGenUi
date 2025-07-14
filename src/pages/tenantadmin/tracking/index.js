@@ -407,7 +407,7 @@ const Patient = ({
                   isResetting={isResetting}
                   tableLoader={tableLoader}
                   btnName={"Export"}
-                  showGenerateReport={ userRole === "TENANT_ADMIN" ?true :false}
+                  showGenerateReport={ userRole === "TENANT_ADMIN" || userRole === "OWNER" ?true :false}
                   generateBtnClick={generateBtnClick}
                   btnDisabled={loading}
                   btnLoading={loading}
