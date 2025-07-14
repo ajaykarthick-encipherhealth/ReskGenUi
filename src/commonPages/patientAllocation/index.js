@@ -219,7 +219,6 @@ const PatientAllocation = ({
       setIsFilter(false);
     }
   }, [data?.response?.metaDataDTO]);
-
   return (
     <div>
       <div className="content-body">
@@ -369,7 +368,7 @@ const PatientAllocation = ({
                             </div>
                             {allRoles?.allocationRoles?.find(
                               (role) => role.roleId === selectedRoleId
-                            )?.aliasName === "QA" && (
+                            )?.aliasName === "QA"  ||  allRoles?.allocationRoles?.every((item)=>item?.aliasName === "QA" ) ?(
                               <div
                                id={
                                   id
@@ -402,7 +401,7 @@ const PatientAllocation = ({
                                   Random Sampling
                                 </Button>
                               </div>
-                            )}
+                            ):""}
                             {roleAliasName === "MASTER_AUDIT" && (
                               <div
                                id={
