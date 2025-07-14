@@ -230,7 +230,7 @@ const Header = ({
   const onClick = ({ key }) => {
     setIsShowDropdown(false);
     setMenuList(getMenuListByRole(key));
-    setCurrentRole(key == "TENANT_ADMIN" ? "ADMIN" : key); 
+    setCurrentRole(key == "TENANT_ADMIN" ? "ADMIN" : key);
     setProjectListCheck(false);
     getProjectActiveTab(null);
 
@@ -342,7 +342,10 @@ const Header = ({
       case "DOWNLOADER":
         return ProviderMenuList(accessMenuList);
       case "OWNER":
-        if (role == "OWNER" && localPanelName?.toLowerCase() === "workqueue panel") {
+        if (
+          role == "OWNER" &&
+          localPanelName?.toLowerCase() === "workqueue panel"
+        ) {
           setPanelName(selectedRoleObj?.details?.panelList?.panel2Name);
           accessMenuList = selectedRoleObj?.details?.panelList
             ?.accessListForPanel2
@@ -352,7 +355,10 @@ const Header = ({
         }
         return ProviderMenuList(accessMenuList);
       case "QA_LEAD":
-        if (role == "QA_LEAD" && localPanelName?.toLowerCase() === "workqueue panel") {
+        if (
+          role == "QA_LEAD" &&
+          localPanelName?.toLowerCase() === "workqueue panel"
+        ) {
           setPanelName(selectedRoleObj?.details?.panelList?.panel2Name);
           accessMenuList = selectedRoleObj?.details?.panelList
             ?.accessListForPanel2
@@ -560,7 +566,7 @@ const Header = ({
       const queryString = window.location.search;
       const urlParams = new URLSearchParams(queryString);
       let encodedParams = null;
-      if (currentRole == "Tenant Admin" ) {
+      if (currentRole == "Tenant Admin") {
         encodedParams = urlParams.get("isTenantAdminTracking");
       } else {
         encodedParams = urlParams.get("isAdminTracking");
@@ -575,7 +581,8 @@ const Header = ({
             encodedParams
               ? stateActive === data.childRoute3
               : stateActive === data.childRoute) ||
-            stateActive === data.childRoute2 ||  stateActive === data.childRoute4
+            stateActive === data.childRoute2 ||
+            stateActive === data.childRoute4
               ? "header-active"
               : `${styles.menuListItems}`
           }
@@ -973,7 +980,7 @@ const Header = ({
     }
   }, [projectDetails]);
   const pathDisbaled = stateActive.endsWith("/details");
-console.log(menuList,"menuList")
+
   return (
     <div className={`header ${headerFix ? "is-fixed" : ""}`}>
       <div className="header-content">
@@ -1277,9 +1284,7 @@ console.log(menuList,"menuList")
                               {userEmail?.split("@")[0]}
                             </div>
 
-                            {roles?.length > 0 &&
-                            userIdDetails != "" &&
-                            isShowDropdown ? (
+                            {roles?.length > 0 && userIdDetails != "" ? (
                               <span className="d-flex mt-1 d-flex">
                                 <Dropdown
                                   menu={{
