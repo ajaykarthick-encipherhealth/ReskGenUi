@@ -1,5 +1,7 @@
 import React from "react";
 import Style from "./style.module.css";
+import { useRouter } from "next/router";
+import { createIdGen } from "../../utils/reusable";
 
 const RegularButton = ({
   type,
@@ -14,9 +16,14 @@ const RegularButton = ({
   padding,
   height,
 }) => {
+  const router = useRouter()
   return (
     <button
-      id={id}
+      id={
+        id
+          ? createIdGen("reusableBtn" + id)
+          : createIdGen("reusableBtn" + router.pathname.replaceAll("/", " "))
+      }
       className={`btn mx-1 ${
         type === "outline" ? Style.outer : Style.btnColor
       }`}

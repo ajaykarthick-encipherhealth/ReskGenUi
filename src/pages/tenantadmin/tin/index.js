@@ -10,6 +10,7 @@ import { actions as allActions } from "../../../stores/reviewer/workqueue";
 import { setStorage } from "../../../utils/storages";
 import { actions as supervisorActions } from "../../../stores/supervisor/auditedQueue";
 import {
+  createIdGen,
   findItemWithTrueKey,
   findMatchesByField,
   getAccessTabItems,
@@ -56,6 +57,7 @@ const Tin = ({
   getAddProvider,
   getProviderNPIList,
   getProviderNameList,
+  id,
 }) => {
   const [form] = Form.useForm();
   const tabs = getAccessTabItems({ page: "Tin", tabsMenu: "tabMenuList" });
@@ -101,20 +103,20 @@ const Tin = ({
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [opt, setOpt] = useState([]);
-  const [ providerList , setProviderList] = useState([])
+  const [providerList, setProviderList] = useState([]);
   const showModal = () => {
     setIsModalOpen(true);
   };
   const handleOk = () => {
     setIsModalOpen(false);
-    setOpt([])
-    setProviderList([])
+    setOpt([]);
+    setProviderList([]);
     form.resetFields();
   };
   const handleCancel = () => {
     setIsModalOpen(false);
-    setOpt([])
-    setProviderList([])
+    setOpt([]);
+    setProviderList([]);
     form.resetFields();
   };
   const currentPageIds =
@@ -131,7 +133,7 @@ const Tin = ({
     activeFilters,
   };
   const gotoPatientDetails = (rowData) => {
-     getTableData({ reloadTrue: true });
+    getTableData({ reloadTrue: true });
     setStorage("patientId", rowData.patientId);
     setStorage("tinNumber", rowData.tinNumber);
     setStorage("routeBackTo", "/tenantadmin/tin");
@@ -151,7 +153,7 @@ const Tin = ({
     setSelectedRows([]);
     setSearchText(null);
     setSelectedDateRanges({});
-    setSelectedDates([])
+    setSelectedDates([]);
   };
   const onPageChange = (e) => {
     setPaginationFirst(e.first);
@@ -357,11 +359,11 @@ const Tin = ({
 
   const handleChanges = async (e) => {
     const value = e.target.value || "";
-    if(value?.length == 0){
-      setProviderList([])
-        form.setFieldsValue({
-      practiceName: null, 
-    });
+    if (value?.length == 0) {
+      setProviderList([]);
+      form.setFieldsValue({
+        practiceName: null,
+      });
     }
     if (value?.length === 10 && !value.includes(" ")) {
       try {
@@ -375,14 +377,14 @@ const Tin = ({
             label: `${item.practiceName}`,
             value: item.id,
           }));
-          setProviderList(providerData || [])
+          setProviderList(providerData || []);
         } else {
           getResponePopup(res);
           form.setFieldsValue({
             firstName: null,
             lastName: null,
           });
-          setProviderList([])
+          setProviderList([]);
         }
       } catch (error) {}
     } else {
@@ -398,8 +400,8 @@ const Tin = ({
       firstName: values?.firstName || "",
       lastName: values?.lastName || "",
       providerNpi: values?.npiNumber,
-      practiceId:values?.practiceName?.value,
-      providerName: `${values?.firstName} ${values?.lastName}`
+      practiceId: values?.practiceName?.value,
+      providerName: `${values?.firstName} ${values?.lastName}`,
     };
     const res = await getAddProvider({ payload: params });
     if (res?.status === "SUCCESS") {
@@ -407,8 +409,8 @@ const Tin = ({
       getAllTins();
       form.resetFields();
       setIsModalOpen(false);
-      setOpt([])
-      setProviderList([])
+      setOpt([]);
+      setProviderList([]);
       setLoading(false);
     } else {
       getResponePopup(res);
@@ -426,7 +428,7 @@ const Tin = ({
           firstName: isFirstName ? value : "",
           lastName: isLastName ? value : "",
         });
-  
+
         if (res?.status === "SUCCESS") {
           const data = res?.response?.npiResponseDtoList?.map((item) => ({
             label: `${item.basic.firstName} ${item.basic.lastName} - (${item.number})`,
@@ -439,7 +441,7 @@ const Tin = ({
             label: `${item.practiceName}`,
             value: item.id,
           }));
-          setProviderList(providerData || [])
+          setProviderList(providerData || []);
           setOpt(data || []);
         }
       } catch (error) {
@@ -447,10 +449,9 @@ const Tin = ({
       }
     } else {
       setOpt([]);
-      setProviderList([])
+      setProviderList([]);
     }
   };
-  
 
   const getAllTins = async (tabOverride) => {
     const currentTab = tabOverride || activeTab;
@@ -544,7 +545,6 @@ const Tin = ({
     }
   }, [data?.response?.metaDataDTO]);
 
-
   return (
     <div className={`show`}>
       {/* <Header /> */}
@@ -556,6 +556,7 @@ const Tin = ({
             tabs={tabs}
             margin={"0"}
             width={"100%"}
+            id="tinTabs"
           />
         </div>
         {activeTab !== "Providers" && (
@@ -579,8 +580,13 @@ const Tin = ({
                 cancelText="No"
               >
                 <Button
-                  data-testid="activeBtn"
-                  name="activeBtn"
+                  data-testid={
+                    id
+                      ? createIdGen("active-InactiveBtn" + id)
+                      : createIdGen(
+                          "active-InactiveBtn" + router.pathname.replaceAll("/", " ")
+                        )
+                  }
                   className="tableButton"
                   disabled={selectedRowsId?.length === 0}
                 >
@@ -593,8 +599,13 @@ const Tin = ({
         {activeTab == "Providers" && (
           <div className="d-flex align-items-center justify-content-end align-items-end p-3 ">
             <Button
-              data-testid="activeBtn"
-              name="activeBtn"
+                data-testid={
+                    id
+                      ? createIdGen("providerBtn" + id)
+                      : createIdGen(
+                          "providerBtn" + router.pathname.replaceAll("/", " ")
+                        )
+                  }
               className="tableButton"
               onClick={showModal}
             >

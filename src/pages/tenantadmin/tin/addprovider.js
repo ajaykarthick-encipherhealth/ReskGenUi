@@ -1,6 +1,8 @@
 import React from "react";
 import { Modal, Form, Input, Select, Spin } from "antd";
 import RegularButton from "../../../components/button";
+import { createIdGen } from '../../../utils/reusable'
+import { useRouter } from "next/router";
 
 const ProviderAddForm = ({
   isModalOpen,
@@ -15,7 +17,9 @@ const ProviderAddForm = ({
   opt,
   loading,
   providerList,
+  id,
 }) => {
+  const router = useRouter()
   return (
     <Modal
       title="Add Provider"
@@ -26,6 +30,13 @@ const ProviderAddForm = ({
     >
       <div>
         <Form
+          data-testid={
+            id
+              ? createIdGen("providerForm" + id)
+              : createIdGen(
+                  "providerForm" + router.pathname.replaceAll("/", " ")
+                )
+          }
           layout="vertical"
           form={form}
           onFinish={handleFinish}
@@ -151,6 +162,7 @@ const ProviderAddForm = ({
               color="#fff"
               loading={loading}
               disabled={getProviderNameLoad || loading}
+              id="add-Provider"
             />
           </Form.Item>
         </Form>

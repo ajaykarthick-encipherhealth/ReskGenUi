@@ -66,7 +66,7 @@ const ReusableFilters = ({
   tableLoader,
   generateBtnClick,
   btnDisabled,
-  btnLoading
+  btnLoading,
 }) => {
   const pickerRefs = useRef({});
   const router = useRouter();
@@ -126,19 +126,19 @@ const ReusableFilters = ({
                   <ReusableInput
                     id={
                       id
-                        ? createIdGen("parent " + id)
+                        ? createIdGen("parent" + id)
                         : createIdGen(
                             "parent" +
-                              item?.title +
+                              item?.headerName +
                               router.pathname.replaceAll("/", " ")
                           )
                     }
                     testId={
                       id
-                        ? createIdGen("input " + id)
+                        ? createIdGen("input" + id)
                         : createIdGen(
                             "input" +
-                              item?.title +
+                              item?.headerName +
                               router.pathname.replaceAll("/", " ")
                           )
                     }
@@ -168,7 +168,7 @@ const ReusableFilters = ({
                     <div
                       id={
                         id
-                          ? createIdGen("parentSelect " + id)
+                          ? createIdGen("parentSelect" + id)
                           : createIdGen(
                               "parentSelect" +
                                 item?.headerName +
@@ -180,9 +180,9 @@ const ReusableFilters = ({
                       <Select
                         data-testid={
                           id
-                            ? createIdGen("select " + id)
+                            ? createIdGen("select" + id)
                             : createIdGen(
-                                "select " +
+                                "select" +
                                   item?.headerName +
                                   router.pathname.replaceAll("/", " ")
                               )
@@ -224,7 +224,7 @@ const ReusableFilters = ({
                   <div
                     id={
                       id
-                        ? createIdGen("parentPicker " + id)
+                        ? createIdGen("parentPicker" + id)
                         : createIdGen(
                             "parentPicker" +
                               item?.headerName +
@@ -239,7 +239,7 @@ const ReusableFilters = ({
                       className="custom-range-picker"
                       data-testid={
                         id
-                          ? createIdGen("picker " + id)
+                          ? createIdGen("picker" + id)
                           : createIdGen(
                               "picker" +
                                 item?.headerName +
@@ -251,7 +251,7 @@ const ReusableFilters = ({
                       // onCalendarChange={(val) => {
                       //   setSelectedDates((prev) => ({
                       //     ...prev,
-                      //     [item?.actualField]: val,  
+                      //     [item?.actualField]: val,
                       //   }));
                       // }}
                       onChange={(date, dateString) => {
@@ -285,19 +285,19 @@ const ReusableFilters = ({
                   <ReusableIntegerInput
                     id={
                       id
-                        ? createIdGen("integerInputParent " + id)
+                        ? createIdGen("integerInputParent" + id)
                         : createIdGen(
                             "integerInputParent" +
-                              item?.title +
+                              item?.headerName +
                               router.pathname.replaceAll("/", " ")
                           )
                     }
                     testId={
                       id
-                        ? createIdGen("integerInput " + id)
+                        ? createIdGen("integerInput" + id)
                         : createIdGen(
                             "integerInput" +
-                              item?.title +
+                              item?.headerName +
                               router.pathname.replaceAll("/", " ")
                           )
                     }
@@ -325,8 +325,13 @@ const ReusableFilters = ({
       <div className="d-flex " style={{ alignContent: "flex-end" }}>
         {showFilter && columns?.length != 0 && activeFilters?.length ? (
           <div
-            id="more-filters"
-            name="more-filters"
+            id={
+              id
+                ? createIdGen("moreFilters" + id)
+                : createIdGen(
+                    "moreFilters" + router.pathname.replaceAll("/", " ")
+                  )
+            }
             className="d-flex justify-content-center align-items-center "
           >
             <MoreFilter
@@ -352,13 +357,23 @@ const ReusableFilters = ({
         {showCustomizeTable && (
           <>
             <div
-              id="addPatient-btn"
-              name="addPatient-btn"
+              id={
+                id
+                  ? createIdGen("tableCustomBtn" + id)
+                  : createIdGen(
+                      "tableCustomBtn" + router.pathname.replaceAll("/", " ")
+                    )
+              }
               className="d-flex justify-content-center align-items-center   mt-4"
             >
               <Button
-                data-testid="table-custom"
-                name="table-custom"
+                data-testid={
+                  id
+                    ? createIdGen("childCustomBtn" + id)
+                    : createIdGen(
+                        "childCustomBtn" + router.pathname.replaceAll("/", " ")
+                      )
+                }
                 onClick={showDrawer}
                 style={{
                   background: "#04306f",
@@ -372,7 +387,6 @@ const ReusableFilters = ({
                 }}
                 className="btn-sm w-full text-ellipsis"
                 disabled={tableLoader ? true : false}
-                
               >
                 Table Customization
               </Button>
@@ -382,13 +396,23 @@ const ReusableFilters = ({
         {showGenerateReport && (
           <>
             <div
-              id="addPatient-btn"
-              name="addPatient-btn"
+              id={
+                id
+                  ? createIdGen("parentBtn" + id)
+                  : createIdGen(
+                      "parentBtn" + router.pathname.replaceAll("/", " ")
+                    )
+              }
               className="d-flex justify-content-center align-items-center   mt-4"
             >
               <Button
-                data-testid="table-custom"
-                name="table-custom"
+                data-testid={
+                  id
+                    ? createIdGen("childBtn" + id)
+                    : createIdGen(
+                        "childBtn" + router.pathname.replaceAll("/", " ")
+                      )
+                }
                 onClick={generateBtnClick}
                 style={{
                   background: "#04306f",
@@ -400,7 +424,7 @@ const ReusableFilters = ({
                 className="btn btn-sm w-full text-ellipsis cursor-pointer"
                 disabled={btnDisabled}
               >
-                 {btnLoading ? "Loading..." : btnName}
+                {btnLoading ? "Loading..." : btnName}
               </Button>
             </div>
           </>

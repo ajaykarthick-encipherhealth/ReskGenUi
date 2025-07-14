@@ -2,8 +2,7 @@ import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
 import { useRouter } from "next/router";
 import "react-facebook-loading/dist/react-facebook-loading.css";
-import { Button, notification, Tooltip } from "antd";
-import { actions as tenantAdminAction } from "../../stores/tenantAdmin/patients";
+import { Button, notification } from "antd";
 import { actions as tableAction } from "../../stores/tableView";
 import { getStorage, setStorage } from "../../utils/storages";
 import { actions as allActions } from "../../stores/reviewer/workqueue";
@@ -12,8 +11,11 @@ import ReusableFilters from "../../components/reusableFilters";
 import AppTable from "../../components/tables";
 import { actions as allReportActions } from "../../stores/admin/report";
 import { Tab, Nav } from "react-bootstrap";
-import Header from "../../jsx/layouts/nav/Header";
-import { findMatchesByField, getResponePopup } from "../../utils/reusable";
+import {
+  createIdGen,
+  findMatchesByField,
+  getResponePopup,
+} from "../../utils/reusable";
 import SubNavBar from "../../components/subNavBar";
 export const bullets = [
   {
@@ -51,6 +53,7 @@ const CodersTable = ({
   route,
   backRoute,
   roleId,
+  id,
 }) => {
   const router = useRouter();
   const masterAuditRouter = router.pathname === "/tenantadmin/tin/tindetails";
@@ -279,7 +282,6 @@ const CodersTable = ({
     setProxy(proxyRole);
   }, [proxy]);
 
-
   return (
     <div className={`show `}>
       {proxy === "QA" ? (
@@ -464,13 +466,23 @@ const CodersTable = ({
                   </Nav>
                   <div className="d-flex gap-2 ms-auto  mb-2">
                     <div
-                      id="table-btn"
-                      name="table-btn"
+                      id={
+                        id
+                          ? createIdGen("customBtn" + id)
+                          : createIdGen(
+                              "customBtn" + router.pathname.replaceAll("/", " ")
+                            )
+                      }
                       className="d-flex justify-content-center align-items-center   mt-4"
                     >
                       <Button
-                        data-testid="table-custom"
-                        name="table-custom"
+                        data-testid={
+                        id
+                          ? createIdGen("tableCustom" + id)
+                          : createIdGen(
+                              "tableCustom" + router.pathname.replaceAll("/", " ")
+                            )
+                      }
                         onClick={showDrawer}
                         style={{
                           cursor: {

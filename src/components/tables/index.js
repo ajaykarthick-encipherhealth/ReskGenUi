@@ -177,8 +177,8 @@ const AppTable = ({
       <div
         id={
           tableId
-            ? createIdGen("table " + tableId)
-            : createIdGen("row " + router.pathname.replaceAll("/", " "))
+            ? createIdGen("table" + tableId)
+            : createIdGen("row" + router.pathname.replaceAll("/", " "))
         }
         className={`${
           tableHeight ? Style.pageContainer1 : Style.pageContainer
@@ -301,8 +301,13 @@ const AppTable = ({
           {isPagination && (
             <div className="pagination-container">
               <Paginator
-                id="pagination"
-                name="pagination"
+                id={
+                  tableId
+                    ? createIdGen("pagination" + tableId)
+                    : createIdGen(
+                        "pagination" + router.pathname.replaceAll("/", " ")
+                      )
+                }
                 first={first}
                 rows={row ? row : 15}
                 totalRecords={totalRecords}
@@ -326,7 +331,9 @@ const TableHeadItem = ({
   handleRowCheckboxChange,
   checkedHeader,
   disabled,
+  id,
 }) => {
+  const router = useRouter();
   if (item.checkBox && item?.header) {
     return (
       <th>
@@ -349,8 +356,13 @@ const TableHeadItem = ({
             cursor: disabled ? "not-allowed" : "pointer",
           }}
           type="checkbox"
-          id="checkall-header"
-          name="checkall-header"
+          id={
+            id
+              ? createIdGen("tableCheckbox" + id)
+              : createIdGen(
+                  "tableCheckbox" + router.pathname.replaceAll("/", " ")
+                )
+          }
           checked={checkedHeader}
           disabled={disabled}
         />
@@ -1081,9 +1093,9 @@ const TableRow = ({
                 <div
                   id={
                     tableId
-                      ? createIdGen("isRoasterFailed" + tableId + colIndex)
+                      ? createIdGen("reUploadFailed" + tableId + colIndex)
                       : createIdGen(
-                          "isRoasterFailed" +
+                          "reUploadFailed" +
                             router.pathname.replaceAll("/", " ") +
                             colIndex
                         )
@@ -1092,8 +1104,15 @@ const TableRow = ({
                 >
                   <div className="d-flex justify-content-center gap-2 ">
                     <button
-                      id="click-upload"
-                      name="click-upload"
+                      id={
+                        tableId
+                          ? createIdGen("reUploadIcon" + tableId + colIndex)
+                          : createIdGen(
+                              "reUploadIcon" +
+                                router.pathname.replaceAll("/", " ") +
+                                colIndex
+                            )
+                      }
                       onClick={(e) => {
                         e.stopPropagation();
                         handleRoasterBtn(item);

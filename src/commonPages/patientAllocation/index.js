@@ -10,8 +10,13 @@ import { actions as tinActions } from "../../stores/tenantAdmin/tin";
 import RandomSamplingModal from "./reviewerAllocation/randomSamplingModal";
 import { actions as tableAction } from "../../stores/tableView";
 import CardSkeleton from "../../components/skeleton/card";
-import { findMatchesByField, getResponePopup } from "../../utils/reusable";
+import {
+  createIdGen,
+  findMatchesByField,
+  getResponePopup,
+} from "../../utils/reusable";
 import { getStorage } from "../../utils/storages";
+import { useRouter } from "next/router";
 
 const PatientAllocation = ({
   getAllTabRoles,
@@ -25,7 +30,9 @@ const PatientAllocation = ({
   tableDynamicColumnReset,
   pageLoad,
   statusBodyTemplate,
+  id,
 }) => {
+  const router = useRouter();
   const [activeFilters, setActiveFilters] = useState([]);
   const [sort, setSort] = useState({
     computedDate: {
@@ -192,7 +199,6 @@ const PatientAllocation = ({
     pageLoad,
     roleAliasName,
     selectedRoleId,
-
   ]);
 
   useEffect(() => {
@@ -242,8 +248,18 @@ const PatientAllocation = ({
                                 as="li"
                                 className="nav-item profile-tab mt-4"
                                 key={role}
+                                id={
+                                  id
+                                    ? createIdGen(
+                                        "allocationRoles" + id + index
+                                      )
+                                    : createIdGen(
+                                        "allocationRoles" +
+                                          index +
+                                          router.pathname.replaceAll("/", " ")
+                                      )
+                                }
                               >
-                                
                                 <Nav.Link
                                   className="mt-4"
                                   onClick={() => {
@@ -255,6 +271,17 @@ const PatientAllocation = ({
                                     getTableData({ reloadTrue: true });
                                     setRoleAliasName(role.aliasName);
                                   }}
+                                  id={
+                                    id
+                                      ? createIdGen(
+                                          "allAllocationRoles" + id + index
+                                        )
+                                      : createIdGen(
+                                          "allAllocationRoles" +
+                                            index +
+                                            router.pathname.replaceAll("/", " ")
+                                        )
+                                  }
                                   eventKey={index + 1}
                                 >
                                   {role?.aliasName
@@ -267,8 +294,14 @@ const PatientAllocation = ({
 
                           <div className="d-flex gap-2 ms-auto  mb-2">
                             <div
-                              id="allocate-btn"
-                              name="allocate-btn"
+                              data-testid={
+                                id
+                                  ? createIdGen("allocateBtn" + id)
+                                  : createIdGen(
+                                      "allocateBtn" +
+                                        router.pathname.replaceAll("/", " ")
+                                    )
+                              }
                               className="d-flex justify-content-center align-items-center   mt-4"
                             >
                               {disbaleAllocate && (
@@ -280,8 +313,17 @@ const PatientAllocation = ({
                                   }
                                 >
                                   <Button
-                                    data-testid="allocate-btn"
-                                    name="allocate-btn"
+                                    data-testid={
+                                      id
+                                        ? createIdGen("allocationBtn" + id)
+                                        : createIdGen(
+                                            "allocationBtn" +
+                                              router.pathname.replaceAll(
+                                                "/",
+                                                " "
+                                              )
+                                          )
+                                    }
                                     onClick={handleOpenModal}
                                     className="tableButton"
                                     disabled={selectedRowsId?.length === 0}
@@ -292,13 +334,25 @@ const PatientAllocation = ({
                               )}
                             </div>
                             <div
-                              id="table-btn"
-                              name="table-btn"
+                              data-testid={
+                                id
+                                  ? createIdGen("allocationCustomBtn" + id)
+                                  : createIdGen(
+                                      "allocationCustomBtn" +
+                                        router.pathname.replaceAll("/", " ")
+                                    )
+                              }
                               className="d-flex justify-content-center align-items-center   mt-4"
                             >
                               <Button
-                                data-testid="table-custom"
-                                name="table-custom"
+                                data-testid={
+                                  id
+                                    ? createIdGen("allocationTableBtn" + id)
+                                    : createIdGen(
+                                        "allocationTableBtn" +
+                                          router.pathname.replaceAll("/", " ")
+                                      )
+                                }
                                 onClick={showDrawer}
                                 style={{
                                   cursor: {
@@ -317,22 +371,32 @@ const PatientAllocation = ({
                               (role) => role.roleId === selectedRoleId
                             )?.aliasName === "QA" && (
                               <div
-                                id="random-btn"
-                                name="random-btn"
+                               id={
+                                  id
+                                    ? createIdGen("randomBtn" + id)
+                                    : createIdGen(
+                                        "randomBtn" +
+                                          router.pathname.replaceAll("/", " ")
+                                      )
+                                }
                                 className="d-flex justify-content-center align-items-center   mt-4"
                               >
                                 <Button
-                                  data-testid="random-sampling"
-                                  name="random-sampling"
+                                  data-testid={
+                                    id
+                                      ? createIdGen("randomSamplingBtn" + id)
+                                      : createIdGen(
+                                          "randomSamplingBtn" +
+                                            router.pathname.replaceAll("/", " ")
+                                        )
+                                  }
                                   onClick={() => setIsModalOpen(true)}
                                   className="tableButton"
                                   disabled={
                                     !selectedRows?.length == 0 ||
-
                                     allRoles?.randomSamplingCompleted ||
                                     data?.response?.pageResponse?.content
                                       ?.length === 0
-
                                   }
                                 >
                                   Random Sampling
@@ -341,13 +405,25 @@ const PatientAllocation = ({
                             )}
                             {roleAliasName === "MASTER_AUDIT" && (
                               <div
-                                id="random-btn"
-                                name="random-btn"
+                               id={
+                                  id
+                                    ? createIdGen("masterAuditBtn" + id)
+                                    : createIdGen(
+                                        "randmasterAuditBtnomBtn" +
+                                          router.pathname.replaceAll("/", " ")
+                                      )
+                                }
                                 className="d-flex justify-content-center align-items-center   mt-4"
                               >
                                 <Button
-                                  data-testid="random-sampling"
-                                  name="random-sampling"
+                                  data-testid={
+                                  id
+                                    ? createIdGen("masterAuditSamplingBtn" + id)
+                                    : createIdGen(
+                                        "masterAuditSamplingBtn" +
+                                          router.pathname.replaceAll("/", " ")
+                                      )
+                                }
                                   onClick={() => setIsModalOpen(true)}
                                   className="tableButton"
                                   disabled={
