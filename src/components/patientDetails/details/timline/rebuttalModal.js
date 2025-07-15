@@ -140,7 +140,6 @@ const RebuttalModal = ({
               >
                 <button
                   className={`${styles.rebuttalButton} btn-sm px-2 me-2`}
-                  onClick={() => handleDisagreeClick(item)}
                 >
                   <FontAwesomeIcon icon={faCircleInfo} /> Rebuttal
                 </button>
@@ -151,7 +150,6 @@ const RebuttalModal = ({
             <Popover content={content} title="Rebuttal Reason" trigger="hover">
               <button
                 className={`${styles.rebuttalButton} btn-sm px-2 me-2`}
-                onClick={() => handleDisagreeClick(item)}
               >
                 <FontAwesomeIcon icon={faCircleInfo} /> Rebuttal
               </button>
