@@ -885,6 +885,12 @@ const Header = ({
   };
 
   useEffect(() => {
+    if (roles?.length > 0 && userIdDetails !== "") {
+      setIsShowDropdown(true);
+    }
+  }, [roles]);
+
+  useEffect(() => {
     if (allRolesData) {
       const data = allRolesData?.userRoles?.map((data) => ({
         label: data.aliasName,
@@ -1284,7 +1290,9 @@ const Header = ({
                               {userEmail?.split("@")[0]}
                             </div>
 
-                            {roles?.length > 0 && userIdDetails != "" ? (
+                            {roles?.length > 0 &&
+                            userIdDetails != "" &&
+                            isShowDropdown ? (
                               <span className="d-flex mt-1 d-flex">
                                 <Dropdown
                                   menu={{
