@@ -1023,6 +1023,12 @@ const Header = ({
                       value={clientOptions && selectedClient}
                       onChange={(e, value) => handleClientChange(value)}
                       options={clientOptions}
+                       filterOption={(input, option) =>
+                      (option?.label ?? "")
+                        .toLowerCase()
+                        .includes(input.toLowerCase())
+                    }
+                     showSearch
                     />
                   </div>
                   <div className="mt-3">
@@ -1033,6 +1039,12 @@ const Header = ({
                       value={!projectListCheck ? selectedProject : []}
                       onChange={(e, value) => handleProjectChange(value)}
                       options={projectList}
+                       filterOption={(input, option) =>
+                      (option?.label ?? "")
+                        .toLowerCase()
+                        .includes(input.toLowerCase())
+                    }
+                     showSearch
                     />
                   </div>
                   <div>
