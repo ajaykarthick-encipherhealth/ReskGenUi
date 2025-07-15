@@ -13,6 +13,7 @@ import { actions as allReportActions } from "../../stores/admin/report";
 import { Tab, Nav } from "react-bootstrap";
 import {
   createIdGen,
+  createIdGens,
   findMatchesByField,
   getResponePopup,
 } from "../../utils/reusable";
@@ -349,7 +350,11 @@ const CodersTable = ({
                     }}
                   >
                     <Nav.Link
-                      id="pending"
+                        id={
+                        id
+                          ? createIdGens("pending" + id)
+                          : createIdGens("pending")
+                      }
                       name="pending"
                       to="#my-posts"
                       eventKey="PENDING"
@@ -366,7 +371,11 @@ const CodersTable = ({
                     }}
                   >
                     <Nav.Link
-                      id="completed"
+                      id={
+                        id
+                          ? createIdGens("approved" + id)
+                          : createIdGens("approved")
+                      }
                       name="completed"
                       to="#my-posts"
                       eventKey="APPROVED"
@@ -383,7 +392,11 @@ const CodersTable = ({
                     }}
                   >
                     <Nav.Link
-                      id="declined"
+                       id={
+                        id
+                          ? createIdGens("rejected" + id)
+                          : createIdGens("rejected")
+                      }
                       name="declined"
                       to="#my-posts"
                       eventKey="REJECTED"
@@ -437,7 +450,11 @@ const CodersTable = ({
                       }}
                     >
                       <Nav.Link
-                        id="pending"
+                        id={
+                        id
+                          ? createIdGens("PENDING" + id)
+                          : createIdGens("PENDING")
+                      }
                         name="pending"
                         to="#my-posts"
                         eventKey="PENDING"
@@ -454,7 +471,11 @@ const CodersTable = ({
                       }}
                     >
                       <Nav.Link
-                        id="completed"
+                        id={
+                        id
+                          ? createIdGens("COMPLETED" + id)
+                          : createIdGens("COMPLETED")
+                      }
                         name="completed"
                         to="#my-posts"
                         eventKey="COMPLETED"

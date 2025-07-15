@@ -1015,11 +1015,11 @@ const Header = ({
               )}
               <div className="d-flex gap-3">
                 <>
-                  <div className="mt-3">
+                  <div id="clientSelect" className="mt-3">
                     <Select
+                      id ="client-dropdown"
                       placeholder="Client"
                       className={styles.selectWidth}
-                      // style={{ width: 150 }}
                       value={clientOptions && selectedClient}
                       onChange={(e, value) => handleClientChange(value)}
                       options={clientOptions}
@@ -1031,11 +1031,11 @@ const Header = ({
                      showSearch
                     />
                   </div>
-                  <div className="mt-3">
+                  <div id="project-select" className="mt-3">
                     <Select
+                      id ="project-dropdown"
                       placeholder="Sample Project"
                       className={styles.selectWidth}
-                      // style={{ width: 150 }}
                       value={!projectListCheck ? selectedProject : []}
                       onChange={(e, value) => handleProjectChange(value)}
                       options={projectList}
@@ -1049,11 +1049,11 @@ const Header = ({
                   </div>
                   <div>
                     {currentRole === "QA" && (
-                      <div className="mt-3">
+                      <div id="tin-select" className="mt-3">
                         <Select
+                         id ="tin-dropdown"
                           placeholder="Select Tin"
                           className={styles.selectWidth}
-                          // style={{ width: 150 }}
                           value={selectedTin}
                           onChange={(e, value) => handleTinChange(value)}
                           options={TinOptions}
@@ -1317,10 +1317,12 @@ const Header = ({
                                   <span
                                     className="alias-name d-flex font1 cursor-pointer"
                                     style={{ margin: "-5px 0px 0 4px" }}
+                                    id= "roles-dropdown"
                                   >
                                     {currentRole?.split("_")?.join(" ")}
 
                                     <DownOutlined
+                                      id="downArrow"
                                       style={{ margin: "0 0 0 5px" }}
                                     />
                                   </span>

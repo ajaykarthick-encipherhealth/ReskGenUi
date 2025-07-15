@@ -36,6 +36,7 @@ import {
   dynamicAuditStatusTemplate,
   findItemWithTrueOrFalse,
   checkWithIncludesKey,
+  createIdGens,
 } from "../../utils/reusable";
 import { faCircleCheck } from "@fortawesome/free-regular-svg-icons";
 
@@ -484,7 +485,9 @@ const TableHeadItem = ({
         <th className="text-start text-truncate font2">
           {typeof item?.headerName === "string"
             ? item?.headerName?.toUpperCase()
-            : item?.headerName ? item?.headerName : ""}
+            : item?.headerName
+            ? item?.headerName
+            : ""}
         </th>
       )}
     </>
@@ -717,26 +720,26 @@ const TableRow = ({
           );
         }
 
-         if (columnItem?.design?.includes("REBUTTAL_CHANGES")) {
-           return (
-             <td
-               style={{
-                 backgroundColor:
-                   item.accountStatus === false ? "#0000001a" : "",
-               }}
-               className={
-                 index === 0
-                   ? Style.firstTdBorder
-                   : column.length - 1 === index
-                   ? Style.lastBorder
-                   : Style.childBorder
-               }
-               key={index}
-             >
-               {item?.rebuttedOn ? "YES": "NO"}
-             </td>
-           );
-         }
+        if (columnItem?.design?.includes("REBUTTAL_CHANGES")) {
+          return (
+            <td
+              style={{
+                backgroundColor:
+                  item.accountStatus === false ? "#0000001a" : "",
+              }}
+              className={
+                index === 0
+                  ? Style.firstTdBorder
+                  : column.length - 1 === index
+                  ? Style.lastBorder
+                  : Style.childBorder
+              }
+              key={index}
+            >
+              {item?.rebuttedOn ? "YES" : "NO"}
+            </td>
+          );
+        }
 
         if (columnItem.countInfo) {
           return (
@@ -842,6 +845,11 @@ const TableRow = ({
                       <CloseCircleOutlined
                         className="cr-pointer"
                         onClick={onCloseIconClick}
+                        id={
+                          tableId
+                            ? createIdGens("closeIcon" + tableId + colIndex)
+                            : createIdGens("closeIcon" + colIndex)
+                        }
                       />
                     </div>
                   }
@@ -856,7 +864,14 @@ const TableRow = ({
                     }
                   }}
                 >
-                  <div onClick={() => handleAction(item.id)}>
+                  <div
+                    id={
+                      tableId
+                        ? createIdGens("editBtn" + tableId + colIndex)
+                        : createIdGens("edit" + colIndex)
+                    }
+                    onClick={() => handleAction(item.id)}
+                  >
                     <EditButton />
                   </div>
                 </Popover>
@@ -956,6 +971,11 @@ const TableRow = ({
                 }
               >
                 <Switch
+                  data-testid={
+                    tableId
+                      ? createIdGens("userSwitch" + id + colIndex)
+                      : createIdGens("userSwitch" + colIndex)
+                  }
                   className="user-switch"
                   checked={item?.userName ? switchStates[item?.userName] : true}
                   // checked={true}

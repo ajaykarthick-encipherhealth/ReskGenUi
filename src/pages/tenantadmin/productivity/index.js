@@ -335,7 +335,7 @@ const Productivity = ({
                               pagination={false}
                               setSort={setSort}
                               sort={sort}
-                              tableId="tracking_table"
+                              tableId="productivity-table"
                               first={pageNo === 0 ? 0 : paginationFirst}
                               totalRecords={
                                 data?.response?.pageResponse?.totalElements

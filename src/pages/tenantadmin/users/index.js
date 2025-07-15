@@ -8,6 +8,7 @@ import ReusableFilters from "../../../components/reusableFilters";
 import AppTable from "../../../components/tables";
 import Header from "../../../jsx/layouts/nav/Header";
 import {
+  createIdGens,
   findItemWithTrueKey,
   findMatchesByField,
   getResponePopup,
@@ -30,6 +31,7 @@ const Users = ({
   getEnableUser,
   allRoles,
   getRoles,
+  id,
 }) => {
   const [activeFilters, setActiveFilters] = useState([]);
   const [switchStates, setSwitchStates] = useState({});
@@ -102,8 +104,7 @@ const Users = ({
       pageId: "8e4f1d2a-7b3c-45e6-9f1d-2a7b3c45e6f1",
       cilentBased: true,
       qaLead: true,
-      projectLead: true
-
+      projectLead: true,
     });
   };
 
@@ -209,20 +210,27 @@ const Users = ({
         value={selectedRole}
         mode="multiple"
         onChange={(value) => setSelectedRole(value)}
+        data-testid={id ? createIdGens("userEdit") : createIdGens("userEdit")}
       />
 
       <div className="d-flex align-items-center justify-content-center mt-3 gap-2">
         <Button
           onClick={handleRoleSubmit}
           className="btn tableButton btn-sm w-full"
+          data-testid={
+            id ? createIdGens("submitBtn") : createIdGens("submitBtn")
+          }
         >
           Submit
         </Button>
         <Button
           onClick={handleCancel}
           className="btn tableButton btn-sm w-full"
+          data-testid={
+            id ? createIdGens("cancelBtn") : createIdGens("cancelBtn")
+          }
         >
-          Cancel{" "}
+          Cancel
         </Button>
       </div>
     </>
@@ -321,12 +329,17 @@ const Users = ({
 
             {aliasName !== "PROJECT_LEAD" && aliasName !== "QA_LEAD" && (
               <div
-                id="assign-btn"
-                name="assign-btn"
+                id={
+                  id
+                    ? createIdGens("assign-userBtn")
+                    : createIdGens("assign-userBtn")
+                }
                 className="d-flex justify-content-center align-items-center mt-4"
               >
                 <Button
-                  data-testid="assign-user"
+                  data-testid={
+                    id ? createIdGens("assignUser") : createIdGens("assignUser")
+                  }
                   className="btn btn-sm w-full text-ellipsis tableButton"
                   onClick={handleOpenModal}
                 >

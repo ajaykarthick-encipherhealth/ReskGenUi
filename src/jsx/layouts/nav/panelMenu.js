@@ -90,11 +90,12 @@ const PanelMenu = ({
   }, [panelName]);
 
   return (
-    <div className={Styles.panelDiv}>
+    <div id ="header-panel" className={Styles.panelDiv}>
       <LeftOutlined
         style={{ fontSize: "14px" }}
         className={`cr-pointer ${index === 0 ? Styles.disabled : ""}`}
         onClick={() => handleLeftClick("Owner Panel")}
+        id="leftArrow-panel"
       />
       <div className={Styles.panleLable}>
         {panelName ? panelName : "Owner Panel"}
@@ -105,6 +106,7 @@ const PanelMenu = ({
           index === panelMenuList.length - 1 ? Styles.disabled : ""
         }`}
         onClick={() => handleRightClick("Workqueue Panel")}
+        id="rightArrow-panel"
       />
     </div>
   );

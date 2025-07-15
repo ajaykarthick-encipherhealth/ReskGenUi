@@ -22,6 +22,7 @@ import { actions as tenantAdminAction } from "../../stores/tenantAdmin/patients"
 import { connect } from "react-redux";
 import { getStorage, setStorage } from "../../utils/storages";
 import {
+  createIdGens,
   findItemWithTrueKey,
   findMatchesByField,
   getResponePopup,
@@ -143,6 +144,7 @@ const Patient = ({
   tableDynamicColumnReset,
   pageLoad,
   backRoute,
+  id,
 }) => {
   const [sort, setSort] = useState({
     computedDate: {
@@ -784,13 +786,20 @@ const Patient = ({
               />
             </div>
             <div
-              id="addPatient-btn"
-              name="addPatient-btn"
+              id={
+                id
+                  ? createIdGens("addPatientBtn" + id)
+                  : createIdGens("addPatientBtn")
+              }
               className="d-flex justify-content-center align-items-center mt-4 px-1"
               style={{ width: "10%" }}
             >
               <Button
-                data-testid="add-patient"
+                data-testid={
+                id
+                  ? createIdGens("addPatient" + id)
+                  : createIdGens("addPatient")
+              }
                 name="add-patient"
                 onClick={() => {
                   if (form) {

@@ -10,7 +10,7 @@ import { actions as allActions } from "../stores/authFlows";
 import { getLogoImage } from "./twofactorauthentication/reusableFun";
 import { useMsal } from "@azure/msal-react";
 import PageLoading from "../components/page-loading";
-import { getResponePopup } from "../utils/reusable";
+import { createIdGens, getResponePopup } from "../utils/reusable";
 import { ssoLogout } from "../../lib/authService";
 // import Client from "./client";
 const SelectProject = ({
@@ -27,6 +27,7 @@ const SelectProject = ({
   allRolesData,
   projectLoading,
   roleLoading,
+  id,
 }) => {
   const router = useRouter();
   const [form] = Form.useForm();
@@ -253,9 +254,19 @@ const SelectProject = ({
                   const isAllFieldsFilled = allValues.role;
                   setIsFormValid(isAllFieldsFilled);
                 }}
+                data-testid={
+                  id
+                    ? createIdGens("loginForm" + id)
+                    : createIdGens("loginForm")
+                }
               >
                 <Form.Item name="client" label={<>Client</>}>
                   <Select
+                    data-testid={
+                      id
+                        ? createIdGens("loginClient" + id)
+                        : createIdGens("loginClient")
+                    }
                     placeholder="Select Client"
                     loading={clientLoading}
                     style={{
@@ -272,10 +283,21 @@ const SelectProject = ({
                         </div>
                       ) : null
                     }
+                    filterOption={(input, option) =>
+                      (option?.label ?? "")
+                        .toLowerCase()
+                        .includes(input.toLowerCase())
+                    }
+                    showSearch
                   />
                 </Form.Item>
                 <Form.Item name="project" label={<>Project</>}>
                   <Select
+                    data-testid={
+                      id
+                        ? createIdGens("loginProject" + id)
+                        : createIdGens("loginProject")
+                    }
                     placeholder="Select Project"
                     loading={projectLoading}
                     style={{
@@ -293,10 +315,21 @@ const SelectProject = ({
                         </div>
                       ) : null
                     }
+                    filterOption={(input, option) =>
+                      (option?.label ?? "")
+                        .toLowerCase()
+                        .includes(input.toLowerCase())
+                    }
+                    showSearch
                   />
                 </Form.Item>
                 <Form.Item name="role" label={<>Role</>}>
                   <Select
+                    data-testid={
+                      id
+                        ? createIdGens("loginRole" + id)
+                        : createIdGens("loginRole")
+                    }
                     placeholder="Select Role"
                     loading={roleLoading}
                     style={{
@@ -314,6 +347,12 @@ const SelectProject = ({
                         </div>
                       ) : null
                     }
+                    filterOption={(input, option) =>
+                      (option?.label ?? "")
+                        .toLowerCase()
+                        .includes(input.toLowerCase())
+                    }
+                    showSearch
                   />
                 </Form.Item>
                 <div className="d-flex justify-content-between mt-5">

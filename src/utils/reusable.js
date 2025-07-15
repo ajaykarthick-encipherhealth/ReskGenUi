@@ -1148,13 +1148,12 @@ export const getRolePanelPermission = (roles, currentRole) => {
     return false;
   }
 };
-
 export const createIdGens = (key) => {
   const router = useRouter();
   if (key && router?.pathname) {
     return (
       key.trim().toLowerCase().replaceAll(" ", "-") +
-      router.pathname.replaceAll("/", " ")
+      router.pathname.replaceAll("/", "-")
     );
   } else if (key) {
     return key.trim().toLowerCase().replaceAll(" ", "-");
