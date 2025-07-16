@@ -208,6 +208,7 @@ const Details = ({
   const [role, setRole] = useState([]);
   const [action, setAction] = useState([]);
   const [isViewAll, setIsViewAll] = useState(false);
+  const [isFileFormShow, setIsFileFormShow] = useState(false);
 
   const handleIconClick = () => {
     setShowFilter((prev) => !prev);
@@ -1121,6 +1122,8 @@ const Details = ({
                             selectedDate={selectedDate}
                             setSelectedDate={setSelectedDate}
                             activeTab={activeTab}
+                            isFileFormShow={isFileFormShow}
+                            setIsFileFormShow={setIsFileFormShow}
                           />
                         ) : activeTab == 2 ? (
                           <NonHcc
@@ -1132,6 +1135,8 @@ const Details = ({
                             setFlagContainerActive={setFlagContainerActive}
                             selectedDate={selectedDate}
                             setSelectedDate={setSelectedDate}
+                            isFileFormShow={isFileFormShow}
+                            setIsFileFormShow={setIsFileFormShow}
                           />
                         ) : activeTab == 3 ? (
                           <Radiology
@@ -1196,7 +1201,10 @@ const Details = ({
                             ].includes(data.name);
                             const isAddDosSpecialCondition =
                               data.name === "Add DOS & Provider" &&
-                              isYearWiseDisabled(patientIdDetailsData,navigate.pathname);
+                              isYearWiseDisabled(
+                                patientIdDetailsData,
+                                navigate.pathname
+                              );
                             // const isDisabled =
                             //   (isEditDisabled && isEditDisabledList) ||
                             //   isFlagDisabled ||
@@ -1381,7 +1389,7 @@ const Details = ({
                           : dosYearDefalutSelect
                       }
                       getPatientListToDetails={getPatientListToDetails}
-                      setSelectDosValue = {setSelectDosValue}
+                      setSelectDosValue={setSelectDosValue}
                     />
                   ) : flagContainerActive === "Queried" ? (
                     <Queried

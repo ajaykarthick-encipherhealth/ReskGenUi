@@ -81,8 +81,10 @@ const Hcc = ({
   updateReEvaluate,
   getPatientIdData,
   activeTab,
+  isFileFormShow,
+  setIsFileFormShow,
 }) => {
-    const router = useRouter()
+  const router = useRouter();
   const { TextArea } = Input;
   const [form] = Form.useForm();
   const patientId = getStorage("patientId");
@@ -109,7 +111,6 @@ const Hcc = ({
   const [isReEvaluateChecked, setIsReEvaluateChecked] = useState(false);
   const [educationalError, setEducationalError] = useState(false);
   const [activeTabNameQuery, setActiveTabNameQuery] = useState(null);
-  const [isFileFormShow, setIsFileFormShow] = useState(false);
 
   const handleChange = (e) => {
     setQueryText(e.target.value);
@@ -393,13 +394,17 @@ const Hcc = ({
       getResponePopup(response);
     }
   };
-   const isDisabled = isStatusDisabled(patientIdDetailsData, patientDetailsResult, router.pathname);
+  const isDisabled = isStatusDisabled(
+    patientIdDetailsData,
+    patientDetailsResult,
+    router.pathname
+  );
 
   const isBlock =
     router.pathname.includes("/tenantadmin/tin/details") ||
     router.pathname.includes("/tenantadmin/project/details") ||
     router.pathname.includes("/tenantadmin/patientsync/batchfilesview");
-    
+
   const hideDiseasePopContent = (
     <>
       <div className="row">
@@ -538,7 +543,7 @@ const Hcc = ({
 
   useEffect(() => {
     getAllRoles();
-  }, []);  
+  }, []);
   return (
     <div className={visitStyles.visitdata_tab_body}>
       <div className={`profile-tab ${visitStyles.visitdata_header_card2}`}>

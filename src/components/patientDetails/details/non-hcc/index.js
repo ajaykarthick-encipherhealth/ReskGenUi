@@ -32,6 +32,7 @@ const NonHcc = ({
   setSelectedDate,
   storeFileDetails,
   getSelectedDosPageNumber,
+  setIsFileFormShow,
 }) => {
   // const [selectDosValue, setSelectDosValue] = useState("");
   const [dosSummariesList, setDosSummariesList] = useState([]);
@@ -158,7 +159,10 @@ const NonHcc = ({
                     setSearch={setSearch}
                     setFlagContainerActive={setFlagContainerActive}
                     selectedDate={selectedDate}
+                    getSelectedDos={getSelectedDos}
                     setSelectedDate={setSelectedDate}
+                    isDosSelected={isDosSelected}
+                    setIsFileFormShow={setIsFileFormShow}
                   />
                   {/* <Select
                     placeholder="Select DOS"
@@ -179,6 +183,7 @@ const NonHcc = ({
                     <YearAndDosStatus
                       isDosStatus={true}
                       setIsLoading={setIsLoading}
+                      setIsFileFormShow={setIsFileFormShow}
                     />
                   )}
                 </Nav.Item>
