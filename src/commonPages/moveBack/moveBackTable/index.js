@@ -101,9 +101,10 @@ const MoveBackTable = ({
             "checkBox"
           )}
           checkedHeader={
-            currentPageIds.length > 0 &&
-            currentPageIds.every((id) => selectedRows.includes(id))
-          }
+          selectedRows?.length ===
+            data?.response?.pageResponse?.totalElements &&
+          data?.response?.pageResponse?.totalElements !== 0
+        }
           statusBodyTemplate={statusBodyTemplate}
         />
       </div>

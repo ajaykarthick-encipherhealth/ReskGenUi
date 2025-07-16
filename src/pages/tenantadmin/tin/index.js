@@ -584,7 +584,8 @@ const Tin = ({
                     id
                       ? createIdGen("active-InactiveBtn" + id)
                       : createIdGen(
-                          "active-InactiveBtn" + router.pathname.replaceAll("/", " ")
+                          "active-InactiveBtn" +
+                            router.pathname.replaceAll("/", " ")
                         )
                   }
                   className="tableButton"
@@ -599,13 +600,13 @@ const Tin = ({
         {activeTab == "Providers" && (
           <div className="d-flex align-items-center justify-content-end align-items-end p-3 ">
             <Button
-                data-testid={
-                    id
-                      ? createIdGen("providerBtn" + id)
-                      : createIdGen(
-                          "providerBtn" + router.pathname.replaceAll("/", " ")
-                        )
-                  }
+              data-testid={
+                id
+                  ? createIdGen("providerBtn" + id)
+                  : createIdGen(
+                      "providerBtn" + router.pathname.replaceAll("/", " ")
+                    )
+              }
               className="tableButton"
               onClick={showModal}
             >
@@ -675,8 +676,9 @@ const Tin = ({
                   "checkBox"
                 )}
                 checkedHeader={
-                  currentPageIds.length > 0 &&
-                  currentPageIds.every((id) => selectedRows.includes(id))
+                  selectedRows?.length ===
+                    data?.response?.pageResponse?.totalElements &&
+                  data?.response?.pageResponse?.totalElements !== 0
                 }
                 selectedRowsId={selectedRowsId}
                 setSelectedRowsId={setSelectedRowsId}
@@ -711,8 +713,9 @@ const Tin = ({
                   "checkBox"
                 )}
                 checkedHeader={
-                  currentPageIds.length > 0 &&
-                  currentPageIds.every((id) => selectedRows.includes(id))
+                  selectedRows?.length ===
+                    data?.response?.pageResponse?.totalElements &&
+                  data?.response?.pageResponse?.totalElements !== 0
                 }
                 selectedRowsId={selectedRowsId}
                 setSelectedRowsId={setSelectedRowsId}
