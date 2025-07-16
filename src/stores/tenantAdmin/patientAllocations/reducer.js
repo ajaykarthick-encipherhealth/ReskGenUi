@@ -15,7 +15,8 @@ import {
   postMoveBack,
   getAllRoles,
   getReAllocateUserList,
-  reAllocateUser
+  reAllocateUser,
+  getUserList
 } from "./actions";
 
 const initialState = {
@@ -77,6 +78,7 @@ const patientsAllocationReducer = combineReducers({
   getRoles:createReducer(getAllRoles),
   getReAllocateUserList:createReducer(getReAllocateUserList),
   reAllocateUser:createReducer(reAllocateUser),
+  getUserList:createReducer(getUserList),
 
   //loaders
   rolesLoader:getReportLoading(getAllRoles),

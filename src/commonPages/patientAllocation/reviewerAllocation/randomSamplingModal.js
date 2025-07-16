@@ -32,14 +32,18 @@ const RandomSamplingModal = ({
   setIsAllocate,
   getAllTabRoles,
   roleAliasName,
+  setFormValues,
+  formValues,
+  form,
 }) => {
+  // const [form] = Form.useForm();
   const tinNumber = getStorage("tinNumber");
   const userId = getStorage("userId");
   const [activeCard, setActiveCard] = useState("");
   const [search, setSearch] = useState("");
   const [userDetails, setUserDetails] = useState([]);
   const [activeEmail, setActiveEmail] = useState([]);
-  const [formValues, setFormValues] = useState(null);
+  // const [formValues, setFormValues] = useState({});
   const [statusCount, setStatusCount] = useState([]);
   const getInitials = (firstName, lastName) => {
     const firstNameInitial = firstName?.charAt(0) || "";
@@ -47,7 +51,7 @@ const RandomSamplingModal = ({
     return firstNameInitial?.toUpperCase() + secondNameInitial?.toUpperCase();
   };
   const [selectedUserIds, setSelectedUserIds] = useState([]);
-  const [form] = Form.useForm();
+  const [roles, setRoles] = useState([]);
   const handleOk = () => {
     setIsModalOpen(false);
   };
@@ -56,13 +60,22 @@ const RandomSamplingModal = ({
     setSelectedUserIds([]);
     setActiveCard("");
     setActiveEmail([]);
-    setFormValues([]);
+    setFormValues({});
     form.resetFields();
   };
+  const aliasOptions = userDetails
+    .filter(
+      (item, index, self) =>
+        index === self.findIndex((i) => i.aliasName === item.aliasName)
+    )
+    .map((item) => ({
+      label: item.aliasName?.split("_")?.join(" "),
+      value: item.role,
+    }));
 
   const getUserList = async ({ roleId, search }) => {
     const response = await getL1UsersList({
-      roleId: roleId || "",
+      roleId: roleAliasName === "MASTER_AUDIT" ? roles || "" : roleId || "",
       search: search,
       masterAudit: roleAliasName === "MASTER_AUDIT" ? true : false,
     });
@@ -123,10 +136,10 @@ const RandomSamplingModal = ({
     if (response?.status === "SUCCESS") {
       getResponePopup(response);
       getAllTabRoles({
-      pageId: "6cd166eb-79ac-4c12-ab0f-07be2983ca70",
+        pageId: "6cd166eb-79ac-4c12-ab0f-07be2983ca70",
       });
       getAllAllocation();
-      setFormValues(null);
+      setFormValues({});
       setOpen(false);
       setIsModalOpen(false);
       setActiveCard("");
@@ -135,16 +148,18 @@ const RandomSamplingModal = ({
       setSelectedRowsId([]);
       setSelectedRows([]);
       setSelectedUserIds([]);
+      setRoles([]);
+      form.resetFields();
     } else {
       getResponePopup(response);
-      setFormValues([]);
     }
   };
+
   const handleUserSelect = (proxyId, email) => {
     const user = userDetails.find((u) => u.proxyId === proxyId);
     const isSelected = selectedUserIds.includes(proxyId);
     if (isSelected) {
-      setSelectedUserIds((prev) => prev.filter((userId) => userId !== proxyId));  
+      setSelectedUserIds((prev) => prev.filter((userId) => userId !== proxyId));
       setActiveEmail((prev) =>
         prev.filter((u) => !(u.username === email && u.roleId === user?.role))
       );
@@ -174,6 +189,9 @@ const RandomSamplingModal = ({
       setSelectedUserIds(allIds);
       setActiveEmail(allUsers);
     }
+  };
+  const handleRoleChange = (value) => {
+    setRoles(value);
   };
   const userTitle = () => {
     return (
@@ -211,12 +229,12 @@ const RandomSamplingModal = ({
   useEffect(() => {
     if (roleId) {
       getUserList({
-        roleId: roleId,
+        roleId: roleAliasName === "MASTER_AUDIT" ? roles || "" : roleId || "",
         search: search,
         masterAudit: roleAliasName === "MASTER_AUDIT" ? true : false,
       });
     }
-  }, [roleId, search, roleAliasName]);
+  }, [roleId, search, roleAliasName ,roles] );
 
   return (
     <div>
@@ -228,8 +246,9 @@ const RandomSamplingModal = ({
           setActiveEmail([]);
           setSearch("");
           setSelectedUserIds([]);
-          setFormValues(null);
+          setFormValues({});
           form.resetFields();
+          setRoles([]);
         }}
         title={roleAliasName === "MASTER_AUDIT" ? "Select User" : userTitle()}
         footer={false}
@@ -258,6 +277,17 @@ const RandomSamplingModal = ({
           <Select
             className={modalStyle.allocationInput}
             placeholder="Select Role"
+            options={
+              roleAliasName === "MASTER_AUDIT"
+                ? [
+                    { value: "7", label: "QA Lead" },
+                    { value: "2", label: "Owner" },
+                  ]
+                : aliasOptions || []
+            }
+            allowClear
+            value={roles}
+            onChange={handleRoleChange}
           />
         </div>
 

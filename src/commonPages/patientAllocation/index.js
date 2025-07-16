@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Tab, Nav } from "react-bootstrap";
 import ReviewerAllocation from "./reviewerAllocation";
-import { Button, Tooltip } from "antd";
+import { Button, Tooltip , Form } from "antd";
 import ReviewerAllocationModal from "./reviewerAllocation/reviewerAllocationModal";
 import { connect } from "react-redux";
 import { actions as allActions } from "../../stores/tenantAdmin/patientAllocations";
@@ -69,7 +69,8 @@ const PatientAllocation = ({
   const [isFilter, setIsFilter] = useState(true);
   const [clear, setClear] = useState(false);
   const [roleAliasName, setRoleAliasName] = useState("");
-
+  const [formValues, setFormValues] = useState({});
+   const [form] = Form.useForm();
   const disbaleAllocate = allRoles?.allocationRoles?.map(
     (item) => item.disableAllocation
   );
@@ -88,6 +89,8 @@ const PatientAllocation = ({
     setSearch(null);
     setSelectedRowsId([]);
     setCheckedHeader(false);
+    setFormValues({});
+    form.resetFields();
   };
 
   const handleOpenModal = () => {
@@ -550,6 +553,9 @@ const PatientAllocation = ({
         setIsAllocate={setIsAllocate}
         showModal={showModal}
         roleAliasName={roleAliasName}
+        formValues={formValues}
+        setFormValues={setFormValues}
+        form={form}
       />
     </div>
   );

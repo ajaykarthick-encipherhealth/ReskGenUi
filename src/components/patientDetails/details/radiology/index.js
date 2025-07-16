@@ -283,9 +283,9 @@ const Radiology = ({
                 <div className="col-12">
                   <Nav
                     as="ul"
-                    className={`nav nav-tabs ${styles.tabsContainer}`}
+                    className={`nav nav-tabs   ${styles.tabsContainer}`}
                   >
-                    <div className={styles.tabslistConatiner}>
+                    <div className={ ` align-items-center ${styles.tabslistConatiner}`}>
                       <Nav.Item as="li" className="nav-item">
                         <Nav.Link
                           to="#my-posts"

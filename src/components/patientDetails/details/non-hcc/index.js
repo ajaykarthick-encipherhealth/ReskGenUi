@@ -129,7 +129,7 @@ const NonHcc = ({
         <div className={`profile-tab ${visitStyles.visitdata_header_card2}`}>
           <div className="custom-tab-1">
             <Tab.Container defaultActiveKey="file">
-              <Nav as="ul" className="nav nav-tabs">
+              <Nav as="ul" className="nav nav-tabs d-flex align-items-center">
                 <Nav.Item as="li" className="nav-item">
                   <Nav.Link
                     to="#my-posts"

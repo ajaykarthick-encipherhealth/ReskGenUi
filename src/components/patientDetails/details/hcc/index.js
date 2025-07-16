@@ -552,7 +552,7 @@ const Hcc = ({
             <div className="row">
               <div className="col-12">
                 <Nav as="ul" className="nav nav-tabs">
-                  <div className={`d-flex  flex-wrap `}>
+                  <div className={`d-flex  flex-wrap  align-items-center`}>
                     {/* <div className="d-flex"> */}
                     <Nav.Item as="li" className="nav-item ">
                       <Nav.Link

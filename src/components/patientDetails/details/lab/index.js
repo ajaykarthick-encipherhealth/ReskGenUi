@@ -269,7 +269,7 @@ const Lab = ({
                     as="ul"
                     className={`nav nav-tabs ${styles.tabsContainer}`}
                   >
-                    <div className={styles.tabslistConatiner}>
+                   <div className={ ` align-items-center ${styles.tabslistConatiner}`}>
                       <Nav.Item as="li" className="nav-item">
                         <Nav.Link
                           to="#my-posts"

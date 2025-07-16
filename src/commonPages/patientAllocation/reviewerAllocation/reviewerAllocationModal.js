@@ -68,16 +68,30 @@ const AllocateModal = ({
   };
   const [selectedUserIds, setSelectedUserIds] = useState([]);
   const [isSecondModalOpen, setIsSecondModalOpen] = useState(false);
+  const [roles, setRoles] = useState([]);
 
+  const aliasOptions = userDetails
+    .filter(
+      (item, index, self) =>
+        index === self.findIndex((i) => i.aliasName === item.aliasName)
+    )
+    .map((item) => ({
+      label: item.aliasName?.split("_")?.join(" "),
+      value: item.role,
+    }));
+
+  const handleRoleChange = (value) => {
+    setRoles(value);
+  };
   const handleChange = (value) => {
     setPriority(value);
   };
 
   const getUserList = async ({ roleId, search }) => {
     const response = await getL1UsersList({
-      roleId: roleId || "",
+      roleId: roleAliasName === "MASTER_AUDIT" ? roles || "" : roleId || "",
       search: search || "",
-       masterAudit: roleAliasName === "MASTER_AUDIT" ? true : false,
+      masterAudit: roleAliasName === "MASTER_AUDIT" ? true : false,
     });
     if (response?.status === "SUCCESS") {
       let result = response?.response;
@@ -88,7 +102,7 @@ const AllocateModal = ({
           id: item.id,
           role: item.roleId,
           email: item.userName,
-          aliasName:item.aliasName,
+          aliasName: item.aliasName,
           proxyId: item.proxyId,
         };
       });
@@ -107,7 +121,7 @@ const AllocateModal = ({
         allocatedBy: userId,
         patientIdList: selectedRowsId,
         priority: priority,
-        masterAudit:true
+        masterAudit: true,
       };
     } else {
       data = {
@@ -136,6 +150,7 @@ const AllocateModal = ({
       setSelectedUserName([]);
       setSelectedUserIds([]);
       setIsSecondModalOpen(false);
+      setRoles([]);
     } else {
       getResponePopup(response);
       setIsAllocate(false);
@@ -146,7 +161,7 @@ const AllocateModal = ({
     const user = userDetails.find((u) => u.proxyId === proxyId);
     const isSelected = selectedUserIds.includes(proxyId);
     if (isSelected) {
-      setSelectedUserIds((prev) => prev.filter((userId) => userId !== proxyId));  
+      setSelectedUserIds((prev) => prev.filter((userId) => userId !== proxyId));
       setActiveEmail((prev) =>
         prev.filter((u) => !(u.username === email && u.roleId === user?.role))
       );
@@ -180,13 +195,12 @@ const AllocateModal = ({
   useEffect(() => {
     if (roleId) {
       getUserList({
-        roleId: roleId,
+        roleId: roleAliasName === "MASTER_AUDIT" ? roles  || "": roleId,
         search: search,
         masterAudit: roleAliasName === "MASTER_AUDIT" ? true : false,
       });
     }
-  }, [roleId, search, roleAliasName]);
-
+  }, [roleId, search, roleAliasName, roles]);
   useEffect(() => {
     setSelectedChart(selectedRowsId);
   }, [selectedRowsId]);
@@ -222,7 +236,6 @@ const AllocateModal = ({
       </div>
     );
   };
-  console.log(userDetails,"userDetails")
   return (
     <div>
       <Modal
@@ -235,6 +248,7 @@ const AllocateModal = ({
           setAllocateDate(null);
           setPriority([]);
           setSelectedUserIds([]);
+          setRoles([]);
         }}
         title={roleAliasName === "MASTER_AUDIT" ? "Select User" : userTitle()}
         footer={false}
@@ -263,6 +277,17 @@ const AllocateModal = ({
           <Select
             className={modalStyle.allocationInput}
             placeholder="Select Role"
+            options={
+              roleAliasName === "MASTER_AUDIT"
+                ? [
+                    { value: "7", label: "QA Lead" },
+                    { value: "2", label: "Owner" },
+                  ]
+                : aliasOptions || []
+            }
+            allowClear
+            value={roles}
+            onChange={handleRoleChange}
           />
         </div>
         {usersLoader ? (
@@ -310,11 +335,11 @@ const AllocateModal = ({
                           {item.firstName + " " + item.lastName}
                         </p>
                         <p className={`mt-2 ${modalStyle.listRole}`}>
-                            {item?.aliasName?.split("_")?.join(" ")}
+                          {item?.aliasName?.split("_")?.join(" ")}
                         </p>
                       </div>
                     </div>
-                     <input
+                    <input
                       style={{
                         width: "20px",
                         height: "20px",

@@ -1,5 +1,13 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Avatar, Checkbox, DatePicker, Empty, Input, Modal, Select } from "antd";
+import {
+  Avatar,
+  Checkbox,
+  DatePicker,
+  Empty,
+  Input,
+  Modal,
+  Select,
+} from "antd";
 import modalStyle from "../../../pages/tenantadmin/allocateduser/allocate/style.module.css";
 import { InputText } from "primereact/inputtext";
 import { useEffect, useState } from "react";
@@ -24,12 +32,10 @@ const ReAllocationModal = ({
   setSelectedRowsId,
   selectedChart,
   setSelectedChart,
-  getL1UsersList,
   reAllocateUser,
   setSelectedRows,
   selectedUserName,
   setSelectedUserName,
-  reAllocateUserLoader,
   getAllReAllocation,
   setIsAllocate,
   roleId,
@@ -57,6 +63,7 @@ const ReAllocationModal = ({
   const [selectedUserIds, setSelectedUserIds] = useState([]);
   const [isSecondModalOpen, setIsSecondModalOpen] = useState(false);
   const [isChecked, setIsChecked] = useState(false);
+  const [roles, setRoles] = useState([]);
 
   const getInitials = (firstName, lastName) => {
     const firstNameInitial = firstName?.charAt(0) || "";
@@ -76,6 +83,7 @@ const ReAllocationModal = ({
       data: {
         roleId: roleId || "",
         search: search || "",
+        aliasName: roles || "",
         userRoleDTOList: selectedUserName.map(({ username, roleId }) => ({
           username,
           roleId,
@@ -91,7 +99,7 @@ const ReAllocationModal = ({
           firstName: item.firstName,
           lastName: item.lastName,
           id: item.id,
-          roleId: item.roleId,
+          role: item.roleId,
           email: item.userName,
           aliasName: item.aliasName,
           proxyId: item.proxyId,
@@ -102,7 +110,21 @@ const ReAllocationModal = ({
     } else {
       setIsLoading(false);
     }
-  }
+  };
+  const aliasOptions = userDetails
+    ?.filter(
+      (item, index, self) =>
+        index === self.findIndex((i) => i.aliasName === item.aliasName)
+    )
+    ?.map((item) => ({
+      label: item.aliasName?.split("_")?.join(" "),
+      value: item.role,
+    }));
+
+  const handleRoleChange = (value) => {
+    setRoles(value);
+  };
+
   const setAllocate = async () => {
     setIsAllocate(true);
 
@@ -110,24 +132,24 @@ const ReAllocationModal = ({
 
     if (roleAliasName === "MASTER_AUDIT") {
       payload = {
-       roleId: Number(activeEmail.map((role)=>role.roleId)),
-        reallocateUserName: activeEmail.map((item)=>item.email).toString(),
+        roleId: Number(activeEmail.map((role) => role.roleId)),
+        reallocateUserName: activeEmail.map((item) => item.email).toString(),
         dueDate: formatDateForIndex({ date: allocateDate, index: 1 }),
-        patientId: selectedRowsId,
-        priority :priority,
-        changesNeeded: isChecked,
-        isMasterAudit:true
-      };
-    } else {
-       payload = {
-        roleId: Number(activeEmail.map((role)=>role.roleId)),
-        dueDate: formatDateForIndex({ date: allocateDate, index: 1 }),
-        reallocateUserName: activeEmail.map((item)=>item.email).toString(),
         patientId: selectedRowsId,
         priority: priority,
         changesNeeded: isChecked,
-       };
-      }
+        isMasterAudit: true,
+      };
+    } else {
+      payload = {
+        roleId: Number(activeEmail.map((role) => role.roleId)),
+        dueDate: formatDateForIndex({ date: allocateDate, index: 1 }),
+        reallocateUserName: activeEmail.map((item) => item.email).toString(),
+        patientId: selectedRowsId,
+        priority: priority,
+        changesNeeded: isChecked,
+      };
+    }
     const response = await reAllocateUser({ data: payload });
 
     if (response?.status === "SUCCESS") {
@@ -146,6 +168,7 @@ const ReAllocationModal = ({
       setSelectedUserIds([]);
       setIsSecondModalOpen(false);
       setIsChecked(false);
+      setRoles([]);
     } else {
       getResponePopup(response);
       setIsAllocate(false);
@@ -153,22 +176,22 @@ const ReAllocationModal = ({
   };
 
   const handleRowCheckboxChange = ({ e, row }) => {
-  if (e.target?.checked) {
-    setSelectedUserIds([row.proxyId]);
+    if (e.target?.checked) {
+      setSelectedUserIds([row.proxyId]);
 
-    setActiveEmail([{ email: row.email, roleId: row.roleId }]);
-  } else {
-    setSelectedUserIds([]);
-    setActiveEmail([]); 
-  }
+      setActiveEmail([{ email: row.email, roleId: row.roleId }]);
+    } else {
+      setSelectedUserIds([]);
+      setActiveEmail([]);
+    }
 
-  setActiveCard("");
-};
+    setActiveCard("");
+  };
   useEffect(() => {
     if (allocateModal) {
-      getUserList({ roleId: roleId,  search: search, userName: selectedUserName });
+      getUserList();
     }
-  }, [roleId, selectedUserName, allocateModal, search]);
+  }, [roleId, selectedUserName, allocateModal, search, roles]);
   useEffect(() => {
     setSelectedChart(selectedRowsId);
   }, [selectedRowsId]);
@@ -185,6 +208,7 @@ const ReAllocationModal = ({
           setAllocateDate(null);
           setPriority([]);
           setSelectedUserIds([]);
+          setRoles([]);
         }}
         title="Select User"
         footer={false}
@@ -192,7 +216,7 @@ const ReAllocationModal = ({
         height={100}
         className={"custom-modal"}
       >
-         <div className="d-flex align-items-center justify-content-evenly mt-2">
+        <div className="d-flex align-items-center justify-content-evenly mt-2">
           <Input
             onKeyDown={(e) => {
               if (e.key === "\\") {
@@ -213,6 +237,10 @@ const ReAllocationModal = ({
           <Select
             className={modalStyle.allocationInput}
             placeholder="Select Role"
+            options={aliasOptions}
+            allowClear
+            value={roles}
+            onChange={handleRoleChange}
           />
         </div>
         {isLoading ? (
