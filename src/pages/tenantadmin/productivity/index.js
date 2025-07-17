@@ -5,7 +5,11 @@ import { connect } from "react-redux";
 import { actions as allActions } from "../../../stores/tenantAdmin/patientAllocations";
 import { actions as tinActions } from "../../../stores/tenantAdmin/tin";
 import { actions as tableAction } from "../../../stores/tableView";
-import { findMatchesByField, getResponePopup } from "../../../utils/reusable";
+import {
+  findMatchesByField,
+  getResponePopup,
+  tableCustomFilterClearCheck,
+} from "../../../utils/reusable";
 import { getStorage } from "../../../utils/storages";
 import ReusableFilters from "../../../components/reusableFilters";
 import CardSkeleton from "../../../components/skeleton/card";
@@ -104,7 +108,6 @@ const Productivity = ({
 
   const handleSubmit = async (data) => {
     setIsSubmitting(true);
-
     const payload = {
       pageId: "73b15fb8-41cf-4e58-9d9b-a3256bbb79b0",
       headerNames: data.map((col) => col.id),
@@ -114,7 +117,20 @@ const Productivity = ({
       const response = await tableDynamicColumn({ payload });
       if (response?.status === "SUCCESS") {
         setIsFilter(true);
-        getAllAllocation();
+        const filterCheck = tableCustomFilterClearCheck(
+          {searchText,
+          selectedDateRanges,
+          selectedDates,
+          selectedOption,
+          setSearchText,
+          setSelectedDateRanges,
+          setSelectedDates,
+          setSelectedOption,
+          data}
+        );
+        if (filterCheck) {
+          getAllAllocation();
+        }
         onClose();
         getResponePopup(response);
       }
@@ -203,13 +219,12 @@ const Productivity = ({
       );
       setIsFilter(false);
     }
-    if(data?.response?.pageResponse?.content){
- setTotalDatas([
-      ...(data?.response?.pageResponse?.content || []),
-      data?.response?.totalResponse || [],
-    ]);
+    if (data?.response?.pageResponse?.content) {
+      setTotalDatas([
+        ...(data?.response?.pageResponse?.content || []),
+        data?.response?.totalResponse || [],
+      ]);
     }
-   
   }, [data?.response?.metaDataDTO]);
 
   return (

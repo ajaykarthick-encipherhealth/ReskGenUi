@@ -12,6 +12,7 @@ import {
   findItemWithTrueKey,
   findMatchesByField,
   getResponePopup,
+  tableCustomFilterClearCheck,
 } from "../../../utils/reusable";
 import ReusableFilters from "../../../components/reusableFilters";
 import { PlusCircleFilled } from "@ant-design/icons";
@@ -279,7 +280,20 @@ const UserList = ({
       const response = await tableDynamicColumn({ payload });
       if (response?.status === "SUCCESS") {
         setIsFilter(true);
-        getAllUsers();
+        const filterCheck = tableCustomFilterClearCheck(
+          {searchText,
+          selectedDateRanges,
+          selectedDates,
+          selectedOption,
+          setSearchText,
+          setSelectedDateRanges,
+          setSelectedDates,
+          setSelectedOption,
+          data}
+        );
+        if (filterCheck) {
+          getAllUsers();
+        }
         onClose();
         getResponePopup(response);
       }

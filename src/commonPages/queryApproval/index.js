@@ -10,7 +10,11 @@ import QueryTable from "./queryTable";
 import Header from "../../jsx/layouts/nav/Header";
 import CardSkeleton from "../../components/skeleton/card";
 import { actions as tableAction } from "../../stores/tableView";
-import { findMatchesByField, getResponePopup } from "../../utils/reusable";
+import {
+  findMatchesByField,
+  getResponePopup,
+  tableCustomFilterClearCheck,
+} from "../../utils/reusable";
 import { getStorage, setStorage } from "../../utils/storages";
 import { useRouter } from "next/router";
 
@@ -63,7 +67,7 @@ const QueryApproval = ({
     var data = {
       activeTab: key,
     };
-     getTableData({ reloadTrue: true });
+    getTableData({ reloadTrue: true });
     getRoutedData(data);
     setActiveTab(key);
     setSearchText("");
@@ -114,7 +118,9 @@ const QueryApproval = ({
   };
 
   const getRolesList = async () => {
-    const res = await getAllTabRoles({pageId:"8c1eebaf-eb20-4758-b968-6ae15e6fc031"});
+    const res = await getAllTabRoles({
+      pageId: "8c1eebaf-eb20-4758-b968-6ae15e6fc031",
+    });
     if (res?.status === "SUCCESS") {
       setRoleId(res?.response?.allocationRoles[0]?.roleId);
       setSelectedRole(res?.response?.allocationRoles[0]?.aliasName);
@@ -140,7 +146,20 @@ const QueryApproval = ({
       const response = await tableDynamicColumn({ payload });
       if (response?.status === "SUCCESS") {
         setIsFilter(true);
-        getQueryApproval();
+        const filterCheck = tableCustomFilterClearCheck(
+         { searchText,
+          selectedDateRanges,
+          selectedDates,
+          selectedOption,
+          setSearchText,
+          setSelectedDateRanges,
+          setSelectedDates,
+          setSelectedOption,
+          data}
+        );
+        if (filterCheck) {
+          getQueryApproval();
+        }
         onClose();
         getResponePopup(response);
       }

@@ -12,6 +12,7 @@ import {
   findItemWithTrueKey,
   findMatchesByField,
   getResponePopup,
+  tableCustomFilterClearCheck,
 } from "../../../utils/reusable";
 import { Button, Popover, Select } from "antd";
 import Usersmodal from "./usersmodal";
@@ -120,7 +121,20 @@ const Users = ({
       const response = await tableDynamicColumn({ payload });
       if (response?.status === "SUCCESS") {
         setIsFilter(true);
-        getUsersAPi();
+        const filterCheck = tableCustomFilterClearCheck(
+         { searchText,
+          selectedDateRanges,
+          selectedDates,
+          selectedOption,
+          setSearchText,
+          setSelectedDateRanges,
+          setSelectedDates,
+          setSelectedOption,
+          data}
+        );
+        if (filterCheck) {
+          getUsersAPi();
+        }
         onClose();
         getResponePopup(response);
       }

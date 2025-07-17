@@ -17,6 +17,7 @@ import {
   convertToCustomParamsDatePicker,
   findMatchesByField,
   getResponePopup,
+  tableCustomFilterClearCheck,
 } from "../../../utils/reusable";
 import visitStyles from "../../../styles/visitdata.module.css";
 import { LoadingOutlined } from "@ant-design/icons";
@@ -33,7 +34,7 @@ const Patient = ({
   tableLoader,
   pageLoad,
 }) => {
-  const userRole = getStorage("userRole")
+  const userRole = getStorage("userRole");
   const [pageNo, setPageNo] = useState(0);
   const [paginationFirst, setPaginationFirst] = useState(0);
   const [sort, setSort] = useState({
@@ -155,7 +156,20 @@ const Patient = ({
       const response = await tableDynamicColumn({ payload });
       if (response?.status === "SUCCESS") {
         setIsFilter(true);
-        getAllTracking();
+        const filterCheck = tableCustomFilterClearCheck(
+        {  searchText,
+          selectedDateRanges,
+          selectedDates,
+          selectedOption,
+          setSearchText,
+          setSelectedDateRanges,
+          setSelectedDates,
+          setSelectedOption,
+          data}
+        );
+        if (filterCheck) {
+          getAllTracking();
+        }
         onClose();
         getResponePopup(response);
       }
@@ -281,10 +295,12 @@ const Patient = ({
     if (selectedDateRanges) {
       dateRangeParams = convertToCustomParamsDatePicker(selectedDateRanges);
     }
-    const baseUrl = `${portalUrl}dbservice/get-excel?roleId=${roleId || ""}&isAdmin=true`;
+    const baseUrl = `${portalUrl}dbservice/get-excel?roleId=${
+      roleId || ""
+    }&isAdmin=true`;
     const finalUrl = `${baseUrl}${searchTextParams}${selectParams}${dateRangeParams}`;
     setLoading(true);
-    try {     
+    try {
       const result = await fetch(finalUrl, {
         method: "GET",
         headers: {
@@ -332,7 +348,7 @@ const Patient = ({
   };
 
   const generateBtnClick = async () => {
-   const response = await  logsDownload({
+    const response = await logsDownload({
       selectedDateRanges,
       searchText,
       roleId: getStorage("roleId"),
@@ -376,43 +392,47 @@ const Patient = ({
       <div className="content-body">
         <div className="container-fluid">
           <div className="table-responsive active-projects task-table">
-              <div className="mt-4">
-                <ReusableFilters
-                  showFilter={true}
-                  setActiveFilters={setActiveFilters}
-                  setSearchText={setSearchText}
-                  searchText={searchText}
-                  setSelectedOption={setSelectedOption}
-                  selectedOption={selectedOption}
-                  setSelectedDateRanges={setSelectedDateRanges}
-                  selectedDateRanges={selectedDateRanges}
-                  setPageNumber={setPageNumber}
-                  FilterItems={activeFilters}
-                  selectedDates={selectedDates}
-                  setSelectedDates={setSelectedDates}
-                  activeFilters={activeFilters}
-                  setClear={setClear}
-                  clear={clear}
-                  setPageNo={setPageNo}
-                  //customize table
-                  open={open}
-                  onClose={onClose}
-                  selectedColumns={test}
-                  setSelectedColumns={setTest}
-                  showCustomizeTable={true}
-                  showDrawer={showDrawer}
-                  handleSubmit={handleSubmit}
-                  handleReset={handleReset}
-                  isSubmitting={isSubmitting}
-                  isResetting={isResetting}
-                  tableLoader={tableLoader}
-                  btnName={"Export"}
-                  showGenerateReport={ userRole === "TENANT_ADMIN" || userRole === "OWNER" ?true :false}
-                  generateBtnClick={generateBtnClick}
-                  btnDisabled={loading}
-                  btnLoading={loading}
-                />
-              </div>
+            <div className="mt-4">
+              <ReusableFilters
+                showFilter={true}
+                setActiveFilters={setActiveFilters}
+                setSearchText={setSearchText}
+                searchText={searchText}
+                setSelectedOption={setSelectedOption}
+                selectedOption={selectedOption}
+                setSelectedDateRanges={setSelectedDateRanges}
+                selectedDateRanges={selectedDateRanges}
+                setPageNumber={setPageNumber}
+                FilterItems={activeFilters}
+                selectedDates={selectedDates}
+                setSelectedDates={setSelectedDates}
+                activeFilters={activeFilters}
+                setClear={setClear}
+                clear={clear}
+                setPageNo={setPageNo}
+                //customize table
+                open={open}
+                onClose={onClose}
+                selectedColumns={test}
+                setSelectedColumns={setTest}
+                showCustomizeTable={true}
+                showDrawer={showDrawer}
+                handleSubmit={handleSubmit}
+                handleReset={handleReset}
+                isSubmitting={isSubmitting}
+                isResetting={isResetting}
+                tableLoader={tableLoader}
+                btnName={"Export"}
+                showGenerateReport={
+                  userRole === "TENANT_ADMIN" || userRole === "OWNER"
+                    ? true
+                    : false
+                }
+                generateBtnClick={generateBtnClick}
+                btnDisabled={loading}
+                btnLoading={loading}
+              />
+            </div>
             <div id="task-tbl_wrapper" className="dataTables_wrapper no-footer">
               <div className="mt-3">
                 <AppTable

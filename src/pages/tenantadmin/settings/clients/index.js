@@ -8,11 +8,12 @@ import {
   findMatchesByField,
   formatDateForIndex,
   getResponePopup,
+  tableCustomFilterClearCheck,
 } from "../../../../utils/reusable";
 import { actions as tableAction } from "../../../../stores/tableView";
 import { actions as authActions } from "../../../../stores/authFlows";
 import { disablePastDate } from "../../../../components/headerFilters/functions";
-import RegularButton from '../../../../components/button'
+import RegularButton from "../../../../components/button";
 
 const Clients = ({
   createClient,
@@ -23,7 +24,7 @@ const Clients = ({
   tableDynamicColumnReset,
   pageLoad,
   getAllClientDetails,
-  clientLoader
+  clientLoader,
 }) => {
   const [form] = Form.useForm();
   const { RangePicker } = DatePicker;
@@ -131,7 +132,20 @@ const Clients = ({
       const response = await tableDynamicColumn({ payload });
       if (response?.status === "SUCCESS") {
         setIsFilter(true);
-        getClientsDetails();
+        const filterCheck = tableCustomFilterClearCheck(
+        {  searchText,
+          selectedDateRanges,
+          selectedDates,
+          selectedOption,
+          setSearchText,
+          setSelectedDateRanges,
+          setSelectedDates,
+          setSelectedOption,
+          data}
+        );
+        if (filterCheck) {
+          getClientsDetails();
+        }
         onClose();
         getResponePopup(response);
       }
@@ -321,7 +335,7 @@ const enhancer = connect(
     data: state?.tableView?.tableView?.data,
     tableLoader: state?.tableView?.tableViewLoading,
     pageLoad: state?.tenantAdmin?.tin?.getPageRendering,
-    clientLoader:state?.tenantAdmin?.settings?.clientCreationLoading
+    clientLoader: state?.tenantAdmin?.settings?.clientCreationLoading,
   }),
   {
     createProject: settingActions.createProjectAction,

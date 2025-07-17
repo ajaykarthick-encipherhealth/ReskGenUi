@@ -15,6 +15,7 @@ import {
   findMatchesByField,
   getAccessTabItems,
   getResponePopup,
+  tableCustomFilterClearCheck,
 } from "../../../utils/reusable";
 import { actions as tableAction } from "../../../stores/tableView";
 import styles from "../../../styles/visitdata.module.css";
@@ -248,7 +249,20 @@ const Tin = ({
       const response = await tableDynamicColumn({ payload });
       if (response?.status === "SUCCESS") {
         setIsFilter(true);
-        getAllTins();
+        const filterCheck = tableCustomFilterClearCheck(
+         { searchText,
+          selectedDateRanges,
+          selectedDates,
+          selectedOption,
+          setSearchText,
+          setSelectedDateRanges,
+          setSelectedDates,
+          setSelectedOption,
+          data}
+        );
+        if (filterCheck) {
+          getAllTins();
+        }
         onClose();
         getResponePopup(response);
       }

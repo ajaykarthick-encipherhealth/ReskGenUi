@@ -28,6 +28,7 @@ import {
   findMatchesByField,
   formatDateForIndex,
   getResponePopup,
+  tableCustomFilterClearCheck,
 } from "../../../utils/reusable";
 import { useRef } from "react";
 import PatientRoasterTable from "../../../components/table/tenantTable/patientRoasterTable";
@@ -871,15 +872,29 @@ const PatientSync = ({
       const response = await tableDynamicColumn({ payload });
       if (response?.status === "SUCCESS") {
         setIsFilter(true);
-        if (reportActiveTab === "Provider Roaster") {
-          getAllProviderApi();
-        } else if (reportActiveTab === "Practice Roaster") {
-          getAllPracticeApi();
-        } else if (reportActiveTab === "Patient Roaster") {
-          getAllPatientApi();
-        } else if (reportActiveTab === "Tin Roaster") {
-          getTinApi();
+        const filterCheck = tableCustomFilterClearCheck(
+          {searchText,
+          selectedDateRanges,
+          selectedDates,
+          selectedOption,
+          setSearchText,
+          setSelectedDateRanges,
+          setSelectedDates,
+          setSelectedOption,
+          data}
+        );
+        if (filterCheck) {
+          if (reportActiveTab === "Provider Roaster") {
+            getAllProviderApi();
+          } else if (reportActiveTab === "Practice Roaster") {
+            getAllPracticeApi();
+          } else if (reportActiveTab === "Patient Roaster") {
+            getAllPatientApi();
+          } else if (reportActiveTab === "Tin Roaster") {
+            getTinApi();
+          }
         }
+
         onClose();
         getResponePopup(response);
       }

@@ -26,6 +26,7 @@ import {
   findItemWithTrueKey,
   findMatchesByField,
   getResponePopup,
+  tableCustomFilterClearCheck,
 } from "../../utils/reusable";
 import { actions as allocationAction } from "../../stores/admin/patientAllocation";
 import { actions as allActions } from "../../stores/admin/workqueue";
@@ -659,7 +660,21 @@ const Patient = ({
       const response = await tableDynamicColumn({ payload });
       if (response?.status === "SUCCESS") {
         setIsFilter(true);
-        getPatients();
+        const filterCheck = tableCustomFilterClearCheck(
+          {searchText,
+          selectedDateRanges,
+          selectedDates,
+          selectedOption,
+          setSearchText,
+          setSelectedDateRanges,
+          setSelectedDates,
+          setSelectedOption,
+          data}
+        );
+        if (filterCheck) {
+          getPatients();
+        }
+
         onClose();
         getResponePopup(response);
       }

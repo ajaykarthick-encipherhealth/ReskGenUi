@@ -16,6 +16,7 @@ import {
   createIdGens,
   findMatchesByField,
   getResponePopup,
+  tableCustomFilterClearCheck,
 } from "../../utils/reusable";
 import SubNavBar from "../../components/subNavBar";
 export const bullets = [
@@ -163,7 +164,19 @@ const CodersTable = ({
       const response = await tableDynamicColumn({ payload });
       if (response?.status === "SUCCESS") {
         setIsFilter(true);
-        getCodersApi();
+        const filterCheck = tableCustomFilterClearCheck(
+          {searchText,
+          selectedDateRanges,
+          selectedDates,
+          selectedOption,
+          setSearchText,
+          setSelectedDateRanges,
+          setSelectedDates,
+          setSelectedOption}
+        );
+        if (filterCheck) {
+          getCodersApi();
+        }
         onClose();
         getResponePopup(response);
       }
@@ -498,12 +511,13 @@ const CodersTable = ({
                     >
                       <Button
                         data-testid={
-                        id
-                          ? createIdGen("tableCustom" + id)
-                          : createIdGen(
-                              "tableCustom" + router.pathname.replaceAll("/", " ")
-                            )
-                      }
+                          id
+                            ? createIdGen("tableCustom" + id)
+                            : createIdGen(
+                                "tableCustom" +
+                                  router.pathname.replaceAll("/", " ")
+                              )
+                        }
                         onClick={showDrawer}
                         style={{
                           cursor: {

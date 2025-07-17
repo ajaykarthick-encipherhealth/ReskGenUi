@@ -8,7 +8,11 @@ import ReusableFilters from "../../components/reusableFilters";
 import { actions as tinActions } from "../../stores/tenantAdmin/tin";
 import { actions as tableAction } from "../../stores/tableView";
 import CardSkeleton from "../../components/skeleton/card";
-import { findMatchesByField, getResponePopup } from "../../utils/reusable";
+import {
+  findMatchesByField,
+  getResponePopup,
+  tableCustomFilterClearCheck,
+} from "../../utils/reusable";
 import { getStorage } from "../../utils/storages";
 import Reallocationmodal from "./allocationTable/reallocationmodal";
 
@@ -25,7 +29,6 @@ const ReAllocation = ({
   pageLoad,
   statusBodyTemplate,
 }) => {
-
   const [activeFilters, setActiveFilters] = useState([]);
   const [sort, setSort] = useState({
     computedDate: {
@@ -84,7 +87,6 @@ const ReAllocation = ({
     setOpen(true);
   };
 
- 
   const getAllReAllocation = async () => {
     const tin = getStorage("tinNumber");
     const response = await getTableData({
@@ -98,7 +100,7 @@ const ReAllocation = ({
       sort,
       tin,
       search,
-      isAdmin:true,
+      isAdmin: true,
       isMasterAudit: roleAliasName === "MASTER_AUDIT" ? true : false,
     });
   };
@@ -114,7 +116,20 @@ const ReAllocation = ({
       const response = await tableDynamicColumn({ payload });
       if (response?.status === "SUCCESS") {
         setIsFilter(true);
-        getAllReAllocation();
+        const filterCheck = tableCustomFilterClearCheck(
+          {searchText,
+          selectedDateRanges,
+          selectedDates,
+          selectedOption,
+          setSearchText,
+          setSelectedDateRanges,
+          setSelectedDates,
+          setSelectedOption,
+          data}
+        );
+        if (filterCheck) {
+          getAllReAllocation();
+        }
         onClose();
         getResponePopup(response);
       }
@@ -144,7 +159,9 @@ const ReAllocation = ({
   };
 
   const getRolesList = async () => {
-    const res = await getAllTabRoles({pageId:"21235203-2ce0-4ebc-b6d3-05a9d8e8fc75"});
+    const res = await getAllTabRoles({
+      pageId: "21235203-2ce0-4ebc-b6d3-05a9d8e8fc75",
+    });
     if (res?.status === "SUCCESS") {
       setRoleId(res?.response?.allocationRoles[0]?.roleId);
     }
@@ -164,14 +181,9 @@ const ReAllocation = ({
     setSelectedRowsId(selectedRows);
   }, [selectedRows, setSelectedRowsId]);
 
-
   useEffect(() => {
     setParamsFilter("check");
-    if (
-      window !== "undefined" &&
-      paramsFilter &&
-      roleId
-    ) {
+    if (window !== "undefined" && paramsFilter && roleId) {
       getAllReAllocation();
     }
   }, [
@@ -185,7 +197,7 @@ const ReAllocation = ({
     search,
     roleId,
     pageLoad,
-    roleAliasName
+    roleAliasName,
   ]);
 
   useEffect(() => {
@@ -205,7 +217,7 @@ const ReAllocation = ({
       setIsFilter(false);
     }
   }, [data?.response?.metaDataDTO]);
-  
+
   return (
     <div>
       <div className="content-body">
@@ -262,23 +274,23 @@ const ReAllocation = ({
                               name="re-allocate-btn"
                               className="d-flex justify-content-center align-items-center   mt-4"
                             >
-                                <Tooltip
-                                  title={
-                                    selectedRowsId?.length === 0
-                                      ? "Select patients to ReAllocate"
-                                      : ""
-                                  }
+                              <Tooltip
+                                title={
+                                  selectedRowsId?.length === 0
+                                    ? "Select patients to ReAllocate"
+                                    : ""
+                                }
+                              >
+                                <Button
+                                  data-testid="allocate-btn"
+                                  name="allocate-btn"
+                                  onClick={handleOpenModal}
+                                  className="tableButton"
+                                  disabled={selectedRowsId?.length === 0}
                                 >
-                                  <Button
-                                    data-testid="allocate-btn"
-                                    name="allocate-btn"
-                                    onClick={handleOpenModal}
-                                    className="tableButton"
-                                    disabled={selectedRowsId?.length === 0}
-                                  >
-                                    ReAllocate
-                                  </Button>
-                                </Tooltip>
+                                  ReAllocate
+                                </Button>
+                              </Tooltip>
                             </div>
                             <div
                               id="table-btn"

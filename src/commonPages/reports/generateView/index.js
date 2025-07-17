@@ -7,6 +7,7 @@ import {
   findItemWithTrueKey,
   findMatchesByField,
   getResponePopup,
+  tableCustomFilterClearCheck,
 } from "../../../utils/reusable";
 import ReusableFilters from "../../../components/reusableFilters";
 import AppTable from "../../../components/tables";
@@ -64,15 +65,13 @@ const GenerateView = ({
     setTest(data?.response?.metaDataDTO);
     setOpen(true);
   };
-  const handleRowCheckboxChange = async ({ e, row, }) => {
+  const handleRowCheckboxChange = async ({ e, row }) => {
     if (e.target?.checked) {
       setSelectedRows([row.id]);
-    }  
-     else {
+    } else {
       setSelectedRows([]);
     }
   };
-
 
   const getGenerateReport = async () => {
     let pageId = "51ccafdf-f18e-4100-8811-63236a79a441";
@@ -86,11 +85,9 @@ const GenerateView = ({
       selectedDateRanges,
       selectedOption,
       searchText,
-      tincompleted:true,
+      tincompleted: true,
     });
   };
-
-
 
   const handleSubmitInsert = async (data) => {
     setIsSubmitting(true);
@@ -104,7 +101,20 @@ const GenerateView = ({
       const response = await tableDynamicColumn({ payload });
       if (response?.status === "SUCCESS") {
         setIsFilter(true);
-        getGenerateReport();
+        const filterCheck = tableCustomFilterClearCheck(
+         { searchText,
+          selectedDateRanges,
+          selectedDates,
+          selectedOption,
+          setSearchText,
+          setSelectedDateRanges,
+          setSelectedDates,
+          setSelectedOption,
+          data}
+        );
+        if (filterCheck) {
+          getGenerateReport();
+        }
         onClose();
         getResponePopup(response);
       }
@@ -231,7 +241,8 @@ const GenerateView = ({
                 btnName={"Generate Report"}
                 tableLoader={tableLoader}
                 generateBtnClick={() => {
-                setIsModalOpen(true)}}
+                  setIsModalOpen(true);
+                }}
                 btnDisabled={selectedRows?.length === 0}
               />
             </div>

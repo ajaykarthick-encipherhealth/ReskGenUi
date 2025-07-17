@@ -8,6 +8,7 @@ import {
   findMatchesByField,
   formatDateForIndex,
   getResponePopup,
+  tableCustomFilterClearCheck,
 } from "../../../../utils/reusable";
 import { actions as tableAction } from "../../../../stores/tableView";
 import { actions as authActions } from "../../../../stores/authFlows";
@@ -130,7 +131,20 @@ const Projects = ({
       const response = await tableDynamicColumn({ payload });
       if (response?.status === "SUCCESS") {
         setIsFilter(true);
-        getProjects();
+        const filterCheck = tableCustomFilterClearCheck(
+         { searchText,
+          selectedDateRanges,
+          selectedDates,
+          selectedOption,
+          setSearchText,
+          setSelectedDateRanges,
+          setSelectedDates,
+          setSelectedOption,
+          data}
+        );
+        if (filterCheck) {
+         getProjects();
+        }       
         onClose();
         getResponePopup(response);
       }

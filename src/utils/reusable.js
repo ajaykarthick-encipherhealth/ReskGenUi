@@ -1161,3 +1161,51 @@ export const createIdGens = (key) => {
     return key;
   }
 };
+
+export const tableCustomFilterClearCheck = (
+ { searchText,
+  selectedDateRanges,
+  selectedDates,
+  selectedOption,
+  setSearchText,
+  setSelectedDateRanges,
+  setSelectedDates,
+  setSelectedOption,
+  data}
+) => {
+  const columnIds = new Set(data.map((col) => col.id));
+
+  const searchTextResult = Object.fromEntries(
+    Object.entries(searchText || {}).filter(([key]) => columnIds.has(key))
+  );
+
+  const selectResult = Object.fromEntries(
+    Object.entries(selectedOption || {})?.filter(([key]) => columnIds.has(key))
+  );
+
+  const selectDateRangestResult = Object.fromEntries(
+    Object.entries(selectedDateRanges || {}).filter(([key]) =>
+      columnIds.has(key)
+    )
+  );
+
+  const selectDatesResult = Object.fromEntries(
+    Object.entries(selectedDates || {}).filter(([key]) => columnIds.has(key))
+  );
+
+  const noResetNeeded =
+    !searchText &&
+    Object.keys(selectedDateRanges).length === 0 &&
+    Object.keys(selectedDates).length === 0 &&
+    Object.keys(selectedOption).length === 0;
+
+  if (noResetNeeded) {
+  } else {
+    setSearchText(searchTextResult);
+    setSelectedDateRanges(selectDateRangestResult);
+    setSelectedDates(selectDatesResult);
+    setSelectedOption(selectResult);
+  }
+
+  return noResetNeeded;
+};

@@ -14,6 +14,7 @@ import {
   createIdGen,
   findMatchesByField,
   getResponePopup,
+  tableCustomFilterClearCheck,
 } from "../../utils/reusable";
 import { getStorage } from "../../utils/storages";
 import { useRouter } from "next/router";
@@ -132,7 +133,21 @@ const PatientAllocation = ({
       const response = await tableDynamicColumn({ payload });
       if (response?.status === "SUCCESS") {
         setIsFilter(true);
-        getAllAllocation();
+        const filterCheck = tableCustomFilterClearCheck(
+         { searchText,
+          selectedDateRanges,
+          selectedDates,
+          selectedOption,
+          setSearchText,
+          setSelectedDateRanges,
+          setSelectedDates,
+          setSelectedOption,
+          data}
+        );
+        if (filterCheck) {
+          getAllAllocation();
+        }
+
         onClose();
         getResponePopup(response);
       }
@@ -371,9 +386,12 @@ const PatientAllocation = ({
                             </div>
                             {allRoles?.allocationRoles?.find(
                               (role) => role.roleId === selectedRoleId
-                            )?.aliasName === "QA"  ||  allRoles?.allocationRoles?.every((item)=>item?.aliasName === "QA" ) ?(
+                            )?.aliasName === "QA" ||
+                            allRoles?.allocationRoles?.every(
+                              (item) => item?.aliasName === "QA"
+                            ) ? (
                               <div
-                               id={
+                                id={
                                   id
                                     ? createIdGen("randomBtn" + id)
                                     : createIdGen(
@@ -404,10 +422,12 @@ const PatientAllocation = ({
                                   Random Sampling
                                 </Button>
                               </div>
-                            ):""}
+                            ) : (
+                              ""
+                            )}
                             {roleAliasName === "MASTER_AUDIT" && (
                               <div
-                               id={
+                                id={
                                   id
                                     ? createIdGen("masterAuditBtn" + id)
                                     : createIdGen(
@@ -419,13 +439,15 @@ const PatientAllocation = ({
                               >
                                 <Button
                                   data-testid={
-                                  id
-                                    ? createIdGen("masterAuditSamplingBtn" + id)
-                                    : createIdGen(
-                                        "masterAuditSamplingBtn" +
-                                          router.pathname.replaceAll("/", " ")
-                                      )
-                                }
+                                    id
+                                      ? createIdGen(
+                                          "masterAuditSamplingBtn" + id
+                                        )
+                                      : createIdGen(
+                                          "masterAuditSamplingBtn" +
+                                            router.pathname.replaceAll("/", " ")
+                                        )
+                                  }
                                   onClick={() => setIsModalOpen(true)}
                                   className="tableButton"
                                   disabled={

@@ -11,7 +11,7 @@ import MoveBackModal from "./moveBackModal";
 import MoveBackTable from "./moveBackTable";
 import { actions as tableAction } from "../../stores/tableView";
 import CardSkeleton from "../../components/skeleton/card";
-import { findMatchesByField, getResponePopup } from "../../utils/reusable";
+import { findMatchesByField, getResponePopup, tableCustomFilterClearCheck } from "../../utils/reusable";
 import { getStorage } from "../../utils/storages";
 
 const MoveBack = ({
@@ -87,7 +87,9 @@ const MoveBack = ({
   };
 
   const getRolesList = async () => {
-    const res = await getAllTabRoles({pageId:"937b0477-f0cd-46e7-b8ab-fefb38f91859"});
+    const res = await getAllTabRoles({
+      pageId: "937b0477-f0cd-46e7-b8ab-fefb38f91859",
+    });
     if (res?.status === "SUCCESS") {
       setRoleId(res?.response?.allocationRoles[0]?.roleId);
     }
@@ -117,7 +119,20 @@ const MoveBack = ({
       const response = await tableDynamicColumn({ payload });
       if (response?.status === "SUCCESS") {
         setIsFilter(true);
-        getMoveBack();
+        const filterCheck = tableCustomFilterClearCheck(
+          {searchText,
+          selectedDateRanges,
+          selectedDates,
+          selectedOption,
+          setSearchText,
+          setSelectedDateRanges,
+          setSelectedDates,
+          setSelectedOption}
+        );
+        if (filterCheck) {
+          getMoveBack();
+        }
+
         onClose();
         getResponePopup(response);
       }
