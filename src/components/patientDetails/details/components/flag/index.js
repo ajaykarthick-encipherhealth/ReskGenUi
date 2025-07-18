@@ -39,8 +39,9 @@ const Flag = ({
   setSearch,
   patientIdDetailsData,
   selectedDosValue,
+  year,
 }) => {
-    const router = useRouter()
+  const router = useRouter();
   const [inputValue, setInputValue] = useState({
     flagId: "",
     comments: "",
@@ -51,7 +52,11 @@ const Flag = ({
   const [validated, setValidated] = useState(false);
   const [localPatientId, setLocalPatientId] = useState("");
   const [userDetails, setUserDetails] = useState("");
- const isDisabled = isStatusDisabled(patientIdDetailsData, patientDetailsResult, router.pathname);
+  const isDisabled = isStatusDisabled(
+    patientIdDetailsData,
+    patientDetailsResult,
+    router.pathname
+  );
 
   const flagPostList = getFlagsData?.response?.map((item) => ({
     value: item?.id,
@@ -76,7 +81,7 @@ const Flag = ({
     try {
       const response = await isdeleteFlag(payload);
       if (response?.status === "SUCCESS") {
-        getPatientDosList(patientId, selectedDosValue);
+        getPatientDosList(patientId, year);
         getResponePopup(response);
         getFlagDetailsData(
           patientDetailsResult?.data?.response?.patientId,
@@ -126,7 +131,7 @@ const Flag = ({
         const response = await flagDetailsPost(dataFormatSuggested);
         if (response?.status === "SUCCESS") {
           getResponePopup(response);
-          getPatientDosList(patientId, selectedDosValue);
+          getPatientDosList(patientId, year);
           // setOpen(false)
           getFlagDetailsData(
             patientDetailsResult?.data?.response?.patientId,
@@ -320,8 +325,9 @@ const Flag = ({
                 className="col-xl-12"
               >
                 <textarea
-                   style={{
-                    cursor: commentsTrigger || isDisabled ? "not-allowed" : "default"
+                  style={{
+                    cursor:
+                      commentsTrigger || isDisabled ? "not-allowed" : "default",
                   }}
                   className={visitStyles.commentsFormControl}
                   rows="5"
@@ -333,7 +339,6 @@ const Flag = ({
                   onChange={handleChange}
                   // onKeyPress={handleEnterTextNotes}
                   // type="submit"
-                 
                 ></textarea>
               </div>
             </div>
@@ -344,10 +349,10 @@ const Flag = ({
                   className=" btn-sm ms-2 flr width-max-content custom-btn-style"
                   type="submit"
                   style={{
-                    cursor: commentsTrigger || isDisabled ? "not-allowed" : "pointer"
+                    cursor:
+                      commentsTrigger || isDisabled ? "not-allowed" : "pointer",
                   }}
-                  
-                  disabled={commentsTrigger ||  isDisabled}
+                  disabled={commentsTrigger || isDisabled}
                   // className={visitStyles.commentSendIcon}
                 >
                   Save
@@ -370,27 +375,33 @@ const Flag = ({
                 className="position-absolute top-0 end-0 mt-2 me-2"
                 style={{ cursor: "pointer" }}
               >
-                {!isDisabled ? <Popconfirm
-                  title="Are you sure you want to delete this flag?"
-                  onConfirm={() => handleDelete(data?.patientFlagDTO?.flagId)}
-                  okText="Yes"
-                  cancelText="No"
-                >
-                  <FontAwesomeIcon
-                    id={`flag-list-close-icon-${index}`}
-                    name={`flag-list-close-icon-${index}`}
-                    icon={faXmarkCircle}
-                    style={{ color: "#be3144", cursor: "pointer" }}
-                  />
-                </Popconfirm> :<>
-                <FontAwesomeIcon
-                    id={`flag-list-close-icon-${index}`}
-                    name={`flag-list-close-icon-${index}`}
-                    icon={faXmarkCircle}
-                    style={{ color: "#be3144", cursor: isDisabled ?"not-allowed" :"pointer" }}
-                  /></> }
-
-               
+                {!isDisabled ? (
+                  <Popconfirm
+                    title="Are you sure you want to delete this flag?"
+                    onConfirm={() => handleDelete(data?.patientFlagDTO?.flagId)}
+                    okText="Yes"
+                    cancelText="No"
+                  >
+                    <FontAwesomeIcon
+                      id={`flag-list-close-icon-${index}`}
+                      name={`flag-list-close-icon-${index}`}
+                      icon={faXmarkCircle}
+                      style={{ color: "#be3144", cursor: "pointer" }}
+                    />
+                  </Popconfirm>
+                ) : (
+                  <>
+                    <FontAwesomeIcon
+                      id={`flag-list-close-icon-${index}`}
+                      name={`flag-list-close-icon-${index}`}
+                      icon={faXmarkCircle}
+                      style={{
+                        color: "#be3144",
+                        cursor: isDisabled ? "not-allowed" : "pointer",
+                      }}
+                    />
+                  </>
+                )}
               </div>
 
               <div

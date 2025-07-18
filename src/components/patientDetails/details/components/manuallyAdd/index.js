@@ -198,7 +198,6 @@ const ManuallyAdd = ({
         break;
     }
   };
-
   const handleSelectChange = async (val, field) => {
     form.setFieldsValue({ [field]: val });
     if (field == "dos") {
@@ -208,7 +207,7 @@ const ManuallyAdd = ({
       } else {
         try {
           const res = await getProviderSection({
-            processedYear: year?.value,
+            processedYear: year?.value ? year?.value : year,
             patientId: getStorage("patientId"),
             dateOfService: [getSelectedDos],
             fileId: patientDetailsResult?.data?.response?.fileId
@@ -332,7 +331,7 @@ const ManuallyAdd = ({
     const isCodeCheck = await isCodeAlready({
       code: value,
       patientId: getStorage("patientId"),
-      dos: year?.value || "",
+      dos: year?.value  ? year?.value : year || "",
       date: getSelectedDos,
     });
     if (isCodeCheck?.response) {
@@ -781,7 +780,7 @@ const ManuallyAdd = ({
             : null,
         chartProcessType: getSelectedDos ? "DATE_OF_SERVICE" : "YEAR",
         dateOfServiceIfDosWiseCompute: getSelectedDos ? getSelectedDos : null,
-        processedYear: year?.value,
+        processedYear: year?.value ? year?.value : year,
         activeHeader: !isMeat,
         educationalError: forms?.educationalError,
       };
@@ -815,7 +814,7 @@ const ManuallyAdd = ({
             : null,
         chartProcessType: getSelectedDos ? "DATE_OF_SERVICE" : "YEAR",
         dateOfServiceIfDosWiseCompute: getSelectedDos ? getSelectedDos : null,
-        processedYear: year?.value,
+        processedYear: year?.value ? year?.value : year,
         educationalError: forms?.educationalError,
         activeHeader: !isMeat,
       };
@@ -844,7 +843,7 @@ const ManuallyAdd = ({
           .map((item) => item.hyperlinks)
           .flat(capturedSections.length + 1),
         chartProcessType: getSelectedDos ? "DATE_OF_SERVICE" : "YEAR",
-        processedYear: year?.value,
+        processedYear: year?.value ? year?.value : year,
         activeHeader: !isMeat,
         educationalError: diagnosisForm?.educationalError,
       };
@@ -868,10 +867,10 @@ const ManuallyAdd = ({
           handleCloseModal(false);
           activeLabels({
             patientId: userId,
-            year: year?.value,
+            year: year?.value ? year?.value : year,
             dos: isDosSelected,
           });
-          getPatientDosList(userId, year?.value);
+          getPatientDosList(userId, year?.value ? year?.value : year);
           getResponePopup(res);
           resetForms({ reload: true });
           setIsBtnLoading(false);
@@ -897,7 +896,7 @@ const ManuallyAdd = ({
         var movemetData = {};
         (movemetData.patientId = getStorage("patientId")),
           (movemetData.diagnosisCode = selectDisDetails.diagnosisCode),
-          (movemetData.processedYear = year?.value),
+          (movemetData.processedYear = year?.value ? year?.value : year),
           (movemetData.chartProcessType = getSelectedDos
             ? "DATE_OF_SERVICE"
             : "YEAR"),

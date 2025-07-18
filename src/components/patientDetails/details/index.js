@@ -1445,6 +1445,11 @@ const Details = ({
           setSearch={setSearch}
           selectedDosValue={selectedDosValue}
           activeTab={activeTab}
+          year={
+            dosYearDefalutSelect.value
+              ? dosYearDefalutSelect.value
+              : dosYearDefalutSelect
+          }
         />
       )}
     </>
