@@ -663,15 +663,26 @@ const Header = ({
       };
     }
   }, [router, menuList]);
-  const handleChange = async (event) => {
-    const file = event.target.files[0];
-    if (file) {
+  
+const handleChange = async (event) => {
+  const file = event.target.files[0];
+  if (file) {
+    const allowedTypes = ["image/png", "image/jpeg", "image/jpg"];
+    if (allowedTypes.includes(file.type)) {
       setSelectedFile(file);
+    } else {
+        getResponePopup({
+        message: "Only PNG, JPG, and JPEG image  are allowed",
+        status: "FAILED",
+        duration: 5,
+      });
+      event.target.value = null;
     }
-  };
+  }
+};
+
   const handleSubmit = async () => {
     if (!selectedFile) return;
-
     const allowedTypes = ["image/png", "image/jpeg", "image/jpg"];
     const validExtensions = ["png", "jpg", "jpeg"];
     const fileType = selectedFile.type;

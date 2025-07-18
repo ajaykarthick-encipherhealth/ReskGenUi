@@ -27,13 +27,13 @@ const ImageUploader = ({
     <div className={styles.cover}>
       <label style={{ height: height }}>
         <input
-        id="uploadInput"
+         id="uploadInput"
           className="input"
           type={"file"}
           onChange={handleChange}
           ref={fileInputRef}
           name="file"
-          multiple
+          multiple={isFolderUplaod}
           accept={isFolderUplaod ? ".xl,.csv" : ".png,.jpg,.jpeg"}
         />
 
