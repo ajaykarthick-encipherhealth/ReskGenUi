@@ -365,6 +365,7 @@ const Tin = ({
         getTinCountData();
         onClose();
         getResponePopup(response);
+        setSelectedRowsId([]);
       }
     } catch (error) {
       getResponePopup(error?.response);
@@ -558,7 +559,6 @@ const Tin = ({
       setIsFilter(false);
     }
   }, [data?.response?.metaDataDTO]);
-
   return (
     <div className={`show`}>
       {/* <Header /> */}
