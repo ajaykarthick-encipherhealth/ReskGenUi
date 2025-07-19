@@ -1777,6 +1777,7 @@ const ManuallyAdd = ({
               pageNumbers={getPageNumbers()}
               educationalError={educationalError}
               setEducationalError={setEducationalError}
+              setIsMeat={setIsMeat}
             />
           </Form>
         </>

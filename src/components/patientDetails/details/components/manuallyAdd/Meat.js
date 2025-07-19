@@ -57,6 +57,7 @@ const Meat = ({
   meatFormDisplay,
   isBtnLoading,
   pageNumbers,
+  setIsMeat
 }) => {
   const userRole = getStorage("userRole")
   return (
@@ -337,7 +338,7 @@ const Meat = ({
                 name="Back"
                 width="100px"
                 method={"button"}
-                onClick={() => setMeatDisplay(false)}
+                onClick={() => {setMeatDisplay(false),setIsMeat(true)}}
               />
             )}
             <RegularButton

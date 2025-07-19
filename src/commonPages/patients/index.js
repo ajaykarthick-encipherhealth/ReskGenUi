@@ -421,7 +421,7 @@ const Patient = ({
           }}
           className="btn hegiht10  sharp me-1 action-btn"
           style={{ background: "#04306f" }}
-          disabled={rowData?.computing == 1}
+          disabled={rowData?.computing == 1 || rowData.uploadDisable}
         >
           <FontAwesomeIcon
             icon={faUpload}
