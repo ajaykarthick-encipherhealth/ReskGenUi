@@ -156,8 +156,11 @@ const Header = ({
   const [userEmail, setUserEmail] = useState(null);
   const [isShowDropdown, setIsShowDropdown] = useState(false);
   const [panelName, setPanelName] = useState("");
-
-  const proxyRole = getStorage("proxyRole");
+  const isRolePresent = (roleKey, allRoles) => {
+    return allRoles?.some(
+      (role) => role.key === roleKey || role?.details?.proxyRole === roleKey
+    );
+  };
   const showDrawer = () => {
     setOpened(true);
     setPopoverVisible(false);
@@ -663,23 +666,23 @@ const Header = ({
       };
     }
   }, [router, menuList]);
-  
-const handleChange = async (event) => {
-  const file = event.target.files[0];
-  if (file) {
-    const allowedTypes = ["image/png", "image/jpeg", "image/jpg"];
-    if (allowedTypes.includes(file.type)) {
-      setSelectedFile(file);
-    } else {
+
+  const handleChange = async (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      const allowedTypes = ["image/png", "image/jpeg", "image/jpg"];
+      if (allowedTypes.includes(file.type)) {
+        setSelectedFile(file);
+      } else {
         getResponePopup({
-        message: "Only PNG, JPG, and JPEG image  are allowed",
-        status: "FAILED",
-        duration: 5,
-      });
-      event.target.value = null;
+          message: "Only PNG, JPG, and JPEG image  are allowed",
+          status: "FAILED",
+          duration: 5,
+        });
+        event.target.value = null;
+      }
     }
-  }
-};
+  };
 
   const handleSubmit = async () => {
     if (!selectedFile) return;
@@ -809,6 +812,11 @@ const handleChange = async (event) => {
       duration: 5,
     });
     const res = await getAllProjects();
+      const allRoles = res?.response?.userRoles?.map((data) => ({
+      label: data.aliasName,
+      key: data.proxyRole,
+      details: data,
+    }));
     if (res?.response?.length === 0) {
       setSelectedClient(backupSelectedClient);
       setStorage("client", backupSelectedClient);
@@ -817,11 +825,19 @@ const handleChange = async (event) => {
         message: "No projects",
         duration: 5,
       });
+    }
+    if (isRolePresent(currentRole, allRoles)) {
+      onClick({ key: currentRole });
     } else {
       getProjectDataList();
       setSelectedProject(res?.response[0]?.projectName);
       setStorage("project", res?.response[0]?.id);
     }
+    // else {
+    //   getProjectDataList();
+    //   setSelectedProject(res?.response[0]?.projectName);
+    //   setStorage("project", res?.response[0]?.id);
+    // }
   };
 
   const handleTinChange = (value) => {
@@ -839,6 +855,11 @@ const handleChange = async (event) => {
       duration: 5,
     });
     const res = await getAllRoles();
+    const allRoles = res?.response?.userRoles?.map((data) => ({
+      label: data.aliasName,
+      key: data.proxyRole,
+      details: data,
+    }));
     if (res?.response?.userRoles?.length === 0) {
       setSelectedProject(backupSelectedProject);
       setStorage("project", backupSelectedProject);
@@ -847,10 +868,17 @@ const handleChange = async (event) => {
         message: "No Role for this project",
         duration: 8,
       });
+    }
+    // else {
+    //   // getProjectDataList();
+    //   getPageRendering(value);
+    //   getRoles();
+    // }
+    if (isRolePresent(currentRole, allRoles)) {
+      onClick({ key: currentRole });
     } else {
-      // getProjectDataList();
-      getPageRendering(value);
       getRoles();
+      getProjectDataList();
     }
   };
 
@@ -1028,41 +1056,41 @@ const handleChange = async (event) => {
                 <>
                   <div id="clientSelect" className="mt-3">
                     <Select
-                      id ="client-dropdown"
+                      id="client-dropdown"
                       placeholder="Client"
                       className={styles.selectWidth}
                       value={clientOptions && selectedClient}
                       onChange={(e, value) => handleClientChange(value)}
                       options={clientOptions}
-                       filterOption={(input, option) =>
-                      (option?.label ?? "")
-                        .toLowerCase()
-                        .includes(input.toLowerCase())
-                    }
-                     showSearch
+                      filterOption={(input, option) =>
+                        (option?.label ?? "")
+                          .toLowerCase()
+                          .includes(input.toLowerCase())
+                      }
+                      showSearch
                     />
                   </div>
                   <div id="project-select" className="mt-3">
                     <Select
-                      id ="project-dropdown"
+                      id="project-dropdown"
                       placeholder="Sample Project"
                       className={styles.selectWidth}
                       value={!projectListCheck ? selectedProject : []}
                       onChange={(e, value) => handleProjectChange(value)}
                       options={projectList}
-                       filterOption={(input, option) =>
-                      (option?.label ?? "")
-                        .toLowerCase()
-                        .includes(input.toLowerCase())
-                    }
-                     showSearch
+                      filterOption={(input, option) =>
+                        (option?.label ?? "")
+                          .toLowerCase()
+                          .includes(input.toLowerCase())
+                      }
+                      showSearch
                     />
                   </div>
                   <div>
                     {currentRole === "QA" && (
                       <div id="tin-select" className="mt-3">
                         <Select
-                         id ="tin-dropdown"
+                          id="tin-dropdown"
                           placeholder="Select Tin"
                           className={styles.selectWidth}
                           value={selectedTin}
@@ -1328,7 +1356,7 @@ const handleChange = async (event) => {
                                   <span
                                     className="alias-name d-flex font1 cursor-pointer"
                                     style={{ margin: "-5px 0px 0 4px" }}
-                                    id= "roles-dropdown"
+                                    id="roles-dropdown"
                                   >
                                     {currentRole?.split("_")?.join(" ")}
 
