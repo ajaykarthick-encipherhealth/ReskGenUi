@@ -1170,6 +1170,8 @@ const Details = ({
                             selectedDate={selectedDate}
                             setSelectedDate={setSelectedDate}
                             activeTab={activeTab}
+                            isFileFormShow={isFileFormShow}
+                            setIsFileFormShow={setIsFileFormShow}
                           />
                         ) : (
                           ""

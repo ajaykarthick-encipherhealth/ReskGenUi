@@ -612,7 +612,7 @@ const Header = ({
           <div
             id={data.title}
             name={data.title}
-            className="d-flex cursor-pointer"
+            className="d-flex cursor-pointer align-items-center"
           >
             <div
               className="menu-icon"
