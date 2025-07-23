@@ -78,6 +78,7 @@ import { actions as allActions } from "../../../stores/tenantAdmin/patientSync";
 import CardSkeleton from "../../skeleton/card";
 import VersionHistory from "./versionHistory";
 import Queried from "./hcc/queried";
+// import { SVGICON } from '../../../jsx/constant/theme'
 
 export const navigetPageDetails = async (
   pageTitle,
@@ -1306,7 +1307,8 @@ const Details = ({
                               </Checkbox>
                             </div>
                             <Tooltip title="Filters" placement="top">
-                              <MenuOutlined onClick={handleIconClick} />
+                              {/* <MenuOutlined onClick={handleIconClick} /> */}
+                              <div className="cursor-pointer" onClick={handleIconClick} >{SVGICON.filter}</div>
                             </Tooltip>
                           </div>
                         </>
