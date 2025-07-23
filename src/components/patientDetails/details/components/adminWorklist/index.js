@@ -248,7 +248,7 @@ const AdminWorkList = ({
                   id="dosSelect"
                   className={`${visitStyles.nameList} ${visitStyles.patientList}`}
                   key={index}
-                  onClick={() => getPatientListToDetails(data.patientId, true)}
+                  onClick={() => getPatientListToDetails(data.patientId)}
                 >
                   <span>
                     <span id="dosSelect">

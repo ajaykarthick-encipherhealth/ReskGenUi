@@ -325,7 +325,7 @@ const SupervisorWorkList = ({
                     className={`${visitStyles.nameList} ${visitStyles.patientList}`}
                     key={index}
                     onClick={() =>
-                      getPatientListToDetails(data.patientId, true)
+                      getPatientListToDetails(data.patientId)
                     }
                   >
                     <span id="dosSelect">
