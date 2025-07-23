@@ -203,7 +203,6 @@ const SelectProject = ({
       removeStorage("proxyRole");
       projectGetApi();
     } else {
-      getRolesApi();
       setStorage("project", value);
       form.setFieldsValue({ project: value, role: null });
       removeStorage("proxyRole");
@@ -238,144 +237,148 @@ const SelectProject = ({
           </div>
 
           <div className="col-lg-6 col-md-7 col-sm-12 mx-auto align-self-center">
-            {isLoading ? (
-              <div>
-                <Skeleton.Input
-                  className="d-flex align-items-center justify-content-center"
-                  style={{ width: 550, height: 500 }}
-                  active
-                  block={true}
-                />
-              </div>
-            ) : (
-              <div className="login-form">
-                <div className=" d-flex align-items-center justify-content-center">
-                  <h2 className="title fontWeight2 ">Login to Your Account</h2>
+            <div className="login-form">
+              {isLoading ? (
+                <div>
+                  <Skeleton.Input
+                    className="d-flex align-items-center justify-content-center"
+                    style={{ width: 550, height: 500 }}
+                    active
+                    block={true}
+                  />
                 </div>
-                <h6 className="login-title">
-                  <span>Login</span>
-                </h6>
-                <Form
-                  form={form}
-                  onFinish={handleFormSubmit}
-                  layout="vertical"
-                  onValuesChange={(allValues) => {
-                    const isAllFieldsFilled = allValues.role;
-                    setIsFormValid(isAllFieldsFilled);
-                  }}
-                  data-testid={
-                    id
-                      ? createIdGens("loginForm" + id)
-                      : createIdGens("loginForm")
-                  }
-                >
-                  <Form.Item name="client" label={<>Client</>}>
-                    <Select
-                      data-testid={
-                        id
-                          ? createIdGens("loginClient" + id)
-                          : createIdGens("loginClient")
-                      }
-                      placeholder="Select Client"
-                      loading={clientLoading}
-                      style={{
-                        width: "100%",
-                        height: "2.75rem",
-                        cursor: "pointer",
-                      }}
-                      onChange={(value) => onValuesChange(value, "client")}
-                      options={clientOptions}
-                      notFoundContent={
-                        clientLoading ? (
-                          <div className="d-flex justify-content-center align-items-center">
-                            <Spin size="small" />
-                          </div>
-                        ) : null
-                      }
-                      filterOption={(input, option) =>
-                        (option?.label ?? "")
-                          .toLowerCase()
-                          .includes(input.toLowerCase())
-                      }
-                      showSearch
-                    />
-                  </Form.Item>
-                  <Form.Item name="project" label={<>Project</>}>
-                    <Select
-                      data-testid={
-                        id
-                          ? createIdGens("loginProject" + id)
-                          : createIdGens("loginProject")
-                      }
-                      placeholder="Select Project"
-                      loading={projectLoading}
-                      style={{
-                        width: "100%",
-                        height: "2.75rem",
-                        cursor: "pointer",
-                      }}
-                      onChange={(value) => onValuesChange(value, "project")}
-                      options={projectOptions}
-                      disabled={!form.getFieldValue("client")}
-                      notFoundContent={
-                        projectLoading ? (
-                          <div className="d-flex justify-content-center align-items-center">
-                            <Spin size="small" />
-                          </div>
-                        ) : null
-                      }
-                      filterOption={(input, option) =>
-                        (option?.label ?? "")
-                          .toLowerCase()
-                          .includes(input.toLowerCase())
-                      }
-                      showSearch
-                    />
-                  </Form.Item>
-                  <Form.Item name="role" label={<>Role</>}>
-                    <Select
-                      data-testid={
-                        id
-                          ? createIdGens("loginRole" + id)
-                          : createIdGens("loginRole")
-                      }
-                      placeholder="Select Role"
-                      loading={roleLoading}
-                      style={{
-                        width: "100%",
-                        height: "2.75rem",
-                        cursor: "pointer",
-                      }}
-                      options={roleOptions}
-                      onChange={(e) => form.setFieldValue("role", e)}
-                      disabled={!form.getFieldValue("project")}
-                      notFoundContent={
-                        roleLoading ? (
-                          <div className="d-flex justify-content-center align-items-center">
-                            <Spin size="small" />
-                          </div>
-                        ) : null
-                      }
-                      filterOption={(input, option) =>
-                        (option?.label ?? "")
-                          .toLowerCase()
-                          .includes(input.toLowerCase())
-                      }
-                      showSearch
-                    />
-                  </Form.Item>
-                  <div className="d-flex justify-content-between mt-5">
-                    <RegularButton
-                      type="submit"
-                      name="SUBMIT"
-                      width="400px"
-                      loading={!submitLoading}
-                      disabled={!form.getFieldsValue()?.role}
-                    />
+              ) : (
+                <div>
+                  <div className=" d-flex align-items-center justify-content-center">
+                    <h2 className="title fontWeight2 ">
+                      Login to Your Account
+                    </h2>
                   </div>
-                </Form>
-              </div>
-            )}
+                  <h6 className="login-title">
+                    <span>Login</span>
+                  </h6>
+                  <Form
+                    form={form}
+                    onFinish={handleFormSubmit}
+                    layout="vertical"
+                    onValuesChange={(allValues) => {
+                      const isAllFieldsFilled = allValues.role;
+                      setIsFormValid(isAllFieldsFilled);
+                    }}
+                    data-testid={
+                      id
+                        ? createIdGens("loginForm" + id)
+                        : createIdGens("loginForm")
+                    }
+                  >
+                    <Form.Item name="client" label={<>Client</>}>
+                      <Select
+                        data-testid={
+                          id
+                            ? createIdGens("loginClient" + id)
+                            : createIdGens("loginClient")
+                        }
+                        placeholder="Select Client"
+                        loading={clientLoading}
+                        style={{
+                          width: "100%",
+                          height: "2.75rem",
+                          cursor: "pointer",
+                        }}
+                        onChange={(value) => onValuesChange(value, "client")}
+                        options={clientOptions}
+                        notFoundContent={
+                          clientLoading ? (
+                            <div className="d-flex justify-content-center align-items-center">
+                              <Spin size="small" />
+                            </div>
+                          ) : null
+                        }
+                        filterOption={(input, option) =>
+                          (option?.label ?? "")
+                            .toLowerCase()
+                            .includes(input.toLowerCase())
+                        }
+                        showSearch
+                      />
+                    </Form.Item>
+                    <Form.Item name="project" label={<>Project</>}>
+                      <Select
+                        data-testid={
+                          id
+                            ? createIdGens("loginProject" + id)
+                            : createIdGens("loginProject")
+                        }
+                        placeholder="Select Project"
+                        loading={projectLoading}
+                        style={{
+                          width: "100%",
+                          height: "2.75rem",
+                          cursor: "pointer",
+                        }}
+                        onChange={(value) => onValuesChange(value, "project")}
+                        options={projectOptions}
+                        disabled={!form.getFieldValue("client")}
+                        notFoundContent={
+                          projectLoading ? (
+                            <div className="d-flex justify-content-center align-items-center">
+                              <Spin size="small" />
+                            </div>
+                          ) : null
+                        }
+                        filterOption={(input, option) =>
+                          (option?.label ?? "")
+                            .toLowerCase()
+                            .includes(input.toLowerCase())
+                        }
+                        showSearch
+                      />
+                    </Form.Item>
+                    <Form.Item name="role" label={<>Role</>}>
+                      <Select
+                        data-testid={
+                          id
+                            ? createIdGens("loginRole" + id)
+                            : createIdGens("loginRole")
+                        }
+                        placeholder="Select Role"
+                        loading={roleLoading}
+                        style={{
+                          width: "100%",
+                          height: "2.75rem",
+                          cursor: "pointer",
+                        }}
+                        options={roleOptions}
+                        onChange={(e) => form.setFieldValue("role", e)}
+                        disabled={!form.getFieldValue("project")}
+                        notFoundContent={
+                          roleLoading ? (
+                            <div className="d-flex justify-content-center align-items-center">
+                              <Spin size="small" />
+                            </div>
+                          ) : null
+                        }
+                        filterOption={(input, option) =>
+                          (option?.label ?? "")
+                            .toLowerCase()
+                            .includes(input.toLowerCase())
+                        }
+                        showSearch
+                      />
+                    </Form.Item>
+                    <div className="d-flex justify-content-between mt-5">
+                      <RegularButton
+                        type="submit"
+                        name="SUBMIT"
+                        width="400px"
+                        loading={!submitLoading}
+                        disabled={!form.getFieldsValue()?.role}
+                      />
+                    </div>
+                  </Form>
+                </div>
+              )}
+            </div>
           </div>
         </div>
       </div>
