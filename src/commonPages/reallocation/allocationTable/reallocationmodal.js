@@ -99,7 +99,7 @@ const ReAllocationModal = ({
           firstName: item.firstName,
           lastName: item.lastName,
           id: item.id,
-          role: item.roleId,
+          roleId: item.roleId,
           email: item.userName,
           aliasName: item.aliasName,
           proxyId: item.proxyId,
@@ -124,7 +124,6 @@ const ReAllocationModal = ({
   const handleRoleChange = (value) => {
     setRoles(value);
   };
-
   const setAllocate = async () => {
     setIsAllocate(true);
 
@@ -178,7 +177,6 @@ const ReAllocationModal = ({
   const handleRowCheckboxChange = ({ e, row }) => {
     if (e.target?.checked) {
       setSelectedUserIds([row.proxyId]);
-
       setActiveEmail([{ email: row.email, roleId: row.roleId }]);
     } else {
       setSelectedUserIds([]);
