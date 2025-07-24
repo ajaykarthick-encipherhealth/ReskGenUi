@@ -78,7 +78,6 @@ import { actions as allActions } from "../../../stores/tenantAdmin/patientSync";
 import CardSkeleton from "../../skeleton/card";
 import VersionHistory from "./versionHistory";
 import Queried from "./hcc/queried";
-// import { SVGICON } from '../../../jsx/constant/theme'
 
 export const navigetPageDetails = async (
   pageTitle,
@@ -210,6 +209,10 @@ const Details = ({
   const [action, setAction] = useState([]);
   const [isViewAll, setIsViewAll] = useState(false);
   const [isFileFormShow, setIsFileFormShow] = useState(false);
+  const currentPath = navigate.asPath;
+  const shouldShowReviewerWorkListByPath = currentPath.endsWith(
+    "/reviewer/patients/details"
+  );
 
   const handleIconClick = () => {
     setShowFilter((prev) => !prev);
@@ -722,18 +725,18 @@ const Details = ({
           // setFilterModalOpen(false);
           setWorkListPatientId(null);
         } else {
-          getpatientDetailsData("", "", "", "", "", true,"");
+          getpatientDetailsData("", "", "", "", "", true, "");
           getResponePopup(res);
           setIsSpinnerLoading(false);
         }
       } else {
-        getpatientDetailsData("", "", null, "", "", true,"");
+        getpatientDetailsData("", "", null, "", "", true, "");
         // No dateOfService available — skip calling getpatientDetailsData
         setIsSpinnerLoading(false);
       }
 
       patientDetailsLoad(false);
-    } catch (error) {      
+    } catch (error) {
       setIsSpinnerLoading(false);
       patientDetailsLoad(false);
     }
@@ -1307,8 +1310,7 @@ const Details = ({
                               </Checkbox>
                             </div>
                             <Tooltip title="Filters" placement="top">
-                              {/* <MenuOutlined onClick={handleIconClick} /> */}
-                              <div className="cursor-pointer" onClick={handleIconClick} >{SVGICON.filter}</div>
+                              <MenuOutlined onClick={handleIconClick} />
                             </Tooltip>
                           </div>
                         </>
@@ -1354,10 +1356,18 @@ const Details = ({
                     />
                   ) : flagContainerActive == "Filter" ? (
                     <>
-                      {userRole == "admin" ||
-                      userRole == "TENANT_ADMIN" ||
-                      userRole == "OWNER" ||
-                      userRole == "DOWNLOADER" ? (
+                      {shouldShowReviewerWorkListByPath &&
+                      userRole == "OWNER" ? (
+                        <ReviwerWorkList
+                          localUserId={localUserId}
+                          setWorkListPatientId={setWorkListPatientId}
+                          setIsModalComments={setIsModalComments}
+                          getPatientListToDetails={getPatientListToDetails}
+                        />
+                      ) : userRole == "admin" ||
+                        userRole == "TENANT_ADMIN" ||
+                        userRole == "OWNER" ||
+                        userRole == "DOWNLOADER" ? (
                         <AdminWorkList
                           localUserId={localUserId}
                           setWorkListPatientId={setWorkListPatientId}
