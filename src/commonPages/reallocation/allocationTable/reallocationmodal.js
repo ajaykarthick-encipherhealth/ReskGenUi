@@ -235,10 +235,10 @@ const ReAllocationModal = ({
           <Select
             className={modalStyle.allocationInput}
             placeholder="Select Role"
-            options={aliasOptions}
+            // options={aliasOptions}
             allowClear
             value={roles}
-            onChange={handleRoleChange}
+            // onChange={handleRoleChange}
           />
         </div>
         {isLoading ? (

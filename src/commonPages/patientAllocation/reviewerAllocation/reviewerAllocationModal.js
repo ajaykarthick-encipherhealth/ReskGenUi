@@ -353,11 +353,12 @@ const AllocateModal = ({
                         handleUserSelect(item.proxyId, item.email)
                       }
                       className="me-2 ms-3 align-self-center"
-                      disabled={
-                        activeEmail.some(
-                          (user) => user.username === item.email
-                        ) && !selectedUserIds.includes(item.proxyId)
-                      }
+                      // disabled={
+                      //   activeEmail.some(
+                      //     (user) => user.username === item.email
+                      //   ) 
+                      //   && !selectedUserIds.includes(item.proxyId)
+                      // }
                     />
                   </div>
                 </div>

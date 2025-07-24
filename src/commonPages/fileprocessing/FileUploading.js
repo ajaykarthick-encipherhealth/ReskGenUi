@@ -42,7 +42,6 @@ const FileUploading = ({
       fileInput.value = "";
     }
   };
-  
   return (
     <Offcanvas
       onHide={handleClose}
@@ -82,6 +81,8 @@ const FileUploading = ({
                   type="text"
                   value={inputValue?.patientId}
                   onChange={(e) => handleChange(e)}
+                  disabled={isUpload}
+                  style={{cursor :isUpload?"not-allowed" :"default"}}
                 />
               </div>
 

@@ -234,7 +234,7 @@ const RandomSamplingModal = ({
         masterAudit: roleAliasName === "MASTER_AUDIT" ? true : false,
       });
     }
-  }, [roleId, search, roleAliasName ,roles] );
+  }, [roleId, search, roleAliasName, roles]);
 
   return (
     <div>
@@ -344,11 +344,11 @@ const RandomSamplingModal = ({
                         handleUserSelect(item.proxyId, item.email)
                       }
                       className="me-2 ms-3 align-self-center"
-                      disabled={
-                        activeEmail.some(
-                          (user) => user.username === item.email
-                        ) && !selectedUserIds.includes(item.proxyId)
-                      }
+                      // disabled={
+                      //   activeEmail.some(
+                      //     (user) => user.username === item.email
+                      //   ) && !selectedUserIds.includes(item.proxyId)
+                      // }
                     />
                   </div>
                   {activeCard == item.id ? (
