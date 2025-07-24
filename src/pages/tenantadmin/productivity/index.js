@@ -67,6 +67,7 @@ const Productivity = ({
     setPageNo(0);
     setSearch(null);
     setSelectedRowsId([]);
+    setSelectedDates([])
   };
 
   const onClose = () => {
