@@ -331,7 +331,7 @@ const ManuallyAdd = ({
     const isCodeCheck = await isCodeAlready({
       code: value,
       patientId: getStorage("patientId"),
-      dos: year?.value  ? year?.value : year || "",
+      dos: year?.value ? year?.value : year || "",
       date: getSelectedDos,
     });
     if (isCodeCheck?.response) {
@@ -355,7 +355,6 @@ const ManuallyAdd = ({
       dateOfService: getSelectedDos ? getSelectedDos : "",
       substring: form[`referance_${section?.replaceAll(" ", "-")}_${item}`],
       pageNumber: form[`pageNumber_${section?.replaceAll(" ", "-")}_${item}`],
-      educationalError: form.educationalError || false,
     }));
     setDiagnosisForm(form);
     setListOfSection((prev) => {
@@ -380,7 +379,6 @@ const ManuallyAdd = ({
       dateOfService: getSelectedDos ? getSelectedDos : "",
       substring: forms[`referance_${section?.replaceAll(" ", "-")}_${item}`],
       pageNumber: forms[`pageNumber_${section?.replaceAll(" ", "-")}_${item}`],
-      educationalError: form.educationalError || false,
     }));
     setListOfSection((prev) => {
       const re = prev?.map((check, ind) => {
@@ -732,7 +730,6 @@ const ManuallyAdd = ({
       //   patientDetailsResult?.data?.response?.meatCriteria?.find(
       //     (item) => item.diagnosisCode == isEditValue.diagnosisCode
       //   );
-
       data = {
         patientId: getStorage("patientId"),
         oldDiagnosisCode: isEditValue?.diagnosisCode,
@@ -782,7 +779,7 @@ const ManuallyAdd = ({
         dateOfServiceIfDosWiseCompute: getSelectedDos ? getSelectedDos : null,
         processedYear: year?.value ? year?.value : year,
         activeHeader: !isMeat,
-        educationalError: forms?.educationalError,
+        educationalError: educationalError,
       };
     } else if (isEditMeat) {
       data = {
@@ -815,7 +812,7 @@ const ManuallyAdd = ({
         chartProcessType: getSelectedDos ? "DATE_OF_SERVICE" : "YEAR",
         dateOfServiceIfDosWiseCompute: getSelectedDos ? getSelectedDos : null,
         processedYear: year?.value ? year?.value : year,
-        educationalError: forms?.educationalError,
+        educationalError: educationalError,
         activeHeader: !isMeat,
       };
     } else {
@@ -845,7 +842,7 @@ const ManuallyAdd = ({
         chartProcessType: getSelectedDos ? "DATE_OF_SERVICE" : "YEAR",
         processedYear: year?.value ? year?.value : year,
         activeHeader: !isMeat,
-        educationalError: diagnosisForm?.educationalError,
+        educationalError: educationalError,
       };
     }
     if (validCode.toLowerCase() == "valid code") {
@@ -864,6 +861,7 @@ const ManuallyAdd = ({
           res = await manuallyAdd(data);
         }
         if (res?.status == "SUCCESS") {
+          setEducationalError(false)
           handleCloseModal(false);
           activeLabels({
             patientId: userId,
@@ -875,6 +873,7 @@ const ManuallyAdd = ({
           resetForms({ reload: true });
           setIsBtnLoading(false);
           setOpens(false);
+       
         } else if (
           res?.status == "CUSTOM_EXCEPTION" ||
           res?.status === "FAILED" ||
@@ -909,8 +908,8 @@ const ManuallyAdd = ({
           (movemetData.assessmentHyperLink = data.assessmentHyperLink),
           (movemetData.treatmentAspect = data.treatmentAspect),
           (movemetData.treatmentHyperLink = data.treatmentHyperLink);
-          movemetData.educationalError = educationalError;
-          (movemetData.activeHeader) = (data.activeHeader);
+        movemetData.educationalError = educationalError;
+        movemetData.activeHeader = data.activeHeader;
         try {
           const res = await suggestedToValidMove(movemetData, selectCardTitle);
 
@@ -983,6 +982,7 @@ const ManuallyAdd = ({
     setListOfSectionT([]);
     setShowSectionT(false);
     setCapturedSectionsT([]);
+    setEducationalError(false)
     setSuggestedMeatForm && setSuggestedMeatForm(false);
   };
 
@@ -1192,7 +1192,6 @@ const ManuallyAdd = ({
 
     return Array.from(sectionsMap.values());
   };
-
   useEffect(() => {
     if (isEditPage && !meatFormDisplay) {
       const filterData =
@@ -1200,6 +1199,7 @@ const ManuallyAdd = ({
           (item) => item.diagnosisCode == isEditValue.diagnosisCode
         );
       setCode(isEditValue.diagnosisCode);
+       setEducationalError(isEditValue?.educationalError)
       setValidCode("Valid Code");
       const dos = isEditValue?.dateOfServices?.map((item) => ({
         lable: item,
@@ -1218,9 +1218,10 @@ const ManuallyAdd = ({
         oldHcc: isEditValue?.oldValue ? isEditValue?.oldValue : "",
         educationalError: isEditValue?.educationalError
           ? isEditValue?.educationalError
-          : "",
+          : false,
         dos: dos,
       });
+     
       const sectionListM = filterData?.monitorHyperLink?.map((item) => ({
         section: item.header,
         hyperlinks: item,
@@ -1250,7 +1251,9 @@ const ManuallyAdd = ({
     }
     handleSelectChange(isEditValue?.dateOfServices, "dos");
   }, [isEditPage, isEditValue, reset, meatFormDisplay]);
-
+  const handleCheckboxChange = (e) => {
+    setEducationalError(e.target.checked);
+  };
   useEffect(() => {
     if (isEditMeat) {
       setMeatDisplay(true);
@@ -1280,12 +1283,15 @@ const ManuallyAdd = ({
       }));
       form.setFieldsValue({
         diagnosisCode: isEditMeatValue.diagnosisCode,
+        
       });
+     
       handleSelectChange(isEditMeatValue.dateOfService, "dos");
       setListOfSectionM(transformData(sectionList));
       setListOfSectionE(transformData(sectionListE));
       setListOfSectionA(transformData(sectionListA));
       setListOfSectionT(transformData(sectionListT));
+      setEducationalError(isEditMeatValue?.educationalError)
     }
     form.setFieldsValue({
       dos: [isDosSelected],
@@ -1514,10 +1520,16 @@ const ManuallyAdd = ({
                 />
               </Form.Item>
             </div>
-             {(userRole === "CODER_2" || userRole === "QA") && (
+            {(userRole === "CODER_2" || userRole === "QA") && (
               <div className="col-12">
-                <Form.Item name="educationalError" valuePropName="checked">
-                  <Checkbox className="ant-badge">Mark as Educational Error</Checkbox>
+                <Form.Item valuePropName="checked">
+                  <Checkbox
+                    checked={educationalError}
+                    onChange={handleCheckboxChange}
+                    className="ant-badge"
+                  >
+                    Mark as Educational Error
+                  </Checkbox>
                 </Form.Item>
               </div>
             )}

@@ -440,6 +440,8 @@ const File = ({
                 year={year}
                 open={isFileFormShow}
                 isDosSelected={isDosSelected}
+                educationalError={educationalError}
+                setEducationalError={setEducationalError}
               />
             </div>
           ) : null}
