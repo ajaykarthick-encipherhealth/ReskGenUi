@@ -172,7 +172,7 @@ const CodersTable = ({
           setSearchText,
           setSelectedDateRanges,
           setSelectedDates,
-          setSelectedOption}
+          setSelectedOption,data}
         );
         if (filterCheck) {
           getCodersApi();

@@ -127,7 +127,7 @@ const MoveBack = ({
           setSearchText,
           setSelectedDateRanges,
           setSelectedDates,
-          setSelectedOption}
+          setSelectedOption,data}
         );
         if (filterCheck) {
           getMoveBack();
