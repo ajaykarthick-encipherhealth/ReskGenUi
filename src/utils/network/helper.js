@@ -1,4 +1,3 @@
-
 import CryptoJS from "crypto-js";
 import { isEncrypted, salt } from "../config";
 import Swal from "sweetalert2";
@@ -52,6 +51,8 @@ function decryptData(encryptedData, key, iv) {
   }
 }
 
+let sessionExpired = false;
+
 export async function checkStatus(response) {
   setStorage("loginCheck", false);
 
@@ -60,10 +61,10 @@ export async function checkStatus(response) {
     buttonText = "Back",
     showCloseButton = true,
     clearStorage = false,
-    showSendMailButton = true 
+    showSendMailButton = true
   ) => {
     if (showCloseButton) appendCloseButtonStyle();
-    
+
     const result = await Swal.fire({
       title: "",
       text: message,
@@ -71,24 +72,29 @@ export async function checkStatus(response) {
       confirmButtonText: buttonText,
       confirmButtonColor: "#DD6B55",
       showDenyButton: showSendMailButton,
-      denyButtonText: showSendMailButton ? `Send Mail` : "", 
+      denyButtonText: showSendMailButton ? `Send Mail` : "",
       denyButtonColor: "rgb(59, 130, 246)",
       showCloseButton,
     });
+
     if (result.isConfirmed && clearStorage) {
       removeStorage();
       window.location = "/login";
-    } else if (result.isDenied && ( response?.status === 500 || response?.status === 502 || response?.status === 512)) {
+    } else if (
+      result.isDenied &&
+      (response?.status === 500 ||
+        response?.status === 502 ||
+        response?.status === 512)
+    ) {
       try {
         Swal.fire({
-          title: 'Sending Email...',
-          text: 'Please wait while we notify the admin.',
-          icon: 'info',
+          title: "Sending Email...",
+          text: "Please wait while we notify the admin.",
+          icon: "info",
           showConfirmButton: false,
-          willOpen: () => {
-            Swal.showLoading();
-          }
+          willOpen: () => Swal.showLoading(),
         });
+
         const res = await exceptionMail({
           obj: {
             exceptionMessage: "Error occurring.",
@@ -96,8 +102,9 @@ export async function checkStatus(response) {
             stackTrace: "Stack trace details go here.",
             subject: "Exception Email",
             exceptionMailServiceEnum: "DB",
-          }
+          },
         });
+
         if (res?.status === "SUCCESS") {
           Swal.fire({
             title: "Success!",
@@ -119,7 +126,8 @@ export async function checkStatus(response) {
           text: "An error occurred while trying to send the email.",
           icon: "error",
         });
-      } }
+      }
+    }
   };
 
   const appendCloseButtonStyle = () => {
@@ -153,17 +161,21 @@ export async function checkStatus(response) {
   };
 
   if (!response) return;
+
   const { status } = response;
-  
+
   switch (status) {
     case 401: {
-      await showModal(
-        "Your session has timed out. Please log in again.",
-        "Logout",
-        false,
-        true,
-        false
-      );
+      if (!sessionExpired) {
+        sessionExpired = true;
+        await showModal(
+          "Your session has timed out. Please log in again.",
+          "Logout",
+          false,
+          true,
+          false
+        );
+      }
       break;
     }
     case 500:
@@ -171,15 +183,20 @@ export async function checkStatus(response) {
         "Something went wrong on our end. Please try again later.",
         "Back",
         true,
-        false, 
+        false,
         false
       );
       break;
-    case 403: {
-      await showModal("You don't have permission to access this page.", "Back", true, false, false); 
+    case 403:
+      await showModal(
+        "You don't have permission to access this page.",
+        "Back",
+        true,
+        false,
+        false
+      );
       break;
-    }
-    case 512: {
+    case 512:
       await showModal(
         "An error occurred due to unhandled exceptions or unexpected conditions within the system. The admin will be notified by email.",
         "Back",
@@ -188,9 +205,10 @@ export async function checkStatus(response) {
         true
       );
       break;
-    }
     default: {
-      const data = isEncrypted === "true" ? await response.text() : await response.json();
+      const data =
+        isEncrypted === "true" ? await response.text() : await response.json();
+
       if (isEncrypted === "true") {
         return await handleDecryption(data);
       } else {
@@ -207,7 +225,6 @@ export async function checkStatus(response) {
     }
   }
 }
-
 
 export async function checkAuth(response) {
   const data = await response.json();
