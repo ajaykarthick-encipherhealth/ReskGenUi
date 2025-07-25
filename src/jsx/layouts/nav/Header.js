@@ -161,6 +161,7 @@ const Header = ({
       (role) => role.key === roleKey || role?.details?.proxyRole === roleKey
     );
   };
+  const isProcessing = useRef(false);
   const showDrawer = () => {
     setOpened(true);
     setPopoverVisible(false);
@@ -564,6 +565,31 @@ const Header = ({
     });
   }, [userRole]);
 
+  const handleClick = (data) => {
+    const targetPath = data?.to;
+    if (router.pathname === targetPath || isProcessing.current) return;
+    try {
+      getFilteredList(null);
+      getPatientID(null);
+      getActiveTab(null);
+      getReportActiveTab(null);
+      getRoutedData(null);
+      getTableData({ reloadTrue: true });
+      router.push(
+        {
+          pathname: `${data?.to}`,
+          query: { ...screenSize },
+        },
+        `${data?.to}`
+      );
+      localStorage.removeItem("patientId");
+    } finally {
+      setTimeout(() => {
+        isProcessing.current = false;
+      }, 500);
+    }
+  };
+
   const renderMenuItems = (condition) => {
     return condition?.map((data, index) => {
       const queryString = window.location.search;
@@ -592,21 +618,7 @@ const Header = ({
           } ${styles.transformed}`}
           key={index}
           onClick={() => {
-            getFilteredList(null);
-            getPatientID(null);
-            getActiveTab(null);
-            getReportActiveTab(null);
-            getRoutedData(null);
-            getTableData({ reloadTrue: true });
-
-            router.push(
-              {
-                pathname: `${data?.to}`,
-                query: { ...screenSize },
-              },
-              `${data?.to}`
-            );
-            localStorage.removeItem("patientId");
+            handleClick(data);
           }}
         >
           <div
@@ -812,7 +824,7 @@ const Header = ({
       duration: 5,
     });
     const res = await getAllProjects();
-      const allRoles = res?.response?.userRoles?.map((data) => ({
+    const allRoles = res?.response?.userRoles?.map((data) => ({
       label: data.aliasName,
       key: data.proxyRole,
       details: data,
