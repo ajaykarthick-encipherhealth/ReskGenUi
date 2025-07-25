@@ -290,7 +290,7 @@ const Radiology = ({
                         <Nav.Link
                           to="#my-posts"
                           eventKey={1}
-                          className={visitStyles.navColor}
+                          className={` ant-badge ${visitStyles.navColor}`}
                           activeClassName={visitStyles.activeLink}
                           onClick={() => selectTab(1)}
                         >
@@ -301,7 +301,7 @@ const Radiology = ({
                         <Nav.Link
                           to="#my-posts"
                           eventKey={2}
-                          className={visitStyles.navColor}
+                          className={` ant-badge ${visitStyles.navColor}`}
                           activeClassName={visitStyles.activeLink}
                           onClick={() => selectTab(2)}
                         >

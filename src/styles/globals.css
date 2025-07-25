@@ -10727,7 +10727,7 @@ p,
 .profile-tab .nav-item .nav-link {
   font-size: 1rem;
   /* margin-right: 7px; */
-  transition: all 0.8s ease-in-out;
+  /* transition: all 0.8s ease-in-out; */
   border: none;
   border-bottom: 0.0125rem solid transparent;
   color: #000;

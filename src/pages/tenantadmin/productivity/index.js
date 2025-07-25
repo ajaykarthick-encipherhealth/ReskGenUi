@@ -258,7 +258,7 @@ const Productivity = ({
                                 key={role}
                               >
                                 <Nav.Link
-                                  className="mt-4"
+                                  className="ant-badge mt-4"
                                   onClick={() => {
                                     setSelectedRoleId(role.roleId);
                                     setRoleId(role.roleId);

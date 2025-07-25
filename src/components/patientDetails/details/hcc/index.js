@@ -554,11 +554,12 @@ const Hcc = ({
                 <Nav as="ul" className="nav nav-tabs">
                   <div className={`d-flex  flex-wrap  align-items-center`}>
                     {/* <div className="d-flex"> */}
-                    <Nav.Item as="li" className="nav-item ">
+                    <Nav.Item as="li" className="nav-item  ">
                       <Nav.Link
                         to="#my-posts"
                         eventKey={1}
-                        className={visitStyles.navColor}
+                        id="badge"
+                        className={`ant-badge ${visitStyles.navColor}`}
                         onClick={() => {
                           selectTab(
                             1,
@@ -577,7 +578,7 @@ const Hcc = ({
                       <Nav.Link
                         to="#my-posts"
                         eventKey={2}
-                        className={` text-truncate ${visitStyles.navColor}`}
+                        className={`ant-badge   text-truncate ${visitStyles.navColor}`}
                         activeClassName={visitStyles.activeLink}
                         onClick={() =>
                           selectTab(
@@ -596,7 +597,7 @@ const Hcc = ({
                       <Nav.Link
                         to="#my-posts"
                         eventKey={3}
-                        className={` text-truncate ${visitStyles.navColor}`}
+                        className={` ant-badge  text-truncate ${visitStyles.navColor}`}
                         onClick={() =>
                           selectTab(
                             3,
@@ -614,7 +615,7 @@ const Hcc = ({
                       <Nav.Link
                         to="#my-posts"
                         eventKey={4}
-                        className={` text-truncate ${visitStyles.navColor}`}
+                        className={`ant-badge  text-truncate ${visitStyles.navColor}`}
                         onClick={() =>
                           selectTab(
                             4,
@@ -633,7 +634,7 @@ const Hcc = ({
                         <Nav.Link
                           to="#my-posts"
                           eventKey={5}
-                          className={` text-truncate ${visitStyles.navColor}`}
+                          className={` ant-badge  text-truncate ${visitStyles.navColor}`}
                           onClick={() =>
                             selectTab(
                               5,
@@ -653,7 +654,7 @@ const Hcc = ({
                       <Nav.Link
                         to="#my-posts"
                         eventKey={6}
-                        className={` text-truncate ${visitStyles.navColor}`}
+                        className={` ant-badge  text-truncate ${visitStyles.navColor}`}
                         onClick={() =>
                           selectTab(
                             6,

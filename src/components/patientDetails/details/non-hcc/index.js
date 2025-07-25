@@ -133,7 +133,7 @@ const NonHcc = ({
                 <Nav.Item as="li" className="nav-item">
                   <Nav.Link
                     to="#my-posts"
-                    className={visitStyles.navColor}
+                   className={` ant-badge ${visitStyles.navColor}`}
                     activeClassName={visitStyles.activeLink}
                     eventKey="file"
                     onClick={() => selectTab(1)}
@@ -145,7 +145,7 @@ const NonHcc = ({
                   <Nav.Link
                     to="#my-posts"
                     eventKey="validDiseases"
-                    className={visitStyles.navColor}
+                    className={` ant-badge ${visitStyles.navColor}`}
                     activeClassName={visitStyles.activeLink}
                     onClick={() => selectTab(2)}
                   >
