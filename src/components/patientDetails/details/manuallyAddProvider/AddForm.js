@@ -47,12 +47,16 @@ const AddForm = ({
   const [credentialOptions, setCredentialOptions] = useState([]);
   const [dosExistsError, setDosExistsError] = useState(null);
   const { patientId = null } = getLocalStored();
-  const validateThreeDigitNumber = (_, value) => {
-    if (!value || /^\d{1,3}$/.test(value)) {
-      return Promise.resolve();
-    }
-    return Promise.reject(new Error("Please enter a valid page number"));
-  };
+const validateThreeDigitNumber = (_, value) => {
+  const number = Number(value);
+  if (!value || (/^\d{1,3}$/.test(value) && number > 0)) {
+    return Promise.resolve();
+  }
+  return Promise.reject(
+    new Error("Please enter a valid positive number (1-999)")
+  );
+};
+
 
   const AddProvider = async (values, providersLists) => {
     setBtnName("LOADING...");
@@ -139,6 +143,8 @@ const AddForm = ({
       form.setFieldsValue(newValues);
     }
   };
+
+
   const customDisableDate = (current) => {
     const year = dosYearDefalutSelect?.value || dosYearDefalutSelect;
     return current.year() !== year;
@@ -255,6 +261,7 @@ const AddForm = ({
             label={
               <label className={style.dateField}>DOS Start Page Number</label>
             }
+            maxLength={3}
             name="dosStartPageNumber"
             rules={[
               { required: true, message: "Please enter DOS Start Page Number" },
@@ -268,6 +275,7 @@ const AddForm = ({
             label={
               <label className={style.dateField}>DOS End Page Number</label>
             }
+            maxLength={3}
             name="dosEndPageNumber"
             rules={[
               { required: true, message: "Please enter DOS End Page Number" },
