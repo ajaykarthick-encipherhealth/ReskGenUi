@@ -243,18 +243,18 @@ const Details = ({
       defaultComplete: "NON_HCC_DISEASE",
     },
 
-    {
-      title: "Radiology",
-      type: "Radiology",
-      iconStyle: IMAGES.visitDataRadioloy,
-      defaultComplete: "RADIOLOGY",
-    },
-    {
-      title: "Lab Report",
-      type: "Lab Report",
-      iconStyle: IMAGES.visitDataLabreport,
-      defaultComplete: "LAB",
-    },
+    // {
+    //   title: "Radiology",
+    //   type: "Radiology",
+    //   iconStyle: IMAGES.visitDataRadioloy,
+    //   defaultComplete: "RADIOLOGY",
+    // },
+    // {
+    //   title: "Lab Report",
+    //   type: "Lab Report",
+    //   iconStyle: IMAGES.visitDataLabreport,
+    //   defaultComplete: "LAB",
+    // },
   ];
   const handleNavigation = (data) => {
     navigetPageDetails(

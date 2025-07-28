@@ -108,15 +108,15 @@ const Flag = ({
       return;
     }
     if (isDisabled) return;
-    if (inputValue.comments.trim() === "") {
-      getResponePopup({
-        data: {
-          status: "USER_DEFINED_ERROR",
-          message: "Comment cannot be empty",
-        },
-      });
-      return;
-    }
+    // if (inputValue.comments.trim() === "") {
+    //   getResponePopup({
+    //     data: {
+    //       status: "USER_DEFINED_ERROR",
+    //       message: "Comment cannot be empty",
+    //     },
+    //   });
+    //   return;
+    // }
     if (form.checkValidity() === true) {
       setCommentsTrigger(true);
       const patientId = getStorage("patientId");
@@ -331,7 +331,7 @@ const Flag = ({
                   }}
                   className={visitStyles.commentsFormControl}
                   rows="5"
-                  required
+                  // required
                   id="Add-flag"
                   name="comments"
                   value={inputValue.comments}
