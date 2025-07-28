@@ -251,7 +251,7 @@ const SelectProject = ({
                 <div>
                   <div className=" d-flex align-items-center justify-content-center">
                     <h2 className="title fontWeight2 ">
-                      Login to Your Account
+                      Your Gateway to CogentAI
                     </h2>
                   </div>
                   <h6 className="login-title">
