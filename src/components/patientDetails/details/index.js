@@ -508,6 +508,8 @@ const Details = ({
     setFlagContainerActive("");
     setShowFilter(false);
     setIsViewAll(false);
+    setRole([]);
+    setAction([]);
   };
 
   const dosOnChange = async (e) => {
