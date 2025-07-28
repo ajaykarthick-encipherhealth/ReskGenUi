@@ -445,8 +445,21 @@ const HccCards = ({
                                 id={`${id}-hcc-info-${i}`}
                                 name={`hcc-info-${i}`}
                               >
-                                {data?.reason && (
-                                  <Popover content={<>{data?.reason || ""}</>}>
+                                {data?.reason && cardTitle == "POTENTIAL" && (
+                                  <Popover
+                                    content={
+                                      <>
+                                        <div
+                                          style={{
+                                            maxWidth: "400px",
+                                            overflowY: "auto",
+                                          }}
+                                        >
+                                          {data?.reason || ""}
+                                        </div>
+                                      </>
+                                    }
+                                  >
                                     <Image
                                       src={AiLogo}
                                       alt="ai-log"

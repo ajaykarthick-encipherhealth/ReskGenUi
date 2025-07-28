@@ -396,7 +396,7 @@ export const getStatusIcon = (status) => {
 
     case "QUERIED":
       return (
-        <Tooltip placement="bottom" title="COMPLETED">
+        <Tooltip placement="bottom" title="QUERIED">
           <div>
             <Image src={IMAGES.queried} />
           </div>
