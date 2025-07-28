@@ -20,6 +20,7 @@ const StatusAction = ({
   patientIdDetailsData,
   getPatientIdData,
   getPatientDosList,
+  dosYearDefalutSelect,
 }) => {
   const router = useRouter();
   const isOnReviewerPatients = router.pathname === "/reviewer/patients/details";
@@ -490,9 +491,8 @@ const StatusAction = ({
     }
   };
   const updateStatus = async (action) => {
-
-  const isTinDetailsPage = path.endsWith("/tindetails/masteraudit");
-  const masterAudit = isTinDetailsPage ? true : false;
+    const isTinDetailsPage = path.endsWith("/tindetails/masteraudit");
+    const masterAudit = isTinDetailsPage ? true : false;
     var postData = {
       // orgId: localOrgId,
       patientId: localPatientId,
@@ -505,7 +505,6 @@ const StatusAction = ({
     try {
       setStatusLoading(true);
       const response = await overallStatusUpdate(postData);
-
       if (response?.status == "SUCCESS") {
         setStatusLoading(false);
         notification.success({
@@ -521,7 +520,9 @@ const StatusAction = ({
       getPatientIdData(localPatientId, path);
       getPatientDosList(
         localPatientId,
-        patientDetailsResult?.data?.response?.processedYear,
+        dosYearDefalutSelect?.value
+          ? dosYearDefalutSelect?.value
+          : dosYearDefalutSelect,
         "",
         "",
         "",
@@ -561,9 +562,9 @@ const StatusAction = ({
     setPatienIdDetails(patientIdDetailsData?.data?.response);
   }, [patientIdDetailsData?.data?.response]);
 
-    const workflowDatas = path.endsWith("/tindetails/masteraudit")
-      ? patienIdDetails?.masterAudit
-      : patienIdDetails?.workflow?.[0];
+  const workflowDatas = path.endsWith("/tindetails/masteraudit")
+    ? patienIdDetails?.masterAudit
+    : patienIdDetails?.workflow?.[0];
 
   return (
     <>
@@ -659,9 +660,7 @@ const StatusAction = ({
                   onVisibleChange={(v) => setMenuIsOpen(v)}
                   visible={menuIsOpen}
                   className={`completedBtnHcc ant-badge ${visitStyles.completedBtnHcc}`}
-                  disabled={
-                    workflowDatas?.status === "COMPLETED"
-                  }
+                  disabled={workflowDatas?.status === "COMPLETED"}
                 >
                   <button
                     id="auditbtn"
@@ -693,9 +692,7 @@ const StatusAction = ({
                   onVisibleChange={(v) => setMenuIsOpen(v)}
                   visible={menuIsOpen}
                   className={`queryBtnHcc ${visitStyles.queryBtnHcc}`}
-                  disabled={
-                    workflowDatas?.status === "QUERIED"
-                  }
+                  disabled={workflowDatas?.status === "QUERIED"}
                 >
                   <button
                     disabled={shouldDisable}

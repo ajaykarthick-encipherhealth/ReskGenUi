@@ -721,7 +721,7 @@ const Details = ({
             setSelectDosValue("");
             getSelectedDosPageNumber(1);
           }
-          setIsModalComments(false);
+          // setIsModalComments(false);
           // setFilterModalOpen(false);
           setWorkListPatientId(null);
         } else {
@@ -920,6 +920,7 @@ const Details = ({
                             selectedDate={selectedDate}
                             setSelectedDate={setSelectedDate}
                             activeTab={activeTab}
+                          
                           />
                         )}
                       </div>

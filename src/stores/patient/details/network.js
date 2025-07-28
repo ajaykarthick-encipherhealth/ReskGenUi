@@ -65,7 +65,7 @@ export async function patientDetails(
     method: "GET",
   };
 
-  let url = `dbservice/status/patient/compute/get?patientId=${patientId}&dateOfService=${dos}&roleId=${userRoleId}`;
+  let url = `dbservice/status/patient/compute/get?patientId=${patientId}&dateOfService=${dos ? dos : ""}&roleId=${userRoleId}`;
   if (masterAudit) {
     url += `&masterAudit=${masterAudit}`;
   }

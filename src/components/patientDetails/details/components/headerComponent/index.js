@@ -57,7 +57,7 @@ const HeaderComponent = ({
 
       <div className="col-1 d-grid " style={{ padding: "0px" }}>
         <div>
-          <StatusAction />
+          <StatusAction dosYearDefalutSelect ={dosYearDefalutSelect}/>
         </div>
         <div className="mt-1">
           {!isLoadingDos ? (
