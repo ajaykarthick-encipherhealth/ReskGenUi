@@ -220,10 +220,10 @@ const handleIdRead = async (notification) => {
                             </div>
                           )}
 
-                          <div className="d-flex p-1 align-items-center ">
+                          <div id="badge" className="d-flex p-1 align-items-center cursor-pointer ant-badge ">
                             <Tooltip title={notification?.content}>
-                              <span
-                                className={`${style.cardContent} text-gray-600 text-truncate`}
+                              <span id="badge"
+                                className={`${style.cardContent} text-gray-600 text-truncate ant-badge` }
                               >
                                 {notification?.content}
                               </span>

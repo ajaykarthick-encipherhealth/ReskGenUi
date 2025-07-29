@@ -1116,16 +1116,15 @@ export const isStatusDisabled = (
   return disabled;
 };
 export const isYearWiseDisabled = (patientDetailsResult, pathname) => {
-  let retrunValue = false;
+  let returnValue = false;
   const overAllStatus =
     patientDetailsResult?.data?.response?.workflow?.[0]?.status ||
     patientDetailsResult?.data?.response?.masterAudit?.status;
-
   if (patientDetailsResult?.data?.response?.masterAudit?.status == "PENDING") {
-    retrunValue = false;
+    returnValue = false;
   } else {
-    if (overAllStatus === "COMPLETED") {
-      retrunValue = true;
+    if (overAllStatus === "COMPLETED" || overAllStatus === "QUERIED" ) {
+      returnValue = true;
     }
   }
   const pathDisbaled =
@@ -1134,10 +1133,10 @@ export const isYearWiseDisabled = (patientDetailsResult, pathname) => {
     pathname.endsWith("/tenantadmin/patientsync/batchfilesview");
 
   if (pathDisbaled) {
-    retrunValue = true;
+    returnValue = true;
   }
 
-  return retrunValue;
+  return returnValue;
 };
 
 export const getRolePanelPermission = (roles, currentRole) => {
