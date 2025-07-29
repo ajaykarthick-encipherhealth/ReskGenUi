@@ -2247,7 +2247,7 @@
 }
 
 .yearactionbtnContainer>button {
-  /* height: 32px !important; */
+  height: 32px !important;
   margin-bottom: 5px;
 }
 
@@ -2326,7 +2326,7 @@
   color: #04306f;
   background-color: #fff;
   border-radius: 5px;
-  height: 32px;
+  /* height: 32px; */
 }
 
 .isSHowHccBlurHcc {
@@ -2397,6 +2397,7 @@
     width: 120px !important;
     font-size: 10px !important;
   }
+
   .actionBtn{
     font-size: 11px !important;
   }

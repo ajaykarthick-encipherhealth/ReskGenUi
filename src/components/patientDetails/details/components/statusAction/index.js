@@ -274,7 +274,7 @@ const StatusAction = ({
                   }}
                   className={`px-3 py-1 rounded-md ${styles.queryBtn}`}
                 >
-                  Query
+                  QUERY
                 </Button>
               )}
           </Menu.Item>

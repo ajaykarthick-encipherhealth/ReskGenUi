@@ -552,7 +552,7 @@ const Hcc = ({
             <div className="row">
               <div className="col-12">
                 <Nav as="ul" className="nav nav-tabs">
-                  <div className={`d-flex  flex-wrap  align-items-center`}>
+                  {/* <div className={`d-flex  flex-wrap  align-items-center`}> */}
                     {/* <div className="d-flex"> */}
                     <Nav.Item as="li" className="nav-item  ">
                       <Nav.Link
@@ -574,7 +574,7 @@ const Hcc = ({
                         File
                       </Nav.Link>
                     </Nav.Item>
-                    <Nav.Item as="li" className="nav-item">
+                    {/* <Nav.Item as="li" className="nav-item">
                       <Nav.Link
                         to="#my-posts"
                         eventKey={2}
@@ -592,7 +592,7 @@ const Hcc = ({
                       >
                         Visit Data
                       </Nav.Link>
-                    </Nav.Item>
+                    </Nav.Item> */}
                     <Nav.Item as="li" className="nav-item">
                       <Nav.Link
                         to="#my-posts"
@@ -629,7 +629,7 @@ const Hcc = ({
                         MEAT Criteria
                       </Nav.Link>
                     </Nav.Item>
-                    {activeTab !== 5 && (
+                    {/* {activeTab !== 5 && (
                       <Nav.Item as="li" className="nav-item">
                         <Nav.Link
                           to="#my-posts"
@@ -649,8 +649,8 @@ const Hcc = ({
                           RAF Score
                         </Nav.Link>
                       </Nav.Item>
-                    )}
-                    <Nav.Item as="li" className="nav-item">
+                    )} */}
+                    {/* <Nav.Item as="li" className="nav-item">
                       <Nav.Link
                         to="#my-posts"
                         eventKey={6}
@@ -667,7 +667,7 @@ const Hcc = ({
                       >
                         Query
                       </Nav.Link>
-                    </Nav.Item>
+                    </Nav.Item> */}
                     <Nav.Item as="li" className="nav-item mt-1">
                       <div id="dosSelect" className="d-flex gap-2 mx-2 ">
                         {/* <Select
@@ -881,7 +881,7 @@ const Hcc = ({
                             </Button>
                           )} */}
                     </Nav.Item>
-                  </div>
+                  {/* </div> */}
                 </Nav>
               </div>
             </div>
