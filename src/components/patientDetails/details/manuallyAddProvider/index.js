@@ -79,7 +79,7 @@ const ManuallyAddProvider = ({
           ? false
           : undefined,
 
-      visitType: data?.visitType || "",
+      visitType: data?.visitType || "OFFICE",
       reviewerComments: data?.reviewerComments || "",
       physicianInquiry: data?.physicianInquiry || "",
       physicianSignaturePresent: data?.physicianSignaturePresent || "",
