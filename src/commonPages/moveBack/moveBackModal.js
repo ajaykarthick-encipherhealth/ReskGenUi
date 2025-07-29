@@ -64,7 +64,6 @@ const MoveBackModal = ({
       console.error("failed");
     }
   };
-
   return (
     <div>
       <Modal
@@ -111,7 +110,7 @@ const MoveBackModal = ({
 
           <div className=" h-100 d-flex align-items-center justify-content-center">
             <RegularButton
-              disabled={!selectLevel || moveBackLoader}
+              disabled={!selectLevel?.length || moveBackLoader}
               type="submit"
               onClick={handleSubmit}
               name={"Done"}

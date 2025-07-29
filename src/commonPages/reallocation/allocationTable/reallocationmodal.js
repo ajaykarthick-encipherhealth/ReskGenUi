@@ -207,6 +207,7 @@ const ReAllocationModal = ({
           setPriority([]);
           setSelectedUserIds([]);
           setRoles([]);
+          setIsChecked(false)
         }}
         title="Select User"
         footer={false}
@@ -466,6 +467,7 @@ const ReAllocationModal = ({
           setActiveCard("");
           setActiveEmail([]);
           setPriority([]);
+          setIsChecked(false)
         }}
         footer={null}
         width="35%"
