@@ -1179,6 +1179,7 @@ const VisitData = ({
         width="75%"
         height={200}
         onCancel={() => setSuggestedMeatForm(false)}
+        closeIcon={false}
       >
         <div className="row p-4" style={{ overflow: "hidden", height: "100%" }}>
           <div className="col-8">

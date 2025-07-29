@@ -1,25 +1,19 @@
 import React, { useEffect, useState } from "react";
 import { CloseOutlined } from "@ant-design/icons";
-import { AutoComplete, Checkbox, Form, Input, Select, Switch } from "antd";
-import AddSection from "./AddSection";
-import SelectButton from "../../../../btnSelect";
 import style from "../../../../../components/button/style.module.css";
-import { connect } from "react-redux";
+import { Checkbox, Form, Input, Select, Spin, Switch } from "antd";
+import { getSectionNameManually } from "../function/ReusableFunctions";
+import { getLocalStored } from "../../../../../utils/storages";
+import { generateUUID, getResponePopup } from "../../../../../utils/reusable";
 import { actions as patientDetailsAction } from "../../../../../stores/patient/details";
 import { actions as detailsActions } from "../../../../../stores/patient/details";
-
-import { getStorage } from "../../../../../utils/storages";
-import {
-  getProviderNameManually,
-  getSectionNameManually,
-} from "../function/ReusableFunctions";
-import RegularButton from "../../../../button";
+import { connect } from "react-redux";
+import AddSection from "./AddSection";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faK, faPlus, faTrashCan } from "@fortawesome/free-solid-svg-icons";
-import moment from "moment";
-import Meat, { checkMeatType } from "./Meat";
-import { getResponePopup } from "../../../../../utils/reusable";
+import { faPlus, faTrashCan } from "@fortawesome/free-solid-svg-icons";
 import CustomSelect from "../../../../customSelect";
+import RegularButton from "../../../../button";
+import SelectButton from "../../../../btnSelect";
 
 const defaultCapturedSections = [
   { label: "Chief Complaint", value: "Chief Complaint" },
@@ -31,10 +25,34 @@ const defaultCapturedSections = [
   { label: "Plan", value: "Plan" },
 ];
 
-const mockVal = (str, repeat = 1) => ({
-  value: str.repeat(repeat),
-});
+export const checkMeatType = (e) => {
+  switch (e) {
+    case "M":
+      return "Monitor";
+    case "E":
+      return "Evaluation";
+    case "A":
+      return "Assessment";
+    case "T":
+      return "Treatment";
+    default:
+      break;
+  }
+};
+
 const ManuallyAdd = ({
+  // isEditPage,
+  // meatFormDisplay,
+  // isEditMeat,
+  // getValidate,
+  // isDosSelected,
+  // patientDosResult,
+  // getSelectedDos,
+  // patientDetailsResult,
+  // year,
+  // getProviderSection,
+  // getValideCodeLoader,
+  // isEditMeatValue
   handleCloseModal,
   patientDosResult,
   getValidate,
@@ -65,63 +83,53 @@ const ManuallyAdd = ({
   getPatientDosList,
   educationalError,
   setEducationalError,
+  getValideCodeLoader,
 }) => {
-  const userId = getStorage("patientId");
-  const userRole = getStorage("userRole");
+  const { patientId = "", userRole = "" } = getLocalStored();
   const [form] = Form.useForm();
-  const [isMeat, setIsMeat] = useState(true);
-  const [validCode, setValidCode] = useState("");
-  const [code, setCode] = useState("");
-  const [providerDetails, setProviderDetails] = useState([]);
-  const [capturedSections, setCapturedSections] = useState([]);
-  const [capturedSectionsM, setCapturedSectionsM] = useState([]);
-  const [diagnosisForm, setDiagnosisForm] = useState({});
+  const { TextArea } = Input;
+  const [options, setOptions] = useState([]);
   const [sectionCount, setSectionCount] = useState([1]);
   const [section, setSection] = useState("");
-  const [meatDisplay, setMeatDisplay] = useState(false);
   const [listOfSection, setListOfSection] = useState([]);
+  const [capturedSections, setCapturedSections] = useState([]);
+  const [diagnosisForm, setDiagnosisForm] = useState({});
+  const [editSection, setEditSection] = useState();
   const [showSection, setShowSection] = useState(false);
-  const [description, setDescription] = useState("");
-  const [oldHcc, setOldhcc] = useState("");
-  const [newHcc, setNewhcc] = useState("");
-
+  const [isEdit, setIsEdit] = useState(false);
+  const [isMeat, setIsMeat] = useState(true);
   const [selectMeat, setSelectMeat] = useState("M");
   const [isFilled, setIsFilled] = useState([]);
+  const [isBtnLoading, setIsBtnLoading] = useState(false);
+  const [code, setCode] = useState("");
+  const [validCode, setValidCode] = useState("");
+  const [dbDescription, setDbDescription] = useState("");
+  const [meatDisplay, setMeatDisplay] = useState(false);
+  const [providerDetails, setProviderDetails] = useState([]);
 
-  const [sectionCountM, setSectionCountM] = useState([1]);
+  const [sectionCountM, setSectionCountM] = useState([2]);
   const [sectionM, setSectionM] = useState("");
   const [listOfSectionM, setListOfSectionM] = useState([]);
   const [showSectionM, setShowSectionM] = useState(false);
+  const [capturedSectionsM, setCapturedSectionsM] = useState([]);
 
-  const [sectionCountE, setSectionCountE] = useState([1]);
+  const [sectionCountE, setSectionCountE] = useState([3]);
   const [sectionE, setSectionE] = useState("");
   const [listOfSectionE, setListOfSectionE] = useState([]);
   const [showSectionE, setShowSectionE] = useState(false);
   const [capturedSectionsE, setCapturedSectionsE] = useState([]);
 
-  const [sectionCountA, setSectionCountA] = useState([1]);
+  const [sectionCountA, setSectionCountA] = useState([4]);
   const [sectionA, setSectionA] = useState("");
   const [listOfSectionA, setListOfSectionA] = useState([]);
   const [showSectionA, setShowSectionA] = useState(false);
   const [capturedSectionsA, setCapturedSectionsA] = useState([]);
-  const [sectionCountT, setSectionCountT] = useState([1]);
+
+  const [sectionCountT, setSectionCountT] = useState([5]);
   const [sectionT, setSectionT] = useState("");
   const [listOfSectionT, setListOfSectionT] = useState([]);
   const [showSectionT, setShowSectionT] = useState(false);
   const [capturedSectionsT, setCapturedSectionsT] = useState([]);
-  const [isEdit, setIsEdit] = useState(false);
-  const [editSection, setEditSection] = useState();
-  const [isBtnLoading, setIsBtnLoading] = useState(false);
-  const [options, setOptions] = useState([]);
-  const getPanelValue = (searchText) =>
-    !searchText ? [] : [mockVal(searchText)];
-  const dosList = patientDosResult?.data?.response?.map(
-    (item) =>
-      ({
-        label: moment(item.dateOfService).format("MM-DD-YYYY"),
-        value: item?.dateOfService,
-      } || [])
-  );
 
   const getPageNumbers = () => {
     const getFilter = patientDosResult?.data?.response
@@ -142,6 +150,218 @@ const ManuallyAdd = ({
       });
     }
     return pageNumber;
+  };
+
+  const sectionDelete = (item) => {
+    const getFormData = form.getFieldsValue();
+    const res = listOfSection.filter((list) => item.section != list.section);
+    setListOfSection(res);
+    const sec = capturedSections.map((item) => {
+      return {
+        label: item.label,
+        value: item.value,
+        disabled: res?.map((ls) => ls.section).includes(item.value),
+      };
+    });
+    form.resetFields();
+    setCapturedSections(sec);
+    form.setFieldsValue(getFormData);
+  };
+
+  const sectionEdit = (item, index) => {
+    setEditSection({ id: index, ...item });
+    item.hyperlinks?.map((list, i) => {
+      form.setFieldsValue({
+        section: [{ lable: list.header, value: list.header }],
+        [`encounterDate_${item?.section?.replaceAll(" ", "-")}_${
+          item?.count[i]
+        }`]: list.dateOfService,
+        [`referance_${item?.section?.replaceAll(" ", "-")}_${item?.count[i]}`]:
+          list.substring,
+        [`pageNumber_${item?.section?.replaceAll(" ", "-")}_${item?.count[i]}`]:
+          list.pageNumber,
+      });
+      setSectionCount(item.count);
+      setSection(list.header);
+    });
+    setIsEdit(true);
+    setShowSection(false);
+  };
+
+  const getVerify = async (value, res) => {
+    setValidCode("Valid Code");
+    const isCodeCheck = await isCodeAlready({
+      code: value,
+      patientId: patientId,
+      dos: year?.value || "",
+      date: getSelectedDos,
+    });
+    if (isCodeCheck?.response) {
+      setValidCode("Code Already Exist");
+    } else if (isCodeCheck?.response == false) {
+      setValidCode("Valid Code");
+    }
+  };
+
+  const handleChange = async (value) => {
+    const code = value?.toUpperCase().trim();
+
+    if (!code || code.length <= 2) return;
+
+    try {
+      const res = await getValidate(code, isDosSelected);
+      const { autoCompleteDTOList = [], icdDiseaseDTOList = [] } =
+        res?.response || {};
+
+      let displayCodeOptions = [];
+
+      if (res?.status === "SUCCESS") {
+        const listToMap =
+          autoCompleteDTOList?.length > 0
+            ? autoCompleteDTOList
+            : icdDiseaseDTOList;
+
+        displayCodeOptions = listToMap.map((item) => {
+          const disease = item?.icdDiseaseDTO || item;
+
+          return {
+            value: disease?.code,
+            description: disease?.description,
+            oldHcc: item?.oldValue?.toString() || 0,
+            newHcc: item?.newValue?.toString() || 0,
+            label: (
+              <div className="d-flex gap-1">
+                <span>{`${disease?.code} - ${disease?.description}`}</span>
+              </div>
+            ),
+          };
+        });
+
+        setOptions(displayCodeOptions);
+        // getVerify(code, res);
+      } else {
+        // Handle invalid code, if needed
+        // setValidCode("Invalid Code");
+      }
+    } catch (error) {
+      console.error("Validation error:", error);
+    }
+  };
+
+  const handleSelectChange = async (val, field) => {
+    try {
+      const res = await getProviderSection({
+        processedYear: year?.value,
+        patientId: patientId,
+        dateOfService: [getSelectedDos],
+        fileId: patientDetailsResult?.data?.response?.fileId
+          ? patientDetailsResult?.data?.response?.fileId
+          : "",
+      });
+      if (res.status == "SUCCESS") {
+        const section = res?.response?.capturedSections.map((item) => ({
+          label: item,
+          value: item,
+        }));
+        setProviderDetails([...res?.response?.providerInfoList]);
+        setCapturedSections(
+          res?.response?.capturedSections?.length > 0
+            ? section
+            : defaultCapturedSections
+        );
+        setCapturedSectionsM(
+          res?.response?.capturedSections?.length > 0
+            ? section
+            : defaultCapturedSections
+        );
+        setCapturedSectionsE(
+          res?.response?.capturedSections?.length > 0
+            ? section
+            : defaultCapturedSections
+        );
+        setCapturedSectionsA(
+          res?.response?.capturedSections?.length > 0
+            ? section
+            : defaultCapturedSections
+        );
+        setCapturedSectionsT(
+          res?.response?.capturedSections?.length > 0
+            ? section
+            : defaultCapturedSections
+        );
+      }
+    } catch (error) {}
+  };
+
+  const handledSave = async (e, type) => {
+    const forms = form.getFieldValue();
+    if (type === "partial") {
+      const maps = sectionCount
+        .map((item, i) => [
+          `referance_${section?.replaceAll(" ", "-")}_${item}`,
+          `pageNumber_${section?.replaceAll(" ", "-")}_${item}`,
+        ])
+        .flat(2);
+      await form.validateFields(["section", ...maps]);
+      const res = sectionCount.map((item, i) => ({
+        header: section,
+        dateOfService: getSelectedDos ? getSelectedDos : "",
+        substring: forms[`referance_${section?.replaceAll(" ", "-")}_${item}`],
+        pageNumber:
+          forms[`pageNumber_${section?.replaceAll(" ", "-")}_${item}`],
+        educationalError: forms.educationalError || false,
+      }));
+      setDiagnosisForm(forms);
+      setListOfSection((prev) => {
+        return [
+          ...prev,
+          ...[{ section: section, hyperlinks: res, count: sectionCount }],
+        ];
+      });
+    }
+  };
+
+  const handleReset = () => {
+    listOfSection?.map((item, i) => {
+      form.resetFields([
+        `section`,
+        `encounterDate_${section?.replaceAll(" ", "-")}_${item}`,
+        `referance_${section?.replaceAll(" ", "-")}_${item}`,
+        `pageNumber_${section?.replaceAll(" ", "-")}_${item}`,
+      ]);
+    });
+
+    setSectionCount([1]);
+    setSection("");
+    setShowSection(true);
+  };
+
+  const disableOption = () => {
+    const sec = capturedSections.map((item) => {
+      return {
+        label: item?.label,
+        value: item?.value,
+        disabled: listOfSection?.map((ls) => ls.section).includes(item?.value),
+      };
+    });
+    setCapturedSections(sec);
+    handleReset();
+  };
+
+  const disableOptionMeat = (
+    capturedSections,
+    listOfSection,
+    setCapturedSections
+  ) => {
+    const sec = capturedSections?.map((item) => {
+      return {
+        label: item?.label,
+        value: item?.value,
+        disabled: listOfSection?.map((ls) => ls?.section).includes(item?.value),
+      };
+    });
+    setCapturedSections(sec);
+    handleResetMeat();
   };
 
   const checkMeat = (e) => {
@@ -197,466 +417,6 @@ const ManuallyAdd = ({
       default:
         break;
     }
-  };
-  const handleSelectChange = async (val, field) => {
-    form.setFieldsValue({ [field]: val });
-    if (field == "dos") {
-      if (val?.length <= 0) {
-        setCapturedSections([]);
-        setProviderDetails([]);
-      } else {
-        try {
-          const res = await getProviderSection({
-            processedYear: year?.value ? year?.value : year,
-            patientId: getStorage("patientId"),
-            dateOfService: [getSelectedDos],
-            fileId: patientDetailsResult?.data?.response?.fileId
-              ? patientDetailsResult?.data?.response?.fileId
-              : "",
-          });
-          if (res.status == "SUCCESS") {
-            setProviderDetails([...res?.response?.providerInfoList]);
-            const section = res?.response?.capturedSections.map((item) => ({
-              label: item,
-              value: item,
-            }));
-            setCapturedSections(
-              res?.response?.capturedSections?.length > 0
-                ? section
-                : defaultCapturedSections
-            );
-            setCapturedSectionsM(
-              res?.response?.capturedSections?.length > 0
-                ? section
-                : defaultCapturedSections
-            );
-            setCapturedSectionsE(
-              res?.response?.capturedSections?.length > 0
-                ? section
-                : defaultCapturedSections
-            );
-            setCapturedSectionsA(
-              res?.response?.capturedSections?.length > 0
-                ? section
-                : defaultCapturedSections
-            );
-            setCapturedSectionsT(
-              res?.response?.capturedSections?.length > 0
-                ? section
-                : defaultCapturedSections
-            );
-          }
-        } catch (error) {}
-      }
-    }
-  };
-  const handleCodeVaildate = async (e) => {
-    const value = e?.toUpperCase();
-    setCode(value);
-    setDescription("");
-    setOldhcc("");
-    setNewhcc("");
-    form.setFieldsValue({ description: "" });
-    if (value?.length > 2) {
-      try {
-        let res = await getValidate(value, isDosSelected);
-        const { autoCompleteDTOList, icdDiseaseDTOList } = res?.response || {};
-
-        let displayCodeOptions = [];
-        if (res?.status === "SUCCESS") {
-          if (
-            Array.isArray(autoCompleteDTOList) &&
-            autoCompleteDTOList.length > 0
-          ) {
-            displayCodeOptions = autoCompleteDTOList.map((item) => ({
-              value: item?.icdDiseaseDTO?.code,
-              description: item?.icdDiseaseDTO?.description,
-              oldHcc: item?.oldValue,
-              newHcc: item?.newValue,
-              label: (
-                <div className="d-flex gap-1">
-                  <span>
-                    {item?.icdDiseaseDTO?.code} -{" "}
-                    {item?.icdDiseaseDTO?.description}
-                  </span>
-                </div>
-              ),
-            }));
-          } else if (Array.isArray(icdDiseaseDTOList)) {
-            displayCodeOptions = icdDiseaseDTOList.map((item) => ({
-              value: item?.code,
-              description: item?.description,
-              oldHcc: null,
-              newHcc: null,
-              label: (
-                <div className="d-flex gap-1">
-                  <span>
-                    {item?.code} - {item?.description}
-                  </span>
-                </div>
-              ),
-            }));
-          }
-          setOptions(displayCodeOptions);
-          getVerify(value, res);
-        } else {
-          setValidCode("Invalid Code");
-        }
-      } catch (error) {}
-    } else {
-      setValidCode("");
-      setDescription("");
-      setOldhcc("");
-      setNewhcc("");
-      form.setFieldsValue({ description: "" });
-    }
-  };
-
-  const onSelect = (value) => {
-    let des = options?.find((s) => s.value == value)?.description;
-    let oldHcc = options?.find((s) => s.value == value)?.oldHcc;
-    let newHcc = options?.find((s) => s.value == value)?.newHcc;
-    setDescription(des);
-    setOldhcc(oldHcc);
-    setNewhcc(newHcc);
-    form.setFieldsValue({
-      description: des,
-      oldHcc: oldHcc,
-      newHcc: newHcc,
-    });
-  };
-
-  const getVerify = async (value, res) => {
-    setValidCode("Valid Code");
-    const isCodeCheck = await isCodeAlready({
-      code: value,
-      patientId: getStorage("patientId"),
-      dos: year?.value ? year?.value : year || "",
-      date: getSelectedDos,
-    });
-    if (isCodeCheck?.response) {
-      setValidCode("Code Already Exist");
-    } else if (isCodeCheck?.response == false) {
-      setValidCode("Valid Code");
-      // form.setFieldsValue({ description: description });
-      // setDescription(value);
-    }
-  };
-  const handledSave = (form) => {
-    const res = sectionCount.map((item, i) => ({
-      header: section,
-      // dateOfService: form[
-      //   `encounterDate_${section?.replaceAll(" ", "-")}_${item}`
-      // ]
-      //   ? moment(
-      //       form[`encounterDate_${section?.replaceAll(" ", "-")}_${item}`]
-      //     ).format("YYYY-MM-DD")
-      //   : "",
-      dateOfService: getSelectedDos ? getSelectedDos : "",
-      substring: form[`referance_${section?.replaceAll(" ", "-")}_${item}`],
-      pageNumber: form[`pageNumber_${section?.replaceAll(" ", "-")}_${item}`],
-    }));
-    setDiagnosisForm(form);
-    setListOfSection((prev) => {
-      return [
-        ...prev,
-        ...[{ section: section, hyperlinks: res, count: sectionCount }],
-      ];
-    });
-  };
-
-  const handledEdit = () => {
-    const forms = form.getFieldsValue();
-    const res = sectionCount.map((item, i) => ({
-      header: section,
-      // dateOfService: forms[
-      //   `encounterDate_${section?.replaceAll(" ", "-")}_${item}`
-      // ]
-      //   ? moment(
-      //       forms[`encounterDate_${section?.replaceAll(" ", "-")}_${item}`]
-      //     ).format("YYYY-MM-DD")
-      //   : "",
-      dateOfService: getSelectedDos ? getSelectedDos : "",
-      substring: forms[`referance_${section?.replaceAll(" ", "-")}_${item}`],
-      pageNumber: forms[`pageNumber_${section?.replaceAll(" ", "-")}_${item}`],
-    }));
-    setListOfSection((prev) => {
-      const re = prev?.map((check, ind) => {
-        if (ind == editSection.id) {
-          return { section: section, hyperlinks: res, count: sectionCount };
-        } else {
-          return check;
-        }
-      });
-      return re;
-    });
-    setIsEdit(false);
-  };
-
-  const handledEditMeat = () => {
-    const forms = form.getFieldsValue();
-    const sections = {
-      M: sectionM,
-      E: sectionE,
-      A: sectionA,
-      T: sectionT,
-    };
-
-    const counts = {
-      M: sectionCountM,
-      E: sectionCountE,
-      A: sectionCountE,
-      T: sectionCountT,
-    };
-
-    const selectedSection = sections[selectMeat];
-    const selectedCount = counts[selectMeat];
-
-    const res = selectedCount.map((item, i) => ({
-      header: selectedSection,
-      dateOfService: forms[
-        `encounterDate_${selectedSection?.replaceAll(
-          " ",
-          "-"
-        )}_${selectMeat}_${item}`
-      ]
-        ? moment(
-            forms[
-              `encounterDate_${selectedSection?.replaceAll(
-                " ",
-                "-"
-              )}_${selectMeat}_${item}`
-            ]
-          ).format("YYYY-MM-DD")
-        : "",
-      substring:
-        forms[
-          `referance_${selectedSection?.replaceAll(
-            " ",
-            "-"
-          )}_${selectMeat}_${item}`
-        ],
-      pageNumber:
-        forms[
-          `pageNumber_${selectedSection?.replaceAll(
-            " ",
-            "-"
-          )}_${selectMeat}_${item}`
-        ],
-    }));
-
-    const setListOfSection = {
-      M: setListOfSectionM,
-      E: setListOfSectionE,
-      A: setListOfSectionA,
-      T: setListOfSectionT,
-    };
-
-    // setListOfSection[selectMeat]((prev) => [
-    //   ...prev,
-    //   ...[{ section: selectedSection, hyperlinks: res, count: selectedCount }],
-    // ]);
-    // const rese = prev?.map((item) => item.section == selectedSection);
-    // const re = rese.map((check, ind) => {
-    //   if (check) {
-    //     return {
-    //       section: selectedSection,
-    //       hyperlinks: res,
-    //       count: selectedCount,
-    //     };
-    //   } else {
-    //     return prev[ind];
-    //   }
-    // });
-    // console.log(re);
-    // return re;
-
-    setListOfSection[selectMeat]((prev) => {
-      const re = prev?.map((check, ind) => {
-        if (ind == editSection.id) {
-          return {
-            section: selectedSection,
-            hyperlinks: res,
-            count: selectedCount,
-          };
-        } else {
-          return check;
-        }
-      });
-      return re;
-    });
-    setIsEdit(false);
-  };
-
-  const handledMeatSave = (form) => {
-    const sections = {
-      M: sectionM,
-      E: sectionE,
-      A: sectionA,
-      T: sectionT,
-    };
-
-    const counts = {
-      M: sectionCountM,
-      E: sectionCountE,
-      A: sectionCountE,
-      T: sectionCountT,
-    };
-
-    const selectedSection = sections[selectMeat];
-    const selectedCount = counts[selectMeat];
-
-    const res = selectedCount?.map((item, i) => ({
-      header: selectedSection,
-      // dateOfService: form[
-      //   `encounterDate_${selectedSection?.replaceAll(
-      //     " ",
-      //     "-"
-      //   )}_${selectMeat}_${item}`
-      // ]
-      //   ? moment(
-      //       form[
-      //         `encounterDate_${selectedSection?.replaceAll(
-      //           " ",
-      //           "-"
-      //         )}_${selectMeat}_${item}`
-      //       ]
-      //     ).format("YYYY-MM-DD")
-      //   : "",
-      dateOfService: getSelectedDos ? getSelectedDos : "",
-      substring:
-        form[
-          `referance_${selectedSection?.replaceAll(
-            " ",
-            "-"
-          )}_${selectMeat}_${item}`
-        ],
-      pageNumber:
-        form[
-          `pageNumber_${selectedSection?.replaceAll(
-            " ",
-            "-"
-          )}_${selectMeat}_${item}`
-        ],
-    }));
-
-    const setListOfSection = {
-      M: setListOfSectionM,
-      E: setListOfSectionE,
-      A: setListOfSectionA,
-      T: setListOfSectionT,
-    };
-
-    setListOfSection[selectMeat]((prev) => [
-      ...prev,
-      ...[
-        {
-          section: selectedSection,
-          hyperlinks: res,
-          count: selectedCount,
-          monitorAspect: form?.MonitorAspect,
-          evaluateAspect: form?.EvaluationAspect,
-          assessmentAspect: form?.AssessmentAspect,
-          treatmentAspect: form?.TreatmentAspect,
-        },
-      ],
-    ]);
-  };
-
-  const disableOption = () => {
-    const sec = capturedSections.map((item) => {
-      return {
-        label: item?.label,
-        value: item?.value,
-        disabled: listOfSection?.map((ls) => ls.section).includes(item?.value),
-      };
-    });
-    setCapturedSections(sec);
-    handleReset();
-  };
-
-  useEffect(() => {
-    if (listOfSection?.length > 0) {
-      disableOption();
-    }
-  }, [listOfSection]);
-  const disableOptionMeat = (
-    capturedSections,
-    listOfSection,
-    setCapturedSections
-  ) => {
-    const sec = capturedSections?.map((item) => {
-      return {
-        label: item?.label,
-        value: item?.value,
-        disabled: listOfSection?.map((ls) => ls?.section).includes(item?.value),
-      };
-    });
-    setCapturedSections(sec);
-    handleResetMeat();
-  };
-
-  useEffect(() => {
-    if (selectMeat == "M") {
-      if (listOfSectionM.length > 0) {
-        disableOptionMeat(
-          capturedSectionsM,
-          listOfSectionM,
-          setCapturedSectionsM
-        );
-      }
-    } else if (selectMeat == "E") {
-      if (listOfSectionE.length > 0) {
-        disableOptionMeat(
-          capturedSectionsE,
-          listOfSectionE,
-          setCapturedSectionsE
-        );
-      }
-    } else if (selectMeat == "A") {
-      if (listOfSectionA.length > 0) {
-        disableOptionMeat(
-          capturedSectionsA,
-          listOfSectionA,
-          setCapturedSectionsA
-        );
-      }
-    } else if (selectMeat == "T") {
-      if (listOfSectionT.length > 0) {
-        disableOptionMeat(
-          capturedSectionsT,
-          listOfSectionT,
-          setCapturedSectionsT
-        );
-      }
-    }
-    setIsFilled([
-      listOfSectionM.length > 0 ? "M" : "",
-      listOfSectionE.length > 0 ? "E" : "",
-      listOfSectionA.length > 0 ? "A" : "",
-      listOfSectionT.length > 0 ? "T" : "",
-    ]);
-  }, [
-    selectMeat,
-    listOfSectionM,
-    listOfSectionE,
-    listOfSectionA,
-    listOfSectionT,
-  ]);
-
-  const handleReset = () => {
-    listOfSection?.map((item, i) => {
-      form.resetFields([
-        `section`,
-        `encounterDate_${section?.replaceAll(" ", "-")}_${i}`,
-        `referance_${section?.replaceAll(" ", "-")}_${i}`,
-        `pageNumber_${section?.replaceAll(" ", "-")}_${i}`,
-      ]);
-    });
-
-    setSectionCount([1]);
-    setSection("");
-    setShowSection(true);
   };
 
   const handleResetMeat = () => {
@@ -720,305 +480,213 @@ const ManuallyAdd = ({
     selected.setShow(true);
   };
 
-  const handleMeatSubmit = async () => {
-    let data = {};
-
+  const handledEditMeat = () => {
     const forms = form.getFieldsValue();
-    if (isEditPage) {
-      setIsBtnLoading(true);
-      // const filterData =
-      //   patientDetailsResult?.data?.response?.meatCriteria?.find(
-      //     (item) => item.diagnosisCode == isEditValue.diagnosisCode
-      //   );
-      data = {
-        patientId: getStorage("patientId"),
-        oldDiagnosisCode: isEditValue?.diagnosisCode,
-        diagnosisCode: selectDisDetails?.diagnosisCode,
-        newDiagnosisCode: code,
-        description: forms?.description ? forms?.description : description,
-        oldHcc: forms?.oldHcc ? forms?.oldHcc : 34,
-        newHcc: forms?.oldHcc ? forms?.oldHcc : 24,
-        dateOfServices: forms.dos,
-        providerNames: providerDetails?.map((item) => item.providerName),
-        hyperlinks: listOfSection
-          .map((item) => item?.hyperlinks)
-          .flat(capturedSections?.length + 1),
-        monitorAspect:
-          listOfSectionM?.length > 0 ? listOfSectionM[0]?.aspect : null,
-        evaluateAspect:
-          listOfSectionE?.length > 0 ? listOfSectionE[0]?.aspect : null,
-        assessmentAspect:
-          listOfSectionA?.length > 0 ? listOfSectionA[0]?.aspect : null,
-        treatmentAspect:
-          listOfSectionT?.length > 0 ? listOfSectionT[0]?.aspect : null,
-        monitorHyperLink:
-          listOfSectionM?.length > 0
-            ? listOfSectionM
-                .map((item) => item?.hyperlinks)
-                .flat(capturedSections?.length + 1)
-            : null,
-        evaluateHyperLink:
-          listOfSectionE.length > 0
-            ? listOfSectionE
-                .map((item) => item?.hyperlinks)
-                .flat(capturedSections?.length + 1)
-            : null,
-        assessmentHyperLink:
-          listOfSectionA.length > 0
-            ? listOfSectionA
-                .map((item) => item?.hyperlinks)
-                .flat(capturedSections?.length + 1)
-            : null,
-        treatmentHyperLink:
-          listOfSectionT.length > 0
-            ? listOfSectionT
-                .map((item) => item?.hyperlinks)
-                .flat(capturedSections?.length + 1)
-            : null,
-        chartProcessType: getSelectedDos ? "DATE_OF_SERVICE" : "YEAR",
-        dateOfServiceIfDosWiseCompute: getSelectedDos ? getSelectedDos : null,
-        processedYear: year?.value ? year?.value : year,
-        activeHeader: !isMeat,
-        educationalError: educationalError,
-      };
-    } else if (isEditMeat) {
-      data = {
-        patientId: getStorage("patientId"),
-        diagnosisCode: isEditMeatValue?.diagnosisCode,
-        monitorHyperLink:
-          listOfSectionM.length > 0
-            ? listOfSectionM
-                .map((item) => item.hyperlinks)
-                .flat(capturedSections.length + 1)
-            : null,
-        evaluateHyperLink:
-          listOfSectionE.length > 0
-            ? listOfSectionE
-                .map((item) => item.hyperlinks)
-                .flat(capturedSections.length + 1)
-            : null,
-        assessmentHyperLink:
-          listOfSectionA.length > 0
-            ? listOfSectionA
-                .map((item) => item.hyperlinks)
-                .flat(capturedSections.length + 1)
-            : null,
-        treatmentHyperLink:
-          listOfSectionT.length > 0
-            ? listOfSectionT
-                .map((item) => item.hyperlinks)
-                .flat(capturedSections.length + 1)
-            : null,
-        chartProcessType: getSelectedDos ? "DATE_OF_SERVICE" : "YEAR",
-        dateOfServiceIfDosWiseCompute: getSelectedDos ? getSelectedDos : null,
-        processedYear: year?.value ? year?.value : year,
-        educationalError: educationalError,
-        activeHeader: !isMeat,
-      };
-    } else {
-      data = {
-        patientId: getStorage("patientId"),
-        diagnosisCode: code.trim(),
-        description: diagnosisForm.description,
-        oldHcc: diagnosisForm.oldHcc,
-        newHcc: diagnosisForm.newHcc,
-        dbDescription: diagnosisForm.description,
-        dateOfServices: diagnosisForm.dos,
-        hyperlinks: listOfSection
-          .map((item) => item.hyperlinks)
-          .flat(capturedSections.length + 1),
-        monitorHyperLink: listOfSectionM
-          .map((item) => item.hyperlinks)
-          .flat(capturedSections.length + 1),
-        evaluateHyperLink: listOfSectionE
-          .map((item) => item.hyperlinks)
-          .flat(capturedSections.length + 1),
-        assessmentHyperLink: listOfSectionA
-          .map((item) => item.hyperlinks)
-          .flat(capturedSections.length + 1),
-        treatmentHyperLink: listOfSectionT
-          .map((item) => item.hyperlinks)
-          .flat(capturedSections.length + 1),
-        chartProcessType: getSelectedDos ? "DATE_OF_SERVICE" : "YEAR",
-        processedYear: year?.value ? year?.value : year,
-        activeHeader: !isMeat,
-        educationalError: educationalError,
-      };
-    }
-    if (validCode.toLowerCase() == "valid code") {
-      setIsBtnLoading(true);
-      try {
-        let res = {};
-        if (isEditPage) {
-          if (meatFormDisplay) {
-            res = await suggestedToValidMove(data, selectCardTitle);
-          } else {
-            res = await diseaseEdit(data);
-          }
-        } else if (isEditMeat) {
-          res = await diseaseEditMeat(data);
+    const sections = {
+      M: sectionM,
+      E: sectionE,
+      A: sectionA,
+      T: sectionT,
+    };
+
+    const counts = {
+      M: sectionCountM,
+      E: sectionCountE,
+      A: sectionCountE,
+      T: sectionCountT,
+    };
+
+    const selectedSection = sections[selectMeat];
+    const selectedCount = counts[selectMeat];
+
+    const res = selectedCount.map((item, i) => ({
+      header: selectedSection,
+      dateOfService: forms[
+        `encounterDate_${selectedSection?.replaceAll(
+          " ",
+          "-"
+        )}_${selectMeat}_${item}`
+      ]
+        ? moment(
+            forms[
+              `encounterDate_${selectedSection?.replaceAll(
+                " ",
+                "-"
+              )}_${selectMeat}_${item}`
+            ]
+          ).format("YYYY-MM-DD")
+        : "",
+      substring:
+        forms[
+          `referance_${selectedSection?.replaceAll(
+            " ",
+            "-"
+          )}_${selectMeat}_${item}`
+        ],
+      pageNumber:
+        forms[
+          `pageNumber_${selectedSection?.replaceAll(
+            " ",
+            "-"
+          )}_${selectMeat}_${item}`
+        ],
+    }));
+
+    const setListOfSection = {
+      M: setListOfSectionM,
+      E: setListOfSectionE,
+      A: setListOfSectionA,
+      T: setListOfSectionT,
+    };
+
+    setListOfSection[selectMeat]((prev) => {
+      const re = prev?.map((check, ind) => {
+        if (ind == editSection.id) {
+          return {
+            section: selectedSection,
+            hyperlinks: res,
+            count: selectedCount,
+          };
         } else {
-          res = await manuallyAdd(data);
+          return check;
         }
-        if (res?.status == "SUCCESS") {
-          setEducationalError(false)
-          handleCloseModal(false);
-          activeLabels({
-            patientId: userId,
-            year: year?.value ? year?.value : year,
-            dos: isDosSelected,
-          });
-          getPatientDosList(userId, year?.value ? year?.value : year);
-          getResponePopup(res);
-          resetForms({ reload: true });
-          setIsBtnLoading(false);
-          setOpens(false);
-       
-        } else if (
-          res?.status == "CUSTOM_EXCEPTION" ||
-          res?.status === "FAILED" ||
-          res?.status == "USER_DEFINED_ERROR"
-        ) {
-          getResponePopup(res);
-          setIsBtnLoading(false);
-        }
-        // else if (res?.status == "USER_DEFINED_ERROR") {
-        //   getResponePopup(res);
-        //   setIsBtnLoading(false);
-        // }
-      } catch (error) {
-        setIsBtnLoading(false);
-      }
-    } else {
-      if (meatFormDisplay) {
-        setIsBtnLoading(true);
-        var movemetData = {};
-        (movemetData.patientId = getStorage("patientId")),
-          (movemetData.diagnosisCode = selectDisDetails.diagnosisCode),
-          (movemetData.processedYear = year?.value ? year?.value : year),
-          (movemetData.chartProcessType = getSelectedDos
-            ? "DATE_OF_SERVICE"
-            : "YEAR"),
-          (movemetData.dateOfServices = selectDisDetails.dateOfServices);
-        (movemetData.monitorAspect = data.monitorAspect),
-          (movemetData.monitorHyperLink = data.monitorHyperLink),
-          (movemetData.evaluateAspect = data.evaluateAspect),
-          (movemetData.evaluateHyperLink = data.evaluateHyperLink),
-          (movemetData.assessmentAspect = data.assessmentAspect),
-          (movemetData.assessmentHyperLink = data.assessmentHyperLink),
-          (movemetData.treatmentAspect = data.treatmentAspect),
-          (movemetData.treatmentHyperLink = data.treatmentHyperLink);
-        movemetData.educationalError = educationalError;
-        movemetData.activeHeader = data.activeHeader;
-        try {
-          const res = await suggestedToValidMove(movemetData, selectCardTitle);
+      });
+      return re;
+    });
+    setIsEdit(false);
+  };
 
-          if (res?.status == "SUCCESS") {
-            handleCloseModal(false);
-            getResponePopup(res);
-            resetForms({ reload: true });
-            setIsBtnLoading(false);
-            setEducationalError && setEducationalError(false);
-          } else if (
-            res?.status == "CUSTOM_EXCEPTION" ||
-            res?.status === "FAILED" ||
-            res?.status == "USER_DEFINED_ERROR"
-          ) {
-            getResponePopup(res);
-            setIsBtnLoading(false);
-          }
-          // else if (res?.status == "USER_DEFINED_ERROR") {
-          //   getResponePopup(res);
-          //   setIsBtnLoading(false);
-          // }
-        } catch (err) {
-          setIsBtnLoading(false);
+  const handledMeatSave = async () => {
+    const values = await form.validateFields();
+    const forms = form.getFieldsValue();
+    const sections = {
+      M: sectionM,
+      E: sectionE,
+      A: sectionA,
+      T: sectionT,
+    };
+
+    const counts = {
+      M: sectionCountM,
+      E: sectionCountE,
+      A: sectionCountA,
+      T: sectionCountT,
+    };
+
+    const selectedSection = sections[selectMeat];
+    const selectedCount = counts[selectMeat];
+
+    const res = selectedCount?.map((item, i) => ({
+      header: selectedSection,
+      dateOfService: getSelectedDos ? getSelectedDos : "",
+      substring:
+        forms[
+          `referance_${selectedSection?.replaceAll(
+            " ",
+            "-"
+          )}_${selectMeat}_${item}`
+        ],
+      pageNumber:
+        forms[
+          `pageNumber_${selectedSection?.replaceAll(
+            " ",
+            "-"
+          )}_${selectMeat}_${item}`
+        ],
+    }));
+
+    const setListOfSection = {
+      M: setListOfSectionM,
+      E: setListOfSectionE,
+      A: setListOfSectionA,
+      T: setListOfSectionT,
+    };
+
+    setListOfSection[selectMeat]((prev) => [
+      ...prev,
+      ...[
+        {
+          section: selectedSection,
+          hyperlinks: res,
+          count: selectedCount,
+          monitorAspect: forms?.MonitorAspect,
+          evaluateAspect: forms?.EvaluationAspect,
+          assessmentAspect: forms?.AssessmentAspect,
+          treatmentAspect: forms?.TreatmentAspect,
+        },
+      ],
+    ]);
+  };
+
+  const handledEdit = () => {
+    const forms = form.getFieldsValue();
+    const res = sectionCount.map((item, i) => ({
+      header: section,
+      dateOfService: getSelectedDos ? getSelectedDos : "",
+      substring: forms[`referance_${section?.replaceAll(" ", "-")}_${item}`],
+      pageNumber: forms[`pageNumber_${section?.replaceAll(" ", "-")}_${item}`],
+      educationalError: form.educationalError || false,
+    }));
+    setListOfSection((prev) => {
+      const re = prev?.map((check, ind) => {
+        if (ind == editSection.id) {
+          return { section: section, hyperlinks: res, count: sectionCount };
+        } else {
+          return check;
         }
+      });
+      return re;
+    });
+    setIsEdit(false);
+  };
+
+  useEffect(() => {
+    if (selectMeat == "M") {
+      if (listOfSectionM.length > 0) {
+        disableOptionMeat(
+          capturedSectionsM,
+          listOfSectionM,
+          setCapturedSectionsM
+        );
+      }
+    } else if (selectMeat == "E") {
+      if (listOfSectionE.length > 0) {
+        disableOptionMeat(
+          capturedSectionsE,
+          listOfSectionE,
+          setCapturedSectionsE
+        );
+      }
+    } else if (selectMeat == "A") {
+      if (listOfSectionA.length > 0) {
+        disableOptionMeat(
+          capturedSectionsA,
+          listOfSectionA,
+          setCapturedSectionsA
+        );
+      }
+    } else if (selectMeat == "T") {
+      if (listOfSectionT.length > 0) {
+        disableOptionMeat(
+          capturedSectionsT,
+          listOfSectionT,
+          setCapturedSectionsT
+        );
       }
     }
-  };
-
-  const resetForms = ({ reload = false }) => {
-    handleCloseModal(false);
-
-    form.resetFields();
-    getPatient(reload);
-    getPatientId(reload);
-
-    setValidCode("");
-    setProviderDetails([]);
-    setCode("");
-    setIsMeat(true);
-    setCapturedSections([]);
-    setDiagnosisForm({});
-    setSectionCount([1]);
-    setSection("");
-    setMeatDisplay(false);
-    setListOfSection([]);
-    setShowSection(false);
-    setSelectMeat("M");
-    setIsFilled([]);
-
-    setSectionCountM([1]);
-    setSectionM("");
-    setListOfSectionM([]);
-    setShowSectionM(false);
-    setCapturedSectionsM([]);
-
-    setSectionCountE([1]);
-    setSectionE("");
-    setListOfSectionE([]);
-    setShowSectionE(false);
-    setCapturedSectionsE([]);
-
-    setSectionCountA([1]);
-    setSectionA("");
-    setListOfSectionA([]);
-    setShowSectionA(false);
-    setCapturedSectionsA([]);
-
-    setSectionCountT([1]);
-    setSectionT("");
-    setListOfSectionT([]);
-    setShowSectionT(false);
-    setCapturedSectionsT([]);
-    setEducationalError(false)
-    setSuggestedMeatForm && setSuggestedMeatForm(false);
-  };
-
-  const getPatient = async (reload) => {
-    // if (reload) {
-    const res = await getpatientDetailsData(
-      patientDetailsResult?.data?.response?.patientId,
-      patientDetailsResult?.data?.response?.processedYear,
-      patientDetailsResult?.data?.response?.dateOfService,
-      "",
-      getStorage("userRole")
-    );
-    // }
-  };
-  const getPatientId = async (reload) => {
-    const res = await getPatientIdData(
-      patientDetailsResult?.data?.response?.patientId
-    );
-  };
-
-  const sectionDelete = (item) => {
-    const getFormData = form.getFieldsValue();
-    const res = listOfSection.filter((list) => item.section != list.section);
-    setListOfSection(res);
-    const sec = capturedSections.map((item) => {
-      return {
-        label: item.label,
-        value: item.value,
-        disabled: res?.map((ls) => ls.section).includes(item.value),
-      };
-    });
-    form.resetFields();
-    setCapturedSections(sec);
-    form.setFieldsValue(getFormData);
-  };
-
+    setIsFilled([
+      listOfSectionM.length > 0 ? "M" : "",
+      listOfSectionE.length > 0 ? "E" : "",
+      listOfSectionA.length > 0 ? "A" : "",
+      listOfSectionT.length > 0 ? "T" : "",
+    ]);
+  }, [
+    selectMeat,
+    listOfSectionM,
+    listOfSectionE,
+    listOfSectionA,
+    listOfSectionT,
+  ]);
   const sectionDeleteMeat = (item) => {
     const getFormData = form.getFieldsValue();
     if (selectMeat == "M") {
@@ -1076,54 +744,6 @@ const ManuallyAdd = ({
     }
   };
 
-  const sectionEdit = (item, index) => {
-    setEditSection({ id: index, ...item });
-    item.hyperlinks?.map((list, i) => {
-      form.setFieldsValue({
-        section: [{ lable: list.header, value: list.header }],
-        [`encounterDate_${item?.section?.replaceAll(" ", "-")}_${
-          item?.count[i]
-        }`]: list.dateOfService,
-        [`referance_${item?.section?.replaceAll(" ", "-")}_${item?.count[i]}`]:
-          list.substring,
-        [`pageNumber_${item?.section?.replaceAll(" ", "-")}_${item?.count[i]}`]:
-          list.pageNumber,
-      });
-      setSectionCount(item.count);
-      setSection(list.header);
-    });
-    setIsEdit(true);
-    setShowSection(false);
-  };
-
-  const setFormValues = (
-    item,
-    selectMeat,
-    countSetter,
-    headerSetter,
-    showSectionSetter
-  ) => {
-    item.hyperlinks?.map((list, i) => {
-      form.setFieldsValue({
-        [`${checkMeatType(selectMeat)}section`]: [
-          { label: list.header, value: list.header },
-        ],
-        [`encounterDate_${item?.section?.replaceAll(" ", "-")}_${selectMeat}_${
-          item?.count[i]
-        }`]: list.dateOfService,
-        [`referance_${item?.section?.replaceAll(" ", "-")}_${selectMeat}_${
-          item?.count[i]
-        }`]: list.substring,
-        [`pageNumber_${item?.section?.replaceAll(" ", "-")}_${selectMeat}_${
-          item?.count[i]
-        }`]: list.pageNumber,
-      });
-      countSetter(item.count);
-      headerSetter(list.header);
-    });
-    showSectionSetter(false);
-  };
-
   const sectionEditMeat = (item, index) => {
     setEditSection({ id: index, ...item });
     switch (selectMeat) {
@@ -1169,6 +789,184 @@ const ManuallyAdd = ({
     setIsEdit(true);
   };
 
+  const setFormValues = (
+    item,
+    selectMeat,
+    countSetter,
+    headerSetter,
+    showSectionSetter
+  ) => {
+    item.hyperlinks?.map((list, i) => {
+      form.setFieldsValue({
+        [`${checkMeatType(selectMeat)}section`]: [
+          { label: list.header, value: list.header },
+        ],
+        [`encounterDate_${item?.section?.replaceAll(" ", "-")}_${selectMeat}_${
+          item?.count[i]
+        }`]: list.dateOfService,
+        [`referance_${item?.section?.replaceAll(" ", "-")}_${selectMeat}_${
+          item?.count[i]
+        }`]: list.substring,
+        [`pageNumber_${item?.section?.replaceAll(" ", "-")}_${selectMeat}_${
+          item?.count[i]
+        }`]: list.pageNumber,
+      });
+      countSetter(item.count);
+      headerSetter(list.header);
+    });
+    showSectionSetter(false);
+  };
+
+  const handleMeatSubmit = async () => {
+    const forms = form.getFieldsValue();
+    const chartProcessType = getSelectedDos ? "DATE_OF_SERVICE" : "YEAR";
+    const dateOfServiceIfDosWiseCompute = getSelectedDos || null;
+
+    const flatLinks = (list) =>
+      list?.map((item) => item?.hyperlinks).flat() || null;
+    const getAspect = (list) => list?.[0]?.aspect || null;
+
+    const commonData = {
+      patientId,
+      chartProcessType,
+      processedYear: year?.value,
+      activeHeader: !isMeat,
+    };
+
+    let data;
+
+    if (isEditPage) {
+      setIsBtnLoading(true);
+      data = {
+        ...commonData,
+        oldDiagnosisCode: isEditValue?.diagnosisCode,
+        diagnosisCode: selectDisDetails?.diagnosisCode,
+        dateOfServiceIfDosWiseCompute: dateOfServiceIfDosWiseCompute,
+        newDiagnosisCode: code,
+        description: forms?.description || dbDescription,
+        // oldHcc: forms?.oldHcc || 34,
+        // newHcc: forms?.oldHcc || 24,
+        dateOfServices: forms.dos,
+        providerNames: providerDetails?.map((item) => item.providerName),
+        hyperlinks: flatLinks(listOfSection),
+        monitorAspect: getAspect(listOfSectionM),
+        evaluateAspect: getAspect(listOfSectionE),
+        assessmentAspect: getAspect(listOfSectionA),
+        treatmentAspect: getAspect(listOfSectionT),
+        monitorHyperLink: !isMeat ? [] : flatLinks(listOfSectionM),
+        evaluateHyperLink: !isMeat ? [] : flatLinks(listOfSectionE),
+        assessmentHyperLink: !isMeat ? [] : flatLinks(listOfSectionA),
+        treatmentHyperLink: !isMeat ? [] : flatLinks(listOfSectionT),
+        educationalError: forms?.educationalError,
+      };
+    } else if (isEditMeat) {
+      data = {
+        ...commonData,
+        dateOfServiceIfDosWiseCompute: dateOfServiceIfDosWiseCompute,
+        diagnosisCode: isEditMeatValue?.diagnosisCode,
+        monitorHyperLink: flatLinks(listOfSectionM),
+        evaluateHyperLink: flatLinks(listOfSectionE),
+        assessmentHyperLink: flatLinks(listOfSectionA),
+        treatmentHyperLink: flatLinks(listOfSectionT),
+        educationalError: forms?.educationalError,
+      };
+    } else {
+      data = {
+        ...commonData,
+        diagnosisCode: code.trim(),
+        description: diagnosisForm.description,
+        dbDescription: dbDescription,
+        // oldHcc: diagnosisForm.oldHcc,
+        // newHcc: diagnosisForm.newHcc,
+        dateOfServices: [dateOfServiceIfDosWiseCompute],
+        hyperlinks: flatLinks(listOfSection),
+        // monitorHyperLink: flatLinks(listOfSectionM),
+        // evaluateHyperLink: flatLinks(listOfSectionE),
+        // assessmentHyperLink: flatLinks(listOfSectionA),
+        // treatmentHyperLink: flatLinks(listOfSectionT),
+        monitorHyperLink: !isMeat ? [] : flatLinks(listOfSectionM),
+        evaluateHyperLink: !isMeat ? [] : flatLinks(listOfSectionE),
+        assessmentHyperLink: !isMeat ? [] : flatLinks(listOfSectionA),
+        treatmentHyperLink: !isMeat ? [] : flatLinks(listOfSectionT),
+        educationalError: diagnosisForm?.educationalError,
+      };
+    }
+
+    const handleSuccess = (res) => {
+      handleCloseModal(false);
+      getResponePopup(res);
+      resetForms({ reload: true });
+      setIsBtnLoading(false);
+      setOpens(false);
+      setEducationalError && setEducationalError(false);
+    };
+
+    const handleFailure = (res) => {
+      getResponePopup(res);
+      setIsBtnLoading(false);
+    };
+
+    const isSuccess = (res) =>
+      res?.status === "SUCCESS" ||
+      res?.status === "CUSTOM_EXCEPTION" ||
+      res?.status === "FAILED" ||
+      res?.status === "USER_DEFINED_ERROR";
+
+    try {
+      setIsBtnLoading(true);
+      let res = {};
+
+      if (validCode.toLowerCase() === "valid code") {
+        if (isEditPage) {
+          res = meatFormDisplay
+            ? await suggestedToValidMove(data, selectCardTitle)
+            : await diseaseEdit(data);
+        } else if (isEditMeat) {
+          res = await diseaseEditMeat(data);
+        } else {
+          res = await manuallyAdd(data);
+        }
+        if (res?.status === "SUCCESS") {
+          activeLabels({
+            patientId: patientId,
+            year: year?.value,
+            dos: isDosSelected,
+          });
+          getPatientDosList(patientId, year?.value);
+          handleSuccess(res);
+        } else {
+          handleFailure(res);
+        }
+      } else if (meatFormDisplay) {
+        const movementData = {
+          ...commonData,
+          diagnosisCode: selectDisDetails?.diagnosisCode,
+          dateOfServices: selectDisDetails?.dateOfServices,
+          monitorAspect: data.monitorAspect,
+          monitorHyperLink: data.monitorHyperLink,
+          evaluateAspect: data.evaluateAspect,
+          evaluateHyperLink: data.evaluateHyperLink,
+          assessmentAspect: data.assessmentAspect,
+          assessmentHyperLink: data.assessmentHyperLink,
+          treatmentAspect: data.treatmentAspect,
+          treatmentHyperLink: data.treatmentHyperLink,
+          educationalError,
+        };
+
+        res = await suggestedToValidMove(movementData, selectCardTitle);
+        activeLabels({
+          patientId: patientId,
+          year: year?.value,
+          dos: isDosSelected,
+        });
+        getPatientDosList(patientId, year?.value);
+        isSuccess(res) ? handleSuccess(res) : handleFailure(res);
+      }
+    } catch (error) {
+      setIsBtnLoading(false);
+      console.error("Submission error:", error);
+    }
+  };
   const transformData = (data) => {
     const sectionsMap = new Map();
 
@@ -1192,14 +990,16 @@ const ManuallyAdd = ({
 
     return Array.from(sectionsMap.values());
   };
+
   useEffect(() => {
     if (isEditPage && !meatFormDisplay) {
+      const meatObj = [...patientDetailsResult?.data?.response?.meatCriteria,  ...patientDetailsResult?.data?.response?.deletedMeatCriteria]
       const filterData =
-        patientDetailsResult?.data?.response?.meatCriteria?.find(
+        meatObj?.find(
           (item) => item.diagnosisCode == isEditValue.diagnosisCode
         );
+
       setCode(isEditValue.diagnosisCode);
-       setEducationalError(isEditValue?.educationalError)
       setValidCode("Valid Code");
       const dos = isEditValue?.dateOfServices?.map((item) => ({
         lable: item,
@@ -1218,10 +1018,10 @@ const ManuallyAdd = ({
         oldHcc: isEditValue?.oldValue ? isEditValue?.oldValue : "",
         educationalError: isEditValue?.educationalError
           ? isEditValue?.educationalError
-          : false,
+          : "",
         dos: dos,
+        educationalError: isEditValue.educationalError || false
       });
-     
       const sectionListM = filterData?.monitorHyperLink?.map((item) => ({
         section: item.header,
         hyperlinks: item,
@@ -1251,550 +1051,627 @@ const ManuallyAdd = ({
     }
     handleSelectChange(isEditValue?.dateOfServices, "dos");
   }, [isEditPage, isEditValue, reset, meatFormDisplay]);
-  const handleCheckboxChange = (e) => {
-    setEducationalError(e.target.checked);
+
+  useEffect(() => {
+    if (listOfSection?.length > 0) {
+      disableOption();
+    }
+  }, [listOfSection]);
+
+  useEffect(() => {
+    handleSelectChange();
+  }, []);
+  const getPatient = async (reload) => {
+    // if (reload) {
+    const res = await getpatientDetailsData(
+      patientDetailsResult?.data?.response?.patientId,
+      patientDetailsResult?.data?.response?.processedYear,
+      patientDetailsResult?.data?.response?.dateOfService,
+      "",
+      userRole
+    );
+    // }
   };
-  useEffect(() => {
-    if (isEditMeat) {
-      setMeatDisplay(true);
-      setCode(isEditMeatValue.diagnosisCode);
-      setValidCode("Valid Code");
-      // const dos = isEditMeatValue?.dateOfService?.map((item) => ({
-      //   lable: item,
-      //   value: item,
-      // }));
-      const sectionList = isEditMeatValue?.monitorHyperLink?.map((item) => ({
-        section: item.header,
-        hyperlinks: item,
-      }));
-      const sectionListE = isEditMeatValue?.evaluateHyperLink?.map((item) => ({
-        section: item.header,
-        hyperlinks: item,
-      }));
-      const sectionListA = isEditMeatValue?.assessmentHyperLink?.map(
-        (item) => ({
-          section: item.header,
-          hyperlinks: item,
-        })
-      );
-      const sectionListT = isEditMeatValue?.treatmentHyperLink?.map((item) => ({
-        section: item.header,
-        hyperlinks: item,
-      }));
-      form.setFieldsValue({
-        diagnosisCode: isEditMeatValue.diagnosisCode,
-        
-      });
-     
-      handleSelectChange(isEditMeatValue.dateOfService, "dos");
-      setListOfSectionM(transformData(sectionList));
-      setListOfSectionE(transformData(sectionListE));
-      setListOfSectionA(transformData(sectionListA));
-      setListOfSectionT(transformData(sectionListT));
-      setEducationalError(isEditMeatValue?.educationalError)
-    }
-    form.setFieldsValue({
-      dos: [isDosSelected],
-    });
-  }, [isEditMeat, isEditMeatValue]);
+  const resetForms = ({ reload = false }) => {
+    handleCloseModal(false);
 
-  // useEffect(() => {
-  //   if (isDosSelected) {
-  //     const selectedDos = [{ label: isDosSelected, value: isDosSelected }]
-  //     setCapturedSections(selectedDos);
-  //     setCapturedSectionsM(selectedDos);
-  //     setCapturedSectionsE(selectedDos);
-  //     setCapturedSectionsA(selectedDos);
-  //     setCapturedSectionsT(selectedDos);
-  //   }
-  // }, [isDosSelected]);
+    form.resetFields();
+    getPatient(reload);
+    // getPatientId(reload);
 
-  useEffect(() => {
-    if (meatFormDisplay) {
-      setMeatDisplay(true);
-    }
-  }, [meatFormDisplay]);
+    setValidCode("");
+    // setProviderDetails([]);
+    setCode("");
+    setIsMeat(true);
+    setCapturedSections([]);
+    setDiagnosisForm({});
+    setSectionCount([1]);
+    setSection("");
+    setMeatDisplay(false);
+    setListOfSection([]);
+    setShowSection(false);
+    setSelectMeat("M");
+    setIsFilled([]);
+
+    setSectionCountM([2]);
+    setSectionM("");
+    setListOfSectionM([]);
+    setShowSectionM(false);
+    setCapturedSectionsM([]);
+
+    setSectionCountE([3]);
+    setSectionE("");
+    setListOfSectionE([]);
+    setShowSectionE(false);
+    setCapturedSectionsE([]);
+
+    setSectionCountA([4]);
+    setSectionA("");
+    setListOfSectionA([]);
+    setShowSectionA(false);
+    setCapturedSectionsA([]);
+
+    setSectionCountT([5]);
+    setSectionT("");
+    setListOfSectionT([]);
+    setShowSectionT(false);
+    setCapturedSectionsT([]);
+    setSuggestedMeatForm && setSuggestedMeatForm(false);
+  };
+
   useEffect(() => {
     if (!open) {
       setIsBtnLoading(false);
       resetForms({ reload: false });
     }
   }, [open]);
+
   return (
-    <>
-      <div className="d-flex justify-content-between mb-4">
-        <div className="font-bold text-[16px]">
-          {isEditPage
-            ? meatFormDisplay
-              ? "Suggested Meat Add"
-              : "Edit Valid Code"
-            : isEditMeat
-            ? "Meat Edit"
-            : "Add Valid Code"}{" "}
-        </div>
-        <div
-          className="cr-pointer"
-          onClick={() => {
-            handleCloseModal(false);
-            setMeatDisplay(false);
-            resetForms({ reload: false });
-            // form.resetFields();
-            setProviderDetails([]);
-            setSuggestedMeatForm && setSuggestedMeatForm(false);
-          }}
-        >
-          <CloseOutlined />
-        </div>
-      </div>
-      {!meatDisplay && !meatFormDisplay ? (
-        <Form
-          form={form}
-          name="basic"
-          layout="vertical"
-          autoComplete="off"
-          initialValues={{
-            educationalError: false,
-          }}
-          // initialValues={formInitialValues}
-          onFinish={(form) => {
-            handledSave(form);
-          }}
-          onFinishFailed={() => {}}
-          onChange={(e) => {
-            console.log(e);
-          }}
-        >
-          <div className="row">
-            <div className="col-12">
-              <Form.Item
-                label={
-                  <label>
-                    Code <span style={{ color: "red" }}>*</span>
-                  </label>
-                }
-                name="diagnosisCode"
-                rules={[
-                  {
-                    required: true,
-                    message: "Please enter diagnosis code",
-                  },
-                ]}
-              >
-                <AutoComplete
-                  options={options}
-                  onSelect={onSelect}
-                  onSearch={(text) => setOptions(getPanelValue(text))}
-                  size="large"
-                  // value={description}
-                  onChange={(e) => handleCodeVaildate(e)}
-                  value={code?.toUpperCase()}
-                >
-                  {/* <Input
-                    name="diagnosisCode"
-                    value={code?.toUpperCase()}
-                    onChange={(e) => handleCodeVaildate(e)}
-                    maxLength={100}
-                  /> */}
-                </AutoComplete>
-                {/* <Input
-                  name="diagnosisCode"
-                  onChange={(e) => handleCodeVaildate(e)}
-                  value={code?.toUpperCase()}
-                  className="text-uppercase"
-                /> */}
-              </Form.Item>
-              {code?.length > 0 &&
-              validCode.length > 0 &&
-              validCode == "Valid Code" ? (
-                <label className="text-success">Valid Code</label>
-              ) : (
-                validCode != "Valid Code" && (
-                  <label className="text-danger">{validCode}</label>
-                )
-              )}
-            </div>
-            <div className="col-12">
-              <Form.Item
-                label={
-                  <label>
-                    Description <span style={{ color: "red" }}>*</span>
-                  </label>
-                }
-                name="description"
-                rules={[
-                  {
-                    required: true,
-                    message: "Please enter description",
-                  },
-                ]}
-              >
-                <Input
-                  name="description"
-                  onChange={(e) => setDescription(e.target.value)}
-                  value={description}
-                  // disabled
-                />
-              </Form.Item>
-            </div>
-            {(oldHcc && newHcc) ||
-            (isEditValue?.newValue && isEditValue?.oldValue) ? (
-              <>
-                <div className="col-12">
+    <div>
+      <Form
+        form={form}
+        name="basic"
+        layout="vertical"
+        autoComplete="off"
+        initialValues={{
+          educationalError: false,
+        }}
+        // initialValues={formInitialValues}
+        onFinish={(form) => {
+          // handledSave(form);
+          handleMeatSubmit(form);
+        }}
+        onFinishFailed={() => {}}
+        onChange={(e) => {
+          // console.log(e);
+        }}
+      >
+        <div className="d-flex mb-1 border-bottom">
+          <div className="w-75">
+            <div className="d-flex">
+              <span className="font-bold text-[16px]">
+                {isEditPage
+                  ? meatFormDisplay
+                    ? "Suggested Meat Add"
+                    : "Edit Valid Code"
+                  : isEditMeat
+                  ? "Meat Edit"
+                  : "Add Valid Code"}{" "}
+              </span>
+              {(userRole === "CODER_2" || userRole === "QA") && (
+                <div style={{ marginTop: "-3px" }} className="mx-2">
                   <Form.Item
-                    label={
-                      <label>
-                        Old Hcc <span style={{ color: "red" }}>*</span>
-                      </label>
-                    }
-                    name="oldHcc"
-                    rules={[
-                      {
-                        required: true,
-                        message: "Please enter description",
-                      },
-                    ]}
+                    name="educationalError"
+                    valuePropName="checked"
+                    style={{ marginBottom: "0" }}
                   >
-                    <Input
-                      name="oldHcc"
-                      onChange={(e) => setOldhcc(e.target.value)}
-                      value={oldHcc}
-                      disabled
-                    />
+                    <Checkbox className="ant-badge">
+                      Mark as Educational Error
+                    </Checkbox>
                   </Form.Item>
-                </div>
-                <div className="col-12">
-                  <Form.Item
-                    label={
-                      <label>
-                        New Hcc <span style={{ color: "red" }}>*</span>
-                      </label>
-                    }
-                    name="newHcc"
-                    rules={[
-                      {
-                        required: true,
-                        message: "Please enter description",
-                      },
-                    ]}
-                  >
-                    <Input
-                      name="newHcc"
-                      onChange={(e) => setNewhcc(e.target.value)}
-                      value={newHcc}
-                      disabled
-                    />
-                  </Form.Item>
-                </div>
-              </>
-            ) : null}
-
-            <div className="col-12">
-              <Form.Item
-                label={
-                  <label>
-                    DOS <span style={{ color: "red" }}>*</span>
-                  </label>
-                }
-                name="dos"
-                class="py-4"
-                rules={[
-                  {
-                    required: true,
-                    message: "Please enter date of service",
-                  },
-                ]}
-              >
-                <Select
-                  // mode="multiple"
-                  maxTagCount="responsive"
-                  className={`ant_select_form_dos hcc_form mb-2`}
-                  onChange={(selOption, val) => {
-                    handleSelectChange(selOption, "dos");
-                  }}
-                  options={
-                    getSelectedDos
-                      ? [{ label: getSelectedDos, value: getSelectedDos }]
-                      : dosList
-                  }
-                  disabled
-                />
-              </Form.Item>
-            </div>
-            {(userRole === "CODER_2" || userRole === "QA") && (
-              <div className="col-12">
-                <Form.Item valuePropName="checked">
-                  <Checkbox
-                    checked={educationalError}
-                    onChange={handleCheckboxChange}
-                    className="ant-badge"
-                  >
-                    Mark as Educational Error
-                  </Checkbox>
-                </Form.Item>
-              </div>
-            )}
-
-            <div className="col-12 mb-3">
-              {providerDetails.length > 0 && (
-                <div>
-                  <div className={`${style.subHeader} border-bottom`}>
-                    Provider
-                  </div>
-                  <div className="">
-                    {getProviderNameManually({
-                      data: providerDetails,
-                      captureSectionMatching: [],
-                    })}
-                  </div>
-                </div>
-              )}
-            </div>
-            <div className="col-12">
-              {listOfSection?.length > 0 && (
-                <div className="py-4">
-                  <div className="d-flex border-bottom align-items-end justify-content-between">
-                    <div className={`${style.subHeader} mb-2`}>
-                      Section List
-                    </div>
-                    <div className="mb-1">
-                      <RegularButton
-                        type=""
-                        method={"button"}
-                        name="Add"
-                        onClick={() => {
-                          setSection("");
-                          setShowSection(false);
-                          setIsEdit(false);
-                        }}
-                      />
-                    </div>
-                  </div>
-                  <div className="mt-2">
-                    {getSectionNameManually({
-                      data: listOfSection,
-                      sectionDelete,
-                      sectionEdit,
-                    })}
-                  </div>
                 </div>
               )}
             </div>
           </div>
-          {(listOfSection.length <= 0 || !showSection) && (
-            <div className="border rounded">
-              <div className="mt-2 mx-2">
+          <div
+            className="w-25 cr-pointer text-end"
+            onClick={() => {
+              handleCloseModal(false);
+              setMeatDisplay(false);
+              resetForms({ reload: false });
+              form.resetFields();
+              setProviderDetails([]);
+              setSuggestedMeatForm && setSuggestedMeatForm(false);
+            }}
+          >
+            <CloseOutlined />
+          </div>
+        </div>
+
+        <div className="row">
+          {!meatDisplay && !meatFormDisplay && (
+            <>
+              <div className="col-6">
                 <Form.Item
                   label={
-                    <label>
-                      Section <span style={{ color: "red" }}>*</span>
+                    <label className="mb-0">
+                      Code <span style={{ color: "red" }}>*</span>
                     </label>
                   }
-                  name="section"
+                  name="diagnosisCode"
                   rules={[
                     {
                       required: true,
-                      message: "Please enter section",
+                      message: "Please enter diagnosis code",
                     },
                   ]}
+                  style={{ marginBottom: 10 }}
+                  onChange={(e) => {
+                    if (e.target.name == "") {
+                      const code = e.target.value.trim();
+                      handleChange(code);
+                    }
+                  }}
                 >
-                  <CustomSelect
-                    options={capturedSections}
-                    onChange={(val) => setSection(val)}
-                    setOptions={setCapturedSections}
-                    value={section}
-                    disabled={false}
+                  <Select
+                    name="diagnosisCode"
+                    allowClear
+                    showSearch
+                    notFoundContent={
+                      getValideCodeLoader ? <Spin size="small" /> : "No data"
+                    }
+                    onClear={() => setOptions([])}
+                    onBlur={() => {
+                      const selected = form.getFieldValue("diagnosisCode");
+                      if (!selected) {
+                        setOptions([]);
+                      }
+                    }}
+                    onChange={(e, value) => {
+                      form.setFieldsValue({
+                        oldHcc: value?.oldHcc,
+                        description: value?.description,
+                        newHcc: value?.newHcc,
+                      });
+                      setCode(value?.value);
+                      getVerify(value?.value);
+                      setDbDescription(value?.description);
+                    }}
+                    options={!getValideCodeLoader && options}
+                  ></Select>
+                </Form.Item>
+                {code?.length > 0 &&
+                validCode.length > 0 &&
+                validCode == "Valid Code" ? (
+                  <label className="text-success">Valid Code</label>
+                ) : (
+                  validCode != "Valid Code" && (
+                    <label className="text-danger">{validCode}</label>
+                  )
+                )}
+              </div>
+              <div className="col-6">
+                <Form.Item
+                  label={
+                    <label className="mb-0">
+                      Description <span style={{ color: "red" }}>*</span>
+                    </label>
+                  }
+                  name="description"
+                  rules={[
+                    {
+                      required: true,
+                      message: "Please enter description",
+                    },
+                  ]}
+                  style={{ marginBottom: 10 }}
+                >
+                  <Input
+                    name="description"
+                    // onChange={(e) => setDescription(e.target.value)}
+                    className="manually"
                   />
                 </Form.Item>
               </div>
-
-              {sectionCount?.map((item, index) => (
-                <div className="pt-2">
-                  <div className="d-flex justify-content-between px-3">
-                    <b>Section - {index + 1}</b>
-                    <label>
-                      {index == 0 && (
-                        <label
-                          className="cr-pointer px-2"
-                          onClick={() =>
-                            setSectionCount([
-                              ...sectionCount,
-                              ...[Math.max(...sectionCount) + 1],
-                            ])
-                          }
-                        >
-                          <FontAwesomeIcon icon={faPlus} color="#04306f" />
-                        </label>
-                      )}
-                      {sectionCount?.length > 1 && (
-                        <label
-                          className="cr-pointer"
-                          onClick={() => {
-                            const remove = sectionCount.filter(
-                              (val) => val != item
-                            );
-                            setSectionCount(remove);
-                          }}
-                        >
-                          <FontAwesomeIcon icon={faTrashCan} color="#04306f" />
-                        </label>
-                      )}
+              <div className="col-6">
+                <Form.Item
+                  label={
+                    <label className="mb-0">
+                      Old Hcc <span style={{ color: "red" }}>*</span>
                     </label>
+                  }
+                  name="oldHcc"
+                  rules={[
+                    {
+                      required: true,
+                      message: "Please enter Old Hcc code",
+                    },
+                  ]}
+                  style={{ marginBottom: 10 }}
+                >
+                  <Input name="oldHcc" disabled className="manually" />
+                </Form.Item>
+              </div>
+              <div className="col-6">
+                <Form.Item
+                  label={
+                    <label className="mb-0">
+                      New Hcc <span style={{ color: "red" }}>*</span>
+                    </label>
+                  }
+                  name="newHcc"
+                  rules={[
+                    {
+                      required: true,
+                      message: "Please enter New Hcc code",
+                    },
+                  ]}
+                  style={{ marginBottom: 10 }}
+                >
+                  <Input name="newHcc" disabled className="manually" />
+                </Form.Item>
+              </div>
+              <div className="col-12">
+                <Form.Item
+                  label={<label className="mb-0">Comments</label>}
+                  name="commants"
+                  style={{ marginBottom: 10 }}
+                >
+                  <TextArea rows={3} className="manually" />
+                </Form.Item>
+              </div>
+              <div className="col-12">
+                {listOfSection?.length > 0 && (
+                  <div className="py-4">
+                    <div className="d-flex border-bottom align-items-end justify-content-between">
+                      <div className={`${style.subHeader} mb-2`}>
+                        Section List
+                      </div>
+                      <div className="mb-1">
+                        <RegularButton
+                          type=""
+                          method={"button"}
+                          name="Add"
+                          onClick={() => {
+                            setSection("");
+                            setShowSection(false);
+                            setIsEdit(false);
+                          }}
+                        />
+                      </div>
+                    </div>
+                    <div className="mt-2">
+                      {getSectionNameManually({
+                        data: listOfSection,
+                        sectionDelete,
+                        sectionEdit,
+                      })}
+                    </div>
                   </div>
-                  <AddSection
-                    key={item}
-                    id={item}
-                    section={section}
-                    date={
-                      getSelectedDos
-                        ? [{ label: getSelectedDos, value: getSelectedDos }]
-                        : getSelectedDos
-                    }
-                    isEditPage={isEditPage}
-                    pageNumbers={getPageNumbers()}
+                )}
+              </div>
+              {(listOfSection.length <= 0 || !showSection) && (
+                <div className="col-12">
+                  <div className="border rounded p-2">
+                    <Form.Item
+                      label={
+                        <label>
+                          Section <span style={{ color: "red" }}>*</span>
+                        </label>
+                      }
+                      name="section"
+                      rules={[
+                        {
+                          required: true,
+                          message: "Please enter section",
+                        },
+                      ]}
+                    >
+                      <CustomSelect
+                        options={capturedSections}
+                        onChange={(val) => setSection(val)}
+                        setOptions={setCapturedSections}
+                        value={section}
+                        disabled={false}
+                      />
+                    </Form.Item>
+
+                    {sectionCount?.map((item, index) => (
+                      <div className="pt-0">
+                        <div className="d-flex justify-content-between px-3">
+                          <b>Section - {index + 1}</b>
+                          <label>
+                            {index == 0 && (
+                              <label
+                                className="cr-pointer px-2"
+                                onClick={() =>
+                                  setSectionCount([
+                                    ...sectionCount,
+                                    generateUUID(),
+                                  ])
+                                }
+                              >
+                                <FontAwesomeIcon
+                                  icon={faPlus}
+                                  color="#04306f"
+                                />
+                              </label>
+                            )}
+                            {sectionCount?.length > 1 && (
+                              <label
+                                className="cr-pointer"
+                                onClick={() => {
+                                  const remove = sectionCount.filter(
+                                    (val) => val != item
+                                  );
+                                  setSectionCount(remove);
+                                }}
+                              >
+                                <FontAwesomeIcon
+                                  icon={faTrashCan}
+                                  color="#04306f"
+                                />
+                              </label>
+                            )}
+                          </label>
+                        </div>
+                        <AddSection
+                          key={item}
+                          id={item}
+                          section={section}
+                          isEditPage={isEditPage}
+                          pageNumbers={getPageNumbers()}
+                        />
+                      </div>
+                    ))}
+                    <div className="d-flex justify-content-center mt-4">
+                      {!isEdit ? (
+                        <RegularButton
+                          type=""
+                          name={isBtnLoading ? "Loading..." : "Save"}
+                          width="100px"
+                          disabled={isBtnLoading}
+                          method={"button"}
+                          onClick={(e) => handledSave(e, "partial")}
+                        />
+                      ) : (
+                        <RegularButton
+                          type=""
+                          method={"button"}
+                          name={isBtnLoading ? "Loading..." : "Save"}
+                          width="100px"
+                          onClick={handledEdit}
+                          disabled={isBtnLoading}
+                        />
+                      )}
+                      {listOfSection.length > 0 && (
+                        <RegularButton
+                          type="outline"
+                          name="Cancel"
+                          width="100px"
+                          method={"button"}
+                          onClick={() => {
+                            setShowSection(true);
+                            setSectionCount([1]);
+                            setSection("");
+                            form.setFieldValue("section", "");
+                          }}
+                        />
+                      )}
+                    </div>
+                  </div>
+                </div>
+              )}
+            </>
+          )}
+          <>
+            {/* MEAT Part */}
+            <div className={style.subHeader}>Meat</div>
+            {!isEditMeat && (
+              <div className="d-flex">
+                <label htmlFor="">Active Header</label>
+                <div className="mx-2">
+                  <Switch
+                    onChange={() => setIsMeat(!isMeat)}
+                    checked={!isMeat}
                   />
                 </div>
-              ))}
-              <Form.Item>
-                <div className="d-flex justify-content-center mt-4">
-                  {!isEdit ? (
-                    <RegularButton
-                      type=""
-                      name={isBtnLoading ? "Loading..." : "Save"}
-                      width="100px"
-                      disabled={isBtnLoading}
-                      // onClick={handledSave}
-                    />
-                  ) : (
-                    <RegularButton
-                      type=""
-                      method={"button"}
-                      name={isBtnLoading ? "Loading..." : "Save"}
-                      width="100px"
-                      onClick={handledEdit}
-                      disabled={isBtnLoading}
-                    />
-                  )}
-                  {listOfSection.length > 0 && (
-                    <RegularButton
-                      type="outline"
-                      name="Cancel"
-                      width="100px"
-                      method={"button"}
-                      onClick={() => {
-                        setShowSection(true);
-                        setSectionCount([1]);
-                        setSection("");
-                        form.setFieldValue("section", "");
-                      }}
-                    />
+              </div>
+            )}
+            {isMeat && (
+              <>
+                <div className="d-flex justify-content-center mb-2">
+                  {" "}
+                  <SelectButton
+                    select={selectMeat}
+                    setSelect={setSelectMeat}
+                    completed={isFilled}
+                  />
+                </div>
+                <div className="col-12">
+                  {checkMeat(selectMeat)?.listOfSection?.length > 0 && (
+                    <div className="py-4">
+                      <div className="d-flex border-bottom align-items-end justify-content-between">
+                        <div className={`${style.subHeader} mb-2`}>
+                          Section List
+                        </div>
+                        <div className="mb-1">
+                          <RegularButton
+                            type=""
+                            method={"button"}
+                            name="Add"
+                            onClick={() =>
+                              checkMeat(selectMeat)?.setShowSection(false)
+                            }
+                          />
+                        </div>
+                      </div>
+                      <div className="mt-2">
+                        {getSectionNameManually({
+                          data: checkMeat(selectMeat)?.listOfSection,
+                          sectionDelete: sectionDeleteMeat,
+                          sectionEdit: sectionEditMeat,
+                        })}
+                      </div>
+                    </div>
                   )}
                 </div>
-              </Form.Item>
-            </div>
-          )}
-          {showSection && listOfSection.length > 0 && (
-            <Form.Item>
-              <div className="d-flex justify-content-center mt-5">
-                <RegularButton
-                  type=""
-                  name={
-                    isEditPage && isEditValue.diagnosisCode == code
-                      ? "Save"
-                      : "Next"
-                  }
-                  width="150px"
-                  method={"button"}
-                  disabled={!(validCode == "Valid Code")}
-                  onClick={() => {
-                    if (isEditPage && isEditValue.diagnosisCode == code) {
-                      handleMeatSubmit();
-                    } else {
-                      setMeatDisplay(true);
-                    }
-                  }}
-                />
-              </div>
-            </Form.Item>
-          )}
-        </Form>
-      ) : (
-        <>
-          <div className={style.subHeader}>Meat</div>
-          {!isEditMeat && (
-            <div className="d-flex">
-              <label htmlFor="">Active Header</label>
-              <div className="mx-2">
-                <Switch onChange={() => setIsMeat(!isMeat)} checked={!isMeat} />
-              </div>
-            </div>
-          )}
-          {isMeat && (
-            <div className="d-flex justify-content-center mb-2">
-              {" "}
-              <SelectButton
-                select={selectMeat}
-                setSelect={setSelectMeat}
-                completed={isFilled}
+
+                <>
+                  {(checkMeat(selectMeat)?.listOfSection?.length <= 0 ||
+                    !checkMeat(selectMeat)?.showSection) && (
+                    <div className="col-12">
+                      <div className="border rounded p-2">
+                        <Form.Item
+                          label={
+                            <label>
+                              Section <span style={{ color: "red" }}>*</span>
+                            </label>
+                          }
+                          name={`${checkMeatType(selectMeat)}section`}
+                          rules={[
+                            {
+                              required: true,
+                              message: "Please enter section",
+                            },
+                          ]}
+                        >
+                          <CustomSelect
+                            options={checkMeat(selectMeat)?.capturedSections}
+                            onChange={(val) =>
+                              checkMeat(selectMeat)?.setSection(val)
+                            }
+                            setOptions={
+                              checkMeat(selectMeat)?.setCapturedSections
+                            }
+                            value={checkMeat(selectMeat)?.section}
+                            disabled={false}
+                          />
+                        </Form.Item>
+
+                        {checkMeat(selectMeat)?.sectionCount?.map(
+                          (item, index) => (
+                            <div className="pt-0">
+                              <div className="d-flex justify-content-between px-3">
+                                <b>Section - {index + 1}</b>
+                                <label>
+                                  {index == 0 && (
+                                    <label
+                                      className="cr-pointer px-2"
+                                      onClick={() =>
+                                        checkMeat(selectMeat)?.setSectionCount([
+                                          ...checkMeat(selectMeat)
+                                            ?.sectionCount,
+                                          generateUUID(),
+                                        ])
+                                      }
+                                    >
+                                      <FontAwesomeIcon
+                                        icon={faPlus}
+                                        color="#04306f"
+                                      />
+                                    </label>
+                                  )}
+                                  {sectionCount?.length > 1 && (
+                                    <label
+                                      className="cr-pointer"
+                                      onClick={() => {
+                                        const remove = sectionCount.filter(
+                                          (val) => val != item
+                                        );
+                                        checkMeat(selectMeat)?.setSectionCount(
+                                          remove
+                                        );
+                                      }}
+                                    >
+                                      <FontAwesomeIcon
+                                        icon={faTrashCan}
+                                        color="#04306f"
+                                      />
+                                    </label>
+                                  )}
+                                </label>
+                              </div>
+                              <AddSection
+                                key={item}
+                                id={item}
+                                section={checkMeat(selectMeat)?.section}
+                                isEditPage={isEditPage}
+                                selectMeat={selectMeat}
+                                pageNumbers={getPageNumbers()}
+                              />
+                            </div>
+                          )
+                        )}
+                        <div className="d-flex justify-content-center mt-4">
+                          {!isEdit ? (
+                            <RegularButton
+                              type=""
+                              method={"button"}
+                              name={isBtnLoading ? "Loading..." : "Save"}
+                              width="100px"
+                              disabled={isBtnLoading}
+                              onClick={handledMeatSave}
+                            />
+                          ) : (
+                            <RegularButton
+                              type=""
+                              method={"button"}
+                              name={isBtnLoading ? "Loading..." : "Save"}
+                              width="100px"
+                              onClick={handledEditMeat}
+                              disabled={isBtnLoading}
+                            />
+                          )}
+                          {checkMeat(selectMeat)?.listOfSection?.length > 0 && (
+                            <RegularButton
+                              type="outline"
+                              name="Cancel"
+                              width="100px"
+                              method={"button"}
+                              onClick={() => {
+                                checkMeat(selectMeat).setShowSection(true);
+                                checkMeat(selectMeat).setSectionCount([1]);
+                                checkMeat(selectMeat).setSection("");
+                                form.setFieldValue(
+                                  `${checkMeatType(selectMeat)}section`,
+                                  ""
+                                );
+                              }}
+                            />
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                </>
+              </>
+            )}
+            <div className="text-center mt-2">
+              <RegularButton
+                type=""
+                name={isBtnLoading ? "Loading..." : "Submit"}
+                width="140px"
+                method={"submit"}
+                // onClick={handleMeatSubmit}
+                disabled={
+                  isMeat
+                    ? !(
+                        isMeat &&
+                        (listOfSectionA.length > 0 ||
+                          listOfSectionE.length > 0 ||
+                          listOfSectionM.length > 0 ||
+                          listOfSectionT.length > 0)
+                      )
+                    : isMeat
+                }
+                loading={isBtnLoading}
               />
             </div>
-          )}
-
-          <Form
-            form={form}
-            name="basic"
-            layout="vertical"
-            autoComplete="off"
-            onFinish={(form) => {
-              handledMeatSave(form);
-            }}
-            onFinishFailed={() => {}}
-          >
-            <Meat
-              selectMeat={selectMeat}
-              listOfSection={checkMeat(selectMeat).listOfSection}
-              dosList={dosList}
-              providerDetails={providerDetails}
-              showSection={checkMeat(selectMeat).showSection}
-              capturedSections={checkMeat(selectMeat).capturedSections}
-              sectionCount={checkMeat(selectMeat).sectionCount}
-              section={checkMeat(selectMeat).section}
-              setMeatDisplay={setMeatDisplay}
-              setShowSection={checkMeat(selectMeat).setShowSection}
-              setSection={checkMeat(selectMeat).setSection}
-              setSectionCount={checkMeat(selectMeat).setSectionCount}
-              setCapturedSections={checkMeat(selectMeat).setCapturedSections}
-              handleMeatSubmit={handleMeatSubmit}
-              isMeat={isMeat}
-              isActive={
-                listOfSectionA.length > 0 ||
-                listOfSectionE.length > 0 ||
-                listOfSectionM.length > 0 ||
-                listOfSectionT.length > 0
-              }
-              sectionDelete={sectionDeleteMeat}
-              date={
-                getSelectedDos
-                  ? [{ label: getSelectedDos, value: getSelectedDos }]
-                  : dosList
-              }
-              isEdit={isEdit}
-              sectionEdit={sectionEditMeat}
-              handleEdit={handledEditMeat}
-              isEditMeat={isEditMeat}
-              isEditMeatValue={isEditMeatValue}
-              form={form}
-              disabled={false}
-              meatFormDisplay={meatFormDisplay}
-              isBtnLoading={isBtnLoading}
-              pageNumbers={getPageNumbers()}
-              educationalError={educationalError}
-              setEducationalError={setEducationalError}
-              setIsMeat={setIsMeat}
-            />
-          </Form>
-        </>
-      )}
-    </>
+          </>
+        </div>
+      </Form>
+    </div>
   );
 };
 
@@ -1804,6 +1681,7 @@ const enhancer = connect(
     patientDetailsResult: state?.patientDetails?.details?.patientResult,
     getSelectedDos: state?.patientDetails?.details?.getSelectedDosDetails,
     isDosSelected: state.patientDetails.details?.getSelectedDosDetails,
+    getValideCodeLoader: state.patientDetails.details?.getValideCodeLoader,
   }),
   {
     getProviderSection: patientDetailsAction.getProviderSection,

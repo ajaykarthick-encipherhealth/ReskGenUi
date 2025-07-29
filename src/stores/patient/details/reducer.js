@@ -149,6 +149,7 @@ const patientDetailsReducer = combineReducers({
   addComments: createReducer(isAddComments),
   isCodeAlready: createReducer(isCodeAlready),
   getValidCode: createReducer(getValideCode),
+  getValideCodeLoader: getPatientsLoading(getValideCode),
   getSelectedDosDetails: getSelectedDosDetails,
   selectedDosPageNumber: getSelectedDetails(getSelectedDosPageNumber),
   currentDiseaseType: getSelectedDetails(getCurrentDiseaseType),

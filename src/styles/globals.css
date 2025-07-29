@@ -15124,6 +15124,10 @@ input::-webkit-inner-spin-button {
 .ant-input {
   height: 42px !important;
 }
+
+.manually {
+  height: auto !important;
+}
 .form-textarea {
   height: 100px !important;
 }

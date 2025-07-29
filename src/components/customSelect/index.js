@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { PlusOutlined } from "@ant-design/icons";
 import { Button, Divider, Input, Select, Space } from "antd";
+import { getResponePopup } from "../../utils/reusable";
 let index = 0;
 const CustomSelect = ({
   options,
@@ -14,17 +15,31 @@ const CustomSelect = ({
   const [name, setName] = useState("");
   const inputRef = useRef(null);
   const onNameChange = (event) => {
-    setName(event.target.value);
+    const value = event.target.value.trimStart();
+    setName(value);
   };
+
   const addItem = (e) => {
     e.preventDefault();
-    if (name?.length > 0) {
-      setOptions([...options, { lable: name, value: name }]);
-      setName("");
-      setTimeout(() => {
-        inputRef.current?.focus();
-      }, 0);
+    const trimmedName = name?.trim();
+    if (!trimmedName) return;
+    const isDuplicate = options.some(
+      (option) => option.value.toLowerCase() === trimmedName.toLowerCase()
+    );
+    if (isDuplicate) {
+      getResponePopup({
+        status: "FAILED",
+        message: "Item already exists!",
+        duration: 5,
+      });
+      return;
     }
+
+    setOptions([...options, { label: trimmedName, value: trimmedName }]);
+    setName("");
+    setTimeout(() => {
+      inputRef.current?.focus();
+    }, 0);
   };
 
   return (

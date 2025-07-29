@@ -804,7 +804,7 @@ const File = ({
         width={"80vw"}
       >
         <div className="row p-4" style={{ overflow: "hidden", height: "100%" }}>
-          <div className="col-8">
+          <div className="col-7">
             {hccFileDetails?.loading != true ? (
               <>
                 {selectFileURL && (
@@ -821,7 +821,7 @@ const File = ({
               </>
             ) : null}
           </div>
-          <div className="col-4">
+          <div className="col-5">
             <div
               // className="px-1"
               style={{
@@ -849,12 +849,13 @@ const File = ({
         title="You want to move  HCC? please add a MEAT condition."
         open={suggestedMeatForm}
         footer={false}
-        width="75%"
+        width="85%"
         height={200}
         onCancel={() => setSuggestedMeatForm(false)}
+        closeIcon={false}
       >
         <div className="row p-4" style={{ overflow: "hidden", height: "100%" }}>
-          <div className="col-8">
+          <div className="col-7">
             {hccFileDetails?.loading != true ? (
               <>
                 {selectFileURL && (
@@ -871,7 +872,7 @@ const File = ({
               </>
             ) : null}
           </div>
-          <div className="col-4">
+          <div className="col-5">
             <div
               className="px-4"
               style={{ height: "90vh", overflowY: "scroll" }}

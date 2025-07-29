@@ -1147,6 +1147,15 @@ export const getRolePanelPermission = (roles, currentRole) => {
     return false;
   }
 };
+
+
+export function generateUUID() {
+  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+    const r = Math.random() * 16 | 0;
+    const v = c === 'x' ? r : (r & 0x3 | 0x8);
+    return v.toString(16); // Example: 'f65c57f6-a6aa-4d8a-9f43-3c9c4f90b2c6'
+  });
+}
 export const createIdGens = (key) => {
   const router = useRouter();
   if (key && router?.pathname) {

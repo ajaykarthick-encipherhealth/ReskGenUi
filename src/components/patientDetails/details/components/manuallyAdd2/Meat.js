@@ -57,6 +57,7 @@ const Meat = ({
   meatFormDisplay,
   isBtnLoading,
   pageNumbers,
+  setIsMeat
 }) => {
   const userRole = getStorage("userRole")
   return (
@@ -135,7 +136,7 @@ const Meat = ({
               </Form.Item>
             </div>
           )}
-          {/* {!meatFormDisplay && (
+          {!meatFormDisplay && (
             <>
               <div className="col-12">
                 <Form.Item
@@ -185,7 +186,7 @@ const Meat = ({
                 )}
               </div>
             </>
-          )} */}
+          )}
           <div className="col-12">
             {listOfSection?.length > 0 && (
               <div className="py-4">
@@ -288,7 +289,7 @@ const Meat = ({
               </div>
             ))}
             <Form.Item>
-              <div className="d-flex justify-content-center my-2">
+              <div className="d-flex justify-content-center mt-4">
                 {!isEdit ? (
                   <RegularButton
                     type=""
@@ -337,7 +338,7 @@ const Meat = ({
                 name="Back"
                 width="100px"
                 method={"button"}
-                onClick={() => setMeatDisplay(false)}
+                onClick={() => {setMeatDisplay(false),setIsMeat(true)}}
               />
             )}
             <RegularButton
