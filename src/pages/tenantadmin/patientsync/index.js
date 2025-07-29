@@ -539,14 +539,14 @@ const PatientSync = ({
         return (
           <>
             <RegularButton
-              name="Add Roaster"
+              name="Add Roster"
               onClick={handleRoasterBtn}
               padding={"5px 10px"}
               height={"35px"}
               width={"120px"}
             />
             <RegularButton
-              name="Dummy Roaster File"
+              name="Dummy Roster File"
               onClick={handleExcelDownload}
               padding={"5px 10px"}
               height={"35px"}
@@ -1264,7 +1264,7 @@ const PatientSync = ({
                                       to="#my-posts"
                                       eventKey="tinRoaster"
                                     >
-                                      Tin Roaster
+                                      Tin Roster
                                     </Nav.Link>
                                   </Nav.Item>
 
@@ -1281,7 +1281,7 @@ const PatientSync = ({
                                       to="#my-posts"
                                       eventKey="practiceRoaster"
                                     >
-                                      Practice Roaster
+                                      Practice Roster
                                     </Nav.Link>
                                   </Nav.Item>
                                   <Nav.Item
@@ -1297,7 +1297,7 @@ const PatientSync = ({
                                       to="#my-posts"
                                       eventKey="providerRoaster"
                                     >
-                                      Provider Roaster
+                                      Provider Roster
                                     </Nav.Link>
                                   </Nav.Item>
 
@@ -1314,7 +1314,7 @@ const PatientSync = ({
                                       to="#my-posts"
                                       eventKey="patientRoaster"
                                     >
-                                      Patient Roaster
+                                      Patient Roster
                                     </Nav.Link>
                                   </Nav.Item>
                                 </Nav>

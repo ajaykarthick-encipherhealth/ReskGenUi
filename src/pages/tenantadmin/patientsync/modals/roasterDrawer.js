@@ -102,7 +102,7 @@ const RoasterDrawer = ({
   };
   return (
     <Drawer
-      title={"Add Roaster Details"}
+      title={"Add Roster Details"}
       width={450}
       onClose={onClose}
       open={isDrawerOpen}
