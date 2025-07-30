@@ -17,7 +17,7 @@ const AddSection = ({ id, section, selectMeat = "", pageNumbers }) => {
             rules={[
               {
                 required: true,
-                message: "Please Select Page Number",
+                message: "Please select page number",
               },
             ]}
             style={{ marginBottom: 10 }}
@@ -43,15 +43,22 @@ const AddSection = ({ id, section, selectMeat = "", pageNumbers }) => {
             rules={[
               {
                 required: true,
-                message: "Please enter Referance",
+                message: "Please enter Reference",
               },
               {
-                validator: (_, value) =>
-                  value && value.trim() !== ""
-                    ? Promise.resolve()
-                    : Promise.reject(
-                        new Error("Reference cannot be empty or just spaces")
-                      ),
+                validator: (_, value) => {
+                  if (!value || value.trim() === "") {
+                    return Promise.reject(
+                      new Error("Reference cannot be empty or just spaces")
+                    );
+                  }
+                  if (/^\s/.test(value)) {
+                    return Promise.reject(
+                      new Error("Reference cannot start with a space")
+                    );
+                  }
+                  return Promise.resolve();
+                },
               },
             ]}
             style={{ marginBottom: 10 }}
