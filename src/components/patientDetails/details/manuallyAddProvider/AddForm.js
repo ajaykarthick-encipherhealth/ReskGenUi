@@ -56,6 +56,17 @@ const validateThreeDigitNumber = (_, value) => {
     new Error("Please enter a valid positive number (1-999)")
   );
 };
+const noWhitespaceOnly = (_, value) => {
+  if (!value || value.trim() === "") {
+    return Promise.reject(
+      new Error("Reference cannot be empty or just spaces")
+    );
+  }
+  if (/^\s/.test(value)) {
+    return Promise.reject(new Error("Reference cannot start with a space"));
+  }
+  return Promise.resolve();
+};
 
 
   const AddProvider = async (values, providersLists) => {
@@ -181,6 +192,16 @@ const validateThreeDigitNumber = (_, value) => {
           name="manuallyAddForm"
           form={form}
           onFinish={(values) => AddProvider(values, providersList)}
+          onFinishFailed={({ errorFields }) => {
+            if (errorFields?.length) {
+              notification.warning({
+                message: "Form Incomplete",
+                description:
+                  "Please fill all the required fields before submitting.",
+                duration: 2,
+              });
+            }
+          }}
           layout="vertical"
           autoComplete="off"
           initialValues={{
@@ -252,7 +273,10 @@ const validateThreeDigitNumber = (_, value) => {
           <Form.Item
             label={<label className={style.dateField}>DOS Substring</label>}
             name="dosSubstring"
-            rules={[{ required: true, message: "Please Enter DOS Substring" }]}
+            rules={[
+              { required: true, message: "Please Enter DOS Substring" },
+              { validator: noWhitespaceOnly },
+            ]}
           >
             <Input placeholder="DOS Substring" />
           </Form.Item>
@@ -326,6 +350,7 @@ const validateThreeDigitNumber = (_, value) => {
             // rules={[
             //   { required: true, message: "Please enter Reviewer Comments" },
             // ]}
+            rules={[{ validator: noWhitespaceOnly }]}
           >
             <Input.TextArea rows={3} placeholder="Enter Reviewer Comments" />
           </Form.Item>
@@ -333,6 +358,7 @@ const validateThreeDigitNumber = (_, value) => {
           <Form.Item
             label={<label className={style.dateField}>Physician Inquiry</label>}
             name="physicianInquiry"
+            rules={[{ validator: noWhitespaceOnly }]}
             // rules={[
             //   { required: true, message: "Please enter Physician Inquiry" },
             // ]}
@@ -448,6 +474,7 @@ const validateThreeDigitNumber = (_, value) => {
                     required: true,
                     message: "Please enter Provider Reference",
                   },
+                  { validator: noWhitespaceOnly },
                 ]}
               >
                 <Input placeholder="Provider Reference" />
