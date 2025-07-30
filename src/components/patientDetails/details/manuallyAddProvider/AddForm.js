@@ -351,14 +351,12 @@ const noWhitespaceOnly = (_, value) => {
             // rules={[
             //   { required: true, message: "Please enter Reviewer Comments" },
             // ]}
-            rules={[{ validator: noWhitespaceOnly }]}
           >
             <Input.TextArea rows={3} placeholder="Enter Reviewer Comments" />
           </Form.Item>
           <Form.Item
             label={<label className={style.dateField}>Physician Inquiry</label>}
             name="physicianInquiry"
-            rules={[{ validator: noWhitespaceOnly }]}
             // rules={[
             //   { required: true, message: "Please enter Physician Inquiry" },
             // ]}
