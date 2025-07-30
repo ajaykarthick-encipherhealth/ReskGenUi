@@ -226,6 +226,7 @@ const ManuallyAddProvider = ({
           dosYearDefalutSelect={dosYearDefalutSelect}
           year={year}
           setSelectDosValue={setSelectDosValue}
+          isTrashView={isTrashView}
         />
       </div>
 

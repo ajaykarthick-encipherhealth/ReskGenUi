@@ -41,12 +41,14 @@ const AddForm = ({
   getSelectedDos,
   year,
   setSelectDosValue,
+  isTrashView,
 }) => {
   const [btnName, setBtnName] = useState(null);
   const [providerOptions, setProviderOptions] = useState([]);
   const [credentialOptions, setCredentialOptions] = useState([]);
   const [dosExistsError, setDosExistsError] = useState(null);
   const { patientId = null } = getLocalStored();
+
 const validateThreeDigitNumber = (_, value) => {
   const number = Number(value);
   if (!value || (/^\d{1,3}$/.test(value) && number > 0)) {
@@ -154,7 +156,6 @@ const noWhitespaceOnly = (_, value) => {
       form.setFieldsValue(newValues);
     }
   };
-
 
   const customDisableDate = (current) => {
     const year = dosYearDefalutSelect?.value || dosYearDefalutSelect;
@@ -517,8 +518,9 @@ const noWhitespaceOnly = (_, value) => {
             <Button
               htmlType="submit"
               type="primary"
-              className="btn btn-sm ms-2 flr width-max-content custom-btn-style"
-              disabled={!!btnName}
+              className=" btn btn-sm ms-2 flr width-max-content custom-btn-style"
+              disabled={!!btnName || isTrashView}
+              
             >
               {btnName ? btnName : providersList ? "UPDATE" : "ADD"}
             </Button>
