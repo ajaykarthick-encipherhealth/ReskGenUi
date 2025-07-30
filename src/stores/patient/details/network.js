@@ -82,10 +82,12 @@ export async function patientDetails(
   }
 }
 
-export async function patientIdDetails(patientId, navigate) {
+export async function patientIdDetails(patientId, navigate,dataEmpty = false) {
   const orgId = getStorage("orgId");
   const userRoleId = getStorage("roleId");
-
+ if(dataEmpty == true){
+    return null;
+  }
   const isTinDetailsPage = navigate
     ? navigate.endsWith("/tindetails/masteraudit")
     : "";

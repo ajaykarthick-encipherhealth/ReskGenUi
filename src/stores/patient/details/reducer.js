@@ -130,6 +130,7 @@ const getPatientsLoading = (type) =>
 const patientDetailsReducer = combineReducers({
   patientResult: createReducer(patientDetailsAction),
   patientIdResult: createReducer(patientIdDetailsAction),
+  patientDataLoader:getPatientsLoading(patientIdDetailsAction),
   loading: getPatientsLoading(patientDetailsAction),
   hccFileResult: createReducer(patientHccFileAction),
   dosResult: createReducer(dosDeatilsAction),

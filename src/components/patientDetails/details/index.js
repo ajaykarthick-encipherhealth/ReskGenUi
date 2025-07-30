@@ -164,6 +164,7 @@ const Details = ({
   queriedLoader,
   allRoles,
   getAddProviderAndDOSList,
+  patientDataLoader
 }) => {
   const navigate = useRouter();
   const [count, setCount] = useState(0);
@@ -282,7 +283,6 @@ const Details = ({
     const patientId = getStorage("patientId");
     getYear(patientId);
   }, []);
-
   useEffect(() => {
     const patientId = getStorage("patientId");
     const fileId = getStorage("fileId");
@@ -395,6 +395,9 @@ const Details = ({
   }, [storeFileDetails]);
 
   const getAllProcessYearSelect = async (result) => {
+    if (result?.data?.response?.length === 0) {
+      patientDetailsLoad(false);
+    }
     const patientId = getStorage("patientId");
     var dosYearArr = result?.data?.response?.map((res) => {
       return { value: res, label: res };
@@ -403,6 +406,10 @@ const Details = ({
     setSelectedDosValue(dosYearArr[0]?.value);
     setDosYear(dosYearArr);
     setIsLoadingDos(false);
+    getPatientIdData(
+      selectPatientId?.patirntId ? selectPatientId?.patirntId : patientId,
+      navigate.pathname
+    );
 
     if (result?.data?.response?.length > 0) {
       if (activeTab == 1) {
@@ -438,10 +445,10 @@ const Details = ({
           );
           patientDetailsLoad(false);
         }
-        getPatientIdData(
-          selectPatientId?.patirntId ? selectPatientId?.patirntId : patientId,
-          navigate.pathname
-        );
+        // getPatientIdData(
+        //   selectPatientId?.patirntId ? selectPatientId?.patirntId : patientId,
+        //   navigate.pathname
+        // );
         // getPatientDosList(
         //   selectPatientId?.patirntId ? selectPatientId?.patirntId : patientId,
         //   dosYearArr[0]?.value
@@ -772,6 +779,7 @@ const Details = ({
     getSelectedDos("");
     getCurrentDiseaseType(true);
     patientDetailsLoad(true);
+    getPatientIdData("" , "" , true )
   };
   const splitUserName = (name) => {
     if (name) {
@@ -860,7 +868,6 @@ const Details = ({
       getActiveLabels();
     }
   }, [isDosSelected, dosYearDefalutSelect]);
-
   return (
     <>
       <div className={`show `} style={{ height: "100vh", background: "#fff" }}>
@@ -898,7 +905,7 @@ const Details = ({
                         style={{ position: "relative", left: "-2%" }}
                         className="col-11"
                       >
-                        {loading || isSpinnerLoading ? (
+                        {patientDataLoader || isSpinnerLoading ? (
                           <div className="my-3">
                             <CardSkeleton height={100} />
                           </div>
@@ -922,7 +929,6 @@ const Details = ({
                             selectedDate={selectedDate}
                             setSelectedDate={setSelectedDate}
                             activeTab={activeTab}
-                          
                           />
                         )}
                       </div>
@@ -1496,6 +1502,7 @@ const enhancer = connect(
     revertLoading: state?.patientDetails?.details?.revertLoading,
     queriedData: state?.patientDetails?.details?.getQueriedDetails?.data,
     queriedLoader: state.patientDetails?.details?.getQueryLoader,
+    patientDataLoader:state?.patientDetails?.details?.patientDataLoader
   }),
   {
     workFgetFlagsowData: workflowActions.flagsAction,
