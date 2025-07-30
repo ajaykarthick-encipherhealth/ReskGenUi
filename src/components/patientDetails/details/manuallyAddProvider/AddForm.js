@@ -354,7 +354,6 @@ const noWhitespaceOnly = (_, value) => {
           >
             <Input.TextArea rows={3} placeholder="Enter Reviewer Comments" />
           </Form.Item>
-
           <Form.Item
             label={<label className={style.dateField}>Physician Inquiry</label>}
             name="physicianInquiry"
