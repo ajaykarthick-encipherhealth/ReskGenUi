@@ -126,16 +126,14 @@ const AllocateModal = ({
     } else {
       data = {
         roleId: roleId,
-        userIdList: activeEmail.map((user) => user.username),
+        userIdList: activeEmail.map((item)=>item.username),
         dueDate: formatDateForIndex({ date: allocateDate, index: 1 }),
         allocatedBy: userId,
         patientIdList: selectedRowsId,
         priority: priority,
       };
     }
-
     const response = await getAllocateUsers({ data });
-
     if (response?.status === "SUCCESS") {
       setIsAllocate(false);
       getResponePopup(response);
@@ -157,41 +155,31 @@ const AllocateModal = ({
     }
   };
 
-  const handleUserSelect = (proxyId, email) => {
-    const user = userDetails.find((u) => u.proxyId === proxyId);
-    const isSelected = selectedUserIds.includes(proxyId);
-    if (isSelected) {
-      setSelectedUserIds((prev) => prev.filter((userId) => userId !== proxyId));
-      setActiveEmail((prev) =>
-        prev.filter((u) => !(u.username === email && u.roleId === user?.role))
-      );
-    } else {
-      if (user) {
-        setSelectedUserIds((prev) => [...prev, proxyId]);
-        setActiveEmail((prev) => [
-          ...prev,
-          { username: email, roleId: user.role },
-        ]);
-      }
-    }
-    setActiveCard("");
-  };
+ const handleUserSelect = (proxyId, email, role) => {
+  if (selectedUserIds.includes(proxyId)) {
+    setSelectedUserIds(selectedUserIds.filter((userId) => userId !== proxyId));
+    setActiveEmail(activeEmail.filter((e) => e.username !== email));
+  } else {
+    setSelectedUserIds([...selectedUserIds, proxyId]);
+    setActiveEmail([...activeEmail, { username: email, roleId: role }]);
+  }
+};
 
-  const handleSelectAll = () => {
-    const isAllSelected = selectedUserIds.length === userDetails.length;
-    if (isAllSelected) {
-      setSelectedUserIds([]);
-      setActiveEmail([]);
-    } else {
-      const allIds = userDetails.map((user) => user.proxyId);
-      const allUsers = userDetails.map((user) => ({
-        username: user.email,
-        roleId: roleId,
-      }));
-      setSelectedUserIds(allIds);
-      setActiveEmail(allUsers);
-    }
-  };
+const handleSelectAll = () => {
+  if (selectedUserIds.length === userDetails.length) {
+    setSelectedUserIds([]);
+    setActiveEmail([]);
+  } else {
+    const allIds = userDetails.map((user) => user.proxyId);
+    const user = userDetails.map((user) => ({
+      username: user.email,
+      roleId: user.role,
+    }));
+    setSelectedUserIds(allIds);
+    setActiveEmail(user);
+  }
+};
+
   useEffect(() => {
     if (roleId) {
       getUserList({
@@ -339,7 +327,7 @@ const AllocateModal = ({
                         </p>
                       </div>
                     </div>
-                    <input
+                      <input
                       style={{
                         width: "20px",
                         height: "20px",
@@ -349,16 +337,8 @@ const AllocateModal = ({
                       }}
                       type="checkbox"
                       checked={selectedUserIds.includes(item.proxyId)}
-                      onChange={() =>
-                        handleUserSelect(item.proxyId, item.email)
-                      }
+                     onChange={() => handleUserSelect(item.proxyId, item.email, item.role)}
                       className="me-2 ms-3 align-self-center"
-                      // disabled={
-                      //   activeEmail.some(
-                      //     (user) => user.username === item.email
-                      //   ) 
-                      //   && !selectedUserIds.includes(item.proxyId)
-                      // }
                     />
                   </div>
                 </div>

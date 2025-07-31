@@ -155,39 +155,30 @@ const RandomSamplingModal = ({
     }
   };
 
-  const handleUserSelect = (proxyId, email) => {
-    const user = userDetails.find((u) => u.proxyId === proxyId);
-    const isSelected = selectedUserIds.includes(proxyId);
-    if (isSelected) {
-      setSelectedUserIds((prev) => prev.filter((userId) => userId !== proxyId));
-      setActiveEmail((prev) =>
-        prev.filter((u) => !(u.username === email && u.roleId === user?.role))
+  const handleUserSelect = (proxyId, email, role) => {
+    if (selectedUserIds.includes(proxyId)) {
+      setSelectedUserIds(
+        selectedUserIds.filter((userId) => userId !== proxyId)
       );
+      setActiveEmail(activeEmail.filter((e) => e.username !== email));
     } else {
-      if (user) {
-        setSelectedUserIds((prev) => [...prev, proxyId]);
-        setActiveEmail((prev) => [
-          ...prev,
-          { username: email, roleId: user.role },
-        ]);
-      }
+      setSelectedUserIds([...selectedUserIds, proxyId]);
+      setActiveEmail([...activeEmail, { username: email, roleId: role }]);
     }
-    setActiveCard("");
   };
 
   const handleSelectAll = () => {
-    const isAllSelected = selectedUserIds.length === userDetails.length;
-    if (isAllSelected) {
+    if (selectedUserIds.length === userDetails.length) {
       setSelectedUserIds([]);
       setActiveEmail([]);
     } else {
       const allIds = userDetails.map((user) => user.proxyId);
-      const allUsers = userDetails.map((user) => ({
+      const user = userDetails.map((user) => ({
         username: user.email,
-        roleId: roleId,
+        roleId: user.role,
       }));
       setSelectedUserIds(allIds);
-      setActiveEmail(allUsers);
+      setActiveEmail(user);
     }
   };
   const handleRoleChange = (value) => {
@@ -341,14 +332,9 @@ const RandomSamplingModal = ({
                       type="checkbox"
                       checked={selectedUserIds.includes(item.proxyId)}
                       onChange={() =>
-                        handleUserSelect(item.proxyId, item.email)
+                        handleUserSelect(item.proxyId, item.email, item.role)
                       }
                       className="me-2 ms-3 align-self-center"
-                      // disabled={
-                      //   activeEmail.some(
-                      //     (user) => user.username === item.email
-                      //   ) && !selectedUserIds.includes(item.proxyId)
-                      // }
                     />
                   </div>
                   {activeCard == item.id ? (
