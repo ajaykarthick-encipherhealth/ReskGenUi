@@ -669,7 +669,7 @@ const Hcc = ({
                       </Nav.Link>
                     </Nav.Item> */}
                     <Nav.Item as="li" className="nav-item mt-1">
-                      <div id="dosSelect" className="d-flex gap-2 mx-2 ">
+                      <div id="dosSelect" className="d-flex gap-2 mx-2 align-items-center">
                         {/* <Select
                           id="dosSelect"
                           placeholder="Select DOS"
@@ -826,6 +826,7 @@ const Hcc = ({
                         }
                       >
                         <button
+                        style={{marginBottom:"3px"}}
                           className={`${visitStyles.actionBtn} px-2 py-1 rounded-md`}
                           onClick={() => {
                             setActions({

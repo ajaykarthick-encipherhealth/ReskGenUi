@@ -2248,7 +2248,7 @@
 
 .yearactionbtnContainer>button {
   height: 32px !important;
-  margin-bottom: 5px;
+  /* margin-bottom: 5px; */
 }
 
 .meatcontainer {
@@ -2399,7 +2399,7 @@
   }
 
   .actionBtn{
-    font-size: 11px !important;
+    /* font-size: 11px !important; */
   }
 }
 .error{
