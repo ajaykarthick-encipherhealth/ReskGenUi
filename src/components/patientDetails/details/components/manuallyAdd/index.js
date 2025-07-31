@@ -834,7 +834,6 @@ const ManuallyAdd = ({
     };
 
     let data;
-
     if (isEditPage) {
       setIsBtnLoading(true);
       data = {
@@ -990,14 +989,54 @@ const ManuallyAdd = ({
 
     return Array.from(sectionsMap.values());
   };
+  useEffect(() => {
+    if (isEditMeat) {
+      setMeatDisplay(true);
+      setCode(isEditMeatValue.diagnosisCode);
+      setValidCode("Valid Code");
+      const sectionList = isEditMeatValue?.monitorHyperLink?.map((item) => ({
+        section: item.header,
+        hyperlinks: item,
+      }));
+      const sectionListE = isEditMeatValue?.evaluateHyperLink?.map((item) => ({
+        section: item.header,
+        hyperlinks: item,
+      }));
+      const sectionListA = isEditMeatValue?.assessmentHyperLink?.map(
+        (item) => ({
+          section: item.header,
+          hyperlinks: item,
+        })
+      );
+      const sectionListT = isEditMeatValue?.treatmentHyperLink?.map((item) => ({
+        section: item.header,
+        hyperlinks: item,
+      }));
+      form.setFieldsValue({
+        diagnosisCode: isEditMeatValue.diagnosisCode,
+      });
+
+      handleSelectChange(isEditMeatValue.dateOfService, "dos");
+      setListOfSectionM(transformData(sectionList));
+      setListOfSectionE(transformData(sectionListE));
+      setListOfSectionA(transformData(sectionListA));
+      setListOfSectionT(transformData(sectionListT));
+      setEducationalError(isEditMeatValue?.educationalError);
+    }
+    form.setFieldsValue({
+      dos: [isDosSelected],
+    });
+  }, [isEditMeat, isEditMeatValue]);
 
   useEffect(() => {
     if (isEditPage && !meatFormDisplay) {
-      const meatObj = [...patientDetailsResult?.data?.response?.meatCriteria,  ...patientDetailsResult?.data?.response?.deletedMeatCriteria]
-      const filterData =
-        meatObj?.find(
-          (item) => item.diagnosisCode == isEditValue.diagnosisCode
-        );
+      const meatObj = [
+        ...patientDetailsResult?.data?.response?.meatCriteria,
+        ...patientDetailsResult?.data?.response?.deletedMeatCriteria,
+      ];
+      const filterData = meatObj?.find(
+        (item) => item.diagnosisCode == isEditValue.diagnosisCode
+      );
 
       setCode(isEditValue.diagnosisCode);
       setValidCode("Valid Code");
@@ -1020,7 +1059,7 @@ const ManuallyAdd = ({
           ? isEditValue?.educationalError
           : "",
         dos: dos,
-        educationalError: isEditValue.educationalError || false
+        educationalError: isEditValue.educationalError || false,
       });
       const sectionListM = filterData?.monitorHyperLink?.map((item) => ({
         section: item.header,
