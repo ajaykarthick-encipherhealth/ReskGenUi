@@ -611,7 +611,8 @@ const Header = ({
               ? stateActive === data.childRoute3
               : stateActive === data.childRoute) ||
             stateActive === data.childRoute2 ||
-            stateActive === data.childRoute4
+            stateActive === data.childRoute4 ||
+            stateActive === data.childRoute5
               ? "header-active"
               : `${styles.menuListItems}`
           }
@@ -662,7 +663,8 @@ const Header = ({
           item?.childRoute === window.location?.pathname ||
           item?.childRoute2 === window.location?.pathname ||
           item?.childRoute3 === window.location?.pathname ||
-          item?.childRoute4 === window.location?.pathname
+          item?.childRoute4 === window.location?.pathname ||
+          item?.childRoute5 === window.location?.pathname
       );
       if (
         currentPath &&

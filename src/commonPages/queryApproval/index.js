@@ -98,7 +98,7 @@ const QueryApproval = ({
     );
     getRoutedData(page);
     navigate.push({
-      pathname: route ? route : "/tenantadmin/tin/details",
+      pathname: route ? route : "/tenantadmin/tin/tindetails/querydetails",
     });
   };
   const getQueryApproval = async () => {

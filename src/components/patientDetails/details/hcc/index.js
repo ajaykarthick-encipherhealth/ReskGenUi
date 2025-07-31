@@ -110,7 +110,6 @@ const Hcc = ({
   const [isReject, setIsReject] = useState(false);
   const [isReEvaluateChecked, setIsReEvaluateChecked] = useState(false);
   const [educationalError, setEducationalError] = useState(false);
-  const [activeTabNameQuery, setActiveTabNameQuery] = useState(null);
 
   const handleChange = (e) => {
     setQueryText(e.target.value);
@@ -126,11 +125,6 @@ const Hcc = ({
     setQueryText("");
   };
 
-  useEffect(() => {
-    const queryTab = getStorage("routeBackTo");
-    setActiveTabNameQuery(queryTab);
-    setIsClient(true);
-  }, []);
   useEffect(() => {
     if (patientDosResult?.data?.response) {
       var dosList = [];
@@ -403,7 +397,10 @@ const Hcc = ({
   const isBlock =
     router.pathname.includes("/tenantadmin/tin/details") ||
     router.pathname.includes("/tenantadmin/project/details") ||
-    router.pathname.includes("/tenantadmin/patientsync/batchfilesview");
+    router.pathname.includes("/tenantadmin/patientsync/batchfilesview") ||
+    router.pathname.includes("/tenantadmin/tin/tindetails/querydetails");
+
+   const queryDetails =  router.pathname.includes("/tenantadmin/tin/tindetails/querydetails")
 
   const hideDiseasePopContent = (
     <>
@@ -839,9 +836,7 @@ const Hcc = ({
                         </button>
                       </Popover>
                     </Nav.Item>
-                    {activeTabName?.tinDetailsTab == "Query Approval" &&
-                    activeTabNameQuery ==
-                      "/tenantadmin/tin/tindetails?tab=Query+Approval" ? (
+                    {queryDetails ? (
                       <div className="d-flex gap-1">
                         <Nav.Item as="li" className="nav-item mx-1 mt-1">
                           <Popconfirm
