@@ -63,6 +63,8 @@ const ManuallyAddProvider = ({
   const [isTrashView, setIsTrashView] = useState(false);
   const [restoringId, setRestoringId] = useState(null);
   const { patientId = null } = getLocalStored();
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [isRestoringApi, setIsRestoringApi] = useState(false);
   const handleEdit = (e, data) => {
     getSelectedDosPageNumber(data?.dosStartPageNumber);
     setSearch({
@@ -112,13 +114,14 @@ const ManuallyAddProvider = ({
   const handleDelete = async (item) => {
     form.resetFields();
     const isDosSelected = item?.dateOfService;
+    setIsDeleting(true); 
 
     try {
       const res = await setTrashProviderAndCaptured({ isDosSelected });
       if (res?.status === "SUCCESS") {
         getResponePopup(res);
         const doslist = await getAddProviderAndDOSList({ year });
-        if (doslist?.response.length == 0) {
+        if (doslist?.response.length === 0) {
           getPatientListToDetails(patientId, true);
         } else {
           getPatientListToDetails(patientId);
@@ -126,11 +129,10 @@ const ManuallyAddProvider = ({
         setProvidersList(null);
       } else {
         console.log("Trash failed:", res);
-        const response = {
+        getResponePopup({
           status: "FAILED",
           message: res?.data?.message || res?.message || "Something went wrong",
-        };
-        getResponePopup(response);
+        });
       }
     } catch (error) {
       console.log(error, "error");
@@ -141,48 +143,55 @@ const ManuallyAddProvider = ({
           error?.message ||
           "Something went wrong",
       });
+    } finally {
+      setIsDeleting(false);
     }
   };
 
-  const handleRestore = async (item) => {
-    const isDosSelected = item?.dateOfService;
-    setRestoringId(item?.dateOfService);
-    try {
-      const res = await setRestoreProviderAndCaptured({ isDosSelected });
-      if (res?.status === "SUCCESS") {
-        getPatientDosList(patientId, year);
-        getResponePopup(res);
-        getAddProviderAndDOSList({ trash: true, year });
-        const res = await manuallyAddDosAndProviderList({ year });
-        if (res?.response?.length == 1) {
-          setSelectDosValue(item?.dateOfService);
-          patientDetailsLoad(true);
-          getSelectedDos(item?.dateOfService);
-          getpatientDetailsData(
-            patientId,
-            null,
-            item?.dateOfService,
-            "",
-            "",
-            "",
-            ""
-          );
-          patientDetailsLoad(false);
-        }
-      } else {
-        console.warn("Restore failed:", res);
-        const response = {
-          status: "FAILED",
-          message: res?.data?.message || res?.message || "Something went wrong",
-        };
-        getResponePopup(response);
+
+const handleRestore = async (item) => {
+  const isDosSelected = item?.dateOfService;
+  setRestoringId(item?.dateOfService);
+  setIsRestoringApi(true); 
+
+  try {
+    const res = await setRestoreProviderAndCaptured({ isDosSelected });
+    if (res?.status === "SUCCESS") {
+      getPatientDosList(patientId, year);
+      getResponePopup(res);
+      getAddProviderAndDOSList({ trash: true, year });
+
+      const res2 = await manuallyAddDosAndProviderList({ year });
+      if (res2?.response?.length === 1) {
+        setSelectDosValue(item?.dateOfService);
+        patientDetailsLoad(true);
+        getSelectedDos(item?.dateOfService);
+        getpatientDetailsData(
+          patientId,
+          null,
+          item?.dateOfService,
+          "",
+          "",
+          "",
+          ""
+        );
+        patientDetailsLoad(false);
       }
-    } catch (error) {
-      getResponePopup(error);
-    } finally {
-      setRestoringId(null);
+    } else {
+      console.warn("Restore failed:", res);
+      getResponePopup({
+        status: "FAILED",
+        message: res?.data?.message || res?.message || "Something went wrong",
+      });
     }
-  };
+  } catch (error) {
+    getResponePopup(error);
+  } finally {
+    setRestoringId(null);
+    setIsRestoringApi(false); 
+  }
+};
+
 
   const handleBackFromTrash = () => {
     setIsTrashView(false);
@@ -247,6 +256,7 @@ const ManuallyAddProvider = ({
               onClick={handleBackFromTrash}
               icon={<FontAwesomeIcon icon={faArrowLeft} />}
               iconPosition="left"
+              disabled={isRestoringApi}
             />
           ) : (
             <>
@@ -267,6 +277,7 @@ const ManuallyAddProvider = ({
                 onClick={handleTrash}
                 icon={<DeleteOutlined />}
                 iconPosition="left"
+                disabled={isDeleting}
               />
             </>
           )}
