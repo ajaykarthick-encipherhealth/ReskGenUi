@@ -97,7 +97,7 @@ const SubNavBar = ({ handleBack, hideBackArrow, pageLoad ,tableLoader}) => {
                       </div>
                      
                     </Tooltip>
-                    {field.headerName === "Tin Name" &&
+                    {field.headerName === "TIN Name" &&
                       row[field.actualField] && (
                         <FontAwesomeIcon
                           icon={faCopy}

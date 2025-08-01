@@ -1264,7 +1264,7 @@ const PatientSync = ({
                                       to="#my-posts"
                                       eventKey="tinRoaster"
                                     >
-                                      Tin Roster
+                                      TIN Roster
                                     </Nav.Link>
                                   </Nav.Item>
 

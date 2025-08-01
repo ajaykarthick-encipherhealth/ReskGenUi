@@ -133,18 +133,18 @@ const Addpatients = ({
                 </Form.Item>
                 {isProjectRoute && (
                   <Form.Item
-                    label="Tin Name"
+                    label="TIN Name"
                     name="tin"
                     id="tinNumber"
                     rules={[
                       {
                         required: true,
-                        message: "Please select Tin!",
+                        message: "Please select TIN!",
                       },
                     ]}
                   >
                     <Select
-                      placeholder="Select Tin"
+                      placeholder="Select TIN"
                       onChange={handleTinChange}
                       options={TinOptions}
                       showSearch={true}

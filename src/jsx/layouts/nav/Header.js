@@ -1105,7 +1105,7 @@ const Header = ({
                       <div id="tin-select" className="mt-3">
                         <Select
                           id="tin-dropdown"
-                          placeholder="Select Tin"
+                          placeholder="Select TIN"
                           className={styles.selectWidth}
                           value={selectedTin}
                           onChange={(e, value) => handleTinChange(value)}

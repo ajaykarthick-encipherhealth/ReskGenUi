@@ -29,7 +29,7 @@ const TinDetails = ({
 }) => {
   const router = useRouter();
 
-  const tabs = getAccessTabItems({ page: "Tin", tabsMenu: "tabMenuList2" });
+  const tabs = getAccessTabItems({ page: "TIN", tabsMenu: "tabMenuList2" });
    const userId = getStorage("userId")
   const { tab } = router.query;
   const activeTab = tab || activeTabName?.tinDetailsTab;
