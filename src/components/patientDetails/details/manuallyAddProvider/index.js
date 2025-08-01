@@ -52,6 +52,9 @@ const ManuallyAddProvider = ({
   getSelectedDos,
   getPatientDosList,
   setSelectDosValue,
+  search,
+  getSelectedDosPageNumber,
+  setSearch,
 }) => {
   const [form] = Form.useForm();
   const [selectFileURL, setSelectFileURL] = useState([]);
@@ -61,6 +64,11 @@ const ManuallyAddProvider = ({
   const [restoringId, setRestoringId] = useState(null);
   const { patientId = null } = getLocalStored();
   const handleEdit = (e, data) => {
+    getSelectedDosPageNumber(data?.dosStartPageNumber);
+    setSearch({
+      value: data.dosSubstring || "",
+      page: data.dosStartPageNumber || 1,
+    });
     e?.stopPropagation?.();
     if (!data) {
       form.resetFields();
@@ -207,9 +215,9 @@ const ManuallyAddProvider = ({
       <div style={{ width: "50%" }}>
         <PdfViewer
           src={selectFileURL}
-          searchQuery={""}
-          pageNumber={1}
-          headers={""}
+          searchQuery={search?.value ? search?.value : ""}
+          pageNumber={search?.page ? search?.page : 1}
+          headers={search?.headers}
         />
       </div>
 
@@ -364,6 +372,7 @@ const enhancer = connect(
     patientDetailsLoad: allActions.patientDetailsLoad,
     getSelectedDos: allActions.getSelectedDos,
     getPatientDosList: allActions.dosDeatilsAction,
+    getSelectedDosPageNumber: allActions.getSelectedDosPageNumber,
   }
 );
 

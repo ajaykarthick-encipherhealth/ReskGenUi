@@ -111,6 +111,13 @@ const PdfViewer = ({
     }
   }, [src, searchQuery, pageNumber, headerContent, selectedPageNumber]);
 
+  useEffect(() => {
+    setEmptyText(false);
+    setTimeout(() => {
+      setEmptyText(true);
+    }, 1000);
+  }, [patientDetailsResult]);
+
   const onChangeTabs = (item) => {
     setActiveTab(item);
   };
@@ -129,10 +136,10 @@ const PdfViewer = ({
           {patientDetailsResult?.summary ? (
             <div>{patientDetailsResult?.summary}</div>
           ) : (
-            <EmptyComponent/>
+            <EmptyComponent />
           )}
         </div>
-      ) : iframeSrc ? (
+      ) : iframeSrc && patientDetailsResult ? (
         <div
           // style={{
           //   maxHeight: fileHeights ? fileHeights : "75vh",

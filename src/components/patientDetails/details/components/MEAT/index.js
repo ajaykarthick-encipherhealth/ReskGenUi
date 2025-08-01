@@ -311,6 +311,8 @@ const MeatCard = ({
                                         getCurrentDiseaseType,
                                       storeFileDetails: storeFileDetails,
                                       isShow: item?.isShow,
+                                      getSelectedDosPageNumber:
+                                      getSelectedDosPageNumber,
                                     })}
                                   </div>
                                 </div>

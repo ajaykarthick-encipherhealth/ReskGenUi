@@ -235,6 +235,10 @@ const Hcc = ({
     } else if (filteredDos1?.details?.stateIndicators?.includes("RADIOLOGY")) {
       // getLabPDFFile({ fileId: filteredDos1.details?.fileId });
     } else {
+      setSearch({
+        value: filteredDos[0]?.substring || "",
+        page: filteredDos[0]?.startPageNumber || 1,
+      });
       getSelectedDosPageNumber(
         filteredDos?.length > 0 ? filteredDos[0]?.startPageNumber : null
       );
@@ -400,7 +404,9 @@ const Hcc = ({
     router.pathname.includes("/tenantadmin/patientsync/batchfilesview") ||
     router.pathname.includes("/tenantadmin/tin/tindetails/querydetails");
 
-   const queryDetails =  router.pathname.includes("/tenantadmin/tin/tindetails/querydetails")
+  const queryDetails = router.pathname.includes(
+    "/tenantadmin/tin/tindetails/querydetails"
+  );
 
   const hideDiseasePopContent = (
     <>
@@ -550,28 +556,28 @@ const Hcc = ({
               <div className="col-12">
                 <Nav as="ul" className="nav nav-tabs">
                   {/* <div className={`d-flex  flex-wrap  align-items-center`}> */}
-                    {/* <div className="d-flex"> */}
-                    <Nav.Item as="li" className="nav-item  ">
-                      <Nav.Link
-                        to="#my-posts"
-                        eventKey={1}
-                        id="badge"
-                        className={`ant-badge ${visitStyles.navColor}`}
-                        onClick={() => {
-                          selectTab(
-                            1,
-                            setFlagTagActive,
-                            setActiveTabHead,
-                            setActiveComboTree,
-                            setPopoverVisible
-                          );
-                          getCurrentDiseaseType(true);
-                        }}
-                      >
-                        File
-                      </Nav.Link>
-                    </Nav.Item>
-                    {/* <Nav.Item as="li" className="nav-item">
+                  {/* <div className="d-flex"> */}
+                  <Nav.Item as="li" className="nav-item  ">
+                    <Nav.Link
+                      to="#my-posts"
+                      eventKey={1}
+                      id="badge"
+                      className={`ant-badge ${visitStyles.navColor}`}
+                      onClick={() => {
+                        selectTab(
+                          1,
+                          setFlagTagActive,
+                          setActiveTabHead,
+                          setActiveComboTree,
+                          setPopoverVisible
+                        );
+                        getCurrentDiseaseType(true);
+                      }}
+                    >
+                      File
+                    </Nav.Link>
+                  </Nav.Item>
+                  {/* <Nav.Item as="li" className="nav-item">
                       <Nav.Link
                         to="#my-posts"
                         eventKey={2}
@@ -590,43 +596,43 @@ const Hcc = ({
                         Visit Data
                       </Nav.Link>
                     </Nav.Item> */}
-                    <Nav.Item as="li" className="nav-item">
-                      <Nav.Link
-                        to="#my-posts"
-                        eventKey={3}
-                        className={` ant-badge  text-truncate ${visitStyles.navColor}`}
-                        onClick={() =>
-                          selectTab(
-                            3,
-                            setFlagTagActive,
-                            setActiveTabHead,
-                            setActiveComboTree,
-                            setPopoverVisible
-                          )
-                        }
-                      >
-                        Combination Codes
-                      </Nav.Link>
-                    </Nav.Item>
-                    <Nav.Item as="li" className="nav-item">
-                      <Nav.Link
-                        to="#my-posts"
-                        eventKey={4}
-                        className={`ant-badge  text-truncate ${visitStyles.navColor}`}
-                        onClick={() =>
-                          selectTab(
-                            4,
-                            setFlagTagActive,
-                            setActiveTabHead,
-                            setActiveComboTree,
-                            setPopoverVisible
-                          )
-                        }
-                      >
-                        MEAT Criteria
-                      </Nav.Link>
-                    </Nav.Item>
-                    {/* {activeTab !== 5 && (
+                  <Nav.Item as="li" className="nav-item">
+                    <Nav.Link
+                      to="#my-posts"
+                      eventKey={3}
+                      className={` ant-badge  text-truncate ${visitStyles.navColor}`}
+                      onClick={() =>
+                        selectTab(
+                          3,
+                          setFlagTagActive,
+                          setActiveTabHead,
+                          setActiveComboTree,
+                          setPopoverVisible
+                        )
+                      }
+                    >
+                      Combination Codes
+                    </Nav.Link>
+                  </Nav.Item>
+                  <Nav.Item as="li" className="nav-item">
+                    <Nav.Link
+                      to="#my-posts"
+                      eventKey={4}
+                      className={`ant-badge  text-truncate ${visitStyles.navColor}`}
+                      onClick={() =>
+                        selectTab(
+                          4,
+                          setFlagTagActive,
+                          setActiveTabHead,
+                          setActiveComboTree,
+                          setPopoverVisible
+                        )
+                      }
+                    >
+                      MEAT Criteria
+                    </Nav.Link>
+                  </Nav.Item>
+                  {/* {activeTab !== 5 && (
                       <Nav.Item as="li" className="nav-item">
                         <Nav.Link
                           to="#my-posts"
@@ -647,7 +653,7 @@ const Hcc = ({
                         </Nav.Link>
                       </Nav.Item>
                     )} */}
-                    {/* <Nav.Item as="li" className="nav-item">
+                  {/* <Nav.Item as="li" className="nav-item">
                       <Nav.Link
                         to="#my-posts"
                         eventKey={6}
@@ -665,9 +671,12 @@ const Hcc = ({
                         Query
                       </Nav.Link>
                     </Nav.Item> */}
-                    <Nav.Item as="li" className="nav-item mt-1">
-                      <div id="dosSelect" className="d-flex gap-2 mx-2 align-items-center">
-                        {/* <Select
+                  <Nav.Item as="li" className="nav-item mt-1">
+                    <div
+                      id="dosSelect"
+                      className="d-flex gap-2 mx-2 align-items-center"
+                    >
+                      {/* <Select
                           id="dosSelect"
                           placeholder="Select DOS"
                           onChange={handleOptions}
@@ -685,28 +694,28 @@ const Hcc = ({
                             </Option>
                           ))}
                         </Select> */}
-                        <DosSelect
-                          options={patientDosResult?.data?.response}
-                          handleOptions={handleOptions}
-                          setSearch={setSearch}
-                          setFlagContainerActive={setFlagContainerActive}
-                          selectedDate={selectedDate}
-                          getSelectedDos={getSelectedDos}
-                          setSelectedDate={setSelectedDate}
-                          isDosSelected={isDosSelected}
-                          setIsFileFormShow={setIsFileFormShow}
-                        />
-                        {isBlock ||
-                          (getStorage("userRole") != "admin" &&
-                            selectDosValue && (
-                              <YearAndDosStatus
-                                setIsLoading={setIsLoading}
-                                isDosStatus={true}
-                                isFileFormShow={isFileFormShow}
-                                setIsFileFormShow={setIsFileFormShow}
-                              />
-                            ))}
-                        {/* {activeTabHead == 1 && (
+                      <DosSelect
+                        options={patientDosResult?.data?.response}
+                        handleOptions={handleOptions}
+                        setSearch={setSearch}
+                        setFlagContainerActive={setFlagContainerActive}
+                        selectedDate={selectedDate}
+                        getSelectedDos={getSelectedDos}
+                        setSelectedDate={setSelectedDate}
+                        isDosSelected={isDosSelected}
+                        setIsFileFormShow={setIsFileFormShow}
+                      />
+                      {isBlock ||
+                        (getStorage("userRole") != "admin" &&
+                          selectDosValue && (
+                            <YearAndDosStatus
+                              setIsLoading={setIsLoading}
+                              isDosStatus={true}
+                              isFileFormShow={isFileFormShow}
+                              setIsFileFormShow={setIsFileFormShow}
+                            />
+                          ))}
+                      {/* {activeTabHead == 1 && (
                           <Popover
                             open={popoverVisible}
                             content={PopContent}
@@ -726,66 +735,66 @@ const Hcc = ({
                             </div>
                           </Popover>
                         )} */}
-                        {flagTagActive ? (
+                      {flagTagActive ? (
+                        <div>
                           <div>
-                            <div>
-                              <Popover
-                                content={
-                                  <>
+                            <Popover
+                              content={
+                                <>
+                                  <div className={visitStyles.flags}>
                                     <div className={visitStyles.flags}>
-                                      <div className={visitStyles.flags}>
-                                        <span
-                                          className={visitStyles.hccFlag}
-                                        ></span>
-                                        <span className={visitStyles.flagCodes}>
-                                          HCC
-                                        </span>
-                                      </div>
-                                      <div className={visitStyles.flags}>
-                                        <span
-                                          className={visitStyles.suggestedFlag}
-                                        ></span>
-                                        <span className={visitStyles.flagCodes}>
-                                          SUGGESTED
-                                        </span>
-                                      </div>
-                                      <div className={visitStyles.flags}>
-                                        <span
-                                          className={visitStyles.deleteFlag}
-                                        ></span>
-                                        <span className={visitStyles.flagCodes}>
-                                          DELETED
-                                        </span>
-                                      </div>
-                                      <div className={visitStyles.flags}>
-                                        <span
-                                          className={visitStyles.nonhccFlag}
-                                        ></span>
-                                        <span className={visitStyles.flagCodes}>
-                                          NON HCC
-                                        </span>
-                                      </div>
-                                      <div className={visitStyles.flags}>
-                                        <span
-                                          className={visitStyles.potentialFlag}
-                                        ></span>
-                                        <span className={visitStyles.flagCodes}>
-                                          POTENTIAL / SUGGESTED DIAGNOSES
-                                        </span>
-                                      </div>
+                                      <span
+                                        className={visitStyles.hccFlag}
+                                      ></span>
+                                      <span className={visitStyles.flagCodes}>
+                                        HCC
+                                      </span>
                                     </div>
-                                  </>
-                                }
-                                trigger={["click"]}
-                                placement="bottom"
-                              >
-                                <Image
-                                  src={warning}
-                                  style={{ cursor: "pointer" }}
-                                />
-                              </Popover>
-                            </div>
-                            {/* <div className={visitStyles.flags}>
+                                    <div className={visitStyles.flags}>
+                                      <span
+                                        className={visitStyles.suggestedFlag}
+                                      ></span>
+                                      <span className={visitStyles.flagCodes}>
+                                        SUGGESTED
+                                      </span>
+                                    </div>
+                                    <div className={visitStyles.flags}>
+                                      <span
+                                        className={visitStyles.deleteFlag}
+                                      ></span>
+                                      <span className={visitStyles.flagCodes}>
+                                        DELETED
+                                      </span>
+                                    </div>
+                                    <div className={visitStyles.flags}>
+                                      <span
+                                        className={visitStyles.nonhccFlag}
+                                      ></span>
+                                      <span className={visitStyles.flagCodes}>
+                                        NON HCC
+                                      </span>
+                                    </div>
+                                    <div className={visitStyles.flags}>
+                                      <span
+                                        className={visitStyles.potentialFlag}
+                                      ></span>
+                                      <span className={visitStyles.flagCodes}>
+                                        POTENTIAL / SUGGESTED DIAGNOSES
+                                      </span>
+                                    </div>
+                                  </div>
+                                </>
+                              }
+                              trigger={["click"]}
+                              placement="bottom"
+                            >
+                              <Image
+                                src={warning}
+                                style={{ cursor: "pointer" }}
+                              />
+                            </Popover>
+                          </div>
+                          {/* <div className={visitStyles.flags}>
                         <div className={visitStyles.flags}>
                           <span className={visitStyles.hccFlag}></span>
                           <span className={visitStyles.flagCodes}>HCC</span>
@@ -805,68 +814,68 @@ const Hcc = ({
                           <span className={visitStyles.flagCodes}>NON HCC</span>
                         </div>
                       </div> */}
-                          </div>
-                        ) : null}
-                      </div>
-                    </Nav.Item>
-                    <Nav.Item as="li" className="nav-item mt-1">
-                      <Popover
-                        open={actions.showActionsPop}
-                        trigger={["click"]}
-                        placement="bottom"
-                        content={hideDiseasePopContent}
-                        onOpenChange={() =>
+                        </div>
+                      ) : null}
+                    </div>
+                  </Nav.Item>
+                  <Nav.Item as="li" className="nav-item mt-1">
+                    <Popover
+                      open={actions.showActionsPop}
+                      trigger={["click"]}
+                      placement="bottom"
+                      content={hideDiseasePopContent}
+                      onOpenChange={() =>
+                        setActions({
+                          ...actions,
+                          showActionsPop: !actions.showActionsPop,
+                        })
+                      }
+                    >
+                      <button
+                        style={{ marginBottom: "3px" }}
+                        className={`${visitStyles.actionBtn} px-2 py-1 rounded-md`}
+                        onClick={() => {
                           setActions({
                             ...actions,
                             showActionsPop: !actions.showActionsPop,
-                          })
-                        }
+                          });
+                        }}
                       >
-                        <button
-                        style={{marginBottom:"3px"}}
-                          className={`${visitStyles.actionBtn} px-2 py-1 rounded-md`}
-                          onClick={() => {
-                            setActions({
-                              ...actions,
-                              showActionsPop: !actions.showActionsPop,
-                            });
-                          }}
+                        More
+                      </button>
+                    </Popover>
+                  </Nav.Item>
+                  {queryDetails ? (
+                    <div className="d-flex gap-1">
+                      <Nav.Item as="li" className="nav-item mx-1 mt-1">
+                        <Popconfirm
+                          placement="bottom"
+                          description="Are you sure you want to approve?"
+                          okText="Yes"
+                          cancelText="No"
+                          onConfirm={handleApprove}
                         >
-                          More
-                        </button>
-                      </Popover>
-                    </Nav.Item>
-                    {queryDetails ? (
-                      <div className="d-flex gap-1">
-                        <Nav.Item as="li" className="nav-item mx-1 mt-1">
-                          <Popconfirm
-                            placement="bottom"
-                            description="Are you sure you want to approve?"
-                            okText="Yes"
-                            cancelText="No"
-                            onConfirm={handleApprove}
-                          >
-                            <Button
-                              disabled={isApproved || isReject ? true : false}
-                              className={`px-3 py-1 rounded-md ${styles.approveBtn}`}
-                            >
-                              Approve
-                            </Button>
-                          </Popconfirm>
-                        </Nav.Item>
-                        <Nav.Item as="li" className="nav-item mt-1">
                           <Button
                             disabled={isApproved || isReject ? true : false}
-                            className={`px-3 py-1 rounded-md ${styles.rejectBtn}`}
-                            onClick={showModal}
+                            className={`px-3 py-1 rounded-md ${styles.approveBtn}`}
                           >
-                            Reject
+                            Approve
                           </Button>
-                        </Nav.Item>
-                      </div>
-                    ) : null}
-                    <Nav.Item as="li" className="nav-item">
-                      {/* {isClient &&
+                        </Popconfirm>
+                      </Nav.Item>
+                      <Nav.Item as="li" className="nav-item mt-1">
+                        <Button
+                          disabled={isApproved || isReject ? true : false}
+                          className={`px-3 py-1 rounded-md ${styles.rejectBtn}`}
+                          onClick={showModal}
+                        >
+                          Reject
+                        </Button>
+                      </Nav.Item>
+                    </div>
+                  ) : null}
+                  <Nav.Item as="li" className="nav-item">
+                    {/* {isClient &&
                           ["CODER_1", "CODER_2", "QA"].includes(proxyRole) && (
                             <Button
                               disabled={isQueried}
@@ -876,7 +885,7 @@ const Hcc = ({
                               Query
                             </Button>
                           )} */}
-                    </Nav.Item>
+                  </Nav.Item>
                   {/* </div> */}
                 </Nav>
               </div>
@@ -938,6 +947,8 @@ const Hcc = ({
                   activeTab={activeTab}
                   educationalError={educationalError}
                   setEducationalError={setEducationalError}
+                  search={search}
+                  setSearch={setSearch}
                 />
               </Tab.Pane>
               <Tab.Pane id="my-posts" eventKey={5}>

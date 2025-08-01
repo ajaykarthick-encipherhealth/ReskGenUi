@@ -63,6 +63,8 @@ const Meat = ({
   activeTab,
   educationalError,
   setEducationalError,
+  search,
+  setSearch
 }) => {
   const [meatEdit, setMeatEdit] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -89,7 +91,7 @@ const Meat = ({
   const [isMeatQueryModal, setIsMeatQueryModal] = useState(false);
   const [fileLoading, setFileLoading] = useState(false);
   const [selectMeatResult, setSelectMeatResult] = useState(null);
-  const [search, setSearch] = useState(false);
+  // const [search, setSearch] = useState(false);
   const [editData, setEditData] = useState({});
   const [queryFormValues, setQueryFormValues] = useState(false);
   const [selectHyperlink, setSelectHyperlink] = useState([]);
@@ -166,7 +168,7 @@ const Meat = ({
     setConfirmNotesModalValid(false);
     setIsAddButtonClicked(false);
     setIsMeatQueryModal(false);
-    // setFileLoading(false);
+    setFileLoading(false);
     setSuggestedMeatForm(false);
   };
 
@@ -605,6 +607,7 @@ const Meat = ({
                           getCurrentDiseaseType: getCurrentDiseaseType,
                           storeFileDetails: storeFileDetails,
                           isShow: selectMeatResult.isShow,
+                          getSelectedDosPageNumber:getSelectedDosPageNumber
                         })}
                       </div>
                     </div>

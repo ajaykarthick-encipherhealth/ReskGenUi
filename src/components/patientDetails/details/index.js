@@ -164,7 +164,7 @@ const Details = ({
   queriedLoader,
   allRoles,
   getAddProviderAndDOSList,
-  patientDataLoader
+  patientDataLoader,
 }) => {
   const navigate = useRouter();
   const [count, setCount] = useState(0);
@@ -421,7 +421,7 @@ const Details = ({
           navigate.pathname
         );
         if (res?.response?.length > 0) {
-          getpatientDetailsData(
+          const patientRes = await getpatientDetailsData(
             selectPatientId?.patirntId ? selectPatientId?.patirntId : patientId,
             null,
             res?.response[0]?.dateOfService,
@@ -430,6 +430,19 @@ const Details = ({
             "",
             navigate.pathname
           );
+
+          const dosSummariesList =
+            patientRes?.response?.fileDetailDTO?.dosSummaries;
+          if (dosSummariesList) {
+            const filteredDos = dosSummariesList?.find(
+              (data) => data?.dos === res?.response[0]?.dateOfService
+            );
+            getSelectedDosPageNumber(filteredDos?.startPageNumber);
+            setSearch({
+              value: filteredDos.substring || "",
+              page: filteredDos.startPageNumber || 1,
+            });
+          }
           getSelectedDos(res?.response[0]?.dateOfService);
           setSelectDosValue(res?.response[0]?.dateOfService);
           patientDetailsLoad(false);
@@ -510,6 +523,20 @@ const Details = ({
   };
 
   const handleCloseModal = () => {
+    if (flagContainerActive === "Add DOS & Provider") {
+      const dosSummariesList =
+        patientDetailsResult?.data?.response?.fileDetailDTO?.dosSummaries;
+      if (dosSummariesList) {
+        const filteredDos = dosSummariesList?.find(
+          (data) => data?.dos === isDosSelected
+        );
+        getSelectedDosPageNumber(filteredDos?.startPageNumber);
+        setSearch({
+          value: filteredDos.substring || "",
+          page: filteredDos.startPageNumber || 1,
+        });
+      }
+    }
     setValidated(false);
     setIsModalComments(false);
     setFlagContainerActive("");
@@ -520,6 +547,7 @@ const Details = ({
   };
 
   const dosOnChange = async (e) => {
+    getpatientDetailsData("", "", "", "", "", true, navigate.pathname);
     setIsFileCheck(false);
     setDosYearDefalutSelect(e);
     setPatientResultReload(false);
@@ -529,7 +557,7 @@ const Details = ({
 
     const res = await getPatientDosList(localPatientId, e);
     if (res?.response?.length > 0) {
-      getpatientDetailsData(
+      const patientResult = await getpatientDetailsData(
         localPatientId,
         null,
         res?.response[0]?.dateOfService,
@@ -538,6 +566,17 @@ const Details = ({
         "",
         navigate.pathname
       );
+      const dosSummariesList = patientResult?.response?.fileDetailDTO?.dosSummaries;
+      if (dosSummariesList) {
+        const filteredDos = dosSummariesList?.find(
+          (data) => data?.dos === res?.response[0]?.dateOfService
+        );
+        getSelectedDosPageNumber(filteredDos?.startPageNumber);
+        setSearch({
+          value: filteredDos.substring || "",
+          page: filteredDos.startPageNumber || 1,
+        });
+      }
       getSelectedDos(res?.response[0]?.dateOfService);
       setSelectDosValue(res?.response[0]?.dateOfService);
       patientDetailsLoad(false);
@@ -713,6 +752,18 @@ const Details = ({
           navigate.pathname
         );
 
+        const dosSummariesList = res?.response?.fileDetailDTO?.dosSummaries;
+        if (dosSummariesList) {
+          const filteredDos = dosSummariesList?.find(
+            (data) => data?.dos === dateOfService
+          );
+          getSelectedDosPageNumber(filteredDos?.startPageNumber);
+          setSearch({
+            value: filteredDos.substring || "",
+            page: filteredDos.startPageNumber || 1,
+          });
+        }
+
         getSelectedDos(dateOfService);
         setSelectDosValue(dateOfService);
 
@@ -779,7 +830,7 @@ const Details = ({
     getSelectedDos("");
     getCurrentDiseaseType(true);
     patientDetailsLoad(true);
-    getPatientIdData("" , "" , true )
+    getPatientIdData("", "", true);
   };
   const splitUserName = (name) => {
     if (name) {
@@ -1413,6 +1464,8 @@ const Details = ({
                       }
                       getPatientListToDetails={getPatientListToDetails}
                       setSelectDosValue={setSelectDosValue}
+                      search={search}
+                      setSearch={setSearch}
                     />
                   ) : flagContainerActive === "Queried" ? (
                     <Queried
@@ -1502,7 +1555,7 @@ const enhancer = connect(
     revertLoading: state?.patientDetails?.details?.revertLoading,
     queriedData: state?.patientDetails?.details?.getQueriedDetails?.data,
     queriedLoader: state.patientDetails?.details?.getQueryLoader,
-    patientDataLoader:state?.patientDetails?.details?.patientDataLoader
+    patientDataLoader: state?.patientDetails?.details?.patientDataLoader,
   }),
   {
     workFgetFlagsowData: workflowActions.flagsAction,

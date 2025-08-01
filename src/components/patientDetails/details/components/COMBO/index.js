@@ -448,6 +448,9 @@ const ComboCard = ({
                                             patientDocumentResult,
                                           popup,
                                           storeFileDetails: storeFileDetails,
+                                          getSelectedDosPageNumber:
+                                          getSelectedDosPageNumber,
+                                          isShow: item?.isShow
                                         })}
                                       </div>
                                       <div
