@@ -356,9 +356,9 @@ export const ProviderMenuList = (data) => {
         to: "/tenantadmin/users",
       });
     }
-    if (res?.title == "Tin" && res?.active) {
+    if (res?.title == "TIN" && res?.active) {
       menus.push({
-        title: "Tin",
+        title: "TIN",
         iconStyle: <ContainerOutlined />,
         activeIcon: <ContainerFilled />,
         to: "/tenantadmin/tin",

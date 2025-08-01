@@ -576,13 +576,13 @@ const Tin = ({
         {activeTab !== "Providers" && (
           <div className="d-flex align-items-center justify-content-end align-items-center gap-2">
             <div className={styles.font}>
-              Total Tin : {tinCount?.totalTin ? tinCount?.totalTin : 0}
+              Total TIN : {tinCount?.totalTin ? tinCount?.totalTin : 0}
             </div>
             <div className={styles.font}>
-              Active Tin : {tinCount?.activeTin ? tinCount?.activeTin : 0}
+              Active TIN : {tinCount?.activeTin ? tinCount?.activeTin : 0}
             </div>
             <div className={styles.font}>
-              InActive Tin : {tinCount?.inactiveTin ? tinCount?.inactiveTin : 0}
+              InActive TIN : {tinCount?.inactiveTin ? tinCount?.inactiveTin : 0}
             </div>
             <div className="p-3">
               <Popconfirm
