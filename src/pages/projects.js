@@ -250,13 +250,13 @@ const SelectProject = ({
               ) : (
                 <div>
                   <div className=" d-flex align-items-center justify-content-center">
-                    <h2 className="title fontWeight2 ">
+                    <h2 className="title fontWeight2 p-2">
                       Your Gateway to CogentAI
                     </h2>
                   </div>
-                  <h6 className="login-title">
+                  {/* <h6 className="login-title">
                     <span>Login</span>
-                  </h6>
+                  </h6> */}
                   <Form
                     form={form}
                     onFinish={handleFormSubmit}
