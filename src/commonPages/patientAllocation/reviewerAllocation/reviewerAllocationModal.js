@@ -82,6 +82,8 @@ const AllocateModal = ({
 
   const handleRoleChange = (value) => {
     setRoles(value);
+    setSelectedUserIds([]);
+    setActiveEmail([]);
   };
   const handleChange = (value) => {
     setPriority(value);
@@ -126,7 +128,7 @@ const AllocateModal = ({
     } else {
       data = {
         roleId: roleId,
-        userIdList: activeEmail.map((item)=>item.username),
+        userIdList: activeEmail.map((item) => item.username),
         dueDate: formatDateForIndex({ date: allocateDate, index: 1 }),
         allocatedBy: userId,
         patientIdList: selectedRowsId,
@@ -154,36 +156,34 @@ const AllocateModal = ({
       setIsAllocate(false);
     }
   };
+  const handleUserSelect = (proxyId, email, role) => {
+    if (selectedUserIds.includes(proxyId)) {
+      setSelectedUserIds((prev) => prev.filter((id) => id !== proxyId));
+      setActiveEmail((prev) => prev.filter((e) => e.username !== email));
+    } else {
+      setSelectedUserIds((prev) => [...prev, proxyId]);
+      setActiveEmail((prev) => [...prev, { username: email, roleId: role }]);
+    }
+  };
 
- const handleUserSelect = (proxyId, email, role) => {
-  if (selectedUserIds.includes(proxyId)) {
-    setSelectedUserIds(selectedUserIds.filter((userId) => userId !== proxyId));
-    setActiveEmail(activeEmail.filter((e) => e.username !== email));
-  } else {
-    setSelectedUserIds([...selectedUserIds, proxyId]);
-    setActiveEmail([...activeEmail, { username: email, roleId: role }]);
-  }
-};
-
-const handleSelectAll = () => {
-  if (selectedUserIds.length === userDetails.length) {
-    setSelectedUserIds([]);
-    setActiveEmail([]);
-  } else {
-    const allIds = userDetails.map((user) => user.proxyId);
-    const user = userDetails.map((user) => ({
-      username: user.email,
-      roleId: user.role,
-    }));
-    setSelectedUserIds(allIds);
-    setActiveEmail(user);
-  }
-};
-
+  const handleSelectAll = () => {
+    if (selectedUserIds.length === userDetails.length) {
+      setSelectedUserIds([]);
+      setActiveEmail([]);
+    } else {
+      const allIds = userDetails.map((user) => user.proxyId);
+      const user = userDetails.map((user) => ({
+        username: user.email,
+        roleId: user.role,
+      }));
+      setSelectedUserIds(allIds);
+      setActiveEmail(user);
+    }
+  };
   useEffect(() => {
     if (roleId) {
       getUserList({
-        roleId: roleAliasName === "MASTER_AUDIT" ? roles  || "": roleId,
+        roleId: roleAliasName === "MASTER_AUDIT" ? roles || "" : roleId,
         search: search,
         masterAudit: roleAliasName === "MASTER_AUDIT" ? true : false,
       });
@@ -291,18 +291,7 @@ const handleSelectAll = () => {
                       : modalStyle.listContent
                   }`}
                 >
-                  <div
-                    className="d-flex justify-content-between"
-                    // onClick={() => {
-                    //   if (activeCard === item.id) {
-                    //     setActiveCard("");
-                    //   } else {
-                    //     setActiveCard(item.id);
-                    //     setAllocateDate("");
-                    //     setPriority([]);
-                    //   }
-                    // }}
-                  >
+                  <div className="d-flex justify-content-between">
                     <div className="d-flex">
                       <Avatar
                         size={65}
@@ -327,7 +316,8 @@ const handleSelectAll = () => {
                         </p>
                       </div>
                     </div>
-                      <input
+                    <input
+                      type="checkbox"
                       style={{
                         width: "20px",
                         height: "20px",
@@ -335,9 +325,14 @@ const handleSelectAll = () => {
                         borderRadius: "4px",
                         cursor: "pointer",
                       }}
-                      type="checkbox"
                       checked={selectedUserIds.includes(item.proxyId)}
-                     onChange={() => handleUserSelect(item.proxyId, item.email, item.role)}
+                      onChange={() =>
+                        handleUserSelect(item.proxyId, item.email, item.role)
+                      }
+                      disabled={
+                        !selectedUserIds.includes(item.proxyId) &&
+                        activeEmail.some((e) => e.username === item.email)
+                      }
                       className="me-2 ms-3 align-self-center"
                     />
                   </div>

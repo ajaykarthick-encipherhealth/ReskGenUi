@@ -154,16 +154,13 @@ const RandomSamplingModal = ({
       getResponePopup(response);
     }
   };
-
   const handleUserSelect = (proxyId, email, role) => {
     if (selectedUserIds.includes(proxyId)) {
-      setSelectedUserIds(
-        selectedUserIds.filter((userId) => userId !== proxyId)
-      );
-      setActiveEmail(activeEmail.filter((e) => e.username !== email));
+      setSelectedUserIds((prev) => prev.filter((id) => id !== proxyId));
+      setActiveEmail((prev) => prev.filter((e) => e.username !== email));
     } else {
-      setSelectedUserIds([...selectedUserIds, proxyId]);
-      setActiveEmail([...activeEmail, { username: email, roleId: role }]);
+      setSelectedUserIds((prev) => [...prev, proxyId]);
+      setActiveEmail((prev) => [...prev, { username: email, roleId: role }]);
     }
   };
 
@@ -183,6 +180,8 @@ const RandomSamplingModal = ({
   };
   const handleRoleChange = (value) => {
     setRoles(value);
+     setSelectedUserIds([]);
+    setActiveEmail([]);
   };
   const userTitle = () => {
     return (
@@ -321,7 +320,7 @@ const RandomSamplingModal = ({
                         </p>
                       </div>
                     </div>
-                    <input
+                    {/* <input
                       style={{
                         width: "20px",
                         height: "20px",
@@ -333,6 +332,25 @@ const RandomSamplingModal = ({
                       checked={selectedUserIds.includes(item.proxyId)}
                       onChange={() =>
                         handleUserSelect(item.proxyId, item.email, item.role)
+                      }
+                      className="me-2 ms-3 align-self-center"
+                    /> */}
+                    <input
+                      type="checkbox"
+                      style={{
+                        width: "20px",
+                        height: "20px",
+                        flexShrink: "0",
+                        borderRadius: "4px",
+                        cursor: "pointer",
+                      }}
+                      checked={selectedUserIds.includes(item.proxyId)}
+                      onChange={() =>
+                        handleUserSelect(item.proxyId, item.email, item.role)
+                      }
+                      disabled={
+                        !selectedUserIds.includes(item.proxyId) &&
+                        activeEmail.some((e) => e.username === item.email)
                       }
                       className="me-2 ms-3 align-self-center"
                     />
