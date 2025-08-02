@@ -404,6 +404,7 @@ function MyApp({ Component, pageProps }) {
     "/tenantadmin/report/reportdetails",
     "/tenantadmin/tracking/details",
     "/tenantadmin/tin/details",
+    "/tenantadmin/tin/tindetails/querydetails"
   ];
   const showFooter = !hideFooterPaths.includes(router.pathname);
   useEffect(() => {
