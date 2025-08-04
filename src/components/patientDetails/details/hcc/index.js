@@ -713,6 +713,10 @@ const Hcc = ({
                               isDosStatus={true}
                               isFileFormShow={isFileFormShow}
                               setIsFileFormShow={setIsFileFormShow}
+                              setSelectDosValue={setSelectDosValue}
+                              getSelectedDos={getSelectedDos}
+                              setSearch={setSearch}
+                              getSelectedDosPageNumber={getSelectedDosPageNumber}
                             />
                           ))}
                       {/* {activeTabHead == 1 && (

@@ -9,7 +9,10 @@ import { actions as detailsActions } from "../../../../../stores/patient/details
 import { getLocalStored, getStorage } from "../../../../../utils/storages";
 import { overallYearStatus } from "../../../../../stores/patient/details/network";
 import { useRouter } from "next/router";
-import { getResponePopup, isStatusDisabled } from '../../../../../utils/reusable'
+import {
+  getResponePopup,
+  isStatusDisabled,
+} from "../../../../../utils/reusable";
 const YearAndDosStatus = ({
   patientDetailsResult,
   patientIdDetailsData,
@@ -19,6 +22,11 @@ const YearAndDosStatus = ({
   getPatientDosList,
   isDosStatus,
   setIsFileFormShow,
+  setSelectDosValue,
+  getSelectedDos,
+  setSearch,
+  getSelectedDosPageNumber,
+  isDosSelected,
 }) => {
   const [localOrgId, setLocalOrgId] = useState("");
   const [localUserId, setLocalUserId] = useState("");
@@ -39,9 +47,9 @@ const YearAndDosStatus = ({
   const [inputValue, setInputValue] = useState({
     notes: "",
   });
-  const [statusName, setStatusName] = useState('');
+  const [statusName, setStatusName] = useState("");
   const [statusLoading, setStatusLoading] = useState(false);
-    const router = useRouter()
+  const router = useRouter();
 
   const renderAuditMenu = (value) => {
     var value = (
@@ -126,10 +134,10 @@ const YearAndDosStatus = ({
         null;
     }
   };
-  const getPatientIdDetails = async (result) => {  
-        const workflowData = router.pathname.endsWith("/tindetails/masteraudit")
-          ? result?.masterAudit
-          : result?.workflow?.[0];  
+  const getPatientIdDetails = async (result) => {
+    const workflowData = router.pathname.endsWith("/tindetails/masteraudit")
+      ? result?.masterAudit
+      : result?.workflow?.[0];
     const menu = (
       <Menu className="ant-badge" id="menu-container" name="menu-container">
         {workflowData?.status != "PENDING" &&
@@ -189,7 +197,7 @@ const YearAndDosStatus = ({
         ) : null}
         {workflowData?.status != "COMPLETE" ? (
           <Menu.Item
-          id="complete-menu-item2"
+            id="complete-menu-item2"
             name="complete-menu-item2"
             key="4"
             onClick={() => {
@@ -203,8 +211,8 @@ const YearAndDosStatus = ({
           </Menu.Item>
         ) : null}
         <Menu.Item
-        id="add-radiology-menu-item"
-        name="add-radiology-menu-item"
+          id="add-radiology-menu-item"
+          name="add-radiology-menu-item"
           key="5"
           onClick={() => {
             handleActionClick("ADD RADIOLOGY");
@@ -221,10 +229,9 @@ const YearAndDosStatus = ({
     );
     const menu3 = (
       <Menu id="menu-container3" name="menu-container3">
-     
         {workflowData?.status != "PENDING" ? (
           <Menu.Item
-          id="pending-menu-item3"
+            id="pending-menu-item3"
             name="pending-menu-item3"
             key="2"
             onClick={() => {
@@ -240,7 +247,7 @@ const YearAndDosStatus = ({
 
         {workflowData?.status != "COMPLETE" ? (
           <Menu.Item
-          id="complete-menu-item3"
+            id="complete-menu-item3"
             name="complete-menu-item3"
             key="4"
             onClick={() => {
@@ -254,8 +261,8 @@ const YearAndDosStatus = ({
           </Menu.Item>
         ) : null}
         <Menu.Item
-        id="add-lab-menu-item"
-        name="add-lab-menu-item"
+          id="add-lab-menu-item"
+          name="add-lab-menu-item"
           key="5"
           onClick={() => {
             handleActionClick("ADD LAB");
@@ -301,6 +308,7 @@ const YearAndDosStatus = ({
     }
   };
 
+
 const handleSubmitHccComplete = async () => {
   await updateStatus("completedFuntion");
 };
@@ -315,8 +323,10 @@ const handleSubmitHccComplete = async () => {
 
     setIsLoading(true);
     setStatusLoading(true);
-  const isTinDetailsPage = router.pathname.endsWith("/tindetails/masteraudit");
-  const masterAudit = isTinDetailsPage ? true : false;
+    const isTinDetailsPage = router.pathname.endsWith(
+      "/tindetails/masteraudit"
+    );
+    const masterAudit = isTinDetailsPage ? true : false;
     var postData = {
       patientId,
       notes: inputValue.notes,
@@ -355,26 +365,66 @@ const handleSubmitHccComplete = async () => {
     try {
       const response = await overallYearStatus(postData, apiURL);
       if (response?.status === "SUCCESS") {
-        getResponePopup(response);
         setInputValue({ notes: "" });
-        setIsFileFormShow(false)
-        getpatientDetailsData(
+        setIsFileFormShow(false);
+        // getpatientDetailsData(
+        //   localPatientId,
+        //   patientDetailsResult?.data?.response?.processedYear,
+        //   patientDetailsResult?.data?.response?.dateOfService,
+        //   "",
+        //   "",
+        //   "",
+        //   router.pathname
+        // );
+        const dosList = await getPatientDosList(
           localPatientId,
           patientDetailsResult?.data?.response?.processedYear,
-          patientDetailsResult?.data?.response?.dateOfService,
-          "",
-          "",
           "",
           router.pathname
         );
-        getPatientDosList(
-          localPatientId,
-          patientDetailsResult?.data?.response?.processedYear,
-          "",
-          router.pathname
-        );
+
+        if (
+          findFirstPendingWorkflow(dosList?.response) &&
+          postData?.processedStatus == "COMPLETED"
+        ) {
+          const dosFindValue = findFirstPendingWorkflow(dosList?.response);
+          const patientResult = await getpatientDetailsData(
+            localPatientId,
+            patientDetailsResult?.data?.response?.processedYear,
+            dosFindValue.dateOfService,
+            "",
+            "",
+            "",
+            router.pathname
+          );
+          const dosSummariesList =
+            patientResult?.response?.fileDetailDTO?.dosSummaries;
+          if (dosSummariesList) {
+            const filteredDos = dosSummariesList?.find(
+              (data) => data?.dos === dosFindValue.dateOfService
+            );
+            getSelectedDosPageNumber(filteredDos?.startPageNumber);
+            setSearch({
+              value: filteredDos.substring || "",
+              page: filteredDos.startPageNumber || 1,
+            });
+          }
+          getSelectedDos(dosFindValue.dateOfService);
+          setSelectDosValue(dosFindValue.dateOfService);
+        } else {
+          getpatientDetailsData(
+            localPatientId,
+            patientDetailsResult?.data?.response?.processedYear,
+            patientDetailsResult?.data?.response?.dateOfService,
+            "",
+            "",
+            "",
+            router.pathname
+          );
+        }
         setConfirmCompleteModal(false);
-      }else{
+        getResponePopup(response);
+      } else {
         getResponePopup(response);
       }
     } catch (error) {
@@ -386,12 +436,24 @@ const handleSubmitHccComplete = async () => {
     }
   };
 
+  const findFirstPendingWorkflow = (responseArray) => {
+    for (const item of responseArray) {
+      if (item.workflow && Array.isArray(item.workflow)) {
+        const hasPending = item.workflow.some((w) => w.status === "PENDING");
+        if (hasPending) {
+          return item;
+        }
+      }
+    }
+    return null;
+  };
+
   const handleChange = async (e) => {
     const key = e.target.name;
     const value = e.target.value;
     setInputValue({ ...inputValue, [key]: value });
   };
-const isLoading = !patienIdDetails || !patienIdDetails?.workflow;
+  const isLoading = !patienIdDetails || !patienIdDetails?.workflow;
   useEffect(() => {
     const userRoleLocal = getStorage("userRole");
     const uId = getStorage("userId");
@@ -403,12 +465,12 @@ const isLoading = !patienIdDetails || !patienIdDetails?.workflow;
     getPatientIdDetails(patientDetailsResult?.data?.response);
     setPatienIdDetails(patientDetailsResult?.data?.response);
   }, [patientDetailsResult?.data?.response]);
-    const workflowDatas = router.pathname.endsWith("/tindetails/masteraudit")
-      ? patienIdDetails?.masterAudit
-      : patienIdDetails?.workflow?.[0];
-       const currentStatus = router.pathname.endsWith("/tindetails/masteraudit")
-         ? patientIdDetailsData?.data?.response?.masterAudit
-         : patientIdDetailsData?.data?.response?.workflow?.[0];
+  const workflowDatas = router.pathname.endsWith("/tindetails/masteraudit")
+    ? patienIdDetails?.masterAudit
+    : patienIdDetails?.workflow?.[0];
+  const currentStatus = router.pathname.endsWith("/tindetails/masteraudit")
+    ? patientIdDetailsData?.data?.response?.masterAudit
+    : patientIdDetailsData?.data?.response?.workflow?.[0];
   return (
     <>
       {patientDetailsResult?.data?.response && (
@@ -491,10 +553,7 @@ const isLoading = !patienIdDetails || !patienIdDetails?.workflow;
                   onVisibleChange={(v) => setMenuIsOpen(v)}
                   visible={menuIsOpen}
                   className={` ant-badge completedBtnHcc ant-badge ${visitStyles.completedBtnHcc}`}
-                  disabled={
-                    currentStatus
-                      ?.status === "COMPLETED"
-                  }
+                  disabled={currentStatus?.status === "COMPLETED"}
                 >
                   <button
                     type="primary"
@@ -503,8 +562,7 @@ const isLoading = !patienIdDetails || !patienIdDetails?.workflow;
                     } completedBtnHcc`}
                     style={{
                       cursor:
-                        currentStatus
-                          ?.status === "COMPLETED"
+                        currentStatus?.status === "COMPLETED"
                           ? "not-allowed"
                           : "pointer",
                     }}
@@ -580,9 +638,7 @@ const isLoading = !patienIdDetails || !patienIdDetails?.workflow;
                   onVisibleChange={(v) => setMenuIsOpen(v)}
                   visible={menuIsOpen}
                   className={`ant-badge queryBtnHcc ${visitStyles.queryBtnHcc}`}
-                  disabled={
-                    workflowDatas?.status === "QUERIED"
-                  }
+                  disabled={workflowDatas?.status === "QUERIED"}
                 >
                   <button
                     type="primary"
@@ -711,6 +767,7 @@ const enhancer = connect(
     getFlagsData: state?.reviewer?.workQueue?.flags?.data,
     patientDetailsResult: state?.patientDetails?.details?.patientResult,
     patientIdDetailsData: state?.patientDetails.details?.patientIdResult,
+    isDosSelected: state.patientDetails.details?.getSelectedDosDetails,
   }),
   {
     getPatientIdData: detailsActions.patientIdDetailsAction,
