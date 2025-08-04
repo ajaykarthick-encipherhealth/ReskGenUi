@@ -61,7 +61,7 @@ const Tin = ({
   id,
 }) => {
   const [form] = Form.useForm();
-  const tabs = getAccessTabItems({ page: "Tin", tabsMenu: "tabMenuList" });
+  const tabs = getAccessTabItems({ page: "TIN", tabsMenu: "tabMenuList" });
   const activeTab = activeTabName || tabs?.[0] || "Active";
   const router = useRouter();
   const [activeFilters, setActiveFilters] = useState([]);

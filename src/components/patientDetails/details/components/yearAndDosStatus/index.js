@@ -293,13 +293,14 @@ const YearAndDosStatus = ({
   const handleSubmitValidNotes = async (event) => {
     const form = event.currentTarget;
     event.preventDefault();
-    if (form.checkValidity() === true) {
+    if (form.checkValidity() === true && inputValue.notes.trim()) {
       setConfirmNotesModal(false);
       updateStatus(isValidAction);
       setInputValue({ notes: "" });
-      setValidated(true);
+      // setValidated(true);
     }
   };
+
 const handleSubmitHccComplete = async () => {
   await updateStatus("completedFuntion");
 };
