@@ -167,7 +167,7 @@ const getDos = (item) => {
 
   return (
     <Select
-    className={styles.dosWidth}
+      className={styles.dosWidth}
       // style={{ width: 490 }}
       placeholder="--- Select DOS ---"
       value={selectedDate ? selectedDate : undefined}
@@ -195,6 +195,7 @@ const getDos = (item) => {
                   top: 0,
                   backgroundColor: "#002b5b",
                   color: "white",
+                  zIndex: 1,
                 }}
               >
                 <tr>
@@ -236,7 +237,7 @@ const getDos = (item) => {
                         setSelectedDate(item?.dateOfService);
                         handleOptions(item?.dateOfService);
                         setOpen(false);
-                        setIsFileFormShow(false)
+                        setIsFileFormShow(false);
                       }}
                     >
                       {getDos(item)}

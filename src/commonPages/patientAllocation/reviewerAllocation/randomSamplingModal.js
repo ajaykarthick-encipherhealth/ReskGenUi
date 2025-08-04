@@ -491,6 +491,26 @@ const RandomSamplingModal = ({
           layout="vertical"
           autoComplete="off"
           onFinish={onFinish}
+          onValuesChange={(changedValues, allValues) => {
+            const hcc = allValues.hccpercentage;
+            const nohcc = allValues.nohccpercentage;
+
+            if ("hccpercentage" in changedValues) {
+              const hccValue = parseInt(changedValues.hccpercentage);
+              if (!isNaN(hccValue) && hccValue >= 0 && hccValue <= 100) {
+                form.setFieldsValue({
+                  nohccpercentage: 100 - hccValue,
+                });
+              }
+            } else if ("nohccpercentage" in changedValues) {
+              const nohccValue = parseInt(changedValues.nohccpercentage);
+              if (!isNaN(nohccValue) && nohccValue >= 0 && nohccValue <= 100) {
+                form.setFieldsValue({
+                  hccpercentage: 100 - nohccValue,
+                });
+              }
+            }
+          }}
         >
           <div className="mt-3 samplingSelect"></div>
           <Form.Item
@@ -571,7 +591,13 @@ const RandomSamplingModal = ({
               }),
             ]}
           >
-            <Input className="w-75" placeholder="Percentage" />
+            <Input
+              className="w-75"
+              placeholder="Percentage"
+              disabled={!!form.getFieldValue("nohccpercentage")}
+            />
+
+            {/* <Input className="w-75" placeholder="Percentage" /> */}
           </Form.Item>
 
           <div className="samplingSelect">
