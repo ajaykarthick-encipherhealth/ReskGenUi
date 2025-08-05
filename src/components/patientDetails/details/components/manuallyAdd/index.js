@@ -1256,6 +1256,8 @@ const ManuallyAdd = ({
                     name="diagnosisCode"
                     allowClear
                     showSearch
+                    labelInValue
+                    optionLabelProp="codeOnly" 
                     notFoundContent={
                       getValideCodeLoader ? <Spin size="small" /> : "No data"
                     }
@@ -1276,8 +1278,18 @@ const ManuallyAdd = ({
                       getVerify(value?.value);
                       setDbDescription(value?.description);
                     }}
-                    options={!getValideCodeLoader && options}
-                  ></Select>
+                    options={
+                      !getValideCodeLoader &&
+                      options?.map((opt) => ({
+                        label: `${opt.value} - ${opt.description}`, 
+                        value: opt.value,
+                        codeOnly: opt.value, 
+                        description: opt.description,
+                        oldHcc: opt.oldHcc,
+                        newHcc: opt.newHcc,
+                      }))
+                    }
+                  />
                 </Form.Item>
                 {code?.length > 0 &&
                 validCode.length > 0 &&
