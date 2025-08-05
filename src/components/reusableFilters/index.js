@@ -82,7 +82,6 @@ const ReusableFilters = ({
     setSelectedDateRanges({});
     setSelectedDates([]);
     setSelectedOption({});
-    // setSearch(null);
   };
   const handleClearFilters = () => {
     setSelectAll(false);
@@ -93,7 +92,6 @@ const ReusableFilters = ({
     setSelectedDates([]);
     setSelectedOption({});
     setSearchText(null);
-    // setSearch(null);
   };
 
   const handleRangePicker = (dates, dateString, tabName) => {

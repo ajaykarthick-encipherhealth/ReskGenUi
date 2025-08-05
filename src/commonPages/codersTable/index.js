@@ -19,6 +19,7 @@ import {
   tableCustomFilterClearCheck,
 } from "../../utils/reusable";
 import SubNavBar from "../../components/subNavBar";
+import MoreFilter from "../../pages/tenantadmin/tracking/filters";
 export const bullets = [
   {
     color: "#00BC13",
@@ -78,6 +79,7 @@ const CodersTable = ({
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isResetting, setIsResetting] = useState(false);
   const [isFilter, setIsFilter] = useState(true);
+  const [selectAll, setSelectAll] = useState(false);
   const [activeFilters, setActiveFilters] = useState(
     data?.response?.metaDataDTO.filter((item) => item.active)
   );
@@ -164,16 +166,17 @@ const CodersTable = ({
       const response = await tableDynamicColumn({ payload });
       if (response?.status === "SUCCESS") {
         setIsFilter(true);
-        const filterCheck = tableCustomFilterClearCheck(
-          {searchText,
+        const filterCheck = tableCustomFilterClearCheck({
+          searchText,
           selectedDateRanges,
           selectedDates,
           selectedOption,
           setSearchText,
           setSelectedDateRanges,
           setSelectedDates,
-          setSelectedOption,data}
-        );
+          setSelectedOption,
+          data,
+        });
         if (filterCheck) {
           getCodersApi();
         }
@@ -204,7 +207,23 @@ const CodersTable = ({
       getResponePopup(error?.response);
     }
   };
-
+  const handleClearAllFilters = () => {
+    setClear(true);
+    setSearchText(null);
+    setSelectedDateRanges({});
+    setSelectedDates([]);
+    setSelectedOption({});
+  };
+  const handleClearFilters = () => {
+    setSelectAll(false);
+    setActiveFilters((prevFilters) =>
+      prevFilters.map((filter) => ({ ...filter, active: true }))
+    );
+    setSelectedDateRanges({});
+    setSelectedDates([]);
+    setSelectedOption({});
+    setSearchText(null);
+  };
   const params = {
     pageNo,
     selectedDates,
@@ -295,7 +314,6 @@ const CodersTable = ({
   useEffect(() => {
     setProxy(proxyRole);
   }, [proxy]);
-
   return (
     <div className={`show `}>
       {proxy === "QA" ? (
@@ -311,7 +329,7 @@ const CodersTable = ({
             {!masterAuditRouter && (
               <div className="mt-5">
                 <ReusableFilters
-                  showFilter={true}
+                  showFilter={false}
                   setActiveFilters={setActiveFilters}
                   setSearchText={setSearchText}
                   searchText={searchText}
@@ -363,7 +381,7 @@ const CodersTable = ({
                     }}
                   >
                     <Nav.Link
-                        id={
+                      id={
                         id
                           ? createIdGens("pending" + id)
                           : createIdGens("pending")
@@ -405,7 +423,7 @@ const CodersTable = ({
                     }}
                   >
                     <Nav.Link
-                       id={
+                      id={
                         id
                           ? createIdGens("rejected" + id)
                           : createIdGens("rejected")
@@ -418,6 +436,51 @@ const CodersTable = ({
                       {tableStatus?.mciPatientCountDTO?.rejectedCount || 0}
                     </Nav.Link>
                   </Nav.Item>
+                  <div className="d-flex gap-2 ms-auto  mb-2">
+                    <div className="mt-2">
+                      <MoreFilter
+                        selectAll={selectAll}
+                        setSelectAll={setSelectAll}
+                        activeFilters={activeFilters}
+                        FilterItems={activeFilters}
+                        setActiveFilters={setActiveFilters}
+                        setClear={setClear}
+                        handleClearAllFilters={handleClearAllFilters}
+                        handleClearFilters={handleClearFilters}
+                      />
+                    </div>
+                    <div
+                      id={
+                        id
+                          ? createIdGen("customBtn" + id)
+                          : createIdGen(
+                              "customBtn" + router.pathname.replaceAll("/", " ")
+                            )
+                      }
+                      className="d-flex justify-content-center align-items-center   mt-4"
+                    >
+                      <Button
+                        data-testid={
+                          id
+                            ? createIdGen("tableCustom" + id)
+                            : createIdGen(
+                                "tableCustom" +
+                                  router.pathname.replaceAll("/", " ")
+                              )
+                        }
+                        onClick={showDrawer}
+                        style={{
+                          cursor: {
+                            cursor: tableLoader ? "not-allowed" : "pointer",
+                          },
+                        }}
+                        className="btn-sm w-full text-ellipsis tableButton"
+                        disabled={tableLoader ? true : false}
+                      >
+                        Table Customization
+                      </Button>
+                    </div>
+                  </div>
                 </Nav>
                 <Tab.Content>
                   <Tab.Pane eventKey={activeStatus}>
@@ -464,10 +527,10 @@ const CodersTable = ({
                     >
                       <Nav.Link
                         id={
-                        id
-                          ? createIdGens("PENDING" + id)
-                          : createIdGens("PENDING")
-                      }
+                          id
+                            ? createIdGens("PENDING" + id)
+                            : createIdGens("PENDING")
+                        }
                         name="pending"
                         to="#my-posts"
                         eventKey="PENDING"
@@ -485,10 +548,10 @@ const CodersTable = ({
                     >
                       <Nav.Link
                         id={
-                        id
-                          ? createIdGens("COMPLETED" + id)
-                          : createIdGens("COMPLETED")
-                      }
+                          id
+                            ? createIdGens("COMPLETED" + id)
+                            : createIdGens("COMPLETED")
+                        }
                         name="completed"
                         to="#my-posts"
                         eventKey="COMPLETED"
@@ -499,6 +562,19 @@ const CodersTable = ({
                     </Nav.Item>
                   </Nav>
                   <div className="d-flex gap-2 ms-auto  mb-2">
+                    <div className="mt-2">
+                      <MoreFilter
+                        selectAll={selectAll}
+                        setSelectAll={setSelectAll}
+                        activeFilters={activeFilters}
+                        FilterItems={activeFilters}
+                        setActiveFilters={setActiveFilters}
+                        setClear={setClear}
+                        handleClearAllFilters={handleClearAllFilters}
+                        handleClearFilters={handleClearFilters}
+                      />
+                    </div>
+
                     <div
                       id={
                         id
@@ -535,7 +611,7 @@ const CodersTable = ({
                 {masterAuditRouter && (
                   <div className="p-2 mt-1">
                     <ReusableFilters
-                      showFilter={true}
+                      showFilter={false}
                       setActiveFilters={setActiveFilters}
                       setSearchText={setSearchText}
                       searchText={searchText}
