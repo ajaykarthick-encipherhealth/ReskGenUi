@@ -20,7 +20,7 @@ import { truncateString } from "../function/ReusableFunctions";
 import { handleCopyToClipboard } from "../../../../commonFunctions";
 import { formatDateTime } from "../../../../../utils/reusable";
 
-const Details = ({ fileResult, fromHcc }) => {
+const Details = ({ fileResult, fromHcc, fileDetails }) => {
   const getMastData = (value) => {
     if (value) {
       return value.split("").splice(0, 3).join("") + "xxxx";
@@ -45,7 +45,7 @@ const Details = ({ fileResult, fromHcc }) => {
           className="row"
           style={{ lineHeight: "0" }}
         >
-          <div className="col-3" id="patient-id" name="patient-id">
+          <div className="col-2" id="patient-id" name="patient-id">
             <FontAwesomeIcon icon={faIdCardClip} style={{ color: "#241571" }} />
             <label className="px-1" style={{ fontWeight: 600 }}>
               Patient ID
@@ -68,7 +68,7 @@ const Details = ({ fileResult, fromHcc }) => {
               </Tooltip>
             </h6>
           </div>
-          <div className="col-4" id="patient-name" name="patient-name">
+          <div className="col-2" id="patient-name" name="patient-name">
             <FontAwesomeIcon icon={faUserCircle} style={{ color: "#241571" }} />
 
             <label className="px-2" style={{ fontWeight: 600 }}>
@@ -114,7 +114,7 @@ const Details = ({ fileResult, fromHcc }) => {
               </Tooltip>
             </h6>
           </div>
-          <div className="col-3" id="patient-age" name="patient-age">
+          <div className="col-2" id="patient-age" name="patient-age">
             <FontAwesomeIcon
               icon={faCalendarAlt}
               style={{ color: "#241571" }}
@@ -130,7 +130,7 @@ const Details = ({ fileResult, fromHcc }) => {
               {fileResult?.dob ? calculateAge(fileResult?.dob) : "-"}
             </h6>
           </div>
-          <div className="col-3" id="file-name" name="file-name">
+          <div className="col-2" id="file-name" name="file-name">
             <FontAwesomeIcon icon={faFile} style={{ color: "#241571" }} />
             <label className="px-1" style={{ fontWeight: 600 }}>
               File Name
@@ -159,7 +159,7 @@ const Details = ({ fileResult, fromHcc }) => {
               )}
             </h6>
           </div>
-          <div className="col-4 " id="date-of-birth" name="date-of-birth">
+          <div className="col-2 " id="date-of-birth" name="date-of-birth">
             <i className={styles.dob_icon}>{SVGICON.DatebirthIcon}</i>
             <label className="px-2" style={{ fontWeight: 600 }}>
               Date Of Birth
@@ -189,20 +189,42 @@ const Details = ({ fileResult, fromHcc }) => {
               </Tooltip>
             </h6>
           </div>
-          <div className="col-3" id="gender" name="gender">
+          <div className="col-2" id="gender" name="gender">
             <FontAwesomeIcon icon={faVenusMars} style={{ color: "#241571" }} />
-            <div
-              style={{
-                position: "relative",
-                bottom: "10px",
-                paddingLeft: "6px",
-              }}
-            >
+            <div className={styles.subItems}>
               <label className="px-3" style={{ fontWeight: 600 }}>
                 Gender
               </label>
-              <h6 id="gender-value" name="gender-value" className="px-2">
+              <h6 id="gender-value" name="gender-value" className="px-3">
                 {fileResult?.gender || "-"}
+              </h6>
+            </div>
+          </div>
+          <div className="col-2" id="gender" name="gender">
+            {SVGICON.faceToface}
+            <div className={styles.subItems}>
+              <label className="px-3" style={{ fontWeight: 600 }}>
+                Face to Face
+              </label>
+              <h6 id="gender-value" name="gender-value" className="px-3">
+                {/* {fileResult?.gender || "-"} */}
+                {fileDetails?.faceToFace === true
+                  ? "Yes"
+                  : fileDetails?.faceToFace === false
+                  ? "No"
+                  : "---"}
+              </h6>
+            </div>
+          </div>
+          <div className="col-4" id="gender" name="gender">
+            {SVGICON.visitType}
+            <div className={styles.subItems}>
+              <label className="px-3" style={{ fontWeight: 600 }}>
+                Visit Type
+              </label>
+              <h6 id="gender-value" name="gender-value" className="px-3">
+                {/* {fileResult?.gender || "-"} */}
+                {fileDetails?.visitType || "---"}
               </h6>
             </div>
           </div>

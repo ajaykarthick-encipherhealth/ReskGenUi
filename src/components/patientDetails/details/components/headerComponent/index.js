@@ -28,15 +28,16 @@ const HeaderComponent = ({
   activeTab,
 }) => {
   return (
-    <div className={`row mt-3 ${styles.HccContainer}`}>
-      <div className="col-5" style={{ padding: "0px" }}>
+    <div className={`row mt-3 gap-3 ${styles.HccContainer}`}>
+      <div className="col-10" style={{ padding: "0px" }}>
         <Details
           fileResult={patienIdDetails}
+          fileDetails={fileResult}
           fromHcc={true}
           setCopied={setCopied}
         />
       </div>
-      <div className="col-4" style={{ padding: "0px" }}>
+      {/* <div className="col-4" style={{ padding: "0px" }}>
         <Flag
           patienIdDetails={patienIdDetails}
           patientDetails={patientDetails}
@@ -45,7 +46,6 @@ const HeaderComponent = ({
           getFlagCounts={getFlagCounts}
         />
 
-        {/* <PieChart /> */}
       </div>
       <div className="col-2" style={{ padding: "0px" }}>
         <Codes
@@ -53,11 +53,11 @@ const HeaderComponent = ({
           hccValidCount={hccValidCount}
           fromHcc={true}
         />
-      </div>
+      </div> */}
 
       <div className="col-1 d-grid " style={{ padding: "0px" }}>
         <div>
-          <StatusAction dosYearDefalutSelect ={dosYearDefalutSelect}/>
+          <StatusAction dosYearDefalutSelect={dosYearDefalutSelect} />
         </div>
         <div className="mt-1">
           {!isLoadingDos ? (
