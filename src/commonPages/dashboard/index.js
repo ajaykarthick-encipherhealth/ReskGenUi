@@ -388,9 +388,9 @@ const DynamicDashboard = ({
                       className="form-check-input cr-pointer"
                       type="checkbox"
                       id="selectAll"
-                      checked={
-                        getWidgets(selectedTab)?.length ===
-                        selectedItems?.length
+                      checked={selectedItems.length &&
+                        (getWidgets(selectedTab)?.length ===
+                        selectedItems?.length)
                       }
                       onChange={(e) => handleSelectAll(e.target.checked)}
                     />
