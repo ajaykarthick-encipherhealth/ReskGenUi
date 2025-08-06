@@ -1246,9 +1246,11 @@ const ManuallyAdd = ({
                   ]}
                   style={{ marginBottom: 10 }}
                   onChange={(e) => {
-                    if (e.target.name == "") {
+                    if (e.target.name === "") {
                       const code = e.target.value.trim();
-                      handleChange(code);
+                      if (!code.includes(".")) {
+                        handleChange(code);
+                      }
                     }
                   }}
                 >
@@ -1257,7 +1259,7 @@ const ManuallyAdd = ({
                     allowClear
                     showSearch
                     labelInValue
-                    optionLabelProp="codeOnly" 
+                    optionLabelProp="codeOnly"
                     notFoundContent={
                       getValideCodeLoader ? <Spin size="small" /> : "No data"
                     }
@@ -1281,9 +1283,9 @@ const ManuallyAdd = ({
                     options={
                       !getValideCodeLoader &&
                       options?.map((opt) => ({
-                        label: `${opt.value} - ${opt.description}`, 
+                        label: `${opt.value} - ${opt.description}`,
                         value: opt.value,
-                        codeOnly: opt.value, 
+                        codeOnly: opt.value,
                         description: opt.description,
                         oldHcc: opt.oldHcc,
                         newHcc: opt.newHcc,
