@@ -193,7 +193,7 @@ const ManuallyAdd = ({
     const isCodeCheck = await isCodeAlready({
       code: value,
       patientId: patientId,
-      dos: year?.value || "",
+      dos: year?.value ? year?.value : year,
       date: getSelectedDos,
     });
     if (isCodeCheck?.response) {
@@ -251,7 +251,7 @@ const ManuallyAdd = ({
   const handleSelectChange = async (val, field) => {
     try {
       const res = await getProviderSection({
-        processedYear: year?.value,
+        processedYear: year?.value ? year?.value : year,
         patientId: patientId,
         dateOfService: [getSelectedDos],
         fileId: patientDetailsResult?.data?.response?.fileId
@@ -829,7 +829,7 @@ const ManuallyAdd = ({
     const commonData = {
       patientId,
       chartProcessType,
-      processedYear: year?.value,
+      processedYear: year?.value ? year?.value : year,
       activeHeader: !isMeat,
     };
 
@@ -928,10 +928,10 @@ const ManuallyAdd = ({
         if (res?.status === "SUCCESS") {
           activeLabels({
             patientId: patientId,
-            year: year?.value,
+            year: year?.value ? year?.value : year,
             dos: isDosSelected,
           });
-          getPatientDosList(patientId, year?.value);
+          getPatientDosList(patientId, year?.value ? year?.value : year);
           handleSuccess(res);
         } else {
           handleFailure(res);
@@ -955,10 +955,10 @@ const ManuallyAdd = ({
         res = await suggestedToValidMove(movementData, selectCardTitle);
         activeLabels({
           patientId: patientId,
-          year: year?.value,
+          year: year?.value ? year?.value : year,
           dos: isDosSelected,
         });
-        getPatientDosList(patientId, year?.value);
+        getPatientDosList(patientId, year?.value ? year?.value : year);
         isSuccess(res) ? handleSuccess(res) : handleFailure(res);
       }
     } catch (error) {
@@ -1081,7 +1081,10 @@ const ManuallyAdd = ({
         hyperlinks: item,
         aspect: filterData?.treatmentAspect,
       }));
-      handleSelectChange(isEditValue?.dateOfServices || year, "dos");
+      handleSelectChange(
+        isEditValue?.dateOfServices || year?.value ? year?.value : year,
+        "dos"
+      );
       setListOfSection(transformData(sectionList));
       setListOfSectionM(transformData(sectionListM));
       setListOfSectionE(transformData(sectionListE));

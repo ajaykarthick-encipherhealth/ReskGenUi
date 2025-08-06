@@ -52,7 +52,8 @@ import {
   actionList,
   getCredentialList,
   rebuttalStatusAction,
-  markAsCompletedAction
+  markAsCompletedAction,
+  findByPatientIdAction
 } from "./actions";
 
 
@@ -133,6 +134,7 @@ const patientDetailsReducer = combineReducers({
   patientDataLoader:getPatientsLoading(patientIdDetailsAction),
   loading: getPatientsLoading(patientDetailsAction),
   hccFileResult: createReducer(patientHccFileAction),
+  findByPatientId: createReducer(findByPatientIdAction),
   dosResult: createReducer(dosDeatilsAction),
   dosPageNumberResult: createReducer(dosPageNumberAction),
   meatQueryResult: createReducer(meatQueryAction),

@@ -18,6 +18,10 @@ export const patientHccFileAction = createActionThunk(
   "PATIENT_HCC_FILE",
   network.patientHccFile
 );
+export const findByPatientIdAction = createActionThunk(
+  "FIND_BY_PATIENT_ID",
+  network.findByPatientId
+);
 export const dosDeatilsAction = createActionThunk(
   "DOS_LIST",
   network.dosWiseList

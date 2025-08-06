@@ -188,6 +188,21 @@ export async function patientHccFile(fileId) {
   // );
   return result;
 }
+export async function findByPatientId() {
+  const options = {
+    method: "GET",
+  };
+    const { patientId = "" } = getLocalStored();
+
+  const result = await requestPortal(
+    `dbservice/fileDetail/findbypatientid?patientId=${
+      patientId ? patientId : ""
+    }`,
+    options
+  );
+  setStorage("fileId", result?.response?.azureBlobPath || null);
+  return result;
+}
 export async function dosWiseList(patientId, year, dataNull = false, navigate) {
   if (dataNull === true) {
     return null;
