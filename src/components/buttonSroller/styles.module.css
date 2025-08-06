@@ -43,6 +43,7 @@
   }
   @media screen and (max-width: 1280px) {
     .btnActive{
+      padding-top: 10px;
       width: 100px;
     }
     .btnInactive{

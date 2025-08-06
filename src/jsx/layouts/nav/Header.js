@@ -346,6 +346,8 @@ const Header = ({
         return PhysicanMenuList(accessMenuList);
       case "DOWNLOADER":
         return ProviderMenuList(accessMenuList);
+        case "CLIENT":
+        return ProviderMenuList(accessMenuList);
       case "OWNER":
         if (
           role == "OWNER" &&

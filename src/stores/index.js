@@ -53,7 +53,8 @@ import { reducer as adminUsersReducer } from "./admin/users";
 import { reducer as supervisorDashboardReducer } from "./supervisor/dashboard";
 import { reducer as reviewerDashboardReducer } from "./reviewer/dashboard";
 import {reducer as chartReducer} from './chatService'
-import {reducer as dashboardReducer} from './admin/dashboard'
+import {reducer as dashboardReducer} from './admin/dashboard';
+import {reducer as dashboardReducer1} from './admin/dashboard1';
 import {reducer as notificationReducer} from './admin/notifications'
 import {reducer as comparisonReducer} from './physician/comparison'
 import { reducer as imageUploadReducer } from "./authflow/imageUpload";
@@ -106,6 +107,8 @@ const reducers = combineReducers({
     patientAllocate: allocatedReducer,
     users: adminUsersReducer,
     dashboard: dashboardReducer,
+    dashboard1: dashboardReducer1,
+    dashboard1: dashboardReducer1,
     notification: notificationReducer,
   }),
   codify: combineReducers({

@@ -10,7 +10,7 @@ import NoNotification from "../../../../images/dashboard/no-notification.webp";
 import spinSTYles from "../../../../styles/auth.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBell } from "@fortawesome/free-solid-svg-icons";
-import { NotifiAvatar } from "../../../reviewer/dashboard/notifications";
+import { NotifiAvatar } from "../../../reviewer/dashboard1/notifications";
 import { truncateString } from "../../../../components/patientDetails/details/components/function/ReusableFunctions";
 
 const Notifications = ({ notificationResponse, webSocketNotificationData }) => {

@@ -2,7 +2,59 @@
   --app-primary: #04306f;
   --app-primary-hover: #6c9ddd;
   --borderColor: #b6b6b6;
+  --new-app-primary: #064BAC;
+  --new-app-secondary: #5271FA;
+  --new-app-secondary2: #00C1FF;
+  --new-app-secondary3: #006DDC;
+  --new-app-secondary4: #008FCA;
+  --new-app-secondary5: #0A5EB0;
+  --new-app-secondary6: #8576FF;
 }
+/* If you want to add a new color, you need to include it in the getColorValue function and create a corresponding CSS class */
+
+.app-primary {
+  color: var(--new-app-primary);
+}
+.app-bg-primary {
+  background-color: var(--new-app-primary);
+}
+.app-secondary {
+  color: var(--new-app-secondary);
+}
+.app-bg-secondary {
+  background-color: var(--new-app-secondary);
+}
+.app-secondary2 {
+  color: var(--new-app-secondary2);
+}
+.app-bg-secondary2 {
+  background-color: var(--new-app-secondary2);
+}
+.app-secondary3 {
+  color: var(--new-app-secondary3);
+}
+.app-bg-secondary3 {
+  background-color: var(--new-app-secondary3);
+}
+.app-secondary4 {
+  color: var(--new-app-secondary4);
+}
+.app-bg-secondary4 {
+  background-color: var(--new-app-secondary4);
+}
+.app-secondary5 {
+  color: var(--new-app-secondary5);
+}
+.app-bg-secondary5 {
+  background-color: var(--new-app-secondary5);
+}
+.app-secondary6 {
+  color: var(--new-app-secondary6);
+}
+.app-bg-secondary6 {
+  background-color: var(--new-app-secondary6);
+}
+
 /* transition codes*/
 .ant-drawer-content-wrapper {
   transition: transform 0.3s ease-in-out !important;
@@ -12583,7 +12635,7 @@ th:first-child {
 } */
 
 tbody > tr {
-  background: #fafcff !important;
+  background: #fff !important;
 }
 
 /* table tr {background-color: #eaeefa!important;} */
@@ -15450,6 +15502,24 @@ input::-webkit-inner-spin-button {
   border-radius: 0px 10px 10px 0px !important;
   box-shadow: rgba(149, 157, 165, 0.2) 0px 0px 10px !important;
 }
+.tenantSelectorCustom .ant-select-outlined {
+  width: 100%;
+  height: 38px !important;
+}
+.tenantSelectorCustom .ant-select-selector {
+  width: 100%;
+  height: 38px !important;
+  border: none !important;
+  border-radius: 0px 10px 10px 0px !important;
+  box-shadow: rgba(149, 157, 165, 0.2) 0px 0px 10px !important;
+}
+.tenantSelectorCustom .ant-picker-range {
+  width: 80%;
+  height: 38px !important;
+  border: none !important;
+  border-radius: 0px 10px 10px 0px !important;
+  box-shadow: rgba(149, 157, 165, 0.2) 0px 0px 10px !important;
+}
 .speedometerChart > div:nth-child(2) {
   height: 220px !important;
 }
@@ -15518,8 +15588,31 @@ input::-webkit-inner-spin-button {
 .tenatTable {
   width: 100%;
   margin: 20px 0px !important;
-  border-collapse: collapse;
+  border-collapse: separate;
+  border-spacing: 0;
 }
+
+.tenatTable {
+  width: 100%;
+  margin: 20px 0px !important;
+  border-collapse: separate;
+  border-spacing: 0;
+}
+
+.tenatTable  tr:first-child td:first-child {
+  border-top-left-radius: 20px;
+}
+.tenatTable  tr:first-child td:last-child {
+  border-top-right-radius: 20px;
+}
+.tenatTable  tr:last-child td:first-child {
+  border-bottom-left-radius: 20px;
+}
+.tenatTable  tr:last-child td:last-child {
+  border-bottom-right-radius: 20px;
+}
+
+
 
 .tenatTable thead {
   background-color: #f3f3f3; /* Or any color you prefer */
@@ -15556,9 +15649,10 @@ input::-webkit-inner-spin-button {
 .tenatTable > thead > tr {
   height: 43px !important;
   border-radius: 10px !important;
-  background-color: #cee2fd !important;
+  background:  linear-gradient(to right, var(--new-app-secondary4), var(--new-app-secondary),  var(--new-app-secondary3));
   font-weight: 700;
   font-size: 16px;
+  color: white !important;
 }
 .tenatTable > tbody > tr {
   height: 43px !important;
@@ -16430,7 +16524,15 @@ input::-webkit-inner-spin-button {
 .customReactModal .modal-header {
   border-bottom: 1px solid #fff !important;
 }
-
+.dynamicDashboardModal .modal-content {
+  width:100% !important;
+}
+.dynamicDashboardModal .modal-dialog {
+  max-width: none !important;
+}
+.dynamicDashboardModal .modal-header {
+  border-bottom: 1px solid #fff !important;
+}
 .send_details {
   display: block;
   max-width: 100%;
@@ -16770,3 +16872,12 @@ input::-webkit-inner-spin-button {
     }
 }
 
+.dynamicChart .ant-card-bordered {
+  height: 100% !important;
+  padding: 20px !important;
+}
+
+.dynamicChart .ant-card-body {
+  background-color: white;
+  padding: 2px;
+}

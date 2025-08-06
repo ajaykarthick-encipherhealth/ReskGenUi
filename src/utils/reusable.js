@@ -32,6 +32,7 @@ import { getStorage } from "./storages";
 import SvgFlag from "../components/patientDetails/details/components/svg/svg";
 import { ssoLogout } from "../../lib/authService";
 import { useRouter } from "next/router";
+import { toFixedNum } from "../../src/commonPages/dashboard/component/function";
 
 export const getResponePopup = (res) => {
   switch (res?.data?.status ? res?.data?.status : res?.status) {
@@ -1172,8 +1173,8 @@ export const createIdGens = (key) => {
   }
 };
 
-export const tableCustomFilterClearCheck = (
- { searchText,
+export const tableCustomFilterClearCheck = ({
+  searchText,
   selectedDateRanges,
   selectedDates,
   selectedOption,
@@ -1181,8 +1182,8 @@ export const tableCustomFilterClearCheck = (
   setSelectedDateRanges,
   setSelectedDates,
   setSelectedOption,
-  data}
-) => {
+  data,
+}) => {
   const columnIds = new Set(data.map((col) => col.id));
 
   const searchTextResult = Object.fromEntries(
@@ -1219,3 +1220,119 @@ export const tableCustomFilterClearCheck = (
 
   return noResetNeeded;
 };
+
+export const getRoleIdByRole = (role) => {
+  switch (role) {
+    case "ADMIN":
+      return "0";
+    case "DOWNLOADER":
+      return "1";
+    case "OWNER":
+      return "2";
+    case "AI":
+      return "3";
+    case "CODER_1":
+      return "4";
+    case "CODER_2":
+      return "5";
+    case "QA":
+      return "6";
+    case "QA_LEAD":
+      return "7";
+    case "PROJECT_LEAD":
+      return "8";
+    case "CLIENT":
+      return "9";
+    default:
+      return null;
+  }
+};
+
+export const getColorValue = (key) => {
+  switch (key) {
+    case "primary":
+    case "1":
+      return "#064BAC";
+    case "secondary":
+    case "2":
+      return "#5271FA";
+    case "secondary2":
+    case "3":
+      return "#00C1FF";
+    case "secondary3":
+    case "4":
+      return "#006DDC";
+    case "secondary4":
+    case "5":
+      return "#008FCA";
+    case "secondary5":
+    case "6":
+      return "#0A5EB0";
+    case "secondary6":
+    case "7":
+      return "#8576FF";
+    default:
+      return null;
+  }
+};
+
+export const getStatusColor = (key) => {
+  switch (key) {
+    case "1": // allocated
+      return "#064BAC";
+    case "2": //Not Allocated
+      return "#5271FA";
+    case "3": //Completed
+      return "#00C1FF";
+    case "4": //InProgress
+      return "#006DDC";
+    case "5": //Reassigned
+      return "#008FCA";
+    // case "secondary5":
+    // case "6":
+    //   return "#0A5EB0";
+    // case "secondary6":
+    // case "7":
+    //   return "#8576FF";
+    default:
+      return null;
+  }
+};
+
+export const getRoleColor = (key) => {
+  switch (key) {
+    case "1": // admin
+      return "#064BAC";
+    case "2": //coder 1
+      return "#5271FA";
+    case "3": //coder 2
+      return "#00C1FF";
+    case "4": //Qa
+      return "#006DDC";
+    case "5": //Qa lead
+      return "#008FCA";
+    case "6": //projectLead
+      return "#0A5EB0";
+    case "7": //owner
+      return "#8576FF";
+    default:
+      return null;
+  }
+};
+
+export const getChartTimeLine = (obj,plotConfig) => {
+  const {key,value} = plotConfig;
+  const tempObj = {};
+      if (obj) {
+        for (const i of obj) {
+          tempObj[i[key]] = toFixedNum(i[value], 2);
+        }
+      }
+      return tempObj;
+}
+
+export const statusFormate = (status) => {
+
+    return typeof status == "string" ? status?.replace(/([a-z](?=[A-Z]))/g, '$1 ') : status;
+    
+}

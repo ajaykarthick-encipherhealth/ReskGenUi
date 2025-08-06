@@ -1,0 +1,68 @@
+import React from "react";
+import ReusableTable from "../../../../../commonPages/dashboard/component/table";
+import { connect } from "react-redux";
+import { actions as allActions } from "../../../../../stores/tenantAdmin/dashboard/default";
+import { useEffect } from "react";
+import { Skeleton, Spin } from "antd";
+
+const index = ({
+  getTopOigCodesData,
+  top0ijHccCodes,
+  dateRange,
+  selectedOrganization,
+  top0ijCodesLoader,
+  selectDos
+
+}) => {
+  useEffect(() => {
+    getTopOigCodesData(
+      dateRange.startDate,
+      dateRange.endDate,
+      selectedOrganization,selectDos
+    );
+  }, [dateRange,selectedOrganization,selectDos]);
+
+  return (
+    <>
+      <div>
+        <span style={{ fontSize: "18px", fontWeight: "600" }}>
+          Top 10 OIG Codes
+        </span>
+        <span
+          style={{
+            color: "#1679AB",
+            fontSize: "20px",
+            fontWeight: "600",
+            margin: "0 0 0 10px",
+          }}
+        >
+          {top0ijHccCodes?.response?.topDiseaseTotalCount}
+        </span>
+      </div>
+      {top0ijCodesLoader ? (
+        <div>
+          <Skeleton.Input
+            className="w-100"
+            style={{ height: "460px" }}
+            active
+          />
+        </div>
+      ) :  (
+        <ReusableTable items={top0ijHccCodes?.response?.topDiseaseDTOList} />
+      )}
+    </>
+  );
+};
+
+const enhancer = connect(
+  (state) => ({
+    top0ijHccCodes:
+      state?.tenantAdmin?.dashboard?.default?.allTopOigCodes?.data,
+    top0ijCodesLoader: state?.tenantAdmin?.dashboard?.default?.topTenOigCodes,
+  }),
+  {
+    getTopOigCodesData: allActions?.topOigCodes,
+  }
+);
+
+export default enhancer(index);

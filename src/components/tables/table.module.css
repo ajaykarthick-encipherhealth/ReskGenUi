@@ -1,5 +1,6 @@
 .classTable > thead {
   background: #04306f !important;
+  /* linear-gradient(to right, var(--new-app-secondary), var(--new-app-secondary4), var(--new-app-secondary3))  */
   border-radius: 10px !important;
 }
 
