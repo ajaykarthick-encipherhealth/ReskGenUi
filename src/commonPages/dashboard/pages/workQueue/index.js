@@ -585,15 +585,52 @@ const getCharts = ({
       //     ? filteredAccuracies.reduce((a, b) => a + b, 0) /
       //       filteredAccuracies.length
       //     : 0;
+      const today = new Date();
+      const todayYear = today.getFullYear();
+      const todayMonth = today.getMonth() + 1;
+      const todayDay = today.getDate();
+      const getWeekOfMonth = (date = new Date()) => {
+        const day = date.getDate();
+        const monthStart = new Date(date.getFullYear(), date.getMonth(), 1);
+        const monthStartDay = monthStart.getDay() || 7;
 
+        return Math.ceil((day + monthStartDay - 1) / 7);
+      };
+
+      const currentWeekOfMonth = getWeekOfMonth(today);
       const numericalData =
         rawAccuracyData?.length > 0 &&
-        rawAccuracyData?.filter((value) => value !== false); // Filter out false values
+        rawAccuracyData.filter((item) => {
+          if (!item || item === false) return false;
+          const { year, month, day, week } = item;
+          if (year > todayYear) return false;
+          if (year < todayYear || (year === todayYear && month < todayMonth)) {
+            return true;
+          }
+          if (
+            year === todayYear &&
+            month === todayMonth &&
+            week < currentWeekOfMonth
+          ) {
+            return true;
+          }
+          if (
+            year === todayYear &&
+            month === todayMonth &&
+            week === currentWeekOfMonth &&
+            day <= todayDay
+          ) {
+            return true;
+          }
+          return false;
+        });
+
       const sum =
         numericalData &&
-        numericalData?.reduce((acc, value) => acc + value.accuracy, 0); // Sum the numerical values
-      const averageAccuracy = sum / numericalData?.length; // Calculate the average
+        numericalData?.reduce((acc, value) => acc + value.accuracy, 0);
 
+      const averageAccuracy =
+        numericalData?.length > 0 ? sum / numericalData.length : 0;
       return (
         <>
           <div className={`d-flex justify-content-end gap-4 w-100`}>
