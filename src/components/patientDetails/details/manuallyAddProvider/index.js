@@ -100,6 +100,7 @@ const ManuallyAddProvider = ({
       providerReference: data?.hyperlinks?.[0]?.substring || "",
       isProviderSigned: !data?.noCredential ? true : false || false,
       fileType: data?.fileType || "",
+      providerNpi:data?.providerNpi || "",
     });
     setProvidersList(data);
   };
@@ -128,14 +129,12 @@ const ManuallyAddProvider = ({
         }
         setProvidersList(null);
       } else {
-        console.log("Trash failed:", res);
         getResponePopup({
           status: "FAILED",
           message: res?.data?.message || res?.message || "Something went wrong",
         });
       }
     } catch (error) {
-      console.log(error, "error");
       getResponePopup({
         status: "EXCEPTION",
         message:

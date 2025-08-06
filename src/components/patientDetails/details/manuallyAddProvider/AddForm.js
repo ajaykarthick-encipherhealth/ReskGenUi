@@ -7,6 +7,7 @@ import {
   notification,
   Radio,
   Select,
+  Spin,
   Switch,
 } from "antd";
 import React, { useEffect, useState } from "react";
@@ -17,6 +18,7 @@ import { actions as allActions } from "../../../../stores/patient/details";
 import { disableFutureDate } from "../../../headerFilters/functions";
 import dayjs from "dayjs";
 import { getResponePopup } from "../../../../utils/reusable";
+import { actions as tinActions } from "../../../../stores/tenantAdmin/tin";
 
 const AddForm = ({
   form,
@@ -36,11 +38,13 @@ const AddForm = ({
   allProviderList,
   allCredentialList,
   getCredentials,
-  existingDos,
+  getProviderNameLoad,
   getExistingDos,
   getSelectedDos,
   year,
   setSelectDosValue,
+  getProviderNPIList,
+  getProviderNameList,
   isTrashView,
 }) => {
   const [btnName, setBtnName] = useState(null);
@@ -48,32 +52,31 @@ const AddForm = ({
   const [credentialOptions, setCredentialOptions] = useState([]);
   const [dosExistsError, setDosExistsError] = useState(null);
   const { patientId = null } = getLocalStored();
+  const [opt, setOpt] = useState([]);
 
-const validateThreeDigitNumber = (_, value) => {
-  const number = Number(value);
-  if (!value || (/^\d{1,3}$/.test(value) && number > 0)) {
-    return Promise.resolve();
-  }
-  return Promise.reject(
-    new Error("Please enter a valid positive number (1-999)")
-  );
-};
-const noWhitespaceOnly = (_, value) => {
-  if (!value || value.trim() === "") {
+  const validateThreeDigitNumber = (_, value) => {
+    const number = Number(value);
+    if (!value || (/^\d{1,3}$/.test(value) && number > 0)) {
+      return Promise.resolve();
+    }
     return Promise.reject(
-      new Error("Reference cannot be empty or just spaces")
+      new Error("Please enter a valid positive number (1-999)")
     );
-  }
-  if (/^\s/.test(value)) {
-    return Promise.reject(new Error("Reference cannot start with a space"));
-  }
-  return Promise.resolve();
-};
-
+  };
+  const noWhitespaceOnly = (_, value) => {
+    if (!value || value.trim() === "") {
+      return Promise.reject(
+        new Error("Reference cannot be empty or just spaces")
+      );
+    }
+    if (/^\s/.test(value)) {
+      return Promise.reject(new Error("Reference cannot start with a space"));
+    }
+    return Promise.resolve();
+  };
 
   const AddProvider = async (values, providersLists) => {
     setBtnName("LOADING...");
-
     const customFileId =
       values?.fileType === "CHART"
         ? patientDetailsResult?.fileId
@@ -97,6 +100,10 @@ const noWhitespaceOnly = (_, value) => {
           : values.faceToFace === false || values.faceToFace === "No"
           ? false
           : undefined,
+      providerNpi: values?.providerNpi || "",
+      providerName: values?.providerName?.key
+        ? values?.providerName?.key
+        : values?.providerName || "",
     };
 
     if (originalDos && originalDos !== formDos) {
@@ -156,7 +163,57 @@ const noWhitespaceOnly = (_, value) => {
       form.setFieldsValue(newValues);
     }
   };
+  const handleChanges = async (e) => {
+    const value = e.target.value || "";
+    if (value?.length === 10 && !value.includes(" ")) {
+      try {
+        const res = await getProviderNPIList({ obj: { number: value } });
+        if (res?.status === "SUCCESS" && res?.response?.basic) {
+          const { firstName, lastName } = res.response.basic;
+          if (firstName && lastName) {
+            form.setFieldsValue({
+              providerName: `${firstName} ${lastName}`,
+            });
+          } else {
+            form.setFieldsValue({
+              providerName: null,
+            });
+          }
+        } else {
+          form.setFieldsValue({
+            providerName: null,
+          });
+        }
+      } catch (error) {
+        form.setFieldsValue({
+          providerName: null,
+        });
+      }
+    }
+  };
 
+  const handleChange = async (value, key) => {
+    const isFirstName = key === "firstName";
+    if (isFirstName && value.length > 2) {
+      try {
+        const res = await getProviderNameList({
+          firstName: isFirstName ? value : "",
+        });
+        if (res?.status === "SUCCESS") {
+          const data = res?.response?.npiResponseDtoList?.map((item) => ({
+            label: `${item.basic.firstName} ${item.basic.lastName}`,
+            value: `${item.basic.firstName} ${item.basic.lastName}`,
+            number: item.number,
+          }));
+          setOpt(data || []);
+        }
+      } catch (error) {
+        console.error("Failed to fetch provider names:", error);
+      }
+    } else {
+      setOpt([]);
+    }
+  };
   const customDisableDate = (current) => {
     const year = dosYearDefalutSelect?.value || dosYearDefalutSelect;
     return current.year() !== year;
@@ -400,22 +457,63 @@ const noWhitespaceOnly = (_, value) => {
           {!physicianSignaturePresent && (
             <>
               <Form.Item
+                label="NPI Number"
+                name="providerNpi"
+                rules={[
+                  { required: true, message: "Please Enter NPI Number" },
+                  { pattern: /^\d+$/, message: "Only numbers are allowed" },
+                ]}
+              >
+                <Input
+                  style={{ width: "100%", height: "2.75rem" }}
+                  placeholder="Enter NPI Number"
+                  onChange={handleChanges}
+                  maxLength={10}
+                  onClear={() => setOpt([])}
+                  onBlur={() => {
+                    const selected = form.getFieldValue("providerNpi");
+                    if (!selected) {
+                      setOpt([]);
+                    }
+                  }}
+                  onKeyDown={(e) => {
+                    if (e.key === " ") {
+                      e.preventDefault();
+                    }
+                  }}
+                />
+              </Form.Item>
+              <Form.Item
                 label={<label className={style.dateField}>Provider Name</label>}
                 name="providerName"
                 rules={[{ required: true, message: "Please Select Provider" }]}
               >
                 <Select
-                  placeholder="Select Provider Name"
+                  style={{ width: "100%", height: "2.75rem" }}
                   showSearch
-                  optionFilterProp="children"
-                  style={{ height: "42px" }}
-                >
-                  {providerOptions.map((provider, index) => (
-                    <Select.Option key={index} value={provider}>
-                      {provider}
-                    </Select.Option>
-                  ))}
-                </Select>
+                  placeholder="Select Provider Name"
+                  labelInValue
+                  filterOption={false}
+                  onSearch={(value) => handleChange(value, "firstName")}
+                  onChange={(value, subValue) => {
+                    form.setFieldsValue({
+                      providerNpi: subValue?.number || null,
+                      lastName: subValue?.lastName || null,
+                      firstName: subValue?.firstName || null,
+                    });
+                  }}
+                  onClear={() => setOpt([])}
+                  onBlur={() => {
+                    const selected = form.getFieldValue("firstName");
+                    if (!selected) {
+                      setOpt([]);
+                    }
+                  }}
+                  notFoundContent={
+                    getProviderNameLoad ? <Spin size="small" /> : "No data"
+                  }
+                  options={!getProviderNameLoad && opt}
+                />
               </Form.Item>
               <Form.Item
                 label={
@@ -518,7 +616,6 @@ const noWhitespaceOnly = (_, value) => {
               type="primary"
               className=" btn btn-sm ms-2 flr width-max-content custom-btn-style"
               disabled={!!btnName || isTrashView}
-              
             >
               {btnName ? btnName : providersList ? "UPDATE" : "ADD"}
             </Button>
@@ -540,6 +637,7 @@ const connector = connect(
     allCredentialList:
       state?.patientDetails?.details?.credentialList?.data?.response,
     existingDos: state?.patientDetails?.details?.existingDos,
+    getProviderNameLoad: state?.tenantAdmin?.tin?.getProviderNameLoad,
   }),
   {
     getAddProviderAndDOS: allActions.getAddProviderAndDOS,
@@ -551,6 +649,8 @@ const connector = connect(
     getProvider: allActions.getProviderList,
     getCredentials: allActions.getCredentialList,
     getExistingDos: allActions.getDosExist,
+    getProviderNPIList: tinActions.getProviderNPIList,
+    getProviderNameList: tinActions.getProviderNameList,
   }
 );
 
