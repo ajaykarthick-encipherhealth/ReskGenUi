@@ -375,7 +375,7 @@ const CodersTable = ({
                 <Nav as="ul" className="nav nav-tabs">
                   <Nav.Item
                     as="li"
-                    className="nav-item"
+                    className="nav-item mt-4"
                     onClick={() => {
                       handleTabs("PENDING");
                     }}
@@ -396,7 +396,7 @@ const CodersTable = ({
                   </Nav.Item>
                   <Nav.Item
                     as="li"
-                    className="nav-item"
+                    className="nav-item mt-4"
                     onClick={() => {
                       handleTabs("APPROVED");
                     }}
@@ -417,7 +417,7 @@ const CodersTable = ({
                   </Nav.Item>{" "}
                   <Nav.Item
                     as="li"
-                    className="nav-item"
+                    className="nav-item mt-4"
                     onClick={() => {
                       handleTabs("REJECTED");
                     }}

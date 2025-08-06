@@ -50,6 +50,7 @@ const tableReducer = combineReducers({
   tableView: createReducer(tableViewAction),
   tableColumnChecked: createReducer(tableDynamicChecked),
   TableStatusView: createReducer(getTableStatusAction),
+  tableStatusLoading:getReportLoading(getTableStatusAction),
   TinCountView: createReducer(getTinCountAction),
   tinColumnChecked: createReducer(tinDynamicChecked),
 });

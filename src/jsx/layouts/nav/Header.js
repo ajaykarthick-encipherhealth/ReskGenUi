@@ -109,6 +109,7 @@ const Header = ({
   getNotificationSound,
   notificationSound,
   getProjectActiveTab,
+  getTableStatus
 }) => {
   const router = useRouter();
   const fileInputRef = useRef(null);
@@ -400,6 +401,7 @@ const Header = ({
   };
   useEffect(() => {
     getTableData({ reloadTrue: true });
+    // getTableStatus({ reloadTrue: true });
   }, []);
 
   useEffect(() => {
@@ -575,6 +577,7 @@ const Header = ({
       getReportActiveTab(null);
       getRoutedData(null);
       getTableData({ reloadTrue: true });
+      getTableStatus({reloadTrue:true})
       router.push(
         {
           pathname: `${data?.to}`,
@@ -1563,6 +1566,7 @@ const enhancer = connect(
     getTableData: tableAction.tableViewAction,
     getNotificationSound: dashbaordActions.notificationSound,
     getProjectActiveTab: tinActions.getProjectActiveTab,
+     getTableStatus: tableAction.getTableStatusAction,
   }
 );
 export default enhancer(Header);
