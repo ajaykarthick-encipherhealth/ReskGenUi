@@ -1,4 +1,4 @@
-import { getFormattedChartData } from "../../function";
+import { getFormattedChartData, getTotalChart } from "../../function";
 import AppChart from "../../appchart";
 import AccuracyChart from "../../accuracyChart";
 import StatCard from "../../statChart";
@@ -221,22 +221,23 @@ export const Coder1 = ({ chartType, chartChange }) => {
     height: coder1Height,
   } = getFormattedChartData(coder1Series, chartType);
 
-      return chartChange ? (
-        <div className="">
-          <CardSkeleton count={1} height={200}/>
-        </div>
-      ) : (
-        <AppChart
-          type={chartType}
-          categories={coder1Categories}
-          series={coder1Formatted}
-          height={coder1Height}
-          showLegend={true}
-          showLegendBarLine={false}
-          xAxisRotated ={true}
-        />
-      );
-}
+  return chartChange ? (
+    <div className="">
+      <CardSkeleton count={1} height={200} />
+    </div>
+  ) : (
+    <AppChart
+      type={chartType}
+      categories={coder1Categories}
+      series={coder1Formatted}
+      height={coder1Height}
+      showLegend={true}
+      showLegendBarLine={false}
+      xAxisRotated={true}
+      total={getTotalChart(coder1Series)}
+    />
+  );
+};
 
 export const Coder2 = ({ chartType, chartChange }) => {
   const coder2Series = [
@@ -254,22 +255,23 @@ export const Coder2 = ({ chartType, chartChange }) => {
     height: coder2Height,
   } = getFormattedChartData(coder2Series, chartType);
 
-      return chartChange ? (
-        <div className="">
-          <CardSkeleton count={1} height={200}/>
-        </div>
-      ) : (
-        <AppChart
-          type={chartType}
-          categories={coder2Categories}
-          series={coder2Formatted}
-          height={coder2Height}
-          showLegend={true}
-          showLegendBarLine={false}
-          xAxisRotated ={true}
-        />
-      );
-}
+  return chartChange ? (
+    <div className="">
+      <CardSkeleton count={1} height={200} />
+    </div>
+  ) : (
+    <AppChart
+      type={chartType}
+      categories={coder2Categories}
+      series={coder2Formatted}
+      height={coder2Height}
+      showLegend={true}
+      showLegendBarLine={false}
+      xAxisRotated={true}
+      total={getTotalChart(coder2Series)}
+    />
+  );
+};
 
 export const QA = ({ chartType, chartChange }) => {
   const QASeries = [
@@ -287,22 +289,23 @@ export const QA = ({ chartType, chartChange }) => {
     height: QAHeight,
   } = getFormattedChartData(QASeries, chartType);
 
-      return chartChange ? (
-        <div className="">
-          <CardSkeleton count={1} height={200}/>
-        </div>
-      ) : (
-        <AppChart
-          type={chartType}
-          categories={QACategories}
-          series={QAFormatted}
-          height={QAHeight}
-          showLegend={true}
-          showLegendBarLine={false}
-          xAxisRotated ={true}
-        />
-      );
-}
+  return chartChange ? (
+    <div className="">
+      <CardSkeleton count={1} height={200} />
+    </div>
+  ) : (
+    <AppChart
+      type={chartType}
+      categories={QACategories}
+      series={QAFormatted}
+      height={QAHeight}
+      showLegend={true}
+      showLegendBarLine={false}
+      xAxisRotated={true}
+      total={getTotalChart(QASeries)}
+    />
+  );
+};
 
 export const ProjectLead = ({ chartType, chartChange }) => {
   const PLSeries = [
@@ -320,22 +323,23 @@ export const ProjectLead = ({ chartType, chartChange }) => {
     height: PLHeight,
   } = getFormattedChartData(PLSeries, chartType);
 
-      return chartChange ? (
-        <div className="">
-          <CardSkeleton count={1} height={200}/>
-        </div>
-      ) : (
-        <AppChart
-          type={chartType}
-          categories={PLCategories}
-          series={PLFormatted}
-          height={PLHeight}
-          showLegend={true}
-          showLegendBarLine={false}
-          xAxisRotated ={true}
-        />
-      );
-}
+  return chartChange ? (
+    <div className="">
+      <CardSkeleton count={1} height={200} />
+    </div>
+  ) : (
+    <AppChart
+      type={chartType}
+      categories={PLCategories}
+      series={PLFormatted}
+      height={PLHeight}
+      showLegend={true}
+      showLegendBarLine={false}
+      xAxisRotated={true}
+      total={getTotalChart(PLSeries)}
+    />
+  );
+};
 
 export const QALead = ({ chartType, chartChange }) => {
   const QALeadSeries = [
@@ -353,22 +357,23 @@ export const QALead = ({ chartType, chartChange }) => {
     height: QALeadHeight,
   } = getFormattedChartData(QALeadSeries, chartType);
 
-      return chartChange ? (
-        <div className="">
-          <CardSkeleton count={1} height={200}/>
-        </div>
-      ) : (
-        <AppChart
-          type={chartType}
-          categories={QALeadCategories}
-          series={QALeadFormatted}
-          height={QALeadHeight}
-          showLegend={true}
-          showLegendBarLine={false}
-          xAxisRotated ={true}
-        />
-      );
-}
+  return chartChange ? (
+    <div className="">
+      <CardSkeleton count={1} height={200} />
+    </div>
+  ) : (
+    <AppChart
+      type={chartType}
+      categories={QALeadCategories}
+      series={QALeadFormatted}
+      height={QALeadHeight}
+      showLegend={true}
+      showLegendBarLine={false}
+      xAxisRotated={true}
+      total={getTotalChart(QALeadSeries)}
+    />
+  );
+};
 
 export const Owner = ({ chartType, chartChange }) => {
   const OwnerSeries = [
@@ -386,22 +391,23 @@ export const Owner = ({ chartType, chartChange }) => {
     height: OwnerHeight,
   } = getFormattedChartData(OwnerSeries, chartType);
 
-      return chartChange ? (
-        <div className="">
-          <CardSkeleton count={1} height={200}/>
-        </div>
-      ) : (
-        <AppChart
-          type={chartType}
-          categories={OwnerCategories}
-          series={OwnerFormatted}
-          height={OwnerHeight}
-          showLegend={true}
-          showLegendBarLine={false}
-          xAxisRotated ={true}
-        />
-      );
-}
+  return chartChange ? (
+    <div className="">
+      <CardSkeleton count={1} height={200} />
+    </div>
+  ) : (
+    <AppChart
+      type={chartType}
+      categories={OwnerCategories}
+      series={OwnerFormatted}
+      height={OwnerHeight}
+      showLegend={true}
+      showLegendBarLine={false}
+      xAxisRotated={true}
+      total={getTotalChart(OwnerSeries)}
+    />
+  );
+};
 
 export const Users = ({ chartType, chartChange }) => {
   const UsersSeries = [
@@ -419,22 +425,22 @@ export const Users = ({ chartType, chartChange }) => {
     height: UsersSeriesHeight,
   } = getFormattedChartData(UsersSeries, chartType);
 
-      return chartChange ? (
-        <div className="">
-          <CardSkeleton count={1} height={200}/>
-        </div>
-      ) : (
-        <AppChart
-          type={chartType}
-          categories={UsersSeriesCategories}
-          series={UsersSeriesFormatted}
-          height={UsersSeriesHeight}
-          showLegend={true}
-          showLegendBarLine={false}
-          xAxisRotated ={true}
-        />
-      );
-}
+  return chartChange ? (
+    <div className="">
+      <CardSkeleton count={1} height={200} />
+    </div>
+  ) : (
+    <AppChart
+      type={chartType}
+      categories={UsersSeriesCategories}
+      series={UsersSeriesFormatted}
+      height={UsersSeriesHeight}
+      showLegend={true}
+      showLegendBarLine={false}
+      xAxisRotated={true}
+    />
+  );
+};
 
 export const Accuracy = ({ chartType, chartChange }) => {
   return (

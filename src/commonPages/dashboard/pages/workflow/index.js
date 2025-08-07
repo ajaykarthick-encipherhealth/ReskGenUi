@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import AppChart from "../../component/appchart";
 import {
   getFormattedChartData,
+  getTotalChart,
   useHasMounted,
   useWindowWidth,
   WorkflowWidget,
@@ -398,6 +399,7 @@ const getCharts = ({
           showLegend={true}
           showLegendBarLine={false}
           xAxisRotated ={true}
+          total={getTotalChart(coder1Series)}
         />
       );
 
@@ -456,6 +458,7 @@ const getCharts = ({
           showLegend={true}
           showLegendBarLine={false}
           xAxisRotated ={true}
+          total={getTotalChart(coder2Series)}
         />
       );
     case "QA":
@@ -513,6 +516,7 @@ const getCharts = ({
           showLegend={true}
           showLegendBarLine={false}
           xAxisRotated ={true}
+          total={getTotalChart(QASeries)}
         />
       );
     case "Project Lead":
@@ -570,6 +574,7 @@ const getCharts = ({
           showLegend={true}
           showLegendBarLine={false}
           xAxisRotated ={true}
+          total={getTotalChart(PLSeries)}
         />
       );
 
@@ -628,6 +633,7 @@ const getCharts = ({
           showLegend={true}
           showLegendBarLine={false}
           xAxisRotated ={true}
+          total={getTotalChart(QALeadSeries)}
         />
       );
     case "Owner":
@@ -685,6 +691,7 @@ const getCharts = ({
           showLegend={true}
           showLegendBarLine={false}
           xAxisRotated ={true}
+          total={getTotalChart(OwnerSeries)}
         />
       );
     case "Users":

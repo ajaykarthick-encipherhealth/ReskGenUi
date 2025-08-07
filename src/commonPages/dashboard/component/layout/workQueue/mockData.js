@@ -11,7 +11,7 @@ import {
   faGaugeHigh,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { getFormattedChartData } from "../../function";
+import { getFormattedChartData, getTotalChart } from "../../function";
 import CardSkeleton from "../../../../../components/skeleton/card";
 import { Skeleton } from "antd";
 
@@ -212,6 +212,7 @@ export const WorkFlow = ({ chartType, chartChange, selectedRole }) => {
       showLegend={true}
       showLegendBarLine={false}
       // xAxisRotated={true}
+      total={getTotalChart(chart5Data)}
     />
   );
 };
@@ -273,6 +274,7 @@ export const DailyTask5 = ({ chartType, chartChange, selectedRole, windowWidth }
                     showLegendBarLine={false}
                     isDailyChart={true}
                     xAxisRotated={true}
+                    total={getTotalChart(task.series)}
                   />
                 </div>
               );
@@ -362,6 +364,7 @@ export const DailyTask7 = ({ chartType, chartChange, selectedRole, windowWidth }
                     showLegendBarLine={false}
                     isDailyChart={true}
                     xAxisRotated={true}
+                    total={getTotalChart(task.series)}
                   />
                 </div>
               );
@@ -582,6 +585,7 @@ export const WorkFlowCharat7 = ({ chartType, chartChange, selectedRole }) => {
       showLegend={true}
       showLegendBarLine={false}
       // xAxisRotated={true}
+      total={getTotalChart(chart7Data)}
     />
   );
 };

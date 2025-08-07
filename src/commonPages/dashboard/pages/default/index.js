@@ -1132,6 +1132,11 @@ function Default({
             return (
               <div className="dynamicChart" key={id} style={style}>
                 <Card>
+                  {item.widgetName !== "WorkFlow" &&
+                    item.title !== "Notifications" &&
+                    item.title !== "Hold Status" && (
+                      <div className="fw-bold mb-2 fs-5">{item.title}</div>
+                    )}
                   {getCharts({
                     type: item.widgetName,
                     chartType: item?.selectedChart,

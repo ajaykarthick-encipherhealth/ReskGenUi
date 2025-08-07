@@ -34,6 +34,7 @@ const AppChart = ({
   xAxisInterval = 0,
   plotConfig,
   isDailyChart = false,
+  total
 }) => {
   series = series.map((item) => {
     if (item.name) {
@@ -420,7 +421,7 @@ const AppChart = ({
                 show: true,
                 position: "center",
                 formatter: () => {
-                  const total = series.reduce(
+                  total =  total ??  series.reduce(
                     (sum, item) => sum + (item.value || 0),
                     0
                   );

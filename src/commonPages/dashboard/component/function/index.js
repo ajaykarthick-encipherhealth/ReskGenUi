@@ -642,3 +642,8 @@ export const filterWidgetsByRole = (widgets, selectedRole) => {
   });
 };
 
+export const getTotalChart = (series) => {
+  return series.reduce((acc, item) => {
+    return (item.name || item.status) === "Allocated" ? item.value : acc
+  }, 0);
+};

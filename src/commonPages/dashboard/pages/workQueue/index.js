@@ -5,6 +5,7 @@ import {
   getDateWeek,
   getDaysInMonth,
   getFormattedChartData,
+  getTotalChart,
   useHasMounted,
   useWindowWidth,
   workQueueWidget,
@@ -216,6 +217,7 @@ const getCharts = ({
           showLegend={true}
           showLegendBarLine={false}
           xAxisRotated={true}
+          total={getTotalChart(chart5Data)}
         />
       );
     case "DailyTask5":
@@ -323,6 +325,7 @@ const getCharts = ({
                         radius={["40%", "70%"]}
                         isDailyChart={true}
                         xAxisRotated={true}
+                        total={getTotalChart(task.series)}
                       />
                     </div>
                   );
@@ -463,6 +466,7 @@ const getCharts = ({
                         radius={["40%", "70%"]}
                         isDailyChart={true}
                         xAxisRotated={true}
+                        total={getTotalChart(task.series)}
                       />
                     </div>
                   );
@@ -970,6 +974,7 @@ const getCharts = ({
           showLegend={true}
           showLegendBarLine={false}
           xAxisRotated={true}
+          total={getTotalChart(chart7Data)}
         />
       );
     default:
