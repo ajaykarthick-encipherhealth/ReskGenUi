@@ -51,7 +51,6 @@ function Invalid({
   customDate,
 }) {
   const [showModal, setShowModal] = useState(false);
-  const [loadingChart, setLoadingChart] = useState(true);
   const [modalChartData, setModalChartData] = useState(null);
   const showModalChart = (data) => {
     setModalChartData(data);
@@ -77,7 +76,19 @@ function Invalid({
     getInvalidMrnIdMismatch: mrnRes,
     getInvalidMultiplePatientFound: multipleRes,
     getInvalidPatientInActive: inactiveRes,
+    getInvalidDosCountLoader,
+    getInvalidDocumentLoader,
+    getInvalidTelevistLoader,
+    getInvalidCredentailsLoader,
+    getInvalidPatientDOBMismatchLoader,
+    getInvalidPatientNameMismatchLoader,
+    getInvalidScopeYearMisMatchLoader,
+    getInvalidPatientDeceasedLoader,
+    getInvalidMrnIdMismatchLoader,
+    getInvalidMultiplePatientFoundLoader,
+    getInvalidPatientInActiveLoader,
   } = data || {};
+
   const dosCount = dosCountRes?.data?.response;
   const document = documentRes?.data?.response;
   const televist = televistRes?.data?.response;
@@ -128,7 +139,7 @@ function Invalid({
       overAll: dosCount?.totalCount || 0,
       data: formatValues(dosCount?.invalidDosCountMapByDate, dates),
       categories: formatDate(dosCount?.invalidDosCountMapByDate || {}),
-      loading: dosCountRes?.loading,
+      loading: getInvalidDosCountLoader,
       color: getColorValue("7"),
     },
     {
@@ -140,7 +151,7 @@ function Invalid({
       overAll: document?.totalCount || 0,
       data: formatValues(document?.invalidDosCountMapByDate, dates),
       categories: formatDate(document?.invalidDosCountMapByDate || {}),
-      loading: documentRes?.loading,
+      loading: getInvalidDocumentLoader,
       color: getColorValue("5"),
     },
     {
@@ -152,7 +163,7 @@ function Invalid({
       overAll: televist?.totalCount || 0,
       data: formatValues(televist?.invalidDosCountMapByDate, dates),
       categories: formatDate(televist?.invalidDosCountMapByDate || {}),
-      loading: televistRes?.loading,
+      loading: getInvalidTelevistLoader,
       color: getColorValue("4"),
     },
     {
@@ -164,7 +175,7 @@ function Invalid({
       overAll: credentials?.totalCount || 0,
       data: formatValues(credentials?.invalidDosCountMapByDate, dates),
       categories: formatDate(credentials?.invalidDosCountMapByDate || {}),
-      loading: credentialsRes?.loading,
+      loading: getInvalidCredentailsLoader,
       color: getColorValue("3"),
     },
     {
@@ -176,7 +187,7 @@ function Invalid({
       overAll: dobMismatch?.totalCount || 0,
       data: formatValues(dobMismatch?.invalidDosCountMapByDate, dates),
       categories: formatDate(dobMismatch?.invalidDosCountMapByDate || {}),
-      loading: dobMismatchRes?.loading,
+      loading: getInvalidPatientDOBMismatchLoader,
       color: getColorValue("7"),
     },
     {
@@ -188,7 +199,7 @@ function Invalid({
       overAll: nameMismatch?.totalCount || 0,
       data: formatValues(nameMismatch?.invalidDosCountMapByDate, dates),
       categories: formatDate(nameMismatch?.invalidDosCountMapByDate || {}),
-      loading: nameMismatchRes?.loading,
+      loading: getInvalidPatientNameMismatchLoader,
       color: getColorValue("4"),
     },
     {
@@ -200,7 +211,7 @@ function Invalid({
       overAll: scopeMismatch?.totalCount || 0,
       data: formatValues(scopeMismatch?.invalidDosCountMapByDate, dates),
       categories: formatDate(scopeMismatch?.invalidDosCountMapByDate || {}),
-      loading: scopeMismatchRes?.loading,
+      loading: getInvalidScopeYearMisMatchLoader,
       color: getColorValue("1"),
     },
     {
@@ -212,7 +223,7 @@ function Invalid({
       overAll: deceased?.totalCount || 0,
       data: formatValues(deceased?.invalidDosCountMapByDate, dates),
       categories: formatDate(deceased?.invalidDosCountMapByDate || {}),
-      loading: deceasedRes?.loading,
+      loading: getInvalidPatientDeceasedLoader,
       color: getColorValue("4"),
     },
     {
@@ -224,7 +235,7 @@ function Invalid({
       overAll: mrnId?.totalCount || 0,
       data: formatValues(mrnId?.invalidDosCountMapByDate, dates),
       categories: formatDate(mrnId?.invalidDosCountMapByDate || {}),
-      loading: mrnRes?.loading,
+      loading: getInvalidMrnIdMismatchLoader,
       color: getColorValue("7"),
     },
     {
@@ -236,7 +247,7 @@ function Invalid({
       overAll: multiplePatient?.totalCount || 0,
       data: formatValues(multiplePatient?.invalidDosCountMapByDate, dates),
       categories: formatDate(multiplePatient?.invalidDosCountMapByDate || {}),
-      loading: multipleRes?.loading,
+      loading: getInvalidMultiplePatientFoundLoader,
       color: getColorValue("4"),
     },
     {
@@ -248,7 +259,7 @@ function Invalid({
       overAll: inactive?.totalCount || 0,
       data: formatValues(inactive?.invalidDosCountMapByDate, dates),
       categories: formatDate(inactive?.invalidDosCountMapByDate || {}),
-      loading: inactiveRes?.loading,
+      loading: getInvalidPatientInActiveLoader,
       color: getColorValue("3"),
     },
   ];
@@ -351,12 +362,11 @@ function Invalid({
   );
   const getApiCall = async () => {
     try {
-      setLoadingChart(true);
       for (const item of apiKeys) {
         const actionKey = `${item.key}Action`;
 
         if (typeof actions[actionKey] === "function") {
-          await dispatch(
+          dispatch(
             actions[actionKey]({
               flagNameList: item.flagName,
               startDate: dateRange.startDate,
@@ -364,7 +374,6 @@ function Invalid({
               organizationId: selectedOrganization || "",
             })
           );
-          if (item.key === apiKeys[apiKeys.length-1].key) setLoadingChart(false);
         } else {
           console.warn(`Action not found for key: ${actionKey}`);
         }
@@ -378,7 +387,7 @@ function Invalid({
     const chart = chartCofigs.find((item) => item.type === type);
     if (!chart) return null;
 
-    return loadingChart || pagesLoader ? (
+    return chart.loading || pagesLoader ? (
       <CardSkeleton count={1} height={300} />
     ) : (
       <AppChart
@@ -415,8 +424,8 @@ function Invalid({
   };
   useEffect(() => {
     getApiCall();
-  }, [dateRange,getSelectedWidgets]);
-  
+  }, [dateRange, getSelectedWidgets]);
+
   const windowWidth = useWindowWidth();
   const hasMounted = useHasMounted();
   if (!hasMounted) return null;
