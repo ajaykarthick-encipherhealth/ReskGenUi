@@ -50,6 +50,9 @@ const apiDefinitions = [
   { key: "getInvalidDocument", endpoint: "invalid/dashboard/count/flag" },
   { key: "getInvalidTelevist", endpoint: "invalid/dashboard/count/flag" },
   { key: "getInvalidCredentails", endpoint: "invalid/dashboard/count/flag" },
+  { key: "getInvalidProviderMissed", endpoint: "invalid/dashboard/count/flag" },
+  { key: "getInvalidProviderSignMissed", endpoint: "invalid/dashboard/count/flag" },
+  { key: "getInvalidNoHccFound", endpoint: "invalid/dashboard/count/flag" },
   {
     key: "getInvalidPatientDOBMismatch",
     endpoint: "invalid/dashboard/count/flag",

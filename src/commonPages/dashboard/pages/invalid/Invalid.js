@@ -76,6 +76,9 @@ function Invalid({
     getInvalidMrnIdMismatch: mrnRes,
     getInvalidMultiplePatientFound: multipleRes,
     getInvalidPatientInActive: inactiveRes,
+    getInvalidProviderMissed: providerMissedRes,
+    getInvalidProviderSignMissed: providerSignMissedRes,
+    getInvalidNoHccFound: noHccFoundRes,
     getInvalidDosCountLoader,
     getInvalidDocumentLoader,
     getInvalidTelevistLoader,
@@ -87,6 +90,9 @@ function Invalid({
     getInvalidMrnIdMismatchLoader,
     getInvalidMultiplePatientFoundLoader,
     getInvalidPatientInActiveLoader,
+    getInvalidProviderMissedLoader,
+    getInvalidProviderSignMissedLoader,
+    getInvalidNoHccFoundLoader
   } = data || {};
 
   const dosCount = dosCountRes?.data?.response;
@@ -100,6 +106,9 @@ function Invalid({
   const mrnId = mrnRes?.data?.response;
   const multiplePatient = multipleRes?.data?.response;
   const inactive = inactiveRes?.data?.response;
+  const providerMissed = providerMissedRes?.data?.response;
+  const providerSignMissed = providerSignMissedRes?.data?.response;
+  const noHccFound = noHccFoundRes?.data?.response;
 
   const dates =
     selectedValue === "custom"
@@ -156,7 +165,7 @@ function Invalid({
     },
     {
       type: "Televisit",
-      header: "Televisit (Audio visit) count",
+      header: "Audio Visit Count",
       image: teleVisitNew,
       background: "#CDE0FE",
       count: televist?.currentFilterCOunt || 0,
@@ -167,8 +176,8 @@ function Invalid({
       color: getColorValue("4"),
     },
     {
-      type: "InvalidCredentails",
-      header: "Invalid Credentials",
+      type: "ProviderUnauthorized",
+      header: "Provider Unauthorized",
       image: invalidNew,
       background: "#D3F2F8",
       count: credentials?.currentFilterCOunt || 0,
@@ -262,6 +271,54 @@ function Invalid({
       loading: getInvalidPatientInActiveLoader,
       color: getColorValue("3"),
     },
+    {
+      type: "ProviderMissed",
+      header: "Provider Missed",
+      image: mrnNew,
+      background: "#D2CCFF",
+      count: providerMissed?.currentFilterCOunt || 0,
+      overAll: providerMissed?.totalCount || 0,
+      data: formatValues(providerMissed?.invalidDosCountMapByDate, dates),
+      categories: formatDate(providerMissed?.invalidDosCountMapByDate || {}),
+      loading: getInvalidProviderMissedLoader,
+      color: getColorValue("7"),
+    },
+    {
+      type: "ProviderSignMissed",
+      header: "Provider Sign Missed",
+      image: mrnNew,
+      background: "#D2CCFF",
+      count: providerSignMissed?.currentFilterCOunt || 0,
+      overAll: providerSignMissed?.totalCount || 0,
+      data: formatValues(providerSignMissed?.invalidDosCountMapByDate, dates),
+      categories: formatDate(providerSignMissed?.invalidDosCountMapByDate || {}),
+      loading: getInvalidProviderSignMissedLoader,
+      color: getColorValue("7"),
+    },
+    {
+      type: "NoHccFound",
+      header: "No HCC Found",
+      image: illegalNew,
+      background: "#D3F2F8",
+      count: noHccFound?.currentFilterCOunt || 0,
+      overAll: noHccFound?.totalCount || 0,
+      data: formatValues(noHccFound?.invalidDosCountMapByDate, dates),
+      categories: formatDate(noHccFound?.invalidDosCountMapByDate || {}),
+      loading: getInvalidNoHccFoundLoader,
+      color: getColorValue("3"),
+    },
+    {
+      type: "OutOfScope",
+      header: "Out Of Scope",
+      image: scopeNew,
+      background: "#D1DAFA",
+      count: scopeMismatch?.currentFilterCOunt || 0,
+      overAll: scopeMismatch?.totalCount || 0,
+      data: formatValues(scopeMismatch?.invalidDosCountMapByDate, dates),
+      categories: formatDate(scopeMismatch?.invalidDosCountMapByDate || {}),
+      loading: getInvalidScopeYearMisMatchLoader,
+      color: getColorValue("1"),
+    },
   ];
 
   const api = [
@@ -291,16 +348,16 @@ function Invalid({
     },
     {
       flagName: "PROVIDER_UNAUTHORIZED",
-      label: "invalidcredentails",
-      id: 4,
+      label: "invalidCredentials",
+      id: 9,
       key: "getInvalidCredentails",
       parmas: {},
-      widgetId: ["acd1b072-3ca4-4bf2-8d32-973ab8c7c014"],
+      widgetId: ["acd1b072-3ca4-4bf2-8d32-973ab8c7c048"],
     },
     {
       flagName: "PATIENT_DOB_MISMATCH",
       label: "patientDobMismatch",
-      id: 5,
+      id: 4,
       key: "getInvalidPatientDOBMismatch",
       parmas: {},
       widgetId: ["acd1b072-3ca4-4bf2-8d32-973ab8c7c015"],
@@ -308,51 +365,75 @@ function Invalid({
     {
       flagName: "PATIENT_NAME_MISMATCH",
       label: "patientNameMismatch",
-      id: 6,
+      id: 5,
       key: "getInvalidPatientNameMismatch",
       params: {},
       widgetId: ["acd1b072-3ca4-4bf2-8d32-973ab8c7c016"],
     },
     {
-      flagName: "SCOPE_YEAR_MISMATCH",
-      label: "scopeyearmismatch",
-      id: 7,
-      key: "getInvalidScopeYearMisMatch",
-      parmas: {},
-      widgetId: ["acd1b072-3ca4-4bf2-8d32-973ab8c7c017"],
-    },
-    {
-      flagName: "PATIENT_DECEASED",
-      label: "patientdeceasded",
-      id: 8,
-      key: "getInvalidPatientDeceased",
-      parmas: {},
-      widgetId: ["acd1b072-3ca4-4bf2-8d32-973ab8c7c018"],
-    },
-    {
-      flagName: "MRN_ID_MISMATCH",
-      label: "mrnIdMismatch",
-      id: 9,
-      key: "getInvalidMrnIdMismatch",
-      params: {},
-      widgetId: ["acd1b072-3ca4-4bf2-8d32-973ab8c7c019"],
-    },
-    {
       flagName: "MULTIPLE_PATIENT_FOUND",
       label: "multiplePatientFound",
-      id: 10,
+      id: 6,
       key: "getInvalidMultiplePatientFound",
       parmas: {},
       widgetId: ["acd1b072-3ca4-4bf2-8d32-973ab8c7c020"],
     },
     {
-      flagName: "PATIENT_INACTIVE",
-      label: "patientInactive",
-      id: 11,
-      key: "getInvalidPatientInActive",
+      flagName: "PROVIDER_MISSED",
+      label: "providerMissed",
+      id: 7,
+      key: "getInvalidProviderMissed",
       parmas: {},
-      widgetId: ["acd1b072-3ca4-4bf2-8d32-973ab8c7c021"],
+      widgetId: ["acd1b072-3ca4-4bf2-8d32-973ab8c7c044"],
     },
+    {
+      flagName: "PROVIDER_CREDENTIAL_MISSED",
+      label: "providerSignMissed",
+      id: 8,
+      key: "getInvalidProviderSignMissed",
+      parmas: {},
+      widgetId: ["acd1b072-3ca4-4bf2-8d32-973ab8c7c045"],
+    },
+    {
+      flagName: "SCOPE_YEAR_MISMATCH",
+      label: "outOfScope",
+      id: 10,
+      key: "getInvalidScopeYearMisMatch",
+      parmas: {},
+      widgetId: ["acd1b072-3ca4-4bf2-8d32-973ab8c7c046"],
+    },
+    {
+      flagName: "NO_HCC_FOUND",
+      label: "noHccFound",
+      id: 11,
+      key: "getInvalidNoHccFound",
+      parmas: {},
+      widgetId: ["acd1b072-3ca4-4bf2-8d32-973ab8c7c047"],
+    },
+    // {
+    //   flagName: "PATIENT_DECEASED",
+    //   label: "patientdeceasded",
+    //   id: 8,
+    //   key: "getInvalidPatientDeceased",
+    //   parmas: {},
+    //   widgetId: ["acd1b072-3ca4-4bf2-8d32-973ab8c7c018"],
+    // },
+    // {
+    //   flagName: "MRN_ID_MISMATCH",
+    //   label: "mrnIdMismatch",
+    //   id: 9,
+    //   key: "getInvalidMrnIdMismatch",
+    //   params: {},
+    //   widgetId: ["acd1b072-3ca4-4bf2-8d32-973ab8c7c019"],
+    // },
+    // {
+    //   flagName: "PATIENT_INACTIVE",
+    //   label: "patientInactive",
+    //   id: 11,
+    //   key: "getInvalidPatientInActive",
+    //   parmas: {},
+    //   widgetId: ["acd1b072-3ca4-4bf2-8d32-973ab8c7c021"],
+    // },
   ];
 
   const apiKeys = api.filter((item) =>

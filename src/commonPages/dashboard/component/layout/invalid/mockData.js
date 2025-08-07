@@ -93,12 +93,12 @@ export const Televisit = ({ chartType, chartChange }) => {
         value: "111 / 200",
         images: teleVisitNew,
         background: "#CDE0FE",
-        header: "Televisit (Audio visit) count",
+        header: "Audio Visit Count",
       }}
       categories={categoriesDate}
       series={[
         {
-          name: "Televist (Audio Visit) Count",
+          name: "Audio Visit Count",
           data: [14, 19, 10, 16, 12, 20, 20],
           color: getColorValue("4"),
           area: chartType === "area",
@@ -308,6 +308,136 @@ export const PatientInActive = ({ chartType, chartChange }) => {
         {
           name: "Patient In-active",
           data: [1, 1, 1, 1, 1, 0, 0],
+          color: getColorValue("3"),
+          area: chartType === "area",
+        },
+      ]}
+    />
+  );
+};
+
+export const ProviderMissed = ({ chartType, chartChange }) => {
+  return chartChange ? (
+    <CardSkeleton count={1} height={200} />
+  ) : (
+    <AppChart
+      type={chartType}
+      customHeader={{
+        label: "Current / Overall",
+        value: "8 / 50",
+        images: mrnNew,
+        background: "#D2CCFF",
+        header: "Provider Missed",
+      }}
+      categories={categoriesDate}
+      series={[
+        {
+          name: "Provider Missed",
+          data: [1, 1, 2, 0, 1, 2, 1],
+          color: getColorValue("7"),
+          area: chartType === "area",
+        },
+      ]}
+    />
+  );
+};
+
+export const ProviderSignMissed = ({ chartType, chartChange }) => {
+  return chartChange ? (
+    <CardSkeleton count={1} height={200} />
+  ) : (
+    <AppChart
+      type={chartType}
+      customHeader={{
+        label: "Current / Overall",
+        value: 68 + " / " + formatKValue(toFixedNum(2500, 2)),
+        images: mrnNew,
+        background: "#D2CCFF",
+        header: "Provider Sign Missed",
+      }}
+      categories={categoriesDate}
+      series={[
+        {
+          name: "Provider Sign Missed",
+          data: [10, 7, 12, 9, 8, 11, 11],
+          color: getColorValue("7"),
+          area: chartType === "area",
+        },
+      ]}
+    />
+  );
+};
+
+export const NoHccFound = ({ chartType, chartChange }) => {
+  return chartChange ? (
+    <CardSkeleton count={1} height={200} />
+  ) : (
+    <AppChart
+      type={chartType}
+      customHeader={{
+        label: "Current / Overall",
+        value: 297 + " / " + formatKValue(toFixedNum(3300, 2)),
+        images: illegalNew,
+        background: "#D3F2F8",
+        header: "No HCC Found",
+      }}
+      categories={categoriesDate}
+      series={[
+        {
+          name: "No HCC Found",
+          data: [1, 1, 1, 1, 1, 0, 0],
+          color: getColorValue("3"),
+          area: chartType === "area",
+        },
+      ]}
+    />
+  );
+};
+
+export const OutOfScope = ({ chartType, chartChange }) => {
+  return chartChange ? (
+    <CardSkeleton count={1} height={200} />
+  ) : (
+    <AppChart
+      type={chartType}
+      customHeader={{
+        label: "Current / Overall",
+        value: 297 + " / " + formatKValue(toFixedNum(3300, 2)),
+        images: scopeNew,
+        background: "#D1DAFA",
+        header: "Out Of Scope",
+      }}
+      categories={categoriesDate}
+      series={[
+        {
+          name: "Out Of Scope",
+          data: [45, 38, 41, 36, 47, 43, 47],
+          color: getColorValue("1"),
+          area: chartType === "area",
+        },
+      ]}
+    />
+  );
+};
+
+export const ProviderUnauthorized = ({ chartType, chartChange }) => {
+  return chartChange ? (
+    <CardSkeleton count={1} height={200} />
+  ) : (
+    <AppChart
+      type={chartType}
+      customHeader={{
+        label: "Current / Overall",
+        value: "76 / 90",
+        images: invalidNew,
+        background: "#D3F2F8",
+        header: "Provider Unauthorized",
+      }}
+      categories={categoriesDate}
+      series={[
+        {
+          name: "Provider Unauthorized",
+          data: [9, 14, 7, 10, 11, 13, 12],
           color: getColorValue("3"),
           area: chartType === "area",
         },
