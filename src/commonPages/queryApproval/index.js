@@ -118,12 +118,26 @@ const QueryApproval = ({
   };
 
   const getRolesList = async () => {
+    var activeTabName = "";
+    if (routedData?.activeTab) {
+      const [indexStr, tabName] = routedData?.activeTab.split(":");
+      activeTabName = tabName;
+    }
+
     const res = await getAllTabRoles({
       pageId: "8c1eebaf-eb20-4758-b968-6ae15e6fc031",
     });
     if (res?.status === "SUCCESS") {
-      setRoleId(res?.response?.allocationRoles[0]?.roleId);
-      setSelectedRole(res?.response?.allocationRoles[0]?.aliasName);
+      const tabRoles = res?.response?.allocationRoles?.find(
+        (role) => role?.aliasName === activeTabName
+      );
+      if (tabRoles) {
+        setRoleId(tabRoles?.roleId);
+        setSelectedRole(tabRoles?.aliasName);
+      } else {
+        setRoleId(res?.response?.allocationRoles[0]?.roleId);
+        setSelectedRole(res?.response?.allocationRoles[0]?.aliasName);
+      }
     }
   };
   const showDrawer = () => {
@@ -146,8 +160,8 @@ const QueryApproval = ({
       const response = await tableDynamicColumn({ payload });
       if (response?.status === "SUCCESS") {
         setIsFilter(true);
-        const filterCheck = tableCustomFilterClearCheck(
-         { searchText,
+        const filterCheck = tableCustomFilterClearCheck({
+          searchText,
           selectedDateRanges,
           selectedDates,
           selectedOption,
@@ -155,8 +169,8 @@ const QueryApproval = ({
           setSelectedDateRanges,
           setSelectedDates,
           setSelectedOption,
-          data}
-        );
+          data,
+        });
         if (filterCheck) {
           getQueryApproval();
         }
@@ -193,7 +207,7 @@ const QueryApproval = ({
     if (routedData) {
       setActiveTab(routedData?.activeTab);
     } else {
-      setActiveTab("1");
+      setActiveTab("1:CODER_1");
       setSearchText("");
       setSelectedOption({});
     }
@@ -297,7 +311,7 @@ const QueryApproval = ({
                                     setActiveStatus("PENDING");
                                   }}
                                   className="mt-4"
-                                  eventKey={index + 1}
+                                  eventKey={`${index + 1}:${role?.aliasName}`}
                                 >
                                   {role?.aliasName
                                     ?.replace(/_/g, " ")
