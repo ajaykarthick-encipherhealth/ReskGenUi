@@ -44,12 +44,12 @@ export const getResponePopup = (res) => {
     case "SUCCESS":
       return notification.success({
         description: res?.data?.message ? res?.data?.message : res?.message,
-        duration: 1,
+        duration: 2,
       });
     case "FAILED":
       return notification.error({
         description: res?.data?.message ? res?.data?.message : res?.message,
-        duration: 1,
+        duration: 2,
       });
     case "EXCEPTION":
       return notification.error({

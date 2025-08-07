@@ -181,6 +181,7 @@ const handleRestore = async (item) => {
       getResponePopup({
         status: "FAILED",
         message: res?.data?.message || res?.message || "Something went wrong",
+        duration: 2
       });
     }
   } catch (error) {
