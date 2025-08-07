@@ -267,7 +267,7 @@ const Details = ({
       setIsLoadingDos,
       setIsLoading
     );
-    setIsFileFormShow(false)
+    setIsFileFormShow(false);
   };
 
   const getYear = async (patientId) => {
@@ -416,15 +416,20 @@ const Details = ({
     if (result?.data?.response?.length > 0) {
       if (activeTab == 1) {
         getFlagCharts({ dos: dosYearArr[0]?.value });
+
         const res = await getPatientDosList(
-          selectPatientId?.patirntId ? selectPatientId?.patirntId : patientId,
+          selectPatientId?.patirntId
+            ? selectPatientId?.patirntId
+            : getStorage("patientId"),
           dosYearArr[0]?.value,
           "",
           navigate.pathname
         );
         if (res?.response?.length > 0) {
           const patientRes = await getpatientDetailsData(
-            selectPatientId?.patirntId ? selectPatientId?.patirntId : patientId,
+            selectPatientId?.patirntId
+              ? selectPatientId?.patirntId
+              : getStorage("patientId"),
             null,
             res?.response[0]?.dateOfService,
             "",
@@ -951,6 +956,7 @@ const Details = ({
       getActiveLabels();
     }
   }, [isDosSelected, dosYearDefalutSelect]);
+
   return (
     <>
       <div className={`show `} style={{ height: "100vh", background: "#fff" }}>
