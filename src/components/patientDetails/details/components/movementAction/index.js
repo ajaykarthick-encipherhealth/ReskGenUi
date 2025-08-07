@@ -44,6 +44,7 @@ const MovementAction = ({
   patientIdDetailsData,
   educationalError,
   setEducationalError,
+  dosDeatilsAction
 }) => {
     const router = useRouter()
   const userRole = getStorage("userRole");
@@ -123,6 +124,7 @@ const MovementAction = ({
           patientDetailsLoad,
           getPatientIdData,
           educationalError,
+          dosDeatilsAction
         });
       }
     } else {
@@ -138,6 +140,7 @@ const MovementAction = ({
         patientDetailsLoad,
         getPatientIdData,
         educationalError,
+        dosDeatilsAction,
       });
     }
   };
@@ -214,6 +217,7 @@ const MovementAction = ({
                       patientDetailsLoad,
                       getPatientIdData,
                       educationalError,
+                      dosDeatilsAction
                     });
                   }}
                   onCancel={handleCancel}
@@ -277,6 +281,7 @@ const MovementAction = ({
                       patientDetailsLoad,
                       getPatientIdData,
                       educationalError,
+                      dosDeatilsAction
                     });
                   }}
                   title={
@@ -350,6 +355,7 @@ const MovementAction = ({
                       patientDetailsLoad,
                       getPatientIdData,
                       educationalError,
+                      dosDeatilsAction
                     });
                   }}
                   title={
@@ -413,6 +419,7 @@ const enhancer = connect(
     getpatientDetailsData: detailsActions.patientDetailsAction,
     patientDetailsLoad: detailsActions.patientDetailsLoad,
     getPatientIdData: detailsActions.patientIdDetailsAction,
+    dosDeatilsAction: detailsActions.dosDeatilsAction,
   }
 );
 export default enhancer(MovementAction);

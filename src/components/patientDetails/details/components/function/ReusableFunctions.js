@@ -1301,6 +1301,7 @@ export const handleSubmitValidNotes = async ({
   getPatientIdData,
   educationalError,
   setEducationalError,
+  dosDeatilsAction,
 }) => {
   setFileLoading(true);
   setConfirmNotesModalValid(false);
@@ -1512,11 +1513,7 @@ export const handleSubmitValidNotes = async ({
     const response = await movementApiCall(dataFormatSuggested, apiURL);
     if (response?.status == "SUCCESS") {
       setFileLoading(false);
-      // notification.success({
-      //   message: response?.response,
-      //   placement: "top",
-      //   duration: 1,
-      // });
+      dosDeatilsAction(patientId,selectDisDetails.processedYear);
       getResponePopup(response);
       getpatientDetailsData(
         patientId,
