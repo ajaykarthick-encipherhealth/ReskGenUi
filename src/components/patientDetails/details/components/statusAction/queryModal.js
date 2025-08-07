@@ -1,12 +1,12 @@
-import { Form, Modal, Select, Input } from 'antd';
-import React, { useState } from 'react';
+import { Form, Modal, Select, Input } from "antd";
+import React, { useState } from "react";
 const { TextArea } = Input;
 import { actions as detailsActions } from "../../../../../stores/patient/details";
-import { connect } from 'react-redux';
+import { connect } from "react-redux";
 import styles from "../../hcc/styles.module.css";
-import { getStorage } from '../../../../../utils/storages';
-import { getResponePopup } from '../../../../../utils/reusable';
-import RegularButton from '../../../../button';
+import { getStorage } from "../../../../../utils/storages";
+import { getResponePopup } from "../../../../../utils/reusable";
+import RegularButton from "../../../../button";
 
 const QueryModal = ({
   isOpen,
@@ -20,11 +20,11 @@ const QueryModal = ({
   isQueried,
   getPatientDosList,
   patientDetailsResult,
-  getPatientIdData
+  getPatientIdData,
+  dosYearDefalutSelect,
 }) => {
   const [form] = Form.useForm();
   const [loading, setLoading] = useState(false);
-
   const onFinish = async (values) => {
     setLoading(true);
     const patientId = getStorage("patientId");
@@ -40,10 +40,12 @@ const QueryModal = ({
       setLoading(false);
       setIsQueried(true);
       getStatus(localPatientId);
-      getPatientIdData(patientId,null);
+      getPatientIdData(patientId, null);
       getPatientDosList(
         patientId,
-        patientDetailsResult?.data?.response?.processedYear
+        dosYearDefalutSelect?.value
+          ? dosYearDefalutSelect?.value
+          : dosYearDefalutSelect
       );
       getResponePopup(response);
       setIsOpen(false);
@@ -105,7 +107,6 @@ const QueryModal = ({
   );
 };
 
-
 const enhancer = connect(
   (state) => ({
     roles: state.patientDetails.details?.allRoles,
@@ -113,7 +114,7 @@ const enhancer = connect(
   }),
   {
     raiseQuery: detailsActions.raiseQueryAction,
-    getPatientIdData: detailsActions.patientIdDetailsAction,    
+    getPatientIdData: detailsActions.patientIdDetailsAction,
   }
 );
 export default enhancer(QueryModal);

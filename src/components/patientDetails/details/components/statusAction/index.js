@@ -792,6 +792,7 @@ const StatusAction = ({
         localPatientId={localPatientId}
         isQueried={isQueried}
         getPatientDosList={getPatientDosList}
+        dosYearDefalutSelect={dosYearDefalutSelect}
       />
 
       {confirmCompleteModal ? (
