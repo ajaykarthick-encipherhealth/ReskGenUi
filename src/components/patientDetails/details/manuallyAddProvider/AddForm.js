@@ -165,6 +165,11 @@ const AddForm = ({
   };
   const handleChanges = async (e) => {
     const value = e.target.value || "";
+    if (value.length !== 10 || value.includes(" ")) {
+      form.setFieldsValue({ providerName: null });
+      setOpt([]);
+      return;
+    }
     if (value?.length === 10 && !value.includes(" ")) {
       try {
         const res = await getProviderNPIList({ obj: { number: value } });
