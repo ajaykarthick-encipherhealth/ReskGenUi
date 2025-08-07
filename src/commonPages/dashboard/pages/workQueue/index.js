@@ -31,7 +31,7 @@ import { getLocalStored } from "../../../../utils/storages";
 import EmptyComponent from "../../component/empty/EmptyComponent";
 import { getDashboardItems } from "../../component/function/resubaleGetStorage";
 import Headtitle from "../../component/headtitle";
-import { formatDateTime, statusFormate } from "../../../../utils/reusable";
+import { formatDateTime, getRoleIdByRole, statusFormate } from "../../../../utils/reusable";
 import moment from "moment";
 import actions from "../../../../stores/admin/dashboard1/actions";
 import { getColorValue } from "../../../../utils/reusable";
@@ -1003,7 +1003,7 @@ function WorkQueue({
   const showDashboard = getSelectedWidgets
     .filter((item) => item?.active)
     .sort((a, b) => a?.orderValue - b?.orderValue);
-  const { dashboardLayout = null, userName = "" } = getLocalStored();
+  const { dashboardLayout = null, userName = "", aliasName = "" } = getLocalStored();
   const currentDate = new Date();
   const [taskDataList, setTaskDataList] = useState({});
   const [visibleDates, setVisibleDates] = useState([
@@ -1139,6 +1139,7 @@ function WorkQueue({
   });
 
   const getInitialApiCall = async () => {
+    const roleId = getRoleIdByRole(aliasName)
     const currentDate = new Date();
     const currentYear = currentDate.getFullYear();
     const currentMonth = currentDate.getMonth() + 1;
@@ -1147,7 +1148,7 @@ function WorkQueue({
         {
           key: "workQueueSummary",
           params: {
-            roleId: 4,
+            roleId,
             username: userName,
           },
           widgetId: ["acd1b072-3ca4-4bf2-8d32-973ab8c7c030"],
@@ -1155,7 +1156,7 @@ function WorkQueue({
         {
           key: "workQueueProductivity",
           params: {
-            roleId: 4,
+            roleId,
             year: currentYear.toString(),
             month: currentMonth.toString(),
             range: "DAILY",
@@ -1165,7 +1166,7 @@ function WorkQueue({
         {
           key: "workQueueAccuracy",
           params: {
-            roleId: 4,
+            roleId,
             year: currentYear.toString(),
             month: currentMonth.toString(),
             range: "DAILY",
@@ -1200,6 +1201,7 @@ function WorkQueue({
     }
   };
   const getSummaryApiCall = async (startDate, endDate) => {
+    const roleId = getRoleIdByRole(aliasName)
     const currentDate = new Date();
 
     const defaultEndDate = new Date(currentDate);
@@ -1212,7 +1214,7 @@ function WorkQueue({
       const actionKey = `workQueueSummaryAction`;
       if (typeof actions[actionKey] === "function") {
         const payload = {
-          roleId: 4,
+          roleId,
           username: userName,
         };
 
@@ -1233,11 +1235,12 @@ function WorkQueue({
   };
 
   const getDailySummaryApiCall = async (date) => {
+    const roleId = getRoleIdByRole(aliasName)
     try {
       const actionKey = `workQueueDailySummaryAction`;
       if (typeof actions[actionKey] === "function") {
         const payload = {
-          roleId: 4,
+          roleId,
           username: userName,
         };
 
@@ -1255,11 +1258,12 @@ function WorkQueue({
   };
 
   const getAccuracyApiCall = async (month, year, range) => {
+    const roleId = getRoleIdByRole(aliasName)
     try {
       const actionKey = `workQueueAccuracyAction`;
       if (typeof actions[actionKey] === "function") {
         const payload = {
-          roleId: 4,
+          roleId,
           username: userName,
         };
         if (month && year) {
@@ -1277,11 +1281,12 @@ function WorkQueue({
     }
   };
   const getProductivityApiCall = async (month, year, range) => {
+    const roleId = getRoleIdByRole(aliasName)
     try {
       const actionKey = `workQueueProductivityAction`;
       if (typeof actions[actionKey] === "function") {
         const payload = {
-          roleId: 4,
+          roleId,
           username: userName,
         };
         if (month && year) {
@@ -1299,7 +1304,7 @@ function WorkQueue({
   };
   useEffect(() => {
     getInitialApiCall();
-  }, []);
+  }, [getSelectedWidgets]);
 
   useEffect(() => {
     if (DateRanges.clear) {
