@@ -200,7 +200,7 @@ export async function findByPatientId() {
     }`,
     options
   );
-  setStorage("fileId", result?.response?.azureBlobPath || null);
+  // setStorage("fileId", result?.response?.azureBlobPath || null);
   return result;
 }
 export async function dosWiseList(patientId, year, dataNull = false, navigate) {

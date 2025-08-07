@@ -165,6 +165,7 @@ const Details = ({
   allRoles,
   getAddProviderAndDOSList,
   patientDataLoader,
+  getPatientFileId,
 }) => {
   const navigate = useRouter();
   const [count, setCount] = useState(0);
@@ -459,6 +460,14 @@ const Details = ({
           );
           patientDetailsLoad(false);
         }
+        const patientId = getStorage("patientId");
+        const fileid = await getPatientFileId(
+          selectPatientId?.patirntId ? selectPatientId?.patirntId : patientId
+        );
+        setStorage("fileId", fileid?.response?.fileId);
+        getPatientHccFile(fileid?.response?.fileId);
+        storePrePatientFileId(fileid?.response?.fileId);
+
         // getPatientIdData(
         //   selectPatientId?.patirntId ? selectPatientId?.patirntId : patientId,
         //   navigate.pathname
@@ -593,6 +602,12 @@ const Details = ({
         navigate.pathname
       );
       patientDetailsLoad(false);
+      const fileid = await getPatientFileId(
+        selectPatientId?.patirntId ? selectPatientId?.patirntId : patientId
+      );
+      setStorage("fileId", fileid?.response?.fileId);
+      getPatientHccFile(fileid?.response?.fileId);
+      storePrePatientFileId(fileid?.response?.fileId);
     }
     getFlagCharts({ dos: e });
     // getAllRevertDetails({ dos: e });
@@ -804,6 +819,12 @@ const Details = ({
         getpatientDetailsData("", "", null, "", "", true, "");
         // No dateOfService available — skip calling getpatientDetailsData
         setIsSpinnerLoading(false);
+        const fileid = await getPatientFileId(
+          selectPatientId?.patirntId ? selectPatientId?.patirntId : patientId
+        );
+        setStorage("fileId", fileid?.response?.fileId);
+        getPatientHccFile(fileid?.response?.fileId);
+        storePrePatientFileId(fileid?.response?.fileId);
       }
 
       patientDetailsLoad(false);
@@ -1604,6 +1625,7 @@ const enhancer = connect(
     getQueryDetails: detailsActions.getQuery,
     activeLabels: detailsActions.activeLabels,
     getAddProviderAndDOSList: detailsActions.getAddProviderAndDOSList,
+    getPatientFileId: detailsActions.findByPatientIdAction,
   }
 );
 export default enhancer(Details);

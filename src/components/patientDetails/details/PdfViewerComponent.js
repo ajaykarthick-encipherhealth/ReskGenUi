@@ -139,7 +139,7 @@ const PdfViewer = ({
             <EmptyComponent />
           )}
         </div>
-      ) : iframeSrc && patientDetailsResult ? (
+      ) : iframeSrc ? (
         <div
           // style={{
           //   maxHeight: fileHeights ? fileHeights : "75vh",
