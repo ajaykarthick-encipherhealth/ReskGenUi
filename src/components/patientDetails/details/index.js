@@ -608,7 +608,7 @@ const Details = ({
       );
       patientDetailsLoad(false);
       const fileid = await getPatientFileId(
-        selectPatientId?.patirntId ? selectPatientId?.patirntId : patientId
+        localPatientId
       );
       setStorage("fileId", fileid?.response?.fileId);
       getPatientHccFile(fileid?.response?.fileId);
@@ -825,7 +825,7 @@ const Details = ({
         // No dateOfService available — skip calling getpatientDetailsData
         setIsSpinnerLoading(false);
         const fileid = await getPatientFileId(
-          selectPatientId?.patirntId ? selectPatientId?.patirntId : patientId
+          userId
         );
         setStorage("fileId", fileid?.response?.fileId);
         getPatientHccFile(fileid?.response?.fileId);
