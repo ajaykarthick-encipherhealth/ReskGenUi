@@ -266,6 +266,7 @@ const Details = ({
       setIsLoadingDos,
       setIsLoading
     );
+    setIsFileFormShow(false)
   };
 
   const getYear = async (patientId) => {
