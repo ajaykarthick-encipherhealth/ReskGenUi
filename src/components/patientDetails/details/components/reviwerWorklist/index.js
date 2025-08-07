@@ -197,7 +197,7 @@ const ReviwerWorkList = ({
                     className={`ant-badge ${visitStyles.nameList} ${visitStyles.patientList}`}
                     key={index}
                     onClick={() =>
-                      getPatientListToDetails(data.patientId)
+                     getPatientListToDetails(data.patientId,"",true)
                     }
                   >
                     <span className="ant-badge">

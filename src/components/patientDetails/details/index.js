@@ -566,7 +566,8 @@ const Details = ({
         "",
         navigate.pathname
       );
-      const dosSummariesList = patientResult?.response?.fileDetailDTO?.dosSummaries;
+      const dosSummariesList =
+        patientResult?.response?.fileDetailDTO?.dosSummaries;
       if (dosSummariesList) {
         const filteredDos = dosSummariesList?.find(
           (data) => data?.dos === res?.response[0]?.dateOfService
@@ -720,7 +721,7 @@ const Details = ({
   //   }
   // };
 
-  const getPatientListToDetails = async (userId, isClear) => {
+  const getPatientListToDetails = async (userId, isClear, workqueue) => {
     setIsLoading(true);
     patientDetailsLoad(true);
 
@@ -728,8 +729,17 @@ const Details = ({
     let year =
       getYear?.response.length > 0 ? getYear?.response[0] : selectedDosValue;
 
-    if (dosYearDefalutSelect) {
-      year = dosYearDefalutSelect?.value || dosYearDefalutSelect;
+    if (workqueue) {
+      var dosYearArr = getYear?.response?.map((res) => {
+        return { value: res, label: res };
+      });
+      setDosYearDefalutSelect(dosYearArr[0]);
+      setSelectedDosValue(dosYearArr[0]?.value);
+      setDosYear(dosYearArr);
+    } else {
+      if (dosYearDefalutSelect) {
+        year = dosYearDefalutSelect?.value || dosYearDefalutSelect;
+      }
     }
 
     try {
