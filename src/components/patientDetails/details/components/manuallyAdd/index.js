@@ -1372,6 +1372,25 @@ const ManuallyAdd = ({
                   label={<label className="mb-0">Comments</label>}
                   name="commants"
                   style={{ marginBottom: 10 }}
+                  rules={[
+                    {
+                      validator: (_, value) => {
+                        if (/^\s/.test(value)) {
+                          return Promise.reject(
+                            new Error("Comments cannot start with a space")
+                          );
+                        }
+                       if (/^[^a-zA-Z0-9]/.test(value)) {
+                         return Promise.reject(
+                           new Error(
+                             "Comments cannot start with a special character"
+                           )
+                         );
+                       }
+                        return Promise.resolve();
+                      },
+                    },
+                  ]}
                 >
                   <TextArea rows={3} className="manually" />
                 </Form.Item>

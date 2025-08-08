@@ -57,6 +57,13 @@ const AddSection = ({ id, section, selectMeat = "", pageNumbers }) => {
                       new Error("Reference cannot start with a space")
                     );
                   }
+                  if (/^[^a-zA-Z0-9]/.test(value)) {
+                    return Promise.reject(
+                      new Error(
+                        "Reference must start with a letter or number, not a special character"
+                      )
+                    );
+                  }
                   return Promise.resolve();
                 },
               },

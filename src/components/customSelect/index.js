@@ -19,28 +19,37 @@ const CustomSelect = ({
     setName(value);
   };
 
-  const addItem = (e) => {
-    e.preventDefault();
-    const trimmedName = name?.trim();
-    if (!trimmedName) return;
-    const isDuplicate = options.some(
-      (option) => option.value.toLowerCase() === trimmedName.toLowerCase()
-    );
-    if (isDuplicate) {
-      getResponePopup({
-        status: "FAILED",
-        message: "Item already exists!",
-        duration: 5,
-      });
-      return;
-    }
+ const addItem = (e) => {
+   e.preventDefault();
+   const trimmedName = name?.trim();
+   if (!trimmedName) return;
+   if (/^[^a-zA-Z0-9]/.test(trimmedName)) {
+     getResponePopup({
+       status: "FAILED",
+       message: "First character cannot be a special character",
+       duration: 5,
+     });
+     return;
+   }
 
-    setOptions([...options, { label: trimmedName, value: trimmedName }]);
-    setName("");
-    setTimeout(() => {
-      inputRef.current?.focus();
-    }, 0);
-  };
+   const isDuplicate = options.some(
+     (option) => option.value.toLowerCase() === trimmedName.toLowerCase()
+   );
+   if (isDuplicate) {
+     getResponePopup({
+       status: "FAILED",
+       message: "Item already exists!",
+       duration: 5,
+     });
+     return;
+   }
+
+   setOptions([...options, { label: trimmedName, value: trimmedName }]);
+   setName("");
+   setTimeout(() => {
+     inputRef.current?.focus();
+   }, 0);
+ };
 
   return (
     <Select
