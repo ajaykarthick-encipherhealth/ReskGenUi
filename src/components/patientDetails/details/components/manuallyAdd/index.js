@@ -873,7 +873,7 @@ const ManuallyAdd = ({
       data = {
         ...commonData,
         diagnosisCode: code.trim(),
-        description: diagnosisForm.description,
+        description: forms.description,
         dbDescription: dbDescription,
         // oldHcc: diagnosisForm.oldHcc,
         // newHcc: diagnosisForm.newHcc,
@@ -887,7 +887,7 @@ const ManuallyAdd = ({
         evaluateHyperLink: !isMeat ? [] : flatLinks(listOfSectionE),
         assessmentHyperLink: !isMeat ? [] : flatLinks(listOfSectionA),
         treatmentHyperLink: !isMeat ? [] : flatLinks(listOfSectionT),
-        educationalError: diagnosisForm?.educationalError,
+        educationalError: forms?.educationalError,
       };
     }
 
