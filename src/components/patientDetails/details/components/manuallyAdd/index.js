@@ -1319,14 +1319,34 @@ const ManuallyAdd = ({
                       required: true,
                       message: "Please enter description",
                     },
+                    {
+                      validator: (_, value) => {
+                        if (!value || value.trim() === "") {
+                          return Promise.reject(
+                            new Error(
+                              "Description cannot be empty or just spaces"
+                            )
+                          );
+                        }
+                        if (/^\s/.test(value)) {
+                          return Promise.reject(
+                            new Error("Description cannot start with a space")
+                          );
+                        }
+                        if (/^[^a-zA-Z0-9]/.test(value)) {
+                          return Promise.reject(
+                            new Error(
+                              "Description cannot start with a special character"
+                            )
+                          );
+                        }
+                        return Promise.resolve();
+                      },
+                    },
                   ]}
                   style={{ marginBottom: 10 }}
                 >
-                  <Input
-                    name="description"
-                    // onChange={(e) => setDescription(e.target.value)}
-                    className="manually"
-                  />
+                  <Input name="description" className="manually" />
                 </Form.Item>
               </div>
               <div className="col-6">
@@ -1380,13 +1400,13 @@ const ManuallyAdd = ({
                             new Error("Comments cannot start with a space")
                           );
                         }
-                       if (/^[^a-zA-Z0-9]/.test(value)) {
-                         return Promise.reject(
-                           new Error(
-                             "Comments cannot start with a special character"
-                           )
-                         );
-                       }
+                        if (/^[^a-zA-Z0-9]/.test(value)) {
+                          return Promise.reject(
+                            new Error(
+                              "Comments cannot start with a special character"
+                            )
+                          );
+                        }
                         return Promise.resolve();
                       },
                     },
