@@ -450,7 +450,7 @@ const PatientSync = ({
     reUpload: null,
   });
   const [searchText, setSearchText] = useState(null);
-  const [selectedOption, setSelectedOption] = useState([]);
+  const [selectedOption, setSelectedOption] = useState({});
   const [clear, setClear] = useState(false);
   const [sort, setSort] = useState(null);
   const [isFilter, setIsFilter] = useState(true);
@@ -612,9 +612,9 @@ const PatientSync = ({
     getActiveTab(name);
     setSearch();
     setSearchVal(null);
-    setSelectedDates(null);
-    setSelectedDateRanges([]);
-    setSelectedOption([]);
+    setSelectedDates([]);
+    setSelectedDateRanges({});
+    setSelectedOption({});
   };
   const debouncedSearch = useCallback(
     debounce((text, setSearchVal, field) => {
@@ -862,7 +862,6 @@ const PatientSync = ({
       : "";
   const handleSubmitInsert = async (data) => {
     setIsSubmitting(true);
-
     const payload = {
       pageId: pageIds,
       headerNames: data.map((col) => col.id),
@@ -872,8 +871,8 @@ const PatientSync = ({
       const response = await tableDynamicColumn({ payload });
       if (response?.status === "SUCCESS") {
         setIsFilter(true);
-        const filterCheck = tableCustomFilterClearCheck(
-          {searchText,
+        const filterCheck = tableCustomFilterClearCheck({
+          searchText,
           selectedDateRanges,
           selectedDates,
           selectedOption,
@@ -881,8 +880,8 @@ const PatientSync = ({
           setSelectedDateRanges,
           setSelectedDates,
           setSelectedOption,
-          data}
-        );
+          data,
+        });
         if (filterCheck) {
           if (reportActiveTab === "Provider Roaster") {
             getAllProviderApi();
@@ -894,7 +893,6 @@ const PatientSync = ({
             getTinApi();
           }
         }
-
         onClose();
         getResponePopup(response);
       }
@@ -905,7 +903,6 @@ const PatientSync = ({
   };
   const handleReset = async () => {
     setIsResetting(true);
-
     const payload = {
       pageId: pageIds,
     };
