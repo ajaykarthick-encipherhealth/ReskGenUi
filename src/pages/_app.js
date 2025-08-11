@@ -449,14 +449,14 @@ function MyApp({ Component, pageProps }) {
       <PrimeReactProvider>
         <Provider store={store}>
           <Script
-            src="https://www.googletagmanager.com/gtag/js?id=G-3LEJBB5YX0"
+            src="https://www.googletagmanager.com/gtag/js?id=G-WEFGJM1VG2"
             strategy="afterInteractive"
           />
           <Script id="google-analytics" strategy="afterInteractive">
             {`window.dataLayer = window.dataLayer || [];
 function gtag(){dataLayer.push(arguments);}
 gtag('js', new Date());
-gtag('config', 'G-3LEJBB5YX0');`}
+gtag('config', 'G-WEFGJM1VG2');`}
           </Script>
 
           {showTerminal && <AICHAT openMsg={true} />}
