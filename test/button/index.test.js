@@ -1,7 +1,8 @@
 import { fireEvent, render } from "@testing-library/react";
+jest.mock('next/router', () => ({ useRouter: () => ({ push: jest.fn(), pathname: '/', query: {} }) }));
 import RegularButton from "../../src/components/button";
 import Style from "../../src/components/button/style.module.css";
-
+jest.mock("next/router", () => ({ useRouter: () => ({ pathname: "/" }) }));
 describe("button", () => {
   it("should render the correct  number text", () => {
     const { getByText } = render(<RegularButton name="Submit" />);
