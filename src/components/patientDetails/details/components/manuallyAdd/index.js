@@ -1053,8 +1053,8 @@ const ManuallyAdd = ({
         description: isEditValue.dbDescription
           ? isEditValue.dbDescription
           : isEditValue.actualDescription,
-        newHcc: isEditValue?.newValue ? isEditValue?.newValue : "",
-        oldHcc: isEditValue?.oldValue ? isEditValue?.oldValue : "",
+        newHcc: isEditValue?.newValue ? isEditValue?.newValue : "0",
+        oldHcc: isEditValue?.oldValue ? isEditValue?.oldValue : "0",
         educationalError: isEditValue?.educationalError
           ? isEditValue?.educationalError
           : "",
