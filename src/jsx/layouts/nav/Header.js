@@ -70,6 +70,7 @@ import { getHeaderLoge } from "../../../pages/twofactorauthentication/reusableFu
 import { actions as tinActions } from "../../../stores/tenantAdmin/tin";
 import { actions as tableAction } from "../../../stores/tableView";
 import PanelMenu from "./panelMenu";
+import { actions as reportAction } from '../../../stores/tenantAdmin/report'
 
 const Header = ({
   notificationResponse,
@@ -109,7 +110,8 @@ const Header = ({
   getNotificationSound,
   notificationSound,
   getProjectActiveTab,
-  getTableStatus
+  getTableStatus,
+  reportTabs
 }) => {
   const router = useRouter();
   const fileInputRef = useRef(null);
@@ -830,6 +832,7 @@ const Header = ({
       message: "Client Changed Successfully",
       duration: 5,
     });
+    reportTabs()
     const res = await getAllProjects();
     const allRoles = res?.response?.userRoles?.map((data) => ({
       label: data.aliasName,
@@ -961,7 +964,7 @@ const Header = ({
   }, [allRolesData]);
   const getProjectDataList = async () => {
     const res = await getAllProjects();
-    if (res.status == "SUCCESS") {
+    if (res?.status == "SUCCESS") {
       const projectOptions = res.response?.map((client) => ({
         label: client.projectName,
         value: client.id,
@@ -1568,7 +1571,8 @@ const enhancer = connect(
     getTableData: tableAction.tableViewAction,
     getNotificationSound: dashbaordActions.notificationSound,
     getProjectActiveTab: tinActions.getProjectActiveTab,
-     getTableStatus: tableAction.getTableStatusAction,
+    getTableStatus: tableAction.getTableStatusAction,
+    reportTabs: reportAction.reportTabList,
   }
 );
 export default enhancer(Header);

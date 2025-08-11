@@ -9,6 +9,7 @@
   --new-app-secondary4: #008FCA;
   --new-app-secondary5: #0A5EB0;
   --new-app-secondary6: #8576FF;
+  --queryBtnColor:#4C4C9D
 }
 /* If you want to add a new color, you need to include it in the getColorValue function and create a corresponding CSS class */
 
@@ -13718,7 +13719,7 @@ tbody > tr {
 }
 .queryBtnHcc button.ant-btn.ant-btn-compact-first-item {
   color: #fff;
-  background: #4C4C9D !important;
+  background: var(--queryBtnColor) !important;
   border: none !important;
   box-shadow: none !important;
   border-radius: 10px;
@@ -13728,7 +13729,7 @@ tbody > tr {
 .queryBtnHcc
   > .ant-btn.ant-btn-primary.ant-btn-icon-only.ant-btn-compact-item.ant-btn-compact-last-item.ant-dropdown-trigger {
   color: #ad94fa;
-  background:  #4C4C9D  !important;
+  background:  var(--queryBtnColor)  !important;
   border: none !important;
   border-radius: 6px;
   box-shadow: none;
@@ -13737,7 +13738,7 @@ tbody > tr {
 .queryBtnHcc
   > .ant-btn.ant-btn-primary.ant-btn-icon-only.ant-btn-compact-item.ant-btn-compact-last-item.ant-dropdown-trigger::before {
   height: calc(100% + 1px) !important;
-  background:  #4C4C9D  !important;
+  background:  var(--queryBtnColor)  !important;
   border: none !important;
   box-shadow: none !important;
 }

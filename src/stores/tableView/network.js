@@ -1,3 +1,4 @@
+import { generatedReportsPageId, generateViewPageId } from "../../utils/pageIds";
 import { requestPortal } from "../../utils/network";
 import {
   convertToCustomParams,
@@ -37,7 +38,8 @@ export async function getTableView({
   allTin,
   clientId,
   projectId,
-}) {  
+  reportCategory,
+}) {
   if (!reloadTrue) {
     const options = { method: "GET" };
     let searchTextParams = null;
@@ -51,7 +53,7 @@ export async function getTableView({
       searchIntParams = convertToCustomParams(search);
     }
     if (selectedOption) {
-      if(selectedOption?.tinIds){
+      if (selectedOption?.tinIds) {
         allTin = false;
       }
       selectParams = convertToCustomParams(selectedOption);
@@ -141,6 +143,10 @@ allTinIds=${allTinIds || false}`;
     const reportIds = ["51ccafdf-f18e-4100-8811-63236a79a441"];
     if (reportIds.includes(pageId)) {
       baseUrl += `&tincompleted=${tincompleted || ""}`;
+    }
+    const reportCategories = ["51ccafdf-f18e-4100-8811-63236a79a441", "5792cd13-73f5-42c0-b0ca-5db81db947ad"];
+    if (reportCategories.includes(pageId)) {
+      baseUrl += `&reportCategory=${reportCategory || ""}`;
     }
 
     const qaCodersPageIds = [

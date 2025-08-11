@@ -17,7 +17,9 @@ import {
   sentReport,
   getSelectedReportDetails,
   reportGenerate,
-  reportDownload
+  reportDownload,
+  reportKill,
+  reportTabList
 } from "./actions";
 
 const initialState = {
@@ -108,6 +110,9 @@ const ReportReducer = combineReducers({
   updateReportLoader: getReportLoading(updateSentReport),
   generateReport :createReducer(reportGenerate),
   downloadReport:createReducer(reportDownload),
+  killReport : createReducer(reportKill),
+  reportTabList:createReducer(reportTabList),
+  tabLoader:createReducer(reportTabList)
 });
 
 export default ReportReducer;

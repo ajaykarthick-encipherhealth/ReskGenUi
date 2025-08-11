@@ -13,49 +13,62 @@ const GenerateReportModal = ({
   handleOk,
   handleCancel,
   generateReport,
-  selectedRows,
   setIsModalOpen,
-  getGenerateReport,
-  setSelectedRows
+  rowTinNumber,
+  setSelectedRows,
+  activeTab,
+  getReports,
+  setRowTinNumber,
+  selectedRows,
 }) => {
   const clientId = getStorage("client");
   const [loading, setLoading] = useState(false);
   const [inputValue, setInputValue] = useState("");
 
-
   const handleInputChange = (e) => {
     setInputValue(e.target.value);
   };
-
   const GenerateReport = async () => {
     setLoading(true);
-    const userId = getStorage("userId")
-
+    const defaultName = `Report${moment(new Date()).format(
+      "MM-DD-YYYY-hh:mm"
+    )}`;
+    const userId = getStorage("userId");
     const response = await generateReport({
       data: {
         tenantId: clientId,
         fileType: "EXCEL",
         reportName: inputValue,
         tinId: selectedRows.toString(),
-        userAndAccess: {
-          [userId]: "DOWNLOAD",
-        },
-      }
+        tinNumber: rowTinNumber,
+        userName: userId,
+        reportCategory:
+          activeTab === "ACO Report"
+            ? "ACO"
+            : activeTab === "MA Report"
+            ? "MA"
+            : activeTab === "Financial Report"
+            ? "FINANCIAL"
+            : "",
+      },
     });
-
     if (response?.status === "SUCCESS") {
       getResponePopup(response);
-      getGenerateReport()
+      getReports();
       setIsModalOpen(false);
-      setInputValue("")
-      setSelectedRows([])
+      setSelectedRows([]);
+      setRowTinNumber("");
+      setInputValue(defaultName);
     } else {
       setIsModalOpen(true);
+      getResponePopup(response);
     }
     setLoading(false);
   };
   useEffect(() => {
-    const defaultName = `Report${moment(new Date()).format("MM-DD-YYYY-hh:mm")}.xlsx`;
+    const defaultName = `Report${moment(new Date()).format(
+      "MM-DD-YYYY-hh:mm"
+    )}`;
     setInputValue(defaultName);
   }, []);
 
@@ -87,7 +100,9 @@ const GenerateReportModal = ({
             />
           </div>
         </div>
-        <div className={`${styles.btnContainer} mt-5 d-flex justify-content-center align-items-center`}>
+        <div
+          className={`${styles.btnContainer} mt-5 d-flex justify-content-center align-items-center`}
+        >
           <RegularButton
             name="Generate"
             onClick={GenerateReport}
@@ -102,10 +117,8 @@ const GenerateReportModal = ({
   );
 };
 
-const connector = connect((state)=>( {
-}),{
-  generateReport: reportActions.reportGenerate
+const connector = connect((state) => ({}), {
+  generateReport: reportActions.reportGenerate,
 });
-
 
 export default connector(GenerateReportModal);

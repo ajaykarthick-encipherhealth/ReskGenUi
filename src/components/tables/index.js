@@ -14,6 +14,7 @@ import {
   Badge,
   Empty,
   Image,
+  Popconfirm,
   Popover,
   Progress,
   Select,
@@ -130,6 +131,8 @@ const AppTable = ({
   showCancelIcon = false,
   progressCancel,
   totalCountHead,
+  progressCancelIcon,
+  cancelIcon=false
 }) => {
   if (isCheckBox) {
     column.push({
@@ -284,6 +287,8 @@ const AppTable = ({
                       handleReportDownload={handleReportDownload}
                       showCancelIcon={showCancelIcon}
                       progressCancel={progressCancel}
+                      progressCancelIcon={progressCancelIcon}
+                      cancelIcon={cancelIcon}
                     />
                   ))
                 ) : (
@@ -543,6 +548,8 @@ const TableRow = ({
   handleReportDownload,
   showCancelIcon,
   progressCancel,
+  progressCancelIcon,
+  cancelIcon
 }) => {
   const router = useRouter();
   return (
@@ -1384,6 +1391,51 @@ const TableRow = ({
             </td>
           );
         }
+        if (columnItem?.design?.includes("PROGRESS_BAR_WITH_CANCEL_BUTTON")) {
+          return (
+            <td
+              className={`${
+                index == 0
+                  ? Style.firstTdBorder
+                  : column.length - 1 == index
+                  ? Style.lastBorder
+                  : Style.childBorder
+              } `}
+            >
+              {item?.progress < 0 ? (
+                <div style={{ fontStyle: "italic" }} className="text-danger">
+                  Cancelled
+                </div>
+              ) : item?.status === "FAILED" ? (
+                <div style={{ fontStyle: "italic" }} className="text-danger">
+                  Failed
+                </div>
+              ) : (
+                <div className="d-flex justify-content-start gap-3">
+                  <Progress
+                    percent={item[`${columnItem.actualField}`]}
+                    format={(percent) => `${percent}%`}
+                    className={`${Style.progreddBr}`}
+                  />
+                  {cancelIcon && item?.progress !== 100 && (
+                    <Popconfirm
+                      title="Are you sure to cancel the process?"
+                      onConfirm={() => progressCancelIcon(item.id)}
+                      okText="Yes"
+                      cancelText="No"
+                    >
+                      <CloseCircleOutlined
+                        style={{ fontSize: "20px" }}
+                        className="text-danger"
+                        onClick={(e) => e.stopPropagation()}
+                      />
+                    </Popconfirm>
+                  )}
+                </div>
+              )}
+            </td>
+          );
+        }
         if (columnItem?.arrayDataFormat) {
           return (
             <td
@@ -1512,8 +1564,7 @@ const TableRow = ({
             </td>
           );
         }
-
-        if (columnItem.reportDownload) {
+        if (columnItem?.design?.includes("DOWNLOAD")) {
           return (
             <td className={`${Style.lastBorder}`}>
               <div
@@ -1529,12 +1580,23 @@ const TableRow = ({
                           colIndex
                       )
                 }
-                className="d-flex align-items-center justify-content-center"
+                className="d-flex align-items-start justify-content-start"
               >
-                <DownloadOutlined
-                  onClick={handleReportDownload}
-                  style={{ fontSize: "16px" }}
-                />
+                {item.enableDownload ? (
+                  <Popconfirm
+                    title="Are you sure you want to download this report?"
+                    onConfirm={() => handleReportDownload(item.id)}
+                    okText="Yes"
+                    cancelText="No"
+                  >
+                    <DownloadOutlined
+                      onClick={(e) => e.stopPropagation()}
+                      style={{ fontSize: "16px", cursor: "pointer" }}
+                    />
+                  </Popconfirm>
+                ) : (
+                  "---"
+                )}
               </div>
             </td>
           );

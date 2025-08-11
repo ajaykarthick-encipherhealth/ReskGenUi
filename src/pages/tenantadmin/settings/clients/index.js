@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import ReusableFilters from "../../../../components/reusableFilters";
 import AppTable from "../../../../components/tables";
-import { Button, DatePicker, Drawer, Form, Input } from "antd";
+import { Button, DatePicker, Drawer, Form, Input, Select } from "antd";
 import { connect } from "react-redux";
 import { actions as settingActions } from "../../../../stores/tenantAdmin/settings";
 import {
@@ -75,6 +75,7 @@ const Clients = ({
       projectEndDate: values.projectInitiatedDate?.[1]
         ?.endOf("day")
         ?.toISOString(),
+      clientType:values?.clienttype
     };
     try {
       const res = await createClient(data);
@@ -132,8 +133,8 @@ const Clients = ({
       const response = await tableDynamicColumn({ payload });
       if (response?.status === "SUCCESS") {
         setIsFilter(true);
-        const filterCheck = tableCustomFilterClearCheck(
-        {  searchText,
+        const filterCheck = tableCustomFilterClearCheck({
+          searchText,
           selectedDateRanges,
           selectedDates,
           selectedOption,
@@ -141,8 +142,8 @@ const Clients = ({
           setSelectedDateRanges,
           setSelectedDates,
           setSelectedOption,
-          data}
-        );
+          data,
+        });
         if (filterCheck) {
           getClientsDetails();
         }
@@ -258,18 +259,6 @@ const Clients = ({
                 autoComplete="off"
                 style={{ maxWidth: 300 }}
               >
-                {/* <Form.Item
-                  label="Client ID"
-                  name="clientId"
-                  rules={[
-                    {
-                      required: true,
-                      message: "Please enter Client ID",
-                    },
-                  ]}
-                >
-                  <Input placeholder="Client ID" />
-                </Form.Item> */}
                 <Form.Item
                   label="Client Name"
                   name="clientName"
@@ -281,6 +270,28 @@ const Clients = ({
                   ]}
                 >
                   <Input placeholder="Client Name" />
+                </Form.Item>
+                 <Form.Item
+                  label="Client Type"
+                  name="clienttype"
+                  rules={[
+                    {
+                      required: true,
+                      message: "Please enter Client Type",
+                    },
+                  ]}
+                >
+                  <Select
+                    style={{ height: "40px" }}
+                    id="project-type"
+                    name="project-type"
+                    placeholder="Client Type"
+                    options={[
+                      { value: "TIDAL_HEALTH", label: "Tidal Health" },
+                      { value: "CHS", label: "CHS" },
+                      { value: "HPN", label: "HPN" },
+                    ]}
+                  />
                 </Form.Item>
                 <Form.Item
                   label="Project Name"
@@ -294,6 +305,7 @@ const Clients = ({
                 >
                   <Input placeholder="Project Name" />
                 </Form.Item>
+               
                 <Form.Item
                   name="projectInitiatedDate"
                   rules={[

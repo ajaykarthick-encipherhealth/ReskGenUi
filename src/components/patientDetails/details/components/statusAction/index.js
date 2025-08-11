@@ -703,7 +703,7 @@ const StatusAction = ({
                           : "pointer",
                     }}
                   >
-                    Queried
+                    QUERIED
                   </button>
                 </Dropdown>
               ) : workflowDatas?.status == "PENDING" ||

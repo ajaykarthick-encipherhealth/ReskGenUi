@@ -15,7 +15,7 @@ const CardSkeleton = ({
             style={{
               height: height,
               display:display,
-              gap:gap
+              gap:gap,
             }}
             active
             block={true}

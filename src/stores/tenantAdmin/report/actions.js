@@ -59,7 +59,11 @@ export const reportDownload = createActionThunk(
   "DOWNLOAD_REPORT",
   network.downloadReport
 );
-
-
-
-
+export const reportKill = createActionThunk(
+  "KILL_REPORT",
+  network.killReport
+);
+export const reportTabList = createActionThunk(
+  "REPORT_TABS",
+  network.tabList
+);

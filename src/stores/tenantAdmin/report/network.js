@@ -190,14 +190,35 @@ export const generateReport = async({data}) => {
   );
   return res;
 };
-export const downloadReport = async({reportType , reportInfoId}) => {
+export const downloadReport = async({reportCategory , reportInfoId}) => {
   const options = {
     method: "GET",
   };
 
   const res = await requestPortal(
-    `management/mci/report/get-blob-url?reportType=${reportType}&reportInfoId=${reportInfoId}`,
+    `management/mci/report/get-blob-url?reportCategory=${reportCategory}&reportInfoId=${reportInfoId}`,
     options
   );
   return res;
 };
+export const killReport = async({ reportInfoId}) => {
+  const options = {
+    method: "POST",
+  };
+
+  const res = await requestPortal(
+    `management/mci/report/kill?reportInfoId=${reportInfoId}`,
+    options
+  );
+  return res;
+};
+
+export async function tabList() {
+  const options = {
+    method: "GET",
+  };
+  const data = await requestPortal(`dbservice/mci/report/page-data`,
+    options
+  );
+  return data;
+}
