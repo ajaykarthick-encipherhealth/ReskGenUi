@@ -13,7 +13,8 @@ import {
   healthMetricAddAction,
   createClientAction,
   fhirServicesAction,
-  updateSettingsAction,createProjectAction ,getProjectAction} from "./actions";
+  updateSettingsAction,createProjectAction ,getProjectAction,
+  deleteProcessAction} from "./actions";
 
 const initialState = {
   loading: true,
@@ -64,12 +65,14 @@ const tenantAminSettingsReducer = combineReducers({
   fhirConnectStatus: createReducer(fhirConnectAction),
   fhirList: createReducer(fhirListAction),
   fhirServicesList: createReducer(fhirServicesAction),
-  createProject:createReducer(createProjectAction),
-  getProject:createReducer(getProjectAction),
-  getProjectLoader:getReportLoading(getProjectAction),
-  createClient:createReducer(createClientAction),
-  clientCreationLoading:getReportLoading(createClientAction),
-  projectCreationLoading:getReportLoading(createProjectAction)
+  createProject: createReducer(createProjectAction),
+  getProject: createReducer(getProjectAction),
+  getProjectLoader: getReportLoading(getProjectAction),
+  createClient: createReducer(createClientAction),
+  clientCreationLoading: getReportLoading(createClientAction),
+  projectCreationLoading: getReportLoading(createProjectAction),
+  deleteProcessLoading: getReportLoading(deleteProcessAction),
+  deleteProcess: createReducer(deleteProcessAction),
 });
 
 

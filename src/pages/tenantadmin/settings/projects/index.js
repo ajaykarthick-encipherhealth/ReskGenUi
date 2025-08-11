@@ -25,6 +25,7 @@ const Projects = ({
   pageLoad,
   getAllProjects,
   projectLoader,
+  deleteProcess,
 }) => {
   const [form] = Form.useForm();
   const { RangePicker } = DatePicker;
@@ -90,6 +91,17 @@ const Projects = ({
       console.error("Project creation error:", error);
     }
   };
+
+
+const handleDeleteProcess = async () => {
+  try {
+    const res = await deleteProcess();
+    getResponePopup(res);
+  } catch (error) {
+    console.error("File deletion error:", error);
+  }
+};
+
   const handleReset = async () => {
     setIsResetting(true);
 
@@ -131,8 +143,8 @@ const Projects = ({
       const response = await tableDynamicColumn({ payload });
       if (response?.status === "SUCCESS") {
         setIsFilter(true);
-        const filterCheck = tableCustomFilterClearCheck(
-         { searchText,
+        const filterCheck = tableCustomFilterClearCheck({
+          searchText,
           selectedDateRanges,
           selectedDates,
           selectedOption,
@@ -140,11 +152,11 @@ const Projects = ({
           setSelectedDateRanges,
           setSelectedDates,
           setSelectedOption,
-          data}
-        );
+          data,
+        });
         if (filterCheck) {
-         getProjects();
-        }       
+          getProjects();
+        }
         onClose();
         getResponePopup(response);
       }
@@ -229,6 +241,19 @@ const Projects = ({
             Create Project
           </Button>
         </div>
+        <div
+          id="delete-btn"
+          name="delete-btn"
+          className="d-flex justify-content-center align-items-center mt-3 ms-2"
+        >
+          <Button
+            data-testid="delete-files"
+            className="btn btn-sm w-full text-ellipsis tableButton mt-2"
+            onClick={handleDeleteProcess}
+          >
+            Delete files
+          </Button>
+        </div>
       </div>
       <div className="mx-3 mt-5">
         <AppTable
@@ -309,7 +334,7 @@ const enhancer = connect(
     tableLoader: state?.tableView?.tableViewLoading,
     pageLoad: state?.tenantAdmin?.tin?.getPageRendering,
     allRoles: state?.tenantAdmin?.patientsAllocation?.getRoles?.data?.response,
-    projectLoader:state.tenantAdmin?.settings?.projectCreationLoading
+    projectLoader: state.tenantAdmin?.settings?.projectCreationLoading,
   }),
   {
     createProject: settingActions.createProjectAction,
@@ -317,6 +342,7 @@ const enhancer = connect(
     tableDynamicColumnReset: tableAction.tableDynamicColumnReset,
     getTableData: tableAction.tableViewAction,
     getAllProjects: authActions.projectDetails,
+    deleteProcess: settingActions.deleteProcessAction,
   }
 );
 export default enhancer(Projects);

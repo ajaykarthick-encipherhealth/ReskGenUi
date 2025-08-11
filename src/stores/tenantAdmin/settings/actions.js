@@ -164,5 +164,9 @@ export const createClientAction = createActionThunk(
   "CREATE_CLIENT",
   network.createClient
 );
+export const deleteProcessAction = createActionThunk(
+  "DELETE_PROCESS",
+  network.deleteProcess
+);
 
 

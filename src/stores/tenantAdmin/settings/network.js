@@ -435,6 +435,17 @@ export async function createClient(data) {
   );
   return res;
 }
+export async function deleteProcess(data) {
+  const options = {
+    method: "POST",
+    body: JSON.stringify(data),
+  };
+  const res = await requestPortal(
+    `dbservice/patient/delete/processing?searchType=PROJECT`,
+    options
+  );
+  return res;
+}
 
 
 
