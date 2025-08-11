@@ -58,6 +58,7 @@ import FileDetails from "./components/fileDetails";
 import { PlusCircleOutlined } from "@ant-design/icons";
 import ManuallyAddProvider from "./manuallyAddProvider";
 import {
+  findFirstPendingWorkflow,
   getAge,
   getResponePopup,
   isStatusDisabled,
@@ -426,12 +427,17 @@ const Details = ({
           navigate.pathname
         );
         if (res?.response?.length > 0) {
+          var dosPendingValue = res?.response[0]?.dateOfService;
+          const pendingWorkflow = findFirstPendingWorkflow(res?.response);
+          if (pendingWorkflow) {
+            dosPendingValue = pendingWorkflow.dateOfService;
+          }
           const patientRes = await getpatientDetailsData(
             selectPatientId?.patirntId
               ? selectPatientId?.patirntId
               : getStorage("patientId"),
             null,
-            res?.response[0]?.dateOfService,
+            dosPendingValue,
             "",
             userRole,
             "",
@@ -442,7 +448,7 @@ const Details = ({
             patientRes?.response?.fileDetailDTO?.dosSummaries;
           if (dosSummariesList) {
             const filteredDos = dosSummariesList?.find(
-              (data) => data?.dos === res?.response[0]?.dateOfService
+              (data) => data?.dos === dosPendingValue
             );
             getSelectedDosPageNumber(filteredDos?.startPageNumber);
             setSearch({
@@ -450,8 +456,8 @@ const Details = ({
               page: filteredDos.startPageNumber || 1,
             });
           }
-          getSelectedDos(res?.response[0]?.dateOfService);
-          setSelectDosValue(res?.response[0]?.dateOfService);
+          getSelectedDos(dosPendingValue);
+          setSelectDosValue(dosPendingValue);
           patientDetailsLoad(false);
         } else {
           getpatientDetailsData(
@@ -572,10 +578,15 @@ const Details = ({
 
     const res = await getPatientDosList(localPatientId, e);
     if (res?.response?.length > 0) {
+      var dosPendingValue = res?.response[0]?.dateOfService;
+      const pendingWorkflow = findFirstPendingWorkflow(res?.response);
+      if (pendingWorkflow) {
+        dosPendingValue = pendingWorkflow.dateOfService;
+      }
       const patientResult = await getpatientDetailsData(
         localPatientId,
         null,
-        res?.response[0]?.dateOfService,
+        dosPendingValue,
         "",
         userRole,
         "",
@@ -585,7 +596,7 @@ const Details = ({
         patientResult?.response?.fileDetailDTO?.dosSummaries;
       if (dosSummariesList) {
         const filteredDos = dosSummariesList?.find(
-          (data) => data?.dos === res?.response[0]?.dateOfService
+          (data) => data?.dos === dosPendingValue
         );
         getSelectedDosPageNumber(filteredDos?.startPageNumber);
         setSearch({
@@ -593,8 +604,8 @@ const Details = ({
           page: filteredDos.startPageNumber || 1,
         });
       }
-      getSelectedDos(res?.response[0]?.dateOfService);
-      setSelectDosValue(res?.response[0]?.dateOfService);
+      getSelectedDos(dosPendingValue);
+      setSelectDosValue(dosPendingValue);
       patientDetailsLoad(false);
     } else {
       getpatientDetailsData(
@@ -607,9 +618,7 @@ const Details = ({
         navigate.pathname
       );
       patientDetailsLoad(false);
-      const fileid = await getPatientFileId(
-        localPatientId
-      );
+      const fileid = await getPatientFileId(localPatientId);
       setStorage("fileId", fileid?.response?.fileId);
       getPatientHccFile(fileid?.response?.fileId);
       storePrePatientFileId(fileid?.response?.fileId);
@@ -771,12 +780,16 @@ const Details = ({
         resData?.response?.length > 0 &&
         resData?.response[0]?.dateOfService
       ) {
-        const dateOfService = resData.response[0].dateOfService;
+        var dosPendingValue = resData?.response[0]?.dateOfService;
+        const pendingWorkflow = findFirstPendingWorkflow(resData?.response);
+        if (pendingWorkflow) {
+          dosPendingValue = pendingWorkflow.dateOfService;
+        }
 
         const res = await getpatientDetailsData(
           userId,
           year,
-          dateOfService,
+          dosPendingValue,
           setIsLoading,
           userRole,
           "",
@@ -786,7 +799,7 @@ const Details = ({
         const dosSummariesList = res?.response?.fileDetailDTO?.dosSummaries;
         if (dosSummariesList) {
           const filteredDos = dosSummariesList?.find(
-            (data) => data?.dos === dateOfService
+            (data) => data?.dos === dosPendingValue
           );
           getSelectedDosPageNumber(filteredDos?.startPageNumber);
           setSearch({
@@ -795,8 +808,8 @@ const Details = ({
           });
         }
 
-        getSelectedDos(dateOfService);
-        setSelectDosValue(dateOfService);
+        getSelectedDos(dosPendingValue);
+        setSelectDosValue(dosPendingValue);
 
         if (res.status === "SUCCESS") {
           getPatientIdData(userId, isDosSelected);
@@ -805,7 +818,7 @@ const Details = ({
           activeLabels({
             patientId: userId,
             year: year,
-            dos: dateOfService,
+            dos: dosPendingValue,
           });
           if (isClear) {
             getSelectedDos("");
@@ -824,9 +837,7 @@ const Details = ({
         getpatientDetailsData("", "", null, "", "", true, "");
         // No dateOfService available — skip calling getpatientDetailsData
         setIsSpinnerLoading(false);
-        const fileid = await getPatientFileId(
-          userId
-        );
+        const fileid = await getPatientFileId(userId);
         setStorage("fileId", fileid?.response?.fileId);
         getPatientHccFile(fileid?.response?.fileId);
         storePrePatientFileId(fileid?.response?.fileId);

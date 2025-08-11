@@ -10,6 +10,7 @@ import { getLocalStored, getStorage } from "../../../../../utils/storages";
 import { overallYearStatus } from "../../../../../stores/patient/details/network";
 import { useRouter } from "next/router";
 import {
+  findFirstPendingWorkflow,
   getResponePopup,
   isStatusDisabled,
 } from "../../../../../utils/reusable";
@@ -434,18 +435,6 @@ const handleSubmitHccComplete = async () => {
       setStatusLoading(false);
       setIsLoading(false);
     }
-  };
-
-  const findFirstPendingWorkflow = (responseArray) => {
-    for (const item of responseArray) {
-      if (item.workflow && Array.isArray(item.workflow)) {
-        const hasPending = item.workflow.some((w) => w.status === "PENDING");
-        if (hasPending) {
-          return item;
-        }
-      }
-    }
-    return null;
   };
 
   const handleChange = async (e) => {

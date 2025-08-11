@@ -1124,7 +1124,7 @@ export const isYearWiseDisabled = (patientDetailsResult, pathname) => {
   if (patientDetailsResult?.data?.response?.masterAudit?.status == "PENDING") {
     returnValue = false;
   } else {
-    if (overAllStatus === "COMPLETED" || overAllStatus === "QUERIED" ) {
+    if (overAllStatus === "COMPLETED" || overAllStatus === "QUERIED") {
       returnValue = true;
     }
   }
@@ -1132,8 +1132,7 @@ export const isYearWiseDisabled = (patientDetailsResult, pathname) => {
     pathname.endsWith("/tenantadmin/tin/details") ||
     pathname.endsWith("/tenantadmin/project/details") ||
     pathname.endsWith("/tenantadmin/patientsync/batchfilesview") ||
-    pathname.endsWith("/tenantadmin/tin/tindetails/querydetails")
-   
+    pathname.endsWith("/tenantadmin/tin/tindetails/querydetails");
 
   if (pathDisbaled) {
     returnValue = true;
@@ -1151,11 +1150,10 @@ export const getRolePanelPermission = (roles, currentRole) => {
   }
 };
 
-
 export function generateUUID() {
-  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-    const r = Math.random() * 16 | 0;
-    const v = c === 'x' ? r : (r & 0x3 | 0x8);
+  return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function (c) {
+    const r = (Math.random() * 16) | 0;
+    const v = c === "x" ? r : (r & 0x3) | 0x8;
     return v.toString(16); // Example: 'f65c57f6-a6aa-4d8a-9f43-3c9c4f90b2c6'
   });
 }
@@ -1320,19 +1318,35 @@ export const getRoleColor = (key) => {
   }
 };
 
-export const getChartTimeLine = (obj,plotConfig) => {
-  const {key,value} = plotConfig;
+export const getChartTimeLine = (obj, plotConfig) => {
+  const { key, value } = plotConfig;
   const tempObj = {};
-      if (obj) {
-        for (const i of obj) {
-          tempObj[i[key]] = toFixedNum(i[value], 2);
-        }
-      }
-      return tempObj;
-}
+  if (obj) {
+    for (const i of obj) {
+      tempObj[i[key]] = toFixedNum(i[value], 2);
+    }
+  }
+  return tempObj;
+};
 
 export const statusFormate = (status) => {
+  return typeof status == "string"
+    ? status?.replace(/([a-z](?=[A-Z]))/g, "$1 ")
+    : status;
+};
 
-    return typeof status == "string" ? status?.replace(/([a-z](?=[A-Z]))/g, '$1 ') : status;
-    
-}
+export const findFirstPendingWorkflow = (responseArray) => {
+  for (const item of responseArray) {
+    if (item.workflow && Array.isArray(item.workflow)) {
+      const hasCompleted = item.workflow.some((w) => w.status === "COMPLETED");
+      const allPending = item.workflow.every((w) => w.status === "PENDING");
+      if (hasCompleted) {
+        continue;
+      }
+      if (allPending) {
+        return item;
+      }
+    }
+  }
+  return null;
+};
