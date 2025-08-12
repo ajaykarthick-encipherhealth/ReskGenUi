@@ -507,6 +507,11 @@ const AddForm = ({
                       firstName: subValue?.firstName || null,
                     });
                   }}
+                  onInputKeyDown={(e) => {
+                    if (e.target.selectionStart === 0 && e.key === " ") {
+                      e.preventDefault();
+                    }
+                  }}
                   onClear={() => setOpt([])}
                   onBlur={() => {
                     const selected = form.getFieldValue("firstName");
