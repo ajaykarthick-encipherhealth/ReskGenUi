@@ -1006,6 +1006,7 @@ function WorkQueue({
   const { dashboardLayout = null, userName = "", aliasName = "" } = getLocalStored();
   const currentDate = new Date();
   const [taskDataList, setTaskDataList] = useState({});
+  const [isPageLoad, setIsPageLoad] = useState(true)
   const [visibleDates, setVisibleDates] = useState([
     moment().subtract(2, "days"),
     moment().subtract(1, "days"),
@@ -1350,6 +1351,12 @@ function WorkQueue({
     productivityState.currentBtn,
   ]);
 
+  useEffect(() => {
+    setTimeout(() => {
+      setIsPageLoad(false)
+    }, 500);
+  }, [])
+
   const windowWidth = useWindowWidth();
   const hasMounted = useHasMounted();
   if (!hasMounted) return null;
@@ -1396,7 +1403,7 @@ function WorkQueue({
 
   return (
     <>
-      {getSelectedWidgetsLoader ? (
+      {getSelectedWidgetsLoader || isPageLoad ? (
         <div
           style={{
             display: "grid",

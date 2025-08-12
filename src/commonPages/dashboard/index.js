@@ -41,7 +41,7 @@ const DynamicDashboard = ({
   const [selectedRole, setSelectedRole] = useState("Admin");
   const [pagesLoader, setPagesLoader] = useState(false);
   const [selectedTab, setSelectedTab] = useState("Default");
-  const [selectedTabPage, setSelectedTabPage] = useState("Default");
+  const [selectedTabPage, setSelectedTabPage] = useState("");
   const [dashboard, setDashboard] = useState([]);
   const [selectedItems, setSelectedItem] = useState([]);
   const [isDisable, setIsDisable] = useState(false);
@@ -50,7 +50,6 @@ const DynamicDashboard = ({
     const actionKey = `${actionType}Action`;
     return await dispatch(actions[actionKey](params));
   };
-
   const handleCancel = () => {
     setDynamicModal("");
     setSelectedItem([]);
