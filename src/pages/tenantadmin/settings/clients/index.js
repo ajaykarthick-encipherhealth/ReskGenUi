@@ -14,6 +14,7 @@ import { actions as tableAction } from "../../../../stores/tableView";
 import { actions as authActions } from "../../../../stores/authFlows";
 import { disablePastDate } from "../../../../components/headerFilters/functions";
 import RegularButton from "../../../../components/button";
+import { clientCreationPageId } from '../../../../utils/pageIds'
 
 const Clients = ({
   createClient,
@@ -96,7 +97,7 @@ const Clients = ({
     setIsResetting(true);
 
     const payload = {
-      pageId: "1b4e28ba-2fa1-11d2-883f-0016d3cca427",
+      pageId: clientCreationPageId,
     };
     try {
       const response = await tableDynamicColumnReset({ payload });
@@ -113,7 +114,7 @@ const Clients = ({
   };
   const getClientsDetails = async () => {
     const response = await getTableData({
-      pageId: "1b4e28ba-2fa1-11d2-883f-0016d3cca427",
+      pageId: clientCreationPageId,
       pageNo,
       pageSize,
       selectedDateRanges,
@@ -125,7 +126,7 @@ const Clients = ({
     setIsSubmitting(true);
 
     const payload = {
-      pageId: "1b4e28ba-2fa1-11d2-883f-0016d3cca427",
+      pageId: clientCreationPageId,
       headerNames: data.map((col) => col.id),
     };
 

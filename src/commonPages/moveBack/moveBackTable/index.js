@@ -4,6 +4,7 @@ import { connect } from "react-redux";
 import { actions as allActions } from "../../../stores/tenantAdmin/patientAllocations";
 import { actions as tableAction } from "../../../stores/tableView";
 import { findItemWithTrueKey } from "../../../utils/reusable";
+import { moveBackPageId } from '../../../utils/pageIds'
 
 const MoveBackTable = ({
   getTableData,
@@ -39,7 +40,7 @@ const MoveBackTable = ({
         const response = await getTableData({
           fromTenant: true,
           allPatientIds: checked,
-          pageId: "937b0477-f0cd-46e7-b8ab-fefb38f91859",
+          pageId: moveBackPageId,
           pageNo: 0,
           pageSize: 15,
           roleId: roleId,

@@ -13,6 +13,7 @@ import { actions as tableAction } from "../../stores/tableView";
 import CardSkeleton from "../../components/skeleton/card";
 import { findMatchesByField, getResponePopup, tableCustomFilterClearCheck } from "../../utils/reusable";
 import { getStorage } from "../../utils/storages";
+import { moveBackPageId } from '../../utils/pageIds'
 
 const MoveBack = ({
   tableLoader,
@@ -88,7 +89,7 @@ const MoveBack = ({
 
   const getRolesList = async () => {
     const res = await getAllTabRoles({
-      pageId: "937b0477-f0cd-46e7-b8ab-fefb38f91859",
+      pageId: moveBackPageId,
     });
     if (res?.status === "SUCCESS") {
       setRoleId(res?.response?.allocationRoles[0]?.roleId);
@@ -97,7 +98,7 @@ const MoveBack = ({
   const getMoveBack = async () => {
     const tin = getStorage("tinNumber");
     const response = await getTableData({
-      pageId: "937b0477-f0cd-46e7-b8ab-fefb38f91859",
+      pageId: moveBackPageId,
       pageNo,
       pageSize,
       roleId,
@@ -112,7 +113,7 @@ const MoveBack = ({
   const handleSubmit = async (data) => {
     setIsSubmitting(true);
     const payload = {
-      pageId: "937b0477-f0cd-46e7-b8ab-fefb38f91859",
+      pageId: moveBackPageId,
       headerNames: data.map((col) => col.id),
     };
     try {
@@ -145,7 +146,7 @@ const MoveBack = ({
     setIsResetting(true);
 
     const payload = {
-      pageId: "937b0477-f0cd-46e7-b8ab-fefb38f91859",
+      pageId: moveBackPageId,
     };
     try {
       const response = await tableDynamicColumnReset({ payload });

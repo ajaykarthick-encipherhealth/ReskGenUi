@@ -40,6 +40,7 @@ import AppTable from "../../../components/tables";
 import { actions as tableAction } from "../../../stores/tableView";
 import ReusableFilters from "../../../components/reusableFilters";
 import { getStorage } from "../../../utils/storages";
+import { patientRosterPageId, practiceRosterPageId, providerRosterPageId, tinRosterPageId } from '../../../utils/pageIds'
 
 const { RangePicker } = DatePicker;
 
@@ -797,7 +798,7 @@ const PatientSync = ({
   const getAllProviderApi = async () => {
     const projectId = getStorage("project");
     const response = await getTableData({
-      pageId: "42136c12-83df-46fc-8c8a-200d97f154be",
+      pageId: providerRosterPageId,
       pageNo,
       pageSize: 15,
       roleId,
@@ -811,7 +812,7 @@ const PatientSync = ({
   const getAllPracticeApi = async () => {
     const projectId = getStorage("project");
     const response = await getTableData({
-      pageId: "e2785147-39dc-4bd3-828c-c0d5168acba7",
+      pageId:practiceRosterPageId,
       pageNo,
       pageSize: 15,
       roleId,
@@ -825,7 +826,7 @@ const PatientSync = ({
   const getAllPatientApi = async () => {
     const projectId = getStorage("project");
     const response = await getTableData({
-      pageId: "c60dec23-bcfa-48ce-966e-dbf1ce3d41b2",
+      pageId: patientRosterPageId,
       pageNo,
       pageSize: 15,
       roleId,
@@ -839,7 +840,7 @@ const PatientSync = ({
   const getTinApi = async () => {
     const projectId = getStorage("project");
     const response = await getTableData({
-      pageId: "1ff437a0-18a8-47de-893d-41dc669e3cbd",
+      pageId: tinRosterPageId,
       pageNo,
       pageSize: 15,
       roleId,
@@ -852,13 +853,13 @@ const PatientSync = ({
   };
   const pageIds =
     reportActiveTab === "Provider Roaster"
-      ? "42136c12-83df-46fc-8c8a-200d97f154be"
+      ? providerRosterPageId
       : reportActiveTab === "Practice Roaster"
-      ? "e2785147-39dc-4bd3-828c-c0d5168acba7"
+      ?practiceRosterPageId
       : reportActiveTab === "Patient Roaster"
-      ? "c60dec23-bcfa-48ce-966e-dbf1ce3d41b2"
+      ? patientRosterPageId
       : reportActiveTab === "Tin Roaster"
-      ? "1ff437a0-18a8-47de-893d-41dc669e3cbd"
+      ? tinRosterPageId
       : "";
   const handleSubmitInsert = async (data) => {
     setIsSubmitting(true);

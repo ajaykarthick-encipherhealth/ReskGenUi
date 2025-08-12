@@ -18,6 +18,7 @@ import ReusableFilters from "../../../components/reusableFilters";
 import { PlusCircleFilled } from "@ant-design/icons";
 import AppTable from "../../../components/tables";
 import { actions as tableAction } from "../../../stores/tableView";
+import { userCreatePageId } from "../../../utils/pageIds";
 
 const intialValues = {
   firstName: "",
@@ -272,7 +273,7 @@ const UserList = ({
   const handleSubmitInsert = async (data) => {
     setIsSubmitting(true);
     const payload = {
-      pageId: "1406dafa-46fa-4f69-ac1b-e354ebc03dad",
+      pageId:userCreatePageId,
       headerNames: data.map((col) => col.id),
     };
 
@@ -306,7 +307,7 @@ const UserList = ({
   const handleReset = async () => {
     setIsResetting(true);
     const payload = {
-      pageId: "1406dafa-46fa-4f69-ac1b-e354ebc03dad",
+      pageId:userCreatePageId,
     };
 
     try {
@@ -352,7 +353,7 @@ const UserList = ({
 
   const getAllUsers = async () => {
     const response = getTableData({
-      pageId: "1406dafa-46fa-4f69-ac1b-e354ebc03dad",
+      pageId:userCreatePageId,
       pageNo,
       pageSize: 15,
       roleId: "",

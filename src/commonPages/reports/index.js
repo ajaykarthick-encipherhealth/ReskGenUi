@@ -17,6 +17,7 @@ import { Button } from "antd";
 import { actions as reportActions } from "../../stores/tenantAdmin/report";
 import CardSkeleton from "../../components/skeleton/card";
 import styles from './style.module.css'
+import { generatedReportsPageId, generateViewPageId } from  '../../utils/pageIds'
 
 const Reports = ({
   getProjectActiveTab,
@@ -123,12 +124,12 @@ const Reports = ({
   const getReports = async () => {
     let pageId =
       activeTab === "Financial Report"
-        ? "5792cd13-73f5-42c0-b0ca-5db81db947ad"
+        ? generatedReportsPageId
         : reportTab === "Generate View"
-        ? "51ccafdf-f18e-4100-8811-63236a79a441"
+        ? generateViewPageId
         : reportTab === "Generated Reports"
-        ? "5792cd13-73f5-42c0-b0ca-5db81db947ad"
-        : "5792cd13-73f5-42c0-b0ca-5db81db947ad";
+        ? generatedReportsPageId
+        : generatedReportsPageId;
 
     const response = await getTableData({
       pageId,
@@ -155,12 +156,12 @@ const Reports = ({
     setIsSubmitting(true);
     let pageId =
       activeTab === "Financial Report"
-        ? "5792cd13-73f5-42c0-b0ca-5db81db947ad"
+        ? generatedReportsPageId
         : reportTab === "Generate View"
-        ? "51ccafdf-f18e-4100-8811-63236a79a441"
+        ? generateViewPageId
         : reportTab === "Generated Reports"
-        ? "5792cd13-73f5-42c0-b0ca-5db81db947ad"
-        : "5792cd13-73f5-42c0-b0ca-5db81db947ad";
+        ? generatedReportsPageId
+        : generatedReportsPageId;
     const payload = {
       pageId: pageId,
       headerNames: data.map((col) => col.id),
@@ -196,12 +197,12 @@ const Reports = ({
     setIsResetting(true);
     let pageId =
       activeTab === "Financial Report"
-        ? "5792cd13-73f5-42c0-b0ca-5db81db947ad"
+        ? generatedReportsPageId
         : reportTab === "Generate View"
-        ? "51ccafdf-f18e-4100-8811-63236a79a441"
+        ? generateViewPageId
         : reportTab === "Generated Reports"
-        ? "5792cd13-73f5-42c0-b0ca-5db81db947ad"
-        : "5792cd13-73f5-42c0-b0ca-5db81db947ad";
+        ? generatedReportsPageId
+        : generatedReportsPageId;
     const payload = {
       pageId,
     };

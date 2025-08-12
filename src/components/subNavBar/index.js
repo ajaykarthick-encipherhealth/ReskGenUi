@@ -14,6 +14,7 @@ import { Tooltip } from "antd";
 import { getPageId } from "../../pages/tenantadmin/tin";
 import { connect } from "react-redux";
 import CardSkeleton from "../skeleton/card";
+import { activeTinPageId } from '../../utils/pageIds'
 
 const SubNavBar = ({ handleBack, hideBackArrow, pageLoad ,tableLoader}) => {
   const role = getStorage("userRole");
@@ -30,7 +31,7 @@ const SubNavBar = ({ handleBack, hideBackArrow, pageLoad ,tableLoader}) => {
     const projectId = getStorage("project");
     setLoading(true);
     const result = await getTableView({
-      pageId:"2d7cb7f7-6dad-41fb-970b-d805fb3f195f",
+      pageId:activeTinPageId,
       pageNo: 0,
       projectId: projectId,
       tin,

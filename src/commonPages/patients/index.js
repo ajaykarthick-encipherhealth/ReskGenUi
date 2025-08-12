@@ -36,6 +36,7 @@ import { actions as allPatientSyncAction } from "../../stores/tenantAdmin/patien
 import SvgFlag from "../../components/patientDetails/details/components/svg/svg";
 import { actions as workflowActions } from "../../stores/reviewer/workqueue";
 import { actions as tableAction } from "../../stores/tableView";
+import { patientPageId, patientProjectPageId } from "../../utils/pageIds";
 
 export const batchBullets = [
   {
@@ -602,10 +603,10 @@ const Patient = ({
   const getPatients = async () => {
     const tin = getStorage("tinNumber");
     const userId = getStorage("userId");
-    let pageId = "d80f80fd-aab8-496e-a9fc-89677d5ac174";
+    let pageId = patientPageId;
 
     if (navigate.pathname === "/tenantadmin/project") {
-      pageId = "c41d4ea9-6da4-495c-84f4-95b25d6c13b4";
+      pageId = patientProjectPageId;
     }
 
     const response = await getTableData({
@@ -646,10 +647,10 @@ const Patient = ({
 
   const handleSubmitInsert = async (data) => {
     setIsSubmitting(true);
-    let pageId = "d80f80fd-aab8-496e-a9fc-89677d5ac174";
+    let pageId = patientPageId;
 
     if (navigate.pathname === "/tenantadmin/project") {
-      pageId = "c41d4ea9-6da4-495c-84f4-95b25d6c13b4";
+      pageId = patientProjectPageId;
     }
     const payload = {
       pageId,
@@ -685,10 +686,10 @@ const Patient = ({
   };
   const handleReset = async () => {
     setIsResetting(true);
-    let pageId = "d80f80fd-aab8-496e-a9fc-89677d5ac174";
+    let pageId = patientPageId;
 
     if (navigate.pathname === "/tenantadmin/project") {
-      pageId = "c41d4ea9-6da4-495c-84f4-95b25d6c13b4";
+      pageId = patientProjectPageId;
     }
     const payload = {
       pageId,

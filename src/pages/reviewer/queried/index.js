@@ -1,6 +1,7 @@
 import React from 'react'
 import CodersTable from '../../../commonPages/codersTable';
 import { getStorage } from '../../../utils/storages';
+import { queriedPageId } from '../../../utils/pageIds';
 
 const Queried =  () => {
   const userId = getStorage("userId")
@@ -10,7 +11,7 @@ const Queried =  () => {
       <CodersTable
         patientAllocated={userId}
         isQueried={true}
-        pageId="a9d5c555-7954-4382-a2ef-3f66b292cf8f"
+        pageId={queriedPageId}
         route="/reviewer/queried/details"
         tin
         backRoute="/reviewer/queried"

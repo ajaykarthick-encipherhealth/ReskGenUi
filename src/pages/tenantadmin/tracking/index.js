@@ -22,6 +22,7 @@ import {
 import visitStyles from "../../../styles/visitdata.module.css";
 import { LoadingOutlined } from "@ant-design/icons";
 import { portalUrl, tokenKey } from "../../../utils/config";
+import { logsPageId } from '../../../utils/pageIds'
 
 const Patient = ({
   patientDetails,
@@ -148,7 +149,7 @@ const Patient = ({
   const handleSubmit = async (data) => {
     setIsSubmitting(true);
     const payload = {
-      pageId: "ea046971-08de-4ee2-bf47-10c62c0eaa18",
+      pageId: logsPageId,
       headerNames: data.map((col) => col.id),
     };
 
@@ -182,7 +183,7 @@ const Patient = ({
   const handleReset = async () => {
     setIsResetting(true);
     const payload = {
-      pageId: "ea046971-08de-4ee2-bf47-10c62c0eaa18",
+      pageId: logsPageId,
     };
 
     try {
@@ -255,7 +256,7 @@ const Patient = ({
   const getAllTracking = async () => {
     const userId = getStorage("userId");
     const response = await getTableData({
-      pageId: "ea046971-08de-4ee2-bf47-10c62c0eaa18",
+      pageId: logsPageId,
       pageNo,
       pageSize: 15,
       roleId: "",

@@ -19,6 +19,7 @@ import Usersmodal from "./usersmodal";
 import { actions as allActions } from "../../../stores/tenantAdmin/users";
 import { actions as authActions } from "../../../stores/authFlows";
 import { getLocalStored } from "../../../utils/storages";
+import { assignUserPageId } from "../../../utils/pageIds";
 
 const Users = ({
   pageLoad,
@@ -102,7 +103,7 @@ const Users = ({
       sort: sort,
       selectedDateRanges,
       searchText: searchText,
-      pageId: "8e4f1d2a-7b3c-45e6-9f1d-2a7b3c45e6f1",
+      pageId:assignUserPageId,
       cilentBased: true,
       qaLead: true,
       projectLead: true,
@@ -113,7 +114,7 @@ const Users = ({
     setIsSubmitting(true);
 
     const payload = {
-      pageId: "8e4f1d2a-7b3c-45e6-9f1d-2a7b3c45e6f1",
+      pageId: assignUserPageId,
       headerNames: data.map((col) => col.id),
     };
 
@@ -172,7 +173,7 @@ const Users = ({
     setIsResetting(true);
 
     const payload = {
-      pageId: "8e4f1d2a-7b3c-45e6-9f1d-2a7b3c45e6f1",
+      pageId: assignUserPageId,
     };
     try {
       const response = await tableDynamicColumnReset({ payload });

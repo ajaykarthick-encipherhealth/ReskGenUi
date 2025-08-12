@@ -1,4 +1,18 @@
-import { generatedReportsPageId, generateViewPageId } from "../../utils/pageIds";
+import {
+  activeTinPageId,
+  assignUserPageId,
+  generatedReportsPageId,
+  generateViewPageId,
+  moveBackPageId,
+  patientAllocationPageId,
+  patientPageId,
+  queriedPageId,
+  queryApprovalPageId,
+  reAllocationPageId,
+  reAssignedPageId,
+  userCreatePageId,
+  workQueuePageId,
+} from "../../utils/pageIds";
 import { requestPortal } from "../../utils/network";
 import {
   convertToCustomParams,
@@ -79,19 +93,9 @@ export async function getTableView({
       clientId || ""
     }&projectId=${projectId || ""}`;
 
-    const allowedPageIds = [
-      "e76aaa6c-319e-44d3-b7ae-aadb17dfb664",
-      "a9d5c555-7954-4382-a2ef-3f66b292cf8f",
-      "da4958c3-7795-4bcc-8ab0-24d93cd52c25",
-    ];
-    const clientBasesPageIds = [
-      "8e4f1d2a-7b3c-45e6-9f1d-2a7b3c45e6f1",
-      "1406dafa-46fa-4f69-ac1b-e354ebc03dad",
-    ];
-    const masterAuditpageIds = [
-      "6cd166eb-79ac-4c12-ab0f-07be2983ca70",
-      "21235203-2ce0-4ebc-b6d3-05a9d8e8fc75",
-    ];
+    const allowedPageIds = [reAssignedPageId, queriedPageId, workQueuePageId];
+    const clientBasesPageIds = [assignUserPageId, userCreatePageId];
+    const masterAuditpageIds = [patientAllocationPageId, reAllocationPageId];
     if (masterAuditpageIds.includes(pageId)) {
       baseUrl += `&isMasterAudit=${isMasterAudit || false}`;
     }
@@ -109,9 +113,9 @@ export async function getTableView({
     //    baseUrl += `&patientAllocated=${patientAllocated || ""}`;
     //  }
     const allowedPageIdsForOwner = [
-      "da4958c3-7795-4bcc-8ab0-24d93cd52c25",
-      "a9d5c555-7954-4382-a2ef-3f66b292cf8f",
-      "e76aaa6c-319e-44d3-b7ae-aadb17dfb664",
+      workQueuePageId,
+      queriedPageId,
+      reAssignedPageId,
     ];
 
     if (
@@ -127,12 +131,12 @@ export async function getTableView({
       baseUrl += `&patientAllocated=${patientAllocated || ""}`;
     }
     const tinPageIds = [
-      "d80f80fd-aab8-496e-a9fc-89677d5ac174",
-      "6cd166eb-79ac-4c12-ab0f-07be2983ca70",
-      "937b0477-f0cd-46e7-b8ab-fefb38f91859",
-      "8c1eebaf-eb20-4758-b968-6ae15e6fc031",
-      "2d7cb7f7-6dad-41fb-970b-d805fb3f195f",
-      "21235203-2ce0-4ebc-b6d3-05a9d8e8fc75",
+      patientPageId,
+      patientAllocationPageId,
+      moveBackPageId,
+      queryApprovalPageId,
+      activeTinPageId,
+      reAllocationPageId,
     ];
 
     if (tinPageIds.includes(pageId)) {
@@ -140,21 +144,17 @@ export async function getTableView({
 allTinIds=${allTinIds || false}`;
     }
 
-    const reportIds = ["51ccafdf-f18e-4100-8811-63236a79a441"];
+    const reportIds = [generateViewPageId];
     if (reportIds.includes(pageId)) {
       baseUrl += `&tincompleted=${tincompleted || ""}`;
     }
-    const reportCategories = ["51ccafdf-f18e-4100-8811-63236a79a441", "5792cd13-73f5-42c0-b0ca-5db81db947ad"];
+    const reportCategories = [generateViewPageId, generatedReportsPageId];
     if (reportCategories.includes(pageId)) {
       baseUrl += `&reportCategory=${reportCategory || ""}`;
     }
 
-    const qaCodersPageIds = [
-      "da4958c3-7795-4bcc-8ab0-24d93cd52c25",
-      "a9d5c555-7954-4382-a2ef-3f66b292cf8f",
-      "e76aaa6c-319e-44d3-b7ae-aadb17dfb664",
-    ];
-    const usersPageIds = ["8e4f1d2a-7b3c-45e6-9f1d-2a7b3c45e6f1"];
+    const qaCodersPageIds = [workQueuePageId, queriedPageId, reAssignedPageId];
+    const usersPageIds = [assignUserPageId];
     if (role === "QA" && qaCodersPageIds.includes(pageId)) {
       baseUrl += `&tin=${tin || ""}&allTinIds=${allTinIds || false}`;
     }
@@ -165,7 +165,7 @@ allTinIds=${allTinIds || false}`;
       baseUrl += `&projectLead=${projectLead || false}`;
     }
 
-    const masterPageIds = ["da4958c3-7795-4bcc-8ab0-24d93cd52c25"];
+    const masterPageIds = [workQueuePageId];
 
     if (
       router?.pathname?.endsWith("/tindetails") &&
@@ -243,15 +243,8 @@ export async function getStatusTableView({
       sort?.sortDir ? sort?.sortDir : ""
     }&sortField=${sort?.sortField ? sort?.sortField : ""}`;
 
-    const allowedPageIds = [
-      "e76aaa6c-319e-44d3-b7ae-aadb17dfb664",
-      "a9d5c555-7954-4382-a2ef-3f66b292cf8f",
-      "da4958c3-7795-4bcc-8ab0-24d93cd52c25",
-    ];
-    const clientBasesPageIds = [
-      "8e4f1d2a-7b3c-45e6-9f1d-2a7b3c45e6f1",
-      "1406dafa-46fa-4f69-ac1b-e354ebc03dad",
-    ];
+    const allowedPageIds = [reAssignedPageId, queriedPageId, workQueuePageId];
+    const clientBasesPageIds = [assignUserPageId, userCreatePageId];
 
     if (allowedPageIds.includes(pageId)) {
       baseUrl += `&isReAssigned=${isReAssigned || false}&isQueried=${
@@ -267,9 +260,9 @@ export async function getStatusTableView({
     //   baseUrl += `&patientAllocated=${patientAllocated || ""}`;
     // }
     const allowedPageIdsForOwner = [
-      "da4958c3-7795-4bcc-8ab0-24d93cd52c25",
-      "a9d5c555-7954-4382-a2ef-3f66b292cf8f",
-      "e76aaa6c-319e-44d3-b7ae-aadb17dfb664",
+      workQueuePageId,
+      queriedPageId,
+      reAssignedPageId,
     ];
 
     if (
@@ -286,30 +279,26 @@ export async function getStatusTableView({
     }
 
     const tinPageIds = [
-      "d80f80fd-aab8-496e-a9fc-89677d5ac174",
-      "6cd166eb-79ac-4c12-ab0f-07be2983ca70",
-      "937b0477-f0cd-46e7-b8ab-fefb38f91859",
-      "8c1eebaf-eb20-4758-b968-6ae15e6fc031",
-      "2d7cb7f7-6dad-41fb-970b-d805fb3f195f",
+      patientPageId,
+      patientAllocationPageId,
+      moveBackPageId,
+      queryApprovalPageId,
+      activeTinPageId,
     ];
 
     if (tinPageIds.includes(pageId)) {
       baseUrl += `&tin=${tin || ""}&
 allTinIds=${allTinIds || false}`;
     }
-    const reportIds = ["51ccafdf-f18e-4100-8811-63236a79a441"];
+    const reportIds = [generateViewPageId];
     if (reportIds.includes(pageId)) {
       baseUrl += `&tincompleted=${tincompleted || ""}`;
     }
-    const qaCodersPageIds = [
-      "da4958c3-7795-4bcc-8ab0-24d93cd52c25",
-      "a9d5c555-7954-4382-a2ef-3f66b292cf8f",
-      "e76aaa6c-319e-44d3-b7ae-aadb17dfb664",
-    ];
+    const qaCodersPageIds = [workQueuePageId, queriedPageId, reAssignedPageId];
     if (role === "QA" && qaCodersPageIds.includes(pageId)) {
       baseUrl += `&tin=${tin || ""}&allTinIds=${allTinIds || false}`;
     }
-    const masterPageIds = ["da4958c3-7795-4bcc-8ab0-24d93cd52c25"];
+    const masterPageIds = [workQueuePageId];
 
     if (
       router?.pathname?.endsWith("/tindetails") &&

@@ -4,6 +4,7 @@ import { actions as allActions } from "../../../stores/tenantAdmin/patientAlloca
 import AppTable from "../../../components/tables";
 import { findItemWithTrueKey } from "../../../utils/reusable";
 import { actions as tableAction } from "../../../stores/tableView";
+import { reAllocationPageId } from '../../../utils/pageIds'
 const ReAllocationTable = ({
   setSelectedRowsId,
   selectedRows,
@@ -42,7 +43,7 @@ const ReAllocationTable = ({
         const response = await getTableData({
           fromTenant: true,
           allPatientIds: checked,
-          pageId: "21235203-2ce0-4ebc-b6d3-05a9d8e8fc75",
+          pageId:reAllocationPageId,
           pageNo: 0,
           pageSize: 15,
           roleId: roleId,

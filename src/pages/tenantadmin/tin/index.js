@@ -25,15 +25,16 @@ import visitStyles from "../../../styles/visitdata.module.css";
 import { actions as allPatientSyncAction } from "../../../stores/tenantAdmin/patientSync";
 import RegularButton from "../../../components/button";
 import ProviderAddForm from "./addprovider";
+import { activeTinPageId, inActiveTinPageId, providerTinPageId } from "../../../utils/pageIds";
 
 export const getPageId = (activeTab) => {
   switch (activeTab) {
     case "Active":
-      return "2d7cb7f7-6dad-41fb-970b-d805fb3f195f";
+      return activeTinPageId;
     case "InActive":
-      return "6579b31a-aa46-42bf-abbb-c1e17e987a3a";
+      return inActiveTinPageId;
     case "Providers":
-      return "32e9eea6-095c-4bd3-abee-17835ea53cdc";
+      return providerTinPageId;
     default:
       return "";
   }
@@ -170,11 +171,11 @@ const Tin = ({
 
   const pageIds =
     activeTab === "Active"
-      ? "2d7cb7f7-6dad-41fb-970b-d805fb3f195f"
+      ? activeTinPageId
       : activeTab === "InActive"
-      ? "6579b31a-aa46-42bf-abbb-c1e17e987a3a"
+      ? inActiveTinPageId
       : activeTab === "Providers"
-      ? "32e9eea6-095c-4bd3-abee-17835ea53cdc"
+      ? providerTinPageId
       : "";
   const handleRowCheckboxChange = async ({ e, row, singleCheck, checked }) => {
     if (!singleCheck) {

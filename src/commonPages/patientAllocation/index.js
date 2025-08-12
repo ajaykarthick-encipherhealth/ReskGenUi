@@ -18,6 +18,7 @@ import {
 } from "../../utils/reusable";
 import { getStorage } from "../../utils/storages";
 import { useRouter } from "next/router";
+import { patientAllocationPageId } from "../../utils/pageIds";
 
 const PatientAllocation = ({
   getAllTabRoles,
@@ -108,7 +109,7 @@ const PatientAllocation = ({
   const getAllAllocation = async () => {
     const tin = getStorage("tinNumber");
     const response = await getTableData({
-      pageId: "6cd166eb-79ac-4c12-ab0f-07be2983ca70",
+      pageId: patientAllocationPageId,
       pageNo,
       pageSize,
       roleId,
@@ -125,7 +126,7 @@ const PatientAllocation = ({
     setIsSubmitting(true);
 
     const payload = {
-      pageId: "6cd166eb-79ac-4c12-ab0f-07be2983ca70",
+      pageId: patientAllocationPageId,
       headerNames: data.map((col) => col.id),
     };
 
@@ -160,7 +161,7 @@ const PatientAllocation = ({
     setIsResetting(true);
 
     const payload = {
-      pageId: "6cd166eb-79ac-4c12-ab0f-07be2983ca70",
+      pageId: patientAllocationPageId,
     };
     try {
       const response = await tableDynamicColumnReset({ payload });
@@ -178,7 +179,7 @@ const PatientAllocation = ({
 
   const getRolesList = async () => {
     const res = await getAllTabRoles({
-      pageId: "6cd166eb-79ac-4c12-ab0f-07be2983ca70",
+      pageId: patientAllocationPageId,
     });
     if (res?.status === "SUCCESS") {
       setRoleId(res?.response?.allocationRoles[0]?.roleId);

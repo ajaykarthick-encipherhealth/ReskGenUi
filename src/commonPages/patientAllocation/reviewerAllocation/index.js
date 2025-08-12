@@ -4,6 +4,7 @@ import { actions as allActions } from "../../../stores/tenantAdmin/patientAlloca
 import AppTable from "../../../components/tables";
 import { findItemWithTrueKey } from "../../../utils/reusable";
 import { actions as tableAction } from "../../../stores/tableView";
+import { patientAllocationPageId } from "../../../utils/pageIds";
 const ReviewerAllocation = ({
   setSelectedRowsId,
   selectedRows,
@@ -42,7 +43,7 @@ const ReviewerAllocation = ({
         const response = await getTableData({
           fromTenant: true,
           allPatientIds: checked,
-          pageId: "6cd166eb-79ac-4c12-ab0f-07be2983ca70",
+          pageId: patientAllocationPageId,
           pageNo: 0,
           pageSize: 15,
           roleId: roleId,

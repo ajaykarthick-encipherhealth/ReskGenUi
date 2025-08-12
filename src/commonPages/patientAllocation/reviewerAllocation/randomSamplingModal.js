@@ -15,6 +15,7 @@ import {
   disablePastDate,
   priorityOptions,
 } from "../../../components/headerFilters/functions";
+import { patientAllocationPageId } from '../../../utils/pageIds'
 
 const RandomSamplingModal = ({
   open,
@@ -136,7 +137,7 @@ const RandomSamplingModal = ({
     if (response?.status === "SUCCESS") {
       getResponePopup(response);
       getAllTabRoles({
-        pageId: "6cd166eb-79ac-4c12-ab0f-07be2983ca70",
+        pageId: patientAllocationPageId,
       });
       getAllAllocation();
       setFormValues({});

@@ -17,6 +17,7 @@ import {
 } from "../../utils/reusable";
 import { getStorage, setStorage } from "../../utils/storages";
 import { useRouter } from "next/router";
+import { queryApprovalPageId } from '../../utils/pageIds'
 
 const QueryApproval = ({
   organizationList,
@@ -104,7 +105,7 @@ const QueryApproval = ({
   const getQueryApproval = async () => {
     const tin = getStorage("tinNumber");
     const response = await getTableData({
-      pageId: "8c1eebaf-eb20-4758-b968-6ae15e6fc031",
+      pageId: queryApprovalPageId,
       pageNo,
       roleId,
       queryStatus: activeStatus,
@@ -125,7 +126,7 @@ const QueryApproval = ({
     }
 
     const res = await getAllTabRoles({
-      pageId: "8c1eebaf-eb20-4758-b968-6ae15e6fc031",
+      pageId: queryApprovalPageId,
     });
     if (res?.status === "SUCCESS") {
       const tabRoles = res?.response?.allocationRoles?.find(
@@ -152,7 +153,7 @@ const QueryApproval = ({
     setIsSubmitting(true);
 
     const payload = {
-      pageId: "8c1eebaf-eb20-4758-b968-6ae15e6fc031",
+      pageId: queryApprovalPageId,
       headerNames: data.map((col) => col.id),
     };
 
@@ -187,7 +188,7 @@ const QueryApproval = ({
     setIsResetting(true);
 
     const payload = {
-      pageId: "8c1eebaf-eb20-4758-b968-6ae15e6fc031",
+      pageId: queryApprovalPageId,
     };
     try {
       const response = await tableDynamicColumnReset({ payload });

@@ -1,6 +1,7 @@
 import React from "react";
 import CodersTable from "../../../commonPages/codersTable";
 import { getStorage } from "../../../utils/storages";
+import { reAssignedPageId } from '../../../utils/pageIds';
 
 const Reassign = () => {
   const userId = getStorage("userId");
@@ -9,7 +10,7 @@ const Reassign = () => {
       <CodersTable
         patientAllocated={userId}
         isReAssigned={true}
-        pageId="e76aaa6c-319e-44d3-b7ae-aadb17dfb664"
+        pageId={reAssignedPageId}
         route="/reviewer/reassign/details"
         tin
         backRoute="/reviewer/reassign"

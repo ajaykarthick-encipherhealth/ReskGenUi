@@ -20,6 +20,7 @@ import {
 } from "../../utils/reusable";
 import SubNavBar from "../../components/subNavBar";
 import MoreFilter from "../../pages/tenantadmin/tracking/filters";
+import { queriedPageId } from "../../utils/pageIds";
 export const bullets = [
   {
     color: "#00BC13",
@@ -363,7 +364,7 @@ const CodersTable = ({
           </div>
         </div>
         <div className="profile-tab p-2 ">
-          {pageId === "a9d5c555-7954-4382-a2ef-3f66b292cf8f" ? (
+          {pageId === queriedPageId ? (
             <div className="custom-tab-1">
               <Tab.Container
                 defaultActiveKey={

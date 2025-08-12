@@ -14,6 +14,7 @@ import { getStorage } from "../../../utils/storages";
 import ReusableFilters from "../../../components/reusableFilters";
 import CardSkeleton from "../../../components/skeleton/card";
 import AppTable from "../../../components/tables";
+import { productivityPageId } from '../../../utils/pageIds'
 
 const Productivity = ({
   getAllTabRoles,
@@ -83,7 +84,7 @@ const Productivity = ({
     const projectId = getStorage("project");
     const clientId = getStorage("client");
     const response = await getTableData({
-      pageId: "73b15fb8-41cf-4e58-9d9b-a3256bbb79b0",
+      pageId: productivityPageId,
       pageNo,
       pageSize,
       roleId,
@@ -110,7 +111,7 @@ const Productivity = ({
   const handleSubmit = async (data) => {
     setIsSubmitting(true);
     const payload = {
-      pageId: "73b15fb8-41cf-4e58-9d9b-a3256bbb79b0",
+      pageId: productivityPageId,
       headerNames: data.map((col) => col.id),
     };
 
@@ -144,7 +145,7 @@ const Productivity = ({
     setIsResetting(true);
 
     const payload = {
-      pageId: "73b15fb8-41cf-4e58-9d9b-a3256bbb79b0",
+      pageId: productivityPageId,
     };
     try {
       const response = await tableDynamicColumnReset({ payload });
@@ -162,7 +163,7 @@ const Productivity = ({
 
   const getRolesList = async () => {
     const res = await getAllTabRoles({
-      pageId: "73b15fb8-41cf-4e58-9d9b-a3256bbb79b0",
+      pageId: productivityPageId,
     });
     if (res?.status === "SUCCESS") {
       setRoleId(res?.response?.allocationRoles[0]?.roleId);

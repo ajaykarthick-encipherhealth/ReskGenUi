@@ -15,6 +15,7 @@ import {
 } from "../../utils/reusable";
 import { getStorage } from "../../utils/storages";
 import Reallocationmodal from "./allocationTable/reallocationmodal";
+import { reAllocationPageId } from '../../utils/pageIds';
 
 const ReAllocation = ({
   getAllTabRoles,
@@ -90,7 +91,7 @@ const ReAllocation = ({
   const getAllReAllocation = async () => {
     const tin = getStorage("tinNumber");
     const response = await getTableData({
-      pageId: "21235203-2ce0-4ebc-b6d3-05a9d8e8fc75",
+      pageId: reAllocationPageId,
       pageNo,
       pageSize,
       roleId,
@@ -108,7 +109,7 @@ const ReAllocation = ({
     setIsSubmitting(true);
 
     const payload = {
-      pageId: "21235203-2ce0-4ebc-b6d3-05a9d8e8fc75",
+      pageId: reAllocationPageId,
       headerNames: data.map((col) => col.id),
     };
 
@@ -142,7 +143,7 @@ const ReAllocation = ({
     setIsResetting(true);
 
     const payload = {
-      pageId: "21235203-2ce0-4ebc-b6d3-05a9d8e8fc75",
+      pageId: reAllocationPageId,
     };
     try {
       const response = await tableDynamicColumnReset({ payload });
@@ -160,7 +161,7 @@ const ReAllocation = ({
 
   const getRolesList = async () => {
     const res = await getAllTabRoles({
-      pageId: "21235203-2ce0-4ebc-b6d3-05a9d8e8fc75",
+      pageId: reAllocationPageId,
     });
     if (res?.status === "SUCCESS") {
       setRoleId(res?.response?.allocationRoles[0]?.roleId);

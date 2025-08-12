@@ -14,6 +14,7 @@ import { actions as tableAction } from "../../../../stores/tableView";
 import { actions as authActions } from "../../../../stores/authFlows";
 import { disablePastDate } from "../../../../components/headerFilters/functions";
 import RegularButton from '../../../../components/button'
+import { projectCreationPageId } from '../../../../utils/pageIds'
 
 const Projects = ({
   createProject,
@@ -106,7 +107,7 @@ const handleDeleteProcess = async () => {
     setIsResetting(true);
 
     const payload = {
-      pageId: "937b0477-f0cd-46e7-b8ab-fefb38f91859",
+      pageId: projectCreationPageId,
     };
     try {
       const response = await tableDynamicColumnReset({ payload });
@@ -123,7 +124,7 @@ const handleDeleteProcess = async () => {
   };
   const getProjects = async () => {
     const response = await getTableData({
-      pageId: "7e57d004-2b97-0e7a-b45f-5387367791cd",
+      pageId: projectCreationPageId,
       pageNo,
       pageSize,
       selectedDateRanges,
@@ -135,7 +136,7 @@ const handleDeleteProcess = async () => {
     setIsSubmitting(true);
 
     const payload = {
-      pageId: "7e57d004-2b97-0e7a-b45f-5387367791cd",
+      pageId: projectCreationPageId,
       headerNames: data.map((col) => col.id),
     };
 
