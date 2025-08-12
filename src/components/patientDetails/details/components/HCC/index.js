@@ -712,7 +712,7 @@ const HccCards = ({
                                             }
                                           }}
                                         >
-                                          {isDosSelected && (
+                                          {/* {isDosSelected && (
                                             <div className="cr-pointer d-flex">
                                               <div
                                                 className={
@@ -729,7 +729,7 @@ const HccCards = ({
                                               </div>
                                               <div className="m-1">Actions</div>
                                             </div>
-                                          )}
+                                          )} */}
                                         </Popconfirm>
                                       ) : (
                                         <div>
