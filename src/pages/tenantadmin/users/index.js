@@ -207,6 +207,7 @@ const Users = ({
     value: item?.roleName,
     label: item?.roleName?.split("_")?.join(" "),
   }));
+
   const handleCancel = () => {
     setSelectedRole(selectedRoleList);
     setVisiblePopoverKey(false);
@@ -215,16 +216,31 @@ const Users = ({
     setSelectedRole(selectedRoleList);
     setVisiblePopoverKey(false);
   };
-  const content = () => (
+const content = (item) => {
+  const FIXED_ROLE = item.currentUser && aliasName ? aliasName : null;
+
+  const updatedRoles = roles.map((role) => ({
+    ...role,
+    disabled: role.value === FIXED_ROLE, 
+  }));
+
+  const handleRoleChange = (value) => {
+    if (FIXED_ROLE && !value.includes(FIXED_ROLE)) {
+      value = [FIXED_ROLE, ...value];
+    }
+    setSelectedRole(value);
+  };
+
+  return (
     <>
       <Select
-        options={roles}
+        options={updatedRoles}
         placeholder="Select the role"
         style={{ width: 250 }}
         dropdownStyle={{ width: 250 }}
         value={selectedRole}
         mode="multiple"
-        onChange={(value) => setSelectedRole(value)}
+        onChange={handleRoleChange}
         data-testid={id ? createIdGens("userEdit") : createIdGens("userEdit")}
       />
 
@@ -250,6 +266,9 @@ const Users = ({
       </div>
     </>
   );
+};
+
+
 
   const handleAction = (item) => {
     setSelectedItem(item?.userName);
