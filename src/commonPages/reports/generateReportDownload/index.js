@@ -31,7 +31,7 @@ const GenerateReportModal = ({
   const GenerateReport = async () => {
     setLoading(true);
     const defaultName = `Report${moment(new Date()).format(
-      "MM-DD-YYYY-hh:mm"
+      "MM-DD-YYYY-hh:mm:ss"
     )}`;
     const userId = getStorage("userId");
     const response = await generateReport({
@@ -67,7 +67,7 @@ const GenerateReportModal = ({
   };
   useEffect(() => {
     const defaultName = `Report${moment(new Date()).format(
-      "MM-DD-YYYY-hh:mm"
+      "MM-DD-YYYY-hh:mm:ss"
     )}`;
     setInputValue(defaultName);
   }, []);
