@@ -2,12 +2,16 @@ import React, { useState, useEffect } from "react";
 import { Button } from "react-bootstrap";
 import Form from "react-bootstrap/Form";
 import visitStyles from "../../../../../styles/visitdata.module.css";
-import { Modal, Tooltip, notification, Dropdown, Menu } from "antd";
+import { Modal, Tooltip, notification, Dropdown, Menu, Spin } from "antd";
 import { connect } from "react-redux";
 import { DownOutlined } from "@ant-design/icons";
 import { actions as detailsActions } from "../../../../../stores/patient/details";
 import { getLocalStored, getStorage } from "../../../../../utils/storages";
-import { overallYearStatus } from "../../../../../stores/patient/details/network";
+import {
+  dosWiseList,
+  overallYearStatus,
+  patientDetails,
+} from "../../../../../stores/patient/details/network";
 import { useRouter } from "next/router";
 import {
   findFirstPendingWorkflow,
@@ -28,6 +32,7 @@ const YearAndDosStatus = ({
   setSearch,
   getSelectedDosPageNumber,
   isDosSelected,
+  loading,
 }) => {
   const [localOrgId, setLocalOrgId] = useState("");
   const [localUserId, setLocalUserId] = useState("");
@@ -309,10 +314,9 @@ const YearAndDosStatus = ({
     }
   };
 
-
-const handleSubmitHccComplete = async () => {
-  await updateStatus("completedFuntion");
-};
+  const handleSubmitHccComplete = async () => {
+    await updateStatus("completedFuntion");
+  };
 
   const updateAudit = async () => {
     updateStatus("auditFunction");
@@ -368,38 +372,21 @@ const handleSubmitHccComplete = async () => {
       if (response?.status === "SUCCESS") {
         setInputValue({ notes: "" });
         setIsFileFormShow(false);
-        // getpatientDetailsData(
-        //   localPatientId,
-        //   patientDetailsResult?.data?.response?.processedYear,
-        //   patientDetailsResult?.data?.response?.dateOfService,
-        //   "",
-        //   "",
-        //   "",
-        //   router.pathname
-        // );
-        const dosList = await getPatientDosList(
+        const dosList = await dosWiseList(
           localPatientId,
           patientDetailsResult?.data?.response?.processedYear,
           "",
           router.pathname
         );
-
         if (
           findFirstPendingWorkflow(dosList?.response) &&
           postData?.processedStatus == "COMPLETED"
         ) {
           const dosFindValue = findFirstPendingWorkflow(dosList?.response);
-          const patientResult = await getpatientDetailsData(
-            localPatientId,
-            patientDetailsResult?.data?.response?.processedYear,
-            dosFindValue.dateOfService,
-            "",
-            "",
-            "",
-            router.pathname
-          );
+          getSelectedDos(dosFindValue.dateOfService);
+          setSelectDosValue(dosFindValue.dateOfService);
           const dosSummariesList =
-            patientResult?.response?.fileDetailDTO?.dosSummaries;
+            patientDetailsResult?.data?.response?.fileDetailDTO?.dosSummaries;
           if (dosSummariesList) {
             const filteredDos = dosSummariesList?.find(
               (data) => data?.dos === dosFindValue.dateOfService
@@ -410,19 +397,13 @@ const handleSubmitHccComplete = async () => {
               page: filteredDos.startPageNumber || 1,
             });
           }
-          getSelectedDos(dosFindValue.dateOfService);
-          setSelectDosValue(dosFindValue.dateOfService);
-        } else {
-          getpatientDetailsData(
-            localPatientId,
-            patientDetailsResult?.data?.response?.processedYear,
-            patientDetailsResult?.data?.response?.dateOfService,
-            "",
-            "",
-            "",
-            router.pathname
-          );
         }
+        getPatientDosList(
+          localPatientId,
+          patientDetailsResult?.data?.response?.processedYear,
+          "",
+          router.pathname
+        );
         setConfirmCompleteModal(false);
         getResponePopup(response);
       } else {
@@ -460,6 +441,7 @@ const handleSubmitHccComplete = async () => {
   const currentStatus = router.pathname.endsWith("/tindetails/masteraudit")
     ? patientIdDetailsData?.data?.response?.masterAudit
     : patientIdDetailsData?.data?.response?.workflow?.[0];
+
   return (
     <>
       {patientDetailsResult?.data?.response && (
@@ -558,7 +540,7 @@ const handleSubmitHccComplete = async () => {
                   >
                     <span className="ant-badge">COMPLETED</span>
                     <span style={{ marginLeft: "10px" }}>
-                      <DownOutlined />
+                      {loading ? <Spin size="small" /> : <DownOutlined />}
                     </span>
                   </button>
                 </Dropdown>
@@ -643,7 +625,7 @@ const handleSubmitHccComplete = async () => {
                   >
                     <span className="ant-badge">QUERIED</span>
                     <span style={{ marginLeft: "10px" }}>
-                      <DownOutlined />
+                      {loading ? <Spin size="small" /> : <DownOutlined />}
                     </span>
                   </button>
                 </Dropdown>
@@ -670,7 +652,7 @@ const handleSubmitHccComplete = async () => {
                   >
                     <span>PENDING</span>
                     <span style={{ marginLeft: "10px" }}>
-                      <DownOutlined />
+                      {loading ? <Spin size="small" /> : <DownOutlined />}
                     </span>
                   </button>
                 </Dropdown>
@@ -757,6 +739,7 @@ const enhancer = connect(
     patientDetailsResult: state?.patientDetails?.details?.patientResult,
     patientIdDetailsData: state?.patientDetails.details?.patientIdResult,
     isDosSelected: state.patientDetails.details?.getSelectedDosDetails,
+    loading: state?.patientDetails?.details?.loading,
   }),
   {
     getPatientIdData: detailsActions.patientIdDetailsAction,
