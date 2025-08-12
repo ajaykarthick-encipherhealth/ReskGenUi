@@ -48,6 +48,7 @@ const ModelIndex = ({
   year,
   patientDetailsLoad,
   getPatientIdData,
+  dosDeatilsAction,
 }) => {
   const userRole = getStorage("userRole");
   const [form] = Form.useForm();
@@ -96,6 +97,7 @@ const ModelIndex = ({
           getPatientIdData,
           educationalError,
           setEducationalError,
+          dosDeatilsAction,
         });
       }
     } else {
@@ -114,6 +116,7 @@ const ModelIndex = ({
         getPatientIdData,
         educationalError,
         setEducationalError,
+        dosDeatilsAction,
       });
     }
   };
@@ -142,7 +145,7 @@ const ModelIndex = ({
                   onChange={handleCheckboxChange}
                   className="ant-badge mt-2"
                 >
-               Mark as Educational Error
+                  Mark as Educational Error
                 </Checkbox>
               </div>
             )}
@@ -210,6 +213,8 @@ const ModelIndex = ({
                             handleCloseModal,
                             patientDetailsLoad,
                             getPatientIdData,
+                            dosDeatilsAction,
+                            setEducationalError,
                           });
                           form.resetFields();
                         }}
@@ -282,6 +287,7 @@ const enhancer = connect(
     getLabDetails: detailsActions.labDetailsAction,
     patientDetailsLoad: detailsActions.patientDetailsLoad,
     getPatientIdData: detailsActions.patientIdDetailsAction,
+    dosDeatilsAction: detailsActions.dosDeatilsAction,
   }
 );
 export default enhancer(ModelIndex);
