@@ -15,7 +15,8 @@ import {
 } from "../../utils/reusable";
 import { getStorage } from "../../utils/storages";
 import Reallocationmodal from "./allocationTable/reallocationmodal";
-import { reAllocationPageId } from '../../utils/pageIds';
+import { reAllocationPageId } from "../../utils/pageIds";
+import MoreFilter from "../../pages/tenantadmin/tracking/filters";
 
 const ReAllocation = ({
   getAllTabRoles,
@@ -64,7 +65,25 @@ const ReAllocation = ({
   const [isFilter, setIsFilter] = useState(true);
   const [clear, setClear] = useState(false);
   const [roleAliasName, setRoleAliasName] = useState("");
+  const [selectAll, setSelectAll] = useState(false);
 
+  const handleClearAllFilters = () => {
+    setClear(true);
+    setSearchText(null);
+    setSelectedDateRanges({});
+    setSelectedDates([]);
+    setSelectedOption({});
+  };
+  const handleClearFilters = () => {
+    setSelectAll(false);
+    setActiveFilters((prevFilters) =>
+      prevFilters.map((filter) => ({ ...filter, active: true }))
+    );
+    setSelectedDateRanges({});
+    setSelectedDates([]);
+    setSelectedOption({});
+    setSearchText(null);
+  };
   const handleTabChange = (key) => {
     getTableData({ reloadTrue: true });
     setActiveTab(key);
@@ -117,8 +136,8 @@ const ReAllocation = ({
       const response = await tableDynamicColumn({ payload });
       if (response?.status === "SUCCESS") {
         setIsFilter(true);
-        const filterCheck = tableCustomFilterClearCheck(
-          {searchText,
+        const filterCheck = tableCustomFilterClearCheck({
+          searchText,
           selectedDateRanges,
           selectedDates,
           selectedOption,
@@ -126,8 +145,8 @@ const ReAllocation = ({
           setSelectedDateRanges,
           setSelectedDates,
           setSelectedOption,
-          data}
-        );
+          data,
+        });
         if (filterCheck) {
           getAllReAllocation();
         }
@@ -245,7 +264,7 @@ const ReAllocation = ({
                             {allRoles?.allocationRoles?.map((role, index) => (
                               <Nav.Item
                                 as="li"
-                                className="nav-item profile-tab mt-4"
+                                className="nav-item profile-tab"
                                 key={role}
                               >
                                 <Nav.Link
@@ -270,6 +289,18 @@ const ReAllocation = ({
                           </Nav>
 
                           <div className="d-flex gap-2 ms-auto  mb-2">
+                            <div className="mt-2">
+                              <MoreFilter
+                                selectAll={selectAll}
+                                setSelectAll={setSelectAll}
+                                activeFilters={activeFilters}
+                                FilterItems={activeFilters}
+                                setActiveFilters={setActiveFilters}
+                                setClear={setClear}
+                                handleClearAllFilters={handleClearAllFilters}
+                                handleClearFilters={handleClearFilters}
+                              />
+                            </div>
                             <div
                               id="re-allocate-btn"
                               name="re-allocate-btn"
@@ -310,9 +341,9 @@ const ReAllocation = ({
                           </div>
                         </div>
                       )}
-                      <div className={` d-flex gap-3 mt-4`}>
+                      <div className={` d-flex gap-3 mt-1`}>
                         <ReusableFilters
-                          showFilter={true}
+                          showFilter={false}
                           setActiveFilters={setActiveFilters}
                           setSearchText={setSearchText}
                           searchText={searchText}

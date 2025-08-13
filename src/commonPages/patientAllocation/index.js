@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Tab, Nav } from "react-bootstrap";
 import ReviewerAllocation from "./reviewerAllocation";
-import { Button, Tooltip , Form } from "antd";
+import { Button, Tooltip, Form } from "antd";
 import ReviewerAllocationModal from "./reviewerAllocation/reviewerAllocationModal";
 import { connect } from "react-redux";
 import { actions as allActions } from "../../stores/tenantAdmin/patientAllocations";
@@ -19,6 +19,7 @@ import {
 import { getStorage } from "../../utils/storages";
 import { useRouter } from "next/router";
 import { patientAllocationPageId } from "../../utils/pageIds";
+import MoreFilter from "../../pages/tenantadmin/tracking/filters";
 
 const PatientAllocation = ({
   getAllTabRoles,
@@ -72,7 +73,25 @@ const PatientAllocation = ({
   const [clear, setClear] = useState(false);
   const [roleAliasName, setRoleAliasName] = useState("");
   const [formValues, setFormValues] = useState({});
-   const [form] = Form.useForm();
+  const [selectAll, setSelectAll] = useState(false);
+  const handleClearAllFilters = () => {
+    setClear(true);
+    setSearchText(null);
+    setSelectedDateRanges({});
+    setSelectedDates([]);
+    setSelectedOption({});
+  };
+  const handleClearFilters = () => {
+    setSelectAll(false);
+    setActiveFilters((prevFilters) =>
+      prevFilters.map((filter) => ({ ...filter, active: true }))
+    );
+    setSelectedDateRanges({});
+    setSelectedDates([]);
+    setSelectedOption({});
+    setSearchText(null);
+  };
+  const [form] = Form.useForm();
   const disbaleAllocate = allRoles?.allocationRoles?.map(
     (item) => item.disableAllocation
   );
@@ -134,8 +153,8 @@ const PatientAllocation = ({
       const response = await tableDynamicColumn({ payload });
       if (response?.status === "SUCCESS") {
         setIsFilter(true);
-        const filterCheck = tableCustomFilterClearCheck(
-         { searchText,
+        const filterCheck = tableCustomFilterClearCheck({
+          searchText,
           selectedDateRanges,
           selectedDates,
           selectedOption,
@@ -143,8 +162,8 @@ const PatientAllocation = ({
           setSelectedDateRanges,
           setSelectedDates,
           setSelectedOption,
-          data}
-        );
+          data,
+        });
         if (filterCheck) {
           getAllAllocation();
         }
@@ -264,7 +283,7 @@ const PatientAllocation = ({
                             {allRoles?.allocationRoles?.map((role, index) => (
                               <Nav.Item
                                 as="li"
-                                className="nav-item profile-tab mt-4"
+                                className="nav-item profile-tab"
                                 key={role}
                                 id={
                                   id
@@ -311,6 +330,18 @@ const PatientAllocation = ({
                           </Nav>
 
                           <div className="d-flex gap-2 ms-auto  mb-2">
+                            <div className="mt-2">
+                              <MoreFilter
+                                selectAll={selectAll}
+                                setSelectAll={setSelectAll}
+                                activeFilters={activeFilters}
+                                FilterItems={activeFilters}
+                                setActiveFilters={setActiveFilters}
+                                setClear={setClear}
+                                handleClearAllFilters={handleClearAllFilters}
+                                handleClearFilters={handleClearFilters}
+                              />
+                            </div>
                             <div
                               data-testid={
                                 id
@@ -465,9 +496,9 @@ const PatientAllocation = ({
                           </div>
                         </div>
                       )}
-                      <div className={` d-flex gap-3 mt-4`}>
+                      <div className={` d-flex gap-3 mt-1`}>
                         <ReusableFilters
-                          showFilter={true}
+                          showFilter={false}
                           setActiveFilters={setActiveFilters}
                           setSearchText={setSearchText}
                           searchText={searchText}

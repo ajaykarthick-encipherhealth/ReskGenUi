@@ -17,7 +17,8 @@ import {
 } from "../../utils/reusable";
 import { getStorage, setStorage } from "../../utils/storages";
 import { useRouter } from "next/router";
-import { queryApprovalPageId } from '../../utils/pageIds'
+import { queryApprovalPageId } from "../../utils/pageIds";
+import MoreFilter from "../../pages/tenantadmin/tracking/filters";
 
 const QueryApproval = ({
   organizationList,
@@ -63,7 +64,24 @@ const QueryApproval = ({
   const [isResetting, setIsResetting] = useState(false);
   const [isFilter, setIsFilter] = useState(true);
   const [clear, setClear] = useState(false);
-
+  const [selectAll, setSelectAll] = useState(false);
+  const handleClearAllFilters = () => {
+    setClear(true);
+    setSearchText(null);
+    setSelectedDateRanges({});
+    setSelectedDates([]);
+    setSelectedOption({});
+  };
+  const handleClearFilters = () => {
+    setSelectAll(false);
+    setActiveFilters((prevFilters) =>
+      prevFilters.map((filter) => ({ ...filter, active: true }))
+    );
+    setSelectedDateRanges({});
+    setSelectedDates([]);
+    setSelectedOption({});
+    setSearchText(null);
+  };
   const handleTabChange = (key) => {
     var data = {
       activeTab: key,
@@ -300,7 +318,7 @@ const QueryApproval = ({
                             {allRoles?.allocationRoles?.map((role, index) => (
                               <Nav.Item
                                 as="li"
-                                className="nav-item profile-tab mt-4"
+                                className="nav-item profile-tab"
                                 key={role}
                               >
                                 <Nav.Link
@@ -323,6 +341,18 @@ const QueryApproval = ({
                           </Nav>
 
                           <div className="d-flex align-items-center gap-2 me-3 mb-2">
+                            <div className="mt-2">
+                              <MoreFilter
+                                selectAll={selectAll}
+                                setSelectAll={setSelectAll}
+                                activeFilters={activeFilters}
+                                FilterItems={activeFilters}
+                                setActiveFilters={setActiveFilters}
+                                setClear={setClear}
+                                handleClearAllFilters={handleClearAllFilters}
+                                handleClearFilters={handleClearFilters}
+                              />
+                            </div>
                             <div
                               id="table-btn"
                               name="table-btn"
@@ -351,7 +381,7 @@ const QueryApproval = ({
                       <div className="d-flex">
                         <div className="mt-4 w-100">
                           <ReusableFilters
-                            showFilter={true}
+                            showFilter={false}
                             setActiveFilters={setActiveFilters}
                             setSearchText={setSearchText}
                             searchText={searchText}

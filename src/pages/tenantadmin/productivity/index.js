@@ -304,7 +304,7 @@ const Productivity = ({
                           </div>
                         </div>
                       )}
-                      <div className={` d-flex gap-3 mt-4`}>
+                      <div className={` d-flex gap-3 mt-1`}>
                         <ReusableFilters
                           showFilter={true}
                           setActiveFilters={setActiveFilters}

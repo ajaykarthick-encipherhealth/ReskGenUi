@@ -11,9 +11,14 @@ import MoveBackModal from "./moveBackModal";
 import MoveBackTable from "./moveBackTable";
 import { actions as tableAction } from "../../stores/tableView";
 import CardSkeleton from "../../components/skeleton/card";
-import { findMatchesByField, getResponePopup, tableCustomFilterClearCheck } from "../../utils/reusable";
+import {
+  findMatchesByField,
+  getResponePopup,
+  tableCustomFilterClearCheck,
+} from "../../utils/reusable";
 import { getStorage } from "../../utils/storages";
-import { moveBackPageId } from '../../utils/pageIds'
+import { moveBackPageId } from "../../utils/pageIds";
+import MoreFilter from "../../pages/tenantadmin/tracking/filters";
 
 const MoveBack = ({
   tableLoader,
@@ -62,7 +67,24 @@ const MoveBack = ({
   const [moveBackLoader, setIsMoveBackLoader] = useState(false);
   const [isFilter, setIsFilter] = useState(true);
   const [clear, setClear] = useState(false);
-
+  const [selectAll, setSelectAll] = useState(false);
+  const handleClearAllFilters = () => {
+    setClear(true);
+    setSearchText(null);
+    setSelectedDateRanges({});
+    setSelectedDates([]);
+    setSelectedOption({});
+  };
+  const handleClearFilters = () => {
+    setSelectAll(false);
+    setActiveFilters((prevFilters) =>
+      prevFilters.map((filter) => ({ ...filter, active: true }))
+    );
+    setSelectedDateRanges({});
+    setSelectedDates([]);
+    setSelectedOption({});
+    setSearchText(null);
+  };
   const handleTabChange = (key) => {
     getTableData({ reloadTrue: true });
     setActiveTab(key);
@@ -120,16 +142,17 @@ const MoveBack = ({
       const response = await tableDynamicColumn({ payload });
       if (response?.status === "SUCCESS") {
         setIsFilter(true);
-        const filterCheck = tableCustomFilterClearCheck(
-          {searchText,
+        const filterCheck = tableCustomFilterClearCheck({
+          searchText,
           selectedDateRanges,
           selectedDates,
           selectedOption,
           setSearchText,
           setSelectedDateRanges,
           setSelectedDates,
-          setSelectedOption,data}
-        );
+          setSelectedOption,
+          data,
+        });
         if (filterCheck) {
           getMoveBack();
         }
@@ -250,7 +273,7 @@ const MoveBack = ({
                             {allRoles?.allocationRoles?.map((role, index) => (
                               <Nav.Item
                                 as="li"
-                                className="nav-item profile-tab mt-4"
+                                className="nav-item profile-tab"
                                 key={role}
                               >
                                 <Nav.Link
@@ -270,6 +293,18 @@ const MoveBack = ({
                           </Nav>
 
                           <div className="d-flex ms-auto gap-2 mb-2 me-2">
+                            <div className="mt-2">
+                              <MoreFilter
+                                selectAll={selectAll}
+                                setSelectAll={setSelectAll}
+                                activeFilters={activeFilters}
+                                FilterItems={activeFilters}
+                                setActiveFilters={setActiveFilters}
+                                setClear={setClear}
+                                handleClearAllFilters={handleClearAllFilters}
+                                handleClearFilters={handleClearFilters}
+                              />
+                            </div>
                             <Nav.Item as="li" className="nav-item profile-tab">
                               <div
                                 id="random-btn"
@@ -326,10 +361,10 @@ const MoveBack = ({
                       <div className="d-flex ">
                         <div
                           style={{ width: "100%" }}
-                          className={` d-flex gap-3 mt-4 `}
+                          className={` d-flex gap-3 mt-1 `}
                         >
                           <ReusableFilters
-                            showFilter={true}
+                            showFilter={false}
                             setActiveFilters={setActiveFilters}
                             setSearchText={setSearchText}
                             searchText={searchText}
