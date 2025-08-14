@@ -12,6 +12,7 @@ import { connect } from "react-redux";
 import chatAssistant from "../../images/chat/chatAssistant.svg";
 import { Skeleton } from "antd";
 import { getLogo } from "../../pages/twofactorauthentication/reusableFun";
+import { companyDeatils } from "../../utils/config";
 
 const AICHAT = ({ openMsg, getChatReply }) => {
   const [activeChat, setActiveChat] = useState(false);
@@ -117,7 +118,8 @@ const AICHAT = ({ openMsg, getChatReply }) => {
                     <div className={`${styles.chatHead} align-items-center`}>
                       {getLogo()}
                       <h4 className={`${styles.chatTitle} text-white`}>
-                        Chat with CogentAI
+                        Chat with {" "}
+                        {companyDeatils == "riskgenai" ? "RiskGen-i" : "CogentAI"}
                       </h4>
                     </div>
                     <div
@@ -135,7 +137,7 @@ const AICHAT = ({ openMsg, getChatReply }) => {
                     id="chat-scroll"
                   >
                     <div className="d-flex justify-content-start mb-0">
-                      <div className="msg_cotainer">Welcome to CogentAI!</div>
+                      <div className="msg_cotainer">Welcome to  {companyDeatils == "riskgenai" ? "RiskGen-i" : "CogentAI!"}</div>
                     </div>
                     {chatResponse?.map((data, index) => (
                       <div key={index}>

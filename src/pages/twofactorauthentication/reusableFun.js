@@ -4,6 +4,7 @@ import c360Logo from "../../images/logo/newLoginLogo.png";
 import cogentHeaderLogo from "../../images/logo/header_logo.png";
 import neChatImage from "../../images/logo/newChatImage.png";
 import cogentChat from "../../images/logo/CAICell.png";
+import riskgen from "../../images/logo/riskgen-i.png";
 import { companyDeatils } from "../../utils/config";
 
 export const getLogoImage = () => {
@@ -13,6 +14,19 @@ export const getLogoImage = () => {
         <Image
           className={`login-logo `}
           src={cogentLogo}
+          alt="Cogentai Logo"
+          style={{
+            display: "block",
+            margin: "0 auto",
+            width: "450px",
+          }}
+        />
+      );
+    case "riskgenai":
+      return (
+        <Image
+          className={`login-logo `}
+          src={riskgen}
           alt="Cogentai Logo"
           style={{
             display: "block",
@@ -38,8 +52,8 @@ export const getLogoImage = () => {
     default:
       return (
         <Image
-        className={`login-logo `}
-        src={cogentLogo}
+          className={`login-logo `}
+          src={cogentLogo}
           alt="Default Logo"
           style={{
             display: "block",
@@ -72,6 +86,23 @@ export const getHeaderLoge = () => {
               height: "auto",
             }}
           />
+        </div>
+      );
+    case "riskgenai":
+      return (
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            width: "120px",
+            aspectRatio: "2 / 1",
+          }}
+          className="mx-3"
+        >
+          <Image src={riskgen} alt="Riskgen Header Logo"  style={{
+            width: "120px",
+            height: 25,
+          }}/>
         </div>
       );
     case "c360":

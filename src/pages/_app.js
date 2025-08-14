@@ -468,7 +468,7 @@ gtag('config', 'G-WEFGJM1VG2');`}
           </span>
           <InternetError />
           {loginCheck == true && <ConnectWebSocket />}
-          {showFooter && showTerminal && <Footer />}
+          {/* {showFooter && showTerminal && <Footer />} */}
         </Provider>
       </PrimeReactProvider>
     </MsalProvider>
