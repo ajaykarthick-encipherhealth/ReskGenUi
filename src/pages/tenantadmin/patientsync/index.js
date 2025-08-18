@@ -40,7 +40,12 @@ import AppTable from "../../../components/tables";
 import { actions as tableAction } from "../../../stores/tableView";
 import ReusableFilters from "../../../components/reusableFilters";
 import { getStorage } from "../../../utils/storages";
-import { patientRosterPageId, practiceRosterPageId, providerRosterPageId, tinRosterPageId } from '../../../utils/pageIds'
+import {
+  patientRosterPageId,
+  practiceRosterPageId,
+  providerRosterPageId,
+  tinRosterPageId,
+} from "../../../utils/pageIds";
 
 const { RangePicker } = DatePicker;
 
@@ -812,7 +817,7 @@ const PatientSync = ({
   const getAllPracticeApi = async () => {
     const projectId = getStorage("project");
     const response = await getTableData({
-      pageId:practiceRosterPageId,
+      pageId: practiceRosterPageId,
       pageNo,
       pageSize: 15,
       roleId,
@@ -855,7 +860,7 @@ const PatientSync = ({
     reportActiveTab === "Provider Roaster"
       ? providerRosterPageId
       : reportActiveTab === "Practice Roaster"
-      ?practiceRosterPageId
+      ? practiceRosterPageId
       : reportActiveTab === "Patient Roaster"
       ? patientRosterPageId
       : reportActiveTab === "Tin Roaster"
@@ -1215,7 +1220,11 @@ const PatientSync = ({
                             style={{ marginTop: "20px" }}
                           >
                             <div className="custom-tab-1">
-                              <Tab.Container defaultActiveKey="fhir">
+                              <Tab.Container
+                                defaultActiveKey={
+                                  reportActiveTab ? reportActiveTab : "FHIR"
+                                }
+                              >
                                 <Nav as="ul" className="nav nav-tabs">
                                   <Nav.Item
                                     as="li"
@@ -1228,7 +1237,7 @@ const PatientSync = ({
                                       id="fhir"
                                       name="fhir"
                                       to="#my-posts"
-                                      eventKey="fhir"
+                                      eventKey="FHIR"
                                     >
                                       FHIR
                                     </Nav.Link>
@@ -1244,7 +1253,7 @@ const PatientSync = ({
                                       id="pdf"
                                       name="pdf"
                                       to="#my-posts"
-                                      eventKey="pdf"
+                                      eventKey="PDF"
                                     >
                                       PDF
                                     </Nav.Link>
@@ -1260,7 +1269,7 @@ const PatientSync = ({
                                       id="tinRoaster"
                                       name="tinRoaster"
                                       to="#my-posts"
-                                      eventKey="tinRoaster"
+                                      eventKey="Tin Roaster"
                                     >
                                       TIN Roster
                                     </Nav.Link>
@@ -1293,7 +1302,7 @@ const PatientSync = ({
                                       id="providerRoaster"
                                       name="providerRoaster"
                                       to="#my-posts"
-                                      eventKey="providerRoaster"
+                                      eventKey="Provider Roaster"
                                     >
                                       Provider Roster
                                     </Nav.Link>
@@ -1310,21 +1319,21 @@ const PatientSync = ({
                                       id="patientRoaster"
                                       name="patientRoaster"
                                       to="#my-posts"
-                                      eventKey="patientRoaster"
+                                      eventKey="Patient Roaster"
                                     >
                                       Patient Roster
                                     </Nav.Link>
                                   </Nav.Item>
                                 </Nav>
                                 <Tab.Content>
-                                  <Tab.Pane id="my-posts" eventKey="fhir">
+                                  <Tab.Pane id="my-posts" eventKey="FHIR">
                                     <FHIRPatinetTable
                                       paginationFirst={paginationFirst}
                                       onPageChange={onPageChange}
                                       tableData={FHIRData}
                                     />
                                   </Tab.Pane>
-                                  <Tab.Pane id="my-posts" eventKey="pdf">
+                                  <Tab.Pane id="my-posts" eventKey="PDF">
                                     <PdfTable
                                       paginationFirst={paginationFirst}
                                       setSelectedBatch={setSelectedBatch}
@@ -1368,7 +1377,10 @@ const PatientSync = ({
                                       }
                                     /> */}
                                   </Tab.Pane>
-                                  <Tab.Pane id="my-posts" eventKey="tinRoaster">
+                                  <Tab.Pane
+                                    id="my-posts"
+                                    eventKey="Tin Roaster"
+                                  >
                                     <TinRoasterTable
                                       pageNumber={pageNumber}
                                       setPageNumber={setPageNumber}
@@ -1383,7 +1395,7 @@ const PatientSync = ({
 
                                   <Tab.Pane
                                     id="my-posts"
-                                    eventKey="patientRoaster"
+                                    eventKey="Patient Roaster"
                                   >
                                     <PatientRoasterTable
                                       pageNumber={pageNumber}
@@ -1399,7 +1411,7 @@ const PatientSync = ({
 
                                   <Tab.Pane
                                     id="my-posts"
-                                    eventKey="providerRoaster"
+                                    eventKey="Provider Roaster"
                                   >
                                     <ProviderRoasterTable
                                       pageNumber={pageNumber}
