@@ -424,7 +424,7 @@ const Flag = ({
                   )}
                 </span>
 
-                <div id={`flag-value-tootip-${index}`}>
+                <div className="cursor-pointer" id={`flag-value-tootip-${index}`}>
                   <Tooltip
                     placement="bottom"
                     title={data?.patientFlagDTO?.createdBy}

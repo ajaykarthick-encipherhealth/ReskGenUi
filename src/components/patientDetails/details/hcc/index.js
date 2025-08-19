@@ -407,7 +407,6 @@ const Hcc = ({
   const queryDetails = router.pathname.includes(
     "/tenantadmin/tin/tindetails/querydetails"
   );
-
   const hideDiseasePopContent = (
     <>
       <div className="row">
@@ -415,7 +414,7 @@ const Hcc = ({
         <div className="col-xl-6 d-flex justify-content-end align-items-center cursor-pointer">
           {!isDisabled ? (
             <Popconfirm
-              title="Are you sure you want to re-evaluate?"
+              title = {`Are you sure you want to ${isReEvaluateChecked?.reEvaluateNeed ? "disable" : "enable"} re-evaluate?`}
               onConfirm={onChange}
               okText="Yes"
               cancelText="No"
