@@ -34,3 +34,7 @@ export const setTinStatus = createActionThunk(
   "TIN_STATUS_ACTION",
   network.changeTinStatus
 );
+export const tinData = createActionThunk(
+  "TIN_VIEW_DATA",
+  network.getTableView
+);

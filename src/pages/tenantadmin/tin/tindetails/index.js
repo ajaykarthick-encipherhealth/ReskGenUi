@@ -111,6 +111,7 @@ const TinDetails = ({
     getTableData({ reloadTrue: true });
     getProjectActiveTab(activeTabName);
     router.push("/tenantadmin/tin");
+    getTableData(null)
   };
   useEffect(() => {
     if (tab) {
@@ -182,7 +183,7 @@ const enhancer = connect(
     getProjectActiveTab: tinActions.getProjectActiveTab,
     getRoutedData: allPatientSyncAction.getRoutedData,
     getRoutedDatAllocation: tinActions.getAllocationRoutedData,
-    getTableData: tableAction.tableViewAction,
+    getTableData: tableAction.tinData,
   }
 );
 

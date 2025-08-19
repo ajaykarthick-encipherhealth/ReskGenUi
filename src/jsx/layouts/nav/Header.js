@@ -111,7 +111,8 @@ const Header = ({
   notificationSound,
   getProjectActiveTab,
   getTableStatus,
-  reportTabs
+  reportTabs,
+  getTinData
 }) => {
   const router = useRouter();
   const fileInputRef = useRef(null);
@@ -580,6 +581,7 @@ const Header = ({
       getActiveTab(null);
       getReportActiveTab(null);
       getRoutedData(null);
+      getTinData(null)
       getTableData({ reloadTrue: true });
       getTableStatus({reloadTrue:true})
       router.push(
@@ -1573,6 +1575,7 @@ const enhancer = connect(
     getProjectActiveTab: tinActions.getProjectActiveTab,
     getTableStatus: tableAction.getTableStatusAction,
     reportTabs: reportAction.reportTabList,
+    getTinData: tableAction.tinData,
   }
 );
 export default enhancer(Header);

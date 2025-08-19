@@ -6,6 +6,7 @@ import {
   getTableStatusAction,
   getTinCountAction,
   tinDynamicChecked,
+  tinData
 } from "./actions";
 
 const initialState = {
@@ -53,6 +54,7 @@ const tableReducer = combineReducers({
   tableStatusLoading:getReportLoading(getTableStatusAction),
   TinCountView: createReducer(getTinCountAction),
   tinColumnChecked: createReducer(tinDynamicChecked),
+  tinData:createReducer(tinData)
 });
 
 export default tableReducer;

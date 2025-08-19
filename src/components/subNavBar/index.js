@@ -15,8 +15,9 @@ import { getPageId } from "../../pages/tenantadmin/tin";
 import { connect } from "react-redux";
 import CardSkeleton from "../skeleton/card";
 import { activeTinPageId } from '../../utils/pageIds'
+import { actions as tableAction } from '../../stores/tableView'
 
-const SubNavBar = ({ handleBack, hideBackArrow, pageLoad ,tableLoader}) => {
+const SubNavBar = ({ handleBack, hideBackArrow, pageLoad ,getTableData}) => {
   const role = getStorage("userRole");
   const [metaData, setMetaData] = useState([]);
   const [tableData, setTableData] = useState([]);
@@ -30,7 +31,7 @@ const SubNavBar = ({ handleBack, hideBackArrow, pageLoad ,tableLoader}) => {
     const tin = getStorage("tinNumber");
     const projectId = getStorage("project");
     setLoading(true);
-    const result = await getTableView({
+    const result = await getTableData({
       pageId:activeTinPageId,
       pageNo: 0,
       projectId: projectId,
@@ -125,7 +126,9 @@ const enhancer = connect(
     pageLoad: state?.tenantAdmin?.tin?.getPageRendering,
     tableLoader: state?.tableView?.tableViewLoading,
   }),
-  {}
+  {
+     getTableData: tableAction.tinData,
+  }
 );
 
 export default enhancer(SubNavBar);

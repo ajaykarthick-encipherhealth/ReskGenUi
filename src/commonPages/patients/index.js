@@ -147,6 +147,7 @@ const Patient = ({
   pageLoad,
   backRoute,
   id,
+  tinData
 }) => {
   const [sort, setSort] = useState({
     computedDate: {
@@ -289,6 +290,7 @@ const Patient = ({
     formData.computing = 0;
     formData.patientId = formData.patientId.trim();
     formData.tin = tin;
+    formData.tinId = formData?.tinId?formData?.tinId :tinData[0]?.id
     setLoader(true);
     try {
       setIsLoadingBtn(true);
@@ -916,6 +918,7 @@ const enhancer = connect(
     data: state?.tableView?.tableView?.data,
     tableLoader: state?.tableView?.tableViewLoading,
     pageLoad: state?.tenantAdmin?.tin?.getPageRendering,
+    tinData:state?.tableView?.tinData?.data?.response?.pageResponse?.content
   }),
   {
     getAllOrganizationList: tenantAdminAction.getAllOrganizationAction,

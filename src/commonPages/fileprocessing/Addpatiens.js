@@ -15,17 +15,20 @@ const Addpatients = ({
   orgAllList,
   tinDetails,
   getPageRendering,
-  loader
+  loader,
 }) => {
   const router = useRouter();
   const isProjectRoute = router.pathname === "/tenantadmin/project";
 
   const [form] = Form.useForm();
-  const TinOptions = tinDetails?.map((client) => ({
+  const TinOptions = tinDetails?.map((client) => (
+    {
     label: client.tinName,
     value: client.tinNumber,
-  }));
-  
+    tinId: client.id,
+  }
+));
+
   const handleCancel = () => {
     form.resetFields();
     setAddPatientId(false);
@@ -71,13 +74,11 @@ const Addpatients = ({
               const selectedTinObj = tinDetails?.find(
                 (tin) => tin.tinNumber === values.tin
               );
-
               const payload = {
                 ...values,
-
                 tin: selectedTinObj?.tinNumber || getStorage("tinNumber"),
+                tinId: selectedTinObj?.id || null,
               };
-
 
               handleSubmitPatientId(payload, form);
             }}
