@@ -86,7 +86,7 @@ export async function getTableView({
     }&${statusKey}=${activeStatus || ""}&roleId=${roleId || ""}&aliasName=${
       selectedRole || ""
     }&queryStatus=${queryStatus || ""}&isAdmin=${isAdmin || ""}&sortDirection=${
-      sort?.sortDir ? sort?.sortDir : "ASC"
+      sort?.sortDir ? sort?.sortDir : "DESC"
     }&sortField=${sort?.sortField ? sort?.sortField : ""}&allClient=${
       allClient || false
     }&allProject=${allProject || false}&allTin=${allTin || false}&clientId=${
