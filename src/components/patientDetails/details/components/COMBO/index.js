@@ -84,8 +84,6 @@ const ComboCard = ({
     "geekblue",
     "purple",
   ];
-  const isComboDisabled =
-    patientIdDetailsData?.data?.response?.workflow?.[0]?.status !== "PENDING";
   return (
     <>
       {provided && (
@@ -348,13 +346,10 @@ const ComboCard = ({
                                       <div
                                         className={visitStyles.close_icon}
                                         style={{
-                                          cursor: isComboDisabled
-                                            ? "not-allowed"
-                                            : "pointer",
+                                          cursor:"pointer",
                                           background: "#c7f3c6",
                                         }}
                                         onClick={() => {
-                                          if (isComboDisabled) return;
                                           setOpens(true);
                                           setCombiTree([
                                             {
