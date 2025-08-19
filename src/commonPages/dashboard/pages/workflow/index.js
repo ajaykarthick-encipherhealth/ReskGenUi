@@ -945,8 +945,6 @@ const Workflow = ({
   const [averageReviewerScore, setAverageReviewerScore] = useState(0);
   const [averageEngineScore, setAverageEngineScore] = useState(0);
 
-  const { userName = "" } = getLocalStored();
-
   const showModal = () => {
     setIsOrgModalOpen(true);
   };
@@ -1045,7 +1043,7 @@ const Workflow = ({
 
       const roleApiCalls = roleBasedApiKeys.map(({ key, roleId }) => {
         const actionKey = `${key}Action`;
-        const params = { ...commonParams, roleId, username: userName };
+        const params = { ...commonParams, roleId };
         if (typeof actions[actionKey] === "function") {
           return dispatch(actions[actionKey](params));
         } else {
