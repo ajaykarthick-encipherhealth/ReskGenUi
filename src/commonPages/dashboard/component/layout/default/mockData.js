@@ -34,74 +34,66 @@ export const fileCountData = [
     title: "File / Patients Count",
     value: "120",
     bgColor: patientCount,
-    color: getColorValue("1")
+    color: getColorValue("1"),
   },
   {
     icon: dosIcon,
     title: "DOS Count",
     value: "1K",
     bgColor: dosCount,
-    color: getColorValue("2")
+    color: getColorValue("2"),
   },
   {
     icon: pageIcon,
     title: "Pages",
     value: "3.2K",
     bgColor: pages,
-    color: getColorValue("3")
+    color: getColorValue("3"),
   },
 ];
 
 export const statCardData = [
   {
     icon: upload,
-    title: "Upload",
+    title: "AI Upload",
     value: 293,
     bgColor: uploadContainer,
   },
   {
     icon: processing,
-    title: "Processing",
+    title: "AI Processing",
     value: 4,
-    bgColor: processingContainer
+    bgColor: processingContainer,
   },
   {
     icon: completed,
-    title: "Completed",
+    title: "AI Completed",
     value: 293,
-    bgColor: completedContainer
+    bgColor: completedContainer,
   },
   {
     icon: failed,
-    title: "Failed",
+    title: "AI Failed",
     value: 4,
-    bgColor: failedContainer
+    bgColor: failedContainer,
   },
   {
     icon: failed,
-    title: "Codes Capture",
+    title: "AI Codes Capture",
     value: 10,
-    bgColor: codeCaptureContainer
+    bgColor: codeCaptureContainer,
   },
 ];
 
 export const rafAndRevenue = ({ chartType }) => [
   {
-    type: "gauge",
-    height: 250,
+    type: "stat",
     size: "col-5",
-    customHeader: {
-      header: "RAF Score Count",
-    },
-    series: [
-      {
-        value: 242.6,
-        max: 1000,
-        color: getColorValue("7"),
-        title: "RAF Score",
-        shadowColor: getColorValue("7"),
-      },
-    ],
+    mainTitle: "HCC Raf Contribution",
+    title: "HCC Raf",
+    value: 242.6,
+    bgColor: patientCount,
+    backgroundColor: getColorValue("7"),
   },
   {
     type: chartType,
@@ -116,8 +108,8 @@ export const rafAndRevenue = ({ chartType }) => [
       "Mar 16",
     ],
     customHeader: {
-      header: "Revenue",
-      value : formatKValue(21400),
+      header: "HCC Revenue Impact",
+      value: formatKValue(21400),
     },
     legend: {
       show: true,
@@ -127,7 +119,7 @@ export const rafAndRevenue = ({ chartType }) => [
         name: "Revenue",
         data: [0, 0, 12.34, 0, 3, 0],
         color: getColorValue("7"),
-        area: chartType === "area"
+        area: chartType === "area",
       },
     ],
   },
@@ -147,34 +139,34 @@ export const totalCodes = ({ chartType }) => [
       "Mar 16",
     ],
     customHeader: {
-      label: "Overall Codes",
+      label: "Code Distribution",
       value: "831",
-      header: "Total Codes",
+      header: "Overall Performance",
     },
     series: [
       {
         name: "Total Codes",
         data: [0, 0, 3.34, 0, 0.1, 0, 8.9],
         color: getColorValue("3"),
-        area: chartType === "area"
+        area: chartType === "area",
       },
       {
         name: "HCC Codes",
         data: [0, 0, 0, 0.3, 0.6, 0, 4],
         color: getColorValue("1"),
-        area: chartType === "area"
+        area: chartType === "area",
       },
       {
         name: "Care Gap Codes",
         data: [0, 0, 0, 1.3, 0.4, 0, 4],
         color: getColorValue("2"),
-        area: chartType === "area"
+        area: chartType === "area",
       },
       {
         name: "Potiential Codes",
         data: [0, 0, 0.2, 0.4, 0, 0],
         color: getColorValue("4"),
-        area: chartType === "area"
+        area: chartType === "area",
       },
     ],
   },
@@ -191,8 +183,8 @@ export const totalCodes = ({ chartType }) => [
       "Mar 16",
     ],
     customHeader: {
-      label: "Overall RAF",
-      value: "58",
+      label: "Overall RAF Score",
+      value: "58.237",
       header: "RAF Score",
     },
     // chartBackground: "#ECF3FF",
@@ -201,25 +193,25 @@ export const totalCodes = ({ chartType }) => [
         name: "Total RAF",
         data: [0, 0, 0.2, 0.4, 0, 0],
         color: getColorValue("3"),
-        area: chartType === "area"
+        area: chartType === "area",
       },
       {
         name: "HCC RAF",
         data: [0, 0, 2.1, 0, 0.1, 0, 8.9],
         color: getColorValue("1"),
-        area: chartType === "area"
+        area: chartType === "area",
       },
       {
         name: "Care Gap RAF",
         data: [0, 0, 0, 1.3, 0.4, 0, 4],
         color: getColorValue("2"),
-        area: chartType === "area"
+        area: chartType === "area",
       },
       {
         name: "Potiential RAF",
         data: [0, 0, 0.5, 0.3, 0.6, 0, 4],
         color: getColorValue("4"),
-        area: chartType === "area"
+        area: chartType === "area",
       },
     ],
   },
@@ -236,7 +228,7 @@ export const totalCodes = ({ chartType }) => [
       "Mar 16",
     ],
     customHeader: {
-      label: "Overall Revenue",
+      label: "Overall Revenue Impact",
       value: formatKValue(toFixedNum(46800, 2)),
       header: "Revenue",
     },
@@ -283,16 +275,16 @@ export const hccCodes = ({ chartType }) => [
       "Mar 16",
     ],
     customHeader: {
-      label: "Overall Codes",
+      label: "HCC Code Distribution",
       value: "290",
-      header: "HCC Codes",
+      header: "HCC Performance",
     },
     series: [
       {
-        name: "HCC Codes",
+        name: "HCC Code Distribution",
         data: [0, 0, 12.34, 0, 3, 0],
         color: getColorValue("1"),
-        area: chartType === "area"
+        area: chartType === "area",
       },
     ],
   },
@@ -309,17 +301,17 @@ export const hccCodes = ({ chartType }) => [
       "Mar 16",
     ],
     customHeader: {
-      label: "Overall Codes",
-      value: "24",
+      label: "HCC RAF Contribution",
+      value: "24.091",
       header: "RAF Score",
     },
     // chartBackground: "#EFECFE",
     series: [
       {
-        name: "HCC RAF",
+        name: "HCC RAF Contribution",
         data: [0, 0, 0.2, 0, 0.1, 0],
         color: getColorValue("1"),
-        area: chartType === "area"
+        area: chartType === "area",
       },
     ],
   },
@@ -336,14 +328,14 @@ export const hccCodes = ({ chartType }) => [
       "Mar 16",
     ],
     customHeader: {
-      label: "Overall Revenue",
+      label: "HCC Revenue Impact",
       value: formatKValue(toFixedNum(19400, 2)) || 0,
       header: "Revenue",
     },
     // chartBackground: "#E2F1F3",
     series: [
       {
-        name: "HCC Revenue",
+        name: "HCC Revenue Impact",
         data: [0, 0, 0, 106.78, 0, 0],
         color: getColorValue("1"),
         step: "middle",
@@ -365,16 +357,16 @@ export const careGapCodes = ({ chartType }) => [
       "Mar 16",
     ],
     customHeader: {
-      label: "Overall Codes",
+      label: "Care Gap Code Distribution",
       value: "241",
-      header: "Care Gap Codes",
+      header: "Care Gap Performance",
     },
     series: [
       {
-        name: "Care Gap Codes",
+        name: "Care Gap Code Distribution",
         data: [756, 92, 20, 91, 42, 24, 56],
         color: getColorValue("3"),
-        area: chartType === "area"
+        area: chartType === "area",
       },
     ],
   },
@@ -393,16 +385,16 @@ export const careGapCodes = ({ chartType }) => [
 
     // chartBackground: " #E2F1F3",
     customHeader: {
-      label: "Overall Codes",
-      value: "34",
+      label: "Care Gap RAF Contribution",
+      value: "34.985",
       header: "RAF Score",
     },
     series: [
       {
-        name: "Care Gap RAF",
+        name: "Care Gap RAF Contribution",
         data: [0, 0, 0.2, 0, 0.1, 0],
         color: getColorValue("3"),
-        area: chartType === "area"
+        area: chartType === "area",
       },
     ],
   },
@@ -419,14 +411,14 @@ export const careGapCodes = ({ chartType }) => [
       "Mar 16",
     ],
     customHeader: {
-      label: "Overall Revenue",
+      label: "Care Gap Revenue Impact",
       value: formatKValue(toFixedNum(27409, 2)),
       header: "Revenue",
     },
     // chartBackground: "#DAE0FC",
     series: [
       {
-        name: "Care Gap Revenue",
+        name: "Care Gap Revenue Impact",
         data: [0, 123.567, 0, 0, 137.423, 0, 0, 0],
         color: getColorValue("3"),
         step: "middle",
@@ -448,13 +440,13 @@ export const potientialCodes = ({ chartType }) => [
       "Mar 16",
     ],
     customHeader: {
-      label: "Overall Codes",
+      label: "Potential Code Distribution",
       value: "300",
-      header: "Potential Codes",
+      header: "Potential Performance",
     },
     series: [
       {
-        name: "Potential Codes",
+        name: "Potential Code Distribution",
         data: [762, 92, 20, 91, 132, 24, 56],
         color: getColorValue("4"),
         area: chartType === "area",
@@ -474,14 +466,14 @@ export const potientialCodes = ({ chartType }) => [
       "Mar 16",
     ],
     customHeader: {
-      label: "Overall Codes",
-      value: "0",
+      label: "Potential RAF Contribution",
+      value: "18.230",
       header: "RAF Score",
     },
     // chartBackground: "#EFECFE",
     series: [
       {
-        name: "Potiential RAF",
+        name: "Potiential RAF Contribution",
         data: [0, 0, 0.2, 0, 0.1, 0],
         color: getColorValue("4"),
         area: chartType === "area",
@@ -501,14 +493,14 @@ export const potientialCodes = ({ chartType }) => [
       "Mar 16",
     ],
     customHeader: {
-      label: "Overall Revenue",
+      label: "Potential Revenue Impact",
       value: formatKValue(toFixedNum(0, 2)),
       header: "Revenue",
     },
     // chartBackground: "#EBFCFF",
     series: [
       {
-        name: "Potential Revenue",
+        name: "Potential Revenue Impact",
         data: [0, 0, 0, 106.78, 0, 0],
 
         color: getColorValue("4"),
@@ -655,16 +647,16 @@ export const fileChartSeries = [
   {
     name: "Completed",
     data: [12, 13, 25, 8, 10, 25, 8, 13, 27],
-    color: getColorValue("5")
+    color: getColorValue("5"),
   },
   {
     name: "Processing",
     data: [5, 20, 25, 5, 20, 25, 5, 20, 25],
-    color: getColorValue("7")
+    color: getColorValue("7"),
   },
   {
     name: "Failed",
     data: [10, 15, 30, 10, 15, 30, 10, 15, 30],
-    color: getColorValue("1")
+    color: getColorValue("1"),
   },
 ];

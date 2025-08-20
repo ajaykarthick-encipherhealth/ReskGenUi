@@ -25,25 +25,25 @@ import CardSkeleton from "../../../../../components/skeleton/card";
 const statCardsData = [
   {
     icon: upload,
-    title: "Upload",
+    title: "AI Upload",
     value: 293,
     bgColor: uploadContainer,
   },
   {
     icon: processing,
-    title: "Processing",
+    title: "AI Processing",
     value: 4,
     bgColor: processingContainer,
   },
   {
     icon: completed,
-    title: "Completed",
+    title: "AI Completed",
     value: 293,
     bgColor: completedContainer,
   },
   {
     icon: failed,
-    title: "Failed",
+    title: "AI Failed",
     value: 4,
     bgColor: failedContainer,
   },

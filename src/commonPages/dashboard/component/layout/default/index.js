@@ -205,7 +205,7 @@ const getCharts = ({ type, chartType, chartChange }) => {
                 title={card.title}
                 value={card.value}
                 bgColor={card.bgColor}
-                padding="16px"
+                padding="10px"
                 minWidth="165px"
                 gap="12px"
                 display="flex"

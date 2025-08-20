@@ -207,28 +207,28 @@ const getCharts = ({
       const statCardsData = [
         {
           icon: upload,
-          title: "Upload",
+          title: "AI Upload",
           value: uploadedFiles || 0,
           bgColor: uploadContainer,
           iconColor: "#d0ccff",
         },
         {
           icon: processing,
-          title: "Processing",
+          title: "AI Processing",
           value: processingFiles || 0,
           bgColor: processingContainer,
           iconColor: "#d0ccff",
         },
         {
           icon: completed,
-          title: "Completed",
+          title: "AI Completed",
           value: computedFiles || 0,
           bgColor: completedContainer,
           iconColor: "#adffb5",
         },
         {
           icon: failed,
-          title: "Failed",
+          title: "AI Failed",
           value: failedFiles || 0,
           bgColor: failedContainer,
           iconColor: "#ffdbcc",

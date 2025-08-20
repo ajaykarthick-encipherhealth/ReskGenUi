@@ -191,28 +191,20 @@ const getCharts = ({
           dates={dates}
           charts={[
             {
-              type: "gauge",
-              height: 300,
+              type: "stat",
               size: "col-5",
-              customHeader: {
-                header: "RAF Score Count",
-              },
-              series: [
-                {
-                  value: toFixedNum(rafHcc?.overallRaf, 2) || 0,
-                  max: 1000,
-                  color: getColorValue("7"),
-                  title: "RAF Score",
-                  shadowColor: getColorValue("7"),
-                },
-              ],
+              mainTitle: "HCC Raf Contribution",
+              title: "HCC Raf",
+              value: toFixedNum(rafHcc?.overallRaf, 3) || 0,
+              bgColor: patientCount,
+              backgroundColor: getColorValue("7"),
             },
             {
               type: chartType,
               size: "col-7",
               categories: dates,
               customHeader: {
-                header: `Revenue`,
+                header: `HCC Revenue Impact`,
                 value: formatKValue(rafHcc?.overallPremium),
               },
               series: [
@@ -263,11 +255,11 @@ const getCharts = ({
               size: "col-4",
               categories: dates,
               customHeader: {
-                label: "Overall Codes",
+                label: "Code Distribution",
                 value: formatKValue(
                   toFixedNum(rafTotal?.overallCodesCount, 2) || 0
                 ),
-                header: "Total Codes",
+                header: "Overall Performance",
               },
               series: [
                 {
@@ -317,8 +309,8 @@ const getCharts = ({
               size: "col-4",
               categories: dates,
               customHeader: {
-                label: "Overall RAF",
-                value: formatKValue(toFixedNum(rafTotal?.overallRaf, 2)) || 0,
+                label: "Overall RAF Score",
+                value: toFixedNum(rafTotal?.overallRaf, 3) || 0,
                 header: "RAF Score",
               },
               // chartBackground: "#ECF3FF",
@@ -371,7 +363,7 @@ const getCharts = ({
               size: "col-4",
               categories: dates,
               customHeader: {
-                label: "Over Revenue",
+                label: "Overall Revenue Impact",
                 value:
                   formatKValue(toFixedNum(rafTotal?.overallPremium, 2)) || 0,
                 header: "Revenue",
@@ -448,14 +440,14 @@ const getCharts = ({
               size: "col-4",
               categories: dates,
               customHeader: {
-                label: "Overall Codes",
+                label: "HCC Code Distribution",
                 value:
                   formatKValue(toFixedNum(rafHcc?.overallCodesCount, 2)) || 0,
-                header: "HCC Codes",
+                header: "HCC Performance",
               },
               series: [
                 {
-                  name: "HCC Codes",
+                  name: "HCC Code Distribution",
                   data: rafHcc?.codesAndRafSummaryDTOList || [],
                   color: getColorValue("1"),
                   area: chartType === "area",
@@ -468,14 +460,14 @@ const getCharts = ({
               size: "col-4",
               categories: dates,
               customHeader: {
-                label: "Overall Codes",
-                value: formatKValue(toFixedNum(rafHcc?.overallRaf, 2)) || 0,
+                label: "HCC RAF Contribution",
+                value: toFixedNum(rafHcc?.overallRaf, 3) || 0,
                 header: "RAF Score",
               },
               // chartBackground: "#EFECFE",
               series: [
                 {
-                  name: "HCC RAF",
+                  name: "HCC RAF Contribution",
                   data: rafHcc?.codesAndRafSummaryDTOList || [],
                   color: getColorValue("1"),
                   area: chartType === "area",
@@ -492,14 +484,14 @@ const getCharts = ({
               size: "col-4",
               categories: dates,
               customHeader: {
-                label: "Overall Revenue",
+                label: "HCC Revenue Impact",
                 value: formatKValue(toFixedNum(rafHcc?.overallPremium, 2)) || 0,
                 header: "Revenue",
               },
               // chartBackground: "#E2F1F3",
               series: [
                 {
-                  name: "HCC Revenue",
+                  name: "HCC Revenue Impact",
                   data: rafHcc?.codesAndRafSummaryDTOList || [],
                   color: getColorValue("1"),
                   ...(chartType === "stepline" && { step: "middle" }),
@@ -535,15 +527,15 @@ const getCharts = ({
               size: "col-4",
               categories: dates,
               customHeader: {
-                label: "Overall Codes",
+                label: "Care Gap Code Distribution",
                 value: formatKValue(
                   toFixedNum(rafCareGap?.overallCodesCount, 2)
                 ),
-                header: "Care Gap Codes",
+                header: "Care Gap Performance",
               },
               series: [
                 {
-                  name: "Care Gap Codes",
+                  name: "Care Gap Code Distribution",
                   data: rafCareGap?.codesAndRafSummaryDTOList || [],
                   color: getColorValue("3"),
                   area: chartType === "area",
@@ -561,13 +553,13 @@ const getCharts = ({
               categories: dates,
               // chartBackground: " #E2F1F3",
               customHeader: {
-                label: "Overall Codes",
-                value: formatKValue(toFixedNum(rafCareGap?.overallRaf, 2)),
+                label: "Care Gap RAF Contribution",
+                value: toFixedNum(rafCareGap?.overallRaf, 3),
                 header: "RAF Score",
               },
               series: [
                 {
-                  name: "Care Gap RAF",
+                  name: "Care Gap RAF Contribution",
                   data: rafCareGap?.codesAndRafSummaryDTOList || [],
                   color: getColorValue("3"),
                   area: chartType === "area",
@@ -584,14 +576,14 @@ const getCharts = ({
               size: "col-4",
               categories: dates,
               customHeader: {
-                label: "Overall Revenue",
+                label: "Care Gap Revenue Impact",
                 value: formatKValue(toFixedNum(rafCareGap?.overallPremium, 2)),
                 header: "Revenue",
               },
               // chartBackground: "#DAE0FC",
               series: [
                 {
-                  name: "Care Gap Revenue",
+                  name: "Care Gap Revenue Impact",
                   data: rafCareGap?.codesAndRafSummaryDTOList || [],
                   color: getColorValue("3"),
                   ...(chartType === "stepline" && { step: "middle" }),
@@ -628,15 +620,15 @@ const getCharts = ({
               size: "col-4",
               categories: dates,
               customHeader: {
-                label: "Overall Codes",
+                label: "Potential Code Distribution",
                 value: formatKValue(
                   toFixedNum(rafPotential?.overallCodesCount, 2)
                 ),
-                header: "Potential Codes",
+                header: "Potential Performance",
               },
               series: [
                 {
-                  name: "Potential Codes",
+                  name: "Potential Code Distribution",
                   data: rafPotential?.codesAndRafSummaryDTOList || [],
                   color: getColorValue("4"),
                   area: chartType === "area",
@@ -653,14 +645,14 @@ const getCharts = ({
               size: "col-4",
               categories: dates,
               customHeader: {
-                label: "Overall Codes",
-                value: formatKValue(toFixedNum(rafPotential?.overallRaf, 2)),
+                label: "Potential RAF Contribution",
+                value: toFixedNum(rafPotential?.overallRaf, 3),
                 header: "RAF Score",
               },
               // chartBackground: "#EFECFE",
               series: [
                 {
-                  name: "Potiential RAF",
+                  name: "Potential RAF Contribution",
                   data: rafPotential?.codesAndRafSummaryDTOList || [],
                   color: getColorValue("4"),
                   area: chartType === "area",
@@ -677,7 +669,7 @@ const getCharts = ({
               size: "col-4",
               categories: dates,
               customHeader: {
-                label: "Overall Revenue",
+                label: "Potential Revenue Impact",
                 value: formatKValue(
                   toFixedNum(rafPotential?.overallPremium, 2)
                 ),
@@ -686,7 +678,7 @@ const getCharts = ({
               // chartBackground: "#EBFCFF",
               series: [
                 {
-                  name: "Potential Revenue",
+                  name: "Potential Revenue Impact",
                   data: rafPotential?.codesAndRafSummaryDTOList || [],
 
                   color: getColorValue("4"),
@@ -777,35 +769,35 @@ const getCharts = ({
       const fileCardsData = [
         {
           icon: upload,
-          title: "Upload",
+          title: "AI Upload",
           value: uploadedFiles || 0,
           bgColor: uploadContainer,
           iconColor: "#d0ccff",
         },
         {
           icon: processing,
-          title: "Processing",
+          title: "AI Processing",
           value: processingFiles || 0,
           bgColor: processingContainer,
           iconColor: "#d0ccff",
         },
         {
           icon: completed,
-          title: "Completed",
+          title: "AI Completed",
           value: computedFiles || 0,
           bgColor: completedContainer,
           iconColor: "#adffb5",
         },
         {
           icon: failed,
-          title: "Failed",
+          title: "AI Failed",
           value: failedFiles || 0,
           bgColor: failedContainer,
           iconColor: "#ffdbcc",
         },
         {
           icon: failed,
-          title: "Codes Capture",
+          title: "AI Codes Capture",
           value: capturedCodesCount || 0,
           bgColor: codeCaptureContainer,
           iconColor: "#ffdbcc",
