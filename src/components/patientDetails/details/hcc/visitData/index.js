@@ -451,7 +451,7 @@ const VisitData = ({
                             />
                           </span>
                           <span className="ant-badge">
-                            POTENTIAL / SUGGESTED DIAGNOSES
+                            POTENTIAL / SUGGESTED DIAGNOSIS
                           </span>
                         </span>
                         <div className="d-flex justify-content-center">
@@ -871,7 +871,7 @@ const VisitData = ({
                             className={`ant-badge ${visitStyles.potential_title_name}`}
                           >
                             <span className="ant-badge">
-                              POTENTIAL / SUGGESTED DIAGNOSES
+                              POTENTIAL / SUGGESTED DIAGNOSIS
                             </span>
                           </span>
                           <div className="d-flex justify-content-center">

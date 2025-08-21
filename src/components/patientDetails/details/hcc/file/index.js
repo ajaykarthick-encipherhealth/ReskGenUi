@@ -569,7 +569,7 @@ const File = ({
                               }
                             />
                           </span>
-                          POTENTIAL / SUGGESTED DIAGNOSES
+                          POTENTIAL / SUGGESTED DIAGNOSIS
                           {/* <Tooltip title="POTENTIAL / SUGGESTED DIAGNOSIS">
                             {truncateString(
                               "POTENTIAL / SUGGESTED DIAGNOSIS",

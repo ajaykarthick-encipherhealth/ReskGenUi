@@ -715,7 +715,9 @@ const Hcc = ({
                               setSelectDosValue={setSelectDosValue}
                               getSelectedDos={getSelectedDos}
                               setSearch={setSearch}
-                              getSelectedDosPageNumber={getSelectedDosPageNumber}
+                              getSelectedDosPageNumber={
+                                getSelectedDosPageNumber
+                              }
                             />
                           ))}
                       {/* {activeTabHead == 1 && (
@@ -782,7 +784,7 @@ const Hcc = ({
                                         className={visitStyles.potentialFlag}
                                       ></span>
                                       <span className={visitStyles.flagCodes}>
-                                        POTENTIAL / SUGGESTED DIAGNOSES
+                                        POTENTIAL / SUGGESTED DIAGNOSIS
                                       </span>
                                     </div>
                                   </div>
