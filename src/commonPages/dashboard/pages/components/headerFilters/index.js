@@ -82,6 +82,7 @@ const index = ({
       setSelectedValue(value);
     } else {
       setIsCustom(false);
+      setSelectedDates([]);
       let startDate;
 
       if (value === "last_1_week") {
