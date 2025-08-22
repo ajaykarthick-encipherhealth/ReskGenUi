@@ -575,6 +575,7 @@ const Combo = ({
             setOpens={setOpens}
             setCombiTree={setCombiTree}
             setFileLoading={setFileLoading}
+            year={year}
           />
         </Modal>
       ) : (
