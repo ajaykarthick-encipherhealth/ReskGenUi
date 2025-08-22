@@ -116,6 +116,10 @@ export const diseaseEdit = createActionThunk(
   "DISEASE_EDIT",
   network.diseaseEdit
 );
+export const diseaseShowHide = createActionThunk(
+  "DISEASE_SHOW_HIDE",
+  network.diseaseShowHide
+);
 export const diseaseEditMeat = createActionThunk(
   "DISEASE_EDIT_MEAT",
   network.diseaseEditMeat

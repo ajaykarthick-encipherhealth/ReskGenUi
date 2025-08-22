@@ -84,7 +84,7 @@ const HccCards = ({
   storeFileDetails,
   year,
   getPatientDetailsData,
-  diseaseEdit,
+  diseaseShowHide,
   selectDosValue,
   patientDetailsLoad,
   isSpinnerLoading,
@@ -95,7 +95,7 @@ const HccCards = ({
   educationalError,
   setEducationalError,
 }) => {
-  const router = useRouter()
+  const router = useRouter();
   const [fileInitialPage, setFileInitialPage] = useState(null);
   const [openEdit, setOpenEdit] = useState(false);
   const [openContent, setOpenContent] = useState(null);
@@ -230,23 +230,11 @@ const HccCards = ({
     patientDetailsLoad(true);
     const patientId = getStorage("patientId");
     const role = getStorage("userRole");
-    const res = await diseaseEdit({
+    const res = await diseaseShowHide({
       patientId: patientId,
-      ...data,
-      isShow: action === "hide" ? false : true,
-      chartProcessType: "DATE_OF_SERVICE",
       dateOfServiceIfDosWiseCompute: data?.dateOfServices[0],
-      processedYear: year?.value , 
-      newDiagnosisCode: data?.diagnosisCode,
+      processedYear: year?.value,
       oldDiagnosisCode: data?.diagnosisCode,
-      monitorAspect: result?.monitorAspect,
-      evaluateAspect: result?.evaluateAspect,
-      assessmentAspect: result?.assessmentAspect,
-      treatmentAspect: result?.treatmentAspect,
-      monitorHyperLink: result?.monitorHyperLink,
-      evaluateHyperLink: result?.evaluateHyperLink,
-      assessmentHyperLink: result?.assessmentHyperLink,
-      treatmentHyperLink: result?.treatmentHyperLink,
     });
     if (res?.status === "SUCCESS") {
       getPatientDetailsData(patientId, null, isDosSelected, "", role);
@@ -259,7 +247,11 @@ const HccCards = ({
       patientDetailsLoad(false);
     }
   };
- const isDisabled = isStatusDisabled(patientIdDetailsData, patientDetailsResult, router.pathname);
+  const isDisabled = isStatusDisabled(
+    patientIdDetailsData,
+    patientDetailsResult,
+    router.pathname
+  );
   return (
     <>
       {provided && (
@@ -1527,7 +1519,7 @@ const enhancer = connect(
     getCurrentDiseaseType: detailsActions.getCurrentDiseaseType,
     storeFileDetails: detailsActions.storeFileIdAction,
     getPatientDetailsData: detailsActions.patientDetailsAction,
-    diseaseEdit: detailsActions.diseaseEdit,
+    diseaseShowHide: detailsActions.diseaseShowHide,
     patientDetailsLoad: detailsActions.patientDetailsLoad,
     getPatientIdData: detailsActions.patientIdDetailsAction,
   }
