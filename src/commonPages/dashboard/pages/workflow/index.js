@@ -40,6 +40,7 @@ import uploadContainer from "../../../../images/dashboard/uploadContainer.png";
 import processingContainer from "../../../../images/dashboard/processingContainer.png";
 import completedContainer from "../../../../images/dashboard/completedContainer.png";
 import failedContainer from "../../../../images/dashboard/failedContainer.png";
+import { companyDeatils } from "../../../../utils/config";
 
 const statCardsData = [
   {
@@ -75,7 +76,7 @@ const statCardsData = [
 const TabButtons = [
   {
     id: 1,
-    title: "CogentAI Accuracy",
+    title: companyDeatils == "riskgenai" ? "AI Quality " : "CogentAI Accuracy",
   },
   {
     id: 2,
@@ -819,7 +820,9 @@ const getCharts = ({
                     {
                       name:
                         currentTabBtn === "CogentAI Accuracy"
-                          ? "Cogent AI Accuracy"
+                          ? companyDeatils == "riskgenai"
+                            ? "AI Quality"
+                            : "CogentAI Accuracy"
                           : "Organization Score",
                       data:
                         currentTabBtn === "CogentAI Accuracy"
@@ -945,6 +948,7 @@ const Workflow = ({
   const [averageReviewerScore, setAverageReviewerScore] = useState(0);
   const [averageEngineScore, setAverageEngineScore] = useState(0);
 
+  const { userName = "" } = getLocalStored();
   const showModal = () => {
     setIsOrgModalOpen(true);
   };

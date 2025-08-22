@@ -40,6 +40,7 @@ import { actions as detailsActions } from "../../../../../stores/patient/details
 import PdfViewer from "../../PdfViewerComponent";
 import ManuallyAdd from "../../components/manuallyAdd";
 import CardSkeleton from "../../../../skeleton/card";
+import { getLocalStored } from "../../../../../utils/storages";
 
 const addOnCodeColor = [
   "magenta",
@@ -74,6 +75,7 @@ const CamboTree = ({
   getPatientIdData,
   patientIdDetailsData,
 }) => {
+  const {patinetId=""} = getLocalStored()
   const [trees, setTrees] = useState(Tree);
   const [isLoading, setLoading] = useState(tree);
   const [zoom, setZoom] = useState({ width: 350, height: 185 });
@@ -149,6 +151,7 @@ const CamboTree = ({
       patientDetailsLoad,
       getPatientIdData,
     });
+    getpatientDetailsData(patinetId, "", isDosSelected)
   };
   const onchangeCombo = (data, code, diseaseSource) => {
     var title =

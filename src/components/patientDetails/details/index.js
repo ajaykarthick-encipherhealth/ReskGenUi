@@ -35,6 +35,9 @@ import {
   Checkbox,
 } from "antd";
 import { IMAGES, SVGICON } from "../../../jsx/constant/theme";
+import hccImg from "../../../images/visitdata/hcc1.png"
+import nonHccImg from "../../../images/visitdata/non-hcc.png"
+import rxImg from "../../../images/visitdata/rx.png"
 import { Button, Offcanvas } from "react-bootstrap";
 import Image from "next/image";
 import { useRouter } from "next/router";
@@ -230,19 +233,19 @@ const Details = ({
     {
       title: "HCC",
       type: "HCC",
-      iconStyle: IMAGES.visitDataHcc,
+      iconStyle: hccImg,
       defaultComplete: "HCC_DISEASES",
     },
     {
       title: "RX",
       type: "RX",
-      iconStyle: IMAGES.visitDataRx,
+      iconStyle: rxImg,
       defaultComplete: "RX_HCC_DISEASE",
     },
     {
       title: "NON HCC",
       type: "NON HCC",
-      iconStyle: IMAGES.visitDataNonHcc,
+      iconStyle: nonHccImg,
       defaultComplete: "NON_HCC_DISEASE",
     },
 

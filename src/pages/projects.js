@@ -11,6 +11,9 @@ import { getLogoImage } from "./twofactorauthentication/reusableFun";
 import { useMsal } from "@azure/msal-react";
 import { createIdGens, getResponePopup } from "../utils/reusable";
 import { ssoLogout } from "../../lib/authService";
+import { companyDeatils } from "../utils/config";
+
+
 // import Client from "./client";
 const SelectProject = ({
   getAllClientId,
@@ -251,7 +254,7 @@ const SelectProject = ({
                 <div>
                   <div className=" d-flex align-items-center justify-content-center">
                     <h2 className="title fontWeight2 p-2">
-                      Your Gateway to CogentAI
+                      Your Gateway to {companyDeatils == "riskgenai" ? "RiskGen-i" : "CogentAI!"}
                     </h2>
                   </div>
                   {/* <h6 className="login-title">

@@ -129,7 +129,7 @@ const NonHcc = ({
         <div className={`profile-tab ${visitStyles.visitdata_header_card2}`}>
           <div className="custom-tab-1">
             <Tab.Container defaultActiveKey="file">
-              <Nav as="ul" className="nav nav-tabs d-flex align-items-center">
+              <Nav as="ul" className="nav nav-tabs d-flex gap-2 align-items-center">
                 <Nav.Item as="li" className="nav-item">
                   <Nav.Link
                     to="#my-posts"
@@ -142,7 +142,7 @@ const NonHcc = ({
                   </Nav.Link>
                 </Nav.Item>
                 <Nav.Item as="li" className="nav-item">
-                  <Nav.Link
+                  {/* <Nav.Link
                     to="#my-posts"
                     eventKey="validDiseases"
                     className={` ant-badge ${visitStyles.navColor}`}
@@ -150,7 +150,7 @@ const NonHcc = ({
                     onClick={() => selectTab(2)}
                   >
                     Visit Data
-                  </Nav.Link>
+                  </Nav.Link> */}
                 </Nav.Item>
                 <Nav.Item as="li" className="nav-item">
                   <DosSelect

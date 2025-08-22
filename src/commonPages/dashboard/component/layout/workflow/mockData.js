@@ -21,6 +21,7 @@ import processingContainer from "../../../../../images/dashboard/processingConta
 import completedContainer from "../../../../../images/dashboard/completedContainer.png";
 import failedContainer from "../../../../../images/dashboard/failedContainer.png";
 import CardSkeleton from "../../../../../components/skeleton/card";
+import { companyDeatils } from "../../../../../utils/config";
 
 const statCardsData = [
   {
@@ -52,7 +53,7 @@ const statCardsData = [
 const TabButtons = [
   {
     id: 1,
-    title: "CogentAI Accuracy",
+    title: companyDeatils == "riskgenai" ? "AI Quality " : "CogentAI Accuracy",
   },
   {
     id: 2,

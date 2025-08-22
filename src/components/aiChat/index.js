@@ -13,8 +13,11 @@ import chatAssistant from "../../images/chat/chatAssistant.svg";
 import { Skeleton } from "antd";
 import { getLogo } from "../../pages/twofactorauthentication/reusableFun";
 import { companyDeatils } from "../../utils/config";
+import { getLocalStored } from "../../utils/storages";
+import { actions as authActions } from "../../stores/authFlows";
+import { capitalizeFirstLetter } from "../headerFilters/functions";
 
-const AICHAT = ({ openMsg, getChatReply }) => {
+const AICHAT = ({ openMsg, getChatReply, allRolesData, getAllRoles }) => {
   const [activeChat, setActiveChat] = useState(false);
   const [inputValue, setInputValue] = useState({ question: "" });
   const [validated, setValidated] = useState(false);
@@ -24,8 +27,10 @@ const AICHAT = ({ openMsg, getChatReply }) => {
   const messagesEndRef = useRef(null);
   const chatContainerRef = useRef(null);
 
+
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    getAllRoles();
   }, [chatResponse]);
 
   const handleChange = (e) => {
@@ -86,7 +91,6 @@ const AICHAT = ({ openMsg, getChatReply }) => {
   const enableScroll = () => {
     document.body.style.overflow = "auto";
   };
-
   return (
     <>
       <button className={styles.clickBtn} onClick={handleChat}>
@@ -114,12 +118,22 @@ const AICHAT = ({ openMsg, getChatReply }) => {
                   <div
                     className={`card-header chat-list-header text-center ${styles.chatTitleCard} rounded-0 m-2`}
                   >
-                    <div className="text-white">Hello user</div>
-                    <div className={`${styles.chatHead} align-items-center`}>
+                    <div className="text-white">
+                      Hello{" "}
+                      {`${capitalizeFirstLetter(
+                        allRolesData?.firstName
+                      )} ${capitalizeFirstLetter(
+                        allRolesData?.lastName
+                      )}`.trim()}
+                    </div>
+
+                    <div className={` d-flex align-items-center`}>
                       {getLogo()}
                       <h4 className={`${styles.chatTitle} text-white`}>
-                        Chat with {" "}
-                        {companyDeatils == "riskgenai" ? "RiskGen-i" : "CogentAI"}
+                        Chat with{" "}
+                        {companyDeatils == "riskgenai"
+                          ? "RiskGen-i"
+                          : "CogentAI"}
                       </h4>
                     </div>
                     <div
@@ -137,7 +151,12 @@ const AICHAT = ({ openMsg, getChatReply }) => {
                     id="chat-scroll"
                   >
                     <div className="d-flex justify-content-start mb-0">
-                      <div className="msg_cotainer">Welcome to  {companyDeatils == "riskgenai" ? "RiskGen-i" : "CogentAI!"}</div>
+                      <div className="msg_cotainer">
+                        Welcome to{" "}
+                        {companyDeatils == "riskgenai"
+                          ? "RiskGen-i"
+                          : "CogentAI!"}
+                      </div>
                     </div>
                     {chatResponse?.map((data, index) => (
                       <div key={index}>
@@ -231,7 +250,10 @@ const AICHAT = ({ openMsg, getChatReply }) => {
                       />
                     </div>
                     <div className="d-flex justify-content-center align-items-center text-white font-weight-bold fs-3">
-                      Welcome to CogentAI
+                      Welcome to{" "}
+                      {companyDeatils == "riskgenai"
+                        ? "RiskGen-i"
+                        : "CogentAI!"}
                     </div>
                     <div className="d-flex justify-content-center align-items-center text-white fs-10 text-center my-2">
                       Your personal AI assistant, ready to help you anytime.
@@ -259,9 +281,11 @@ const AICHAT = ({ openMsg, getChatReply }) => {
 const connector = connect(
   (state) => ({
     msgReply: state.chartService?.chatReply,
+    allRolesData: state.authReducer?.getAllRoles?.data?.response,
   }),
   {
     getChatReply: allActions.getChatReply,
+    getAllRoles: authActions.allRoles,
   }
 );
 

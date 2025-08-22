@@ -70,7 +70,8 @@ import { getHeaderLoge } from "../../../pages/twofactorauthentication/reusableFu
 import { actions as tinActions } from "../../../stores/tenantAdmin/tin";
 import { actions as tableAction } from "../../../stores/tableView";
 import PanelMenu from "./panelMenu";
-import { actions as reportAction } from '../../../stores/tenantAdmin/report'
+import { actions as reportAction } from "../../../stores/tenantAdmin/report";
+import { capitalizeFirstLetter } from "../../../components/headerFilters/functions";
 
 const Header = ({
   notificationResponse,
@@ -349,7 +350,7 @@ const Header = ({
         return PhysicanMenuList(accessMenuList);
       case "DOWNLOADER":
         return ProviderMenuList(accessMenuList);
-        case "CLIENT":
+      case "CLIENT":
         return ProviderMenuList(accessMenuList);
       case "OWNER":
         if (
@@ -583,7 +584,7 @@ const Header = ({
       getRoutedData(null);
       getTinData(null)
       getTableData({ reloadTrue: true });
-      getTableStatus({reloadTrue:true})
+      getTableStatus({ reloadTrue: true });
       router.push(
         {
           pathname: `${data?.to}`,
@@ -834,7 +835,7 @@ const Header = ({
       message: "Client Changed Successfully",
       duration: 5,
     });
-    reportTabs()
+    reportTabs();
     const res = await getAllProjects();
     const allRoles = res?.response?.userRoles?.map((data) => ({
       label: data.aliasName,
@@ -964,6 +965,7 @@ const Header = ({
       setStorage("userAllRoles", JSON?.stringify(data));
     }
   }, [allRolesData]);
+
   const getProjectDataList = async () => {
     const res = await getAllProjects();
     if (res?.status == "SUCCESS") {
@@ -1362,7 +1364,7 @@ const Header = ({
                               className="text-dark-50 header-name d-flex"
                               style={{ fontWeight: "600", fontSize: "18px" }}
                             >
-                              {userEmail?.split("@")[0]}
+                              {allRolesData?.firstName} {allRolesData?.lastName}
                             </div>
 
                             {roles?.length > 0 &&

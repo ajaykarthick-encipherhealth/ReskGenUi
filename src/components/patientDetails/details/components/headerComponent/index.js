@@ -35,6 +35,7 @@ const HeaderComponent = ({
           fileDetails={fileResult}
           fromHcc={true}
           setCopied={setCopied}
+          patientDetails= {patientDetails?.rafScore?.rafVersionDTO?.overAllScore}
         />
       </div>
       {/* <div className="col-4" style={{ padding: "0px" }}>
@@ -46,8 +47,8 @@ const HeaderComponent = ({
           getFlagCounts={getFlagCounts}
         />
 
-      </div>
-      <div className="col-2" style={{ padding: "0px" }}>
+      </div> */}
+      {/* <div className="col-2" style={{ padding: "0px" }}>
         <Codes
           hccCounts={hccCounts}
           hccValidCount={hccValidCount}

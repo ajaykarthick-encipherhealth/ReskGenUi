@@ -6,7 +6,7 @@ import neChatImage from "../../images/logo/newChatImage.png";
 import cogentChat from "../../images/logo/CAICell.png";
 import riskgen from "../../images/logo/riskgen-i.png";
 import { companyDeatils } from "../../utils/config";
-
+import riskGenImage from "../../../public/favicon4.png"
 export const getLogoImage = () => {
   switch (companyDeatils) {
     case "cogentai":
@@ -130,6 +130,8 @@ export const getFaviconUrl = () => {
       return "/favicon.png";
     case "c360":
       return "/favicon2.png";
+    case "riskgenai":
+      return "/favicon4.png";
     default:
       return "/favicon.png";
   }
@@ -153,6 +155,18 @@ export const getLogo = () => {
             src={neChatImage}
             alt="C360 Chat Logo"
             width={30}
+            style={{ aspectRatio: "2 / 1" }}
+          />
+        </div>
+      );
+    case "riskgenai":
+      return (
+        <div className="bg-white rounded-circle d-flex align-items-center justify-content-center p-1">
+          <Image
+            src={riskGenImage}
+            alt="Riskgen Chat Logo"
+            width={13}
+            height={13}
             style={{ aspectRatio: "2 / 1" }}
           />
         </div>

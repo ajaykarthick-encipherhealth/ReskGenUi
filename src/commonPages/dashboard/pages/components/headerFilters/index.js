@@ -295,7 +295,7 @@ const index = ({
       </div>
 
       <div className="d-flex">
-        {aliasName == "ADMIN" && 
+        {(aliasName == "ADMIN" || aliasName == "OWNER") &&   
         <div className="d-flex align-items-center">
           <Button
             className="btn-sm w-full text-ellipsis tableButton"

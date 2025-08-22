@@ -21,13 +21,21 @@ import { handleCopyToClipboard } from "../../../../commonFunctions";
 import { formatDateTime } from "../../../../../utils/reusable";
 import { useWindowWidth } from "../../../../../commonPages/dashboard/component/function";
 
-const Details = ({ fileResult, fromHcc, fileDetails }) => {
-  const size = useWindowWidth()
-  const getMastData = (value) => {
-    if (value) {
-      return value.split("").splice(0, 3).join("") + "xxxx";
-    }
-  };
+const Details = ({ fileResult, fromHcc, fileDetails, patientDetails }) => {
+  const size = useWindowWidth();
+const getMastData = (value) => {
+  if (!value) return "---";
+
+  if (typeof value === "number") {
+    return `${value.toString().slice(0, 0)}xx`;
+  }
+
+  if (typeof value === "string") {
+    return value.split("").splice(0, 3).join("") + "xxxx";
+  }
+
+  return value;
+};
 
   const calculateAge = (dob) => {
     if (dob) {
@@ -63,7 +71,7 @@ const Details = ({ fileResult, fromHcc, fileDetails }) => {
       title: "Age",
       value: calculateAge(fileResult?.dob) || "---",
       icon: faCalendarAlt,
-      isMask: false,
+      isMask: true,
       isCopyed: false,
       isSvg: false,
     },
@@ -109,18 +117,34 @@ const Details = ({ fileResult, fromHcc, fileDetails }) => {
       isCopyed: false,
       isSvg: true,
     },
+    {
+      title: "RAF Score",
+      value: patientDetails?.toFixed(3) || "0.0",
+      icon: SVGICON.rafScore,
+      isMask: false,
+      isCopyed: false,
+      isSvg: true,
+    },
   ];
-  
+
   return (
     <>
       <div
         id="detailsCardHcc"
         name="detailsCardHcc"
         className={styles.detailsCardHcc}
-      > 
-        <div className={size <= 1130 ? "row" : "d-flex gap-3 justify-content-between"}>
+      >
+        <div
+          className={
+            size <= 1130 ? "row" : "d-flex gap-2 justify-content-between"
+          }
+        >
           {getHeaderData.map((item) => (
-            <div className={size <= 1130 ? "col-2" : ""} id="patient-id" name="patient-id">
+            <div
+              className={size <= 1130 ? "col-2" : ""}
+              id="patient-id"
+              name="patient-id"
+            >
               {item.isSvg ? (
                 item.icon
               ) : (

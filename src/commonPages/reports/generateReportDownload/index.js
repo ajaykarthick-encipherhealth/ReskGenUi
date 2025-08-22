@@ -48,7 +48,7 @@ const GenerateReportModal = ({
             : activeTab === "MA Report"
             ? "MA"
             : activeTab === "Financial Report"
-            ? "FINANCIAL"
+            ? "FINANCIAL_SUMMARY"
             : "",
       },
     });
@@ -64,6 +64,9 @@ const GenerateReportModal = ({
       getResponePopup(response);
     }
     setLoading(false);
+  };
+  const dummyFunction = () => {
+    setIsModalOpen(false);
   };
   useEffect(() => {
     const defaultName = `Report${moment(new Date()).format(
@@ -105,7 +108,9 @@ const GenerateReportModal = ({
         >
           <RegularButton
             name="Generate"
-            onClick={GenerateReport}
+            onClick={
+              activeTab === "Financial Report" ? dummyFunction : GenerateReport
+            }
             bg="#263E50"
             color="#fff"
             disabled={!inputValue}

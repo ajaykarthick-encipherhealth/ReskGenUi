@@ -10,7 +10,7 @@ import { getPatientDetails } from "../../components/function/GetData";
 import { actions as detailsActions } from "../../../../../stores/patient/details";
 import ComboCard from "../../components/COMBO";
 import ModelIndex from "../../components/model/Index";
-import { getStorage } from "../../../../../utils/storages";
+import { getLocalStored, getStorage } from "../../../../../utils/storages";
 import ManuallyAdd from "../../components/manuallyAdd";
 import { onDragEnd } from "../../components/function/ReusableFunctions";
 import { DragDropContext, Droppable } from "react-beautiful-dnd";
@@ -29,7 +29,9 @@ const Combo = ({
   activeTab,
   educationalError,
   setEducationalError,
+  isDosSelected
 }) => {
+  const {patientId=""} = getLocalStored()
   const [isModalOpenCaptureSection, setIsModalOpenCaptureSection] =
     useState(false);
   const [comboDiseaseCodesList, setComboDiseaseCodesList] = useState([]);
@@ -562,7 +564,10 @@ const Combo = ({
           centered
           open={opens}
           onOk={() => setOpens(false)}
-          onCancel={() => setOpens(false)}
+          onCancel={() => {
+            setOpens(false);
+            getpatientDetailsData(patientId, "", isDosSelected);
+          }}
           footer={null}
         >
           <CamboTree
@@ -724,6 +729,7 @@ const enhancer = connect(
     patientDetailsResult: state?.patientDetails?.details?.patientResult,
     hccFileDetails: state?.patientDetails?.details?.hccFileResult,
     fileDosPageNumberList: state?.patientDetails?.details?.dosPageNumberResult,
+     isDosSelected: state.patientDetails.details?.getSelectedDosDetails,
   }),
   {
     getpatientDetailsData: detailsActions.patientDetailsAction,

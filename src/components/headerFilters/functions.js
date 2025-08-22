@@ -620,7 +620,7 @@ export const disablePastDate = (current) => {
 
 export const capitalizeFirstLetter = (string) => {
   const formattedString = string?.toLowerCase();
-  return formattedString?.charAt(0).toUpperCase() + formattedString.slice(1);
+  return formattedString?.charAt(0)?.toUpperCase() + formattedString?.slice(1);
 };
 
 export const handleTogglePasswordVisibility = (

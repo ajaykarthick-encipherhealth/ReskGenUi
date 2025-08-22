@@ -16,8 +16,11 @@ import GenateReportModal from "../../commonPages/reports/generateReportDownload"
 import { Button } from "antd";
 import { actions as reportActions } from "../../stores/tenantAdmin/report";
 import CardSkeleton from "../../components/skeleton/card";
-import styles from './style.module.css'
-import { generatedReportsPageId, generateViewPageId } from  '../../utils/pageIds'
+import styles from "./style.module.css";
+import {
+  generatedReportsPageId,
+  generateViewPageId,
+} from "../../utils/pageIds";
 
 const Reports = ({
   getProjectActiveTab,
@@ -330,6 +333,7 @@ const Reports = ({
   useEffect(() => {
     reportTabs();
   }, []);
+
   return (
     <div className="show">
       <div className="text-center" style={{ paddingTop: "80px" }}>
@@ -366,13 +370,16 @@ const Reports = ({
             </Nav>
           )}
           <div className="d-flex gap-2 ms-auto  mb-2">
-            {reportTab == "Generated Reports" ||
-              (activeTab !== "Financial Report" && (
+            {
+              reportTab == "Generated Reports" || (
                 <>
-                  <div className=" font2 d-flex align-items-end justify-content-end gap-2">
-                    <span className="text-danger "> *</span> You can choose only
-                    one TIN at a time to generate the report
-                  </div>
+                  {activeTab !== "Financial Report" && (
+                    <div className=" font2 d-flex align-items-end justify-content-end gap-2">
+                      <span className="text-danger "> *</span> You can choose
+                      only one TIN at a time to generate the report
+                    </div>
+                  )}
+
                   <div className="d-flex justify-content-center align-items-center   mt-4">
                     <Button
                       onClick={generateBtnClick}
@@ -384,13 +391,15 @@ const Reports = ({
                         marginLeft: "10px",
                       }}
                       className="btn btn-sm w-full text-ellipsis cursor-pointer"
-                      disabled={selectedRows?.length === 0}
+                      disabled={ activeTab !== "Financial Report" && selectedRows?.length === 0 || data?.response?.pageResponse?.content?.length == 0}
                     >
                       Generate Report
                     </Button>
                   </div>
                 </>
-              ))}
+              )
+              // ))
+            }
             <div
               id="table-btn"
               name="table-btn"

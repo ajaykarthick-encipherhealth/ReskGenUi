@@ -18,10 +18,10 @@ import { getPatientDetails } from "../../components/function/GetData";
 import { DragDropContext, Droppable } from "react-beautiful-dnd";
 import { onDragEnd } from "../../components/function/ReusableFunctions";
 import ManuallyAdd from "../../components/manuallyAdd";
-import { getStorage } from "../../../../../utils/storages";
+import { getLocalStored, getStorage } from "../../../../../utils/storages";
 import { getValidHccDetailsApi } from "../../../../../stores/patient/details/network";
 import CardSkeleton from "../../../../skeleton/card";
-import { isStatusDisabled } from '../../../../../utils/reusable'
+import { isStatusDisabled } from "../../../../../utils/reusable";
 import { useRouter } from "next/router";
 
 const File = ({
@@ -54,12 +54,13 @@ const File = ({
   isSpinnerLoading,
   patientIdDetailsData,
   activeTab,
- educationalError,
- setEducationalError,
- isFileFormShow,
- setIsFileFormShow
+  educationalError,
+  setEducationalError,
+  isFileFormShow,
+  setIsFileFormShow,
+  getPatientDetailsData
 }) => {
-  
+  const { patientId = "" } = getLocalStored();
   // const [isFileFormShow, setIsFileFormShow] = useState(false);
   const [confirmNotesModalValid, setConfirmNotesModalValid] = useState(false);
   const [selectDiseasesName, setSelectDiseasesName] = useState("");
@@ -96,7 +97,7 @@ const File = ({
   const [suggestedMeatForm, setSuggestedMeatForm] = useState(false);
   const [selectCardTitle, setSelectCardTitle] = useState("");
   const [potentialList, setPotentialList] = useState([]);
-  const router = useRouter()
+  const router = useRouter();
 
   useEffect(() => {
     var orgId = getStorage("orgId");
@@ -145,6 +146,7 @@ const File = ({
     // setFileLoading(false);
     setIsEditHccForm(false);
     setOpens(false);
+    getPatientDetailsData(patientId, "", isDosSelected);
   };
   const getValidHccDetails = async (value, code) => {
     var result = "";
@@ -241,7 +243,11 @@ const File = ({
       setShowList((prev) => [...prev, value]);
     }
   };
-   const isDisabled = isStatusDisabled(patientIdDetailsData, patientDetailsResult, router.pathname);
+  const isDisabled = isStatusDisabled(
+    patientIdDetailsData,
+    patientDetailsResult,
+    router.pathname
+  );
   return (
     <>
       {/* {fileLoading ? <LogoLoader /> : null} */}
@@ -915,6 +921,7 @@ const enhancer = connect(
     patientIdDetailsData: state?.patientDetails.details?.patientIdResult,
   }),
   {
+    getPatientDetailsData: detailsActions.patientDetailsAction,
     getRadiologyFileDetails: detailsActions.radiologyFileAction,
     getLabFileDetails: detailsActions.labFileAction,
   }

@@ -2,11 +2,11 @@ import { Divider, Image, Popover, Spin } from "antd";
 import React from "react";
 import styles from "../../../styles/file-managemnt.module.css";
 import { LoadingOutlined, CloseCircleOutlined } from "@ant-design/icons";
-import { renderUserPrfoile } from "../../../components/headerFilters/functions";
+import { capitalizeFirstLetter, renderUserPrfoile } from "../../../components/headerFilters/functions";
 import { connect } from "react-redux";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPen } from "@fortawesome/free-solid-svg-icons";
-import { getStorage } from "../../../utils/storages";
+import { getLocalStored, getStorage } from "../../../utils/storages";
 
 const Profile = ({
   openContent,
@@ -22,9 +22,14 @@ const Profile = ({
   userEmail,
   allRolesData,
 }) => {
+    const { name = "" } = getLocalStored();
   return (
     <>
-      <div id="profileTab" name="profileTab" className="header-media ant-badge cursor-pointer d-flex me-1">
+      <div
+        id="profileTab"
+        name="profileTab"
+        className="header-media ant-badge cursor-pointer d-flex me-1"
+      >
         <Popover
           trigger="click"
           open={openContent}
@@ -92,10 +97,7 @@ const Profile = ({
                       fontSize: "16px",
                     }}
                   >
-                    {userEmail &&
-                      userEmail
-                        .split("@")[0]
-                        .replace(/^./, (c) => c.toUpperCase())}
+                    {`${capitalizeFirstLetter(allRolesData?.firstName)} ${capitalizeFirstLetter(allRolesData?.lastName)}`.trim()}
                   </span>
 
                   <span
@@ -130,7 +132,7 @@ const Profile = ({
             <div className="header-info2 d-flex align-items-center">
               <div
                 className="header-media  cursor-pointer"
-                style={{ marginRight:"10px" }}
+                style={{ marginRight: "10px" }}
                 onClick={() => setOpenContent(true)}
               >
                 {profileUploadedTime ? (

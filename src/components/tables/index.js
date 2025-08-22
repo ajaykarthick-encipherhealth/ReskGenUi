@@ -845,7 +845,7 @@ const TableRow = ({
                 }}
               >
                 <Popover
-                  content={content ? content(item): ""}
+                  content={content && content(item)}
                   title={
                     <div className="d-flex justify-content-between align-items-center">
                       <span>Change Role</span>
