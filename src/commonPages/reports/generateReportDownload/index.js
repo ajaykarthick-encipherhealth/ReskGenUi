@@ -24,13 +24,12 @@ const GenerateReportModal = ({
   const clientId = getStorage("client");
   const [loading, setLoading] = useState(false);
   const [inputValue, setInputValue] = useState("");
-
   const handleInputChange = (e) => {
     setInputValue(e.target.value);
   };
   const GenerateReport = async () => {
     setLoading(true);
-    const defaultName = `Report${moment(new Date()).format(
+    const defaultName = `${activeTab}-${moment(new Date()).format(
       "MM-DD-YYYY-hh:mm:ss"
     )}`;
     const userId = getStorage("userId");
@@ -69,11 +68,11 @@ const GenerateReportModal = ({
     setIsModalOpen(false);
   };
   useEffect(() => {
-    const defaultName = `Report${moment(new Date()).format(
+    const defaultName = `${activeTab}-${moment(new Date()).format(
       "MM-DD-YYYY-hh:mm:ss"
     )}`;
     setInputValue(defaultName);
-  }, []);
+  }, [activeTab]);
 
   return (
     <Modal
