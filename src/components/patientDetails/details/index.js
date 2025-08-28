@@ -474,13 +474,13 @@ const Details = ({
           );
           patientDetailsLoad(false);
         }
-        const patientId = getStorage("patientId");
-        const fileid = await getPatientFileId(
-          selectPatientId?.patirntId ? selectPatientId?.patirntId : patientId
-        );
-        setStorage("fileId", fileid?.response?.fileId);
-        getPatientHccFile(fileid?.response?.fileId);
-        storePrePatientFileId(fileid?.response?.fileId);
+        // const patientId = getStorage("patientId");
+        // const fileid = await getPatientFileId(
+        //   selectPatientId?.patirntId ? selectPatientId?.patirntId : patientId
+        // );
+        // setStorage("fileId", fileid?.response?.fileId);
+        // getPatientHccFile(fileid?.response?.fileId);
+        // storePrePatientFileId(fileid?.response?.fileId);
 
         // getPatientIdData(
         //   selectPatientId?.patirntId ? selectPatientId?.patirntId : patientId,
