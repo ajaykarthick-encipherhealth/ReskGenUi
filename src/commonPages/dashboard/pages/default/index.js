@@ -1072,7 +1072,7 @@ function Default({
       for (const item of apiKeys) {
         const actionKey = `${item.key}Action`;
         if (typeof actions[actionKey] === "function") {
-          await dispatch(actions[actionKey](params));
+           dispatch(actions[actionKey](params));
         } else {
           console.warn(`Action not found for key: ${actionKey}`);
         }

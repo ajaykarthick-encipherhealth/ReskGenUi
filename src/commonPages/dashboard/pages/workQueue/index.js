@@ -1192,7 +1192,7 @@ function WorkQueue({
       for (const item of apiKeysNew) {
         const actionKey = `${item.key}Action`;
         if (typeof actions[actionKey] === "function") {
-          await dispatch(actions[actionKey](item.params));
+           dispatch(actions[actionKey](item.params));
         } else {
           console.warn(`Action not found for key: ${actionKey}`);
         }
