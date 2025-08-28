@@ -74,8 +74,9 @@ const CamboTree = ({
   patientDetailsLoad,
   getPatientIdData,
   patientIdDetailsData,
+  dosDeatilsAction,
 }) => {
-  const {patinetId=""} = getLocalStored()
+  const { patientId = "" } = getLocalStored();
   const [trees, setTrees] = useState(Tree);
   const [isLoading, setLoading] = useState(tree);
   const [zoom, setZoom] = useState({ width: 350, height: 185 });
@@ -150,8 +151,9 @@ const CamboTree = ({
       handleCloseModal,
       patientDetailsLoad,
       getPatientIdData,
+      dosDeatilsAction,
     });
-    getpatientDetailsData(patinetId, "", isDosSelected)
+    getpatientDetailsData(patientId, "", isDosSelected);
   };
   const onchangeCombo = (data, code, diseaseSource) => {
     var title =
@@ -527,6 +529,7 @@ const enhancer = connect(
     getLabDetails: detailsActions.labDetailsAction,
     patientDetailsLoad: detailsActions.patientDetailsLoad,
     getPatientIdData: detailsActions.patientIdDetailsAction,
+    dosDeatilsAction: detailsActions.dosDeatilsAction,
   }
 );
 export default enhancer(CamboTree);
