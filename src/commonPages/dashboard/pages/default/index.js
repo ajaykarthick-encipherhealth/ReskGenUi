@@ -193,7 +193,7 @@ const getCharts = ({
             {
               type: "stat",
               size: "col-5",
-              mainTitle: "HCC Raf Contribution",
+              mainTitle: "HCC RAF",
               title: "HCC Raf",
               value: toFixedNum(rafHcc?.overallRaf, 3) || 0,
               bgColor: patientCount,
@@ -460,14 +460,14 @@ const getCharts = ({
               size: "col-4",
               categories: dates,
               customHeader: {
-                label: "HCC RAF Contribution",
+                label: "HCC RAF",
                 value: toFixedNum(rafHcc?.overallRaf, 3) || 0,
                 header: "RAF Score",
               },
               // chartBackground: "#EFECFE",
               series: [
                 {
-                  name: "HCC RAF Contribution",
+                  name: "HCC RAF",
                   data: rafHcc?.codesAndRafSummaryDTOList || [],
                   color: getColorValue("1"),
                   area: chartType === "area",
@@ -553,13 +553,13 @@ const getCharts = ({
               categories: dates,
               // chartBackground: " #E2F1F3",
               customHeader: {
-                label: "Care Gap RAF Contribution",
+                label: "Care Gap RAF",
                 value: toFixedNum(rafCareGap?.overallRaf, 3),
                 header: "RAF Score",
               },
               series: [
                 {
-                  name: "Care Gap RAF Contribution",
+                  name: "Care Gap RAF",
                   data: rafCareGap?.codesAndRafSummaryDTOList || [],
                   color: getColorValue("3"),
                   area: chartType === "area",
@@ -645,14 +645,14 @@ const getCharts = ({
               size: "col-4",
               categories: dates,
               customHeader: {
-                label: "Potential RAF Contribution",
+                label: "Potential RAF",
                 value: toFixedNum(rafPotential?.overallRaf, 3),
                 header: "RAF Score",
               },
               // chartBackground: "#EFECFE",
               series: [
                 {
-                  name: "Potential RAF Contribution",
+                  name: "Potential RAF",
                   data: rafPotential?.codesAndRafSummaryDTOList || [],
                   color: getColorValue("4"),
                   area: chartType === "area",

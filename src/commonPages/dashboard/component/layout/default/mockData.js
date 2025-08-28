@@ -89,7 +89,7 @@ export const rafAndRevenue = ({ chartType }) => [
   {
     type: "stat",
     size: "col-5",
-    mainTitle: "HCC Raf Contribution",
+    mainTitle: "HCC RAF",
     title: "HCC Raf",
     value: 242.6,
     bgColor: patientCount,
@@ -301,14 +301,14 @@ export const hccCodes = ({ chartType }) => [
       "Mar 16",
     ],
     customHeader: {
-      label: "HCC RAF Contribution",
+      label: "HCC RAF",
       value: "24.091",
       header: "RAF Score",
     },
     // chartBackground: "#EFECFE",
     series: [
       {
-        name: "HCC RAF Contribution",
+        name: "HCC RAF",
         data: [0, 0, 0.2, 0, 0.1, 0],
         color: getColorValue("1"),
         area: chartType === "area",
@@ -385,13 +385,13 @@ export const careGapCodes = ({ chartType }) => [
 
     // chartBackground: " #E2F1F3",
     customHeader: {
-      label: "Care Gap RAF Contribution",
+      label: "Care Gap RAF",
       value: "34.985",
       header: "RAF Score",
     },
     series: [
       {
-        name: "Care Gap RAF Contribution",
+        name: "Care Gap RAF",
         data: [0, 0, 0.2, 0, 0.1, 0],
         color: getColorValue("3"),
         area: chartType === "area",
@@ -466,14 +466,14 @@ export const potientialCodes = ({ chartType }) => [
       "Mar 16",
     ],
     customHeader: {
-      label: "Potential RAF Contribution",
+      label: "Potential RAF",
       value: "18.230",
       header: "RAF Score",
     },
     // chartBackground: "#EFECFE",
     series: [
       {
-        name: "Potiential RAF Contribution",
+        name: "Potiential RAF",
         data: [0, 0, 0.2, 0, 0.1, 0],
         color: getColorValue("4"),
         area: chartType === "area",

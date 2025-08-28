@@ -36,7 +36,8 @@ const Tab = ({ activeTab, handleTabs, tabs, id, padding }) => {
                 className={activeTab === tab ? styles.active : ""}
                 onClick={() => handleTabs(tab)}
               >
-                {tab}
+                {/* This is only for demo purposes, as told by Logesh. */}
+                {tab == "ReAllocation" ? "Re-Allocation" : tab } 
               </button>
             </label>
           ))}
