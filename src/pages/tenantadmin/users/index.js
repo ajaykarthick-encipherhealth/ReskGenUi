@@ -34,6 +34,7 @@ const Users = ({
   allRoles,
   getRoles,
   id,
+  editUsersLoader,
 }) => {
   const [activeFilters, setActiveFilters] = useState([]);
   const [switchStates, setSwitchStates] = useState({});
@@ -103,12 +104,13 @@ const Users = ({
       sort: sort,
       selectedDateRanges,
       searchText: searchText,
-      pageId:assignUserPageId,
+      pageId: assignUserPageId,
       cilentBased: true,
       qaLead: true,
       projectLead: true,
     });
   };
+
 
   const handleSubmit = async (data) => {
     setIsSubmitting(true);
@@ -122,8 +124,8 @@ const Users = ({
       const response = await tableDynamicColumn({ payload });
       if (response?.status === "SUCCESS") {
         setIsFilter(true);
-        const filterCheck = tableCustomFilterClearCheck(
-         { searchText,
+        const filterCheck = tableCustomFilterClearCheck({
+          searchText,
           selectedDateRanges,
           selectedDates,
           selectedOption,
@@ -131,8 +133,8 @@ const Users = ({
           setSelectedDateRanges,
           setSelectedDates,
           setSelectedOption,
-          data}
-        );
+          data,
+        });
         if (filterCheck) {
           getUsersAPi();
         }
@@ -216,59 +218,54 @@ const Users = ({
     setSelectedRole(selectedRoleList);
     setVisiblePopoverKey(false);
   };
-const content = (item) => {
-  const FIXED_ROLE = item.currentUser && aliasName ? aliasName : null;
+  const content = (item) => {
+    const FIXED_ROLE = item.currentUser && aliasName ? aliasName : null;
 
-  const updatedRoles = roles.map((role) => ({
-    ...role,
-    disabled: role.value === FIXED_ROLE, 
-  }));
+    const updatedRoles = roles.map((role) => ({
+      ...role,
+      disabled: role.value === FIXED_ROLE,
+    }));
 
-  const handleRoleChange = (value) => {
-    if (FIXED_ROLE && !value.includes(FIXED_ROLE)) {
-      value = [FIXED_ROLE, ...value];
-    }
-    setSelectedRole(value);
+    const handleRoleChange = (value) => {
+      if (FIXED_ROLE && !value.includes(FIXED_ROLE)) {
+        value = [FIXED_ROLE, ...value];
+      }
+      setSelectedRole(value);
+    };
+
+    return (
+      <>
+        <Select
+          options={updatedRoles}
+          placeholder="Select the role"
+          style={{ width: 250 }}
+          dropdownStyle={{ width: 250 }}
+          value={selectedRole}
+          mode="multiple"
+          onChange={handleRoleChange}
+          data-testid={createIdGens("userEdit")}
+        />
+
+        <div className="d-flex align-items-center justify-content-center mt-3 gap-2">
+          <Button
+            onClick={handleRoleSubmit}
+            className="btn tableButton btn-sm w-full"
+            data-testid={createIdGens("submitBtn")}
+            disabled={editUsersLoader}
+          >
+            {editUsersLoader ? "Loading..." : "Submit"}
+          </Button>
+          <Button
+            onClick={handleCancel}
+            className="btn tableButton btn-sm w-full"
+            data-testid={createIdGens("cancelBtn")}
+          >
+            Cancel
+          </Button>
+        </div>
+      </>
+    );
   };
-
-  return (
-    <>
-      <Select
-        options={updatedRoles}
-        placeholder="Select the role"
-        style={{ width: 250 }}
-        dropdownStyle={{ width: 250 }}
-        value={selectedRole}
-        mode="multiple"
-        onChange={handleRoleChange}
-        data-testid={id ? createIdGens("userEdit") : createIdGens("userEdit")}
-      />
-
-      <div className="d-flex align-items-center justify-content-center mt-3 gap-2">
-        <Button
-          onClick={handleRoleSubmit}
-          className="btn tableButton btn-sm w-full"
-          data-testid={
-            id ? createIdGens("submitBtn") : createIdGens("submitBtn")
-          }
-        >
-          Submit
-        </Button>
-        <Button
-          onClick={handleCancel}
-          className="btn tableButton btn-sm w-full"
-          data-testid={
-            id ? createIdGens("cancelBtn") : createIdGens("cancelBtn")
-          }
-        >
-          Cancel
-        </Button>
-      </div>
-    </>
-  );
-};
-
-
 
   const handleAction = (item) => {
     setSelectedItem(item?.userName);
@@ -426,6 +423,7 @@ const enhancer = connect(
     tableStatus: state?.tableView?.TableStatusView?.data?.response,
     pageLoad: state?.tenantAdmin?.tin?.getPageRendering,
     allRoles: state?.tenantAdmin?.users?.getUsersRoles?.data?.response,
+    editUsersLoader: state?.tenantAdmin?.users?.editUsersLoader,
   }),
   {
     getTableData: tableAction.tableViewAction,

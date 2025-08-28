@@ -44,15 +44,16 @@ const getReportLoading = (type) =>
 const tenantAminUsersReducer = combineReducers({
   allOrganization: createReducer(getAllOrganizationAction),
   allUsers: createReducer(getAllUsersAction),
-  getAllUsersData:createReducer(getUsers),
-  assignedUsers:createReducer(usersAssigned),
-  getUsersRoles:createReducer(usersAllRoles),
-  editUsers:createReducer(userEditRoles),
+  getAllUsersData: createReducer(getUsers),
+  assignedUsers: createReducer(usersAssigned),
+  getUsersRoles: createReducer(usersAllRoles),
+  editUsers: createReducer(userEditRoles),
 
   // loaders
   allOrganizationLoader: getReportLoading(getAllOrganizationAction),
   allUsersLoading: getReportLoading(getAllUsersAction),
-  usersLoader:getReportLoading(getUsers)
+  usersLoader: getReportLoading(getUsers),
+  editUsersLoader: getReportLoading(userEditRoles),
 });
 
 export default tenantAminUsersReducer;

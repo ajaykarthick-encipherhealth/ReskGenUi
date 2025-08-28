@@ -1750,7 +1750,7 @@ const ManuallyAdd = ({
                 method={"submit"}
                 // onClick={handleMeatSubmit}
                 disabled={
-                  isMeat
+                  isBtnLoading || isMeat
                     ? !(
                         isMeat &&
                         (listOfSectionA.length > 0 ||
