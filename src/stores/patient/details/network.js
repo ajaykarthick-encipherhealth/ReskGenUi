@@ -1,6 +1,9 @@
 import { requestPortal, requestPortalFiles } from "../../../utils/network";
-import { getLocalStored, getStorage, setStorage } from "../../../utils/storages";
-
+import {
+  getLocalStored,
+  getStorage,
+  setStorage,
+} from "../../../utils/storages";
 
 export async function patientDetailsBasedOnACtionType() {
   const patientId = getStorage("patientId");
@@ -65,12 +68,12 @@ export async function patientDetails(
     method: "GET",
   };
 
-  let url = `dbservice/status/patient/compute/get?patientId=${patientId}&dateOfService=${dos ? dos : ""}&roleId=${userRoleId}`;
+  let url = `dbservice/status/patient/compute/get?patientId=${patientId}&dateOfService=${
+    dos ? dos : ""
+  }&roleId=${userRoleId}`;
   if (masterAudit) {
     url += `&masterAudit=${masterAudit}`;
   }
-
-
 
   try {
     const data = await requestPortal(url, options);
@@ -82,10 +85,10 @@ export async function patientDetails(
   }
 }
 
-export async function patientIdDetails(patientId, navigate,dataEmpty = false) {
+export async function patientIdDetails(patientId, navigate, dataEmpty = false) {
   const orgId = getStorage("orgId");
   const userRoleId = getStorage("roleId");
- if(dataEmpty == true){
+  if (dataEmpty == true) {
     return null;
   }
   const isTinDetailsPage = navigate
@@ -188,16 +191,14 @@ export async function patientHccFile(fileId) {
   // );
   return result;
 }
-export async function findByPatientId() {
+export async function findByPatientId({ patientId = "", year = "" }) {
   const options = {
     method: "GET",
   };
-    const { patientId = "" } = getLocalStored();
+  // const { patientId = "" } = getLocalStored();
 
   const result = await requestPortal(
-    `dbservice/fileDetail/findbypatientid?patientId=${
-      patientId ? patientId : ""
-    }`,
+    `dbservice/fileDetail/find-fileid-by-patientid?patientId=${patientId}&year=${year?.toString()?.trim()}`,
     options
   );
   // setStorage("fileId", result?.response?.azureBlobPath || null);
@@ -500,8 +501,12 @@ export async function manuallyAddDosAndProvider(data) {
   return res;
 }
 
-export async function manuallyAddDosAndProviderList({ trash, year ,dataEmpty = false}) {
-  if(dataEmpty == true){
+export async function manuallyAddDosAndProviderList({
+  trash,
+  year,
+  dataEmpty = false,
+}) {
+  if (dataEmpty == true) {
     return null;
   }
   const patientId = getStorage("patientId");
@@ -891,8 +896,6 @@ export async function queryApproval(obj) {
   return data;
 }
 
-
-
 export async function raiseQuery(obj) {
   const options = {
     method: "POST",
@@ -927,7 +930,6 @@ export async function setMarkAsCompleted(obj) {
   );
   return data;
 }
-
 
 export async function getAllRoles() {
   const { aliasName = null, patientId = null } = getLocalStored();

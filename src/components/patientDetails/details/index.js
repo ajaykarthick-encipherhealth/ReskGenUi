@@ -35,9 +35,9 @@ import {
   Checkbox,
 } from "antd";
 import { IMAGES, SVGICON } from "../../../jsx/constant/theme";
-import hccImg from "../../../images/visitdata/hcc1.png"
-import nonHccImg from "../../../images/visitdata/non-hcc.png"
-import rxImg from "../../../images/visitdata/rx.png"
+import hccImg from "../../../images/visitdata/hcc1.png";
+import nonHccImg from "../../../images/visitdata/non-hcc.png";
+import rxImg from "../../../images/visitdata/rx.png";
 import { Button, Offcanvas } from "react-bootstrap";
 import Image from "next/image";
 import { useRouter } from "next/router";
@@ -474,13 +474,18 @@ const Details = ({
           );
           patientDetailsLoad(false);
         }
-        // const patientId = getStorage("patientId");
-        // const fileid = await getPatientFileId(
-        //   selectPatientId?.patirntId ? selectPatientId?.patirntId : patientId
-        // );
-        // setStorage("fileId", fileid?.response?.fileId);
-        // getPatientHccFile(fileid?.response?.fileId);
-        // storePrePatientFileId(fileid?.response?.fileId);
+        const patientId = getStorage("patientId");
+        const fileid = await getPatientFileId({
+          patientId: selectPatientId?.patirntId
+            ? selectPatientId?.patirntId
+            : patientId,
+          year: dosYearArr[0]?.value ? dosYearArr[0]?.value : result,
+        });
+        if (fileid?.response) {
+          setStorage("fileId", fileid?.response);
+          getPatientHccFile(fileid?.response);
+          storePrePatientFileId(fileid?.response);
+        }
 
         // getPatientIdData(
         //   selectPatientId?.patirntId ? selectPatientId?.patirntId : patientId,
@@ -621,10 +626,15 @@ const Details = ({
         navigate.pathname
       );
       patientDetailsLoad(false);
-      const fileid = await getPatientFileId(localPatientId);
-      setStorage("fileId", fileid?.response?.fileId);
-      getPatientHccFile(fileid?.response?.fileId);
-      storePrePatientFileId(fileid?.response?.fileId);
+      const fileid = await getPatientFileId({
+        patientId: localPatientId,
+        year: e,
+      });
+      if (fileid?.response) {
+        setStorage("fileId", fileid?.response);
+        getPatientHccFile(fileid?.response);
+        storePrePatientFileId(fileid?.response);
+      }
     }
     getFlagCharts({ dos: e });
     // getAllRevertDetails({ dos: e });
@@ -840,10 +850,17 @@ const Details = ({
         getpatientDetailsData("", "", null, "", "", true, "");
         // No dateOfService available — skip calling getpatientDetailsData
         setIsSpinnerLoading(false);
-        const fileid = await getPatientFileId(userId);
-        setStorage("fileId", fileid?.response?.fileId);
-        getPatientHccFile(fileid?.response?.fileId);
-        storePrePatientFileId(fileid?.response?.fileId);
+        const fileid = await getPatientFileId({
+          patientId: userId,
+          year: dosYearDefalutSelect?.value
+            ? dosYearDefalutSelect?.value
+            : dosYearDefalutSelect,
+        });
+        if (fileid?.response) {
+          setStorage("fileId", fileid?.response);
+          getPatientHccFile(fileid?.response);
+          storePrePatientFileId(fileid?.response);
+        }
       }
 
       patientDetailsLoad(false);
@@ -863,14 +880,8 @@ const Details = ({
 
   const backToPatientData = () => {
     const backRoute = getStorage("routeBackTo");
-
     getRoutedData(routedData);
-
     navigate.push(backRoute);
-
-    // navigate.back(
-
-    // )
     getpatientDetailsData("", "", "", "", "", true, navigate.pathname);
     getPatientDosList("", "", true, navigate.pathname);
     getpatientDetailsData("", "", "", "", "", true);

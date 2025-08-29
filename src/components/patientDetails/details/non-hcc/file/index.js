@@ -88,9 +88,9 @@ const File = ({
   }, [patientDetailsResult]);
 
   useEffect(() => {
-    if (patientDetailsResult?.data?.response?.fileDetailDTO?.azureBlobPath) {
+    if (hccFileDetails?.data?.response) {
       setSelectFileURL(
-        patientDetailsResult?.data?.response?.fileDetailDTO?.azureBlobPath
+        hccFileDetails?.data?.response
       );
     }
   }, []);
