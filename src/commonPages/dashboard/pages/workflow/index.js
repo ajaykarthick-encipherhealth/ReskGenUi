@@ -903,6 +903,7 @@ const getCharts = ({
       break;
   }
 };
+
 const Workflow = ({
   getSelectedWidgets = [],
   getSelectedWidgetsLoader,
@@ -1001,7 +1002,7 @@ const Workflow = ({
       for (const { key, params } of independentApiKeys) {
         const actionKey = `${key}Action`;
         if (typeof actions[actionKey] === "function") {
-          await dispatch(actions[actionKey](params));
+           dispatch(actions[actionKey](params));
         } else {
           console.warn(`Action not found for key: ${actionKey}`);
         }
@@ -1049,7 +1050,7 @@ const Workflow = ({
         const actionKey = `${key}Action`;
         const params = { ...commonParams, roleId };
         if (typeof actions[actionKey] === "function") {
-          return dispatch(actions[actionKey](params));
+           dispatch(actions[actionKey](params));
         } else {
           console.warn(`Action not found for key: ${actionKey}`);
           return Promise.resolve();
