@@ -163,25 +163,25 @@ export const getMeatFound = (code, data, value) => {
     switch (value) {
       case "M":
         if (result[0]?.monitor) {
-          backColor = "#191970";
+          backColor = "#15b315";
         }
         meatTitle = "Monitor";
         break;
       case "E":
         if (result[0]?.evaluate) {
-          backColor = "#191970";
+          backColor = "#15b315";
         }
         meatTitle = "Evaluate";
         break;
       case "A":
         if (result[0]?.assessment) {
-          backColor = "#191970";
+          backColor = "#15b315";
         }
         meatTitle = "Assessment";
         break;
       case "T":
         if (result[0]?.treatment) {
-          backColor = "#191970";
+          backColor = "#15b315";
         }
         meatTitle = "Treatment";
         break;

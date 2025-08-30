@@ -1064,25 +1064,25 @@ export const getMeatFound = (code, data, value) => {
     switch (value) {
       case "M":
         if (result[0]?.monitorAspect) {
-          backColor = "#191970";
+          backColor = "#15b315";
         }
         meatTitle = "Monitor";
         break;
       case "E":
         if (result[0]?.evaluateAspect) {
-          backColor = "#191970";
+          backColor = "#15b315";
         }
         meatTitle = "Evaluate";
         break;
       case "A":
         if (result[0]?.assessmentAspect) {
-          backColor = "#191970";
+          backColor = "#15b315";
         }
         meatTitle = "Assessment";
         break;
       case "T":
         if (result[0]?.treatmentAspect) {
-          backColor = "#191970";
+          backColor = "#15b315";
         }
         meatTitle = "Treatment";
         break;
