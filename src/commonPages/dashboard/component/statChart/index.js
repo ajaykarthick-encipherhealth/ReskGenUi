@@ -68,7 +68,7 @@ const StatCard = ({
       )} */}
 
       <div style={{ textAlign: textAlign, paddingTop: paddingTop }}>
-        <div style={{ fontWeight: "600", fontSize: "16px", color: textColor }}>{title}</div>
+        <div style={{ fontWeight: "600", fontSize: "14px", color: textColor }}>{title}</div>
         <div
           style={{
             fontSize: fontSize || "36px",

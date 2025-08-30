@@ -596,38 +596,38 @@ export const topOIGCodesMock = [
 
 export const tinTableMock = [
   {
-    tinNumber: "234567629",
-    tinName: "Olde Towne Urgent Care LLC",
+    tinNumber: "1234",
+    tinName: "TIN 1",
     progressPercentage: 97,
   },
   {
-    tinNumber: "234567627",
-    tinName: "MOHAMAD ALABRASH",
+    tinNumber: "5678",
+    tinName: "TIN 2",
     progressPercentage: 80,
   },
   {
-    tinNumber: "234567626",
-    tinName: "OMNI HEALTH MANAGEMENT INC",
+    tinNumber: "9876",
+    tinName: "TIN 3",
     progressPercentage: 70,
   },
   {
-    tinNumber: "234567623",
-    tinName: "My Med Clinic PA",
+    tinNumber: "5432",
+    tinName: "TIN 4",
     progressPercentage: 60,
   },
   {
-    tinNumber: "234567699",
-    tinName: "ALLEGANY MEDICAL",
+    tinNumber: "9876",
+    tinName: "TIN 5",
     progressPercentage: 55,
   },
   {
-    tinNumber: "234567659",
-    tinName: "FAMILY CARE ASSOCIATES",
+    tinNumber: "4321",
+    tinName: "TIN 6",
     progressPercentage: 50,
   },
   {
-    tinNumber: "234567629",
-    tinName: "Aiping Sui MD & Wei Xu MD",
+    tinNumber: "8765",
+    tinName: "TIN 7",
     progressPercentage: 5,
   },
 ];
