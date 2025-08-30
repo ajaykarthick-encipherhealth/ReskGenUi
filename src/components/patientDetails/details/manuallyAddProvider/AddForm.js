@@ -271,6 +271,11 @@ const AddForm = ({
             faceToFace: true,
             visitType: "OFFICE",
           }}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") {
+              e.preventDefault(); 
+            }
+          }}
         >
           <Form.Item
             label={<label className={style.dateField}>Date Of Service</label>}
@@ -465,7 +470,7 @@ const AddForm = ({
                 label="NPI Number"
                 name="providerNpi"
                 rules={[
-                  { required: true, message: "Please Enter NPI Number" },
+                  // { required: true, message: "Please Enter NPI Number" }, // as per ranjith requirement
                   { pattern: /^\d+$/, message: "Only numbers are allowed" },
                 ]}
               >
@@ -522,7 +527,13 @@ const AddForm = ({
                   notFoundContent={
                     getProviderNameLoad ? <Spin size="small" /> : "No data"
                   }
-                  options={!getProviderNameLoad && opt}
+                  options={
+                    !getProviderNameLoad &&
+                    opt.filter(
+                      (item, index, self) =>
+                        index === self.findIndex((t) => t.value === item.value)
+                    )
+                  }
                 />
               </Form.Item>
               <Form.Item
