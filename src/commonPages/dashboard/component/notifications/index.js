@@ -11,6 +11,7 @@ import spinSTYles from "../../../../styles/auth.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBell } from "@fortawesome/free-solid-svg-icons";
 import { truncateString } from "../../../../components/patientDetails/details/components/function/ReusableFunctions";
+import { capitalizeFirstLetter } from "../../../../components/headerFilters/functions";
 
 export const NotifiAvatar = () => {
   return (
@@ -70,9 +71,14 @@ const Notifications = ({
             <div className={styles.time}>
               {moment(info?.createdDate).format("MM-DD-YYYY")} &nbsp;
               {moment(info?.createdDate).format("hh:mm A")} &nbsp;
-              {`${info?.fromUserDetails?.firstName ?? ""} ${
+              {/* {`${info?.fromUserDetails?.firstName ?? ""} ${
                 info?.fromUserDetails?.lastName ?? ""
-              }`}
+              }`} */}
+              {`(${capitalizeFirstLetter(
+                info?.fromUserDetails?.firstName
+              )} ${capitalizeFirstLetter(
+                info?.fromUserDetails?.lastName
+              )})`.trim()}
             </div>
           </div>
         </div>
@@ -105,11 +111,11 @@ const Notifications = ({
       />
 
       <div className={styles.card4}>
-          {notificationLoading && !useDummyData ? (
-            NotifiAvatar()
-          ) : (
-            <div className={styles.container}>{notificationData}</div>
-          )}
+        {notificationLoading && !useDummyData ? (
+          NotifiAvatar()
+        ) : (
+          <div className={styles.container}>{notificationData}</div>
+        )}
       </div>
       <Modal
         title="Notifications"
@@ -144,9 +150,14 @@ const Notifications = ({
                   <div className={styles.time}>
                     {moment(info?.createdDate).format("MM-DD-YYYY")} &nbsp;
                     {moment(info?.createdDate).format("hh:mm A")} &nbsp;
-                    {`${info?.fromUserDetails?.firstName ?? ""} (${
-                      info?.fromUserDetails?.role ?? ""
-                    })`}
+                    {/* {`${info?.fromUserDetails?.firstName ?? ""} ${
+                      info?.fromUserDetails?.lastName ?? ""
+                    }`} */}
+                    {`(${capitalizeFirstLetter(
+                      info?.fromUserDetails?.firstName
+                    )} ${capitalizeFirstLetter(
+                      info?.fromUserDetails?.lastName
+                    )})`.trim()}
                   </div>
                 </div>
               </div>
