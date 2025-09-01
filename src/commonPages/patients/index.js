@@ -711,8 +711,7 @@ const Patient = ({
   };
   useEffect(() => {
     if (webSocketData && webSocketData?.webSocketType == "PATIENT_COMPUTE") {
-      const patientData =
-        allPatientList?.data?.response?.patientDtoList?.content;
+      const patientData = data?.response?.pageResponse?.content;
       let foundItem = patientData?.find(
         (x) => x.patientId == webSocketData.patientId
       );
@@ -724,10 +723,9 @@ const Patient = ({
       }
       setStatusUpdateWebSocket(patientData);
     } else {
-      setStatusUpdateWebSocket(
-        allPatientList?.data?.response?.patientDtoList?.content
-      );
+      setStatusUpdateWebSocket(data?.response?.pageResponse?.content);
     }
+
   }, [webSocketData, allPatientList]);
 
   useEffect(() => {
