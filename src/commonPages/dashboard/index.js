@@ -231,7 +231,7 @@ const DynamicDashboard = ({
         handleGetWidgets();
         getResponePopup({
           status: "SUCCESS",
-          message: "Widget Saved Successfully",
+          message: "Widget Changed Successfully",
         });
       } else {
         getResponePopup(res);

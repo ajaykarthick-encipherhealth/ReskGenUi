@@ -164,6 +164,7 @@ const getCharts = ({
   usersStatusCountDataLoading,
   accuracyData,
   accuracyDataLoading,
+  selectedValue,
   dates,
 }) => {
   switch (type) {
@@ -192,7 +193,7 @@ const getCharts = ({
           handleOk={handleOk}
           handleCancel={handleCancel}
           xAxisInterval={8}
-          xAxisRotated ={true}
+          xAxisRotated={true}
         />
       );
     case "WorkFlowFiles":
@@ -399,7 +400,7 @@ const getCharts = ({
           height={coder1Height}
           showLegend={true}
           showLegendBarLine={false}
-          xAxisRotated ={true}
+          xAxisRotated={true}
           total={getTotalChart(coder1Series)}
         />
       );
@@ -458,7 +459,7 @@ const getCharts = ({
           height={coder2Height}
           showLegend={true}
           showLegendBarLine={false}
-          xAxisRotated ={true}
+          xAxisRotated={true}
           total={getTotalChart(coder2Series)}
         />
       );
@@ -516,7 +517,7 @@ const getCharts = ({
           height={QAHeight}
           showLegend={true}
           showLegendBarLine={false}
-          xAxisRotated ={true}
+          xAxisRotated={true}
           total={getTotalChart(QASeries)}
         />
       );
@@ -574,7 +575,7 @@ const getCharts = ({
           height={PLHeight}
           showLegend={true}
           showLegendBarLine={false}
-          xAxisRotated ={true}
+          xAxisRotated={true}
           total={getTotalChart(PLSeries)}
         />
       );
@@ -633,7 +634,7 @@ const getCharts = ({
           height={QALeadHeight}
           showLegend={true}
           showLegendBarLine={false}
-          xAxisRotated ={true}
+          xAxisRotated={true}
           total={getTotalChart(QALeadSeries)}
         />
       );
@@ -691,7 +692,7 @@ const getCharts = ({
           height={OwnerHeight}
           showLegend={true}
           showLegendBarLine={false}
-          xAxisRotated ={true}
+          xAxisRotated={true}
           total={getTotalChart(OwnerSeries)}
         />
       );
@@ -754,21 +755,24 @@ const getCharts = ({
           height={UsersSeriesHeight}
           showLegend={true}
           showLegendBarLine={false}
-          xAxisRotated ={true}
+          xAxisRotated={true}
         />
       );
     case "Accuracy":
+    //send both date and value to filter data based on x-axis date
       const accuracyList = accuracyData?.accuracyResultDTOList || [];
-
-      const machineAccuracyData = accuracyList.map(
-        (item) => +(item.machineAccuracy?.toFixed(2) ?? 0)
-      );
-      const correctedCodesData = accuracyList.map(
-        (item) => +(item.correctedCodes?.toFixed(2) ?? 0)
-      );
-      const orgAccuracyData = accuracyList.map(
-        (item) => +(item.organisationAccuracy?.toFixed(2) ?? 0)
-      );
+      const correctedCodesData = accuracyList.map((item) => ({
+        date: item.date,
+        value: +(item.correctedCodes?.toFixed?.(2) ?? 0),
+      }));
+      const machineAccuracyData = accuracyList.map((item) => ({
+        date: item.date,
+        value: +(item.machineAccuracy?.toFixed?.(2) ?? 0),
+      }));
+      const orgAccuracyData = accuracyList.map((item) => ({
+        date: item.date,
+        value: +(item.organisationAccuracy?.toFixed?.(2) ?? 0),
+      }));
       const averageMachineAccuracy = accuracyData?.avgMachineAccuracy ?? 0;
       const averageOrganizationAccuracy =
         accuracyData?.avgOrganisationAccuracy ?? 0;
@@ -809,6 +813,8 @@ const getCharts = ({
                   yAxisFont1="#2CAFFE"
                   yAxisFont2="#2472FF"
                   rightYaxisFont="black"
+                  selectedValue={selectedValue}
+                  customDate={dates}
                   series={[
                     {
                       name: "Total Codes Count",
@@ -1002,7 +1008,7 @@ const Workflow = ({
       for (const { key, params } of independentApiKeys) {
         const actionKey = `${key}Action`;
         if (typeof actions[actionKey] === "function") {
-           dispatch(actions[actionKey](params));
+          dispatch(actions[actionKey](params));
         } else {
           console.warn(`Action not found for key: ${actionKey}`);
         }
@@ -1050,7 +1056,7 @@ const Workflow = ({
         const actionKey = `${key}Action`;
         const params = { ...commonParams, roleId };
         if (typeof actions[actionKey] === "function") {
-           dispatch(actions[actionKey](params));
+          dispatch(actions[actionKey](params));
         } else {
           console.warn(`Action not found for key: ${actionKey}`);
           return Promise.resolve();
@@ -1145,6 +1151,7 @@ const Workflow = ({
                     usersStatusCountDataLoading,
                     accuracyData,
                     accuracyDataLoading,
+                    selectedValue,
                     dates,
                   })}
                 </Card>

@@ -81,6 +81,14 @@ export const getMaskData = (value) => {
   }
 };
 
+//format date (eg.sep01 -> sept1)
+export const formatDateLabel = (dateString) => {
+  const date = new Date(dateString);
+  return (
+    date.toLocaleString("default", { month: "short" }) + date.getDate()
+  );
+}
+
 export function getLast30Days() {
   const date_thirty_days = [];
   const currentDate = new Date();

@@ -674,6 +674,11 @@ export const roleAccessList = {
 export const getDaysInMonth = (year, month) => {
   return new Date(year, month, 0).getDate();
 };
+export const getWeeksInMonth = (year, month) => {
+  const days = getDaysInMonth(year, month);
+  const firstDay = new Date(year, month - 1, 1).getDay();
+  return Math.ceil((days + firstDay) / 7);
+};
 
 export const getDateWeek = (date) => {
   const firstDayOfMonth = new Date(date.getFullYear(), date.getMonth(), 1);

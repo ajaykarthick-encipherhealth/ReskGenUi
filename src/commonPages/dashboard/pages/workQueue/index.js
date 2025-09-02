@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import {
   getDateWeek,
   getDaysInMonth,
+  getWeeksInMonth,
   getFormattedChartData,
   getTotalChart,
   useHasMounted,
@@ -31,7 +32,11 @@ import { getLocalStored } from "../../../../utils/storages";
 import EmptyComponent from "../../component/empty/EmptyComponent";
 import { getDashboardItems } from "../../component/function/resubaleGetStorage";
 import Headtitle from "../../component/headtitle";
-import { formatDateTime, getRoleIdByRole, statusFormate } from "../../../../utils/reusable";
+import {
+  formatDateTime,
+  getRoleIdByRole,
+  statusFormate,
+} from "../../../../utils/reusable";
 import moment from "moment";
 import actions from "../../../../stores/admin/dashboard1/actions";
 import { getColorValue } from "../../../../utils/reusable";
@@ -502,12 +507,10 @@ const getCharts = ({
         </div>
       );
     case "Accuracy":
-      const accuracyData = new Array(31).fill(0);
+      let accuracyData = [];
       const accuracySelectedYear = accuracyState.selectedYear;
       const accuracySelectedMonth = accuracyState.selectedMonth;
-
       let accuracyDayCategories = [];
-
       const MONTH_NAMES = [
         "JAN",
         "FEB",
@@ -529,27 +532,36 @@ const getCharts = ({
           },
           (_, i) => i + 1
         );
+        const daysInMonth = getDaysInMonth(
+          accuracySelectedYear,
+          accuracySelectedMonth
+        );
+        accuracyData = new Array(daysInMonth).fill(0);
         accuracyResponse?.accuracyData?.forEach(({ day, accuracy }) => {
-          if (day >= 1 && day <= 31) {
+          if (day >= 1 && day <= daysInMonth) {
             accuracyData[day - 1] = accuracy;
           }
         });
       } else if (accuracyState.currentBtn === "Weekly") {
+        const weeksInMonth = getWeeksInMonth(
+          accuracySelectedYear,
+          accuracySelectedMonth
+        );
+        accuracyData = new Array(weeksInMonth).fill(null);
         const maxWeek = Math.max(
-          ...accuracyResponse?.accuracyData
-            .map((item) => item.week)
-            .filter((week) => week > 0)
+          ...accuracyResponse?.accuracyData.map((item) => item.week)
         );
         accuracyDayCategories = Array.from(
           { length: maxWeek },
           (_, i) => `Week ${i + 1}`
         );
         accuracyResponse?.accuracyData?.forEach(({ week, accuracy }) => {
-          if (week >= 1) {
+          if (week >= 1 && week <= weeksInMonth) {
             accuracyData[week - 1] = accuracy;
           }
         });
       } else if (accuracyState.currentBtn === "Monthly") {
+        accuracyData = new Array(12).fill(0);
         const uniqueMonths = [
           ...new Set(accuracyResponse?.accuracyData.map((item) => item.month)),
         ];
@@ -727,10 +739,10 @@ const getCharts = ({
         />
       );
     case "CompletedStatus":
-      let productivityAllocatedData = new Array(31).fill(0);
-      let productivityCompletedData = new Array(31).fill(0);
-      const productivitySelectedYear = accuracyState.selectedYear;
-      const productivitySelectedMonth = accuracyState.selectedMonth;
+      let productivityAllocatedData = [];
+      let productivityCompletedData = [];
+      const productivitySelectedYear = productivityState.selectedYear;
+      const productivitySelectedMonth = productivityState.selectedMonth;
 
       let productivityDayCategories = [];
 
@@ -750,6 +762,12 @@ const getCharts = ({
       ];
 
       if (productivityState.currentBtn === "Daily") {
+        const daysInMonth = getDaysInMonth(
+          productivitySelectedYear,
+          productivitySelectedMonth
+        );
+        productivityAllocatedData = new Array(daysInMonth).fill(0);
+        productivityCompletedData = new Array(daysInMonth).fill(0);
         productivityDayCategories = Array.from(
           {
             length: getDaysInMonth(
@@ -774,6 +792,12 @@ const getCharts = ({
           }
         );
       } else if (productivityState.currentBtn === "Weekly") {
+        const weeksInMonth = getWeeksInMonth(
+          productivitySelectedYear,
+          productivitySelectedMonth
+        );
+        productivityAllocatedData = new Array(weeksInMonth).fill(0);
+        productivityCompletedData = new Array(weeksInMonth).fill(0);
         const maxWeek = Math.max(
           ...productivityResponse?.productivityAllocatedCount
             .map((item) => item.week)
@@ -798,6 +822,8 @@ const getCharts = ({
           }
         );
       } else if (productivityState.currentBtn === "Monthly") {
+        productivityAllocatedData = new Array(12).fill(0);
+        productivityCompletedData = new Array(12).fill(0);
         const uniqueMonths = [
           ...new Set(
             productivityResponse?.productivityAllocatedCount.map(
@@ -1003,10 +1029,14 @@ function WorkQueue({
   const showDashboard = getSelectedWidgets
     .filter((item) => item?.active)
     .sort((a, b) => a?.orderValue - b?.orderValue);
-  const { dashboardLayout = null, userName = "", aliasName = "" } = getLocalStored();
+  const {
+    dashboardLayout = null,
+    userName = "",
+    aliasName = "",
+  } = getLocalStored();
   const currentDate = new Date();
   const [taskDataList, setTaskDataList] = useState({});
-  const [isPageLoad, setIsPageLoad] = useState(true)
+  const [isPageLoad, setIsPageLoad] = useState(true);
   const [visibleDates, setVisibleDates] = useState([
     moment().subtract(2, "days"),
     moment().subtract(1, "days"),
@@ -1140,7 +1170,7 @@ function WorkQueue({
   });
 
   const getInitialApiCall = async () => {
-    const roleId = getRoleIdByRole(aliasName)
+    const roleId = getRoleIdByRole(aliasName);
     const currentDate = new Date();
     const currentYear = currentDate.getFullYear();
     const currentMonth = currentDate.getMonth() + 1;
@@ -1192,7 +1222,7 @@ function WorkQueue({
       for (const item of apiKeysNew) {
         const actionKey = `${item.key}Action`;
         if (typeof actions[actionKey] === "function") {
-           dispatch(actions[actionKey](item.params));
+          dispatch(actions[actionKey](item.params));
         } else {
           console.warn(`Action not found for key: ${actionKey}`);
         }
@@ -1202,7 +1232,7 @@ function WorkQueue({
     }
   };
   const getSummaryApiCall = async (startDate, endDate) => {
-    const roleId = getRoleIdByRole(aliasName)
+    const roleId = getRoleIdByRole(aliasName);
     const currentDate = new Date();
 
     const defaultEndDate = new Date(currentDate);
@@ -1236,7 +1266,7 @@ function WorkQueue({
   };
 
   const getDailySummaryApiCall = async (date) => {
-    const roleId = getRoleIdByRole(aliasName)
+    const roleId = getRoleIdByRole(aliasName);
     try {
       const actionKey = `workQueueDailySummaryAction`;
       if (typeof actions[actionKey] === "function") {
@@ -1259,7 +1289,7 @@ function WorkQueue({
   };
 
   const getAccuracyApiCall = async (month, year, range) => {
-    const roleId = getRoleIdByRole(aliasName)
+    const roleId = getRoleIdByRole(aliasName);
     try {
       const actionKey = `workQueueAccuracyAction`;
       if (typeof actions[actionKey] === "function") {
@@ -1282,7 +1312,7 @@ function WorkQueue({
     }
   };
   const getProductivityApiCall = async (month, year, range) => {
-    const roleId = getRoleIdByRole(aliasName)
+    const roleId = getRoleIdByRole(aliasName);
     try {
       const actionKey = `workQueueProductivityAction`;
       if (typeof actions[actionKey] === "function") {
@@ -1353,9 +1383,9 @@ function WorkQueue({
 
   useEffect(() => {
     setTimeout(() => {
-      setIsPageLoad(false)
+      setIsPageLoad(false);
     }, 500);
-  }, [])
+  }, []);
 
   const windowWidth = useWindowWidth();
   const hasMounted = useHasMounted();
