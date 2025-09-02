@@ -374,7 +374,7 @@ const Tin = ({
   };
 
   const handleChanges = async (e) => {
-    const value = e.target.value || "";
+  const value = (e.target.value || "").trim().replace(/\D/g, "");
     if (value?.length == 0) {
       setProviderList([]);
       form.setFieldsValue({
