@@ -77,7 +77,7 @@ const Addpatients = ({
               const payload = {
                 ...values,
                 tin: selectedTinObj?.tinNumber || getStorage("tinNumber"),
-                tinId: selectedTinObj?.id || null,
+                // tinId: selectedTinObj?.id || null,
               };
 
               handleSubmitPatientId(payload, form);
