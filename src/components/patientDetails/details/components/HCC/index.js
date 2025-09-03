@@ -916,7 +916,7 @@ const HccCards = ({
                                         ? data.dbDescription
                                         : data.actualDescription ||
                                           "--".toString(),
-                                      count: 45,
+                                      count: 35,
                                     })}
                                   </span>
                                 </>
