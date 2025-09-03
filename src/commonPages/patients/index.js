@@ -726,7 +726,7 @@ const Patient = ({
       setStatusUpdateWebSocket(data?.response?.pageResponse?.content);
     }
 
-  }, [webSocketData, allPatientList]);
+  }, [webSocketData, data]);
 
   useEffect(() => {
     const handleBackButton = (event) => {
