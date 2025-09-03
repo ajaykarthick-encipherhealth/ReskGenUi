@@ -21,13 +21,11 @@ const Addpatients = ({
   const isProjectRoute = router.pathname === "/tenantadmin/project";
 
   const [form] = Form.useForm();
-  const TinOptions = tinDetails?.map((client) => (
-    {
+  const TinOptions = tinDetails?.map((client) => ({
     label: client.tinName,
     value: client.tinNumber,
     tinId: client.id,
-  }
-));
+  }));
 
   const handleCancel = () => {
     form.resetFields();
@@ -102,12 +100,17 @@ const Addpatients = ({
                       pattern: /^\S*$/,
                       message: "Patient ID should not contain spaces!",
                     },
+                    {
+                      max: 20,
+                      message: "Patient ID cannot exceed 20 characters!",
+                    },
                   ]}
                 >
                   <Input
                     id="patientId"
                     name="patientId"
                     placeholder="Enter patient ID"
+                    maxLength={20}
                   />
                 </Form.Item>
               </Col>
@@ -121,6 +124,10 @@ const Addpatients = ({
                       required: true,
                       message: "Please enter patient name!",
                     },
+                    {
+                      max: 20,
+                      message: "Patient name cannot exceed 20 characters!",
+                    },
                   ]}
                 >
                   <div>
@@ -129,6 +136,7 @@ const Addpatients = ({
                       id="patientName"
                       name="patientName"
                       placeholder="Enter patient name"
+                      maxLength={20}
                     />
                   </div>
                 </Form.Item>
