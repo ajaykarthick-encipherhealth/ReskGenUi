@@ -379,10 +379,13 @@ const YearAndDosStatus = ({
           router.pathname
         );
         if (
-          findFirstPendingWorkflow(dosList?.response) &&
+          findFirstPendingWorkflow(dosList?.response, router) &&
           postData?.processedStatus == "COMPLETED"
         ) {
-          const dosFindValue = findFirstPendingWorkflow(dosList?.response);
+          const dosFindValue = findFirstPendingWorkflow(
+            dosList?.response,
+            router
+          );
           getSelectedDos(dosFindValue.dateOfService);
           setSelectDosValue(dosFindValue.dateOfService);
           const dosSummariesList =

@@ -216,9 +216,10 @@ const Details = ({
   const [isViewAll, setIsViewAll] = useState(false);
   const [isFileFormShow, setIsFileFormShow] = useState(false);
   const currentPath = navigate.asPath;
-  const shouldShowReviewerWorkListByPath = currentPath.endsWith(
-    "/reviewer/patients/details"
-  );
+const shouldShowReviewerWorkListByPath =
+  currentPath.endsWith("/reviewer/patients/details") ||
+  currentPath.endsWith("/tindetails/masteraudit");
+
 
   const handleIconClick = () => {
     setShowFilter((prev) => !prev);
@@ -431,7 +432,7 @@ const Details = ({
         );
         if (res?.response?.length > 0) {
           var dosPendingValue = res?.response[0]?.dateOfService;
-          const pendingWorkflow = findFirstPendingWorkflow(res?.response);
+          const pendingWorkflow = findFirstPendingWorkflow(res?.response,navigate);
           if (pendingWorkflow) {
             dosPendingValue = pendingWorkflow.dateOfService;
           }
@@ -587,7 +588,7 @@ const Details = ({
     const res = await getPatientDosList(localPatientId, e);
     if (res?.response?.length > 0) {
       var dosPendingValue = res?.response[0]?.dateOfService;
-      const pendingWorkflow = findFirstPendingWorkflow(res?.response);
+      const pendingWorkflow = findFirstPendingWorkflow(res?.response,navigate);
       if (pendingWorkflow) {
         dosPendingValue = pendingWorkflow.dateOfService;
       }
@@ -794,7 +795,7 @@ const Details = ({
         resData?.response[0]?.dateOfService
       ) {
         var dosPendingValue = resData?.response[0]?.dateOfService;
-        const pendingWorkflow = findFirstPendingWorkflow(resData?.response);
+        const pendingWorkflow = findFirstPendingWorkflow(resData?.response,navigate);
         if (pendingWorkflow) {
           dosPendingValue = pendingWorkflow.dateOfService;
         }

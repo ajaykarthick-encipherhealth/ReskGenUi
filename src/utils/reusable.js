@@ -1113,7 +1113,7 @@ export const isStatusDisabled = (
     patientIdDetailsData?.data?.response?.workflow?.[0]?.status ||
     patientIdDetailsData?.data?.response?.masterAudit?.status;
 
-  const disabled = dosWiseStatus !== "PENDING" || overAllStatus === "COMPLETED";
+  let disabled = dosWiseStatus !== "PENDING" || overAllStatus === "COMPLETED";
   const pathDisbaled =
     pathname.endsWith("/tenantadmin/tin/details") ||
     pathname.endsWith("/tenantadmin/project/details") ||
@@ -1121,6 +1121,14 @@ export const isStatusDisabled = (
 
   if (pathDisbaled) {
     return true;
+  }
+  if (pathname.endsWith("/tenantadmin/tin/tindetails/masteraudit")) {
+    const dosWiseStatus = patientDetailsResult?.data?.response?.masterAudit
+      ?.status
+      ? patientDetailsResult?.data?.response?.masterAudit?.status
+      : "PENDING";
+    disabled = dosWiseStatus !== "PENDING";
+    return disabled;
   }
   return disabled;
 };
@@ -1343,16 +1351,31 @@ export const statusFormate = (status) => {
     : status;
 };
 
-export const findFirstPendingWorkflow = (responseArray) => {
+export const findFirstPendingWorkflow = (responseArray, router) => {
   for (const item of responseArray) {
-    if (item.workflow && Array.isArray(item.workflow)) {
-      const hasCompleted = item.workflow.some((w) => w.status === "COMPLETED");
-      const allPending = item.workflow.every((w) => w.status === "PENDING");
-      if (hasCompleted) {
-        continue;
+    if (router?.pathname.endsWith("/tenantadmin/tin/tindetails/masteraudit")) {
+      if (item?.masterAudit) {
+        const hasCompleted = item.masterAudit?.status === "COMPLETED";
+        const allPending = item.masterAudit?.status === "PENDING";
+        if (hasCompleted) {
+          continue;
+        }
+        if (allPending) {
+          return item;
+        }
       }
-      if (allPending) {
-        return item;
+    } else {
+      if (item.workflow && Array.isArray(item.workflow)) {
+        const hasCompleted = item.workflow.some(
+          (w) => w.status === "COMPLETED"
+        );
+        const allPending = item.workflow.every((w) => w.status === "PENDING");
+        if (hasCompleted) {
+          continue;
+        }
+        if (allPending) {
+          return item;
+        }
       }
     }
   }
