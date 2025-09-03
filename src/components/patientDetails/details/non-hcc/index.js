@@ -91,29 +91,89 @@ const NonHcc = ({
       }, 500);
     }
   };
-
   useEffect(() => {
     if (patientDosResult?.data?.response) {
-      setSelectDosValue();
       var dosList = [];
       patientDosResult?.data?.response?.map((res, index) => {
         if (res) {
           var dosLable = (
             <>
-              <div className="d-flex align-items-center justify-content-between">
-                <span className={styles.dosLable}>
-                  {moment(res.dateOfService).format("MM-DD-YYYY")}
-                </span>
+              <div
+                id="dosSelect"
+                className="d-flex justify-content-between gap-1 align-items-center "
+              >
+                <div id="dosSelect" className="d-flex gap-1">
+                  <span id="dosSelect">
+                    {res?.stateIndicators?.includes("CHART") && (
+                      <span
+                        id="dosSelect"
+                        className="p-1 rounded-1"
+                        style={{
+                          background: "#87d068",
+                          color: "#fff",
+                          fontSize: "10px",
+                        }}
+                      >
+                        C
+                      </span>
+                    )}
+                    {res?.stateIndicators?.includes("LAB") && (
+                      <span
+                        id="dosSelect"
+                        className="p-1 rounded-2 mx-1 me-2"
+                        style={{
+                          background: "#108ee9",
+                          color: "#fff",
+                          fontSize: "10px",
+                        }}
+                      >
+                        L
+                      </span>
+                    )}
+                    {res?.stateIndicators?.includes("RADIOLOGY") && (
+                      <span
+                        id="dosSelect"
+                        className="p-1 rounded-2 mx-1"
+                        style={{
+                          background: "#f50",
+                          color: "#fff",
+                          fontSize: "10px",
+                        }}
+                      >
+                        R
+                      </span>
+                    )}
+                  </span>
+
+                  <span id="dosSelect" className={styles.dosLable}>
+                    {moment(res.dateOfService).format("MM-DD-YYYY")}
+                  </span>
+                </div>
                 {getStatusIcon(res.processedStatus)}
               </div>
             </>
           );
-          dosList.push({ value: res.dateOfService, label: dosLable });
+          dosList.push({
+            value: res.dateOfService,
+            label: dosLable,
+            details: res,
+          });
         }
       });
       setDosSummariesList(dosList);
       if (patientDetailsResult?.data?.response?.dateOfService) {
-        setSelectDosValue(patientDetailsResult?.data?.response?.dateOfService);
+        // setSelectDosValue(patientDetailsResult?.data?.response?.dateOfService);
+        if (isDosSelected) {
+          const patientId = getStorage("patientId");
+          const role = getStorage("userRole");
+          getpatientDetailsData(
+            patientId,
+            null,
+            moment(isDosSelected).format("YYYY-MM-DD"),
+            "",
+            role
+          );
+        }
       }
     }
   }, [patientDosResult?.data?.response]);
