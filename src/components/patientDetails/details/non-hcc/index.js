@@ -33,6 +33,7 @@ const NonHcc = ({
   storeFileDetails,
   getSelectedDosPageNumber,
   setIsFileFormShow,
+  isFileFormShow,
 }) => {
   // const [selectDosValue, setSelectDosValue] = useState("");
   const [dosSummariesList, setDosSummariesList] = useState([]);
@@ -129,11 +130,14 @@ const NonHcc = ({
         <div className={`profile-tab ${visitStyles.visitdata_header_card2}`}>
           <div className="custom-tab-1">
             <Tab.Container defaultActiveKey="file">
-              <Nav as="ul" className="nav nav-tabs d-flex gap-2 align-items-center">
+              <Nav
+                as="ul"
+                className="nav nav-tabs d-flex gap-2 align-items-center"
+              >
                 <Nav.Item as="li" className="nav-item">
                   <Nav.Link
                     to="#my-posts"
-                   className={` ant-badge ${visitStyles.navColor}`}
+                    className={` ant-badge ${visitStyles.navColor}`}
                     activeClassName={visitStyles.activeLink}
                     eventKey="file"
                     onClick={() => selectTab(1)}
@@ -181,9 +185,17 @@ const NonHcc = ({
                 <Nav.Item as="li" className="nav-item mx-2">
                   {getStorage("userRole") != "admin" && selectDosValue && (
                     <YearAndDosStatus
-                      isDosStatus={true}
+                      // isDosStatus={true}
+                      // setIsLoading={setIsLoading}
+                      // setIsFileFormShow={setIsFileFormShow}
                       setIsLoading={setIsLoading}
+                      isDosStatus={true}
+                      isFileFormShow={isFileFormShow}
                       setIsFileFormShow={setIsFileFormShow}
+                      setSelectDosValue={setSelectDosValue}
+                      getSelectedDos={getSelectedDos}
+                      setSearch={setSearch}
+                      getSelectedDosPageNumber={getSelectedDosPageNumber}
                     />
                   )}
                 </Nav.Item>
