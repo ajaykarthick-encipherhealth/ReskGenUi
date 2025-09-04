@@ -1148,7 +1148,8 @@ export const isYearWiseDisabled = (patientDetailsResult, pathname) => {
     pathname.endsWith("/tenantadmin/tin/details") ||
     pathname.endsWith("/tenantadmin/project/details") ||
     pathname.endsWith("/tenantadmin/patientsync/batchfilesview") ||
-    pathname.endsWith("/tenantadmin/tin/tindetails/querydetails");
+    pathname.endsWith("/tenantadmin/tin/tindetails/querydetails") ||
+    pathname.endsWith("/tenantadmin/tracking/details")
 
   if (pathDisbaled) {
     returnValue = true;
