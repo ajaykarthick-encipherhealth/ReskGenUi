@@ -40,9 +40,9 @@ export async function getAllTracking({
       selectedOption?.auditAllocatedBy || ""
     }&auditedAssigned=${selectedOption?.supervisor || ""}&sortfield=${
       sort?.sortField ? sort?.sortField : ""
-    }&sortdirection=${
-      sort?.sortDir ? sort?.sortDir : ""
-    }&priority=${selectedOption?.priority || ""}`,
+    }&sortdirection=${sort?.sortDir ? sort?.sortDir : ""}&priority=${
+      selectedOption?.priority || ""
+    }`,
     options
   );
   return res;
@@ -55,15 +55,14 @@ export async function getCustomAllUsers() {
   return data;
 }
 
-export async function getAllFileProcess(
-  searchstring = "",
-  status = "",
-  startdate = "",
-  enddate = ""
-) {
+export async function getAllFileProcess() {
   const options = {
     method: "GET",
   };
-  const data = await requestPortal(`dbservice/file-process/status`, options);
+  const tin = getStorage("tinNumber")
+  const data = await requestPortal(
+    `dbservice/file-process/status?tinId=${tin}`,
+    options
+  );
   return data;
 }
