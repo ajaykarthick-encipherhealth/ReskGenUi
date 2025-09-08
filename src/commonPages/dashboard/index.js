@@ -387,9 +387,10 @@ const DynamicDashboard = ({
                       className="form-check-input cr-pointer"
                       type="checkbox"
                       id="selectAll"
-                      checked={selectedItems.length &&
-                        (getWidgets(selectedTab)?.length ===
-                        selectedItems?.length)
+                      checked={
+                        selectedItems.length &&
+                        getWidgets(selectedTab)?.length ===
+                          selectedItems?.length
                       }
                       onChange={(e) => handleSelectAll(e.target.checked)}
                     />
@@ -401,13 +402,15 @@ const DynamicDashboard = ({
               )}
 
               <div className="d-flex gap-1">
-                <Button
-                  className="btn btn-sm  w-full text-ellipsis"
-                  style={{ background: "#A6A8AC", color: "white" }}
-                  onClick={handleTapChange}
-                >
-                  Cancel
-                </Button>
+                {dynamicModal === "widget" && (
+                  <Button
+                    className="btn btn-sm  w-full text-ellipsis"
+                    style={{ background: "#A6A8AC", color: "white" }}
+                    onClick={handleTapChange}
+                  >
+                    Cancel
+                  </Button>
+                )}
                 <Button
                   className=" btn-sm w-full text-ellipsis tableButton"
                   onClick={handleSave}

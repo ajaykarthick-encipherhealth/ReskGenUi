@@ -204,7 +204,7 @@ export const DraggableBox = React.memo(
         style={style}
         {...attributes}
         {...listeners}
-        className={`rounded bg-white border ${item.empty ? "empty-slot" : ""}`}
+        className={`rounded bg-white border overflow-hidden ${item.empty ? "empty-slot" : ""}`}
       >
         {!item.empty && zone === "dashboard" && (
           <div
