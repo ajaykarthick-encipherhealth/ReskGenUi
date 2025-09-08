@@ -97,12 +97,13 @@ const Addpatients = ({
                       message: "Please enter patient ID!",
                     },
                     {
-                      pattern: /^\S*$/,
-                      message: "Patient ID should not contain spaces!",
+                      max: 40,
+                      message: "Patient ID cannot exceed 40 characters!",
                     },
                     {
-                      max: 20,
-                      message: "Patient ID cannot exceed 20 characters!",
+                      pattern: /^[A-Za-z0-9_-]+$/,
+                      message:
+                        "Patient ID should only contain letters and numbers!",
                     },
                   ]}
                 >
@@ -110,7 +111,7 @@ const Addpatients = ({
                     id="patientId"
                     name="patientId"
                     placeholder="Enter patient ID"
-                    maxLength={20}
+                    maxLength={40}
                   />
                 </Form.Item>
               </Col>
@@ -125,8 +126,13 @@ const Addpatients = ({
                       message: "Please enter patient name!",
                     },
                     {
-                      max: 20,
-                      message: "Patient name cannot exceed 20 characters!",
+                      max: 40,
+                      message: "Patient name cannot exceed 40 characters!",
+                    },
+                   {
+                      pattern: /^[A-Za-z0-9_-]+$/,
+                      message:
+                        "Patient Name should only contain letters and numbers!",
                     },
                   ]}
                 >
@@ -136,7 +142,7 @@ const Addpatients = ({
                       id="patientName"
                       name="patientName"
                       placeholder="Enter patient name"
-                      maxLength={20}
+                      maxLength={40}
                     />
                   </div>
                 </Form.Item>
@@ -167,26 +173,6 @@ const Addpatients = ({
                   </Form.Item>
                 )}
               </Col>
-              {/* <Col span={24}>
-                <Form.Item
-                  label="Select Organization"
-                  name="organizationId"
-                  rules={[
-                    {
-                      required: true,
-                      message: "Please select Organization!",
-                    },
-                  ]}
-                >
-                  <Select
-                  id="organizationId"
-                  name="organizationId"
-                    placeholder="Select"
-                    options={orgAllList}
-                    style={{ height: "42px" }}
-                  />
-                </Form.Item>
-              </Col> */}
             </Row>
             <div style={{ display: "flex", gap: "8px" }}>
               <Form.Item>
