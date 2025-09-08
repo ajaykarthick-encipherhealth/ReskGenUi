@@ -140,6 +140,7 @@ const Tin = ({
     setStorage("tinNumber", rowData.tinNumber);
     setStorage("routeBackTo", "/tenantadmin/tin");
     setStorage("activeTabTin", activeTab);
+    setStorage("tinId" , rowData?.id)
     getRoutedData(params);
     router.push("/tenantadmin/tin/tindetails?tab=Patients");
   };

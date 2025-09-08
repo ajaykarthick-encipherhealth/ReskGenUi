@@ -286,11 +286,12 @@ const Patient = ({
 
   const handleSubmitPatientId = async (formData, form) => {
     const tin = getStorage("tinNumber");
+    const tinId = getStorage("tinId")
     formData.allocatedBy = localUserId;
     formData.computing = 0;
     formData.patientId = formData.patientId.trim();
     formData.tin = tin;
-    // formData.tinId = formData?.tinId?formData?.tinId :tinData[0]?.id
+    formData.tinId = formData?.tinId?formData?.tinId : tinId
     setLoader(true);
     try {
       setIsLoadingBtn(true);

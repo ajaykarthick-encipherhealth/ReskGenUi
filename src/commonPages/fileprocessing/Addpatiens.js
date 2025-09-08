@@ -72,10 +72,11 @@ const Addpatients = ({
               const selectedTinObj = tinDetails?.find(
                 (tin) => tin.tinNumber === values.tin
               );
+              console.log(selectedTinObj,"selectedTinObj")
               const payload = {
                 ...values,
                 tin: selectedTinObj?.tinNumber || getStorage("tinNumber"),
-                // tinId: selectedTinObj?.id || null,
+                tinId: selectedTinObj?.id || null,
               };
 
               handleSubmitPatientId(payload, form);
