@@ -17,7 +17,6 @@ import dynamic from "next/dynamic";
 import { getStorage, setStorage } from "../utils/storages";
 import { serverControl } from "../utils/config";
 import { authRequestPortal, requestPortal } from "../utils/network";
-import Swal from "sweetalert2";
 import InternetError from "../utils/internetError";
 import { MsalProvider } from "@azure/msal-react";
 import { msalInstance } from "../../lib/msalInstance";
@@ -28,6 +27,7 @@ import {
 } from "../utils/inactiveTracker";
 import { ssoLogout } from "../../lib/authService";
 import Script from "next/script";
+import { Poppins, Manrope } from "next/font/google";
 
 // Defer heavy components to reduce main-thread work on initial load
 const AICHAT = dynamic(() => import("../components/aiChat"), { ssr: false });
@@ -39,6 +39,17 @@ const Header = dynamic(() => import("../jsx/layouts/nav/Header"), {
 });
 
 config.autoAddCss = false;
+
+const poppins = Poppins({
+  subsets: ["latin"],
+  weight: ["100", "300", "400", "500", "700", "900"],
+  display: "swap",
+});
+const manrope = Manrope({
+  subsets: ["latin"],
+  weight: ["200", "300", "400", "500", "600", "700", "800"],
+  display: "swap",
+});
 
 function MyApp({ Component, pageProps }) {
   const router = useRouter();
@@ -416,13 +427,16 @@ function MyApp({ Component, pageProps }) {
   }, []);
   useEffect(() => {
     const handleOffline = () => {
-      Swal.fire({
-        title: "No Internet Connection",
-        text: "Please check your network.",
-        icon: "error",
-        confirmButtonText: "Retry",
-        confirmButtonColor: "#DD6B55",
-      }).then(() => window.location.reload());
+      (async () => {
+        const Swal = (await import("sweetalert2")).default;
+        Swal.fire({
+          title: "No Internet Connection",
+          text: "Please check your network.",
+          icon: "error",
+          confirmButtonText: "Retry",
+          confirmButtonColor: "#DD6B55",
+        }).then(() => window.location.reload());
+      })();
     };
 
     const handleOnline = () => console.log("Back online!");
@@ -437,9 +451,10 @@ function MyApp({ Component, pageProps }) {
   }, []);
 
   return (
-    <MsalProvider instance={msalInstance}>
-      <PrimeReactProvider>
-        <Provider store={store}>
+    <div className={`${poppins.className} ${manrope.className}`}>
+      <MsalProvider instance={msalInstance}>
+        <PrimeReactProvider>
+          <Provider store={store}>
           <Script
             src="https://www.googletagmanager.com/gtag/js?id=G-WEFGJM1VG2"
             strategy="lazyOnload"
@@ -451,19 +466,20 @@ gtag('js', new Date());
 gtag('config', 'G-WEFGJM1VG2');`}
           </Script>
 
-          {showTerminal && <AICHAT openMsg={true} />}
-          <span>
-            {showTerminal && <Header />}
-            <div>
-              <Component {...pageProps} />
-            </div>
-          </span>
-          <InternetError />
-          {loginCheck == true && <ConnectWebSocket />}
-          {/* {showFooter && showTerminal && <Footer />} */}
-        </Provider>
-      </PrimeReactProvider>
-    </MsalProvider>
+            {showTerminal && <AICHAT openMsg={true} />}
+            <span>
+              {showTerminal && <Header />}
+              <div>
+                <Component {...pageProps} />
+              </div>
+            </span>
+            <InternetError />
+            {loginCheck == true && <ConnectWebSocket />}
+            {/* {showFooter && showTerminal && <Footer />} */}
+          </Provider>
+        </PrimeReactProvider>
+      </MsalProvider>
+    </div>
   );
 }
 

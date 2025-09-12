@@ -119,14 +119,16 @@ const Login = ({ getMFAValidation, loginResponse }) => {
       <div className="login-account">
         <div className={`row ${styles.loginContainer}`}>
           <div className="col-lg-6 align-self-start">
-            <div
-              className="account-info-area"
-              style={{ backgroundImage: `url(${LoginBack})` }}
-            >
-              <div
-                className="login-content"
-                style={{ position: "relative", textAlign: "center" }}
-              >
+            <div className="account-info-area" style={{ position: "relative", minHeight: 400 }}>
+              <Image
+                src={LoginBack}
+                alt="Login background"
+                fill
+                priority
+                sizes="(max-width: 768px) 100vw, 50vw"
+                style={{ objectFit: "cover" }}
+              />
+              <div className="login-content" style={{ position: "relative", textAlign: "center" }}>
                 <p className="sub-title"></p>
                 {getLogoImage()}
               </div>
