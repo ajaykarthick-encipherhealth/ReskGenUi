@@ -13,8 +13,7 @@ import { useRouter } from "next/router";
 import { PrimeReactProvider } from "primereact/api";
 import { config } from "@fortawesome/fontawesome-svg-core";
 import Footer from "../jsx/layouts/Footer";
-import AICHAT from "../components/aiChat";
-import ConnectWebSocket from "../components/websocket";
+import dynamic from "next/dynamic";
 import { getStorage, setStorage } from "../utils/storages";
 import { serverControl } from "../utils/config";
 import { authRequestPortal, requestPortal } from "../utils/network";
@@ -29,7 +28,15 @@ import {
 } from "../utils/inactiveTracker";
 import { ssoLogout } from "../../lib/authService";
 import Script from "next/script";
-import Header from "../jsx/layouts/nav/Header";
+
+// Defer heavy components to reduce main-thread work on initial load
+const AICHAT = dynamic(() => import("../components/aiChat"), { ssr: false });
+const ConnectWebSocket = dynamic(() => import("../components/websocket"), {
+  ssr: false,
+});
+const Header = dynamic(() => import("../jsx/layouts/nav/Header"), {
+  ssr: false,
+});
 
 config.autoAddCss = false;
 
@@ -235,32 +242,17 @@ function MyApp({ Component, pageProps }) {
   }, []);
 
   useEffect(() => {
-    const currentPath = window.location.pathname;
-    fetch(currentPath)
-      .then((response) => {
-        if (!response.ok) {
-          setShowTerminal(false);
-        } else {
-          if (
-            currentPath === "/" ||
-            currentPath?.includes("/login") ||
-            currentPath?.includes("/projects") ||
-            currentPath?.includes("/client") ||
-            currentPath?.includes("/ehrlogin") ||
-            currentPath?.includes("/twofactorauthentication/") ||
-            currentPath?.includes("search")
-            // currentPath?.includes("/reviewer/patients/details")
-          ) {
-            setShowTerminal(false);
-          } else {
-            setShowTerminal(true);
-          }
-        }
-      })
-      .catch((error) => {
-        console.error("Error fetching data:", error);
-      });
-  }, [router]);
+    const path = router.pathname || "";
+    const shouldHide =
+      path === "/" ||
+      path.includes("/login") ||
+      path.includes("/projects") ||
+      path.includes("/client") ||
+      path.includes("/ehrlogin") ||
+      path.includes("/twofactorauthentication/") ||
+      path.includes("search");
+    setShowTerminal(!shouldHide);
+  }, [router.pathname]);
 
   // comment this refresh token --- Dev  login
 
@@ -450,9 +442,9 @@ function MyApp({ Component, pageProps }) {
         <Provider store={store}>
           <Script
             src="https://www.googletagmanager.com/gtag/js?id=G-WEFGJM1VG2"
-            strategy="afterInteractive"
+            strategy="lazyOnload"
           />
-          <Script id="google-analytics" strategy="afterInteractive">
+          <Script id="google-analytics" strategy="lazyOnload">
             {`window.dataLayer = window.dataLayer || [];
 function gtag(){dataLayer.push(arguments);}
 gtag('js', new Date());
