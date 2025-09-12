@@ -136,3 +136,4 @@ dist
 # Ignore src directory inside utils specifically for enpoints.js
 src/utility/*/enpoints.js/src/
 .qodo
+.DS_Store
