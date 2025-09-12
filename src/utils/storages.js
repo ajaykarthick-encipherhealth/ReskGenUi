@@ -7,6 +7,9 @@ const hashKey = (key) => {
 };
 export const getStorage = (key) => {
   try {
+    if (typeof window === "undefined" || typeof sessionStorage === "undefined") {
+      return null;
+    }
     if (serverControl === "production") {
       const hashedKey = hashKey(key);
       const encryptedValue = sessionStorage.getItem(hashedKey);
@@ -26,6 +29,9 @@ export const getStorage = (key) => {
 
 export const setStorage = (key, value) => {
   try {
+    if (typeof window === "undefined" || typeof sessionStorage === "undefined") {
+      return Promise.resolve();
+    }
     if (serverControl === "production") {
       const hashedKey = hashKey(key);
       const stringValue =
@@ -48,6 +54,9 @@ export const setStorage = (key, value) => {
 
 export const removeStorage = (key) => {
   try {
+    if (typeof window === "undefined" || typeof sessionStorage === "undefined") {
+      return Promise.resolve();
+    }
     if (key) {
       if (serverControl === "production") {
         const hashedKey = hashKey(key);

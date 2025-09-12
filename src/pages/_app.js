@@ -17,10 +17,12 @@ import dynamic from "next/dynamic";
 import { getStorage, setStorage } from "../utils/storages";
 import { serverControl } from "../utils/config";
 import { authRequestPortal, requestPortal } from "../utils/network";
-import Swal from "sweetalert2";
+// Defer heavy sweetalert2 until used to reduce main thread work
+let Swal;
 import InternetError from "../utils/internetError";
 import { MsalProvider } from "@azure/msal-react";
 import { msalInstance } from "../../lib/msalInstance";
+import { Poppins, Manrope } from "next/font/google";
 import {
   clearInactivityTimer,
   resetInactivityTimer,
@@ -36,6 +38,20 @@ const ConnectWebSocket = dynamic(() => import("../components/websocket"), {
 });
 const Header = dynamic(() => import("../jsx/layouts/nav/Header"), {
   ssr: false,
+});
+
+// Self-host Google fonts via next/font to avoid render-blocking CSS
+const poppins = Poppins({
+  subsets: ["latin"],
+  weight: ["300", "400", "500", "700", "900"],
+  display: "swap",
+  variable: "--font-poppins",
+});
+const manrope = Manrope({
+  subsets: ["latin"],
+  weight: ["200", "300", "400", "500", "600", "700", "800"],
+  display: "swap",
+  variable: "--font-manrope",
 });
 
 config.autoAddCss = false;
@@ -416,7 +432,7 @@ function MyApp({ Component, pageProps }) {
   }, []);
   useEffect(() => {
     const handleOffline = () => {
-      Swal.fire({
+      (Swal || (Swal = require("sweetalert2"))).fire({
         title: "No Internet Connection",
         text: "Please check your network.",
         icon: "error",
@@ -452,7 +468,7 @@ gtag('config', 'G-WEFGJM1VG2');`}
           </Script>
 
           {showTerminal && <AICHAT openMsg={true} />}
-          <span>
+          <span className={`${poppins.variable} ${manrope.variable}`}>
             {showTerminal && <Header />}
             <div>
               <Component {...pageProps} />
