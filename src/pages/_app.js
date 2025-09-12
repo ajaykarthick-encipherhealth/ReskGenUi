@@ -13,15 +13,16 @@ import { useRouter } from "next/router";
 import { PrimeReactProvider } from "primereact/api";
 import { config } from "@fortawesome/fontawesome-svg-core";
 import Footer from "../jsx/layouts/Footer";
-import AICHAT from "../components/aiChat";
-import ConnectWebSocket from "../components/websocket";
+import dynamic from "next/dynamic";
 import { getStorage, setStorage } from "../utils/storages";
 import { serverControl } from "../utils/config";
 import { authRequestPortal, requestPortal } from "../utils/network";
-import Swal from "sweetalert2";
+// Defer heavy sweetalert2 until used to reduce main thread work
+let Swal;
 import InternetError from "../utils/internetError";
 import { MsalProvider } from "@azure/msal-react";
 import { msalInstance } from "../../lib/msalInstance";
+import { Poppins, Manrope } from "next/font/google";
 import {
   clearInactivityTimer,
   resetInactivityTimer,
@@ -29,7 +30,29 @@ import {
 } from "../utils/inactiveTracker";
 import { ssoLogout } from "../../lib/authService";
 import Script from "next/script";
-import Header from "../jsx/layouts/nav/Header";
+
+// Defer heavy components to reduce main-thread work on initial load
+const AICHAT = dynamic(() => import("../components/aiChat"), { ssr: false });
+const ConnectWebSocket = dynamic(() => import("../components/websocket"), {
+  ssr: false,
+});
+const Header = dynamic(() => import("../jsx/layouts/nav/Header"), {
+  ssr: false,
+});
+
+// Self-host Google fonts via next/font to avoid render-blocking CSS
+const poppins = Poppins({
+  subsets: ["latin"],
+  weight: ["300", "400", "500", "700", "900"],
+  display: "swap",
+  variable: "--font-poppins",
+});
+const manrope = Manrope({
+  subsets: ["latin"],
+  weight: ["200", "300", "400", "500", "600", "700", "800"],
+  display: "swap",
+  variable: "--font-manrope",
+});
 
 config.autoAddCss = false;
 
@@ -235,32 +258,17 @@ function MyApp({ Component, pageProps }) {
   }, []);
 
   useEffect(() => {
-    const currentPath = window.location.pathname;
-    fetch(currentPath)
-      .then((response) => {
-        if (!response.ok) {
-          setShowTerminal(false);
-        } else {
-          if (
-            currentPath === "/" ||
-            currentPath?.includes("/login") ||
-            currentPath?.includes("/projects") ||
-            currentPath?.includes("/client") ||
-            currentPath?.includes("/ehrlogin") ||
-            currentPath?.includes("/twofactorauthentication/") ||
-            currentPath?.includes("search")
-            // currentPath?.includes("/reviewer/patients/details")
-          ) {
-            setShowTerminal(false);
-          } else {
-            setShowTerminal(true);
-          }
-        }
-      })
-      .catch((error) => {
-        console.error("Error fetching data:", error);
-      });
-  }, [router]);
+    const path = router.pathname || "";
+    const shouldHide =
+      path === "/" ||
+      path.includes("/login") ||
+      path.includes("/projects") ||
+      path.includes("/client") ||
+      path.includes("/ehrlogin") ||
+      path.includes("/twofactorauthentication/") ||
+      path.includes("search");
+    setShowTerminal(!shouldHide);
+  }, [router.pathname]);
 
   // comment this refresh token --- Dev  login
 
@@ -424,7 +432,7 @@ function MyApp({ Component, pageProps }) {
   }, []);
   useEffect(() => {
     const handleOffline = () => {
-      Swal.fire({
+      (Swal || (Swal = require("sweetalert2"))).fire({
         title: "No Internet Connection",
         text: "Please check your network.",
         icon: "error",
@@ -450,9 +458,9 @@ function MyApp({ Component, pageProps }) {
         <Provider store={store}>
           <Script
             src="https://www.googletagmanager.com/gtag/js?id=G-WEFGJM1VG2"
-            strategy="afterInteractive"
+            strategy="lazyOnload"
           />
-          <Script id="google-analytics" strategy="afterInteractive">
+          <Script id="google-analytics" strategy="lazyOnload">
             {`window.dataLayer = window.dataLayer || [];
 function gtag(){dataLayer.push(arguments);}
 gtag('js', new Date());
@@ -460,7 +468,7 @@ gtag('config', 'G-WEFGJM1VG2');`}
           </Script>
 
           {showTerminal && <AICHAT openMsg={true} />}
-          <span>
+          <span className={`${poppins.variable} ${manrope.variable}`}>
             {showTerminal && <Header />}
             <div>
               <Component {...pageProps} />
