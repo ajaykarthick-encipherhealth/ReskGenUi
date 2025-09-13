@@ -11,9 +11,7 @@ import {
   CloseCircleOutlined,
 } from "@ant-design/icons";
 import {
-  Badge,
   Empty,
-  Image,
   Popconfirm,
   Popover,
   Progress,
@@ -26,12 +24,10 @@ import {
   auditStatusTemplate,
   processstatusBodyTemplate,
   renderUserProfile,
-  renderUserProfileDisable,
   reusableEllipses,
   tableSkeleton,
   createIdGen,
   proxyStatusBodyTemplate,
-  getRoasterStatus,
   renderFlagCells,
   processStatusBodyTemplate,
   dynamicAuditStatusTemplate,
@@ -41,18 +37,16 @@ import {
 } from "../../utils/reusable";
 import { faCircleCheck } from "@fortawesome/free-regular-svg-icons";
 
-import { priorityOptions, priorityStatus } from "../headerFilters/functions";
+import { priorityOptions } from "../headerFilters/functions";
 import Legends from "../legends";
 import { bullets } from "../../pages/reviewer/patients";
 import { auditBullets } from "../../pages/supervisor/auditing";
-import { CircularProgressbar } from "react-circular-progressbar";
 import EditButton from "../../images/adminUsers/EditButton";
 import EditButtonDisbled from "../../images/adminUsersDisabled/EditButtonDisabled";
 import { faArrowsRotate, faUpload } from "@fortawesome/free-solid-svg-icons";
 import { batchBullets } from "../../commonPages/patients";
 import { useRouter } from "next/router";
 import { Paginator } from "primereact/paginator";
-import { useState } from "react";
 
 const AppTable = ({
   switchStates,

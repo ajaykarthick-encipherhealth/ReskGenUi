@@ -12,7 +12,6 @@ import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/router";
 import { PrimeReactProvider } from "primereact/api";
 import { config } from "@fortawesome/fontawesome-svg-core";
-import Footer from "../jsx/layouts/Footer";
 import dynamic from "next/dynamic";
 import { getStorage, setStorage } from "../utils/storages";
 import { serverControl } from "../utils/config";
@@ -476,7 +475,7 @@ gtag('config', 'G-WEFGJM1VG2');`}
           </span>
           <InternetError />
           {loginCheck == true && <ConnectWebSocket />}
-          {/* {showFooter && showTerminal && <Footer />} */}
+          {/* Footer intentionally disabled to reduce initial JS. Re-enable if needed */}
         </Provider>
       </PrimeReactProvider>
     </MsalProvider>

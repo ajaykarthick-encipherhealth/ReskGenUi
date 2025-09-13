@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import Header from "../../../jsx/layouts/nav/Header";
 import { actions as tinActions } from "../../../stores/tenantAdmin/tin";
 import Tab from "../../../mainStream/components/tags";
 import { connect } from "react-redux";
@@ -19,8 +18,8 @@ import {
 } from "../../../utils/reusable";
 import { actions as tableAction } from "../../../stores/tableView";
 import styles from "../../../styles/visitdata.module.css";
-import { Button, Form, Input, Modal, Popconfirm, Select, Spin } from "antd";
-import { LoadingOutlined, PlusCircleFilled } from "@ant-design/icons";
+import { Button, Form, Input, Popconfirm, Select, Spin } from "antd";
+import { LoadingOutlined } from "@ant-design/icons";
 import visitStyles from "../../../styles/visitdata.module.css";
 import { actions as allPatientSyncAction } from "../../../stores/tenantAdmin/patientSync";
 import RegularButton from "../../../components/button";
