@@ -62,8 +62,9 @@
     "xlsx": "^0.18.5"
   },
   "scripts": {
-    "dev": "next dev",
-    "build": "npm run optimize:images && next build",
+    "postinstall": "node patch-rc-util.js",
+    "dev": "npm run postinstall && next dev",
+    "build": "npm run postinstall && npm run optimize:images && next build",
     "start": "next start",
     "sass": "node-sass --watch src/scss/main.scss src/css/style.css --source-map src/css/style.css.map",
     "test": "jest --watch",

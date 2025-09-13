@@ -17,6 +17,9 @@ const nextConfig = {
   // Enable compression
   compress: true,
 
+  // Transpile ESM packages that cause issues
+  transpilePackages: ['rc-util', 'antd', '@ant-design/cssinjs'],
+
   // Optimize bundle splitting
   experimental: {
     optimizeCss: true,
@@ -31,6 +34,37 @@ const nextConfig = {
 
   // Configure webpack for better performance
   webpack: (config, { dev, isServer }) => {
+    // Fix ESM module resolution issues
+    config.resolve.extensionAlias = {
+      '.js': ['.ts', '.tsx', '.js', '.jsx'],
+      '.mjs': ['.mts', '.mjs'],
+      '.cjs': ['.cts', '.cjs'],
+    };
+
+    // Fix rc-util and other ESM import issues
+    config.resolve.alias = {
+      ...config.resolve.alias,
+      'rc-util/es': 'rc-util/lib',
+      'rc-util/es/Dom/canUseDom': 'rc-util/lib/Dom/canUseDom',
+    };
+
+    // Handle ESM modules properly
+    config.module.rules.push({
+      test: /\.m?js$/,
+      type: 'javascript/auto',
+      resolve: {
+        fullySpecified: false,
+      },
+    });
+
+    // Fix import resolution for problematic packages
+    config.resolve.fallback = {
+      ...config.resolve.fallback,
+      fs: false,
+      path: false,
+      os: false,
+    };
+
     // Bundle analyzer for development
     if (process.env.ANALYZE === 'true') {
       const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
@@ -88,12 +122,13 @@ const nextConfig = {
       };
     }
 
-    // Tree shake unused code
-    config.optimization.usedExports = true;
-    config.optimization.sideEffects = false;
-
-    // Optimize module concatenation
-    config.optimization.concatenateModules = true;
+    // Tree shake unused code (only in production)
+    if (!dev) {
+      config.optimization.usedExports = true;
+      config.optimization.sideEffects = false;
+      // Optimize module concatenation
+      config.optimization.concatenateModules = true;
+    }
 
     return config;
   },
@@ -152,7 +187,7 @@ const nextConfig = {
       },
       {
         // Cache for images with proper headers
-        source: '/(.*\\.(png|jpg|jpeg|gif|ico|svg|webp|avif))',
+        source: '/:path*\\.(png|jpg|jpeg|gif|ico|svg|webp|avif)',
         headers: [
           {
             key: 'Cache-Control',
@@ -166,7 +201,7 @@ const nextConfig = {
       },
       {
         // Cache for fonts
-        source: '/(.*\\.(woff|woff2|eot|ttf|otf))',
+        source: '/:path*\\.(woff|woff2|eot|ttf|otf)',
         headers: [
           {
             key: 'Cache-Control',
@@ -180,7 +215,7 @@ const nextConfig = {
       },
       {
         // Cache for CSS and JS files
-        source: '/(.*\\.(css|js))',
+        source: '/:path*\\.(css|js)',
         headers: [
           {
             key: 'Cache-Control',

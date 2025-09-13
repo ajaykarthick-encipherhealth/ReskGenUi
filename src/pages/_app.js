@@ -1,7 +1,11 @@
-// Load critical CSS first
+import "bootstrap/dist/css/bootstrap.css";
 import "../styles/globals.css";
+import "nprogress/nprogress.css";
 import NProgress from "nprogress";
 import Router from "next/router";
+import "@fortawesome/fontawesome-svg-core/styles.css";
+import "primereact/resources/themes/lara-light-indigo/theme.css";
+import "primereact/resources/primereact.min.css";
 import { config } from "@fortawesome/fontawesome-svg-core";
 import dynamic from "next/dynamic";
 import { wrapper, store } from "../stores/index";
@@ -57,29 +61,8 @@ config.autoAddCss = false;
 function MyApp({ Component, pageProps }) {
   const router = useRouter();
   const [showTerminal, setShowTerminal] = useState(false);
-  const [cssLoaded, setCssLoaded] = useState(false);
   let loginCheck =
     typeof window !== "undefined" ? Boolean(getStorage("loginCheck")) : false;
-
-  // Load non-critical CSS after initial render to prevent render blocking
-  useEffect(() => {
-    const loadCSS = (href, id) => {
-      if (document.getElementById(id)) return;
-      const link = document.createElement('link');
-      link.id = id;
-      link.rel = 'stylesheet';
-      link.href = href;
-      link.onload = () => setCssLoaded(true);
-      document.head.appendChild(link);
-    };
-
-    // Load non-critical CSS asynchronously
-    loadCSS('/node_modules/bootstrap/dist/css/bootstrap.css', 'bootstrap-css');
-    loadCSS('/node_modules/nprogress/nprogress.css', 'nprogress-css');
-    loadCSS('/node_modules/@fortawesome/fontawesome-svg-core/styles.css', 'fontawesome-css');
-    loadCSS('/node_modules/primereact/resources/themes/lara-light-indigo/theme.css', 'primereact-theme-css');
-    loadCSS('/node_modules/primereact/resources/primereact.min.css', 'primereact-css');
-  }, []);
 
   const refreshToken = async () => {
     const refreshToken = getStorage("refreshToken");
