@@ -1,11 +1,9 @@
-import "bootstrap/dist/css/bootstrap.css";
+// Load critical CSS first
 import "../styles/globals.css";
-import "nprogress/nprogress.css";
 import NProgress from "nprogress";
 import Router from "next/router";
-import "@fortawesome/fontawesome-svg-core/styles.css";
-import "primereact/resources/themes/lara-light-indigo/theme.css";
-import "primereact/resources/primereact.min.css";
+import { config } from "@fortawesome/fontawesome-svg-core";
+import dynamic from "next/dynamic";
 import { wrapper, store } from "../stores/index";
 import { Provider } from "react-redux";
 import { useEffect, useRef, useState } from "react";
@@ -59,8 +57,29 @@ config.autoAddCss = false;
 function MyApp({ Component, pageProps }) {
   const router = useRouter();
   const [showTerminal, setShowTerminal] = useState(false);
+  const [cssLoaded, setCssLoaded] = useState(false);
   let loginCheck =
     typeof window !== "undefined" ? Boolean(getStorage("loginCheck")) : false;
+
+  // Load non-critical CSS after initial render to prevent render blocking
+  useEffect(() => {
+    const loadCSS = (href, id) => {
+      if (document.getElementById(id)) return;
+      const link = document.createElement('link');
+      link.id = id;
+      link.rel = 'stylesheet';
+      link.href = href;
+      link.onload = () => setCssLoaded(true);
+      document.head.appendChild(link);
+    };
+
+    // Load non-critical CSS asynchronously
+    loadCSS('/node_modules/bootstrap/dist/css/bootstrap.css', 'bootstrap-css');
+    loadCSS('/node_modules/nprogress/nprogress.css', 'nprogress-css');
+    loadCSS('/node_modules/@fortawesome/fontawesome-svg-core/styles.css', 'fontawesome-css');
+    loadCSS('/node_modules/primereact/resources/themes/lara-light-indigo/theme.css', 'primereact-theme-css');
+    loadCSS('/node_modules/primereact/resources/primereact.min.css', 'primereact-css');
+  }, []);
 
   const refreshToken = async () => {
     const refreshToken = getStorage("refreshToken");
@@ -424,6 +443,18 @@ function MyApp({ Component, pageProps }) {
     Router.events.on("routeChangeComplete", handleComplete);
     Router.events.on("routeChangeError", handleComplete);
 
+    // Register service worker for better caching
+    if ('serviceWorker' in navigator && process.env.NODE_ENV === 'production') {
+      navigator.serviceWorker
+        .register('/sw.js')
+        .then((registration) => {
+          console.log('SW registered: ', registration);
+        })
+        .catch((registrationError) => {
+          console.log('SW registration failed: ', registrationError);
+        });
+    }
+
     return () => {
       Router.events.off("routeChangeStart", handleStart);
       Router.events.off("routeChangeComplete", handleComplete);
@@ -456,16 +487,26 @@ function MyApp({ Component, pageProps }) {
     <MsalProvider instance={msalInstance}>
       <PrimeReactProvider>
         <Provider store={store}>
+          {/* Load Google Analytics only after user interaction to minimize third-party impact */}
           <Script
             src="https://www.googletagmanager.com/gtag/js?id=G-WEFGJM1VG2"
-            strategy="lazyOnload"
+            strategy="afterInteractive"
+            onLoad={() => {
+              // Initialize GA only after script loads
+              window.dataLayer = window.dataLayer || [];
+              function gtag(){dataLayer.push(arguments);}
+              gtag('js', new Date());
+              gtag('config', 'G-WEFGJM1VG2', {
+                // Optimize GA configuration
+                page_title: document.title,
+                page_location: window.location.href,
+                // Reduce data collection to improve performance
+                anonymize_ip: true,
+                allow_google_signals: false,
+                allow_ad_personalization_signals: false
+              });
+            }}
           />
-          <Script id="google-analytics" strategy="lazyOnload">
-            {`window.dataLayer = window.dataLayer || [];
-function gtag(){dataLayer.push(arguments);}
-gtag('js', new Date());
-gtag('config', 'G-WEFGJM1VG2');`}
-          </Script>
 
           {showTerminal && <AICHAT openMsg={true} />}
           <span className={`${poppins.variable} ${manrope.variable}`}>

@@ -1,9 +1,19 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo, useCallback } from "react";
 import Header from "../../jsx/layouts/nav/Header";
 import { useRouter } from "next/router";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import "react-facebook-loading/dist/react-facebook-loading.css";
 import { faUpload } from "@fortawesome/free-solid-svg-icons";
+import dynamic from "next/dynamic";
+
+// Lazy load non-critical components to reduce initial bundle size
+const FileUploading = dynamic(() => import("../fileprocessing/FileUploading"), { 
+  ssr: false,
+  loading: () => <div className="loading-placeholder" style={{ height: '400px' }} />
+});
+const Addpatients = dynamic(() => import("../fileprocessing/Addpatiens"), { 
+  ssr: false,
+  loading: () => <div className="loading-placeholder" style={{ height: '300px' }} />
+});
 import {
   Badge,
   Button,
@@ -14,8 +24,6 @@ import {
   notification,
 } from "antd";
 import visitStyles from "../../styles/visitdata.module.css";
-import FileUploading from "../fileprocessing/FileUploading";
-import Addpatients from "../fileprocessing/Addpatiens";
 import { LoadingOutlined, PlusCircleFilled } from "@ant-design/icons";
 import { validateYear } from "../../components/headerFilters/functions";
 import { actions as tenantAdminAction } from "../../stores/tenantAdmin/patients";
@@ -350,7 +358,8 @@ const Patient = ({
       });
     }
   };
-  const processstatusBodyTemplate = (rowData) => {
+  // Memoize expensive computations to prevent unnecessary re-renders
+  const processstatusBodyTemplate = useCallback((rowData) => {
     const isFinished =
       parsedData?.length > 0 &&
       parsedData?.find(
@@ -369,8 +378,16 @@ const Patient = ({
         : rowData?.computing == 3
         ? "Failed"
         : "Not Computed";
+    
     return (
-      <div className="patient-status">
+      <div className="patient-status" style={{ 
+        width: '120px', 
+        height: '32px', 
+        display: 'flex', 
+        alignItems: 'center',
+        // Prevent layout shift by reserving space
+        minWidth: '120px'
+      }}>
         <div
           className={visitStyles.roleStyle}
           style={{
@@ -390,6 +407,14 @@ const Patient = ({
                 : rowStatus === "Failed"
                 ? "red"
                 : "#BA704F",
+            width: '100%',
+            height: '100%',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            borderRadius: '4px',
+            fontSize: '12px',
+            fontWeight: '500'
           }}
         >
           {rowStatus === "Processing" && (
@@ -410,22 +435,40 @@ const Patient = ({
         </div>
       </div>
     );
-  };
+  }, [parsedData]);
 
-  const actionBodyTemplate = (rowData) => {
+  // Memoize action button to prevent unnecessary re-renders
+  const actionBodyTemplate = useCallback((rowData) => {
     return (
-      <div className="d-flex justify-content-center">
+      <div className="d-flex justify-content-center" style={{ 
+        width: '50px', 
+        height: '32px',
+        // Prevent layout shift
+        minWidth: '50px'
+      }}>
         <button
           id="click-upload"
-          nam="click-upload"
+          name="click-upload"
           onClick={() => {
             if (rowData?.processedStatus !== "PROCESSING") {
               addPatientFile(rowData);
             }
           }}
-          className="btn hegiht10  sharp me-1 action-btn"
-          style={{ background: "#04306f" }}
+          className="btn hegiht10 sharp me-1 action-btn"
+          style={{ 
+            background: "#04306f",
+            width: '32px',
+            height: '32px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            border: 'none',
+            borderRadius: '4px',
+            cursor: rowData?.computing == 1 || rowData.uploadDisable ? 'not-allowed' : 'pointer',
+            opacity: rowData?.computing == 1 || rowData.uploadDisable ? 0.6 : 1
+          }}
           disabled={rowData?.computing == 1 || rowData.uploadDisable}
+          aria-label="Upload file"
         >
           <FontAwesomeIcon
             icon={faUpload}
@@ -435,7 +478,7 @@ const Patient = ({
         </button>
       </div>
     );
-  };
+  }, []);
 
   const submitPatientFile = async () => {
     const formData = new FormData();
@@ -838,38 +881,59 @@ const Patient = ({
           </section>
           <div id="task-tbl_wrapper" className="dataTables_wrapper no-footer">
             <div className="mt-4">
-              <AppTable
-                getRetregger={getRetregger}
-                data={
-                  statusUpdateWebSocket
-                    ? statusUpdateWebSocket
-                    : data?.response?.pageResponse?.content
-                }
-                column={data?.response?.metaDataDTO.filter(
-                  (item) => item.active
+              {/* Reserve space to prevent layout shift during loading */}
+              <div className="table-container" style={{ 
+                minHeight: tableLoader ? '400px' : 'auto',
+                position: 'relative'
+              }}>
+                {tableLoader && (
+                  <div className="loading-placeholder" style={{
+                    position: 'absolute',
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    height: '400px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    backgroundColor: 'rgba(255, 255, 255, 0.8)',
+                    zIndex: 1
+                  }}>
+                    <Spin size="large" />
+                  </div>
                 )}
-                onRowClick={gotoPatientDetails}
-                loader={tableLoader}
-                actionBodyTemplate={actionBodyTemplate}
-                statusBodyTemplate={processstatusBodyTemplate}
-                pagination={false}
-                sort={sort}
-                setSort={setSort}
-                first={pageNo === 0 ? 0 : paginationFirst}
-                totalRecords={data?.response?.pageResponse?.totalElements}
-                row={15}
-                onPageChange={onPageChange}
-                renderFlagCell={renderFlagCell}
-                isUpload={findItemWithTrueKey(
-                  data?.response?.staticDesign,
-                  "upload"
-                )}
-                isTrigger={findItemWithTrueKey(
-                  data?.response?.metaDataDTO,
-                  "isRequestForRetry"
-                )}
-              />
-              <div></div>
+                <AppTable
+                  getRetregger={getRetregger}
+                  data={
+                    statusUpdateWebSocket
+                      ? statusUpdateWebSocket
+                      : data?.response?.pageResponse?.content
+                  }
+                  column={data?.response?.metaDataDTO?.filter(
+                    (item) => item.active
+                  ) || []}
+                  onRowClick={gotoPatientDetails}
+                  loader={false} // Handle loading with our custom overlay
+                  actionBodyTemplate={actionBodyTemplate}
+                  statusBodyTemplate={processstatusBodyTemplate}
+                  pagination={false}
+                  sort={sort}
+                  setSort={setSort}
+                  first={pageNo === 0 ? 0 : paginationFirst}
+                  totalRecords={data?.response?.pageResponse?.totalElements || 0}
+                  row={15}
+                  onPageChange={onPageChange}
+                  renderFlagCell={renderFlagCell}
+                  isUpload={findItemWithTrueKey(
+                    data?.response?.staticDesign,
+                    "upload"
+                  )}
+                  isTrigger={findItemWithTrueKey(
+                    data?.response?.metaDataDTO,
+                    "isRequestForRetry"
+                  )}
+                />
+              </div>
             </div>
           </div>
         </div>
