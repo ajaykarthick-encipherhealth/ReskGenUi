@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import Header from "../../jsx/layouts/nav/Header";
 import { useRouter } from "next/router";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import "react-facebook-loading/dist/react-facebook-loading.css";
 import { faUpload } from "@fortawesome/free-solid-svg-icons";
 import {
   Badge,

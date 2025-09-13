@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef, use } from "react";
+import Image from "next/image";
 import { connect } from "react-redux";
 import { useRouter } from "next/router";
 import Swal from "sweetalert2";
@@ -1220,12 +1221,16 @@ const Header = ({
                             className={styles.codify}
                           >
                             <Tooltip placement="bottom" title={"CodeRoot"}>
-                              <img
+                              <Image
                                 id="codify"
                                 name="codify"
-                                src={CodeRoot.src}
+                                src={CodeRoot}
+                                alt="CodeRoot"
+                                width={24}
+                                height={24}
                                 className={Styles.codifyColor}
                                 onClick={showDrawer}
+                                priority={false}
                               />
                             </Tooltip>
                           </div>
