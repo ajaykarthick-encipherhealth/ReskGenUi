@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import moment from "moment";
 import TableStyle from "../table.module.css";
 import { Select as AntSelect, Empty, Popover, Tooltip } from "antd";
+import Image from "next/image";
 import { useRouter } from "next/router";
 import dayjs from "dayjs";
 import {
@@ -240,7 +241,7 @@ function PatientTable({
                         {badges?.length > 0 &&
                           badges?.map((data) => (
                             <div style={{ marginBottom: "10px" }}>
-                              <Image src={data.src} width={20} height={30} />
+                              <Image src={data.src} width={20} height={30} alt={data?.name || 'badge'} loading="lazy" />
                               <span style={{ marginLeft: "5px" }}>
                                 {data?.name}
                               </span>

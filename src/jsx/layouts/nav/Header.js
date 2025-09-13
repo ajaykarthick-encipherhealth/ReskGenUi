@@ -21,6 +21,7 @@ import {
   MinusCircleOutlined,
   PlusCircleOutlined,
 } from "@ant-design/icons";
+import Image from "next/image";
 import CodeRoot from "../../../images/menu/coderootv4.png";
 import styles from "../../../styles/file-managemnt.module.css";
 import Styles from "./styles.module.css";
@@ -1069,12 +1070,13 @@ const Header = ({
                       height: "30px",
                     }}
                   ></span>
-                  <img
+                  <Image
                     src={tenent?.data?.response?.companyLogoLink}
-                    alt="tenetLog"
+                    alt="tenant logo"
                     width={70}
                     height={40}
                     style={{ objectFit: "cover" }}
+                    priority={false}
                   />
                 </div>
               )}
@@ -1220,12 +1222,16 @@ const Header = ({
                             className={styles.codify}
                           >
                             <Tooltip placement="bottom" title={"CodeRoot"}>
-                              <img
+                              <Image
                                 id="codify"
                                 name="codify"
-                                src={CodeRoot.src}
+                                src={CodeRoot}
+                                alt="CodeRoot"
                                 className={Styles.codifyColor}
                                 onClick={showDrawer}
+                                width={24}
+                                height={24}
+                                priority={false}
                               />
                             </Tooltip>
                           </div>

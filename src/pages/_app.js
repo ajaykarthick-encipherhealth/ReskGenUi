@@ -469,7 +469,12 @@ gtag('config', 'G-WEFGJM1VG2');`}
 
           {showTerminal && <AICHAT openMsg={true} />}
           <span className={`${poppins.variable} ${manrope.variable}`}>
-            {showTerminal && <Header />}
+            {/* Reserve header space to reduce CLS when Header loads client-side */}
+            {showTerminal && (
+              <div style={{ minHeight: 64 }}>
+                <Header />
+              </div>
+            )}
             <div>
               <Component {...pageProps} />
             </div>
