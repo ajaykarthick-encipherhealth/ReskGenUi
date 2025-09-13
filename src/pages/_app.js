@@ -12,7 +12,7 @@ import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/router";
 import { PrimeReactProvider } from "primereact/api";
 import { config } from "@fortawesome/fontawesome-svg-core";
-import Footer from "../jsx/layouts/Footer";
+// Removed unused global Footer import to keep the initial bundle lean
 import dynamic from "next/dynamic";
 import { getStorage, setStorage } from "../utils/storages";
 import { serverControl } from "../utils/config";
@@ -30,6 +30,7 @@ import {
 } from "../utils/inactiveTracker";
 import { ssoLogout } from "../../lib/authService";
 import Script from "next/script";
+const GA_ID = process.env.NEXT_PUBLIC_GA_ID;
 
 // Defer heavy components to reduce main-thread work on initial load
 const AICHAT = dynamic(() => import("../components/aiChat"), { ssr: false });
@@ -456,16 +457,20 @@ function MyApp({ Component, pageProps }) {
     <MsalProvider instance={msalInstance}>
       <PrimeReactProvider>
         <Provider store={store}>
-          <Script
-            src="https://www.googletagmanager.com/gtag/js?id=G-WEFGJM1VG2"
-            strategy="lazyOnload"
-          />
-          <Script id="google-analytics" strategy="lazyOnload">
-            {`window.dataLayer = window.dataLayer || [];
-function gtag(){dataLayer.push(arguments);}
+          {serverControl === "production" && GA_ID ? (
+            <>
+              <Script
+                src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`}
+                strategy="afterInteractive"
+              />
+              <Script id="google-analytics" strategy="afterInteractive">
+                {`window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);} 
 gtag('js', new Date());
-gtag('config', 'G-WEFGJM1VG2');`}
-          </Script>
+gtag('config', '${GA_ID}', { anonymize_ip: true, transport_type: 'beacon' });`}
+              </Script>
+            </>
+          ) : null}
 
           {showTerminal && <AICHAT openMsg={true} />}
           <span className={`${poppins.variable} ${manrope.variable}`}>

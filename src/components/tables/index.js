@@ -10,18 +10,7 @@ import {
   LoadingOutlined,
   CloseCircleOutlined,
 } from "@ant-design/icons";
-import {
-  Badge,
-  Empty,
-  Image,
-  Popconfirm,
-  Popover,
-  Progress,
-  Select,
-  Spin,
-  Switch,
-  Tooltip,
-} from "antd";
+import { Badge, Empty, Popconfirm, Popover, Progress, Select, Spin, Switch, Tooltip } from "antd";
 import {
   auditStatusTemplate,
   processstatusBodyTemplate,

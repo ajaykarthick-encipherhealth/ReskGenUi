@@ -1,11 +1,19 @@
 import React, { useEffect, useState } from "react";
-import Header from "../../../jsx/layouts/nav/Header";
+import dynamic from "next/dynamic";
 import { actions as tinActions } from "../../../stores/tenantAdmin/tin";
-import Tab from "../../../mainStream/components/tags";
 import { connect } from "react-redux";
 import { useRouter } from "next/router";
-import ReusableFilters from "../../../components/reusableFilters";
-import AppTable from "../../../components/tables";
+// Code-split heavy UI components to reduce the Tin page bundle size
+const Tab = dynamic(() => import("../../../mainStream/components/tags"), {
+  ssr: false,
+});
+const ReusableFilters = dynamic(
+  () => import("../../../components/reusableFilters"),
+  { ssr: false }
+);
+const AppTable = dynamic(() => import("../../../components/tables"), {
+  ssr: false,
+});
 import { actions as allActions } from "../../../stores/reviewer/workqueue";
 import { setStorage } from "../../../utils/storages";
 import { actions as supervisorActions } from "../../../stores/supervisor/auditedQueue";
@@ -20,11 +28,12 @@ import {
 import { actions as tableAction } from "../../../stores/tableView";
 import styles from "../../../styles/visitdata.module.css";
 import { Button, Form, Input, Modal, Popconfirm, Select, Spin } from "antd";
-import { LoadingOutlined, PlusCircleFilled } from "@ant-design/icons";
+import { LoadingOutlined } from "@ant-design/icons";
 import visitStyles from "../../../styles/visitdata.module.css";
 import { actions as allPatientSyncAction } from "../../../stores/tenantAdmin/patientSync";
-import RegularButton from "../../../components/button";
-import ProviderAddForm from "./addprovider";
+const ProviderAddForm = dynamic(() => import("./addprovider"), {
+  ssr: false,
+});
 import { activeTinPageId, inActiveTinPageId, providerTinPageId } from "../../../utils/pageIds";
 
 export const getPageId = (activeTab) => {
